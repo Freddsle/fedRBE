@@ -287,5 +287,8 @@ class Client:
     def remove_batch_effects(self, beta):
         """remove batch effects from intensities using server beta coefficients"""
         #  pg_matrix - np.dot(beta, batch.T)
-        self.intensities_corrected = self.intensities - beta @ self.design.drop(columns=['intercept']).T
+        self.intensities_corrected = np.where(self.intensities == 'NA', np.nan, self.intensities)
+        dot_product = beta @ self.design.drop(columns=['intercept']).T
+        self.intensities_corrected = np.where(np.isnan(self.intensities_corrected), self.intensities_corrected, self.intensities_corrected - dot_product)
+        self.intensities_corrected = pd.DataFrame(self.intensities_corrected, index=self.intensities.index, columns=self.intensities.columns)
         logging.info("Client %s:\tBatch effects removed." % self.cohort_name)
