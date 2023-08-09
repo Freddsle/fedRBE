@@ -11,13 +11,6 @@ logging.basicConfig(
 )
 
 
-def cov2cor(cov_coef):
-    cor = np.diag(cov_coef) ** -0.5 * cov_coef
-    cor = cor.T * np.diag(cov_coef) ** -0.5
-    np.fill_diagonal(cor, 1)
-    return cor
-
-
 class Server:
     def __init__(self, covariates):
         self.covariates = sorted(covariates)
@@ -31,15 +24,7 @@ class Server:
         self.XtX_glob = None
         self.Xty_glob = None
         self.beta = None
-        self.cov_coef = None
         self.stdev_unscaled = None
-        self.var = None
-        self.sigma = None
-        self.df_residual = None
-        self.df_total = None
-        self.Amean = None
-        self.results = None
-        self.table = None
 
 
     def join_client(self, client):
