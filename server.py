@@ -89,31 +89,4 @@ class Server:
             
             self.beta[i, :] = invXtX @ self.XtY_glob[i, :]
             self.stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))  # standart err for b coefficients
-
-    def aggregate_SSE_and_cov_coef(self, SSE_list, cov_coef_list, intensities_sum, n_measurements_list):
-        n = len(self.stored_features)  # proteins
-        k = len(self.variables)
-        self.SSE = np.zeros(n)
-        self.cov_coef = np.zeros((k, k))
-        self.n_measurements = np.zeros(n)  # number of not nan measurements per protein
-        self.Amean = np.zeros(n)
-
-        for c in range(0, len(self.client_names)):
-            self.cov_coef += cov_coef_list[c]
-            self.Amean += intensities_sum[c]
-            self.n_measurements += n_measurements_list[c]
-            for i in range(0, n):
-                self.SSE[i] += SSE_list[c][i]
-
-        self.cov_coef = linalg.inv(self.cov_coef)
-        # estimated residual variance
-        self.var = self.SSE / (self.n_measurements - k)
-        # estimated residual standard deviations
-        self.sigma = np.sqrt(self.var)
-        # degrees of freedom
-        self.df_residual = np.ones(n) * (self.n_measurements - k)
-        # mean log-intensity
-        self.Amean = self.Amean / self.n_measurements
-
-
     

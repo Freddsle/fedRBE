@@ -77,6 +77,7 @@ class Client:
         self.sample_names = list(self.intensities.columns.values)
         self.n_samples = len(self.sample_names)
 
+
     def process_files(self):
         """Process the loaded data based on experiment type."""
         # if self.experiment_type == EXPERIMENT_TYPE:
@@ -88,49 +89,6 @@ class Client:
         logging.info(f"Client {self.cohort_name}: Log2(x+1) transformed intensities.")
         return True
 
-    # def check_and_reorder_samples(self):
-    #     """Check and reorder samples based on design and intensities."""
-    #     design_rows = set(self.design.index.values)
-    #     exprs_cols = set(self.intensities.columns.values)
-    #     self.sample_names = sorted(design_rows.intersection(exprs_cols))
-
-    #     self.design = self.design.loc[self.sample_names, :]
-    #     self.intensities = self.intensities.loc[:, self.sample_names]
-    #     self.n_samples = len(self.sample_names)
-
-    # def process_tmt_files(self):
-    #     """Validate and process the TMT files."""
-    #     self.validate_tmt_files()
-
-    #     for tmt in self.tmt_names:
-    #         if REF_SAMPLE not in self.design.loc[self.design[TMT_PLEX] == tmt, SAMPLE_TYPE].values:
-    #             logging.error(
-    #                 f"Client {self.cohort_name}: No reference sample found in TMT-plex {tmt}. All samples will be excluded."
-    #             )
-    #             self.tmt_names.discard(tmt)
-
-    #     self.counts = self.counts.loc[:, self.tmt_names]
-    #     self.design = self.design.loc[self.design[TMT_PLEX].isin(self.tmt_names), :]
-
-    # def validate_tmt_files(self):
-    #     """
-    #     Validates the TMT files.
-    #     """
-    #     if TMT_PLEX not in self.design.columns:
-    #         logging.error(f"Client {self.cohort_name}: Design matrix does not contain '{TMT_PLEX}' column.")
-    #         return
-
-    #     self.design[TMT_PLEX] = self.design[TMT_PLEX].apply(lambda x: str(x) + "_" + self.cohort_name)
-    #     self.counts.rename(lambda x: str(x) + "_" + self.cohort_name, axis="columns", inplace=True)
-    #     self.tmt_names = set(self.design[TMT_PLEX].values)
-
-    #     if not set(self.counts.columns.values) == self.tmt_names:
-    #         shared_tmt_plexes = set(self.counts.columns.values).intersection(self.tmt_names)
-    #         logging.error(
-    #             f"Client {self.cohort_name}: Only {len(shared_tmt_plexes)} TMT-plexes are shared between design matrix and count table."
-    #         )
-    #         self.tmt_names = shared_tmt_plexes
-    #     self.tmt_names = sorted(list(self.tmt_names))
 
     def validate_inputs(self, stored_features, variables):
         """
@@ -175,37 +133,7 @@ class Client:
             )    
         # reorder genes
         self.prot_names = sorted(self_prots)
-        self.intensities = self.intensities.loc[self.prot_names, :]
-        
-
-    # def validate_variables(self, variables):
-    #     """ensure that design matrix contains all variables"""
-    #     self_variables = set(self.design.columns)
-
-    #     if self_variables != set(variables):
-    #         missing_variables = set(variables).difference(self_variables)
-    #         if len(missing_variables) > 0:
-    #             raise ValueError(
-    #                 f"Client {self.cohort_name}: Some variables are missing in the design matrix: {missing_variables}"
-    #             )
-
-    #         extra_variables = self_variables.difference(set(variables))
-
-    #         if len(extra_variables) > 0:
-    #             logging.info(
-    #                 "Client %s:\t%s columns are excluded from the design matrix:" % (self.cohort_name, len(extra_variables))
-    #             )
-
-    #         # keep only necessary columns in the design matrix
-    #         if self.experiment_type == EXPERIMENT_TYPE:
-    #             self.design = self.design.loc[:, variables + [TMT_PLEX, SAMPLE_TYPE]]
-    #         else:
-    #             self.design = self.design.loc[:, variables]
-
-    #     # find how many TMT detect each protein group
-    #     if self.experiment_type == EXPERIMENT_TYPE:
-    #         self.n_tmt_per_prot = self.n_tmt - self.counts.isna().sum(axis=1)
-        
+        self.intensities = self.intensities.loc[self.prot_names, :] 
     
     def create_design(self, cohorts):
         """add covariates to model cohort effects."""
@@ -251,37 +179,6 @@ class Client:
             self.XtY[i, :] = x.T @ y
         return self.XtX, self.XtY
 
-    def compute_SSE_and_cov_coef(self, beta):
-        X = self.design.values
-        Y = self.intensities.values
-        n = Y.shape[0]
-        self.SSE = np.zeros(n)
-        self.mu = np.empty(Y.shape)
-
-        for i in range(n):
-            # check NA in Y
-            y = Y[i, :]
-            # remove NA from Y and from x
-            ndxs = np.argwhere(np.isfinite(y)).reshape(-1)
-            x = X[ndxs, :]
-            y = y[ndxs]
-            self.mu[i, ndxs] = x @ beta[i, :]  #  fitted Y
-            self.SSE[i] = np.sum((y - self.mu[i, ndxs]) ** 2)  # local SSE
-        # print("mu:",self.mu.shape)
-        # Q,R = np.linalg.qr(X)
-        # self.cov_coef = R.T @ R
-        self.cov_coef = X.T @ X
-        return self.SSE, self.cov_coef
-
-    def sum_intensities(self):
-        return self.intensities.sum(axis=1)
-
-    def get_not_na(self):
-        # number of non-NA samples per protein
-        n_na = self.intensities.isna().astype(int).sum(axis=1)
-        return self.n_samples - n_na
-
-
     ####### limma: removeBatchEffects #########
 
     def remove_batch_effects(self, beta):
@@ -291,4 +188,5 @@ class Client:
         dot_product = beta @ self.design.drop(columns=['intercept']).T
         self.intensities_corrected = np.where(np.isnan(self.intensities_corrected), self.intensities_corrected, self.intensities_corrected - dot_product)
         self.intensities_corrected = pd.DataFrame(self.intensities_corrected, index=self.intensities.index, columns=self.intensities.columns)
+        
         logging.info("Client %s:\tBatch effects removed." % self.cohort_name)
