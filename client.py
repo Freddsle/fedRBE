@@ -64,7 +64,6 @@ class Client:
         self.read_files(intensities_file_path)
         if not self.process_files():
             return False
-        # self.check_and_reorder_samples()
         logging.info(
             f"Client {self.cohort_name}: Loaded {len(self.sample_names)} samples and {len(self.prot_names)} proteins."
         )
@@ -73,10 +72,24 @@ class Client:
     def read_files(self, intensities_file_path):
         """Read files using pandas and store the information in the class attributes."""
         self.intensities = pd.read_csv(intensities_file_path, sep="\t", index_col=0)
-        self.prot_names = list(sorted(self.intensities.index.values))
+        self.validate_useful_genes()
         self.sample_names = list(self.intensities.columns.values)
         self.n_samples = len(self.sample_names)
 
+
+    def validate_useful_genes(self):
+        """
+        Check if there are genes where only one sample is given. These need to
+        be removed as they would be observable during later steps.
+        """
+        n_col = self.intensities.shape[1]
+        num_nans = self.intensities.isna().sum(axis=1)
+        n = 2 # number of existing values at least needed to include the protein
+
+        select_rows = self.intensities[(n_col - num_nans) >= n]
+        self.prot_names = select_rows.index.values
+        
+        return
 
     def process_files(self):
         """Process the loaded data based on experiment type."""
