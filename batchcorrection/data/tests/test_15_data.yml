@@ -1,0 +1,12 @@
+id: 15
+image: batchcorrection
+createdat: 2023-08-25T10:08:48.91009654Z
+relayaddress: localhost
+queryinterval: 10
+dirs:
+- ./client1
+- ./client2
+- ./client3
+- ./client4
+gendir: ./generic
+resultdir: /data/tests
