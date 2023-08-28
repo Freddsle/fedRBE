@@ -14,6 +14,13 @@ RUN pip3 install --user --upgrade pip && \
     pip3 install --user -r ./app/requirements.txt && \
     pip3 cache purge
 
+#TODO: remove this and use the pip package via requirements.txt. 
+# Also remove the whole featureCloud folder then
+COPY ./FeatureCloud /FeatureCloud
+WORKDIR "/FeatureCloud"
+RUN pip3 install pandas
+RUN python setup.py install
+WORKDIR "/"
 COPY . /app
 
 EXPOSE 9000 9001

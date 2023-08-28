@@ -33,8 +33,9 @@ class InitialState(AppState):
             gene_threshold
         ) # initializing the client includes loading and preprocessing of the data
         self.store(key='client', value=client)
-
+        self.configure_smpc()
         # send list of protein names (genes) to coordinator
+        print(client.prot_names)
         self.send_data_to_coordinator(client.prot_names,
                                     send_to_self=True,
                                     use_smpc=use_smpc)
@@ -53,7 +54,8 @@ class CommonGenesState(AppState):
     def run(self):
         # wait for each client to send the list of genes they have
         print(1)
-        lists_of_genes = self.gather_data(is_json=use_smpc)
+        lists_of_genes = self.gather_data(use_smpc=False)
+            # SMPC will not work as strings can't be averaged
         print(2)
         # generate a sorted list of the genes that are available on each client
         prot_names = list()
@@ -70,8 +72,7 @@ class CommonGenesState(AppState):
         print(5)
         # Send prot_names and variables to all 
         self.broadcast_data([prot_names, variables],
-                            send_to_self=True,
-                            use_smpc=use_smpc)
+                            send_to_self=True)
         print(6)
         return 'validate'
 
