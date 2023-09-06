@@ -38,7 +38,7 @@ class InitialState(AppState):
         print(client.prot_names)
         self.send_data_to_coordinator(client.prot_names,
                                     send_to_self=True,
-                                    use_smpc=use_smpc)
+                                    use_smpc=False)
 
         if self.is_coordinator:
             return 'common_genes'
@@ -54,7 +54,7 @@ class CommonGenesState(AppState):
     def run(self):
         # wait for each client to send the list of genes they have
         print(1)
-        lists_of_genes = self.gather_data(use_smpc=False)
+        lists_of_genes = self.gather_data(is_json=False)
             # SMPC will not work as strings can't be averaged
         print(2)
         # generate a sorted list of the genes that are available on each client
@@ -85,7 +85,7 @@ class ValidationState(AppState):
 
     def run(self):
         # obtain and safe common genes and indices of design matrix
-        prot_names, variables = self.await_data(n=1, is_json=use_smpc)
+        prot_names, variables = self.await_data(n=1, is_json=False)
         client = self.load('client')
         client.variables = variables
         client.prot_names = prot_names
