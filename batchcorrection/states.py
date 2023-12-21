@@ -1,4 +1,6 @@
 import os
+import bios
+import time #TODO: rmv
 
 import numpy as np
 
@@ -6,11 +8,6 @@ from scipy import linalg
 from FeatureCloud.app.engine.app import AppState, app_state, Role
 
 from classes.client import Client
-
-
-# CONFIG
-use_smpc = True
-gene_threshold = 2
 
 # FeatureCloud requires that apps define the at least the 'initial' state.
 # This state is executed after the app instance is started.
@@ -22,6 +19,10 @@ class InitialState(AppState):
         self.register_transition('validate', Role.PARTICIPANT)
     
     def run(self):
+        # read in the config
+        config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
+        config = config["flimmaBatchCorrection"]
+        gene_threshold = config["gene_threshold"]
         # defining the client
         cohort_name = self.id
         intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", "protein_groups_matrix.tsv")
@@ -35,6 +36,7 @@ class InitialState(AppState):
         self.store(key='client', value=client)
         self.configure_smpc()
         # send list of protein names (genes) to coordinator
+        print("[initial] Sending the following prot_names to the coordinator")
         print(client.prot_names)
         self.send_data_to_coordinator(client.prot_names,
                                     send_to_self=True,
@@ -53,27 +55,29 @@ class CommonGenesState(AppState):
         
     def run(self):
         # wait for each client to send the list of genes they have
-        print(1)
+        print("[common_genes] Gathering genes from all clients")
         lists_of_genes = self.gather_data(is_json=False)
             # SMPC will not work as strings can't be averaged
-        print(2)
+        print("[common_genes] Gathered data from all clients")
         # generate a sorted list of the genes that are available on each client
         prot_names = list()
-        print(3)
         for l in lists_of_genes:
             if len(prot_names) == 0:
                 prot_names = l
             else:
                 prot_names = sorted(list(set(prot_names) & set(l)))
-        print(4)
+        print("[common_genes] Common_genes were found")
 
         # create index for design matrix
         variables = ['intercept'] + self.clients[:-1]
-        print(5)
+        print("[common_genes] index of design matrix created")
         # Send prot_names and variables to all 
         self.broadcast_data([prot_names, variables],
                             send_to_self=True)
-        print(6)
+        print("[common_genes] Data was set to be broadcasted:")
+        print(prot_names)
+        print(variables)
+        print("[common_genes] transitioning to validate, data was broadcastet")
         return 'validate'
 
 
@@ -85,20 +89,23 @@ class ValidationState(AppState):
 
     def run(self):
         # obtain and safe common genes and indices of design matrix
+        print("[validate] {} waiting for data".format(self.id)) #TODO: rmv
         prot_names, variables = self.await_data(n=1, is_json=False)
         client = self.load('client')
         client.variables = variables
         client.prot_names = prot_names
 
         client.validate_inputs(client.prot_names, client.variables)
-
+        print("[validate] {} Inputs have been validated".format(self.id))
         # get all client names to generate design matrix
         all_client_names = self.clients
         client.create_design(all_client_names[:-1])
+        print("[validate] {} design has been created".format(self.id))
         # filter the intinsities to only use the columns that are given on each client
         client.intensities = client.intensities.loc[client.prot_names, :]
+        print("[validate] {} intensities has been created".format(self.id))
         self.store(key='client', value=client)
-
+        print("[validate] {} changing states".format(self.id))
         return 'compute_XtX_XtY'
 
 
@@ -123,9 +130,10 @@ class ComputeState(AppState):
         # stop if number of rows (or rows - 1, which would be more safe) is equal than rank of matrix
 
         # send XtX and XtY
+        print("[compute_XtX_XtY] Computation done, sending data to coordinator")
         self.send_data_to_coordinator([XtX, XtY],
                                 send_to_self=True,
-                                use_smpc=use_smpc)
+                                use_smpc=False)
 
         if self.is_coordinator:
             return 'compute_beta'
@@ -140,12 +148,15 @@ class ComputeCorrectionState(AppState):
 
     def run(self):
         # wait for each client to compute XtX and XtY and collect data
-        XtX_XtY_list = self.gather_data(is_json=use_smpc)
+        print("[compute_beta] gathering data")
+        XtX_XtY_list = self.gather_data(use_smpc=False)
+        print("[compute_beta] Got XtX_XtY_list friom gather_data")
         XtX_list = list()
         XtY_list = list()
-        for XtX, XtY in XtX_XtY_list:
-            XtX_list.append(XtX)
-            XtY_list.append(XtY)
+        for ele in XtX_XtY_list:
+            # ele is list[XtX, XtY], see send_data of compute_XtX_XtY
+            XtX_list.append(ele[0])
+            XtY_list.append(ele[1])
 
         # set up matrices for global XtX and XtY
         client = self.load('client')
@@ -166,10 +177,10 @@ class ComputeCorrectionState(AppState):
             stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))
 
         # send beta to clients so they can correct their data
+        print("[compute_beta] broadcasting betas")
         self.broadcast_data(beta,
-                            send_to_self=True,
-                            use_smpc=use_smpc)
-    
+                            send_to_self=True)
+        
         return 'include_correction'
 
 
@@ -181,7 +192,7 @@ class IncludeCorrectionState(AppState):
 
     def run(self):
         # wait for the coordinator to calcualte beta
-        beta = self.await_data(n=1, is_json=use_smpc)
+        beta = self.await_data(n=1, is_json=False)
         client = self.load('client')
 
         # remove the batch effects in own data and safe the results
