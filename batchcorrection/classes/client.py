@@ -151,10 +151,11 @@ class Client:
         self.prot_names = sorted(self_prots)
         self.intensities = self.intensities.loc[self.prot_names, :] 
     
-    def create_design(self, cohorts):
+    def create_design(self, cohorts, minSamples):
         """add covariates to model cohort effects."""
 
         # first add intersept colum
+        assert self.sample_names
         if self.design is None:
             self.design = pd.DataFrame({'intercept': np.ones(len(self.sample_names))},
                                         index=self.sample_names)
@@ -169,9 +170,32 @@ class Client:
                 self.design[cohort] = 1
             else:
                 self.design[cohort] = 0
+        # for privacy reasons, we should protect the covariates added to the 
+        # design matrix. The design matrix itself is completely reproducable for
+        # only one cohort. In case covariates are added, we ensure that
+        # there are enough samples (more samples than columns in the design 
+        # matrix so that XtX=A cannot be solved for X given A
+        # This way, for every added covariate, we get the information of the
+        # combination of the covariate with all other covariates and the number
+        # of 1s in the the covariate (via the multiplication with the intercept)
+        # However, each covariate adds #samples new unknown values, so as long 
+        # as #samples > #covariates, the exact values of samples cannot be 
+        # extracted, only the count. 
+        if self.design.shape[0] <= self.design.shape[1]:
+            return f"Privacy Error: There are more enough samples to provide sufficient " +\
+                f"privacy, please more samples than #cohorts + #covariantes " +\
+                f"({self.design.shape[1]} in this case)"
+        # Furthermore, as we later use each column in the calculation of XtY, 
+        # we ensure that each column has at least minSamples values that are neither NaN
+        # nor 0. Otherwise, we might have very little values of y represented in
+        # a XtY value.
+        counts = self.design.apply(lambda col: (col[(col != 0) & col.notna()].count()))
+        if counts.apply(lambda count: count > 0 and count < minSamples).all():
+            return f"Privacy Error: At least one column in the design matrix must " +\
+                   f"contain more than {minSamples} values for privacy reasons."
 
     ####### limma: linear regression #########
-    def compute_XtX_XtY(self):
+    def compute_XtX_XtY(self, minSamples):
         X = self.design.values
         Y = self.intensities.values  # Y - intensities (proteins x samples)
         n = Y.shape[0]  # genes
@@ -190,10 +214,16 @@ class Client:
                 y = y[ndxs]
             else:
                 x = X
+            # privacy check, ensure that y holds enough values
+            counts_y = np.sum((y != 0) & (~np.isnan(y)))
+            if counts_y > 0 and counts_y < minSamples:
+                return None, None, f"Privacy Error: your expression data must not contain a " +\
+                    f"protein with only min_sample ({minSamples}) value(s) " +\
+                    f"that are neither 0 nor NaN."
 
             self.XtX[i, :, :] = x.T @ x
             self.XtY[i, :] = x.T @ y
-        return self.XtX, self.XtY
+        return self.XtX, self.XtY, None
 
     ####### limma: removeBatchEffects #########
 

@@ -1,2 +1,9 @@
 flimmaBatchCorrection:
   gene_threshold: 2
+  min_samples: 5 # Recommended: Don't change this value
+                 # Meaning of the value:
+                 # In case a covariat is known to an attacker, this ensures that
+                 # in each calculation, the vector of all samples of one protein
+                 # and of one covariat contain at least min_samples non Zero 
+                 # non NaN samples, so that results are fuzzy enough for
+                 # attackers to not quess samples. 

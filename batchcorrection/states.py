@@ -5,7 +5,7 @@ import time #TODO: rmv
 import numpy as np
 
 from scipy import linalg
-from FeatureCloud.app.engine.app import AppState, app_state, Role
+from FeatureCloud.app.engine.app import AppState, app_state, Role, LogLevel
 
 from classes.client import Client
 
@@ -23,6 +23,7 @@ class InitialState(AppState):
         config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
         config = config["flimmaBatchCorrection"]
         gene_threshold = config["gene_threshold"]
+        minSamples = config["min_samples"]
         # defining the client
         cohort_name = self.id
         intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", "protein_groups_matrix.tsv")
@@ -34,6 +35,7 @@ class InitialState(AppState):
             gene_threshold
         ) # initializing the client includes loading and preprocessing of the data
         self.store(key='client', value=client)
+        self.store(key='minSamples', value=minSamples)
         self.configure_smpc()
         # send list of protein names (genes) to coordinator
         print("[initial] Sending the following prot_names to the coordinator")
@@ -99,7 +101,9 @@ class ValidationState(AppState):
         print("[validate] {} Inputs have been validated".format(self.id))
         # get all client names to generate design matrix
         all_client_names = self.clients
-        client.create_design(all_client_names[:-1])
+        err = client.create_design(all_client_names[:-1], self.load("minSamples"))
+        if err:
+            self.log(err, LogLevel.FATAL)
         print("[validate] {} design has been created".format(self.id))
         # filter the intinsities to only use the columns that are given on each client
         client.intensities = client.intensities.loc[client.prot_names, :]
@@ -124,10 +128,10 @@ class ComputeState(AppState):
         client.n_samples = len(client.sample_names)
         
         # compute XtX and XtY
-        XtX, XtY = client.compute_XtX_XtY()
+        XtX, XtY, err = client.compute_XtX_XtY(self.load("minSamples"))
+        if err != None:
+            self.log(err, LogLevel.FATAL)
 
-        # TODO: check rank of XtY
-        # stop if number of rows (or rows - 1, which would be more safe) is equal than rank of matrix
 
         # send XtX and XtY
         print("[compute_XtX_XtY] Computation done, sending data to coordinator")
