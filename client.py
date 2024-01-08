@@ -21,6 +21,7 @@ class Client:
     def __init__(self, 
                 cohort_name,
                 intensities_file_path,
+                design_file_path=None,
                 experiment_type=EXPERIMENT_TYPE
             ):
 
@@ -38,7 +39,7 @@ class Client:
         self.intensities_corrected = None
 
 
-        if not self.open_dataset(intensities_file_path):
+        if not self.open_dataset(intensities_file_path, design_file_path):
             raise Exception("Failed to open dataset")
 
         self.XtX = None
@@ -50,18 +51,14 @@ class Client:
     
 
     ######### open dataset #########
-    def open_dataset(self, intensities_file_path):
+    def open_dataset(self, intensities_file_path, design_file_path=None):
         """
         For LFQ-data:
         Reads data and design matrices and ensures that sample names are the same.
         Log2(x + 1) transforms intensities.
 
-        For TMT-data:
-        Reads data and design matrices and ensures that sample names are the same,
-        each TMT-plex has at least one reference sample. Excludes proteins detected in less than 'min_f' plexes.
-        Log2(x+1) transforms intensities.
         """
-        self.read_files(intensities_file_path)
+        self.read_files(intensities_file_path, design_file_path)
         if not self.process_files():
             return False
         logging.info(
@@ -69,9 +66,11 @@ class Client:
         )
         return True
 
-    def read_files(self, intensities_file_path):
+    def read_files(self, intensities_file_path, design_file_path=None):
         """Read files using pandas and store the information in the class attributes."""
         self.intensities = pd.read_csv(intensities_file_path, sep="\t", index_col=0)
+        if design_file_path:
+            self.design = pd.read_csv(design_file_path, sep="\t", index_col=0)
         self.validate_useful_genes()
         self.sample_names = list(self.intensities.columns.values)
         self.n_samples = len(self.sample_names)
@@ -155,17 +154,24 @@ class Client:
         if self.design is None:
             self.design = pd.DataFrame({'intercept': np.ones(len(self.sample_names))},
                                         index=self.sample_names)
+        else:
+            self.design['intercept'] = np.ones(len(self.sample_names))
 
         if self.cohort_name not in cohorts:
             for cohort in cohorts:
                 self.design[cohort] = -1
-            return
 
-        for cohort in cohorts:
-            if self.cohort_name == cohort:
-                self.design[cohort] = 1
-            else:
-                self.design[cohort] = 0
+        else:
+            for cohort in cohorts:
+                if self.cohort_name == cohort:
+                    self.design[cohort] = 1
+                else:
+                    self.design[cohort] = 0
+
+        # if covariates is not None - rearrange columns - intersept column, all cohorts columns, covariates columns
+        self.design = self.design.loc[:, ['intercept'] + self.variables + cohorts]
+        logging.info(f"Client {self.cohort_name}: Design matrix created.")
+        logging.info(f"Client {self.cohort_name}: Design matrix columns: {self.design.columns.values}")
 
     ####### limma: linear regression #########
     def compute_XtX_XtY(self):
@@ -198,7 +204,11 @@ class Client:
         """remove batch effects from intensities using server beta coefficients"""
         #  pg_matrix - np.dot(beta, batch.T)
         self.intensities_corrected = np.where(self.intensities == 'NA', np.nan, self.intensities)
-        dot_product = beta @ self.design.drop(columns=['intercept']).T
+        
+        positions = [self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]
+        beta_reduced = np.delete(beta, positions, axis=1)
+        dot_product = beta_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
+        
         self.intensities_corrected = np.where(np.isnan(self.intensities_corrected), self.intensities_corrected, self.intensities_corrected - dot_product)
         self.intensities_corrected = pd.DataFrame(self.intensities_corrected, index=self.intensities.index, columns=self.intensities.columns)
         
