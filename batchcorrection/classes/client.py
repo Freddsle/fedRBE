@@ -21,14 +21,13 @@ class Client:
     def __init__(self, 
                 cohort_name,
                 intensities_file_path,
+                design_file_path=None,
                 experiment_type=EXPERIMENT_TYPE,
-                gene_threshold=2
             ):
 
         self.experiment_type = experiment_type
         self.tmt_names = None if self.experiment_type == EXPERIMENT_TYPE else None
         self.cohort_name = cohort_name
-        self.gene_threshold = gene_threshold
         self.intensities = None
         self.design = None
         self.prot_names = None
@@ -40,7 +39,7 @@ class Client:
         self.intensities_corrected = None
 
 
-        if not self.open_dataset(intensities_file_path):
+        if not self.open_dataset(intensities_file_path, design_file_path):
             raise Exception("Failed to open dataset")
 
         self.XtX = None
@@ -52,18 +51,14 @@ class Client:
     
 
     ######### open dataset #########
-    def open_dataset(self, intensities_file_path):
+    def open_dataset(self, intensities_file_path, design_file_path=None):
         """
         For LFQ-data:
         Reads data and design matrices and ensures that sample names are the same.
         Log2(x + 1) transforms intensities.
 
-        For TMT-data:
-        Reads data and design matrices and ensures that sample names are the same,
-        each TMT-plex has at least one reference sample. Excludes proteins detected in less than 'min_f' plexes.
-        Log2(x+1) transforms intensities.
         """
-        self.read_files(intensities_file_path)
+        self.read_files(intensities_file_path, design_file_path)
         if not self.process_files():
             return False
         # self.check_and_reorder_samples()
@@ -72,26 +67,14 @@ class Client:
         )
         return True
 
-    def read_files(self, intensities_file_path):
+    def read_files(self, intensities_file_path, design_file_path=None):
         """Read files using pandas and store the information in the class attributes."""
         self.intensities = pd.read_csv(intensities_file_path, sep="\t", index_col=0)
-        self.validate_useful_genes()
+        if design_file_path:
+            self.design = pd.read_csv(design_file_path, sep="\t", index_col=0)
+        self.prot_names = self.intensities.index.values
         self.sample_names = list(self.intensities.columns.values)
         self.n_samples = len(self.sample_names)
-  
-    
-    def validate_useful_genes(self):
-        """
-        Check if there are genes where only one sample is given. These need to
-        be removed as they would be observable during later steps.
-        """
-        n_col = self.intensities.shape[1]
-        num_nans = self.intensities.isna().sum(axis=1)
-
-        select_rows = self.intensities[(n_col - num_nans) >= self.gene_threshold]
-        self.prot_names = select_rows.index.values
-        
-        return
 
 
     def process_files(self):
@@ -123,6 +106,14 @@ class Client:
         """
         Ensure that gene names are the same and are in the same order.
         """
+        # @Jens do we need all of this?
+        # stored_features is the same as client.prot_names, see states.py
+        # checking for duplicates could be done by the coordinator instead maybe?
+        # and the rest could then be removed I think
+        # we could maybe just 
+        # 1. move the testing for duplicates to the coordinator
+        # 2. reorder the genes here
+        
         global_prots = set(stored_features)
         self_prots = set(self.prot_names).intersection(global_prots)
         #self_prots = set(self.prot_names)
@@ -154,22 +145,35 @@ class Client:
     def create_design(self, cohorts, minSamples):
         """add covariates to model cohort effects."""
 
-        # first add intersept colum
+        # first add intercept colum
         assert self.sample_names
         if self.design is None:
             self.design = pd.DataFrame({'intercept': np.ones(len(self.sample_names))},
                                         index=self.sample_names)
+        else:
+            self.design['intercept'] = np.ones(len(self.sample_names))
+
 
         if self.cohort_name not in cohorts:
             for cohort in cohorts:
                 self.design[cohort] = -1
-            return
+        else:
+            for cohort in cohorts:
+                if self.cohort_name == cohort:
+                    self.design[cohort] = 1
+                else:
+                    self.design[cohort] = 0
 
-        for cohort in cohorts:
-            if self.cohort_name == cohort:
-                self.design[cohort] = 1
-            else:
-                self.design[cohort] = 0
+                
+        # if covariates is not None - rearrange columns - intersept column,  covariates columns, all cohorts columns
+        if self.variables:
+            # first we ensure that the variables are in the loaded design matrix
+            if not all(column_name in self.design.columns for column_name in self.variables):
+                return f"ERROR: the given variables {self.variables} were not found in the given design matrix file."
+            self.design = self.design.loc[:, ['intercept'] + self.variables + cohorts]
+            logging.info(f"Client {self.cohort_name}: Design matrix created.")
+            logging.info(f"Client {self.cohort_name}: Design matrix columns: {self.design.columns.values}")
+
         # for privacy reasons, we should protect the covariates added to the 
         # design matrix. The design matrix itself is completely reproducable for
         # only one cohort. In case covariates are added, we ensure that
@@ -231,7 +235,11 @@ class Client:
         """remove batch effects from intensities using server beta coefficients"""
         #  pg_matrix - np.dot(beta, batch.T)
         self.intensities_corrected = np.where(self.intensities == 'NA', np.nan, self.intensities)
-        dot_product = beta @ self.design.drop(columns=['intercept']).T
+
+        positions = [self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]
+        beta_reduced = np.delete(beta, positions, axis=1)
+        dot_product = beta_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
+
         self.intensities_corrected = np.where(np.isnan(self.intensities_corrected), self.intensities_corrected, self.intensities_corrected - dot_product)
         self.intensities_corrected = pd.DataFrame(self.intensities_corrected, index=self.intensities.index, columns=self.intensities.columns)
         

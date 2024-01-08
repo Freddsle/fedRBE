@@ -1,5 +1,10 @@
 flimmaBatchCorrection:
   gene_threshold: 2
+  annotation_filename: "design.tsv"  # the file containing covariates
+                                     # it is read in the following way:
+                                     # pd.read_csv(design_file_path, sep="\t", index_col=0)
+  covariates: ['Pyr'] # covariates in linear model (use only one if there is two conditions)
+                      # format: list of strings
   min_samples: 5 # Recommended: Don't change this value
                  # Meaning of the value:
                  # In case a covariat is known to an attacker, this ensures that
@@ -7,3 +12,4 @@ flimmaBatchCorrection:
                  # and of one covariat contain at least min_samples non Zero 
                  # non NaN samples, so that results are fuzzy enough for
                  # attackers to not quess samples. 
+                 # format: int

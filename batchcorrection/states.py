@@ -22,20 +22,20 @@ class InitialState(AppState):
         # read in the config
         config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
         config = config["flimmaBatchCorrection"]
-        gene_threshold = config["gene_threshold"]
         minSamples = config["min_samples"]
+        covariates = config["covariates"]
         # defining the client
         cohort_name = self.id
         intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", "protein_groups_matrix.tsv")
-        experiment_type = 'DIA'
+        experiment_type = 'DIA' #TODO: also support other types?
         client = Client(
             cohort_name,
             intensity_file_path,
-            experiment_type,
-            gene_threshold
+            experiment_type
         ) # initializing the client includes loading and preprocessing of the data
         self.store(key='client', value=client)
         self.store(key='minSamples', value=minSamples)
+        self.store(key='covariates', value=covariates)
         self.configure_smpc()
         # send list of protein names (genes) to coordinator
         print("[initial] Sending the following prot_names to the coordinator")
@@ -71,7 +71,7 @@ class CommonGenesState(AppState):
         print("[common_genes] Common_genes were found")
 
         # create index for design matrix
-        variables = ['intercept'] + self.clients[:-1]
+        variables = self.load("covariates")
         print("[common_genes] index of design matrix created")
         # Send prot_names and variables to all 
         self.broadcast_data([prot_names, variables],
@@ -164,7 +164,8 @@ class ComputeCorrectionState(AppState):
 
         # set up matrices for global XtX and XtY
         client = self.load('client')
-        k = len(client.variables)
+        k = client.design.shape[1]
+        print(f"k is: {k}")
         n = len(client.prot_names)
         XtX_glob = np.zeros((n, k, k))
         XtY_glob = np.zeros((n, k))
