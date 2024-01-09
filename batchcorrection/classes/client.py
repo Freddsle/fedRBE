@@ -70,6 +70,7 @@ class Client:
     def read_files(self, intensities_file_path, design_file_path=None):
         """Read files using pandas and store the information in the class attributes."""
         self.intensities = pd.read_csv(intensities_file_path, sep="\t", index_col=0)
+        print(design_file_path)
         if design_file_path:
             self.design = pd.read_csv(design_file_path, sep="\t", index_col=0)
         self.prot_names = self.intensities.index.values
@@ -113,7 +114,8 @@ class Client:
         # we could maybe just 
         # 1. move the testing for duplicates to the coordinator
         # 2. reorder the genes here
-        
+        print(f"self.prot_names: {self.prot_names}")
+        print(f"Given features: {stored_features}")
         global_prots = set(stored_features)
         self_prots = set(self.prot_names).intersection(global_prots)
         #self_prots = set(self.prot_names)
@@ -192,11 +194,12 @@ class Client:
         # Furthermore, as we later use each column in the calculation of XtY, 
         # we ensure that each column has at least minSamples values that are neither NaN
         # nor 0. Otherwise, we might have very little values of y represented in
-        # a XtY value.
-        counts = self.design.apply(lambda col: (col[(col != 0) & col.notna()].count()))
-        if counts.apply(lambda count: count > 0 and count < minSamples).all():
-            return f"Privacy Error: At least one column in the design matrix must " +\
-                   f"contain more than {minSamples} values for privacy reasons."
+        # a XtY value. 
+        # TODO: keep this in or not?
+        # counts = self.design.apply(lambda col: (col[(col != 0) & col.notna()].count()))
+        # if counts.apply(lambda count: count > 0 and count < minSamples).all():
+        #     return f"Privacy Error: All column in the design matrix must " +\
+        #            f"contain more than {minSamples} values for privacy reasons."
 
     ####### limma: linear regression #########
     def compute_XtX_XtY(self, minSamples):
@@ -219,11 +222,13 @@ class Client:
             else:
                 x = X
             # privacy check, ensure that y holds enough values
-            counts_y = np.sum((y != 0) & (~np.isnan(y)))
-            if counts_y > 0 and counts_y < minSamples:
-                return None, None, f"Privacy Error: your expression data must not contain a " +\
-                    f"protein with only min_sample ({minSamples}) value(s) " +\
-                    f"that are neither 0 nor NaN."
+            # Even when just one value is present, it is unknown which sample
+            # exactly is choosen
+            # counts_y = np.sum((y != 0) & (~np.isnan(y)))
+            # if counts_y > 0 and counts_y < minSamples:
+            #     return None, None, f"Privacy Error: your expression data must not contain a " +\
+            #         f"protein with less than min_sample ({minSamples}) value(s) " +\
+            #         f"that are neither 0 nor NaN."
 
             self.XtX[i, :, :] = x.T @ x
             self.XtY[i, :] = x.T @ y
@@ -236,9 +241,19 @@ class Client:
         #  pg_matrix - np.dot(beta, batch.T)
         self.intensities_corrected = np.where(self.intensities == 'NA', np.nan, self.intensities)
 
-        positions = [self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]
-        beta_reduced = np.delete(beta, positions, axis=1)
-        dot_product = beta_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
+        print("beta shape is {beta.shape}")
+        mask = np.ones(beta.shape[1], dtype=bool)
+        if self.variables:
+            mask[[self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]] = False
+        else:
+            mask[[self.design.columns.get_loc(col) for col in ['intercept']]] = False
+        print(f"mask is: {mask}")
+        beta_reduced = beta[:, mask]
+        print(f"shape of beta_reduces is {beta_reduced.shape}")
+        if self.variables:
+            dot_product = beta_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
+        else:
+            dot_product = beta_reduced @ self.design.drop(columns=['intercept']).T
 
         self.intensities_corrected = np.where(np.isnan(self.intensities_corrected), self.intensities_corrected, self.intensities_corrected - dot_product)
         self.intensities_corrected = pd.DataFrame(self.intensities_corrected, index=self.intensities.index, columns=self.intensities.columns)

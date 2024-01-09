@@ -24,6 +24,7 @@ class InitialState(AppState):
         config = config["flimmaBatchCorrection"]
         minSamples = config["min_samples"]
         covariates = config["covariates"]
+        design_file_path = config["annotation_filename"]
         # defining the client
         cohort_name = self.id
         intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", "protein_groups_matrix.tsv")
@@ -31,7 +32,8 @@ class InitialState(AppState):
         client = Client(
             cohort_name,
             intensity_file_path,
-            experiment_type
+            design_file_path,
+            experiment_type,
         ) # initializing the client includes loading and preprocessing of the data
         self.store(key='client', value=client)
         self.store(key='minSamples', value=minSamples)
@@ -74,8 +76,8 @@ class CommonGenesState(AppState):
         variables = self.load("covariates")
         print("[common_genes] index of design matrix created")
         # Send prot_names and variables to all 
-        self.broadcast_data([prot_names, variables],
-                            send_to_self=True)
+        self.broadcast_data((prot_names, variables),
+                            send_to_self=True, memo="commonGenes")
         print("[common_genes] Data was set to be broadcasted:")
         print(prot_names)
         print(variables)
@@ -92,7 +94,8 @@ class ValidationState(AppState):
     def run(self):
         # obtain and safe common genes and indices of design matrix
         print("[validate] {} waiting for data".format(self.id)) #TODO: rmv
-        prot_names, variables = self.await_data(n=1, is_json=False)
+        prot_names, variables = self.await_data(n=1, is_json=False, memo="commonGenes")
+        print(f"[validate] Got prot_names={prot_names}, variabes={variables}")
         client = self.load('client')
         client.variables = variables
         client.prot_names = prot_names
@@ -135,6 +138,7 @@ class ComputeState(AppState):
 
         # send XtX and XtY
         print("[compute_XtX_XtY] Computation done, sending data to coordinator")
+        print(f"[compute_XtX_XtY] XtX of shape {XtX.shape}, X of shape {client.design.shape}, XtY of shape {XtY.shape}")
         self.send_data_to_coordinator([XtX, XtY],
                                 send_to_self=True,
                                 use_smpc=False)
@@ -154,11 +158,13 @@ class ComputeCorrectionState(AppState):
         # wait for each client to compute XtX and XtY and collect data
         print("[compute_beta] gathering data")
         XtX_XtY_list = self.gather_data(use_smpc=False)
-        print("[compute_beta] Got XtX_XtY_list friom gather_data")
+        print("[compute_beta] Got XtX_XtY_list from gather_data")
         XtX_list = list()
         XtY_list = list()
         for ele in XtX_XtY_list:
             # ele is list[XtX, XtY], see send_data of compute_XtX_XtY
+            print(f"XtXList, shape of element: {ele[0].shape}")
+            print(f"XtYList, shape of element: {ele[1].shape}")
             XtX_list.append(ele[0])
             XtY_list.append(ele[1])
 
@@ -167,6 +173,7 @@ class ComputeCorrectionState(AppState):
         k = client.design.shape[1]
         print(f"k is: {k}")
         n = len(client.prot_names)
+        print(f"n is {n}")
         XtX_glob = np.zeros((n, k, k))
         XtY_glob = np.zeros((n, k))
         stdev_unscaled = np.zeros((n, k))
@@ -181,10 +188,12 @@ class ComputeCorrectionState(AppState):
             beta[i, :] = invXtX @ XtY_glob[i, :]
             stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))
 
+        print(f"[compute_beta] betas calculated: beta.shape is {beta.shape}")
+        print(f"[compute_beta] stdev_unscaled.shape is {stdev_unscaled.shape}")
         # send beta to clients so they can correct their data
         print("[compute_beta] broadcasting betas")
         self.broadcast_data(beta,
-                            send_to_self=True)
+                            send_to_self=True, memo="beta")
         
         return 'include_correction'
 
@@ -197,11 +206,12 @@ class IncludeCorrectionState(AppState):
 
     def run(self):
         # wait for the coordinator to calcualte beta
-        beta = self.await_data(n=1, is_json=False)
+        beta = self.await_data(n=1, is_json=False, memo="beta")
+        print(f"[include_correction] beta gotten is of shape {beta.shape}")
         client = self.load('client')
 
         # remove the batch effects in own data and safe the results
-        client.remove_batch_effects(beta[:,1:])
+        client.remove_batch_effects(beta)
         output_file = os.path.join(os.getcwd(), "mnt", "output", "intensities_corrected.csv")
         client.intensities_corrected.to_csv(output_file)
         
