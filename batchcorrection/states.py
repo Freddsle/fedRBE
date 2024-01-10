@@ -24,16 +24,17 @@ class InitialState(AppState):
         config = config["flimmaBatchCorrection"]
         minSamples = config["min_samples"]
         covariates = config["covariates"]
-        design_file_path = config["annotation_filename"]
+        design_file_path = os.path.join(os.getcwd(), "mnt", "input", config["annotation_filename"])
         # defining the client
         cohort_name = self.id
-        intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", "protein_groups_matrix.tsv")
+        intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", config["expression_filename"])
         experiment_type = 'DIA' #TODO: also support other types?
         client = Client(
             cohort_name,
             intensity_file_path,
             design_file_path,
             experiment_type,
+            covariates,
         ) # initializing the client includes loading and preprocessing of the data
         self.store(key='client', value=client)
         self.store(key='minSamples', value=minSamples)
@@ -184,6 +185,9 @@ class ComputeCorrectionState(AppState):
         # calcualte beta and std. dev.
         beta = np.zeros((n, k))
         for i in range(0, n):
+            #TODO: this might throw an error if XtX_glob[i, :, :] is a singular
+            # matrix
+            print(f"Creating beta with XtX = {XtX_glob[i, :, :]}")
             invXtX = linalg.inv(XtX_glob[i, :, :])
             beta[i, :] = invXtX @ XtY_glob[i, :]
             stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))

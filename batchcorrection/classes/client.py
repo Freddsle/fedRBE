@@ -23,6 +23,7 @@ class Client:
                 intensities_file_path,
                 design_file_path=None,
                 experiment_type=EXPERIMENT_TYPE,
+                covariates=None,
             ):
 
         self.experiment_type = experiment_type
@@ -33,7 +34,7 @@ class Client:
         self.prot_names = None
         self.sample_names = None
 
-        self.variables = None
+        self.variables = covariates
 
         # for correction
         self.intensities_corrected = None
@@ -72,7 +73,11 @@ class Client:
         self.intensities = pd.read_csv(intensities_file_path, sep="\t", index_col=0)
         print(design_file_path)
         if design_file_path:
-            self.design = pd.read_csv(design_file_path, sep="\t", index_col=0)
+            design_file = pd.read_csv(design_file_path, sep="\t", index_col=0)
+            print(design_file)
+            print(design_file.columns)
+            print(self.variables)
+            self.design = design_file[self.variables]
         self.prot_names = self.intensities.index.values
         self.sample_names = list(self.intensities.columns.values)
         self.n_samples = len(self.sample_names)
