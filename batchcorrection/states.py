@@ -185,10 +185,13 @@ class ComputeCorrectionState(AppState):
         # calcualte beta and std. dev.
         beta = np.zeros((n, k))
         for i in range(0, n):
-            #TODO: this might throw an error if XtX_glob[i, :, :] is a singular
-            # matrix
-            print(f"Creating beta with XtX = {XtX_glob[i, :, :]}")
-            invXtX = linalg.inv(XtX_glob[i, :, :])
+            # if the determant is 0 the inverse cannot be formed so we need
+            # to use the pseudo inverse instead
+            if linalg.det(XtX_glob[i, :, :]) == 0:
+                invXtX = linalg.pinv(XtX_glob[i, :, :])
+                pass
+            else:
+                invXtX = linalg.inv(XtX_glob[i, :, :])
             beta[i, :] = invXtX @ XtY_glob[i, :]
             stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))
 
