@@ -70,7 +70,11 @@ class Server:
         self.rank = np.ones(n) * k
 
         for i in range(0, n):
-            invXtX = linalg.inv(self.XtX_glob[i, :, :])
+            try:
+                invXtX = linalg.inv(self.XtX_glob[i, :, :])
+            except linalg.LinAlgError:
+                invXtX = linalg.pinv(self.XtX_glob[i, :, :])
+                
             
             self.beta[i, :] = invXtX @ self.XtY_glob[i, :]
             self.stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))  # standart err for b coefficients
