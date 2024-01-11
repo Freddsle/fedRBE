@@ -209,6 +209,7 @@ class Client:
         beta_reduced = np.delete(beta, positions, axis=1)
         dot_product = beta_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
         
+        # correct values that are non nan, ignore nans
         self.intensities_corrected = np.where(np.isnan(self.intensities_corrected), self.intensities_corrected, self.intensities_corrected - dot_product)
         self.intensities_corrected = pd.DataFrame(self.intensities_corrected, index=self.intensities.index, columns=self.intensities.columns)
         

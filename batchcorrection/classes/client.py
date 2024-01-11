@@ -262,5 +262,6 @@ class Client:
 
         self.intensities_corrected = np.where(np.isnan(self.intensities_corrected), self.intensities_corrected, self.intensities_corrected - dot_product)
         self.intensities_corrected = pd.DataFrame(self.intensities_corrected, index=self.intensities.index, columns=self.intensities.columns)
-        
+        print(f"self.intensities.shape={self.intensities.shape}")
+        print(f"self.intensities_corrected.shape={self.intensities_corrected.shape}")
         logging.info("Client %s:\tBatch effects removed." % self.cohort_name)
