@@ -24,7 +24,9 @@ class InitialState(AppState):
         config = config["flimmaBatchCorrection"]
         minSamples = config["min_samples"]
         covariates = config["covariates"]
-        design_file_path = os.path.join(os.getcwd(), "mnt", "input", config["annotation_filename"])
+        design_file_path = None
+        if config["annotation_filename"]:
+            design_file_path = os.path.join(os.getcwd(), "mnt", "input", config["annotation_filename"])
         # defining the client
         cohort_name = self.id
         intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", config["expression_filename"])

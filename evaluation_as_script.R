@@ -1,9 +1,9 @@
 ### VARIABLES TO SET
-design_concatted_all_vec <- c("test_data/raw_files_first_Imalanced/bath_info_all.tsv")
-central_cured_vec <- c("/results/Imalanced/central_cured.csv")
-folder_fed_results_vec <- c(paste0(getwd(), "/results/Imalanced"))
-plot_folder_name_vec <- c("Imbalanced")
-cohorts_vector <- list(c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'))
+design_concatted_all_vec <- c("test_data/raw_files_first_Imalanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv")
+central_cured_vec <- c("/results/Imalanced/central_cured.csv", "/results/Balanced/central_cured.csv")
+folder_fed_results_vec <- c(paste0(getwd(), "/results/Imalanced/withCovariates"), paste0(getwd(), "/results/Balanced/withCovariates"))
+plot_folder_name_vec <- c("ImbalancedCovariates", "BalancedCovariates")
+cohorts_vector <- list(c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'))
 plotting <- FALSE #TODO: plotting is not yet taken from the ipynb
 
 ### IMPORTS
@@ -30,7 +30,12 @@ suppressPackageStartupMessages(library(tidyverse))
 
 ### FUNCTIONS
 main <- function() {
-    #TODO: add assert, vectors of same length
+    stopifnot(
+        length(design_concatted_all_vec) == length(central_cured_vec),
+        length(central_cured_vec) == length(folder_fed_results_vec),
+        length(folder_fed_results_vec) == length(plot_folder_name_vec),
+        length(plot_folder_name_vec) == length(cohorts_vector)
+    )
     for (idx in seq_along(design_concatted_all_vec)) {
         run_comparison(design_concatted_all_vec[idx], central_cured_vec[idx], 
             folder_fed_results_vec[idx], plot_folder_name_vec[idx], cohorts_vector[[idx]])
@@ -39,6 +44,8 @@ main <- function() {
 
 run_comparison <- function(design_concat_all_file, central_cured_file, 
     folder_fed_results, plot_folder, cohorts) {
+    print(paste0("CHECKING ", central_cured_file))
+    print("=================================================================")
     path <- paste0(getwd(), "/", design_concat_all_file)
     batch_info_ref <- read.csv(path, check.names = FALSE, sep="\t") %>%
     column_to_rownames('rowname') %>%
