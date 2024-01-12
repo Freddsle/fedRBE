@@ -149,7 +149,7 @@ class Client:
         self.prot_names = sorted(self_prots)
         self.intensities = self.intensities.loc[self.prot_names, :] 
     
-    def create_design(self, cohorts, minSamples):
+    def create_design(self, cohorts):
         """add covariates to model cohort effects."""
 
         # first add intercept colum
@@ -234,7 +234,12 @@ class Client:
             #     return None, None, f"Privacy Error: your expression data must not contain a " +\
             #         f"protein with less than min_sample ({minSamples}) value(s) " +\
             #         f"that are neither 0 nor NaN."
-
+            if minSamples != 0:
+                x_boolean = np.where(x != 0, 1, 0)
+                y_boolean = np.where(y != 0, 1, 0)
+                XtY_boolean = x_boolean.T @ y_boolean
+                if not np.all(XtY_boolean >= minSamples | XtY_boolean == 0):
+                    return None, None, "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
             self.XtX[i, :, :] = x.T @ x
             self.XtY[i, :] = x.T @ y
         return self.XtX, self.XtY, None

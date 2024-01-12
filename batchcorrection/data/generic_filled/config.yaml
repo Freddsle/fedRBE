@@ -21,10 +21,11 @@ flimmaBatchCorrection:
   # potentially known privacy might become an issue
   # With min samples > 0, the program might halt depending on the given data
   smpc: True
-  min_samples: 0 # In case a covariat is known to an attacker, this ensures that
+  min_samples: 5 # In case a covariat is known to an attacker, this ensures that
                  # in each calculation, the vector of all samples of one protein
                  # and of one covariat contain at least min_samples non Zero 
                  # non NaN samples, so that results are fuzzy enough for
                  # attackers to not quess samples. 
                  # format: int
+
 

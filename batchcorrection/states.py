@@ -24,6 +24,10 @@ class InitialState(AppState):
         config = config["flimmaBatchCorrection"]
         minSamples = config["min_samples"]
         covariates = config["covariates"]
+        smpc = config["smpc"]
+        if not smpc:
+            smpc = False
+        self.store("smpc", config["smpc"])
         design_file_path = None
         if config["annotation_filename"]:
             design_file_path = os.path.join(os.getcwd(), "mnt", "input", config["annotation_filename"])
@@ -107,7 +111,7 @@ class ValidationState(AppState):
         print("[validate] {} Inputs have been validated".format(self.id))
         # get all client names to generate design matrix
         all_client_names = self.clients
-        err = client.create_design(all_client_names[:-1], self.load("minSamples"))
+        err = client.create_design(all_client_names[:-1])
         if err:
             self.log(err, LogLevel.FATAL)
         print("[validate] {} design has been created".format(self.id))
@@ -144,7 +148,7 @@ class ComputeState(AppState):
         print(f"[compute_XtX_XtY] XtX of shape {XtX.shape}, X of shape {client.design.shape}, XtY of shape {XtY.shape}")
         self.send_data_to_coordinator([XtX, XtY],
                                 send_to_self=True,
-                                use_smpc=False)
+                                use_smpc=self.load("smpc"))
 
         if self.is_coordinator:
             return 'compute_beta'
