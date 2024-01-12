@@ -1,9 +1,9 @@
 ### VARIABLES TO SET
-design_concatted_all_vec <- c("test_data/raw_files_first_Imalanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv")
-central_cured_vec <- c("/results/Imalanced/central_cured.csv", "/results/Balanced/central_cured.csv")
-folder_fed_results_vec <- c(paste0(getwd(), "/results/Imalanced/withCovariates"), paste0(getwd(), "/results/Balanced/withCovariates"))
-plot_folder_name_vec <- c("ImbalancedCovariates", "BalancedCovariates")
-cohorts_vector <- list(c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'))
+design_concatted_all_vec <- c("test_data/raw_files_first_Imalanced/bath_info_all.tsv", "test_data/raw_files_first_Imalanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv")
+central_cured_vec <- c("/results/Imalanced/central_cured.csv", "/results/Imalanced_nocov/central_cured.csv", "/results/Balanced/central_cured.csv", "/results/Balanced_nocov/central_cured.csv")
+folder_fed_results_vec <- c(paste0(getwd(), "/results/Imalanced"), paste0(getwd(), "/results/Imalanced_nocov"), paste0(getwd(), "/results/Balanced", ""), paste0(getwd(), "/results/Balanced_nocov", ""))
+plot_folder_name_vec <- c("Imalanced", "Imalanced_nocov", "Balanced", "Balanced_nocov")
+cohorts_vector <- list(c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'))
 plotting <- FALSE #TODO: plotting is not yet taken from the ipynb
 
 ### IMPORTS
