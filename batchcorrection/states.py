@@ -164,18 +164,8 @@ class ComputeCorrectionState(AppState):
     def run(self):
         # wait for each client to compute XtX and XtY and collect data
         print("[compute_beta] gathering data")
-        XtX_XtY_list = self.gather_data(use_smpc=False)
+        XtX_XtY_list = self.gather_data(use_smpc=self.load("smpc"))
         print("[compute_beta] Got XtX_XtY_list from gather_data")
-        XtX_list = list()
-        XtY_list = list()
-        for ele in XtX_XtY_list:
-            # ele is list[XtX, XtY], see send_data of compute_XtX_XtY
-            print(f"XtXList, shape of element: {ele[0].shape}")
-            print(f"XtYList, shape of element: {ele[1].shape}")
-            XtX_list.append(ele[0])
-            XtY_list.append(ele[1])
-
-        # set up matrices for global XtX and XtY
         client = self.load('client')
         k = client.design.shape[1]
         print(f"k is: {k}")
@@ -184,15 +174,40 @@ class ComputeCorrectionState(AppState):
         XtX_glob = np.zeros((n, k, k))
         XtY_glob = np.zeros((n, k))
         stdev_unscaled = np.zeros((n, k))
-        for i in range(0, len(self.clients)):
-            XtX_glob += XtX_list[i]
-            XtY_glob += XtY_list[i]
-        
+        if not self.load("smpc"):
+            XtX_list = list()
+            XtY_list = list()
+            for ele in XtX_XtY_list:
+                # ele is list[XtX, XtY], see send_data of compute_XtX_XtY
+                print(f"XtXList, shape of element: {ele[0].shape}")
+                print(f"XtYList, shape of element: {ele[1].shape}")
+                XtX_list.append(ele[0])
+                XtY_list.append(ele[1])
+
+            # set up matrices for global XtX and XtY
+            for i in range(0, len(self.clients)):
+                XtX_glob += XtX_list[i]
+                XtY_glob += XtY_list[i]
+        else:
+            # smpc case, already aggregated
+            XtX_XtY_list = XtX_XtY_list[0]
+            XtX_glob += XtX_XtY_list[0]
+            XtY_glob += XtX_XtY_list[1]
+
         # calcualte beta and std. dev.
         beta = np.zeros((n, k))
         for i in range(0, n):
             # if the determant is 0 the inverse cannot be formed so we need
             # to use the pseudo inverse instead
+            print(f"i is {i}")
+            print("XtX_glob:")
+            print(type(XtX_glob))
+            print(len(XtX_glob))
+            print("XtX_glob[0]")
+            print(type(XtX_glob[0]))
+            print(len(XtX_glob[0]))
+            print(XtX_glob[0])
+            
             if linalg.det(XtX_glob[i, :, :]) == 0:
                 invXtX = linalg.pinv(XtX_glob[i, :, :])
                 pass

@@ -1,9 +1,9 @@
 ### VARIABLES TO SET
-design_concatted_all_vec <- c("test_data/raw_files_first_Imalanced/bath_info_all.tsv", "test_data/raw_files_first_Imalanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv")
-central_cured_vec <- c("/results/Imalanced/central_cured.csv", "/results/Imalanced_nocov/central_cured.csv", "/results/Balanced/central_cured.csv", "/results/Balanced_nocov/central_cured.csv")
-folder_fed_results_vec <- c(paste0(getwd(), "/results/Imalanced"), paste0(getwd(), "/results/Imalanced_nocov"), paste0(getwd(), "/results/Balanced", ""), paste0(getwd(), "/results/Balanced_nocov", ""))
-plot_folder_name_vec <- c("Imalanced", "Imalanced_nocov", "Balanced", "Balanced_nocov")
-cohorts_vector <- list(c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'))
+design_concatted_all_vec <- c("test_data/raw_files_first_Imalanced/bath_info_all.tsv", "test_data/raw_files_first_Imalanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv", "test_data/raw_files_first_Balanced/bath_info_all.tsv")
+central_cured_vec <- c("/results/Imalanced/central_cured.csv", "/results/Imalanced_nocov/central_cured.csv", "/results/Balanced/central_cured.csv", "/results/Balanced_nocov/central_cured.csv", "/results/Balanced/central_cured.csv")
+folder_fed_results_vec <- c(paste0(getwd(), "/results/Imalanced"), paste0(getwd(), "/results/Imalanced_nocov"), paste0(getwd(), "/results/Balanced", ""), paste0(getwd(), "/results/Balanced_nocov", ""), paste0(getwd(), "/results/Balanced", ""))
+plot_folder_name_vec <- c("Imalanced", "Imalanced_nocov", "Balanced", "Balanced_nocov", "Balanced_smpc")
+cohorts_vector <- list(c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'), c('lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E'))
 plotting <- FALSE #TODO: plotting is not yet taken from the ipynb
 
 ### IMPORTS
@@ -44,7 +44,7 @@ main <- function() {
 
 run_comparison <- function(design_concat_all_file, central_cured_file, 
     folder_fed_results, plot_folder, cohorts) {
-    print(paste0("CHECKING ", central_cured_file))
+    print(paste0("CHECKING ", plot_folder))
     print("=================================================================")
     path <- paste0(getwd(), "/", design_concat_all_file)
     batch_info_ref <- read.csv(path, check.names = FALSE, sep="\t") %>%
