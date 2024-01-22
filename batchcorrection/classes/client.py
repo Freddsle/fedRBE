@@ -238,7 +238,7 @@ class Client:
                 x_boolean = np.where(x != 0, 1, 0)
                 y_boolean = np.where(y != 0, 1, 0)
                 XtY_boolean = x_boolean.T @ y_boolean
-                if not np.all(XtY_boolean >= minSamples | XtY_boolean == 0):
+                if not np.all((XtY_boolean >= minSamples) | (XtY_boolean == 0)):
                     return None, None, "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
             self.XtX[i, :, :] = x.T @ x
             self.XtY[i, :] = x.T @ y
