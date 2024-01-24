@@ -1,0 +1,31 @@
+flimmaBatchCorrection:
+  expression_filename: "lab_B_protein_groups_matrix.tsv" 
+    # the file containing the expression data. Must be a 2d matrix where
+    # samples are given as columns and features as rows
+  annotation_filename: lab_B_design.tsv # the file containing covariates
+                                     # it is read in the following way:
+                                     # pd.read_csv(design_file_path, sep="\t", index_col=0)
+  covariates: ['Pyr'] # covariates in linear model (use only one if there is two conditions)
+                      # format: list of strings
+  # The following options are for privacy, we recommend one of these tiers:
+  # minimum privacy:
+  #   smpc = False
+  #   min_samples = 0
+  # medium privacy, medium slowdown
+  #   smpc = True
+  #   min_samples = 0
+  # maximum privacy, medium to high slowdown
+  #   smpc = True
+  #   min_samples = 5
+  # generally minimum or medium privacy is enough, only when covariates are
+  # potentially known privacy might become an issue
+  # With min samples > 0, the program might halt depending on the given data
+  smpc: True
+  min_samples: 0 # In case a covariat is known to an attacker, this ensures that
+                 # in each calculation, the vector of all samples of one protein
+                 # and of one covariat contain at least min_samples non Zero 
+                 # non NaN samples, so that results are fuzzy enough for
+                 # attackers to not quess samples. 
+                 # format: int
+
+

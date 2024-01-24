@@ -21,16 +21,32 @@ class InitialState(AppState):
     def run(self):
         # read in the config
         config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
+        if "flimmaBatchCorrection" not in config:
+            self.log("Incorrect format of your config file, the key flimmaBatchCorrection must be in your config file", LogLevel.FATAL)
         config = config["flimmaBatchCorrection"]
-        minSamples = config["min_samples"]
-        covariates = config["covariates"]
-        smpc = config["smpc"]
-        if not smpc:
-            smpc = False
-        self.store("smpc", config["smpc"])
+        # read min_samples
+        if "min_samples" not in config:
+            minSamples = 0
+            self.log("min_samples was not given so it was set to 0", LogLevel.DEBUG) # debug is used like info
+        else:
+            minSamples = config["min_samples"]
+        # read covariates
+        if "covariates" not in config:
+            covariates = None
+        else:
+            covariates = config["covariates"]
+        # read smpc
+        smpc = True
+        if "smpc" in config:
+            smpc = config["smpc"]
+        # read design file
         design_file_path = None
         if config["annotation_filename"]:
             design_file_path = os.path.join(os.getcwd(), "mnt", "input", config["annotation_filename"])
+        # read expression file
+        if "expression_filename" not in config:
+            self.log("No expression file was given in the config, cannot continue", LogLevel.FATAL)
+
         # defining the client
         cohort_name = self.id
         intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", config["expression_filename"])
@@ -42,6 +58,7 @@ class InitialState(AppState):
             experiment_type,
             covariates,
         ) # initializing the client includes loading and preprocessing of the data
+        self.store(key="smpc", value=smpc)
         self.store(key='client', value=client)
         self.store(key='minSamples', value=minSamples)
         self.store(key='covariates', value=covariates)
