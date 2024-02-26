@@ -3,8 +3,11 @@ flimmaBatchCorrection:
   annotation_filename: lab_A_design.tsv # the file containing covariates
                                      # it is read in the following way:
                                      # pd.read_csv(design_file_path, sep="\t", index_col=0)
+  separator: "\t"
   covariates: ["Pyr"] # covariates in linear model (use only one if there is two conditions)
                       # format: list of strings
+  normalizationMethod: "log2(x+1)" # the method used for normalization, supported:
+                                   # "log2(x+1)"
   min_samples: 0 # Recommended: Don't change this value
                  # Meaning of the value:
                  # In case a covariat is known to an attacker, this ensures that

@@ -1,6 +1,5 @@
 import os
 import bios
-import time #TODO: rmv
 
 import numpy as np
 
@@ -11,16 +10,24 @@ from classes.client import Client
 
 # FeatureCloud requires that apps define the at least the 'initial' state.
 # This state is executed after the app instance is started.
+INPUT_FOLDER = os.path.join(os.getcwd(), "mnt", "input")
 @app_state('initial')
 class InitialState(AppState):
 
     def register(self):
-        self.register_transition('common_genes', Role.COORDINATOR)
+        self.register_transition('common_features', Role.COORDINATOR)
         self.register_transition('validate', Role.PARTICIPANT)
     
     def run(self):
         # read in the config
-        config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
+        try:
+            config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yml"))
+        except Exception as e1:
+            try:
+                config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
+            except Exception as e2:
+                self.log(f"Could not read the config file, tried config.yml: {e1} and config.yaml: {e2}", LogLevel.FATAL)
+        
         if "flimmaBatchCorrection" not in config:
             self.log("Incorrect format of your config file, the key flimmaBatchCorrection must be in your config file", LogLevel.FATAL)
         config = config["flimmaBatchCorrection"]
@@ -39,43 +46,72 @@ class InitialState(AppState):
         smpc = True
         if "smpc" in config:
             smpc = config["smpc"]
-        # read design file
+        # read design file and design_seperator
         design_file_path = None
-        if config["annotation_filename"]:
-            design_file_path = os.path.join(os.getcwd(), "mnt", "input", config["annotation_filename"])
-        # read expression file
-        if "expression_filename" not in config:
-            self.log("No expression file was given in the config, cannot continue", LogLevel.FATAL)
+        if "design_filename" in config:
+            design_file_path = os.path.join(INPUT_FOLDER, config["design_filename"])
+        if "design_separator" not in config:
+            design_separator = "\t"
+        else:
+            design_separator = config["design_separator"]
+        # read expression file or data file
+        if "data_filename" not in config:
+            self.log("No data_filename was given in the config, cannot continue", LogLevel.FATAL)
+        datafile_path = os.path.join(INPUT_FOLDER, config["data_filename"])
+        # read the seperator
+        if "separator" not in config:
+            self.log("No separator was given in the config, cannot continue", LogLevel.FATAL)
+        # read the normalization method
+        if "normalizationMethod" not in config:
+            normalizationMethod = None
+        else:
+            normalizationMethod = config["normalizationMethod"]
+        # read whether given file is an expression file
+        if "expression_file_flag" not in config:
+            expr_file_flag = False
+        else:
+            expr_file_flag = config["expression_file_flag"]
+        # checking for the index_col
+        if "index_col" not in config:
+            index_col = None
+        else:
+            index_col = config["index_col"]
+        if not index_col:
+            print("No index_col was given in the config, automatically creating an index.")
 
         # defining the client
         cohort_name = self.id
-        intensity_file_path = os.path.join(os.getcwd(), "mnt", "input", config["expression_filename"])
-        experiment_type = 'DIA' #TODO: also support other types?
         client = Client(
-            cohort_name,
-            intensity_file_path,
-            design_file_path,
-            experiment_type,
-            covariates,
-        ) # initializing the client includes loading and preprocessing of the data
+            cohort_name=cohort_name,
+            datafile_path=datafile_path,
+            expr_file_flag=expr_file_flag,
+            design_file_path=design_file_path,
+            separator=config["separator"],
+            design_separator=design_separator,
+            index_col=index_col,
+            covariates=covariates,
+            normalizationMethod=normalizationMethod,
+        ) # initializing the client includes loading of the data
+
         self.store(key="smpc", value=smpc)
         self.store(key='client', value=client)
         self.store(key='minSamples', value=minSamples)
         self.store(key='covariates', value=covariates)
+        self.store(key="separator", value=config["separator"])
         self.configure_smpc()
         # send list of protein names (genes) to coordinator
-        print("[initial] Sending the following prot_names to the coordinator")
-        print(client.prot_names)
-        self.send_data_to_coordinator(client.prot_names,
+        # we use the hashed values of the feature names and variables
+        print("[initial] Sending feature_names to the coordinator")
+        self.send_data_to_coordinator((list(client.hash2feature.keys()), list(client.hash2variable.keys())),
                                     send_to_self=True,
                                     use_smpc=False)
-
+        print(f"[initial] The following clients are registered: {self.clients}")
         if self.is_coordinator:
-            return 'common_genes'
+            return 'common_features'
         return 'validate'
 
 
-@app_state('common_genes')
+@app_state('common_features')
 class CommonGenesState(AppState):
 
     def register(self):
@@ -83,29 +119,34 @@ class CommonGenesState(AppState):
         
     def run(self):
         # wait for each client to send the list of genes they have
-        print("[common_genes] Gathering genes from all clients")
-        lists_of_genes = self.gather_data(is_json=False)
-            # SMPC will not work as strings can't be averaged
-        print("[common_genes] Gathered data from all clients")
+        print("[common_features] Gathering features from all clients")
+        lists_of_features_and_variables = self.gather_data(is_json=False)
+        print("[common_features] Gathered data from all clients")
         # generate a sorted list of the genes that are available on each client
-        prot_names = list()
-        for l in lists_of_genes:
-            if len(prot_names) == 0:
-                prot_names = l
+        global_feature_names = set()
+        global_variables = set()
+        for tup in lists_of_features_and_variables:
+            local_feature_name = tup[0]
+            local_variable_list = tup[1]
+            if len(global_feature_names) == 0:
+                global_feature_names = set(local_feature_name)
             else:
-                prot_names = sorted(list(set(prot_names) & set(l)))
-        print("[common_genes] Common_genes were found")
+                global_feature_names = global_feature_names.intersection(set(local_feature_name))
+            if local_variable_list:
+                if len(global_variables) == 0:
+                    global_variables = set(local_variable_list)
+                else:
+                    global_variables.intersection(set( local_variable_list))
+        global_feature_names = sorted(list(global_feature_names))
+        print("[common_features] common_features were found")
 
-        # create index for design matrix
-        variables = self.load("covariates")
-        print("[common_genes] index of design matrix created")
-        # Send prot_names and variables to all 
-        self.broadcast_data((prot_names, variables),
+        # Send feature_names and variables to all 
+        if not global_variables:
+            global_variables = None
+        self.broadcast_data((global_feature_names, global_variables),
                             send_to_self=True, memo="commonGenes")
-        print("[common_genes] Data was set to be broadcasted:")
-        print(prot_names)
-        print(variables)
-        print("[common_genes] transitioning to validate, data was broadcastet")
+        print("[common_features] Data was set to be broadcasted:")
+        print("[common_features] transitioning to validate")
         return 'validate'
 
 
@@ -117,14 +158,11 @@ class ValidationState(AppState):
 
     def run(self):
         # obtain and safe common genes and indices of design matrix
-        print("[validate] {} waiting for data".format(self.id)) #TODO: rmv
-        prot_names, variables = self.await_data(n=1, is_json=False, memo="commonGenes")
-        print(f"[validate] Got prot_names={prot_names}, variabes={variables}")
+        print("[validate] {} waiting for common features and covariates".format(self.id)) 
+        global_feauture_names_hashed, global_variables_hashed = self.await_data(n=1, is_json=False, memo="commonGenes")
         client = self.load('client')
-        client.variables = variables
-        client.prot_names = prot_names
 
-        client.validate_inputs(client.prot_names, client.variables)
+        client.validate_inputs(global_feauture_names_hashed, global_variables_hashed)
         print("[validate] {} Inputs have been validated".format(self.id))
         # get all client names to generate design matrix
         all_client_names = self.clients
@@ -132,9 +170,6 @@ class ValidationState(AppState):
         if err:
             self.log(err, LogLevel.FATAL)
         print("[validate] {} design has been created".format(self.id))
-        # filter the intinsities to only use the columns that are given on each client
-        client.intensities = client.intensities.loc[client.prot_names, :]
-        print("[validate] {} intensities has been created".format(self.id))
         self.store(key='client', value=client)
         print("[validate] {} changing states".format(self.id))
         return 'compute_XtX_XtY'
@@ -150,8 +185,8 @@ class ComputeState(AppState):
     def run(self):
         client = self.load('client')
         client.sample_names = client.design.index.values
-        # sort intensities by sample names and proteins
-        client.intensities = client.intensities.loc[client.prot_names, client.sample_names]
+        # sort data by sample names and proteins
+        client.data = client.data.loc[client.feature_names, client.sample_names]
         client.n_samples = len(client.sample_names)
         
         # compute XtX and XtY
@@ -185,9 +220,7 @@ class ComputeCorrectionState(AppState):
         print("[compute_beta] Got XtX_XtY_list from gather_data")
         client = self.load('client')
         k = client.design.shape[1]
-        print(f"k is: {k}")
-        n = len(client.prot_names)
-        print(f"n is {n}")
+        n = len(client.feature_names)
         XtX_glob = np.zeros((n, k, k))
         XtY_glob = np.zeros((n, k))
         stdev_unscaled = np.zeros((n, k))
@@ -195,9 +228,6 @@ class ComputeCorrectionState(AppState):
             XtX_list = list()
             XtY_list = list()
             for ele in XtX_XtY_list:
-                # ele is list[XtX, XtY], see send_data of compute_XtX_XtY
-                print(f"XtXList, shape of element: {ele[0].shape}")
-                print(f"XtYList, shape of element: {ele[1].shape}")
                 XtX_list.append(ele[0])
                 XtY_list.append(ele[1])
 
@@ -216,14 +246,6 @@ class ComputeCorrectionState(AppState):
         for i in range(0, n):
             # if the determant is 0 the inverse cannot be formed so we need
             # to use the pseudo inverse instead
-            print(f"i is {i}")
-            print("XtX_glob:")
-            print(type(XtX_glob))
-            print(len(XtX_glob))
-            print("XtX_glob[0]")
-            print(type(XtX_glob[0]))
-            print(len(XtX_glob[0]))
-            print(XtX_glob[0])
             
             if linalg.det(XtX_glob[i, :, :]) == 0:
                 invXtX = linalg.pinv(XtX_glob[i, :, :])
@@ -238,8 +260,8 @@ class ComputeCorrectionState(AppState):
         # send beta to clients so they can correct their data
         print("[compute_beta] broadcasting betas")
         self.broadcast_data(beta,
-                            send_to_self=True, memo="beta")
-        
+                            send_to_self=True, 
+                            memo="beta")
         return 'include_correction'
 
 
@@ -252,12 +274,14 @@ class IncludeCorrectionState(AppState):
     def run(self):
         # wait for the coordinator to calcualte beta
         beta = self.await_data(n=1, is_json=False, memo="beta")
-        print(f"[include_correction] beta gotten is of shape {beta.shape}")
         client = self.load('client')
 
         # remove the batch effects in own data and safe the results
         client.remove_batch_effects(beta)
-        output_file = os.path.join(os.getcwd(), "mnt", "output", "intensities_corrected.csv")
-        client.intensities_corrected.to_csv(output_file)
-        
+        client.data_corrected.to_csv(os.path.join(os.getcwd(), "mnt", "output", "only_batch_corrected_data.csv"), 
+                                     sep=self.load("separator"))
+        client.data_corrected_and_raw.to_csv(os.path.join(os.getcwd(), "mnt", "output", "all_data.csv"), 
+                                     sep=self.load("separator"))
+        with open(os.path.join(os.getcwd(), "mnt", "output", "report.txt"), "w") as f:
+            f.write(client.report)
         return 'terminal'

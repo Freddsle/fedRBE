@@ -161,5 +161,6 @@ cython_debug/
 
 batchcorrection/data/tests
 batchcorrection/data/logs
+batchcorrection/data/site_info.json
 batchcorrection/logs
 batchcorrection/tests
