@@ -22,12 +22,15 @@ for dataset_folder, index_col in zip(dataset_folders, index_cols):
         specific_dataset_federated_path = os.path.join(dataset_folder_path, specific_dataset, federated_folder)
         # now we iterate all folders, check that there is only one file and merge the files
         for lab_folder in os.listdir(specific_dataset_federated_path):
+            if lab_folder == "merged.tsv":
+                continue
             lab_folder_path = os.path.join(specific_dataset_federated_path, lab_folder)
             # check that there is only one file
             files = os.listdir(lab_folder_path)
             assert len(files) == 1
             file = files[0]
-            df = pd.read_csv(os.path.join(lab_folder_path, file), sep="\t", index_col=index_col)
+            df = pd.read_csv(os.path.join(lab_folder_path, file), sep=",", index_col=index_col)
+            #print(df.head)
             # check cols
             if not concat_data.empty and concat_data.columns.equals(df.columns):
                 # check that the columns are the same
@@ -36,4 +39,7 @@ for dataset_folder, index_col in zip(dataset_folders, index_cols):
             # merge into the df
             concat_data = pd.concat([concat_data, df], axis=1)
         # save the concatted data to the corresponding federated folder
+        print(specific_dataset_federated_path)
+        print(concat_data.head())
         concat_data.to_csv(os.path.join(specific_dataset_federated_path, "merged.tsv"), sep="\t")
+        concat_data = pd.DataFrame()
