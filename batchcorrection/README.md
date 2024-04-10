@@ -10,7 +10,11 @@ supported, check the [config](#config) for more information.
 - (Optional) the design matrix with given covariates. Covariates can also be given in the datafile, see [Config](#config). 
 
 ## Output
-- `only_batch_corrected_data.csv`: This contains only the features that could be batch corrected. Only features that are available in ALL clients and are numeric can be batch corrected. CSV format uses the same `seperator` as given in `seperator`.
+The following output is given in each client and only concerns each clients individual data. 
+The CSV format of output files uses the same `seperator` as given in the config files `seperator`.
+The following output is produced:
+
+- `only_batch_corrected_data.csv`: This contains only the features that could be batch corrected. Only features that are available in ALL clients and are numeric can be batch corrected. 
 - `all_data.csv`: This contains all batch corrected features as well as all other features that could not be batch corrected. CSV format uses the same `seperator` as given in `seperator`.
 - `report.txt`: This contains textual information about which features were excluded from the batch effect corection. Furthermore, it holds the `beta` values calculated for the batch effect correction as well as the internally used design matrix.
 
