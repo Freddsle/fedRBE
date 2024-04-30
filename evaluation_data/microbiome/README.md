@@ -18,3 +18,13 @@ Data from 5 studies:
 Central run:  
 - limmaRBE with classes as covariates and study_accession as batches.
 - 0 as 0.
+
+For plots - data contains zero values. Now need to do imputation.
+
+# Structure
+
+In /before folder there are two versions on the dataset.  
+- one file for all - all studies in one tsv (metadata, normalized counts and raw counts).
+- the save but folder per study - for App. Contains additionally design file - covariates info in sutable for App format.
+
+For the App better to use normalized-log-transformed data, but with log2 inside App transformation disabled.
