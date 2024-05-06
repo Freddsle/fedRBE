@@ -1,0 +1,31 @@
+Sample_geo_ID	Status	HistSubtypes	Stage	Grade2	ClinicopathologicSubtypes	platform_id	supplementary_file	Grade	tissue	Stage2	Stage3
+GSM947277	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947277/suppl/GSM947277_OSE_434.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947278	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947278/suppl/GSM947278_OSE_437.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947279	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947279/suppl/GSM947279_OSE_440.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947280	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947280/suppl/GSM947280_OSE_448.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947281	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947281/suppl/GSM947281_OSE_452.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947282	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947282/suppl/GSM947282_OSE_541.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947283	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947283/suppl/GSM947283_OSE_463.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947284	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947284/suppl/GSM947284_OSE_470.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947285	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947285/suppl/GSM947285_OSE_475.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947286	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947286/suppl/GSM947286_OSE_552.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947287	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947287/suppl/GSM947287_OSE_563.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947288	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947288/suppl/GSM947288_OSE_567.CEL.gz	NA	Ovarian Surface Epithelium	NA	NA
+GSM947296	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947296/suppl/GSM947296_CEPI_183.CEL.gz	2	Ovarian Cancer Epithelium	III	NA
+GSM947297	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947297/suppl/GSM947297_CEPI_229.CEL.gz	3	Ovarian Cancer Epithelium	III	NA
+GSM947298	ovarian tumour	high-grade serous carcinoma	IIB	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947298/suppl/GSM947298_CEPI_242.CEL.gz	3	Ovarian Cancer Epithelium	II	NA
+GSM947299	ovarian tumour	high-grade serous carcinoma	IC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947299/suppl/GSM947299_CEPI_317.CEL.gz	3	Ovarian Cancer Epithelium	I	NA
+GSM947300	ovarian tumour	high-grade serous carcinoma	IC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947300/suppl/GSM947300_CEPI_336.CEL.gz	3	Ovarian Cancer Epithelium	I	NA
+GSM947301	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947301/suppl/GSM947301_CEPI_367.CEL.gz	3	Ovarian Cancer Epithelium	II	NA
+GSM947302	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947302/suppl/GSM947302_CEPI_369.CEL.gz	2	Ovarian Cancer Epithelium	III	NA
+GSM947303	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947303/suppl/GSM947303_CEPI_413.CEL.gz	3	Ovarian Cancer Epithelium	III	NA
+GSM947304	ovarian tumour	high-grade serous carcinoma	IIIC/IV	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947304/suppl/GSM947304_CEPI_489.CEL.gz	3	Ovarian Cancer Epithelium	IV	NA
+GSM947305	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947305/suppl/GSM947305_CEPI_528.CEL.gz	3	Ovarian Cancer Epithelium	III	NA
+GSM947306	ovarian tumour	high-grade serous carcinoma	IIIA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947306/suppl/GSM947306_CEPI_537.CEL.gz	2	Ovarian Cancer Epithelium	III	NA
+GSM947307	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947307/suppl/GSM947307_CEPI_542.CEL.gz	3	Ovarian Cancer Epithelium	IV	NA
+GSM947308	ovarian tumour	high-grade serous carcinoma	IIIC/IV	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947308/suppl/GSM947308_CEPI_551.CEL.gz	3	Ovarian Cancer Epithelium	IV	NA
+GSM947309	ovarian tumour	high-grade serous carcinoma	IIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947309/suppl/GSM947309_CEPI_588.CEL.gz	2	Ovarian Cancer Epithelium	II	NA
+GSM947310	ovarian tumour	high-grade serous carcinoma	IIIA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947310/suppl/GSM947310_CEPI_606.CEL.gz	3	Ovarian Cancer Epithelium	III	NA
+GSM947311	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947311/suppl/GSM947311_CEPI_617.CEL.gz	2	Ovarian Cancer Epithelium	III	NA
+GSM947312	ovarian tumour	high-grade serous carcinoma	III/IV	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947312/suppl/GSM947312_CEPI_620.CEL.gz	3	Ovarian Cancer Epithelium	IV	NA
+GSM947313	ovarian tumour	high-grade serous carcinoma	IIIB/C	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM947nnn/GSM947313/suppl/GSM947313_CEPI_651.CEL.gz	3	Ovarian Cancer Epithelium	III	NA

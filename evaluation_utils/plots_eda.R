@@ -28,6 +28,11 @@ pca_plot <- function(
   if(shape_col != ""){
     pca_plot <- pca_df %>%
         ggplot(aes_string(x = "PC1", y = "PC2", color = col_col, shape = shape_col))
+    if(length(unique(batch_info[[shape_col]])) > 6){
+      shapes_codes <- c(0, 1, 3, 8, 7, 15, 19)
+      pca_plot <- pca_plot + 
+        scale_shape_manual(values = shapes_codes)
+    }    
   } else {
     pca_plot <- pca_df %>%
         ggplot(aes_string(x = "PC1", y = "PC2", color = col_col))
@@ -73,7 +78,7 @@ umap_plot <- function(
 
   plot_result <- ggplot(umap_data, aes_string(x = "X1", y = "X2", color = color_column)) +
     geom_point(aes_string(col = color_column), size = 0.7) +
-    stat_ellipse(type = "t", level = 0.95) + # Add ellipses for each condition
+    # stat_ellipse(type = "t", level = 0.95) + # Add ellipses for each condition
     theme_minimal() +
     scale_color_lancet() + 
     labs(title = title, x = "UMAP 1", y = "UMAP 2") +
@@ -86,7 +91,6 @@ umap_plot <- function(
         ggsave(path, plot_result)
   }
 }
-
 
 # boxplot
 boxplot_plot <- function(matrix, metadata_df, quantitativeColumnName, color_col, title, path="") {
