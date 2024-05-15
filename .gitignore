@@ -159,8 +159,12 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+
+# FeatureCloud related files
 batchcorrection/data/tests
 batchcorrection/data/logs
 batchcorrection/data/site_info.json
 batchcorrection/logs
 batchcorrection/tests
+evaluation_data/site_info.json
+evaluation_data/tests/
