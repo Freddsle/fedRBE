@@ -93,7 +93,8 @@ umap_plot <- function(
 }
 
 # boxplot
-boxplot_plot <- function(matrix, metadata_df, quantitativeColumnName, color_col, title, path="") {
+boxplot_plot <- function(matrix, metadata_df, quantitativeColumnName, color_col, title, path="",
+                         remove_xnames=FALSE) {
   # Reshape data into long format
   long_data <- tidyr::gather(matrix, 
                              key = "file", value = "Intensity")
@@ -108,6 +109,10 @@ boxplot_plot <- function(matrix, metadata_df, quantitativeColumnName, color_col,
     # adjust fonsize for the x-axis
     theme(axis.text.x = element_text(size = 8)) +
     labs(title = title) 
+
+  if(remove_xnames){
+    boxplot <- boxplot + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
+  }
 
   if(path == "") {
     return(boxplot)
