@@ -27,7 +27,7 @@ class InitialState(AppState):
                 config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
             except Exception as e2:
                 self.log(f"Could not read the config file, tried config.yml: {e1} and config.yaml: {e2}", LogLevel.FATAL)
-        
+        self.log(f"Got the following config:\n{config}")
         if "flimmaBatchCorrection" not in config:
             self.log("Incorrect format of your config file, the key flimmaBatchCorrection must be in your config file", LogLevel.FATAL)
         config = config["flimmaBatchCorrection"]
@@ -77,7 +77,7 @@ class InitialState(AppState):
         else:
             index_col = config["index_col"]
         if not index_col:
-            print("No index_col was given in the config, automatically creating an index.")
+            self.log("No index_col was given in the config, automatically creating an index.")
 
         # defining the client
         cohort_name = self.id
@@ -101,11 +101,9 @@ class InitialState(AppState):
         self.configure_smpc()
         # send list of protein names (genes) to coordinator
         # we use the hashed values of the feature names and variables
-        print("[initial] Sending feature_names to the coordinator")
         self.send_data_to_coordinator((list(client.hash2feature.keys()), list(client.hash2variable.keys())),
                                     send_to_self=True,
                                     use_smpc=False)
-        print(f"[initial] The following clients are registered: {self.clients}")
         if self.is_coordinator:
             return 'common_features'
         return 'validate'
@@ -119,9 +117,9 @@ class CommonGenesState(AppState):
         
     def run(self):
         # wait for each client to send the list of genes they have
-        print("[common_features] Gathering features from all clients")
+        self.log("[common_features] Gathering features from all clients")
         lists_of_features_and_variables = self.gather_data(is_json=False)
-        print("[common_features] Gathered data from all clients")
+        self.log("[common_features] Gathered data from all clients")
         # generate a sorted list of the genes that are available on each client
         global_feature_names = set()
         global_variables = set()
@@ -138,15 +136,15 @@ class CommonGenesState(AppState):
                 else:
                     global_variables.intersection(set( local_variable_list))
         global_feature_names = sorted(list(global_feature_names))
-        print("[common_features] common_features were found")
+        self.log("[common_features] common_features were found")
 
         # Send feature_names and variables to all 
         if not global_variables:
             global_variables = None
         self.broadcast_data((global_feature_names, global_variables),
                             send_to_self=True, memo="commonGenes")
-        print("[common_features] Data was set to be broadcasted:")
-        print("[common_features] transitioning to validate")
+        self.log("[common_features] Data was set to be broadcasted:")
+        self.log("[common_features] transitioning to validate")
         return 'validate'
 
 
@@ -158,20 +156,19 @@ class ValidationState(AppState):
 
     def run(self):
         # obtain and safe common genes and indices of design matrix
-        print("[validate] {} waiting for common features and covariates".format(self.id)) 
+        self.log("[validate] waiting for common features and covariates") 
         global_feauture_names_hashed, global_variables_hashed = self.await_data(n=1, is_json=False, memo="commonGenes")
         client = self.load('client')
 
         client.validate_inputs(global_feauture_names_hashed, global_variables_hashed)
-        print("[validate] {} Inputs have been validated".format(self.id))
+        self.log("[validate] Inputs have been validated")
         # get all client names to generate design matrix
         all_client_names = self.clients
         err = client.create_design(all_client_names[:-1])
         if err:
             self.log(err, LogLevel.FATAL)
-        print("[validate] {} design has been created".format(self.id))
+        self.log("[validate] design has been created")
         self.store(key='client', value=client)
-        print("[validate] {} changing states".format(self.id))
         return 'compute_XtX_XtY'
 
 
@@ -185,6 +182,18 @@ class ComputeState(AppState):
     def run(self):
         client = self.load('client')
         client.sample_names = client.design.index.values
+        # Error check if the design index and the data index are the same
+        # we check by comparing the sorted indexes
+        if not np.array_equal(sorted(client.sample_names), sorted(client.data.columns.values)):
+            self.log("The sample names in the design file and the data file do not match")
+            des_idx = set(client.sample_names)
+            data_idx = set(client.data.index.values)
+            union_indexes = des_idx.union(data_idx)
+            intercept_indexes = des_idx.intersection(data_idx)
+            self.log(f"The following indexes are in the union of both files (union): {union_indexes}")
+            self.log(f"The following indexes are in both files (intercept): {intercept_indexes}")
+            self.log(f"The following indexes are only in one of the files (union-intercept): {union_indexes.difference(intercept_indexes)}")
+            self.log("aborting...", LogLevel.FATAL)
         # sort data by sample names and proteins
         client.data = client.data.loc[client.feature_names, client.sample_names]
         client.n_samples = len(client.sample_names)
@@ -196,8 +205,8 @@ class ComputeState(AppState):
 
 
         # send XtX and XtY
-        print("[compute_XtX_XtY] Computation done, sending data to coordinator")
-        print(f"[compute_XtX_XtY] XtX of shape {XtX.shape}, X of shape {client.design.shape}, XtY of shape {XtY.shape}")
+        self.log("[compute_XtX_XtY] Computation done, sending data to coordinator")
+        self.log(f"[compute_XtX_XtY] XtX of shape {XtX.shape}, X of shape {client.design.shape}, XtY of shape {XtY.shape}")
         self.send_data_to_coordinator([XtX, XtY],
                                 send_to_self=True,
                                 use_smpc=self.load("smpc"))
@@ -215,9 +224,9 @@ class ComputeCorrectionState(AppState):
 
     def run(self):
         # wait for each client to compute XtX and XtY and collect data
-        print("[compute_beta] gathering data")
+        self.log("[compute_beta] gathering data")
         XtX_XtY_list = self.gather_data(use_smpc=self.load("smpc"))
-        print("[compute_beta] Got XtX_XtY_list from gather_data")
+        self.log("[compute_beta] Got XtX_XtY_list from gather_data")
         client = self.load('client')
         k = client.design.shape[1]
         n = len(client.feature_names)
@@ -255,10 +264,8 @@ class ComputeCorrectionState(AppState):
             beta[i, :] = invXtX @ XtY_glob[i, :]
             stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))
 
-        print(f"[compute_beta] betas calculated: beta.shape is {beta.shape}")
-        print(f"[compute_beta] stdev_unscaled.shape is {stdev_unscaled.shape}")
         # send beta to clients so they can correct their data
-        print("[compute_beta] broadcasting betas")
+        self.log("[compute_beta] broadcasting betas")
         self.broadcast_data(beta,
                             send_to_self=True, 
                             memo="beta")

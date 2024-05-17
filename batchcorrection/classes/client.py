@@ -84,8 +84,8 @@ class Client:
             self.rawdata = pd.read_csv(datafile_path, sep=separator, index_col=index_col)
         self.data = self.rawdata
         
+        self.variables_in_data = False
         if not expr_file_flag:
-            #TODO: handling of variables
             # First we remove the covariates if not design matrix is given
             if self.variables and not design_file_path:
                 self.data = self.data.drop(columns=self.variables)
@@ -189,8 +189,6 @@ class Client:
         # reorder genes and only look at the global_features
         self.feature_names = sorted(global_features)
         assert self.data is not None
-        print(f"client {self.cohort_name}: has index={self.data.index}")
-        print(f"checking if {self.feature_names} is in index")
         self.data = self.data.loc[self.feature_names, :] 
         # set feature_names and variables to sets again in case this was changed here
         self.feature_names = list(self.feature_names)
@@ -234,7 +232,6 @@ class Client:
                 # relevant for the batch correction later as well as for the
                 # computation of betas with sample averaging, be careful
                 # with changing the order
-            print(f"Client {self.cohort_name}: Design matrix created.")
         # for privacy reasons, we should protect the covariates added to the 
         # design matrix. The design matrix itself is completely reproducable for
         # only one cohort. In case covariates are added, we ensure that
@@ -254,7 +251,6 @@ class Client:
         assert self.data is not None
         X = self.design.values
         Y = self.data.values  # Y - intensities (proteins x samples)
-        print("Shape of Y is: ", Y.shape)
         n = Y.shape[0]  # genes
         k = self.design.shape[1]  # variables
         self.XtX = np.zeros((n, k, k))
@@ -297,16 +293,12 @@ class Client:
         assert self.data is not None
         assert self.design is not None
         self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
-        print(type(beta)) #TODO: rmv, chekc this!
-        print("beta shape is {beta.shape}")
         mask = np.ones(beta.shape[1], dtype=bool)
         if self.variables:
             mask[[self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]] = False
         else:
             mask[[self.design.columns.get_loc(col) for col in ['intercept']]] = False
-        print(f"mask is: {mask}")
         beta_reduced = beta[:, mask]
-        print(f"shape of beta_reduces is {beta_reduced.shape}")
         if self.variables:
             dot_product = beta_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
         else:
