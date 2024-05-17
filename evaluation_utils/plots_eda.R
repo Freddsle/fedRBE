@@ -15,6 +15,8 @@ pca_plot <- function(
     quantitative_col_name = "Quantitative.column.name", 
     col_col = "Group", 
     shape_col = "",
+    pc_x = "PC1",  # Default principal component for the x-axis
+    pc_y = "PC2",  # Default principal component for the y-axis
     show_legend = TRUE
     ){
   pca <- prcomp(t(na.omit(df)))
@@ -25,25 +27,24 @@ pca_plot <- function(
   var_expl <- pca$sdev^2 / sum(pca$sdev^2)
   names(var_expl) <- paste0("PC", 1:length(var_expl))
 
+  # Update the ggplot function call to use dynamic PC columns
+  pca_plot <- pca_df %>%
+      ggplot(aes_string(x = pc_x, y = pc_y, color = col_col, shape = shape_col))
+
   if(shape_col != ""){
-    pca_plot <- pca_df %>%
-        ggplot(aes_string(x = "PC1", y = "PC2", color = col_col, shape = shape_col))
     if(length(unique(batch_info[[shape_col]])) > 6){
       shapes_codes <- c(0, 1, 3, 8, 7, 15, 19)
       pca_plot <- pca_plot + 
         scale_shape_manual(values = shapes_codes)
     }    
-  } else {
-    pca_plot <- pca_df %>%
-        ggplot(aes_string(x = "PC1", y = "PC2", color = col_col))
   }
 
   pca_plot <- pca_plot + 
-    geom_point(size=3) +
+    geom_point(size=2) +
     theme_classic() +
     labs(title = title,
-         x = glue::glue("PC1 [{round(var_expl['PC1']*100, 2)}%]"),
-         y = glue::glue("PC2 [{round(var_expl['PC2']*100, 2)}%]"))
+         x = glue::glue("{pc_x} [{round(var_expl[pc_x]*100, 2)}%]"),
+         y = glue::glue("{pc_y} [{round(var_expl[pc_y]*100, 2)}%]"))
 
   if(!show_legend){
     pca_plot <- pca_plot + 
@@ -57,6 +58,7 @@ pca_plot <- function(
     return(pca_plot)
   }
 }
+
 
 
 umap_plot <- function(
