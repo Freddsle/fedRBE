@@ -24,6 +24,10 @@ This script checks the differences between federated batch effect corrected data
 and centralized batch effect corrected data. Tests to see that the results
 have the same index, columns and gives the mean and maximum difference element 
 wise. Uses the results produced by [get_federated_corrected_data.py](evaluation_utils/get_federated_corrected_data.py)
+Please note that some of the data exceeds GitHubs file size limit, so they
+are provided in zip format. If this script throws a FileNotFound error, you
+probably just need to unzip the corresponding files/generate them using
+[get_federated_corrected_data.py](evaluation_utils/get_federated_corrected_data.py)
 1. [filtering.R](evaluation_utils/filtering.R)
 TODO: description
 1. [plots_eda.R](evaluation_utils/plots_eda.R)
@@ -38,5 +42,3 @@ TODO: describe the federated simulation folder?
 The documentation for the implementation can be found in the corresponding 
 subfolders README at [batchcorrection/README.md](batchcorrection/README.md)
 and in the [paper](TODO: ref the paper) 
-
-TODO: update featurecloud app to final, cleaned version

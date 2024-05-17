@@ -168,4 +168,6 @@ batchcorrection/logs
 batchcorrection/tests
 evaluation_data/site_info.json
 evaluation_data/tests/
+evaluation_data/testbed-*
+evaluation_data/workflows
 evaluation_data/**/config.yaml
