@@ -6,6 +6,8 @@ library(grid)
 library(umap)
 library(ggsci)
 
+library(viridis)
+
 
 pca_plot <- function(
     df, 
@@ -17,7 +19,8 @@ pca_plot <- function(
     shape_col = "",
     pc_x = "PC1",  # Default principal component for the x-axis
     pc_y = "PC2",  # Default principal component for the y-axis
-    show_legend = TRUE
+    show_legend = TRUE,
+    cbPalette = NULL
     ){
   pca <- prcomp(t(na.omit(df)))
   pca_df <- pca$x %>%
@@ -29,7 +32,7 @@ pca_plot <- function(
 
   # Update the ggplot function call to use dynamic PC columns
   pca_plot <- pca_df %>%
-      ggplot(aes_string(x = pc_x, y = pc_y, color = col_col, shape = shape_col))
+      ggplot(aes_string(x = pc_x, y = pc_y, color = col_col, shape = shape_col)) +
 
   if(shape_col != ""){
     if(length(unique(batch_info[[shape_col]])) > 6){
@@ -50,6 +53,12 @@ pca_plot <- function(
     pca_plot <- pca_plot + 
       theme(legend.position = "none")
   }
+
+
+  if (!is.null(cbPalette)) {
+    pca_plot <- pca_plot + scale_color_manual(values = cbPalette)
+  }
+
 
   if (path == "") {
     return(pca_plot)
@@ -123,6 +132,57 @@ boxplot_plot <- function(matrix, metadata_df, quantitativeColumnName, color_col,
       return(boxplot)
   }
 }
+
+boxplot_plot_groupped <- function(matrix, metadata_df, quantitativeColumnName, color_col, title, path="",
+                         remove_xnames=FALSE, y_limits=NULL,
+                         show_legend=TRUE, cbPalette=NULL) {
+                          
+  
+  # Reshape data into long format and group by color_col
+  long_data <- tidyr::gather(matrix, key = "file", value = "Intensity")
+  merged_data <- merge(long_data, metadata_df, by.x = "file", by.y = quantitativeColumnName)
+  
+  # Group by color_col
+  merged_data_grouped <- merged_data %>%
+    group_by(.data[[color_col]])
+  
+  # Log transformed scale
+  boxplot <- ggplot(merged_data_grouped, aes(x = .data[[color_col]], y = Intensity, fill = .data[[color_col]])) + 
+    geom_violin(trim = F) +
+    stat_summary(fun = median, geom = "crossbar", width = 0.35, color = "black", position = position_dodge(width = 0.2)) +
+    stat_summary(fun = mean, geom = "point", shape = 4, size = 3, color = "darkred") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+    # adjust font size for the x-axis
+    theme(axis.text.x = element_text(size = 8)) +
+    labs(title = title) +
+    guides(fill = guide_legend(override.aes = list(shape = NA, linetype = 0)))
+
+  if(remove_xnames){
+    boxplot <- boxplot + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
+  }
+
+  if (!is.null(y_limits)) {
+    boxplot <- boxplot + ylim(y_limits)
+  }
+
+  if (!is.null(cbPalette)) {
+    boxplot <- boxplot + scale_fill_manual(values = cbPalette)
+  }
+
+
+  if(!show_legend){
+    boxplot <- boxplot + theme(legend.position = "none")
+  }
+
+  if(path == "") {
+    return(boxplot)
+  } else {
+      ggsave(path, boxplot)
+      return(boxplot)
+  }
+}
+
 
 
 plotIntensityDensity <- function(
