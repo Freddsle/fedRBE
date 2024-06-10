@@ -17,7 +17,7 @@ class InitialState(AppState):
     def register(self):
         self.register_transition('common_features', Role.COORDINATOR)
         self.register_transition('validate', Role.PARTICIPANT)
-    
+
     def run(self):
         # read in the config
         try:
@@ -114,7 +114,7 @@ class CommonGenesState(AppState):
 
     def register(self):
         self.register_transition('validate', Role.COORDINATOR)
-        
+
     def run(self):
         # wait for each client to send the list of genes they have
         self.log("[common_features] Gathering features from all clients")
@@ -138,7 +138,7 @@ class CommonGenesState(AppState):
         global_feature_names = sorted(list(global_feature_names))
         self.log("[common_features] common_features were found")
 
-        # Send feature_names and variables to all 
+        # Send feature_names and variables to all
         if not global_variables:
             global_variables = None
         self.broadcast_data((global_feature_names, global_variables),
@@ -156,7 +156,7 @@ class ValidationState(AppState):
 
     def run(self):
         # obtain and safe common genes and indices of design matrix
-        self.log("[validate] waiting for common features and covariates") 
+        self.log("[validate] waiting for common features and covariates")
         global_feauture_names_hashed, global_variables_hashed = self.await_data(n=1, is_json=False, memo="commonGenes")
         client = self.load('client')
 
@@ -197,7 +197,7 @@ class ComputeState(AppState):
         # sort data by sample names and proteins
         client.data = client.data.loc[client.feature_names, client.sample_names]
         client.n_samples = len(client.sample_names)
-        
+
         # compute XtX and XtY
         XtX, XtY, err = client.compute_XtX_XtY(self.load("minSamples"))
         if err != None:
@@ -214,7 +214,7 @@ class ComputeState(AppState):
         if self.is_coordinator:
             return 'compute_beta'
         return 'include_correction'
-    
+
 
 @app_state('compute_beta')
 class ComputeCorrectionState(AppState):
@@ -255,10 +255,8 @@ class ComputeCorrectionState(AppState):
         for i in range(0, n):
             # if the determant is 0 the inverse cannot be formed so we need
             # to use the pseudo inverse instead
-            
             if linalg.det(XtX_glob[i, :, :]) == 0:
                 invXtX = linalg.pinv(XtX_glob[i, :, :])
-                pass
             else:
                 invXtX = linalg.inv(XtX_glob[i, :, :])
             beta[i, :] = invXtX @ XtY_glob[i, :]
@@ -267,7 +265,7 @@ class ComputeCorrectionState(AppState):
         # send beta to clients so they can correct their data
         self.log("[compute_beta] broadcasting betas")
         self.broadcast_data(beta,
-                            send_to_self=True, 
+                            send_to_self=True,
                             memo="beta")
         return 'include_correction'
 
@@ -285,9 +283,9 @@ class IncludeCorrectionState(AppState):
 
         # remove the batch effects in own data and safe the results
         client.remove_batch_effects(beta)
-        client.data_corrected.to_csv(os.path.join(os.getcwd(), "mnt", "output", "only_batch_corrected_data.csv"), 
+        client.data_corrected.to_csv(os.path.join(os.getcwd(), "mnt", "output", "only_batch_corrected_data.csv"),
                                      sep=self.load("separator"))
-        client.data_corrected_and_raw.to_csv(os.path.join(os.getcwd(), "mnt", "output", "all_data.csv"), 
+        client.data_corrected_and_raw.to_csv(os.path.join(os.getcwd(), "mnt", "output", "all_data.csv"),
                                      sep=self.load("separator"))
         with open(os.path.join(os.getcwd(), "mnt", "output", "report.txt"), "w") as f:
             f.write(client.report)
