@@ -2,7 +2,7 @@
 This file is used to run the federated batch correction experiments.
 It uses featurecloud_api_extension.py to run the experiments.
 The Experiment class is used to define experiments that are then run.
-To change the experiments done, define a new Experiment object 
+To change the experiments done, define a new Experiment object
 and add it to the experiments list.
 See the Experiment class and the examples below for more information.
 To change the postprocessing done, change the logic under the
@@ -41,7 +41,7 @@ base_config = {
     },
 }
 
-# The name of the docker image that contains the application to be tested  
+# The name of the docker image that contains the application to be tested
 app_image_name = "bcorrect"
 
 ### SETTING THE EXPERIMENTS
@@ -50,8 +50,8 @@ result_file_names: List[str] = list()
 
 ## MICROBIOME
 microbiome_config_file_changes_logmin = \
-    {"flimmaBatchCorrection.data_filename": "msp_counts_norm_logmin_5C.tsv", 
-     "flimmaBatchCorrection.design_filename": "design_5C.tsv", 
+    {"flimmaBatchCorrection.data_filename": "msp_counts_norm_logmin_5C.tsv",
+     "flimmaBatchCorrection.design_filename": "design_5C.tsv",
      "flimmaBatchCorrection.covariates": ["CRC"]}
 microbiome_experiment_logmin = util.Experiment(
         clients=[os.path.join(data_dir, "microbiome", "before", "PRJEB10878"),
@@ -66,8 +66,8 @@ microbiome_experiment_logmin = util.Experiment(
 )
 
 microbiome_config_file_changes_logmin_smpc = \
-    {"flimmaBatchCorrection.data_filename": "msp_counts_norm_logmin_5C.tsv", 
-     "flimmaBatchCorrection.design_filename": "design_5C.tsv", 
+    {"flimmaBatchCorrection.data_filename": "msp_counts_norm_logmin_5C.tsv",
+     "flimmaBatchCorrection.design_filename": "design_5C.tsv",
      "flimmaBatchCorrection.covariates": ["CRC"],
      "flimmaBatchCorrection.smpc": True}
 microbiome_experiment_logmin_smpc = util.Experiment(
@@ -84,8 +84,8 @@ microbiome_experiment_logmin_smpc = util.Experiment(
 
 ## PROTEOMICS
 proteomics_config_file_changes_base = \
-    {"flimmaBatchCorrection.data_filename": "intensities_log_filtered.tsv", 
-     "flimmaBatchCorrection.design_filename": "design.tsv", 
+    {"flimmaBatchCorrection.data_filename": "intensities_log_filtered.tsv",
+     "flimmaBatchCorrection.design_filename": "design.tsv",
      "flimmaBatchCorrection.covariates": ["Pyr"]}
 
 proteomics_experiment_balanced = util.Experiment(
@@ -101,8 +101,8 @@ proteomics_experiment_balanced = util.Experiment(
 )
 
 proteomics_config_file_changes_smpc = \
-    {"flimmaBatchCorrection.data_filename": "intensities_log_filtered.tsv", 
-     "flimmaBatchCorrection.design_filename": "design.tsv", 
+    {"flimmaBatchCorrection.data_filename": "intensities_log_filtered.tsv",
+     "flimmaBatchCorrection.design_filename": "design.tsv",
      "flimmaBatchCorrection.covariates": ["Pyr"],
      "flimmaBatchCorrection.smpc": True}
 
@@ -146,8 +146,8 @@ proteomics_experiment_imbalanced_smpc = util.Experiment(
 
 ## MICROARRAY
 base_microarray_config_file_changes = \
-    {"flimmaBatchCorrection.data_filename": "expr_for_correction.tsv", 
-     "flimmaBatchCorrection.design_filename": "design.tsv", 
+    {"flimmaBatchCorrection.data_filename": "expr_for_correction.tsv",
+     "flimmaBatchCorrection.design_filename": "design.tsv",
      "flimmaBatchCorrection.covariates": ["HGSC"]}
 microarray_experiment = util.Experiment(
         clients=[os.path.join(data_dir, "microarray", "before", "GSE6008"),
@@ -163,8 +163,8 @@ microarray_experiment = util.Experiment(
 )
 
 base_microarray_config_file_changes_smpc = \
-    {"flimmaBatchCorrection.data_filename": "expr_for_correction.tsv", 
-     "flimmaBatchCorrection.design_filename": "design.tsv", 
+    {"flimmaBatchCorrection.data_filename": "expr_for_correction.tsv",
+     "flimmaBatchCorrection.design_filename": "design.tsv",
      "flimmaBatchCorrection.covariates": ["HGSC"],
      "flimmaBatchCorrection.smpc": True}
 microarray_experiment_smpc = util.Experiment(
@@ -183,7 +183,7 @@ microarray_experiment_smpc = util.Experiment(
 ### ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
 ## Microbiome
 # logmin
-# experiments.append(microbiome_experiment_logmin) 
+# experiments.append(microbiome_experiment_logmin)
 # result_file_names.append(os.path.join(data_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_FEDERATED.tsv"))
 # # logmin+smpc
 # experiments.append(microbiome_experiment_logmin_smpc)
@@ -207,9 +207,13 @@ microarray_experiment_smpc = util.Experiment(
 # # default
 # experiments.append(microarray_experiment)
 # result_file_names.append(os.path.join(data_dir, "microarray", "after", "federated_corrected.csv"))
-# smpc 
-experiments.append(microarray_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "microarray", "after", "federated_corrected_smpc.csv"))
+# smpc
+# experiments.append(microarray_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "microarray", "after", "federated_corrected_smpc.csv"))
+
+# NEW APP
+experiments.append(microarray_experiment)
+result_file_names.append(os.path.join(data_dir, "microarray", "after", "federated_corrected_UNION.csv"))
 
 if len(experiments) != len(result_file_names):
     raise RuntimeError("Number of experiments and result file names do not match, please fix this!")
@@ -217,7 +221,7 @@ if len(experiments) != len(result_file_names):
 ### MAIN
 # Starts the FeatureCloud controler and runs the experiments
 # The results are then postprocessed and saved in the result files.
-# This postprocessing simply takes the individual results (assumes the default 
+# This postprocessing simply takes the individual results (assumes the default
 # output file name used by the batch correction app (federated limma RBE)
 # of this repo) and concats them.
 
@@ -230,8 +234,8 @@ except Exception as e:
 # Run the experiments
 for exp, result_filename in zip(experiments, result_file_names):
     ### RUN THE FEATURECLOUD EXPERIMENT AND EXTARCT INDIVIDUAL RESULTS
-    print(f"Starting experiment:\n{exp}") 
-    try:   
+    print(f"Starting experiment:\n{exp}")
+    try:
         result_files_zipped = util.run_test(exp, data_dir)
     except Exception as e:
         print(f"Experiment could not be started or aborted too many times! Error: \n{e}")
@@ -257,7 +261,7 @@ for exp, result_filename in zip(experiments, result_file_names):
             zip_ref.extract(f"only_batch_corrected_data.csv", os.path.join(result_folder, "individual_results"))
             # rename the just extracted file so it doesn't get overwritten
             os.rename(os.path.join(result_folder, "individual_results", "only_batch_corrected_data.csv"), os.path.join(result_folder, "individual_results", f"only_batch_corrected_data_{idx}.csv"))
-    
+
     ### CONCAT THE RESULTS AND PRODUCE FINAL MERGED RESULT
     result_folder = os.path.dirname(result_filename)
     idx = 0
@@ -272,7 +276,7 @@ for exp, result_filename in zip(experiments, result_file_names):
         else:
             # in this case we just concat
             final_df = pd.concat([final_df, pd.read_csv(os.path.join(
-                result_folder, "individual_results", f"only_batch_corrected_data_{idx}.csv"), sep="\t", index_col=0)], 
+                result_folder, "individual_results", f"only_batch_corrected_data_{idx}.csv"), sep="\t", index_col=0)],
                 axis=1)
         idx += 1
     # Save the final df

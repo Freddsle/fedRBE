@@ -1,9 +1,10 @@
+from typing import List
 import pandas as pd
 import numpy as np
 import hashlib
 
 class Client:
-    def __init__(self, 
+    def __init__(self,
                 cohort_name,
                 datafile_path=None,
                 expr_file_flag=False,
@@ -25,7 +26,7 @@ class Client:
         self.sample_names = None
         self.expr_file_flag = expr_file_flag
         self.data_variables = None
-
+        self.extra_global_features = None
         self.variables = covariates
 
         # for correction
@@ -47,14 +48,24 @@ class Client:
         # we hash the feature names and variables to hide covariates and features
         # that this client has but other clients do not have
         self.hash2feature = dict()
+        self.feature2hash = dict()
         self.hash2variable = dict()
-        assert self.feature_names is not None
+        if self.feature_names is None:
+            raise ValueError(f"Client {self.cohort_name}: Error loading feature names.")
         for feature in self.feature_names:
-            self.hash2feature[hashlib.sha3_256(feature.encode()).hexdigest()] = feature
+            feature_hash = hashlib.sha3_256(feature.encode()).hexdigest()
+            self.hash2feature[feature_hash] = feature
+            self.feature2hash[feature] = feature_hash
+        if self.data is None:
+            raise ValueError(f"Client {self.cohort_name}: Error loading data.")
+        # we use only the hashes of features and only in the end replace again
+        # with the real featurenames
+        self.data.rename(index=self.feature2hash, inplace=True)
+
         if covariates:
             for variable in covariates:
                 self.hash2variable[hashlib.sha3_256(variable.encode()).hexdigest()] = variable
-    
+
     ######### open dataset #########
     def open_dataset(self, datafile_path, expr_file_flag, design_file_path=None,
                     separator="\t", design_separator="\t", index_col=None):
@@ -83,19 +94,19 @@ class Client:
         else:
             self.rawdata = pd.read_csv(datafile_path, sep=separator, index_col=index_col)
         self.data = self.rawdata
-        
+
         self.variables_in_data = False
         if not expr_file_flag:
-            # First we remove the covariates if not design matrix is given
+            # First we remove the covariates if no design matrix is given
             if self.variables and not design_file_path:
                 self.data = self.data.drop(columns=self.variables)
                 self.variables_in_data = True
-        
+
             # we ensure that we only have numerical values
             self.data = self.data.select_dtypes(include=np.number)
             self.num_excluded_numeric = len(self.rawdata.columns) - len(self.data.columns)
-            # finally we transpose as sample x feature data is expected
-            self.data = self.data.T 
+            # finally we transpose as feature x sample data is expected
+            self.data = self.data.T
 
 
         else:
@@ -108,7 +119,7 @@ class Client:
             tmp = tmp.select_dtypes(include=np.number)
             self.num_excluded_numeric = len(self.rawdata.columns) - len(tmp.columns)
             self.data = tmp.T
-            
+
         self.feature_names = list(self.data.index.values)
         self.sample_names = list(self.data.columns.values)
         self.n_samples = len(self.sample_names)
@@ -117,12 +128,12 @@ class Client:
         if normalizationMethod == "log2(x+1)":
             self.data = np.log2(self.data + 1)
 
-    def validate_inputs(self, global_features_hashed, global_variables_hashed):
+    def validate_inputs(self, global_variables_hashed):
         """
         Checks if protein_names match global protein group names.
         Important to ensure that client's protein names are in the global protein names. But it's not important that all global protein names are in the client's protein names.
         """
-        self.validate_feature_names(global_features_hashed)
+        #self.validate_feature_names(global_features_hashed)
         self.validate_variables(global_variables_hashed)
         print(f"Client {self.cohort_name}: Inputs validated.")
 
@@ -135,22 +146,21 @@ class Client:
         if global_variables_hashed is None and self.variables is not None:
             print("WARNING: No common global covariates were selected, but local covariates were selected. The local covariates will be ignored.")
             self.variables = None
-            return 
+            return
         elif global_variables_hashed is not None and self.variables is None:
             raise Exception("Globally covariates were selected that cannot be represented as this client does not have these covariates")
         if global_variables_hashed is None and self.variables is None:
-            return 
+            return
         global_variables = [self.hash2variable.get(hashed, hashed) for hashed in global_variables_hashed]
-        
+
         # handle global/local variables having different covariates
-        assert self.variables is not None        
+        assert self.variables is not None
         extra_global_variables = set(global_variables).difference(set(self.variables))
         extra_local_variables = set(self.variables).difference(set(global_variables))
         if len(extra_global_variables) > 0:
             raise Exception("Globally covariates were selected that cannot be represented as this client does not have these covariates")
-        self.extra_variables = extra_local_variables
         if len(extra_local_variables) > 0:
-            print(f"WARNING: Client {self.cohort_name}: These extra variables that are not available on all clients will NOT be corrected {extra_local_variables}")  
+            print(f"WARNING: Client {self.cohort_name}: These extra variables that are not available on all clients will NOT be corrected {extra_local_variables}")
             # we continue but ignore these features
         self.variables = global_variables
         # now we need to check if these variables are in the design matrix/in the data
@@ -163,10 +173,55 @@ class Client:
                 assert self.data is not None
                 if var not in self.data.index.tolist():
                     raise Exception(f"Variable {var} was not found in the data")
-            
+
+
+    def set_data(self, global_hashed_features: List[str]):
+        """
+        Checks the global_hashed_features that should be used. Fills self.data
+        with 0 values for features from the global_hashed_features list that this
+        client does not have.
+        Ensures that self.data has the features in the order of global_hashed_features.
+        Args:
+            global_hashed_features: List of hashed features that should be used
+                for the batch effect correction. The order of the features is
+                important.
+        Returns:
+            None, just sets the self.data matrix
+        """
+        # we get which features are available only locally and which only globally
+        # then we fill the data matrix with 0 values for the global features
+        # that are not available locally
+        # then we correct the order of the features in the data matrix
+        # first we ensure that the features are in the loaded data matrix
+        if self.data is None:
+            raise Exception("Data matrix is not loaded yet, cannot set data")
+
+        # Get features only we have and features only global has
+        if not self.feature_names:
+            raise Exception("Feature names are not loaded yet, cannot set data")
+
+        extra_local_features = set(self.feature_names).difference(set(global_hashed_features))
+        self.extra_global_features = set(global_hashed_features).difference(set(self.feature_names))
+
+
+        # we ignore the only us features for now
+        if len(extra_local_features) > 0:
+            print(f"Client {self.cohort_name}: These features are not available on all clients and will NOT be corrected {extra_local_features}")
+
+        # for all extra global features we add a columns of zeros
+        # reminder: data is features x samples
+        for feature in self.extra_global_features:
+            self.data.loc[feature] = 0
+
+        # now we apply the order of the global features to the data matrix
+        if set(global_hashed_features) != set(self.data.index):
+            raise Exception("INTERNAL ERROR: something went wrong adding all features from all clients, data matrix index != global features list")
+        self.data = self.data.reindex(global_hashed_features)
+        self.feature_names = global_hashed_features
 
     def validate_feature_names(self, global_features_hashed):
         """
+        DEPRECATED
         Compares the features gotten from the global aggregation vs the one
         the client has. It only uses the global features.
         """
@@ -184,16 +239,16 @@ class Client:
         if len(extra_local_features) > 0:
             self.num_excluded_federation = len(extra_local_features)
             print(f"Client {self.cohort_name}: These extra features that are not available on all clients will NOT be corrected {extra_local_features}")
-            self.extra_features = extra_local_features
 
         # reorder genes and only look at the global_features
         self.feature_names = sorted(global_features)
-        assert self.data is not None
-        self.data = self.data.loc[self.feature_names, :] 
+        if self.data is None:
+            raise Exception("Data matrix is not loaded yet, cannot set data")
+        self.data = self.data.loc[self.feature_names, :]
         # set feature_names and variables to sets again in case this was changed here
         self.feature_names = list(self.feature_names)
         self.variables = list(self.variables) if self.variables else None
-    
+
     def create_design(self, cohorts):
         """add covariates to model cohort effects."""
         # first add intercept colum
@@ -228,20 +283,20 @@ class Client:
                 if not all(column_name in self.design.columns for column_name in self.variables):
                     return f"ERROR: the given variables {self.variables} were not found in the given design matrix file."
             self.design = self.design.loc[:, ['intercept'] + self.variables + cohorts]
-                # IMPORTANT: this order of intercept, variables, cohorts is 
+                # IMPORTANT: this order of intercept, variables, cohorts is
                 # relevant for the batch correction later as well as for the
                 # computation of betas with sample averaging, be careful
                 # with changing the order
-        # for privacy reasons, we should protect the covariates added to the 
+        # for privacy reasons, we should protect the covariates added to the
         # design matrix. The design matrix itself is completely reproducable for
         # only one cohort. In case covariates are added, we ensure that
-        # there are enough samples (more samples than columns in the design 
+        # there are enough samples (more samples than columns in the design
         # matrix so that XtX=A cannot be solved for X given A
         if self.design.shape[0] <= self.design.shape[1]:
             return f"Privacy Error: There are not enough samples to provide sufficient " +\
                 f"privacy, please more samples than #cohorts + #covariantes " +\
                 f"({self.design.shape[1]} in this case)"
-        
+
         print(f"design was finally created: {self.design}")
         return None
 
@@ -257,7 +312,7 @@ class Client:
         self.XtY = np.zeros((n, k))
 
         # linear models for each row
-        for i in range(n):  
+        for i in range(n):
             y = Y[i, :]
             # check NA in Y
             ndxs = np.argwhere(np.isfinite(y)).reshape(-1)
@@ -306,6 +361,12 @@ class Client:
 
         self.data_corrected = np.where(np.isnan(self.data_corrected), self.data_corrected, self.data_corrected - dot_product)
         self.data_corrected = pd.DataFrame(self.data_corrected, index=self.data.index, columns=self.data.columns)
+        # now we drop the extra global features that were added and
+        # that we don't actually have data for
+        if self.extra_global_features is not None:
+            self.data_corrected = self.data_corrected.drop(index=list(self.extra_global_features))
+        # finally replace the hashed feature names with the real feature names
+        self.data_corrected.rename(index=self.hash2feature, inplace=True)
         if self.expr_file_flag:
             # add the removed columns (non numerical ones)
             additional_columns = self.rawdata.T.columns.difference(self.data_corrected.T.columns)
@@ -321,10 +382,9 @@ class Client:
         self.report += f"Client {self.cohort_name}:\n"
         if len(additional_columns) > 0 or self.num_excluded_federation > 0 or self.num_excluded_numeric > 0:
             self.report += f"{len(additional_columns)} features were not batch corrected in total. Of these:\n"
-            self.report += f"{self.num_excluded_federation} features were not part of the global feature list.\n"
             self.report += f"{self.num_excluded_numeric} features were excluded for not being numeric data.\n"
             self.report += f"The following features were not batch corrected: {additional_columns}\n"
         self.report += f"The following betas were used for batch correction:\n{beta}\n"
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
         np.set_printoptions(threshold=1000)
-        
+

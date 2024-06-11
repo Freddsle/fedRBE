@@ -15,7 +15,7 @@ INPUT_FOLDER = os.path.join(os.getcwd(), "mnt", "input")
 class InitialState(AppState):
 
     def register(self):
-        self.register_transition('common_features', Role.COORDINATOR)
+        self.register_transition('global_feature_selection', Role.COORDINATOR)
         self.register_transition('validate', Role.PARTICIPANT)
 
     def run(self):
@@ -105,21 +105,20 @@ class InitialState(AppState):
                                     send_to_self=True,
                                     use_smpc=False)
         if self.is_coordinator:
-            return 'common_features'
+            return 'global_feature_selection'
         return 'validate'
 
 
-@app_state('common_features')
-class CommonGenesState(AppState):
-
+@app_state('global_feature_selection')
+class globalFeatureSelection(AppState):
     def register(self):
         self.register_transition('validate', Role.COORDINATOR)
 
     def run(self):
         # wait for each client to send the list of genes they have
-        self.log("[common_features] Gathering features from all clients")
+        self.log("[global_feature_selection] Gathering features from all clients")
         lists_of_features_and_variables = self.gather_data(is_json=False)
-        self.log("[common_features] Gathered data from all clients")
+        self.log("[global_feature_selection] Gathered data from all clients")
         # generate a sorted list of the genes that are available on each client
         global_feature_names = set()
         global_variables = set()
@@ -129,22 +128,22 @@ class CommonGenesState(AppState):
             if len(global_feature_names) == 0:
                 global_feature_names = set(local_feature_name)
             else:
-                global_feature_names = global_feature_names.intersection(set(local_feature_name))
+                global_feature_names = global_feature_names.union(set(local_feature_name))
             if local_variable_list:
                 if len(global_variables) == 0:
                     global_variables = set(local_variable_list)
                 else:
                     global_variables.intersection(set( local_variable_list))
         global_feature_names = sorted(list(global_feature_names))
-        self.log("[common_features] common_features were found")
+        self.log("[global_feature_selection] all_features were combined")
 
         # Send feature_names and variables to all
         if not global_variables:
             global_variables = None
         self.broadcast_data((global_feature_names, global_variables),
                             send_to_self=True, memo="commonGenes")
-        self.log("[common_features] Data was set to be broadcasted:")
-        self.log("[common_features] transitioning to validate")
+        self.log("[global_feature_selection] Data was set to be broadcasted:")
+        self.log("[global_feature_selection] transitioning to validate")
         return 'validate'
 
 
@@ -160,8 +159,10 @@ class ValidationState(AppState):
         global_feauture_names_hashed, global_variables_hashed = self.await_data(n=1, is_json=False, memo="commonGenes")
         client = self.load('client')
 
-        client.validate_inputs(global_feauture_names_hashed, global_variables_hashed)
+        client.validate_inputs(global_variables_hashed)
         self.log("[validate] Inputs have been validated")
+        client.set_data(global_feauture_names_hashed)
+        self.log("[validate] Data has been set to contain all global features")
         # get all client names to generate design matrix
         all_client_names = self.clients
         err = client.create_design(all_client_names[:-1])
@@ -251,6 +252,7 @@ class ComputeCorrectionState(AppState):
             XtY_glob += XtX_XtY_list[1]
 
         # calcualte beta and std. dev.
+        print([f"INFO: Current shape of XtX_glob: {XtX_glob.shape}"])
         beta = np.zeros((n, k))
         for i in range(0, n):
             # if the determant is 0 the inverse cannot be formed so we need
@@ -261,6 +263,8 @@ class ComputeCorrectionState(AppState):
                 invXtX = linalg.inv(XtX_glob[i, :, :])
             beta[i, :] = invXtX @ XtY_glob[i, :]
             stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))
+        print(f"INFO: Shape of beta: {beta.shape}")
+        print(f"INFO: Shape of stdev_unscaled: {stdev_unscaled.shape}")
 
         # send beta to clients so they can correct their data
         self.log("[compute_beta] broadcasting betas")

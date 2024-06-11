@@ -1,12 +1,12 @@
 """
-This script analyses the difference between centralized results and 
+This script analyses the difference between centralized results and
 federated results. It compares the results of the experiments for the
 differences of each individual value.
 It saves the result in csv format and prints them.
 It checks for:
 - Check for same shape, same columns, same rows (after sorting columns and rows)
 - Check for maximal and mean value difference over all corresponding values
-The analysis can be extended by adding more experiments to the 
+The analysis can be extended by adding more experiments to the
 experiment_results list. This can be found under the ### EXPERIMENT RESULTS
 comment.
 """
@@ -63,7 +63,7 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
             print(f"Union-Intercept of rows: {union_rows.difference(intercept_rows)}")
             failed = True
         if failed:
-            print(f"_________________________FAILED {exp.name}_________________________")  
+            print(f"_________________________FAILED {exp.name}_________________________")
             continue
         # Compare value by value
         # we extarct all differences and perform basic statiscs on them
@@ -100,56 +100,63 @@ experiment_results = list()
 
 ## Microbiome
 # logmin_counts_5centers_corrected
-experiment_results.append(ExperimentResult(
-    name="Microbiome",
-    central_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_CENTRAL.tsv"),
-    federated_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_FEDERATED.tsv"),
-))
-# logmin_counts_5centers_corrected_smpc
-experiment_results.append(ExperimentResult(
-    name="Microbiome_smpc",
-    central_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_CENTRAL.tsv"),
-    federated_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_smpc_FEDERATED.tsv"),
-))
+# experiment_results.append(ExperimentResult(
+#     name="Microbiome",
+#     central_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_CENTRAL.tsv"),
+#     federated_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_FEDERATED.tsv"),
+# ))
+# # logmin_counts_5centers_corrected_smpc
+# experiment_results.append(ExperimentResult(
+#     name="Microbiome_smpc",
+#     central_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_CENTRAL.tsv"),
+#     federated_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_smpc_FEDERATED.tsv"),
+# ))
 
-## Proteomics
-# balanced
-experiment_results.append(ExperimentResult(
-    name="Proteomics_balanced",
-    central_result_file=os.path.join(base_dir, "proteomics", "after", "balanced", "central_intensities_log_filtered_corrected.tsv"),
-    federated_result_file=os.path.join(base_dir, "proteomics", "after", "balanced", "federated_intensities_log_filtered_corrected.tsv"),
-))
-# balanced_smpc
-experiment_results.append(ExperimentResult(
-    name="Proteomics_balanced_smpc",
-    central_result_file=os.path.join(base_dir, "proteomics", "after", "balanced", "central_intensities_log_filtered_corrected.tsv"),
-    federated_result_file=os.path.join(base_dir, "proteomics", "after", "balanced", "federated_intensities_log_filtered_corrected_smpc.tsv"),
-))
-# imbalanced
-experiment_results.append(ExperimentResult(
-    name="Proteomics_imbalanced",
-    central_result_file=os.path.join(base_dir, "proteomics", "after", "imbalanced", "central_intensities_log_filtered_corrected.tsv"),
-    federated_result_file=os.path.join(base_dir, "proteomics", "after", "imbalanced", "federated_intensities_log_filtered_corrected.tsv"),
-))
-# imbalanced_smpc
-experiment_results.append(ExperimentResult(
-    name="Proteomics_imbalanced_smpc",
-    central_result_file=os.path.join(base_dir, "proteomics", "after", "imbalanced", "central_intensities_log_filtered_corrected.tsv"),
-    federated_result_file=os.path.join(base_dir, "proteomics", "after", "imbalanced", "federated_intensities_log_filtered_corrected_smpc.tsv"),
-))
+# ## Proteomics
+# # balanced
+# experiment_results.append(ExperimentResult(
+#     name="Proteomics_balanced",
+#     central_result_file=os.path.join(base_dir, "proteomics", "after", "balanced", "central_intensities_log_filtered_corrected.tsv"),
+#     federated_result_file=os.path.join(base_dir, "proteomics", "after", "balanced", "federated_intensities_log_filtered_corrected.tsv"),
+# ))
+# # balanced_smpc
+# experiment_results.append(ExperimentResult(
+#     name="Proteomics_balanced_smpc",
+#     central_result_file=os.path.join(base_dir, "proteomics", "after", "balanced", "central_intensities_log_filtered_corrected.tsv"),
+#     federated_result_file=os.path.join(base_dir, "proteomics", "after", "balanced", "federated_intensities_log_filtered_corrected_smpc.tsv"),
+# ))
+# # imbalanced
+# experiment_results.append(ExperimentResult(
+#     name="Proteomics_imbalanced",
+#     central_result_file=os.path.join(base_dir, "proteomics", "after", "imbalanced", "central_intensities_log_filtered_corrected.tsv"),
+#     federated_result_file=os.path.join(base_dir, "proteomics", "after", "imbalanced", "federated_intensities_log_filtered_corrected.tsv"),
+# ))
+# # imbalanced_smpc
+# experiment_results.append(ExperimentResult(
+#     name="Proteomics_imbalanced_smpc",
+#     central_result_file=os.path.join(base_dir, "proteomics", "after", "imbalanced", "central_intensities_log_filtered_corrected.tsv"),
+#     federated_result_file=os.path.join(base_dir, "proteomics", "after", "imbalanced", "federated_intensities_log_filtered_corrected_smpc.tsv"),
+# ))
 
-## Microarray
-# default
+# ## Microarray
+# # default
+# experiment_results.append(ExperimentResult(
+#     name="Microarray",
+#     central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected.tsv"),
+#     federated_result_file=os.path.join(base_dir, "microarray", "after", "federated_corrected.csv"),
+# ))
+# # smpc
+# experiment_results.append(ExperimentResult(
+#     name="Microarray_smpc",
+#     central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected.tsv"),
+#     federated_result_file=os.path.join(base_dir, "microarray", "after", "federated_corrected_smpc.csv"),
+# ))
+
+### NEW APP USING ALL FEATURES
 experiment_results.append(ExperimentResult(
-    name="Microarray",
-    central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected.tsv"),
-    federated_result_file=os.path.join(base_dir, "microarray", "after", "federated_corrected.csv"),
-))
-# smpc
-experiment_results.append(ExperimentResult(
-    name="Microarray_smpc",
-    central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected.tsv"),
-    federated_result_file=os.path.join(base_dir, "microarray", "after", "federated_corrected_smpc.csv"),
+    name="Microarray_UNION",
+    central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv"),
+    federated_result_file=os.path.join(base_dir, "microarray", "after", "federated_corrected_UNION.csv"),
 ))
 
 ### MAIN, just runs compare_experiments on all experiments and prints the results

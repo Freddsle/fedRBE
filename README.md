@@ -42,3 +42,9 @@ TODO: describe the federated simulation folder?
 The documentation for the implementation can be found in the corresponding 
 subfolders README at [batchcorrection/README.md](batchcorrection/README.md)
 and in the [paper](TODO: ref the paper) 
+
+
+# TODO tmp:
+1. append one example experiment
+    1. append in get_federated_corrcted_data
+    1. append in analyse_fedvscentral
