@@ -212,8 +212,14 @@ microarray_experiment_smpc = util.Experiment(
 # result_file_names.append(os.path.join(data_dir, "microarray", "after", "federated_corrected_smpc.csv"))
 
 # NEW APP
-experiments.append(microarray_experiment)
-result_file_names.append(os.path.join(data_dir, "microarray", "after", "federated_corrected_UNION.csv"))
+microarray_union_experiment = deepcopy(microarray_experiment)
+microarray_union_experiment_configfile_changes = microarray_union_experiment.config_file_changes[0]
+microarray_union_experiment_configfile_changes["flimmaBatchCorrection.data_filename"] = "expr_for_correction_UNION.tsv"
+microarray_union_experiment.config_file_changes = [microarray_union_experiment_configfile_changes]*6
+
+experiments.append(microarray_union_experiment)
+result_file_names.append(
+    os.path.join(data_dir, "microarray", "after", "federated_corrected_UNION.csv"))
 
 if len(experiments) != len(result_file_names):
     raise RuntimeError("Number of experiments and result file names do not match, please fix this!")
@@ -229,7 +235,7 @@ if len(experiments) != len(result_file_names):
 try:
     util.startup(data_dir)
 except Exception as e:
-    raise RuntimeError(f"Experiment could not be started! Error: \n{e}")
+    raise RuntimeError(f"Experiment could not be started! Error: \n{e}") from e
 
 # Run the experiments
 for exp, result_filename in zip(experiments, result_file_names):
@@ -263,6 +269,7 @@ for exp, result_filename in zip(experiments, result_file_names):
             os.rename(os.path.join(result_folder, "individual_results", "only_batch_corrected_data.csv"), os.path.join(result_folder, "individual_results", f"only_batch_corrected_data_{idx}.csv"))
 
     ### CONCAT THE RESULTS AND PRODUCE FINAL MERGED RESULT
+    print("Postprocessing finished! Concatenating results...")
     result_folder = os.path.dirname(result_filename)
     idx = 0
     final_df = None
