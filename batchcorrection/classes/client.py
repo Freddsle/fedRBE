@@ -61,6 +61,9 @@ class Client:
         # we use only the hashes of features and only in the end replace again
         # with the real featurenames
         self.data.rename(index=self.feature2hash, inplace=True)
+        print("shape of datya after renaming: ", self.data.shape)
+        # translate the feature names to hashes
+        self.feature_names = [self.feature2hash[feature] for feature in self.feature_names]
 
         if covariates:
             for variable in covariates:
@@ -77,38 +80,47 @@ class Client:
         Furthermore, variables are extracted and added to the design matrix.
         A report of which features were batch corrected is given in the end.
         """
+        print(f"Opening dataset {datafile_path}")
         self.expr_file_flag = expr_file_flag
         if design_file_path:
             design_file = pd.read_csv(design_file_path, sep=design_separator, index_col=0)
             self.design = design_file[self.variables]
         # first we open the data file
-        if not index_col:
-            # expression file flags should have the feature names as the first
-            # column per default
-            if expr_file_flag:
-                self.rawdata = pd.read_csv(datafile_path, sep=separator, index_col=0)
-            # for normak csv, the default is not having samples so we autogenerate
-            # sample integers
-            else:
-                self.rawdata = pd.read_csv(datafile_path, sep=separator)
+        # expression file flags should have the feature names as the first
+        # column per default
+        if expr_file_flag:
+            if index_col is None:
+                # In expression files, the defualt is the fiurst column containing the feature names
+                # default would however be to create an index col
+                index_col = 0
+            self.rawdata = pd.read_csv(datafile_path, sep=separator, index_col=index_col)
+            print(f"Shape of rawdata(expr_file): {self.rawdata.shape}")
+        # for normak csv, the default is not having samples so we autogenerate
+        # sample integers
         else:
             self.rawdata = pd.read_csv(datafile_path, sep=separator, index_col=index_col)
+            print(f"Shape of rawdata(default csv): {self.rawdata.shape}")
         self.data = self.rawdata
 
         self.variables_in_data = False
+        # handling of default csv files
         if not expr_file_flag:
-            # First we remove the covariates if no design matrix is given
+            # First we remove the covariates from the training data
+            # if no design matrix is given
             if self.variables and not design_file_path:
                 self.data = self.data.drop(columns=self.variables)
                 self.variables_in_data = True
 
+            # data cleanup
             # we ensure that we only have numerical values
+            if self.data is None:
+                raise ValueError(f"Client {self.cohort_name}: Error loading data.")
             self.data = self.data.select_dtypes(include=np.number)
             self.num_excluded_numeric = len(self.rawdata.columns) - len(self.data.columns)
             # finally we transpose as feature x sample data is expected
             self.data = self.data.T
 
-
+        # handling of expression files
         else:
             # for expression files we just have to remove the rows that have non-numeric values
             # we also need to potentially extract covariates
@@ -123,6 +135,7 @@ class Client:
         self.feature_names = list(self.data.index.values)
         self.sample_names = list(self.data.columns.values)
         self.n_samples = len(self.sample_names)
+        print(f"finished loading data, shape of data: {self.data.shape}, num_features: {len(self.feature_names)}, num_samples: {self.n_samples}")
 
     def normalize(self, normalizationMethod):
         if normalizationMethod == "log2(x+1)":
@@ -160,7 +173,7 @@ class Client:
         if len(extra_global_variables) > 0:
             raise Exception("Globally covariates were selected that cannot be represented as this client does not have these covariates")
         if len(extra_local_variables) > 0:
-            print(f"WARNING: Client {self.cohort_name}: These extra variables that are not available on all clients will NOT be corrected {extra_local_variables}")
+            print(f"WARNING: Client {self.cohort_name}: {len(extra_local_variables)} extra variables that are not available on all clients will NOT be corrected.")
             # we continue but ignore these features
         self.variables = global_variables
         # now we need to check if these variables are in the design matrix/in the data
@@ -201,12 +214,15 @@ class Client:
             raise Exception("Feature names are not loaded yet, cannot set data")
 
         extra_local_features = set(self.feature_names).difference(set(global_hashed_features))
+        print(f"feature names: {self.feature_names[:10]}")
+        print(f"global features: {global_hashed_features[:10]}")
         self.extra_global_features = set(global_hashed_features).difference(set(self.feature_names))
+        print(f"Extra global features: {list(self.extra_global_features)[:10]}")
 
 
         # we ignore the only us features for now
-        if len(extra_local_features) > 0:
-            print(f"Client {self.cohort_name}: These features are not available on all clients and will NOT be corrected {extra_local_features}")
+        # if len(extra_local_features) > 0:
+        #     print(f"Client {self.cohort_name}: {len(extra_local_features)} features are not available on all clients and will NOT be corrected")
 
         # for all extra global features we add a columns of zeros
         # reminder: data is features x samples
@@ -216,7 +232,9 @@ class Client:
         # now we apply the order of the global features to the data matrix
         if set(global_hashed_features) != set(self.data.index):
             raise Exception("INTERNAL ERROR: something went wrong adding all features from all clients, data matrix index != global features list")
+        print(f"Before reindexing got this data: {self.data.shape}")
         self.data = self.data.reindex(global_hashed_features)
+        print(f"After reindexing got this data: {self.data.shape}")
         self.feature_names = global_hashed_features
 
     def validate_feature_names(self, global_features_hashed):
@@ -347,6 +365,9 @@ class Client:
         #  pg_matrix - np.dot(beta, batch.T)
         assert self.data is not None
         assert self.design is not None
+        print("start remove_batch_effects")
+        print(f"Shape of data: {self.data.shape}")
+        print("Shape of beta: ", beta.shape)
         self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
         mask = np.ones(beta.shape[1], dtype=bool)
         if self.variables:
@@ -361,15 +382,20 @@ class Client:
 
         self.data_corrected = np.where(np.isnan(self.data_corrected), self.data_corrected, self.data_corrected - dot_product)
         self.data_corrected = pd.DataFrame(self.data_corrected, index=self.data.index, columns=self.data.columns)
+        print(f"Shape of corrected data after correction: {self.data_corrected.shape}")
         # now we drop the extra global features that were added and
         # that we don't actually have data for
         if self.extra_global_features is not None:
             self.data_corrected = self.data_corrected.drop(index=list(self.extra_global_features))
         # finally replace the hashed feature names with the real feature names
+        print(f"index is {self.data_corrected.index}")
+        print(f"Amount of index found in hash2feature: {len([hashed for hashed in self.data_corrected.index if hashed in self.hash2feature])}/{len(self.data_corrected.index)}")
         self.data_corrected.rename(index=self.hash2feature, inplace=True)
+        print(f"After renaming got this data_corrected: {self.data_corrected}")
         if self.expr_file_flag:
             # add the removed columns (non numerical ones)
             additional_columns = self.rawdata.T.columns.difference(self.data_corrected.T.columns)
+            print(f"Additional columns expr file: {additional_columns}")
             self.data_corrected_and_raw = self.data_corrected.T.join(self.rawdata.T[additional_columns]).T
         else:
             # add the removed columns (non numerical ones)
@@ -380,11 +406,12 @@ class Client:
         np.set_printoptions(threshold=np.inf)
         self.report = ""
         self.report += f"Client {self.cohort_name}:\n"
-        if len(additional_columns) > 0 or self.num_excluded_federation > 0 or self.num_excluded_numeric > 0:
-            self.report += f"{len(additional_columns)} features were not batch corrected in total. Of these:\n"
-            self.report += f"{self.num_excluded_numeric} features were excluded for not being numeric data.\n"
-            self.report += f"The following features were not batch corrected: {additional_columns}\n"
+        # if len(additional_columns) > 0 or self.num_excluded_federation > 0 or self.num_excluded_numeric > 0:
+        #     self.report += f"{len(additional_columns)} features were not batch corrected in total. Of these:\n"
+        #     self.report += f"{self.num_excluded_numeric} features were excluded for not being numeric data.\n"
+        #     self.report += f"The following features were not batch corrected: {additional_columns}\n"
         self.report += f"The following betas were used for batch correction:\n{beta}\n"
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
         np.set_printoptions(threshold=1000)
+        print(f"remove batch final corrected data shape: {self.data_corrected.shape}")
 

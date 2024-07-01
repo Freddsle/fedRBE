@@ -133,7 +133,7 @@ class globalFeatureSelection(AppState):
                 if len(global_variables) == 0:
                     global_variables = set(local_variable_list)
                 else:
-                    global_variables.intersection(set( local_variable_list))
+                    global_variables.intersection(set(local_variable_list))
         global_feature_names = sorted(list(global_feature_names))
         self.log("[global_feature_selection] all_features were combined")
 
@@ -287,6 +287,8 @@ class IncludeCorrectionState(AppState):
 
         # remove the batch effects in own data and safe the results
         client.remove_batch_effects(beta)
+        print(f"DEBUG: Shape of corrected data: {client.data_corrected.shape}")
+        print(f"DEBUG: shape of corrected and raw: {client.data_corrected_and_raw.shape}")
         client.data_corrected.to_csv(os.path.join(os.getcwd(), "mnt", "output", "only_batch_corrected_data.csv"),
                                      sep=self.load("separator"))
         client.data_corrected_and_raw.to_csv(os.path.join(os.getcwd(), "mnt", "output", "all_data.csv"),
