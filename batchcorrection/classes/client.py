@@ -270,7 +270,6 @@ class Client:
     def create_design(self, cohorts):
         """add covariates to model cohort effects."""
         # first add intercept colum
-        assert self.sample_names
         if self.design is None:
             self.design = pd.DataFrame({'intercept': np.ones(len(self.sample_names))},
                                         index=self.sample_names)
@@ -315,7 +314,10 @@ class Client:
                 f"privacy, please more samples than #cohorts + #covariantes " +\
                 f"({self.design.shape[1]} in this case)"
 
+        pd.set_option('display.max_columns', None)
         print(f"design was finally created: {self.design}")
+        print(f"shape of design: {self.design.shape}")
+        pd.reset_option('display.max_columns')
         return None
 
     ####### limma: linear regression #########
@@ -323,21 +325,28 @@ class Client:
         assert self.design is not None
         assert self.data is not None
         X = self.design.values
-        Y = self.data.values  # Y - intensities (proteins x samples)
-        n = Y.shape[0]  # genes
-        k = self.design.shape[1]  # variables
+        Y = self.data.values  # Y -> features x samples
+        n = Y.shape[0]  # [0] = rows = features
+        k = self.design.shape[1]  # [1] = columns = samples
         self.XtX = np.zeros((n, k, k))
+            # for each feature, we calculate the XtX matrix individually
+            # X is of shape k x len([intercept, variables, cohorts]), so XtX
+            # is of shape k x k
         self.XtY = np.zeros((n, k))
+            # for each feature, we calculate the XtY vector individually
+            # X is of shape k x len([intercept, variables, cohorts]), y is of
+            # len of samples
 
-        # linear models for each row
-        for i in range(n):
-            y = Y[i, :]
-            # check NA in Y
-            ndxs = np.argwhere(np.isfinite(y)).reshape(-1)
-            if len(ndxs) != len(y):
-                # remove NA from Y and from x
-                x = X[ndxs, :]
-                y = y[ndxs]
+        # linear models for each row (for each feature)
+        for feature_idx in range(n):
+            y = Y[feature_idx, :] # y is all values of one specific feature
+            non_nan_idxs = np.argwhere(np.isfinite(y)).reshape(-1)
+                # gives the indices of the non-NaN values in y as an 1d array
+            if len(non_nan_idxs) != len(y):
+                # for each feature we only consider the samples that have
+                # values for this feature
+                x = X[non_nan_idxs, :]
+                y = y[non_nan_idxs]
             else:
                 x = X
             # privacy check, ensure that y holds enough values
@@ -354,8 +363,27 @@ class Client:
                 XtY_boolean = x_boolean.T @ y_boolean
                 if not np.all((XtY_boolean >= minSamples) | (XtY_boolean == 0)):
                     return None, None, "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
-            self.XtX[i, :, :] = x.T @ x
-            self.XtY[i, :] = x.T @ y
+
+            self.XtX[feature_idx, :, :] = x.T @ x
+            self.XtY[feature_idx, :] = x.T @ y
+            #TODO: rmv:
+            if 0 == len(non_nan_idxs):
+                print(f"In XtX calc, feature {self.data.index[feature_idx]} has NO non-NaN values")
+                print(f"This results in the following XtX matrix: \n{self.XtX[feature_idx, :, :]}")
+                print(f"This results in the following XtY vector: \n{self.XtY[feature_idx, :]}")
+                print(f"shape of x: {x.shape}, shape of y: {y.shape}")
+                print(f"XtX shape: {self.XtX[feature_idx, :, :].shape}, XtY shape: {self.XtY[feature_idx, :].shape}")
+                print(f"k is {k}, n is {n}")
+            if np.all(y == 0):
+                print(f"Feature {feature_idx} has only zeros in Y")
+                print(f"This results in the following XtX matrix: \n{self.XtX[feature_idx, :, :]}")
+                print(f"This results in the following XtY vector: \n{self.XtY[feature_idx, :]}")
+                print(f"shape of x: {x.shape}, shape of y: {y.shape}")
+            if np.all(np.isnan(self.XtX[feature_idx, :, :])):
+                print(f"Feature {feature_idx} has only NaN in XtX")
+            if np.all(np.isnan(self.XtY[feature_idx, :])):
+                print(f"Feature {feature_idx} has only NaN in XtY")
+        print(f"final vectors to be sent: XtX shape: {self.XtX.shape}, XtY shape: {self.XtY.shape}")
         return self.XtX, self.XtY, None
 
     ####### limma: removeBatchEffects #########
@@ -392,16 +420,16 @@ class Client:
         print(f"Amount of index found in hash2feature: {len([hashed for hashed in self.data_corrected.index if hashed in self.hash2feature])}/{len(self.data_corrected.index)}")
         self.data_corrected.rename(index=self.hash2feature, inplace=True)
         print(f"After renaming got this data_corrected: {self.data_corrected}")
-        if self.expr_file_flag:
-            # add the removed columns (non numerical ones)
-            additional_columns = self.rawdata.T.columns.difference(self.data_corrected.T.columns)
-            print(f"Additional columns expr file: {additional_columns}")
-            self.data_corrected_and_raw = self.data_corrected.T.join(self.rawdata.T[additional_columns]).T
-        else:
-            # add the removed columns (non numerical ones)
-            self.data_corrected = self.data_corrected.T
-            additional_columns = self.rawdata.columns.difference(self.data_corrected.columns)
-            self.data_corrected_and_raw = self.data_corrected.join(self.rawdata[additional_columns])
+        # if self.expr_file_flag:
+        #     # add the removed columns (non numerical ones)
+        #     additional_columns = self.rawdata.T.columns.difference(self.data_corrected.T.columns)
+        #     print(f"Additional columns expr file: {additional_columns}")
+        #     self.data_corrected_and_raw = self.data_corrected.T.join(self.rawdata.T[additional_columns]).T
+        # else:
+        #     # add the removed columns (non numerical ones)
+        #     self.data_corrected = self.data_corrected.T
+        #     additional_columns = self.rawdata.columns.difference(self.data_corrected.columns)
+        #     self.data_corrected_and_raw = self.data_corrected.join(self.rawdata[additional_columns])
         # generate a report of additional features that were not batch corrected
         np.set_printoptions(threshold=np.inf)
         self.report = ""

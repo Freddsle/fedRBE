@@ -195,6 +195,7 @@ class ComputeState(AppState):
             self.log(f"The following indexes are in both files (intercept): {intercept_indexes}")
             self.log(f"The following indexes are only in one of the files (union-intercept): {union_indexes.difference(intercept_indexes)}")
             self.log("aborting...", LogLevel.FATAL)
+
         # sort data by sample names and proteins
         client.data = client.data.loc[client.feature_names, client.sample_names]
         client.n_samples = len(client.sample_names)
@@ -229,29 +230,35 @@ class ComputeCorrectionState(AppState):
         XtX_XtY_list = self.gather_data(use_smpc=self.load("smpc"))
         self.log("[compute_beta] Got XtX_XtY_list from gather_data")
         client = self.load('client')
-        k = client.design.shape[1]
-        n = len(client.feature_names)
+        k = client.design.shape[1] # [1] = columns = samples
+        n = len(client.feature_names) # [0] = rows = features
         XtX_glob = np.zeros((n, k, k))
         XtY_glob = np.zeros((n, k))
         stdev_unscaled = np.zeros((n, k))
         if not self.load("smpc"):
-            XtX_list = list()
-            XtY_list = list()
             for ele in XtX_XtY_list:
-                XtX_list.append(ele[0])
-                XtY_list.append(ele[1])
+                if ele[0].shape[0] != n or ele[0].shape[1] != k or ele[1].shape[0] != n or ele[1].shape[1] != k:
+                    self.log(f"Shape of received XtX or XtY does not match the expected shape: {ele[0].shape} {ele[1].shape}", LogLevel.FATAL)
+                XtX_glob += ele[0]
+                XtY_glob += ele[1]
 
-            # set up matrices for global XtX and XtY
-            for i in range(0, len(self.clients)):
-                XtX_glob += XtX_list[i]
-                XtY_glob += XtY_list[i]
         else:
             # smpc case, already aggregated
-            XtX_XtY_list = XtX_XtY_list[0]
+            XtX_XtY_list = XtX_XtY_list[0] # unwrap
             XtX_glob += XtX_XtY_list[0]
             XtY_glob += XtX_XtY_list[1]
 
-        # calcualte beta and std. dev.
+        #TODO: rmv
+        if np.isnan(XtX_glob).any():
+            print("XtX_glob contains NaNs")
+        else:
+            print("XtX_glob does not contain NaNs")
+        if np.isnan(XtY_glob).any():
+            print("XtY_glob contains NaNs")
+        else:
+            print("XtY_glob does not contain NaNs")
+
+        # calculate beta and std. dev.
         print([f"INFO: Current shape of XtX_glob: {XtX_glob.shape}"])
         beta = np.zeros((n, k))
         for i in range(0, n):
@@ -288,11 +295,10 @@ class IncludeCorrectionState(AppState):
         # remove the batch effects in own data and safe the results
         client.remove_batch_effects(beta)
         print(f"DEBUG: Shape of corrected data: {client.data_corrected.shape}")
-        print(f"DEBUG: shape of corrected and raw: {client.data_corrected_and_raw.shape}")
         client.data_corrected.to_csv(os.path.join(os.getcwd(), "mnt", "output", "only_batch_corrected_data.csv"),
                                      sep=self.load("separator"))
-        client.data_corrected_and_raw.to_csv(os.path.join(os.getcwd(), "mnt", "output", "all_data.csv"),
-                                     sep=self.load("separator"))
+        # client.data_corrected_and_raw.to_csv(os.path.join(os.getcwd(), "mnt", "output", "all_data.csv"),
+        #                              sep=self.load("separator"))
         with open(os.path.join(os.getcwd(), "mnt", "output", "report.txt"), "w") as f:
             f.write(client.report)
         return 'terminal'
