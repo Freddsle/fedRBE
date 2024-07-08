@@ -1,50 +1,124 @@
-from typing import List
+from typing import List, Union
 import pandas as pd
 import numpy as np
 import hashlib
+import os
+import bios
 
 class Client:
-    def __init__(self,
-                cohort_name,
-                datafile_path=None,
-                expr_file_flag=False,
-                design_file_path=None,
-                separator="\t",
-                design_separator="\t",
-                index_col=None,
-                covariates=None,
-                normalizationMethod=None,
-            ):
+    def __init__(self):
         """
-        Initialize the client and load the datafile and design file already.
-        Furthermore, normalization of the input data is done.
+        Please use config_based_init to intialize the class
         """
-        self.cohort_name = cohort_name
+        self.cohort_name = None
+        self.smpc = False
+        self.covariates = None
+        self.min_samples = 0
+        self.XtX = None
+        self.XtY = None
         self.data = None
+        self.rawdata = None
         self.design = None
-        self.feature_names = None
-        self.sample_names = None
-        self.expr_file_flag = expr_file_flag
-        self.data_variables = None
-        self.extra_global_features = None
-        self.variables = covariates
-
-        # for correction
         self.data_corrected = None
+        self.report = None
+        self.feature_names = None
+        self.variables = []
+        self.variables_in_data = False
+        self.expr_file_flag = False
+        self.num_excluded_numeric = 0
+        self.num_excluded_federation = 0
+        self.extra_global_features = None
+        self.hash2feature = None
+        self.feature2hash = None
+        self.hash2variable = None
 
-        # load dataset
+
+    def config_based_init(self, clientname: str, config_filename: str="", input_folder: str = "mnt/input"):
+        """
+        Initializes the client based on a given config file. File must be named
+        config.yml or config.yaml, see the documentation of the
+        batchcorrection app for more information of the config contents.
+        Calls the __init__ method, which also loads the data and design matrix.
+        Raises an RuntimeError if something goes wrong.
+        """
+        # read in the config
+        if config_filename:
+            config = bios.read(os.path.join(input_folder, config_filename))
+        else:
+            # automatic reading of the config file
+            try:
+                config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yml"))
+            except Exception as e1:
+                try:
+                    config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
+                except Exception as e2:
+                    raise RuntimeError(f"Could not read the config file, tried config.yml: {e1} and config.yaml: {e2}")
+        print(f"Got the following config:\n{config}")
+        if "flimmaBatchCorrection" not in config:
+            raise RuntimeError("Incorrect format of your config file, the key flimmaBatchCorrection must be in your config file")
+
+        config = config["flimmaBatchCorrection"]
+        # read min_samples
+        if "min_samples" not in config:
+            min_samples = 0
+            print("min_samples was not given so it was set to 0")
+        else:
+            min_samples = config["min_samples"]
+        # read covariates
+        if "covariates" not in config:
+            covariates = None
+        else:
+            covariates = config["covariates"]
+        # read smpc
+        smpc = True
+        if "smpc" in config:
+            smpc = config["smpc"]
+
+        # read design file and design_seperator
+        design_file_path = None
+        if "design_filename" in config:
+            design_file_path = os.path.join(input_folder, config["design_filename"])
+        if "design_separator" not in config:
+            design_separator = "\t"
+        else:
+            design_separator = config["design_separator"]
+        # read expression file or data file
+        if "data_filename" not in config:
+            raise RuntimeError("No data_filename was given in the config, cannot continue")
+        datafile_path = os.path.join(input_folder, config["data_filename"])
+        # read the seperator
+        if "separator" not in config:
+            raise RuntimeError("No separator was given in the config, cannot continue")
+        separator = config["separator"]
+        # read the normalization method
+        if "normalizationMethod" not in config:
+            normalizationMethod = None
+        else:
+            normalizationMethod = config["normalizationMethod"]
+        # read whether given file is an expression file
+        if "expression_file_flag" not in config:
+            expr_file_flag = False
+        else:
+            expr_file_flag = config["expression_file_flag"]
+        # checking for the index_col
+        if "index_col" not in config:
+            index_col = None
+        else:
+            index_col = config["index_col"]
+
+        # set variables
+        self.cohort_name = clientname
+        self.smpc = smpc
+        self.variables = covariates
+        self.min_samples = min_samples
+        self.separator = separator
+
+        # load the data
         try:
             self.open_dataset(datafile_path, expr_file_flag, design_file_path, separator, design_separator, index_col)
         except:
             raise ValueError(f"Client {self.cohort_name}: Error loading dataset.")
-
         self.normalize(normalizationMethod)
-        self.XtX = None
-        self.XtY = None
-        self.SSE = None
-        self.cov_coef = None
-        self.fitted_logcounts = None
-        self.mu = None
         # we hash the feature names and variables to hide covariates and features
         # that this client has but other clients do not have
         self.hash2feature = dict()
@@ -52,6 +126,8 @@ class Client:
         self.hash2variable = dict()
         if self.feature_names is None:
             raise ValueError(f"Client {self.cohort_name}: Error loading feature names.")
+        if self.feature_names is None:
+            raise ValueError(f"Client {self.cohort_name}: Error loading variables.")
         for feature in self.feature_names:
             feature_hash = hashlib.sha3_256(feature.encode()).hexdigest()
             self.hash2feature[feature_hash] = feature
@@ -69,6 +145,7 @@ class Client:
             for variable in covariates:
                 self.hash2variable[hashlib.sha3_256(variable.encode()).hexdigest()] = variable
 
+
     ######### open dataset #########
     def open_dataset(self, datafile_path, expr_file_flag, design_file_path=None,
                     separator="\t", design_separator="\t", index_col=None):
@@ -83,8 +160,7 @@ class Client:
         print(f"Opening dataset {datafile_path}")
         self.expr_file_flag = expr_file_flag
         if design_file_path:
-            design_file = pd.read_csv(design_file_path, sep=design_separator, index_col=0)
-            self.design = design_file[self.variables]
+            self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[self.variables]
         # first we open the data file
         # expression file flags should have the feature names as the first
         # column per default
@@ -101,6 +177,10 @@ class Client:
             self.rawdata = pd.read_csv(datafile_path, sep=separator, index_col=index_col)
             print(f"Shape of rawdata(default csv): {self.rawdata.shape}")
         self.data = self.rawdata
+
+        # cleanof only NaN columns and rows
+        self.data = self.data.dropna(axis=0, how='all')
+        self.data = self.data.dropna(axis=1, how='all')
 
         self.variables_in_data = False
         # handling of default csv files
@@ -227,7 +307,7 @@ class Client:
         # for all extra global features we add a columns of zeros
         # reminder: data is features x samples
         for feature in self.extra_global_features:
-            self.data.loc[feature] = 0
+            self.data.loc[feature] = np.nan
 
         # now we apply the order of the global features to the data matrix
         if set(global_hashed_features) != set(self.data.index):
@@ -321,7 +401,7 @@ class Client:
         return None
 
     ####### limma: linear regression #########
-    def compute_XtX_XtY(self, minSamples):
+    def compute_XtX_XtY(self):
         assert self.design is not None
         assert self.data is not None
         X = self.design.values
@@ -342,13 +422,12 @@ class Client:
             y = Y[feature_idx, :] # y is all values of one specific feature
             non_nan_idxs = np.argwhere(np.isfinite(y)).reshape(-1)
                 # gives the indices of the non-NaN values in y as an 1d array
-            if len(non_nan_idxs) != len(y):
-                # for each feature we only consider the samples that have
-                # values for this feature
+            if len(non_nan_idxs) > 0:
                 x = X[non_nan_idxs, :]
                 y = y[non_nan_idxs]
-            else:
-                x = X
+                self.XtX[feature_idx, :, :] = x.T @ x
+                self.XtY[feature_idx, :] = x.T @ y
+
             # privacy check, ensure that y holds enough values
             # Even when just one value is present, it is unknown which sample
             # exactly is choosen
@@ -357,32 +436,51 @@ class Client:
             #     return None, None, f"Privacy Error: your expression data must not contain a " +\
             #         f"protein with less than min_sample ({minSamples}) value(s) " +\
             #         f"that are neither 0 nor NaN."
-            if minSamples != 0:
+            if self.min_samples != 0:
                 x_boolean = np.where(x != 0, 1, 0)
                 y_boolean = np.where(y != 0, 1, 0)
                 XtY_boolean = x_boolean.T @ y_boolean
-                if not np.all((XtY_boolean >= minSamples) | (XtY_boolean == 0)):
+                if not np.all((XtY_boolean >= self.min_samples) | (XtY_boolean == 0)):
                     return None, None, "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
 
-            self.XtX[feature_idx, :, :] = x.T @ x
-            self.XtY[feature_idx, :] = x.T @ y
-            #TODO: rmv:
-            if 0 == len(non_nan_idxs):
-                print(f"In XtX calc, feature {self.data.index[feature_idx]} has NO non-NaN values")
-                print(f"This results in the following XtX matrix: \n{self.XtX[feature_idx, :, :]}")
-                print(f"This results in the following XtY vector: \n{self.XtY[feature_idx, :]}")
-                print(f"shape of x: {x.shape}, shape of y: {y.shape}")
-                print(f"XtX shape: {self.XtX[feature_idx, :, :].shape}, XtY shape: {self.XtY[feature_idx, :].shape}")
-                print(f"k is {k}, n is {n}")
-            if np.all(y == 0):
-                print(f"Feature {feature_idx} has only zeros in Y")
-                print(f"This results in the following XtX matrix: \n{self.XtX[feature_idx, :, :]}")
-                print(f"This results in the following XtY vector: \n{self.XtY[feature_idx, :]}")
-                print(f"shape of x: {x.shape}, shape of y: {y.shape}")
-            if np.all(np.isnan(self.XtX[feature_idx, :, :])):
-                print(f"Feature {feature_idx} has only NaN in XtX")
-            if np.all(np.isnan(self.XtY[feature_idx, :])):
-                print(f"Feature {feature_idx} has only NaN in XtY")
+            # #TODO: rmv:
+            # if 0 == len(non_nan_idxs):
+            #     print(f"In XtX calc, feature {self.data.index[feature_idx]} has NO non-NaN values")
+            #     print(f"This results in the following XtX matrix: \n{self.XtX[feature_idx, :, :]}")
+            #     print(f"This results in the following XtY vector: \n{self.XtY[feature_idx, :]}")
+            #     print(f"shape of x: {x.shape}, shape of y: {y.shape}")
+            #     print(f"XtX shape: {self.XtX[feature_idx, :, :].shape}, XtY shape: {self.XtY[feature_idx, :].shape}")
+            #     print(f"k is {k}, n is {n}")
+            #     if not np.all(self.XtX[feature_idx, :, :] == 0):
+            #         raise ValueError("XtX is not all zeros, although no data was present")
+            #     if not np.all(self.XtY[feature_idx, :] == 0):
+            #         raise ValueError("XtY is not all zeros, although no data was present")
+            # if np.all(y == 0):
+            #     print(f"Feature {feature_idx} has only zeros in Y")
+            #     print(f"This results in the following XtX matrix: \n{self.XtX[feature_idx, :, :]}")
+            #     print(f"This results in the following XtY vector: \n{self.XtY[feature_idx, :]}")
+            #     print(f"shape of x: {x.shape}, shape of y: {y.shape}")
+            #     if not np.all(self.XtX[feature_idx, :, :] == 0):
+            #         raise ValueError("XtX is not all zeros, although no data was present")
+            #     if not np.all(self.XtY[feature_idx, :] == 0):
+            #         raise ValueError("XtY is not all zeros, although no data was present")
+            # if np.all(np.isnan(self.XtX[feature_idx, :, :])):
+            #     print(f"Feature {feature_idx} has only NaN in XtX")
+            #     if not np.all(self.XtX[feature_idx, :, :] == 0):
+            #         raise ValueError("XtX is not all zeros, although no data was present")
+            #     if not np.all(self.XtY[feature_idx, :] == 0):
+            #         raise ValueError("XtY is not all zeros, although no data was present")
+            # if np.all(np.isnan(self.XtY[feature_idx, :])):
+            #     print(f"Feature {feature_idx} has only NaN in XtY")
+            #     if not np.all(self.XtX[feature_idx, :, :] == 0):
+            #         raise ValueError("XtX is not all zeros, although no data was present")
+            #     if not np.all(self.XtY[feature_idx, :] == 0):
+            #         raise ValueError("XtY is not all zeros, although no data was present")
+            if len(non_nan_idxs) == 0:
+                if not np.all(self.XtX[feature_idx, :, :] == 0):
+                    raise ValueError("XtX is not all zeros, although no data was present")
+                if not np.all(self.XtY[feature_idx, :] == 0):
+                    raise ValueError("XtY is not all zeros, although no data was present")
         print(f"final vectors to be sent: XtX shape: {self.XtX.shape}, XtY shape: {self.XtY.shape}")
         return self.XtX, self.XtY, None
 
@@ -398,16 +496,22 @@ class Client:
         print("Shape of beta: ", beta.shape)
         self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
         mask = np.ones(beta.shape[1], dtype=bool)
+            # mask has true for betas concerning clients and false for betas concerning variables and intercept
         if self.variables:
             mask[[self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]] = False
         else:
             mask[[self.design.columns.get_loc(col) for col in ['intercept']]] = False
         beta_reduced = beta[:, mask]
+            # only keep the betas concerning the clients
+            # shape of beta is #features x [intercept + variables + cohorts-1]
         if self.variables:
             dot_product = beta_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
+            # only keep betas concerning this client
+            # the client that set -1 to all clients uses all betas
         else:
             dot_product = beta_reduced @ self.design.drop(columns=['intercept']).T
 
+        print(f"Beta_reduced contains {np.sum(np.isnan(beta_reduced))} Nan values")
         self.data_corrected = np.where(np.isnan(self.data_corrected), self.data_corrected, self.data_corrected - dot_product)
         self.data_corrected = pd.DataFrame(self.data_corrected, index=self.data.index, columns=self.data.columns)
         print(f"Shape of corrected data after correction: {self.data_corrected.shape}")

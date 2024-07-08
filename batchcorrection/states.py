@@ -1,12 +1,12 @@
 import os
-import bios
 
 import numpy as np
 
-from scipy import linalg
 from FeatureCloud.app.engine.app import AppState, app_state, Role, LogLevel
 
 from classes.client import Client
+from classes.coordinator_utils import select_common_features_variables, \
+    compute_beta
 
 # FeatureCloud requires that apps define the at least the 'initial' state.
 # This state is executed after the app instance is started.
@@ -19,86 +19,15 @@ class InitialState(AppState):
         self.register_transition('validate', Role.PARTICIPANT)
 
     def run(self):
-        # read in the config
-        try:
-            config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yml"))
-        except Exception as e1:
-            try:
-                config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
-            except Exception as e2:
-                self.log(f"Could not read the config file, tried config.yml: {e1} and config.yaml: {e2}", LogLevel.FATAL)
-        self.log(f"Got the following config:\n{config}")
-        if "flimmaBatchCorrection" not in config:
-            self.log("Incorrect format of your config file, the key flimmaBatchCorrection must be in your config file", LogLevel.FATAL)
-        config = config["flimmaBatchCorrection"]
-        # read min_samples
-        if "min_samples" not in config:
-            minSamples = 0
-            self.log("min_samples was not given so it was set to 0", LogLevel.DEBUG) # debug is used like info
-        else:
-            minSamples = config["min_samples"]
-        # read covariates
-        if "covariates" not in config:
-            covariates = None
-        else:
-            covariates = config["covariates"]
-        # read smpc
-        smpc = True
-        if "smpc" in config:
-            smpc = config["smpc"]
-        # read design file and design_seperator
-        design_file_path = None
-        if "design_filename" in config:
-            design_file_path = os.path.join(INPUT_FOLDER, config["design_filename"])
-        if "design_separator" not in config:
-            design_separator = "\t"
-        else:
-            design_separator = config["design_separator"]
-        # read expression file or data file
-        if "data_filename" not in config:
-            self.log("No data_filename was given in the config, cannot continue", LogLevel.FATAL)
-        datafile_path = os.path.join(INPUT_FOLDER, config["data_filename"])
-        # read the seperator
-        if "separator" not in config:
-            self.log("No separator was given in the config, cannot continue", LogLevel.FATAL)
-        # read the normalization method
-        if "normalizationMethod" not in config:
-            normalizationMethod = None
-        else:
-            normalizationMethod = config["normalizationMethod"]
-        # read whether given file is an expression file
-        if "expression_file_flag" not in config:
-            expr_file_flag = False
-        else:
-            expr_file_flag = config["expression_file_flag"]
-        # checking for the index_col
-        if "index_col" not in config:
-            index_col = None
-        else:
-            index_col = config["index_col"]
-        if not index_col:
-            self.log("No index_col was given in the config, automatically creating an index.")
-
         # defining the client
         cohort_name = self.id
-        client = Client(
-            cohort_name=cohort_name,
-            datafile_path=datafile_path,
-            expr_file_flag=expr_file_flag,
-            design_file_path=design_file_path,
-            separator=config["separator"],
-            design_separator=design_separator,
-            index_col=index_col,
-            covariates=covariates,
-            normalizationMethod=normalizationMethod,
-        ) # initializing the client includes loading of the data
+        client = Client()
+        client.config_based_init(clientname = cohort_name, input_folder = INPUT_FOLDER)
 
-        self.store(key="smpc", value=smpc)
+        self.store(key="smpc", value=client.smpc)
         self.store(key='client', value=client)
-        self.store(key='minSamples', value=minSamples)
-        self.store(key='covariates', value=covariates)
-        self.store(key="separator", value=config["separator"])
-        self.configure_smpc()
+        self.store(key="separator", value=client.separator)
+        self.configure_smpc() # set the default values
         # send list of protein names (genes) to coordinator
         # we use the hashed values of the feature names and variables
         self.send_data_to_coordinator((list(client.hash2feature.keys()), list(client.hash2variable.keys())),
@@ -119,33 +48,12 @@ class globalFeatureSelection(AppState):
         self.log("[global_feature_selection] Gathering features from all clients")
         lists_of_features_and_variables = self.gather_data(is_json=False)
         self.log("[global_feature_selection] Gathered data from all clients")
-        # generate a sorted list of the genes that are available on each client
-        global_feature_names = set()
-        global_variables = set()
-        for tup in lists_of_features_and_variables:
-            local_feature_name = tup[0]
-            local_variable_list = tup[1]
-            if len(global_feature_names) == 0:
-                global_feature_names = set(local_feature_name)
-            else:
-                global_feature_names = global_feature_names.union(set(local_feature_name))
-            if local_variable_list:
-                if len(global_variables) == 0:
-                    global_variables = set(local_variable_list)
-                else:
-                    global_variables.intersection(set(local_variable_list))
-        global_feature_names = sorted(list(global_feature_names))
-        self.log("[global_feature_selection] all_features were combined")
-
-        # Send feature_names and variables to all
-        if not global_variables:
-            global_variables = None
+        global_feature_names, global_variables = select_common_features_variables(lists_of_features_and_variables)
         self.broadcast_data((global_feature_names, global_variables),
                             send_to_self=True, memo="commonGenes")
         self.log("[global_feature_selection] Data was set to be broadcasted:")
         self.log("[global_feature_selection] transitioning to validate")
         return 'validate'
-
 
 @app_state('validate')
 class ValidationState(AppState):
@@ -183,6 +91,7 @@ class ComputeState(AppState):
     def run(self):
         client = self.load('client')
         client.sample_names = client.design.index.values
+
         # Error check if the design index and the data index are the same
         # we check by comparing the sorted indexes
         if not np.array_equal(sorted(client.sample_names), sorted(client.data.columns.values)):
@@ -201,7 +110,7 @@ class ComputeState(AppState):
         client.n_samples = len(client.sample_names)
 
         # compute XtX and XtY
-        XtX, XtY, err = client.compute_XtX_XtY(self.load("minSamples"))
+        XtX, XtY, err = client.compute_XtX_XtY()
         if err != None:
             self.log(err, LogLevel.FATAL)
 
@@ -230,48 +139,7 @@ class ComputeCorrectionState(AppState):
         XtX_XtY_list = self.gather_data(use_smpc=self.load("smpc"))
         self.log("[compute_beta] Got XtX_XtY_list from gather_data")
         client = self.load('client')
-        k = client.design.shape[1] # [1] = columns = samples
-        n = len(client.feature_names) # [0] = rows = features
-        XtX_glob = np.zeros((n, k, k))
-        XtY_glob = np.zeros((n, k))
-        stdev_unscaled = np.zeros((n, k))
-        if not self.load("smpc"):
-            for ele in XtX_XtY_list:
-                if ele[0].shape[0] != n or ele[0].shape[1] != k or ele[1].shape[0] != n or ele[1].shape[1] != k:
-                    self.log(f"Shape of received XtX or XtY does not match the expected shape: {ele[0].shape} {ele[1].shape}", LogLevel.FATAL)
-                XtX_glob += ele[0]
-                XtY_glob += ele[1]
-
-        else:
-            # smpc case, already aggregated
-            XtX_XtY_list = XtX_XtY_list[0] # unwrap
-            XtX_glob += XtX_XtY_list[0]
-            XtY_glob += XtX_XtY_list[1]
-
-        #TODO: rmv
-        if np.isnan(XtX_glob).any():
-            print("XtX_glob contains NaNs")
-        else:
-            print("XtX_glob does not contain NaNs")
-        if np.isnan(XtY_glob).any():
-            print("XtY_glob contains NaNs")
-        else:
-            print("XtY_glob does not contain NaNs")
-
-        # calculate beta and std. dev.
-        print([f"INFO: Current shape of XtX_glob: {XtX_glob.shape}"])
-        beta = np.zeros((n, k))
-        for i in range(0, n):
-            # if the determant is 0 the inverse cannot be formed so we need
-            # to use the pseudo inverse instead
-            if linalg.det(XtX_glob[i, :, :]) == 0:
-                invXtX = linalg.pinv(XtX_glob[i, :, :])
-            else:
-                invXtX = linalg.inv(XtX_glob[i, :, :])
-            beta[i, :] = invXtX @ XtY_glob[i, :]
-            stdev_unscaled[i, :] = np.sqrt(np.diag(invXtX))
-        print(f"INFO: Shape of beta: {beta.shape}")
-        print(f"INFO: Shape of stdev_unscaled: {stdev_unscaled.shape}")
+        beta = compute_beta(XtX_XtY_list, n=len(client.feature_names), k=client.design.shape[1])
 
         # send beta to clients so they can correct their data
         self.log("[compute_beta] broadcasting betas")
