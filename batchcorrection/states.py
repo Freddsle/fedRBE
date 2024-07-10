@@ -94,18 +94,9 @@ class ComputeState(AppState):
 
         # Error check if the design index and the data index are the same
         # we check by comparing the sorted indexes
-        if not np.array_equal(sorted(client.sample_names), sorted(client.data.columns.values)):
-            self.log("The sample names in the design file and the data file do not match")
-            des_idx = set(client.sample_names)
-            data_idx = set(client.data.index.values)
-            union_indexes = des_idx.union(data_idx)
-            intercept_indexes = des_idx.intersection(data_idx)
-            self.log(f"The following indexes are in the union of both files (union): {union_indexes}")
-            self.log(f"The following indexes are in both files (intercept): {intercept_indexes}")
-            self.log(f"The following indexes are only in one of the files (union-intercept): {union_indexes.difference(intercept_indexes)}")
-            self.log("aborting...", LogLevel.FATAL)
+        client._check_consistency_designfile()
 
-        # sort data by sample names and proteins
+        # Extract only relevant (the global) features and samples
         client.data = client.data.loc[client.feature_names, client.sample_names]
         client.n_samples = len(client.sample_names)
 

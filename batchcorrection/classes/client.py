@@ -33,7 +33,10 @@ class Client:
         self.hash2variable = None
 
 
-    def config_based_init(self, clientname: str, config_filename: str="", input_folder: str = "mnt/input"):
+    def config_based_init(self,
+                          clientname: str,
+                          config_filename: str="",
+                          input_folder: str = os.path.join("mnt", "input")):
         """
         Initializes the client based on a given config file. File must be named
         config.yml or config.yaml, see the documentation of the
@@ -47,10 +50,10 @@ class Client:
         else:
             # automatic reading of the config file
             try:
-                config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yml"))
+                config = bios.read(os.path.join(input_folder, "config.yml"))
             except Exception as e1:
                 try:
-                    config = bios.read(os.path.join(os.getcwd(), "mnt", "input", "config.yaml"))
+                    config = bios.read(os.path.join(input_folder, "config.yaml"))
                 except Exception as e2:
                     raise RuntimeError(f"Could not read the config file, tried config.yml: {e1} and config.yaml: {e2}")
         print(f"Got the following config:\n{config}")
@@ -547,3 +550,22 @@ class Client:
         np.set_printoptions(threshold=1000)
         print(f"remove batch final corrected data shape: {self.data_corrected.shape}")
 
+    ### Helpers ###
+    def _check_consistency_designfile(self) -> None:
+        """
+        Used to checks whether the design files row names (samples) are consistent
+        with the given data
+        Raises an ValueError if they are not the same
+        """
+        design_samples = self.sample_names
+        samples = self.data.columns.values
+        if not np.array_equal(sorted(design_samples), sorted(samples)):
+            print("The sample names in the design file and the data file do not match")
+            des_idx = set(design_samples)
+            data_idx = set(samples)
+            union_indexes = des_idx.union(data_idx)
+            intercept_indexes = des_idx.intersection(data_idx)
+            print(f"The following indexes are in the union of both files (union): {union_indexes}")
+            print(f"The following indexes are in both files (intercept): {intercept_indexes}")
+            print(f"The following indexes are only in one of the files (union-intercept): {union_indexes.difference(intercept_indexes)}")
+            raise ValueError("aborting...")

@@ -51,9 +51,9 @@ def select_common_features_variables(
         global_variables = sorted(list(global_variables))
     return list(global_feature_names), global_variables
 
-def compute_beta(XtX_XtY_list: List[Tuple[np.ndarray, np.ndarray]], n: int, k: int) -> np.ndarray:
+def compute_beta(XtX_XtY_list: List[List[np.ndarray]], n: int, k: int) -> np.ndarray:
     """
-    Gets a list of tuples containing the XtX and XtY matrices from each client
+    Gets a list of a List containing the XtX and XtY matrices from each client
     and calculates the linear model from them, returning the beta vector.
     Args:
         XtX_XtY_list: A list of tuples containing the XtX and XtY matrices from
