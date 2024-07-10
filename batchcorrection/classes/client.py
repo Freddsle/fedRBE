@@ -181,9 +181,8 @@ class Client:
             print(f"Shape of rawdata(default csv): {self.rawdata.shape}")
         self.data = self.rawdata
 
-        # cleanof only NaN columns and rows
-        self.data = self.data.dropna(axis=0, how='all')
         self.data = self.data.dropna(axis=1, how='all')
+        self.data = self.data.dropna(axis=0, how='all')
 
         self.variables_in_data = False
         # handling of default csv files
@@ -207,12 +206,12 @@ class Client:
         else:
             # for expression files we just have to remove the rows that have non-numeric values
             # we also need to potentially extract covariates
-            tmp = self.rawdata.T
+            tmp = self.data.T
             if self.variables and not design_file_path:
                 self.variables_in_data = True
                 tmp = tmp.drop(columns=self.variables)
             tmp = tmp.select_dtypes(include=np.number)
-            self.num_excluded_numeric = len(self.rawdata.columns) - len(tmp.columns)
+            self.num_excluded_numeric = len(self.data.columns) - len(tmp.columns)
             self.data = tmp.T
 
         self.feature_names = list(self.data.index.values)
@@ -309,10 +308,14 @@ class Client:
 
         # for all extra global features we add a columns of zeros
         # reminder: data is features x samples
-        for feature in self.extra_global_features:
-            self.data.loc[feature] = np.nan
+
+        print(f"Adding {len(self.extra_global_features)} extra global features")
+        # Reindex the Series to include all indices in the extra_global_features list
+        self.data = self.data.reindex(self.data.index.union(list(self.extra_global_features)))
+        self.data.loc[list(self.extra_global_features)] = np.nan
 
         # now we apply the order of the global features to the data matrix
+        print(f"Got {len(global_hashed_features)} global features and {len(self.data.index)} features in the data matrix")
         if set(global_hashed_features) != set(self.data.index):
             raise Exception("INTERNAL ERROR: something went wrong adding all features from all clients, data matrix index != global features list")
         print(f"Before reindexing got this data: {self.data.shape}")

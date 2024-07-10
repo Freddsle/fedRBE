@@ -47,6 +47,14 @@ def select_common_features_variables(
                 global_variables = set(local_variable_list)
             else:
                 global_variables.intersection(set(local_variable_list))
+    #TODO: keep the strategy that we need at least 2 clients to have a feature
+    #TODO: rmv this again:
+    print(f"[global_feature_selection] The following counts exist for genes: {set(global_feature_names.values())}")
+    for feature, count in global_feature_names.items():
+        if count == 4:
+            print(f"A feature which only exists in 4 clients is: {feature}")
+            break
+
     global_feature_names = sorted([feature for feature, count in global_feature_names.items() if count > 1])
     print("[global_feature_selection] all_features were combined")
 
