@@ -12,6 +12,8 @@ def select_common_features_variables(
     """
     Extracts the union of features and the intersection of variables from the
     lists of features and variables provided by the clients.
+    For the union, only features that are available on at least two clients
+    are selected.
     Args:
         lists_of_features_and_variables: A list of tuples containing the features
         and variables available on each client. Each tuple represents one client,
@@ -27,21 +29,25 @@ def select_common_features_variables(
                 If no variables are available, this is None.
     """
     # generate a sorted list of the genes that are available on each client
-    global_feature_names = set()
+    global_feature_names = dict()
     global_variables = set()
     for tup in lists_of_features_and_variables:
-        local_feature_name = tup[0]
+        local_feature_names = tup[0]
         local_variable_list = tup[1]
         if len(global_feature_names) == 0:
-            global_feature_names = set(local_feature_name)
+            global_feature_names = {feature: 1 for feature in local_feature_names}
         else:
-            global_feature_names = global_feature_names.union(set(local_feature_name))
+            for feature in local_feature_names:
+                if feature in global_feature_names:
+                    global_feature_names[feature] += 1
+                else:
+                    global_feature_names[feature] = 1
         if local_variable_list:
             if len(global_variables) == 0:
                 global_variables = set(local_variable_list)
             else:
                 global_variables.intersection(set(local_variable_list))
-    global_feature_names = sorted(list(global_feature_names))
+    global_feature_names = sorted([feature for feature, count in global_feature_names.items() if count > 1])
     print("[global_feature_selection] all_features were combined")
 
     # Send feature_names and variables to all
