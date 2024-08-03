@@ -1,0 +1,8 @@
+flimmaBatchCorrection:
+  min_samples: 2
+  data_filename: "intensities_log_UNION.tsv"
+  separator: "\t"
+  covariates: ["Pyr"]
+  design_filename: "design.tsv"
+  index_col: "rowname"
+  expression_file_flag: true

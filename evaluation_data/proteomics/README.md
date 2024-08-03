@@ -4,7 +4,7 @@
 
 Preprocessing:
 - raw data from DIA-NN outputs were log2-transformed.
-- filtering - keep only rows with 2 not-NA values per center.
+- filtering - keep only rows with 2 not-NA values per center AND 2 per covariate class.
 
 Contains NA - for PCA plots - omit rows with NA.
 
