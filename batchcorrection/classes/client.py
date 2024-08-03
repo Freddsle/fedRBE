@@ -32,11 +32,37 @@ class Client:
         self.feature2hash = None
         self.hash2variable = None
 
+    def hash_names(self, 
+                   names: List[str]) -> dict:
+        """
+        Hashes the names for privacy reasons.
+        """
+        hash2name = {}
+        name2hash = {}
+        for name in names:
+            name_hash = hashlib.sha3_256(name.encode()).hexdigest()
+            hash2name[name_hash] = name
+            name2hash[name] = name_hash
+        return name2hash, hash2name
+
+
+    def hash_covariates(self, 
+                        covariates: List[str]) -> dict:
+        """
+        Hashes the covariates for privacy reasons.
+        """
+        hash2variable = {}
+        for variable in covariates:
+            variable_hash = hashlib.sha3_256(variable.encode()).hexdigest()
+            hash2variable[variable_hash] = variable
+        return hash2variable
+
 
     def config_based_init(self,
                           clientname: str,
                           config_filename: str="",
-                          input_folder: str = os.path.join("mnt", "input")):
+                          input_folder: str = os.path.join("mnt", "input"),
+                          use_hashing: bool=True):
         """
         Initializes the client based on a given config file. File must be named
         config.yml or config.yaml, see the documentation of the
@@ -122,32 +148,29 @@ class Client:
         except:
             raise ValueError(f"Client {self.cohort_name}: Error loading dataset.")
         self.normalize(normalizationMethod)
-        # we hash the feature names and variables to hide covariates and features
-        # that this client has but other clients do not have
-        self.hash2feature = dict()
-        self.feature2hash = dict()
-        self.hash2variable = dict()
-        if self.feature_names is None:
-            raise ValueError(f"Client {self.cohort_name}: Error loading feature names.")
-        if self.feature_names is None:
-            raise ValueError(f"Client {self.cohort_name}: Error loading variables.")
-        for feature in self.feature_names:
-            feature_hash = hashlib.sha3_256(feature.encode()).hexdigest()
-            self.hash2feature[feature_hash] = feature
-            self.feature2hash[feature] = feature_hash
-        if self.data is None:
-            raise ValueError(f"Client {self.cohort_name}: Error loading data.")
-        # we use only the hashes of features and only in the end replace again
-        # with the real featurenames
-        self.data.rename(index=self.feature2hash, inplace=True)
-        print("shape of datya after renaming: ", self.data.shape)
-        # translate the feature names to hashes
-        self.feature_names = [self.feature2hash[feature] for feature in self.feature_names]
 
-        if covariates:
-            for variable in covariates:
-                self.hash2variable[hashlib.sha3_256(variable.encode()).hexdigest()] = variable
-
+        # Hashing logic
+        if use_hashing:
+            # we hash the feature names and variables to hide covariates and features
+            # that this client has but other clients do not have
+            if not self.feature_names:
+                raise ValueError(f"Client {self.cohort_name}: Error loading feature names.")
+            if not self.variables:
+                raise ValueError(f"Client {self.cohort_name}: Error loading variables.")
+            
+            self.feature2hash, self.hash2feature = self.hash_names(self.feature_names)
+            self.data.rename(index=self.feature2hash, inplace=True)
+            print("shape of data after renaming: ", self.data.shape)
+            
+            self.feature_names = [self.feature2hash[feature] for feature in self.feature_names]
+            
+            if covariates:
+                self.hash2variable = self.hash_covariates(covariates)
+        else:
+            self.hash2feature = {name: name for name in self.feature_names}
+            self.feature2hash = {name: name for name in self.feature_names}
+            self.hash2variable = {name: name for name in covariates} if covariates else {}
+            
 
     ######### open dataset #########
     def open_dataset(self, datafile_path, expr_file_flag, design_file_path=None,
@@ -296,10 +319,12 @@ class Client:
             raise Exception("Feature names are not loaded yet, cannot set data")
 
         extra_local_features = set(self.feature_names).difference(set(global_hashed_features))
-        print(f"feature names: {self.feature_names[:10]}")
-        print(f"global features: {global_hashed_features[:10]}")
+        print(f"feature names: {len(self.feature_names)}")
+        print(f"global features: {len(global_hashed_features)}")
+        print(f"Extra local features: {len(extra_local_features)}")
         self.extra_global_features = set(global_hashed_features).difference(set(self.feature_names))
-        print(f"Extra global features: {list(self.extra_global_features)[:10]}")
+        # print(f"Extra global features: {list(self.extra_global_features)[:10]}")
+        print(f"Extra global features: {len(list(self.extra_global_features))}")
 
 
         # we ignore the only us features for now
@@ -410,10 +435,12 @@ class Client:
     def compute_XtX_XtY(self):
         assert self.design is not None
         assert self.data is not None
+
         X = self.design.values
         Y = self.data.values  # Y -> features x samples
         n = Y.shape[0]  # [0] = rows = features
         k = self.design.shape[1]  # [1] = columns = samples
+        
         self.XtX = np.zeros((n, k, k))
             # for each feature, we calculate the XtX matrix individually
             # X is of shape k x len([intercept, variables, cohorts]), so XtX
@@ -428,26 +455,27 @@ class Client:
             y = Y[feature_idx, :] # y is all values of one specific feature
             non_nan_idxs = np.argwhere(np.isfinite(y)).reshape(-1)
                 # gives the indices of the non-NaN values in y as an 1d array
+            
             if len(non_nan_idxs) > 0:
                 x = X[non_nan_idxs, :]
                 y = y[non_nan_idxs]
                 self.XtX[feature_idx, :, :] = x.T @ x
                 self.XtY[feature_idx, :] = x.T @ y
 
-            # privacy check, ensure that y holds enough values
-            # Even when just one value is present, it is unknown which sample
-            # exactly is choosen
-            # counts_y = np.sum((y != 0) & (~np.isnan(y)))
-            # if counts_y > 0 and counts_y < minSamples:
-            #     return None, None, f"Privacy Error: your expression data must not contain a " +\
-            #         f"protein with less than min_sample ({minSamples}) value(s) " +\
-            #         f"that are neither 0 nor NaN."
-            if self.min_samples != 0:
-                x_boolean = np.where(x != 0, 1, 0)
-                y_boolean = np.where(y != 0, 1, 0)
-                XtY_boolean = x_boolean.T @ y_boolean
-                if not np.all((XtY_boolean >= self.min_samples) | (XtY_boolean == 0)):
-                    return None, None, "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
+                # privacy check, ensure that y holds enough values
+                # Even when just one value is present, it is unknown which sample
+                # exactly is choosen
+                # counts_y = np.sum((y != 0) & (~np.isnan(y)))
+                # if counts_y > 0 and counts_y < minSamples:
+                #     return None, None, f"Privacy Error: your expression data must not contain a " +\
+                #         f"protein with less than min_sample ({minSamples}) value(s) " +\
+                #         f"that are neither 0 nor NaN."
+                if self.min_samples != 0:
+                    x_boolean = np.where(x != 0, 1, 0)
+                    y_boolean = np.where(y != 0, 1, 0)
+                    XtY_boolean = x_boolean.T @ y_boolean
+                    if not np.all((XtY_boolean >= self.min_samples) | (XtY_boolean == 0)):
+                        return None, None, "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
 
             # #TODO: rmv:
             # if 0 == len(non_nan_idxs):
