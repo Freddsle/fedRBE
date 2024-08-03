@@ -7,18 +7,19 @@ from numpy import linalg
 from typing import List, Tuple, Union
 
 def select_common_features_variables(
-    lists_of_features_and_variables: List[Tuple[List[str], List[str]]]) -> \
+    lists_of_features_and_variables: List[Tuple[List[str], List[str]]],
+    min_clients=2) -> \
         Tuple[List[str], Union[List[str], None]]:
     """
     Extracts the union of features and the intersection of variables from the
     lists of features and variables provided by the clients.
-    For the union, only features that are available on at least two clients
+    outdated : For the union, only features that are available on at least two clients
     are selected.
     Args:
         lists_of_features_and_variables: A list of tuples containing the features
         and variables available on each client. Each tuple represents one client,
-        the feature_names are the first element of the tuple and the variables
-        are the second element of the tuple. The featurenames should be hashes,
+        the feature_names is the first element of the tuple and the variables
+        is the second element of the tuple. The featurenames should be hashes,
         but this is not checked here.
     Returns:
         global_feature_names, global_variables
@@ -28,42 +29,35 @@ def select_common_features_variables(
                 all clients. The list is sorted and contains no duplicates.
                 If no variables are available, this is None.
     """
-    # generate a sorted list of the genes that are available on each client
-    global_feature_names = dict()
-    global_variables = set()
-    for tup in lists_of_features_and_variables:
-        local_feature_names = tup[0]
-        local_variable_list = tup[1]
-        if len(global_feature_names) == 0:
-            global_feature_names = {feature: 1 for feature in local_feature_names}
-        else:
-            for feature in local_feature_names:
-                if feature in global_feature_names:
-                    global_feature_names[feature] += 1
-                else:
-                    global_feature_names[feature] = 1
-        if local_variable_list:
-            if len(global_variables) == 0:
-                global_variables = set(local_variable_list)
+    feature_count = {}
+    global_variables = None
+
+    for features, variables in lists_of_features_and_variables:
+        # Count features
+        for feature in features:
+            if feature in feature_count:
+                feature_count[feature] += 1
             else:
-                global_variables.intersection(set(local_variable_list))
-    #TODO: keep the strategy that we need at least 2 clients to have a feature
-    #TODO: rmv this again:
-    print(f"[global_feature_selection] The following counts exist for genes: {set(global_feature_names.values())}")
-    for feature, count in global_feature_names.items():
-        if count == 4:
-            print(f"A feature which only exists in 4 clients is: {feature}")
-            break
+                feature_count[feature] = 1
+        
+        # Intersect variables
+        if variables:
+            if global_variables is None:
+                global_variables = set(variables)
+            else:
+                global_variables.intersection_update(variables)
 
-    global_feature_names = sorted([feature for feature, count in global_feature_names.items() if count > 1])
-    print("[global_feature_selection] all_features were combined")
+    # Select features present in at least two clients
+    global_feature_names = sorted([feature for feature, count in feature_count.items() if count >= min_clients])
 
-    # Send feature_names and variables to all
-    if not global_variables:
-        global_variables = None
+    # Sort variables
+    if global_variables:
+        global_variables = sorted(global_variables)
     else:
-        global_variables = sorted(list(global_variables))
-    return list(global_feature_names), global_variables
+        global_variables = None
+
+    return global_feature_names, global_variables
+
 
 def compute_beta(XtX_XtY_list: List[List[np.ndarray]], n: int, k: int) -> np.ndarray:
     """
