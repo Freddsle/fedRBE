@@ -12,8 +12,8 @@ Data from 5 studies:
 1. Filter - remove NA rows.
 2. Filter - keep rows with min 2 not NA values per study.
 3. Filter - keep only samples with min 2 not-NA values per sample (column).
-4. Keeps samples oonly with upper quantile > 0.
-5. Normalization to total sequencing coverage (?).
+4. Keeps samples only with upper quantile > 0.
+<!-- 5. Normalization to total sequencing coverage (?). -->
 6. Upper-quantile normalization - taking into account only non-NA values.
    
 
