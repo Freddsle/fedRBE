@@ -31,18 +31,18 @@ pca_plot <- function(
   names(var_expl) <- paste0("PC", 1:length(var_expl))
 
   # Update the ggplot function call to use dynamic PC columns
-  pca_plot <- pca_df %>%
+  pca_plotting <- pca_df %>%
       ggplot(aes_string(x = pc_x, y = pc_y, color = col_col, shape = shape_col)) +
 
   if(shape_col != ""){
     if(length(unique(batch_info[[shape_col]])) > 6){
       shapes_codes <- c(0, 1, 3, 8, 7, 15, 19)
-      pca_plot <- pca_plot + 
+      pca_plotting <- pca_plotting + 
         scale_shape_manual(values = shapes_codes)
     }    
   }
 
-  pca_plot <- pca_plot + 
+  pca_plotting <- pca_plotting + 
     geom_point(size=2) +
     theme_classic() +
     labs(title = title,
@@ -50,21 +50,21 @@ pca_plot <- function(
          y = glue::glue("{pc_y} [{round(var_expl[pc_y]*100, 2)}%]"))
 
   if(!show_legend){
-    pca_plot <- pca_plot + 
+    pca_plotting <- pca_plotting + 
       theme(legend.position = "none")
   }
 
 
   if (!is.null(cbPalette)) {
-    pca_plot <- pca_plot + scale_color_manual(values = cbPalette)
+    pca_plotting <- pca_plotting + scale_color_manual(values = cbPalette)
   }
 
 
   if (path == "") {
-    return(pca_plot)
+    return(pca_plotting)
   } else {
-    ggsave(path, pca_plot, width = 5, height = 5)
-    return(pca_plot)
+    ggsave(path, pca_plotting, width = 5, height = 5)
+    return(pca_plotting)
   }
 }
 
