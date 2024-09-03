@@ -10,7 +10,7 @@ Preprocessing:
 Do not contain NA values.
 
 Central run:  
-- limmaRBE with Status (normal / HGSC) as covariates and dataset as batches.
+- limmaRBE with Status (normal / tumor) as covariates and dataset as batches.
 - without NA.
 
 # Structure

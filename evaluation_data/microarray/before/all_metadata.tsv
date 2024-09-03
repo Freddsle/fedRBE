@@ -1,62 +1,4 @@
 Sample_geo_ID	Status	HistSubtypes	Stage2	Grade2	ClinicopathologicSubtypes	Dataset
-GSM139377	ovarian tumour	clear cell carcinoma	III	High	Type I	GSE6008
-GSM139378	ovarian tumour	clear cell carcinoma	IV	High	Type I	GSE6008
-GSM139379	ovarian tumour	clear cell carcinoma	I	High	Type I	GSE6008
-GSM139380	ovarian tumour	clear cell carcinoma	I	NA	Type I	GSE6008
-GSM139381	ovarian tumour	clear cell carcinoma	II	NA	Type I	GSE6008
-GSM139382	ovarian tumour	clear cell carcinoma	I	NA	Type I	GSE6008
-GSM139383	ovarian tumour	clear cell carcinoma	I	NA	Type I	GSE6008
-GSM139384	ovarian tumour	clear cell carcinoma	I	NA	Type I	GSE6008
-GSM139385	ovarian tumour	endometrioid carcinoma	IV	High	Type I	GSE6008
-GSM139386	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139387	ovarian tumour	endometrioid carcinoma	IV	High	Type I	GSE6008
-GSM139388	ovarian tumour	endometrioid carcinoma	II	High	Type I	GSE6008
-GSM139389	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139390	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139391	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139392	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139393	ovarian tumour	endometrioid carcinoma	III	Low	Type I	GSE6008
-GSM139394	ovarian tumour	endometrioid carcinoma	I	High	Type I	GSE6008
-GSM139395	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139396	ovarian tumour	endometrioid carcinoma	I	High	Type I	GSE6008
-GSM139397	ovarian tumour	endometrioid carcinoma	I	High	Type I	GSE6008
-GSM139398	ovarian tumour	endometrioid carcinoma	IV	High	Type I	GSE6008
-GSM139399	ovarian tumour	endometrioid carcinoma	I	High	Type I	GSE6008
-GSM139400	ovarian tumour	endometrioid carcinoma	I	High	Type I	GSE6008
-GSM139401	ovarian tumour	endometrioid carcinoma	II	High	Type I	GSE6008
-GSM139402	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139403	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139404	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139405	ovarian tumour	endometrioid carcinoma	II	High	Type I	GSE6008
-GSM139406	ovarian tumour	endometrioid carcinoma	I	High	Type I	GSE6008
-GSM139407	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139408	ovarian tumour	endometrioid carcinoma	II	High	Type I	GSE6008
-GSM139409	ovarian tumour	endometrioid carcinoma	II	High	Type I	GSE6008
-GSM139410	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139411	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139412	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139413	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139414	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139415	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139416	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139417	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139418	ovarian tumour	endometrioid carcinoma	I	High	Type I	GSE6008
-GSM139419	ovarian tumour	endometrioid carcinoma	III	High	Type I	GSE6008
-GSM139420	ovarian tumour	endometrioid carcinoma	I	Low	Type I	GSE6008
-GSM139421	ovarian tumour	endometrioid carcinoma	I	High	Type I	GSE6008
-GSM139422	ovarian tumour	mucinous carcinoma	II	High	Type I	GSE6008
-GSM139423	ovarian tumour	mucinous carcinoma	I	Low	Type I	GSE6008
-GSM139424	ovarian tumour	mucinous carcinoma	III	High	Type I	GSE6008
-GSM139425	ovarian tumour	mucinous carcinoma	I	Low	Type I	GSE6008
-GSM139426	ovarian tumour	mucinous carcinoma	I	Low	Type I	GSE6008
-GSM139427	ovarian tumour	mucinous carcinoma	I	Low	Type I	GSE6008
-GSM139428	ovarian tumour	mucinous carcinoma	III	Low	Type I	GSE6008
-GSM139429	ovarian tumour	mucinous carcinoma	NA	NA	Type I	GSE6008
-GSM139430	ovarian tumour	mucinous carcinoma	NA	NA	Type I	GSE6008
-GSM139431	ovarian tumour	mucinous carcinoma	NA	NA	Type I	GSE6008
-GSM139432	ovarian tumour	mucinous carcinoma	NA	NA	Type I	GSE6008
-GSM139433	ovarian tumour	mucinous carcinoma	III	High	Type I	GSE6008
-GSM139434	ovarian tumour	mucinous carcinoma	II	Low	Type I	GSE6008
 GSM139435	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139436	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE6008
 GSM139437	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
@@ -64,15 +6,11 @@ GSM139438	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139439	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139440	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139441	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
-GSM139442	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
-GSM139443	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
 GSM139444	ovarian tumour	high-grade serous carcinoma	I	High	Type II	GSE6008
 GSM139445	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE6008
 GSM139446	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE6008
 GSM139447	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE6008
 GSM139448	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
-GSM139449	ovarian tumour	low-grade serous carcinoma	III	Low	Type I	GSE6008
-GSM139450	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
 GSM139451	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139452	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139453	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
@@ -80,23 +18,9 @@ GSM139454	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139455	ovarian tumour	high-grade serous carcinoma	I	High	Type II	GSE6008
 GSM139456	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139457	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE6008
-GSM139458	ovarian tumour	serous carcinoma	IV	NA	NA	GSE6008
-GSM139459	ovarian tumour	serous carcinoma	IV	NA	NA	GSE6008
-GSM139460	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
-GSM139461	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
-GSM139462	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
-GSM139463	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
-GSM139464	ovarian tumour	serous carcinoma	I	NA	NA	GSE6008
-GSM139465	ovarian tumour	serous carcinoma	II	NA	NA	GSE6008
-GSM139466	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
-GSM139467	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
-GSM139468	ovarian tumour	serous carcinoma	I	NA	NA	GSE6008
-GSM139469	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
-GSM139470	ovarian tumour	serous carcinoma	III	NA	NA	GSE6008
 GSM139471	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139472	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139473	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
-GSM139474	ovarian tumour	low-grade serous carcinoma	III	Low	Type I	GSE6008
 GSM139475	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
 GSM139476	normal	NA	NA	NA	NA	GSE6008
 GSM139477	normal	NA	NA	NA	NA	GSE6008
