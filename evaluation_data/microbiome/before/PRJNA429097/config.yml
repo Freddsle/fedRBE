@@ -1,0 +1,8 @@
+flimmaBatchCorrection:
+  min_samples: 2
+  data_filename: "UQnorm_log_counts_for_corr.tsv"
+  separator: "\t"
+  covariates: ["CRC"]
+  design_filename: "design_5C.tsv"
+  index_col: "gene_ID"
+  expression_file_flag: true
