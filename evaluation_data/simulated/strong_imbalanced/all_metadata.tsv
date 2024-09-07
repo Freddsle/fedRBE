@@ -1,601 +1,601 @@
-A	B	lab
-s.2	1	0	lab1
-s.8	1	0	lab1
-s.43	1	0	lab1
-s.61	1	0	lab1
-s.66	1	0	lab1
-s.68	1	0	lab1
-s.70	1	0	lab1
-s.71	1	0	lab1
-s.72	1	0	lab1
-s.79	1	0	lab1
-s.116	1	0	lab1
-s.130	1	0	lab1
-s.145	1	0	lab1
-s.148	1	0	lab1
-s.149	1	0	lab1
-s.150	1	0	lab1
-s.174	1	0	lab1
-s.191	1	0	lab1
-s.197	1	0	lab1
-s.209	1	0	lab1
-s.214	1	0	lab1
-s.225	1	0	lab1
-s.240	1	0	lab1
-s.276	1	0	lab1
-s.277	1	0	lab1
-s.279	1	0	lab1
-s.282	1	0	lab1
-s.299	1	0	lab1
-s.308	1	0	lab1
-s.318	1	0	lab1
-s.323	1	0	lab1
-s.325	1	0	lab1
-s.350	0	1	lab1
-s.391	0	1	lab1
-s.402	0	1	lab1
-s.456	0	1	lab1
-s.460	0	1	lab1
-s.511	0	1	lab1
-s.525	0	1	lab1
-s.557	0	1	lab1
-s.3	1	0	lab2
-s.31	1	0	lab2
-s.35	1	0	lab2
-s.52	1	0	lab2
-s.57	1	0	lab2
-s.83	1	0	lab2
-s.103	1	0	lab2
-s.106	1	0	lab2
-s.140	1	0	lab2
-s.151	1	0	lab2
-s.157	1	0	lab2
-s.186	1	0	lab2
-s.188	1	0	lab2
-s.195	1	0	lab2
-s.210	1	0	lab2
-s.229	1	0	lab2
-s.232	1	0	lab2
-s.253	1	0	lab2
-s.257	1	0	lab2
-s.273	1	0	lab2
-s.287	1	0	lab2
-s.292	1	0	lab2
-s.296	1	0	lab2
-s.319	1	0	lab2
-s.327	1	0	lab2
-s.335	1	0	lab2
-s.338	1	0	lab2
-s.342	1	0	lab2
-s.355	0	1	lab2
-s.362	0	1	lab2
-s.366	0	1	lab2
-s.373	0	1	lab2
-s.374	0	1	lab2
-s.382	0	1	lab2
-s.384	0	1	lab2
-s.395	0	1	lab2
-s.397	0	1	lab2
-s.399	0	1	lab2
-s.401	0	1	lab2
-s.412	0	1	lab2
-s.416	0	1	lab2
-s.422	0	1	lab2
-s.430	0	1	lab2
-s.454	0	1	lab2
-s.458	0	1	lab2
-s.461	0	1	lab2
-s.473	0	1	lab2
-s.477	0	1	lab2
-s.480	0	1	lab2
-s.481	0	1	lab2
-s.487	0	1	lab2
-s.491	0	1	lab2
-s.494	0	1	lab2
-s.495	0	1	lab2
-s.497	0	1	lab2
-s.500	0	1	lab2
-s.508	0	1	lab2
-s.518	0	1	lab2
-s.521	0	1	lab2
-s.526	0	1	lab2
-s.531	0	1	lab2
-s.532	0	1	lab2
-s.534	0	1	lab2
-s.541	0	1	lab2
-s.543	0	1	lab2
-s.553	0	1	lab2
-s.555	0	1	lab2
-s.558	0	1	lab2
-s.566	0	1	lab2
-s.571	0	1	lab2
-s.572	0	1	lab2
-s.582	0	1	lab2
-s.583	0	1	lab2
-s.587	0	1	lab2
-s.588	0	1	lab2
-s.591	0	1	lab2
-s.594	0	1	lab2
-s.596	0	1	lab2
-s.599	0	1	lab2
-s.600	0	1	lab2
-s.1	1	0	lab3
-s.4	1	0	lab3
-s.5	1	0	lab3
-s.6	1	0	lab3
-s.7	1	0	lab3
-s.9	1	0	lab3
-s.10	1	0	lab3
-s.11	1	0	lab3
-s.12	1	0	lab3
-s.13	1	0	lab3
-s.14	1	0	lab3
-s.15	1	0	lab3
-s.16	1	0	lab3
-s.17	1	0	lab3
-s.18	1	0	lab3
-s.19	1	0	lab3
-s.20	1	0	lab3
-s.21	1	0	lab3
-s.22	1	0	lab3
-s.23	1	0	lab3
-s.24	1	0	lab3
-s.25	1	0	lab3
-s.26	1	0	lab3
-s.27	1	0	lab3
-s.28	1	0	lab3
-s.29	1	0	lab3
-s.30	1	0	lab3
-s.32	1	0	lab3
-s.33	1	0	lab3
-s.34	1	0	lab3
-s.36	1	0	lab3
-s.37	1	0	lab3
-s.38	1	0	lab3
-s.39	1	0	lab3
-s.40	1	0	lab3
-s.41	1	0	lab3
-s.42	1	0	lab3
-s.44	1	0	lab3
-s.45	1	0	lab3
-s.46	1	0	lab3
-s.47	1	0	lab3
-s.48	1	0	lab3
-s.49	1	0	lab3
-s.50	1	0	lab3
-s.51	1	0	lab3
-s.53	1	0	lab3
-s.54	1	0	lab3
-s.55	1	0	lab3
-s.56	1	0	lab3
-s.58	1	0	lab3
-s.59	1	0	lab3
-s.60	1	0	lab3
-s.62	1	0	lab3
-s.63	1	0	lab3
-s.64	1	0	lab3
-s.65	1	0	lab3
-s.67	1	0	lab3
-s.69	1	0	lab3
-s.73	1	0	lab3
-s.74	1	0	lab3
-s.75	1	0	lab3
-s.76	1	0	lab3
-s.77	1	0	lab3
-s.78	1	0	lab3
-s.80	1	0	lab3
-s.81	1	0	lab3
-s.82	1	0	lab3
-s.84	1	0	lab3
-s.85	1	0	lab3
-s.86	1	0	lab3
-s.87	1	0	lab3
-s.88	1	0	lab3
-s.89	1	0	lab3
-s.90	1	0	lab3
-s.91	1	0	lab3
-s.92	1	0	lab3
-s.93	1	0	lab3
-s.94	1	0	lab3
-s.95	1	0	lab3
-s.96	1	0	lab3
-s.97	1	0	lab3
-s.98	1	0	lab3
-s.99	1	0	lab3
-s.100	1	0	lab3
-s.101	1	0	lab3
-s.102	1	0	lab3
-s.104	1	0	lab3
-s.105	1	0	lab3
-s.107	1	0	lab3
-s.108	1	0	lab3
-s.109	1	0	lab3
-s.110	1	0	lab3
-s.111	1	0	lab3
-s.112	1	0	lab3
-s.113	1	0	lab3
-s.114	1	0	lab3
-s.115	1	0	lab3
-s.117	1	0	lab3
-s.118	1	0	lab3
-s.119	1	0	lab3
-s.120	1	0	lab3
-s.121	1	0	lab3
-s.122	1	0	lab3
-s.123	1	0	lab3
-s.124	1	0	lab3
-s.125	1	0	lab3
-s.126	1	0	lab3
-s.127	1	0	lab3
-s.128	1	0	lab3
-s.129	1	0	lab3
-s.131	1	0	lab3
-s.132	1	0	lab3
-s.133	1	0	lab3
-s.134	1	0	lab3
-s.135	1	0	lab3
-s.136	1	0	lab3
-s.137	1	0	lab3
-s.138	1	0	lab3
-s.139	1	0	lab3
-s.141	1	0	lab3
-s.142	1	0	lab3
-s.143	1	0	lab3
-s.144	1	0	lab3
-s.146	1	0	lab3
-s.147	1	0	lab3
-s.152	1	0	lab3
-s.153	1	0	lab3
-s.154	1	0	lab3
-s.155	1	0	lab3
-s.156	1	0	lab3
-s.158	1	0	lab3
-s.159	1	0	lab3
-s.160	1	0	lab3
-s.161	1	0	lab3
-s.162	1	0	lab3
-s.163	1	0	lab3
-s.164	1	0	lab3
-s.165	1	0	lab3
-s.166	1	0	lab3
-s.167	1	0	lab3
-s.168	1	0	lab3
-s.169	1	0	lab3
-s.170	1	0	lab3
-s.171	1	0	lab3
-s.172	1	0	lab3
-s.173	1	0	lab3
-s.175	1	0	lab3
-s.176	1	0	lab3
-s.177	1	0	lab3
-s.178	1	0	lab3
-s.179	1	0	lab3
-s.180	1	0	lab3
-s.181	1	0	lab3
-s.182	1	0	lab3
-s.183	1	0	lab3
-s.184	1	0	lab3
-s.185	1	0	lab3
-s.187	1	0	lab3
-s.189	1	0	lab3
-s.190	1	0	lab3
-s.192	1	0	lab3
-s.193	1	0	lab3
-s.194	1	0	lab3
-s.196	1	0	lab3
-s.198	1	0	lab3
-s.199	1	0	lab3
-s.200	1	0	lab3
-s.201	1	0	lab3
-s.202	1	0	lab3
-s.203	1	0	lab3
-s.204	1	0	lab3
-s.205	1	0	lab3
-s.206	1	0	lab3
-s.207	1	0	lab3
-s.208	1	0	lab3
-s.211	1	0	lab3
-s.212	1	0	lab3
-s.213	1	0	lab3
-s.215	1	0	lab3
-s.216	1	0	lab3
-s.217	1	0	lab3
-s.218	1	0	lab3
-s.219	1	0	lab3
-s.220	1	0	lab3
-s.221	1	0	lab3
-s.222	1	0	lab3
-s.223	1	0	lab3
-s.224	1	0	lab3
-s.226	1	0	lab3
-s.227	1	0	lab3
-s.228	1	0	lab3
-s.230	1	0	lab3
-s.231	1	0	lab3
-s.233	1	0	lab3
-s.234	1	0	lab3
-s.235	1	0	lab3
-s.236	1	0	lab3
-s.237	1	0	lab3
-s.238	1	0	lab3
-s.239	1	0	lab3
-s.241	1	0	lab3
-s.242	1	0	lab3
-s.243	1	0	lab3
-s.244	1	0	lab3
-s.245	1	0	lab3
-s.246	1	0	lab3
-s.247	1	0	lab3
-s.248	1	0	lab3
-s.249	1	0	lab3
-s.250	1	0	lab3
-s.251	1	0	lab3
-s.252	1	0	lab3
-s.254	1	0	lab3
-s.255	1	0	lab3
-s.256	1	0	lab3
-s.258	1	0	lab3
-s.259	1	0	lab3
-s.260	1	0	lab3
-s.261	1	0	lab3
-s.262	1	0	lab3
-s.263	1	0	lab3
-s.264	1	0	lab3
-s.265	1	0	lab3
-s.266	1	0	lab3
-s.267	1	0	lab3
-s.268	1	0	lab3
-s.269	1	0	lab3
-s.270	1	0	lab3
-s.271	1	0	lab3
-s.272	1	0	lab3
-s.274	1	0	lab3
-s.275	1	0	lab3
-s.278	1	0	lab3
-s.280	1	0	lab3
-s.281	1	0	lab3
-s.283	1	0	lab3
-s.284	1	0	lab3
-s.285	1	0	lab3
-s.286	1	0	lab3
-s.288	1	0	lab3
-s.289	1	0	lab3
-s.290	1	0	lab3
-s.291	1	0	lab3
-s.293	1	0	lab3
-s.294	1	0	lab3
-s.295	1	0	lab3
-s.297	1	0	lab3
-s.298	1	0	lab3
-s.300	1	0	lab3
-s.301	1	0	lab3
-s.302	1	0	lab3
-s.303	1	0	lab3
-s.304	1	0	lab3
-s.305	1	0	lab3
-s.306	1	0	lab3
-s.307	1	0	lab3
-s.309	1	0	lab3
-s.310	1	0	lab3
-s.311	1	0	lab3
-s.312	1	0	lab3
-s.313	1	0	lab3
-s.314	1	0	lab3
-s.315	1	0	lab3
-s.316	1	0	lab3
-s.317	1	0	lab3
-s.320	1	0	lab3
-s.321	1	0	lab3
-s.322	1	0	lab3
-s.324	1	0	lab3
-s.326	1	0	lab3
-s.328	1	0	lab3
-s.329	1	0	lab3
-s.330	1	0	lab3
-s.331	1	0	lab3
-s.332	1	0	lab3
-s.333	1	0	lab3
-s.334	1	0	lab3
-s.336	1	0	lab3
-s.337	1	0	lab3
-s.339	1	0	lab3
-s.340	1	0	lab3
-s.341	1	0	lab3
-s.343	1	0	lab3
-s.344	1	0	lab3
-s.345	1	0	lab3
-s.346	1	0	lab3
-s.347	1	0	lab3
-s.348	1	0	lab3
-s.349	0	1	lab3
-s.351	0	1	lab3
-s.352	0	1	lab3
-s.353	0	1	lab3
-s.354	0	1	lab3
-s.356	0	1	lab3
-s.357	0	1	lab3
-s.358	0	1	lab3
-s.359	0	1	lab3
-s.360	0	1	lab3
-s.361	0	1	lab3
-s.363	0	1	lab3
-s.364	0	1	lab3
-s.365	0	1	lab3
-s.367	0	1	lab3
-s.368	0	1	lab3
-s.369	0	1	lab3
-s.370	0	1	lab3
-s.371	0	1	lab3
-s.372	0	1	lab3
-s.375	0	1	lab3
-s.376	0	1	lab3
-s.377	0	1	lab3
-s.378	0	1	lab3
-s.379	0	1	lab3
-s.380	0	1	lab3
-s.381	0	1	lab3
-s.383	0	1	lab3
-s.385	0	1	lab3
-s.386	0	1	lab3
-s.387	0	1	lab3
-s.388	0	1	lab3
-s.389	0	1	lab3
-s.390	0	1	lab3
-s.392	0	1	lab3
-s.393	0	1	lab3
-s.394	0	1	lab3
-s.396	0	1	lab3
-s.398	0	1	lab3
-s.400	0	1	lab3
-s.403	0	1	lab3
-s.404	0	1	lab3
-s.405	0	1	lab3
-s.406	0	1	lab3
-s.407	0	1	lab3
-s.408	0	1	lab3
-s.409	0	1	lab3
-s.410	0	1	lab3
-s.411	0	1	lab3
-s.413	0	1	lab3
-s.414	0	1	lab3
-s.415	0	1	lab3
-s.417	0	1	lab3
-s.418	0	1	lab3
-s.419	0	1	lab3
-s.420	0	1	lab3
-s.421	0	1	lab3
-s.423	0	1	lab3
-s.424	0	1	lab3
-s.425	0	1	lab3
-s.426	0	1	lab3
-s.427	0	1	lab3
-s.428	0	1	lab3
-s.429	0	1	lab3
-s.431	0	1	lab3
-s.432	0	1	lab3
-s.433	0	1	lab3
-s.434	0	1	lab3
-s.435	0	1	lab3
-s.436	0	1	lab3
-s.437	0	1	lab3
-s.438	0	1	lab3
-s.439	0	1	lab3
-s.440	0	1	lab3
-s.441	0	1	lab3
-s.442	0	1	lab3
-s.443	0	1	lab3
-s.444	0	1	lab3
-s.445	0	1	lab3
-s.446	0	1	lab3
-s.447	0	1	lab3
-s.448	0	1	lab3
-s.449	0	1	lab3
-s.450	0	1	lab3
-s.451	0	1	lab3
-s.452	0	1	lab3
-s.453	0	1	lab3
-s.455	0	1	lab3
-s.457	0	1	lab3
-s.459	0	1	lab3
-s.462	0	1	lab3
-s.463	0	1	lab3
-s.464	0	1	lab3
-s.465	0	1	lab3
-s.466	0	1	lab3
-s.467	0	1	lab3
-s.468	0	1	lab3
-s.469	0	1	lab3
-s.470	0	1	lab3
-s.471	0	1	lab3
-s.472	0	1	lab3
-s.474	0	1	lab3
-s.475	0	1	lab3
-s.476	0	1	lab3
-s.478	0	1	lab3
-s.479	0	1	lab3
-s.482	0	1	lab3
-s.483	0	1	lab3
-s.484	0	1	lab3
-s.485	0	1	lab3
-s.486	0	1	lab3
-s.488	0	1	lab3
-s.489	0	1	lab3
-s.490	0	1	lab3
-s.492	0	1	lab3
-s.493	0	1	lab3
-s.496	0	1	lab3
-s.498	0	1	lab3
-s.499	0	1	lab3
-s.501	0	1	lab3
-s.502	0	1	lab3
-s.503	0	1	lab3
-s.504	0	1	lab3
-s.505	0	1	lab3
-s.506	0	1	lab3
-s.507	0	1	lab3
-s.509	0	1	lab3
-s.510	0	1	lab3
-s.512	0	1	lab3
-s.513	0	1	lab3
-s.514	0	1	lab3
-s.515	0	1	lab3
-s.516	0	1	lab3
-s.517	0	1	lab3
-s.519	0	1	lab3
-s.520	0	1	lab3
-s.522	0	1	lab3
-s.523	0	1	lab3
-s.524	0	1	lab3
-s.527	0	1	lab3
-s.528	0	1	lab3
-s.529	0	1	lab3
-s.530	0	1	lab3
-s.533	0	1	lab3
-s.535	0	1	lab3
-s.536	0	1	lab3
-s.537	0	1	lab3
-s.538	0	1	lab3
-s.539	0	1	lab3
-s.540	0	1	lab3
-s.542	0	1	lab3
-s.544	0	1	lab3
-s.545	0	1	lab3
-s.546	0	1	lab3
-s.547	0	1	lab3
-s.548	0	1	lab3
-s.549	0	1	lab3
-s.550	0	1	lab3
-s.551	0	1	lab3
-s.552	0	1	lab3
-s.554	0	1	lab3
-s.556	0	1	lab3
-s.559	0	1	lab3
-s.560	0	1	lab3
-s.561	0	1	lab3
-s.562	0	1	lab3
-s.563	0	1	lab3
-s.564	0	1	lab3
-s.565	0	1	lab3
-s.567	0	1	lab3
-s.568	0	1	lab3
-s.569	0	1	lab3
-s.570	0	1	lab3
-s.573	0	1	lab3
-s.574	0	1	lab3
-s.575	0	1	lab3
-s.576	0	1	lab3
-s.577	0	1	lab3
-s.578	0	1	lab3
-s.579	0	1	lab3
-s.580	0	1	lab3
-s.581	0	1	lab3
-s.584	0	1	lab3
-s.585	0	1	lab3
-s.586	0	1	lab3
-s.589	0	1	lab3
-s.590	0	1	lab3
-s.592	0	1	lab3
-s.593	0	1	lab3
-s.595	0	1	lab3
-s.597	0	1	lab3
-s.598	0	1	lab3
+file	condition	lab	A
+1	s.6	A	lab1	0
+2	s.29	A	lab1	0
+3	s.39	A	lab1	0
+4	s.56	A	lab1	0
+5	s.57	A	lab1	0
+6	s.58	A	lab1	0
+7	s.73	A	lab1	0
+8	s.97	A	lab1	0
+9	s.99	A	lab1	0
+10	s.107	A	lab1	0
+11	s.125	A	lab1	0
+12	s.146	A	lab1	0
+13	s.158	A	lab1	0
+14	s.167	A	lab1	0
+15	s.204	A	lab1	0
+16	s.205	A	lab1	0
+17	s.212	A	lab1	0
+18	s.223	A	lab1	0
+19	s.225	A	lab1	0
+20	s.257	A	lab1	0
+21	s.270	A	lab1	0
+22	s.281	A	lab1	0
+23	s.292	A	lab1	0
+24	s.299	A	lab1	0
+25	s.306	A	lab1	0
+26	s.316	A	lab1	0
+27	s.321	A	lab1	0
+28	s.328	A	lab1	0
+29	s.330	A	lab1	0
+30	s.344	A	lab1	0
+31	s.345	A	lab1	0
+32	s.346	A	lab1	0
+33	s.375	B	lab1	1
+34	s.378	B	lab1	1
+35	s.434	B	lab1	1
+36	s.435	B	lab1	1
+37	s.472	B	lab1	1
+38	s.484	B	lab1	1
+39	s.524	B	lab1	1
+40	s.533	B	lab1	1
+41	s.13	A	lab2	0
+42	s.22	A	lab2	0
+43	s.24	A	lab2	0
+44	s.31	A	lab2	0
+45	s.36	A	lab2	0
+46	s.44	A	lab2	0
+47	s.50	A	lab2	0
+48	s.63	A	lab2	0
+49	s.65	A	lab2	0
+50	s.66	A	lab2	0
+51	s.71	A	lab2	0
+52	s.80	A	lab2	0
+53	s.110	A	lab2	0
+54	s.160	A	lab2	0
+55	s.163	A	lab2	0
+56	s.169	A	lab2	0
+57	s.199	A	lab2	0
+58	s.221	A	lab2	0
+59	s.224	A	lab2	0
+60	s.233	A	lab2	0
+61	s.279	A	lab2	0
+62	s.309	A	lab2	0
+63	s.317	A	lab2	0
+64	s.322	A	lab2	0
+65	s.332	A	lab2	0
+66	s.335	A	lab2	0
+67	s.347	A	lab2	0
+68	s.348	A	lab2	0
+69	s.351	B	lab2	1
+70	s.352	B	lab2	1
+71	s.353	B	lab2	1
+72	s.355	B	lab2	1
+73	s.356	B	lab2	1
+74	s.358	B	lab2	1
+75	s.365	B	lab2	1
+76	s.373	B	lab2	1
+77	s.380	B	lab2	1
+78	s.381	B	lab2	1
+79	s.385	B	lab2	1
+80	s.393	B	lab2	1
+81	s.396	B	lab2	1
+82	s.406	B	lab2	1
+83	s.414	B	lab2	1
+84	s.415	B	lab2	1
+85	s.416	B	lab2	1
+86	s.418	B	lab2	1
+87	s.427	B	lab2	1
+88	s.439	B	lab2	1
+89	s.441	B	lab2	1
+90	s.450	B	lab2	1
+91	s.452	B	lab2	1
+92	s.453	B	lab2	1
+93	s.462	B	lab2	1
+94	s.467	B	lab2	1
+95	s.470	B	lab2	1
+96	s.480	B	lab2	1
+97	s.483	B	lab2	1
+98	s.486	B	lab2	1
+99	s.488	B	lab2	1
+100	s.489	B	lab2	1
+101	s.493	B	lab2	1
+102	s.498	B	lab2	1
+103	s.505	B	lab2	1
+104	s.510	B	lab2	1
+105	s.514	B	lab2	1
+106	s.517	B	lab2	1
+107	s.518	B	lab2	1
+108	s.520	B	lab2	1
+109	s.522	B	lab2	1
+110	s.523	B	lab2	1
+111	s.525	B	lab2	1
+112	s.527	B	lab2	1
+113	s.540	B	lab2	1
+114	s.549	B	lab2	1
+115	s.579	B	lab2	1
+116	s.585	B	lab2	1
+117	s.586	B	lab2	1
+118	s.592	B	lab2	1
+119	s.593	B	lab2	1
+120	s.597	B	lab2	1
+121	s.1	A	lab3	0
+122	s.2	A	lab3	0
+123	s.3	A	lab3	0
+124	s.4	A	lab3	0
+125	s.5	A	lab3	0
+126	s.7	A	lab3	0
+127	s.8	A	lab3	0
+128	s.9	A	lab3	0
+129	s.10	A	lab3	0
+130	s.11	A	lab3	0
+131	s.12	A	lab3	0
+132	s.14	A	lab3	0
+133	s.15	A	lab3	0
+134	s.16	A	lab3	0
+135	s.17	A	lab3	0
+136	s.18	A	lab3	0
+137	s.19	A	lab3	0
+138	s.20	A	lab3	0
+139	s.21	A	lab3	0
+140	s.23	A	lab3	0
+141	s.25	A	lab3	0
+142	s.26	A	lab3	0
+143	s.27	A	lab3	0
+144	s.28	A	lab3	0
+145	s.30	A	lab3	0
+146	s.32	A	lab3	0
+147	s.33	A	lab3	0
+148	s.34	A	lab3	0
+149	s.35	A	lab3	0
+150	s.37	A	lab3	0
+151	s.38	A	lab3	0
+152	s.40	A	lab3	0
+153	s.41	A	lab3	0
+154	s.42	A	lab3	0
+155	s.43	A	lab3	0
+156	s.45	A	lab3	0
+157	s.46	A	lab3	0
+158	s.47	A	lab3	0
+159	s.48	A	lab3	0
+160	s.49	A	lab3	0
+161	s.51	A	lab3	0
+162	s.52	A	lab3	0
+163	s.53	A	lab3	0
+164	s.54	A	lab3	0
+165	s.55	A	lab3	0
+166	s.59	A	lab3	0
+167	s.60	A	lab3	0
+168	s.61	A	lab3	0
+169	s.62	A	lab3	0
+170	s.64	A	lab3	0
+171	s.67	A	lab3	0
+172	s.68	A	lab3	0
+173	s.69	A	lab3	0
+174	s.70	A	lab3	0
+175	s.72	A	lab3	0
+176	s.74	A	lab3	0
+177	s.75	A	lab3	0
+178	s.76	A	lab3	0
+179	s.77	A	lab3	0
+180	s.78	A	lab3	0
+181	s.79	A	lab3	0
+182	s.81	A	lab3	0
+183	s.82	A	lab3	0
+184	s.83	A	lab3	0
+185	s.84	A	lab3	0
+186	s.85	A	lab3	0
+187	s.86	A	lab3	0
+188	s.87	A	lab3	0
+189	s.88	A	lab3	0
+190	s.89	A	lab3	0
+191	s.90	A	lab3	0
+192	s.91	A	lab3	0
+193	s.92	A	lab3	0
+194	s.93	A	lab3	0
+195	s.94	A	lab3	0
+196	s.95	A	lab3	0
+197	s.96	A	lab3	0
+198	s.98	A	lab3	0
+199	s.100	A	lab3	0
+200	s.101	A	lab3	0
+201	s.102	A	lab3	0
+202	s.103	A	lab3	0
+203	s.104	A	lab3	0
+204	s.105	A	lab3	0
+205	s.106	A	lab3	0
+206	s.108	A	lab3	0
+207	s.109	A	lab3	0
+208	s.111	A	lab3	0
+209	s.112	A	lab3	0
+210	s.113	A	lab3	0
+211	s.114	A	lab3	0
+212	s.115	A	lab3	0
+213	s.116	A	lab3	0
+214	s.117	A	lab3	0
+215	s.118	A	lab3	0
+216	s.119	A	lab3	0
+217	s.120	A	lab3	0
+218	s.121	A	lab3	0
+219	s.122	A	lab3	0
+220	s.123	A	lab3	0
+221	s.124	A	lab3	0
+222	s.126	A	lab3	0
+223	s.127	A	lab3	0
+224	s.128	A	lab3	0
+225	s.129	A	lab3	0
+226	s.130	A	lab3	0
+227	s.131	A	lab3	0
+228	s.132	A	lab3	0
+229	s.133	A	lab3	0
+230	s.134	A	lab3	0
+231	s.135	A	lab3	0
+232	s.136	A	lab3	0
+233	s.137	A	lab3	0
+234	s.138	A	lab3	0
+235	s.139	A	lab3	0
+236	s.140	A	lab3	0
+237	s.141	A	lab3	0
+238	s.142	A	lab3	0
+239	s.143	A	lab3	0
+240	s.144	A	lab3	0
+241	s.145	A	lab3	0
+242	s.147	A	lab3	0
+243	s.148	A	lab3	0
+244	s.149	A	lab3	0
+245	s.150	A	lab3	0
+246	s.151	A	lab3	0
+247	s.152	A	lab3	0
+248	s.153	A	lab3	0
+249	s.154	A	lab3	0
+250	s.155	A	lab3	0
+251	s.156	A	lab3	0
+252	s.157	A	lab3	0
+253	s.159	A	lab3	0
+254	s.161	A	lab3	0
+255	s.162	A	lab3	0
+256	s.164	A	lab3	0
+257	s.165	A	lab3	0
+258	s.166	A	lab3	0
+259	s.168	A	lab3	0
+260	s.170	A	lab3	0
+261	s.171	A	lab3	0
+262	s.172	A	lab3	0
+263	s.173	A	lab3	0
+264	s.174	A	lab3	0
+265	s.175	A	lab3	0
+266	s.176	A	lab3	0
+267	s.177	A	lab3	0
+268	s.178	A	lab3	0
+269	s.179	A	lab3	0
+270	s.180	A	lab3	0
+271	s.181	A	lab3	0
+272	s.182	A	lab3	0
+273	s.183	A	lab3	0
+274	s.184	A	lab3	0
+275	s.185	A	lab3	0
+276	s.186	A	lab3	0
+277	s.187	A	lab3	0
+278	s.188	A	lab3	0
+279	s.189	A	lab3	0
+280	s.190	A	lab3	0
+281	s.191	A	lab3	0
+282	s.192	A	lab3	0
+283	s.193	A	lab3	0
+284	s.194	A	lab3	0
+285	s.195	A	lab3	0
+286	s.196	A	lab3	0
+287	s.197	A	lab3	0
+288	s.198	A	lab3	0
+289	s.200	A	lab3	0
+290	s.201	A	lab3	0
+291	s.202	A	lab3	0
+292	s.203	A	lab3	0
+293	s.206	A	lab3	0
+294	s.207	A	lab3	0
+295	s.208	A	lab3	0
+296	s.209	A	lab3	0
+297	s.210	A	lab3	0
+298	s.211	A	lab3	0
+299	s.213	A	lab3	0
+300	s.214	A	lab3	0
+301	s.215	A	lab3	0
+302	s.216	A	lab3	0
+303	s.217	A	lab3	0
+304	s.218	A	lab3	0
+305	s.219	A	lab3	0
+306	s.220	A	lab3	0
+307	s.222	A	lab3	0
+308	s.226	A	lab3	0
+309	s.227	A	lab3	0
+310	s.228	A	lab3	0
+311	s.229	A	lab3	0
+312	s.230	A	lab3	0
+313	s.231	A	lab3	0
+314	s.232	A	lab3	0
+315	s.234	A	lab3	0
+316	s.235	A	lab3	0
+317	s.236	A	lab3	0
+318	s.237	A	lab3	0
+319	s.238	A	lab3	0
+320	s.239	A	lab3	0
+321	s.240	A	lab3	0
+322	s.241	A	lab3	0
+323	s.242	A	lab3	0
+324	s.243	A	lab3	0
+325	s.244	A	lab3	0
+326	s.245	A	lab3	0
+327	s.246	A	lab3	0
+328	s.247	A	lab3	0
+329	s.248	A	lab3	0
+330	s.249	A	lab3	0
+331	s.250	A	lab3	0
+332	s.251	A	lab3	0
+333	s.252	A	lab3	0
+334	s.253	A	lab3	0
+335	s.254	A	lab3	0
+336	s.255	A	lab3	0
+337	s.256	A	lab3	0
+338	s.258	A	lab3	0
+339	s.259	A	lab3	0
+340	s.260	A	lab3	0
+341	s.261	A	lab3	0
+342	s.262	A	lab3	0
+343	s.263	A	lab3	0
+344	s.264	A	lab3	0
+345	s.265	A	lab3	0
+346	s.266	A	lab3	0
+347	s.267	A	lab3	0
+348	s.268	A	lab3	0
+349	s.269	A	lab3	0
+350	s.271	A	lab3	0
+351	s.272	A	lab3	0
+352	s.273	A	lab3	0
+353	s.274	A	lab3	0
+354	s.275	A	lab3	0
+355	s.276	A	lab3	0
+356	s.277	A	lab3	0
+357	s.278	A	lab3	0
+358	s.280	A	lab3	0
+359	s.282	A	lab3	0
+360	s.283	A	lab3	0
+361	s.284	A	lab3	0
+362	s.285	A	lab3	0
+363	s.286	A	lab3	0
+364	s.287	A	lab3	0
+365	s.288	A	lab3	0
+366	s.289	A	lab3	0
+367	s.290	A	lab3	0
+368	s.291	A	lab3	0
+369	s.293	A	lab3	0
+370	s.294	A	lab3	0
+371	s.295	A	lab3	0
+372	s.296	A	lab3	0
+373	s.297	A	lab3	0
+374	s.298	A	lab3	0
+375	s.300	A	lab3	0
+376	s.301	A	lab3	0
+377	s.302	A	lab3	0
+378	s.303	A	lab3	0
+379	s.304	A	lab3	0
+380	s.305	A	lab3	0
+381	s.307	A	lab3	0
+382	s.308	A	lab3	0
+383	s.310	A	lab3	0
+384	s.311	A	lab3	0
+385	s.312	A	lab3	0
+386	s.313	A	lab3	0
+387	s.314	A	lab3	0
+388	s.315	A	lab3	0
+389	s.318	A	lab3	0
+390	s.319	A	lab3	0
+391	s.320	A	lab3	0
+392	s.323	A	lab3	0
+393	s.324	A	lab3	0
+394	s.325	A	lab3	0
+395	s.326	A	lab3	0
+396	s.327	A	lab3	0
+397	s.329	A	lab3	0
+398	s.331	A	lab3	0
+399	s.333	A	lab3	0
+400	s.334	A	lab3	0
+401	s.336	A	lab3	0
+402	s.337	A	lab3	0
+403	s.338	A	lab3	0
+404	s.339	A	lab3	0
+405	s.340	A	lab3	0
+406	s.341	A	lab3	0
+407	s.342	A	lab3	0
+408	s.343	A	lab3	0
+409	s.349	B	lab3	1
+410	s.350	B	lab3	1
+411	s.354	B	lab3	1
+412	s.357	B	lab3	1
+413	s.359	B	lab3	1
+414	s.360	B	lab3	1
+415	s.361	B	lab3	1
+416	s.362	B	lab3	1
+417	s.363	B	lab3	1
+418	s.364	B	lab3	1
+419	s.366	B	lab3	1
+420	s.367	B	lab3	1
+421	s.368	B	lab3	1
+422	s.369	B	lab3	1
+423	s.370	B	lab3	1
+424	s.371	B	lab3	1
+425	s.372	B	lab3	1
+426	s.374	B	lab3	1
+427	s.376	B	lab3	1
+428	s.377	B	lab3	1
+429	s.379	B	lab3	1
+430	s.382	B	lab3	1
+431	s.383	B	lab3	1
+432	s.384	B	lab3	1
+433	s.386	B	lab3	1
+434	s.387	B	lab3	1
+435	s.388	B	lab3	1
+436	s.389	B	lab3	1
+437	s.390	B	lab3	1
+438	s.391	B	lab3	1
+439	s.392	B	lab3	1
+440	s.394	B	lab3	1
+441	s.395	B	lab3	1
+442	s.397	B	lab3	1
+443	s.398	B	lab3	1
+444	s.399	B	lab3	1
+445	s.400	B	lab3	1
+446	s.401	B	lab3	1
+447	s.402	B	lab3	1
+448	s.403	B	lab3	1
+449	s.404	B	lab3	1
+450	s.405	B	lab3	1
+451	s.407	B	lab3	1
+452	s.408	B	lab3	1
+453	s.409	B	lab3	1
+454	s.410	B	lab3	1
+455	s.411	B	lab3	1
+456	s.412	B	lab3	1
+457	s.413	B	lab3	1
+458	s.417	B	lab3	1
+459	s.419	B	lab3	1
+460	s.420	B	lab3	1
+461	s.421	B	lab3	1
+462	s.422	B	lab3	1
+463	s.423	B	lab3	1
+464	s.424	B	lab3	1
+465	s.425	B	lab3	1
+466	s.426	B	lab3	1
+467	s.428	B	lab3	1
+468	s.429	B	lab3	1
+469	s.430	B	lab3	1
+470	s.431	B	lab3	1
+471	s.432	B	lab3	1
+472	s.433	B	lab3	1
+473	s.436	B	lab3	1
+474	s.437	B	lab3	1
+475	s.438	B	lab3	1
+476	s.440	B	lab3	1
+477	s.442	B	lab3	1
+478	s.443	B	lab3	1
+479	s.444	B	lab3	1
+480	s.445	B	lab3	1
+481	s.446	B	lab3	1
+482	s.447	B	lab3	1
+483	s.448	B	lab3	1
+484	s.449	B	lab3	1
+485	s.451	B	lab3	1
+486	s.454	B	lab3	1
+487	s.455	B	lab3	1
+488	s.456	B	lab3	1
+489	s.457	B	lab3	1
+490	s.458	B	lab3	1
+491	s.459	B	lab3	1
+492	s.460	B	lab3	1
+493	s.461	B	lab3	1
+494	s.463	B	lab3	1
+495	s.464	B	lab3	1
+496	s.465	B	lab3	1
+497	s.466	B	lab3	1
+498	s.468	B	lab3	1
+499	s.469	B	lab3	1
+500	s.471	B	lab3	1
+501	s.473	B	lab3	1
+502	s.474	B	lab3	1
+503	s.475	B	lab3	1
+504	s.476	B	lab3	1
+505	s.477	B	lab3	1
+506	s.478	B	lab3	1
+507	s.479	B	lab3	1
+508	s.481	B	lab3	1
+509	s.482	B	lab3	1
+510	s.485	B	lab3	1
+511	s.487	B	lab3	1
+512	s.490	B	lab3	1
+513	s.491	B	lab3	1
+514	s.492	B	lab3	1
+515	s.494	B	lab3	1
+516	s.495	B	lab3	1
+517	s.496	B	lab3	1
+518	s.497	B	lab3	1
+519	s.499	B	lab3	1
+520	s.500	B	lab3	1
+521	s.501	B	lab3	1
+522	s.502	B	lab3	1
+523	s.503	B	lab3	1
+524	s.504	B	lab3	1
+525	s.506	B	lab3	1
+526	s.507	B	lab3	1
+527	s.508	B	lab3	1
+528	s.509	B	lab3	1
+529	s.511	B	lab3	1
+530	s.512	B	lab3	1
+531	s.513	B	lab3	1
+532	s.515	B	lab3	1
+533	s.516	B	lab3	1
+534	s.519	B	lab3	1
+535	s.521	B	lab3	1
+536	s.526	B	lab3	1
+537	s.528	B	lab3	1
+538	s.529	B	lab3	1
+539	s.530	B	lab3	1
+540	s.531	B	lab3	1
+541	s.532	B	lab3	1
+542	s.534	B	lab3	1
+543	s.535	B	lab3	1
+544	s.536	B	lab3	1
+545	s.537	B	lab3	1
+546	s.538	B	lab3	1
+547	s.539	B	lab3	1
+548	s.541	B	lab3	1
+549	s.542	B	lab3	1
+550	s.543	B	lab3	1
+551	s.544	B	lab3	1
+552	s.545	B	lab3	1
+553	s.546	B	lab3	1
+554	s.547	B	lab3	1
+555	s.548	B	lab3	1
+556	s.550	B	lab3	1
+557	s.551	B	lab3	1
+558	s.552	B	lab3	1
+559	s.553	B	lab3	1
+560	s.554	B	lab3	1
+561	s.555	B	lab3	1
+562	s.556	B	lab3	1
+563	s.557	B	lab3	1
+564	s.558	B	lab3	1
+565	s.559	B	lab3	1
+566	s.560	B	lab3	1
+567	s.561	B	lab3	1
+568	s.562	B	lab3	1
+569	s.563	B	lab3	1
+570	s.564	B	lab3	1
+571	s.565	B	lab3	1
+572	s.566	B	lab3	1
+573	s.567	B	lab3	1
+574	s.568	B	lab3	1
+575	s.569	B	lab3	1
+576	s.570	B	lab3	1
+577	s.571	B	lab3	1
+578	s.572	B	lab3	1
+579	s.573	B	lab3	1
+580	s.574	B	lab3	1
+581	s.575	B	lab3	1
+582	s.576	B	lab3	1
+583	s.577	B	lab3	1
+584	s.578	B	lab3	1
+585	s.580	B	lab3	1
+586	s.581	B	lab3	1
+587	s.582	B	lab3	1
+588	s.583	B	lab3	1
+589	s.584	B	lab3	1
+590	s.587	B	lab3	1
+591	s.588	B	lab3	1
+592	s.589	B	lab3	1
+593	s.590	B	lab3	1
+594	s.591	B	lab3	1
+595	s.594	B	lab3	1
+596	s.595	B	lab3	1
+597	s.596	B	lab3	1
+598	s.598	B	lab3	1
+599	s.599	B	lab3	1
+600	s.600	B	lab3	1

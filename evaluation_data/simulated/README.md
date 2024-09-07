@@ -8,7 +8,7 @@ Contains NA - for PCA plots - NA were replaced with 0.
 
 Central run:  
 - limmaRBE with condition as covariates and lab as batches.
-- with NA.
+- WITHOUT NA.
 
 # Structure
 

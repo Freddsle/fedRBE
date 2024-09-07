@@ -1,5 +1,5 @@
 flimmaBatchCorrection:
-  min_samples: 2
+  min_samples: 0
   data_filename: "intensities.tsv"
   separator: "\t"
   covariates: ["A"]
