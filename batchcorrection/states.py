@@ -6,7 +6,7 @@ from FeatureCloud.app.engine.app import AppState, app_state, Role, LogLevel
 
 from classes.client import Client
 from classes.coordinator_utils import select_common_features_variables, \
-    compute_beta
+    compute_beta, reorder_matrix, create_beta_mask
 
 # FeatureCloud requires that apps define the at least the 'initial' state.
 # This state is executed after the app instance is started.
@@ -30,7 +30,9 @@ class InitialState(AppState):
         self.configure_smpc() # set the default values
         # send list of protein names (genes) to coordinator
         # we use the hashed values of the feature names and variables
-        self.send_data_to_coordinator((list(client.hash2feature.keys()), list(client.hash2variable.keys())),
+        self.send_data_to_coordinator((cohort_name, # for mask creation - to track the cohort
+                                       list(client.hash2feature.keys()),
+                                       list(client.hash2variable.keys())),
                                     send_to_self=True,
                                     use_smpc=False)
         if self.is_coordinator:
@@ -48,11 +50,17 @@ class globalFeatureSelection(AppState):
         self.log("[global_feature_selection] Gathering features from all clients")
         lists_of_features_and_variables = self.gather_data(is_json=False)
         self.log("[global_feature_selection] Gathered data from all clients")
-        global_feature_names, global_variables = select_common_features_variables(lists_of_features_and_variables)
+        global_feature_names, global_variables, feature_presence_matrix, cohorts_order = \
+              select_common_features_variables(lists_of_features_and_variables, min_clients=1)
+        feature_presence_matrix = reorder_matrix(feature_presence_matrix,
+                                                 self._app.clients,
+                                                 cohorts_order)
         self.broadcast_data((global_feature_names, global_variables),
                             send_to_self=True, memo="commonGenes")
+        self.store(key='feature_presence_matrix', value=feature_presence_matrix)
+        self.store(key='cohorts_order', value=cohorts_order)
         self.log("[global_feature_selection] Data was set to be broadcasted:")
-        self.log("[global_feature_selection] transitioning to validate")
+        self.log("[global_feature_selection] transitioning to feature_presence_matrix")
         return 'validate'
 
 @app_state('validate')
@@ -125,12 +133,21 @@ class ComputeCorrectionState(AppState):
         self.register_transition('include_correction', Role.COORDINATOR)
 
     def run(self):
+        client = self.load('client')
+        feauture_presence_matrix = self.load('feature_presence_matrix')
+        # calculate the global mask used to eliminate linearly dependant features
+        n = len(client.feature_names)
+        k = client.design.shape[1]
+        global_mask = create_beta_mask(feauture_presence_matrix, n, k)
+
         # wait for each client to compute XtX and XtY and collect data
         self.log("[compute_beta] gathering data")
         XtX_XtY_list = self.gather_data(use_smpc=self.load("smpc"))
         self.log("[compute_beta] Got XtX_XtY_list from gather_data")
-        client = self.load('client')
-        beta = compute_beta(XtX_XtY_list, n=len(client.feature_names), k=client.design.shape[1])
+        beta = compute_beta(XtX_XtY_list,
+                            n=n,
+                            k=k,
+                            global_mask=global_mask)
 
         # send beta to clients so they can correct their data
         self.log("[compute_beta] broadcasting betas")
