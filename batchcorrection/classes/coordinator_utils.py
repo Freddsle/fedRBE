@@ -15,7 +15,7 @@ def create_feature_presence_matrix(
     clients. The matrix has the shape (num_features, num_clients) and contains
     1 if the feature is present in the client and 0 otherwise. Also returns
     a dictionary indicating which clients contain each feature.
-    
+
     Args:
         lists_of_features_and_variables: A list of tuples containing the cohort name, features
         and variables available on each client. Each tuple represents one client,
@@ -23,7 +23,7 @@ def create_feature_presence_matrix(
         is the second element of the tuple. The featurenames should be hashes,
         but this is not checked here.
         global_feature_names: A list of all the features that are available on all clients.
-        
+
     Returns:
         matrix: A matrix of shape (num_features, num_clients) that indicates
             the presence of features in the different clients. The matrix contains
@@ -33,24 +33,24 @@ def create_feature_presence_matrix(
     feature_index = {feature: idx for idx, feature in enumerate(global_feature_names)}
     num_features = len(global_feature_names)
     num_cohorts = len(lists_of_features_and_variables)
-    
+
     # Initialize the matrix
     matrix = np.zeros((num_features, num_cohorts), dtype=int)
     cohorts_order = []
-    
+
     # Populate the matrix and the dictionary
     for cohort_idx, (cohort_name, features, _) in enumerate(lists_of_features_and_variables):
         for feature in features:
             if feature in feature_index:
                 matrix[feature_index[feature], cohort_idx] = 1
         cohorts_order.append(cohort_name)
-    
+
     return matrix, cohorts_order
 
 def select_common_features_variables(
     lists_of_features_and_variables: List[Tuple[str, List[str], List[str]]],
     min_clients=2) -> \
-        Tuple[List[str], Union[List[str], None]]:
+        Tuple[List[str], Union[List[str], None], np.ndarray, List[str]]:
     """
     Extracts the union of features and the intersection of variables from the
     lists of features and variables provided by the clients.
@@ -84,7 +84,7 @@ def select_common_features_variables(
                 feature_count[feature] += 1
             else:
                 feature_count[feature] = 1
-        
+
         # Intersect variables
         if variables:
             if global_variables is None:
@@ -121,14 +121,14 @@ def reorder_matrix(feature_matrix: np.ndarray,
     Returns:
         reordered_matrix: The feature matrix with the columns reordered according
             to the specified order of clients.
-    """    
+    """
     # Create a mapping of column indices
     index_mapping = {name: idx for idx, name in enumerate(cohorts_order)}
     ordered_indices = [index_mapping[cohort] for cohort in all_client_names]
 
     # Reorder the columns
     reordered_matrix = feature_matrix[:, ordered_indices]
-    
+
     return reordered_matrix
 
 def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.ndarray:
@@ -147,37 +147,37 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
             which features are present in the clients. The matrix contains 1
             if the feature is absent in the client and 1 otherwise.
     """
-    
+
     # Initialize the mask with zeros
     global_mask = np.zeros((n, k))
     # Get the number of columns in the feature_presence_matrix
     num_cols = feature_presence_matrix.shape[1]
-    
+
     # Iterate over each row in the feature_presence_matrix
     for i in range(n):
         row = feature_presence_matrix[i]
-        
+
         # check if we need to do anything - if any batch is missing?
         zero_count = np.sum(row == 0)
         if zero_count > feature_presence_matrix.shape[1] - 1:
             raise ValueError("The number of zeros in the row is greater than the number of columns")
         if zero_count == 0:
             continue
-        
-        # presence of the first and last beach 
+
+        # presence of the first and last beach
         last_batch_present = row[-1] == 1
         # transform presence to mask, 0 means present, 1 is absent
         transformed_row = np.where(row[:-1] == 0, 1, 0)
-        
+
         if not last_batch_present:
             # If the last column is 0 (the reference batch is not present),
             # process the row as described
             # move a 0 from the last present batch to the first batch
             if 0 in transformed_row:
                 last_zero_index = np.where(transformed_row == 0)[0][-1]
-                transformed_row[last_zero_index] = 1 
+                transformed_row[last_zero_index] = 1
             global_mask[i, -num_cols+1:] = transformed_row
-        
+
         else:
             # Check if there is a last_present_index and it is not zero
             if 0 in transformed_row:
@@ -185,7 +185,7 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
                 last_present_indices = np.where(transformed_row == 0)[0]
                 if len(last_present_indices) > 0 and last_present_indices[-1] != 0:
                     last_present_index = last_present_indices[-1]
-                    
+
                     if last_present_index > first_absent_index:
                         # in transformed_row interchange values between the first absent and the last present.
                         # Swap the values
@@ -197,8 +197,8 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
     global_mask = global_mask > 0
     return global_mask
 
-def compute_beta(XtX_XtY_list: List[List[np.ndarray]], 
-                 n: int, k: int, 
+def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
+                 n: int, k: int,
                  global_mask: np.ndarray
                  ) -> np.ndarray:
     """
@@ -243,7 +243,7 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         # using the mask to remove the columns and rows that are not present
         mask = global_mask[i, :]
         submatrix = XtX_glob[i, :, :][np.ix_(~mask, ~mask)]
-              
+
         if linalg.det(submatrix) == 0:
             inverse_count += 1 #TODO: rmv
             print(f"INFO: XtX_glob[{i}] is singular")
