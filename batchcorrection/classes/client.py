@@ -32,7 +32,7 @@ class Client:
         self.feature2hash = None
         self.hash2variable = None
 
-    def hash_names(self, 
+    def hash_names(self,
                    names: List[str]) -> dict:
         """
         Hashes the names for privacy reasons.
@@ -46,7 +46,7 @@ class Client:
         return name2hash, hash2name
 
 
-    def hash_covariates(self, 
+    def hash_covariates(self,
                         covariates: List[str]) -> dict:
         """
         Hashes the covariates for privacy reasons.
@@ -157,20 +157,20 @@ class Client:
                 raise ValueError(f"Client {self.cohort_name}: Error loading feature names.")
             if not self.variables:
                 raise ValueError(f"Client {self.cohort_name}: Error loading variables.")
-            
+
             self.feature2hash, self.hash2feature = self.hash_names(self.feature_names)
             self.data.rename(index=self.feature2hash, inplace=True)
             print("shape of data after renaming: ", self.data.shape)
-            
+
             self.feature_names = [self.feature2hash[feature] for feature in self.feature_names]
-            
+
             if covariates:
                 self.hash2variable = self.hash_covariates(covariates)
         else:
             self.hash2feature = {name: name for name in self.feature_names}
             self.feature2hash = {name: name for name in self.feature_names}
             self.hash2variable = {name: name for name in covariates} if covariates else {}
-            
+
 
     ######### open dataset #########
     def open_dataset(self, datafile_path, expr_file_flag, design_file_path=None,
@@ -243,8 +243,15 @@ class Client:
         print(f"finished loading data, shape of data: {self.data.shape}, num_features: {len(self.feature_names)}, num_samples: {self.n_samples}")
 
     def normalize(self, normalizationMethod):
+        if not normalizationMethod or normalizationMethod == "":
+            # do nothing
+            return
         if normalizationMethod == "log2(x+1)":
             self.data = np.log2(self.data + 1)
+        else:
+            print(f"Normalization method {normalizationMethod} not recognized, no normalization applied")
+            return
+
 
     def validate_inputs(self, global_variables_hashed):
         """
@@ -440,7 +447,7 @@ class Client:
         Y = self.data.values  # Y -> features x samples
         n = Y.shape[0]  # [0] = rows = features
         k = self.design.shape[1]  # [1] = columns = samples
-        
+
         self.XtX = np.zeros((n, k, k))
             # for each feature, we calculate the XtX matrix individually
             # X is of shape k x len([intercept, variables, cohorts]), so XtX
@@ -455,7 +462,7 @@ class Client:
             y = Y[feature_idx, :] # y is all values of one specific feature
             non_nan_idxs = np.argwhere(np.isfinite(y)).reshape(-1)
                 # gives the indices of the non-NaN values in y as an 1d array
-            
+
             if len(non_nan_idxs) > 0:
                 x = X[non_nan_idxs, :]
                 y = y[non_nan_idxs]
