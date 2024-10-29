@@ -230,6 +230,9 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
     beta = np.zeros((n, k))
 
     for XtX, XtY in XtX_XtY_list:
+        # due to serialization, the matrices are received as lists
+        XtX = np.array(XtX)
+        XtY = np.array(XtY)
         if XtX.shape[0] != n or XtX.shape[1] != k or XtY.shape[0] != n or XtY.shape[1] != k:
             raise ValueError(f"Shape of received XtX or XtY does not match the expected shape: {XtX.shape} {XtY.shape}")
         XtX_glob += XtX

@@ -110,7 +110,8 @@ class ComputeState(AppState):
 
         # compute XtX and XtY
         XtX, XtY, err = client.compute_XtX_XtY()
-        if err != None:
+        if err:
+            print(f"Error in compute_XtX_XtY: {err}")
             self.log(err, LogLevel.FATAL)
 
 

@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Tuple
 import pandas as pd
 import numpy as np
 import hashlib
@@ -439,7 +439,15 @@ class Client:
         return None
 
     ####### limma: linear regression #########
-    def compute_XtX_XtY(self):
+    def compute_XtX_XtY(self) -> Tuple[np.ndarray, np.ndarray, str]:
+        """
+        Computes the XtX and XtY matrices for the linear regression.
+        Returns:
+            Returns a tuple of (XtX, XtY, Error) where
+            - XtX is the XtX matrix of shape k x k
+            - XtY is the XtY vector of shape k
+            - Error is a string with an error message or None if no error occured
+        """
         assert self.design is not None
         assert self.data is not None
 
@@ -523,7 +531,7 @@ class Client:
                 if not np.all(self.XtY[feature_idx, :] == 0):
                     raise ValueError("XtY is not all zeros, although no data was present")
         print(f"final vectors to be sent: XtX shape: {self.XtX.shape}, XtY shape: {self.XtY.shape}")
-        return self.XtX, self.XtY, None
+        return self.XtX, self.XtY, ""
 
     ####### limma: removeBatchEffects #########
 
