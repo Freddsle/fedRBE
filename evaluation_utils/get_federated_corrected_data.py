@@ -115,27 +115,27 @@ base_simulated_config_file_changes = \
      "flimmaBatchCorrection.covariates": ["A"],
      "flimmaBatchCorrection.index_col": "rowname"}
 simulated_balanced_experiment = util.Experiment(
-        clients=[os.path.join(data_dir, "simulated", "before", "balanced", "lab1"),
-                 os.path.join(data_dir, "simulated", "before", "balanced", "lab2"),
-                 os.path.join(data_dir, "simulated", "before", "balanced", "lab3"),
+        clients=[os.path.join(data_dir, "simulated", "balanced", "before", "lab1"),
+                 os.path.join(data_dir, "simulated", "balanced", "before", "lab2"),
+                 os.path.join(data_dir, "simulated", "balanced", "before", "lab3"),
         ],
         app_image_name=app_image_name,
         config_files=[deepcopy(base_config)]*3,
         config_file_changes=[base_simulated_config_file_changes]*3,
 )
 simulated_mildly_imbalanced_experiment = util.Experiment(
-        clients=[os.path.join(data_dir, "simulated", "before", "mild_imbalanced", "lab1"),
-                 os.path.join(data_dir, "simulated", "before", "mild_imbalanced", "lab2"),
-                 os.path.join(data_dir, "simulated", "before", "mild_imbalanced", "lab3"),
+        clients=[os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab1"),
+                 os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab2"),
+                 os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab3"),
         ],
         app_image_name=app_image_name,
         config_files=[deepcopy(base_config)]*3,
         config_file_changes=[base_simulated_config_file_changes]*3,
 )
 simulated_strongly_imbalanced_experiment = util.Experiment(
-        clients=[os.path.join(data_dir, "simulated", "before", "strong_imbalanced", "lab1"),
-                 os.path.join(data_dir, "simulated", "before", "strong_imbalanced", "lab2"),
-                 os.path.join(data_dir, "simulated", "before", "strong_imbalanced", "lab3"),
+        clients=[os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab1"),
+                 os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab2"),
+                 os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab3"),
         ],
         app_image_name=app_image_name,
         config_files=[deepcopy(base_config)]*3,
@@ -157,13 +157,13 @@ result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_c
 
 ## Simulated
 experiments.append(simulated_balanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "after", "balanced", "FedApp_corrected_data.tsv"))
+result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
 
 experiments.append(simulated_mildly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "after", "mild_imbalanced", "FedApp_corrected_data.tsv"))
+result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
 
 experiments.append(simulated_strongly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "after", "strong_imbalanced", "FedApp_corrected_data.tsv"))
+result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
 
 
 

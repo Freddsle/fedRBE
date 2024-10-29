@@ -44,20 +44,20 @@ experiment_results.append(utils.ExperimentResult(
 # SIMULATED
 experiment_results.append(utils.ExperimentResult(
     name="Simulated Balanced",
-    central_result_file=os.path.join(base_dir, "simulated", "after", "balanced", "FedApp_corrected_data.tsv"),
-    federated_result_file=os.path.join(base_dir, "simulated", "after", "balanced", "intensities_R_corrected.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"),
+    federated_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "intensities_R_corrected.tsv"),
 ))
 
 experiment_results.append(utils.ExperimentResult(
     name="Simulated Mildly Imbalanced",
-    central_result_file=os.path.join(base_dir, "simulated", "after", "mild_imbalanced", "FedApp_corrected_data.tsv"),
-    federated_result_file=os.path.join(base_dir, "simulated", "after", "mild_imbalanced", "intensities_R_corrected.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"),
+    federated_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
 ))
 
 experiment_results.append(utils.ExperimentResult(
     name="Simulated Strongly Imbalanced",
-    central_result_file=os.path.join(base_dir, "simulated", "after", "strong_imbalanced", "FedApp_corrected_data.tsv"),
-    federated_result_file=os.path.join(base_dir, "simulated", "after", "strong_imbalanced", "intensities_R_corrected.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"),
+    federated_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
 ))
 
 
