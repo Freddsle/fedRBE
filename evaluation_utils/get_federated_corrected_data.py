@@ -46,14 +46,21 @@ app_image_name = "bcorrect"
 
 ### SETTING THE EXPERIMENTS
 experiments: List[util.Experiment] = list()
+    # Here aree all the experiments defined, including the location of
+    # the data, the configuration file changes and the app image name.
 result_file_names: List[str] = list()
+    # List of the names for the batch corrected result files generated
+    # by the experiments
+    # this list should have the same length as the experiments
+    # and is iterated with the experiments together, so experiments[i]
+    # will output to result_file_names[i]
 
 ## MICROBIOME
-microbiome_config_file_changes_logmin = \
-    {"flimmaBatchCorrection.data_filename": "msp_counts_norm_logmin_5C.tsv",
+microbiome_config_file_changes = \
+    {"flimmaBatchCorrection.data_filename": "UQnorm_log_counts_for_corr.tsv",
      "flimmaBatchCorrection.design_filename": "design_5C.tsv",
      "flimmaBatchCorrection.covariates": ["CRC"]}
-microbiome_experiment_logmin = util.Experiment(
+microbiome_experiment = util.Experiment(
         clients=[os.path.join(data_dir, "microbiome", "before", "PRJEB10878"),
                 os.path.join(data_dir, "microbiome", "before", "PRJEB27928"),
                 os.path.join(data_dir, "microbiome", "before", "PRJEB6070"),
@@ -62,91 +69,30 @@ microbiome_experiment_logmin = util.Experiment(
         ],
         app_image_name=app_image_name,
         config_files=[deepcopy(base_config)]*5,
-        config_file_changes=[deepcopy(microbiome_config_file_changes_logmin)]*5,
-)
-
-microbiome_config_file_changes_logmin_smpc = \
-    {"flimmaBatchCorrection.data_filename": "msp_counts_norm_logmin_5C.tsv",
-     "flimmaBatchCorrection.design_filename": "design_5C.tsv",
-     "flimmaBatchCorrection.covariates": ["CRC"],
-     "flimmaBatchCorrection.smpc": True}
-microbiome_experiment_logmin_smpc = util.Experiment(
-        clients=[os.path.join(data_dir, "microbiome", "before", "PRJEB10878"),
-                os.path.join(data_dir, "microbiome", "before", "PRJEB27928"),
-                os.path.join(data_dir, "microbiome", "before", "PRJEB6070"),
-                os.path.join(data_dir, "microbiome", "before", "PRJNA429097"),
-                os.path.join(data_dir, "microbiome", "before", "PRJNA731589"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*5,
-        config_file_changes=[deepcopy(microbiome_config_file_changes_logmin_smpc)]*5,
+        config_file_changes=[deepcopy(microbiome_config_file_changes)]*5,
 )
 
 ## PROTEOMICS
 proteomics_config_file_changes_base = \
-    {"flimmaBatchCorrection.data_filename": "intensities_log_filtered.tsv",
+    {"flimmaBatchCorrection.data_filename": "intensities_log_UNION.tsv",
      "flimmaBatchCorrection.design_filename": "design.tsv",
      "flimmaBatchCorrection.covariates": ["Pyr"]}
 
-proteomics_experiment_balanced = util.Experiment(
-        clients=[os.path.join(data_dir, "proteomics", "before", "balanced", "lab_A"),
-                 os.path.join(data_dir, "proteomics", "before", "balanced", "lab_B"),
-                 os.path.join(data_dir, "proteomics", "before", "balanced", "lab_C"),
-                 os.path.join(data_dir, "proteomics", "before", "balanced", "lab_D"),
-                 os.path.join(data_dir, "proteomics", "before", "balanced", "lab_E"),
+proteomics_experiment = util.Experiment(
+        clients=[os.path.join(data_dir, "proteomics", "before", "lab_A"),
+                 os.path.join(data_dir, "proteomics", "before", "lab_B"),
+                 os.path.join(data_dir, "proteomics", "before", "lab_C"),
+                 os.path.join(data_dir, "proteomics", "before", "lab_D"),
+                 os.path.join(data_dir, "proteomics", "before", "lab_E"),
         ],
         app_image_name=app_image_name,
         config_files=[deepcopy(base_config)]*5,
         config_file_changes=[deepcopy(proteomics_config_file_changes_base)]*5,
 )
-
-proteomics_config_file_changes_smpc = \
-    {"flimmaBatchCorrection.data_filename": "intensities_log_filtered.tsv",
-     "flimmaBatchCorrection.design_filename": "design.tsv",
-     "flimmaBatchCorrection.covariates": ["Pyr"],
-     "flimmaBatchCorrection.smpc": True}
-
-proteomics_experiment_balanced_smpc = util.Experiment(
-        clients=[os.path.join(data_dir, "proteomics", "before", "balanced", "lab_A"),
-                 os.path.join(data_dir, "proteomics", "before", "balanced", "lab_B"),
-                 os.path.join(data_dir, "proteomics", "before", "balanced", "lab_C"),
-                 os.path.join(data_dir, "proteomics", "before", "balanced", "lab_D"),
-                 os.path.join(data_dir, "proteomics", "before", "balanced", "lab_E"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*5,
-        config_file_changes=[deepcopy(proteomics_config_file_changes_smpc)]*5,
-)
-
-proteomics_experiment_imbalanced = util.Experiment(
-        clients=[os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_A"),
-                 os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_B"),
-                 os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_C"),
-                 os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_D"),
-                 os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_E"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*5,
-        config_file_changes=[deepcopy(proteomics_config_file_changes_base)]*5,
-)
-
-proteomics_experiment_imbalanced_smpc = util.Experiment(
-        clients=[os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_A"),
-                 os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_B"),
-                 os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_C"),
-                 os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_D"),
-                 os.path.join(data_dir, "proteomics", "before", "imbalanced", "lab_E"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*5,
-        config_file_changes=[deepcopy(proteomics_config_file_changes_smpc)]*5,
-)
-
-
 
 ## MICROARRAY
 base_microarray_config_file_changes = \
-    {"flimmaBatchCorrection.data_filename": "expr_for_correction.tsv",
+    {"flimmaBatchCorrection.data_filename": "expr_for_correction_UNION.tsv",
      "flimmaBatchCorrection.design_filename": "design.tsv",
      "flimmaBatchCorrection.covariates": ["HGSC"]}
 microarray_experiment = util.Experiment(
@@ -162,64 +108,66 @@ microarray_experiment = util.Experiment(
         config_file_changes=[base_microarray_config_file_changes]*6,
 )
 
-base_microarray_config_file_changes_smpc = \
-    {"flimmaBatchCorrection.data_filename": "expr_for_correction.tsv",
+## SIMULATED
+base_simulated_config_file_changes = \
+    {"flimmaBatchCorrection.data_filename": "intensities.tsv",
      "flimmaBatchCorrection.design_filename": "design.tsv",
-     "flimmaBatchCorrection.covariates": ["HGSC"],
-     "flimmaBatchCorrection.smpc": True}
-microarray_experiment_smpc = util.Experiment(
-        clients=[os.path.join(data_dir, "microarray", "before", "GSE6008"),
-                 os.path.join(data_dir, "microarray", "before", "GSE14407"),
-                 os.path.join(data_dir, "microarray", "before", "GSE26712"),
-                 os.path.join(data_dir, "microarray", "before", "GSE38666"),
-                 os.path.join(data_dir, "microarray", "before", "GSE40595"),
-                 os.path.join(data_dir, "microarray", "before", "GSE69428"),
+     "flimmaBatchCorrection.covariates": ["A"],
+     "flimmaBatchCorrection.index_col": "rowname"}
+simulated_balanced_experiment = util.Experiment(
+        clients=[os.path.join(data_dir, "simulated", "before", "balanced", "lab1"),
+                 os.path.join(data_dir, "simulated", "before", "balanced", "lab2"),
+                 os.path.join(data_dir, "simulated", "before", "balanced", "lab3"),
         ],
         app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*6,
-        config_file_changes=[deepcopy(base_microarray_config_file_changes_smpc)]*6,
+        config_files=[deepcopy(base_config)]*3,
+        config_file_changes=[base_simulated_config_file_changes]*3,
+)
+simulated_mildly_imbalanced_experiment = util.Experiment(
+        clients=[os.path.join(data_dir, "simulated", "before", "mild_imbalanced", "lab1"),
+                 os.path.join(data_dir, "simulated", "before", "mild_imbalanced", "lab2"),
+                 os.path.join(data_dir, "simulated", "before", "mild_imbalanced", "lab3"),
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config)]*3,
+        config_file_changes=[base_simulated_config_file_changes]*3,
+)
+simulated_strongly_imbalanced_experiment = util.Experiment(
+        clients=[os.path.join(data_dir, "simulated", "before", "strong_imbalanced", "lab1"),
+                 os.path.join(data_dir, "simulated", "before", "strong_imbalanced", "lab2"),
+                 os.path.join(data_dir, "simulated", "before", "strong_imbalanced", "lab3"),
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config)]*3,
+        config_file_changes=[base_simulated_config_file_changes]*3,
 )
 
 ### ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
 ## Microbiome
-# logmin
-# experiments.append(microbiome_experiment_logmin)
-# result_file_names.append(os.path.join(data_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_FEDERATED.tsv"))
-# # logmin+smpc
-# experiments.append(microbiome_experiment_logmin_smpc)
-# result_file_names.append(os.path.join(data_dir, "microbiome", "after", "normalized_logmin_counts_5centers_corrected_smpc_FEDERATED.tsv"))
+experiments.append(microbiome_experiment)
+result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
 
-# ## Proteomics
-# # balanced
-# experiments.append(proteomics_experiment_balanced)
-# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "balanced", "federated_intensities_log_filtered_corrected.tsv"))
-# # balanced+smpc
-# experiments.append(proteomics_experiment_balanced_smpc)
-# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "balanced", "federated_intensities_log_filtered_corrected_smpc.tsv"))
-# # imbalanced
-# experiments.append(proteomics_experiment_imbalanced)
-# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "imbalanced", "federated_intensities_log_filtered_corrected.tsv"))
-# # imbalanced+smpc
-# experiments.append(proteomics_experiment_imbalanced_smpc)
-# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "imbalanced", "federated_intensities_log_filtered_corrected_smpc.tsv"))
+## Proteomics
+experiments.append(proteomics_experiment)
+result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
 
-# ## Microarray
-# # default
-# experiments.append(microarray_experiment)
-# result_file_names.append(os.path.join(data_dir, "microarray", "after", "federated_corrected.csv"))
-# smpc
-# experiments.append(microarray_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "microarray", "after", "federated_corrected_smpc.csv"))
+## Microarray
+experiments.append(microarray_experiment)
+result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
 
-# NEW APP
-microarray_union_experiment = deepcopy(microarray_experiment)
-microarray_union_experiment_configfile_changes = microarray_union_experiment.config_file_changes[0]
-microarray_union_experiment_configfile_changes["flimmaBatchCorrection.data_filename"] = "expr_for_correction_UNION.tsv"
-microarray_union_experiment.config_file_changes = [microarray_union_experiment_configfile_changes]*6
+## Simulated
+experiments.append(simulated_balanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "after", "balanced", "FedApp_corrected_data.tsv"))
 
-experiments.append(microarray_union_experiment)
-result_file_names.append(
-    os.path.join(data_dir, "microarray", "after", "federated_corrected_UNION.csv"))
+experiments.append(simulated_mildly_imbalanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "after", "mild_imbalanced", "FedApp_corrected_data.tsv"))
+
+experiments.append(simulated_strongly_imbalanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "after", "strong_imbalanced", "FedApp_corrected_data.tsv"))
+
+
+
+### ACTUAL PROGRAM, NO NEED TO CHANGE IF A DIFFERENT EXPERIMENT WANTS TO BE RUN
 
 if len(experiments) != len(result_file_names):
     raise RuntimeError("Number of experiments and result file names do not match, please fix this!")
