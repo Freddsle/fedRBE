@@ -423,7 +423,7 @@ class Experiment():
             raise RuntimeError("No config files given!")
         ### os manipulations to get the config files in the correct client folders
         for client_dir, config in zip(self.clients, self.config_files):
-            config_path = os.path.join(client_dir, "config.yaml")
+            config_path = os.path.join(client_dir, "config.yml")
             with open(config_path, "w") as f:
                 yaml.dump(config, f, default_flow_style=False)
 

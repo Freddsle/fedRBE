@@ -78,7 +78,8 @@ microbiome_experiment = util.Experiment(
 proteomics_config_file_changes_base = \
     {"flimmaBatchCorrection.data_filename": "intensities_log_UNION.tsv",
      "flimmaBatchCorrection.design_filename": "design.tsv",
-     "flimmaBatchCorrection.covariates": ["Pyr"]}
+     "flimmaBatchCorrection.covariates": ["Pyr"],
+     "flimmaBatchCorrection.normalizationMethod": "log2(x+1)"}
 
 proteomics_experiment = util.Experiment(
         name="Proteomics",
@@ -159,13 +160,13 @@ simulated_strongly_imbalanced_experiment = util.Experiment(
 # experiments.append(microbiome_experiment)
 # result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
 
-# ## Proteomics
-# experiments.append(proteomics_experiment)
-# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
+## Proteomics
+experiments.append(proteomics_experiment)
+result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
 
-## Microarray
-experiments.append(microarray_experiment)
-result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
+# ## Microarray
+# experiments.append(microarray_experiment)
+# result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
 
 # ## Simulated
 # experiments.append(simulated_balanced_experiment)
