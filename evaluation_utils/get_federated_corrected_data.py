@@ -61,6 +61,8 @@ microbiome_config_file_changes = \
      "flimmaBatchCorrection.design_filename": "design_5C.tsv",
      "flimmaBatchCorrection.covariates": ["CRC"]}
 microbiome_experiment = util.Experiment(
+        name="Microbiome",
+        fc_data_dir=data_dir,
         clients=[os.path.join(data_dir, "microbiome", "before", "PRJEB10878"),
                 os.path.join(data_dir, "microbiome", "before", "PRJEB27928"),
                 os.path.join(data_dir, "microbiome", "before", "PRJEB6070"),
@@ -79,6 +81,8 @@ proteomics_config_file_changes_base = \
      "flimmaBatchCorrection.covariates": ["Pyr"]}
 
 proteomics_experiment = util.Experiment(
+        name="Proteomics",
+        fc_data_dir=data_dir,
         clients=[os.path.join(data_dir, "proteomics", "before", "lab_A"),
                  os.path.join(data_dir, "proteomics", "before", "lab_B"),
                  os.path.join(data_dir, "proteomics", "before", "lab_C"),
@@ -96,6 +100,8 @@ base_microarray_config_file_changes = \
      "flimmaBatchCorrection.design_filename": "design.tsv",
      "flimmaBatchCorrection.covariates": ["HGSC"]}
 microarray_experiment = util.Experiment(
+        name="Microarray",
+        fc_data_dir=data_dir,
         clients=[os.path.join(data_dir, "microarray", "before", "GSE6008"),
                  os.path.join(data_dir, "microarray", "before", "GSE14407"),
                  os.path.join(data_dir, "microarray", "before", "GSE26712"),
@@ -115,6 +121,8 @@ base_simulated_config_file_changes = \
      "flimmaBatchCorrection.covariates": ["A"],
      "flimmaBatchCorrection.index_col": "rowname"}
 simulated_balanced_experiment = util.Experiment(
+        name="Simulated Balanced",
+        fc_data_dir=data_dir,
         clients=[os.path.join(data_dir, "simulated", "balanced", "before", "lab1"),
                  os.path.join(data_dir, "simulated", "balanced", "before", "lab2"),
                  os.path.join(data_dir, "simulated", "balanced", "before", "lab3"),
@@ -124,6 +132,8 @@ simulated_balanced_experiment = util.Experiment(
         config_file_changes=[base_simulated_config_file_changes]*3,
 )
 simulated_mildly_imbalanced_experiment = util.Experiment(
+        name="Simulated Mildly Imbalanced",
+        fc_data_dir=data_dir,
         clients=[os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab1"),
                  os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab2"),
                  os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab3"),
@@ -133,6 +143,8 @@ simulated_mildly_imbalanced_experiment = util.Experiment(
         config_file_changes=[base_simulated_config_file_changes]*3,
 )
 simulated_strongly_imbalanced_experiment = util.Experiment(
+        name="Simulated Strongly Imbalanced",
+        fc_data_dir=data_dir,
         clients=[os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab1"),
                  os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab2"),
                  os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab3"),
@@ -143,27 +155,27 @@ simulated_strongly_imbalanced_experiment = util.Experiment(
 )
 
 ### ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
-## Microbiome
-experiments.append(microbiome_experiment)
-result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
+# ## Microbiome
+# experiments.append(microbiome_experiment)
+# result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
 
-## Proteomics
-experiments.append(proteomics_experiment)
-result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
+# ## Proteomics
+# experiments.append(proteomics_experiment)
+# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
 
 ## Microarray
 experiments.append(microarray_experiment)
 result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
 
-## Simulated
-experiments.append(simulated_balanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
+# ## Simulated
+# experiments.append(simulated_balanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
 
-experiments.append(simulated_mildly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(simulated_mildly_imbalanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
 
-experiments.append(simulated_strongly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(simulated_strongly_imbalanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
 
 
 
@@ -179,18 +191,12 @@ if len(experiments) != len(result_file_names):
 # output file name used by the batch correction app (federated limma RBE)
 # of this repo) and concats them.
 
-#Start the featurecloud controller
-try:
-    util.startup(data_dir)
-except Exception as e:
-    raise RuntimeError(f"Experiment could not be started! Error: \n{e}") from e
-
 # Run the experiments
 for exp, result_filename in zip(experiments, result_file_names):
     ### RUN THE FEATURECLOUD EXPERIMENT AND EXTARCT INDIVIDUAL RESULTS
     print(f"Starting experiment:\n{exp}")
     try:
-        result_files_zipped = util.run_test(exp, data_dir)
+        result_files_zipped, _, _ = exp.run_test()
     except Exception as e:
         print(f"Experiment could not be started or aborted too many times! Error: \n{e}")
         print("_______________¡FAILED_EXPERIMENT!_______________")
