@@ -170,4 +170,7 @@ evaluation_data/site_info.json
 evaluation_data/tests/
 evaluation_data/testbed-*
 evaluation_data/workflows
-evaluation_data/**/config.yaml
+
+# these files are too big!
+evaluation_data/microarray/after/*.tsv
+evaluation_data/microarray/after/*.csv

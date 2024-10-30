@@ -1,8 +1,12 @@
 flimmaBatchCorrection:
-  min_samples: 2
-  data_filename: "intensities_log_UNION.tsv"
-  separator: "\t"
-  covariates: ["Pyr"]
-  design_filename: "design.tsv"
-  index_col: "rowname"
+  covariates:
+  - Pyr
+  data_filename: intensities_log_UNION.tsv
+  design_filename: design.tsv
+  design_separator: "\t"
   expression_file_flag: true
+  index_col: rowname
+  min_samples: 2
+  normalizationMethod: log2(x+1)
+  separator: "\t"
+  smpc: false

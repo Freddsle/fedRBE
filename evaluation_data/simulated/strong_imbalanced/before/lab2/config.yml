@@ -1,8 +1,12 @@
 flimmaBatchCorrection:
-  min_samples: 0
-  data_filename: "intensities.tsv"
-  separator: "\t"
-  covariates: ["A"]
-  design_filename: "design.tsv"
-  index_col: "rowname"
+  covariates:
+  - A
+  data_filename: intensities.tsv
+  design_filename: design.tsv
+  design_separator: "\t"
   expression_file_flag: true
+  index_col: rowname
+  min_samples: 0
+  normalizationMethod: null
+  separator: "\t"
+  smpc: false
