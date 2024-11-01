@@ -66,6 +66,12 @@ def add_position_to_config(exp: util.Experiment):
         tmp["flimmaBatchCorrection.position"] = idx
         exp.config_file_changes[idx] = deepcopy(tmp)
 
+def set_smpc_true(exp: util.Experiment):
+    for idx, _ in enumerate(exp.clients):
+        tmp = exp.config_file_changes[idx]
+        tmp["flimmaBatchCorrection.smpc"] = True
+        exp.config_file_changes[idx] = deepcopy(tmp)
+
 
 ## MICROBIOME
 microbiome_config_file_changes = \
@@ -85,6 +91,9 @@ microbiome_experiment = util.Experiment(
         config_files=[deepcopy(base_config)]*5,
         config_file_changes=[deepcopy(microbiome_config_file_changes)]*5,
 )
+microbiome_experiment_smpc = deepcopy(microbiome_experiment)
+set_smpc_true(microbiome_experiment_smpc)
+add_position_to_config(microbiome_experiment_smpc)
 add_position_to_config(microbiome_experiment)
 
 ## PROTEOMICS
@@ -108,6 +117,9 @@ proteomics_experiment = util.Experiment(
         config_files=[deepcopy(base_config)]*5,
         config_file_changes=[deepcopy(proteomics_config_file_changes_base)]*5,
 )
+proteomics_experiment_smpc = deepcopy(proteomics_experiment)
+set_smpc_true(proteomics_experiment_smpc)
+add_position_to_config(proteomics_experiment_smpc)
 add_position_to_config(proteomics_experiment)
 
 
@@ -132,6 +144,9 @@ microarray_experiment = util.Experiment(
         config_files=[deepcopy(base_config)]*6,
         config_file_changes=[base_microarray_config_file_changes]*6,
 )
+microarray_experiment_smpc = deepcopy(microarray_experiment)
+set_smpc_true(microarray_experiment_smpc)
+add_position_to_config(microarray_experiment_smpc)
 add_position_to_config(microarray_experiment)
 
 ## SIMULATED
@@ -151,6 +166,9 @@ simulated_balanced_experiment = util.Experiment(
         config_files=[deepcopy(base_config)]*3,
         config_file_changes=[base_simulated_config_file_changes]*3,
 )
+simulated_balanced_experiment_smpc = deepcopy(simulated_balanced_experiment)
+set_smpc_true(simulated_balanced_experiment_smpc)
+add_position_to_config(simulated_balanced_experiment_smpc)
 add_position_to_config(simulated_balanced_experiment)
 simulated_mildly_imbalanced_experiment = util.Experiment(
         name="Simulated Mildly Imbalanced",
@@ -163,6 +181,9 @@ simulated_mildly_imbalanced_experiment = util.Experiment(
         config_files=[deepcopy(base_config)]*3,
         config_file_changes=[base_simulated_config_file_changes]*3,
 )
+simulated_mildly_imbalanced_experiment_smpc = deepcopy(simulated_mildly_imbalanced_experiment)
+set_smpc_true(simulated_mildly_imbalanced_experiment_smpc)
+add_position_to_config(simulated_mildly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_mildly_imbalanced_experiment)
 simulated_strongly_imbalanced_experiment = util.Experiment(
         name="Simulated Strongly Imbalanced",
@@ -175,30 +196,45 @@ simulated_strongly_imbalanced_experiment = util.Experiment(
         config_files=[deepcopy(base_config)]*3,
         config_file_changes=[base_simulated_config_file_changes]*3,
 )
+simulated_strongly_imbalanced_experiment_smpc = deepcopy(simulated_strongly_imbalanced_experiment)
+set_smpc_true(simulated_strongly_imbalanced_experiment_smpc)
+add_position_to_config(simulated_strongly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_strongly_imbalanced_experiment)
 
 ### ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
 ## Microbiome
 experiments.append(microbiome_experiment)
 result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
+experiments.append(microbiome_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Proteomics
 experiments.append(proteomics_experiment)
 result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
+experiments.append(proteomics_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Microarray
 experiments.append(microarray_experiment)
 result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
+experiments.append(microarray_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Simulated
 experiments.append(simulated_balanced_experiment)
 result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_balanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
 experiments.append(simulated_mildly_imbalanced_experiment)
 result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_mildly_imbalanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
 experiments.append(simulated_strongly_imbalanced_experiment)
 result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_strongly_imbalanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
 
 
