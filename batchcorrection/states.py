@@ -30,7 +30,7 @@ class InitialState(AppState):
         self.configure_smpc() # set the default values
         # send list of protein names (genes) to coordinator
         # we use the hashed values of the feature names and variables
-        self.send_data_to_coordinator((cohort_name, # for mask creation - to track the cohort
+        self.send_data_to_coordinator((cohort_name, client.position, # for mask creation - to track the cohort
                                        list(client.hash2feature.keys()),
                                        list(client.hash2variable.keys())),
                                     send_to_self=True,
@@ -51,14 +51,14 @@ class globalFeatureSelection(AppState):
         lists_of_features_and_variables = self.gather_data(is_json=False)
         self.log("[global_feature_selection] Gathered data from all clients")
         global_feature_names, global_variables, feature_presence_matrix, cohorts_order = \
-              select_common_features_variables(lists_of_features_and_variables, min_clients=1)
+              select_common_features_variables(lists_of_features_and_variables, min_clients=1,
+                                               default_order=self._app.clients)
         feature_presence_matrix = reorder_matrix(feature_presence_matrix,
                                                  self._app.clients,
                                                  cohorts_order)
-        self.broadcast_data((global_feature_names, global_variables),
+        self.broadcast_data((global_feature_names, global_variables, cohorts_order),
                             send_to_self=True, memo="commonGenes")
         self.store(key='feature_presence_matrix', value=feature_presence_matrix)
-        self.store(key='cohorts_order', value=cohorts_order)
         self.log("[global_feature_selection] Data was set to be broadcasted:")
         self.log("[global_feature_selection] transitioning to feature_presence_matrix")
         return 'validate'
@@ -72,7 +72,7 @@ class ValidationState(AppState):
     def run(self):
         # obtain and safe common genes and indices of design matrix
         self.log("[validate] waiting for common features and covariates")
-        global_feauture_names_hashed, global_variables_hashed = self.await_data(n=1, is_json=False, memo="commonGenes")
+        global_feauture_names_hashed, global_variables_hashed, cohorts_order = self.await_data(n=1, is_json=False, memo="commonGenes")
         client = self.load('client')
 
         client.validate_inputs(global_variables_hashed)
@@ -80,8 +80,7 @@ class ValidationState(AppState):
         client.set_data(global_feauture_names_hashed)
         self.log("[validate] Data has been set to contain all global features")
         # get all client names to generate design matrix
-        all_client_names = self.clients
-        err = client.create_design(all_client_names[:-1])
+        err = client.create_design(cohorts_order[:-1])
         if err:
             self.log(err, LogLevel.FATAL)
         self.log("[validate] design has been created")
@@ -140,6 +139,7 @@ class ComputeCorrectionState(AppState):
         n = len(client.feature_names)
         k = client.design.shape[1]
         global_mask = create_beta_mask(feauture_presence_matrix, n, k)
+        global_mask.to_csv(os.path.join(os.getcwd(), "mnt", "output", "maskFed.tsv"), sep="\t")
 
         # wait for each client to compute XtX and XtY and collect data
         self.log("[compute_beta] gathering data")
@@ -167,6 +167,7 @@ class IncludeCorrectionState(AppState):
     def run(self):
         # wait for the coordinator to calcualte beta
         beta = self.await_data(n=1, is_json=False, memo="beta")
+        beta.to_csv(os.path.join(os.getcwd(), "mnt", "output", "betasFed.tsv"), sep="\t"),
         client = self.load('client')
 
         # remove the batch effects in own data and safe the results

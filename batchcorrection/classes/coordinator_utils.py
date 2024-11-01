@@ -7,8 +7,9 @@ from numpy import linalg
 from typing import List, Tuple, Union
 
 def create_feature_presence_matrix(
-        lists_of_features_and_variables: List[Tuple[str, List[str], List[str]]],
-        global_feature_names: List[str]
+        lists_of_features_and_variables: List[Tuple[str, Union[int, None], List[str], List[str]]],
+        global_feature_names: List[str],
+        default_order: List[str]
         ) -> Tuple[np.ndarray, List[str]]:
     """
     Creates a matrix that indicates the presence of features in the different
@@ -17,12 +18,11 @@ def create_feature_presence_matrix(
     a dictionary indicating which clients contain each feature.
 
     Args:
-        lists_of_features_and_variables: A list of tuples containing the cohort name, features
-        and variables available on each client. Each tuple represents one client,
-        the feature_names is the first element of the tuple and the variables
-        is the second element of the tuple. The featurenames should be hashes,
-        but this is not checked here.
+        lists_of_features_and_variables: A list of tuples containing the name of the client,
+        it's position (or None), features, and variables available on each client.
+        Expects hashed variables and features.
         global_feature_names: A list of all the features that are available on all clients.
+        default_order: A list of names of the clients in which to order the clients
 
     Returns:
         matrix: A matrix of shape (num_features, num_clients) that indicates
@@ -36,19 +36,29 @@ def create_feature_presence_matrix(
 
     # Initialize the matrix
     matrix = np.zeros((num_features, num_cohorts), dtype=int)
-    cohorts_order = []
 
-    # Populate the matrix and the dictionary
-    for cohort_idx, (cohort_name, features, _) in enumerate(lists_of_features_and_variables):
+    # we need to set the order of the cohorts either as sent by the clients
+    # or as found in self._app.clients
+    if any([not isinstance(position, int) for _, position, _, _ in lists_of_features_and_variables]):
+        # if any position is None, we use the default order
+        cohorts_order = default_order
+    else:
+        # if all positions are integers, we use the order of the positions
+        cohorts_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[1])]
+
+    # we populate the matrix and the dictionary
+    for cohort_idx, cohort_name in enumerate(cohorts_order):
+        # get the corresponding features
+        features = [features for c_name, _, features, _ in lists_of_features_and_variables if c_name == cohort_name][0]
         for feature in features:
             if feature in feature_index:
                 matrix[feature_index[feature], cohort_idx] = 1
-        cohorts_order.append(cohort_name)
 
     return matrix, cohorts_order
 
 def select_common_features_variables(
-    lists_of_features_and_variables: List[Tuple[str, List[str], List[str]]],
+    lists_of_features_and_variables: List[Tuple[str, int, List[str], List[str]]],
+    default_order: List[str],
     min_clients=2) -> \
         Tuple[List[str], Union[List[str], None], np.ndarray, List[str]]:
     """
@@ -57,11 +67,12 @@ def select_common_features_variables(
     outdated : For the union, only features that are available on at least two clients
     are selected.
     Args:
-        lists_of_features_and_variables: A list of tuples containing the features
-        and variables available on each client. Each tuple represents one client,
-        the feature_names is the first element of the tuple and the variables
-        is the second element of the tuple. The featurenames should be hashes,
-        but this is not checked here.
+        lists_of_features_and_variables: A list of tuples containing the name of the client,
+        it's position (or None), features, and variables available on each client.
+        Expects hashed variables and features.
+        default_order: A list of names of the clients in which to order the clients
+        min_clients: The minimum number of clients that should have a feature for the
+            feature to be included in the global feature list.
     Returns:
         global_feature_names, global_variables
             global_feature_names: A list of all the features that are available
@@ -72,12 +83,12 @@ def select_common_features_variables(
             feature_presence_matrix: A matrix of shape (num_features, num_clients) that indicates
                 the presence of features in the different clients. The matrix contains
                 1 if the feature is present in the client and 0 otherwise.
-            cohorts_order: A list of names of the clients to which the columns of the matrix correspond.
+            cohorts_order: A list of names of the clients in which to order the clients
     """
     feature_count = {}
     global_variables = None
 
-    for _, features, variables in lists_of_features_and_variables:
+    for _, _, features, variables in lists_of_features_and_variables:
         # Count features
         for feature in features:
             if feature in feature_count:
@@ -102,7 +113,7 @@ def select_common_features_variables(
         global_variables = None
 
     # Create the feature presence matrix - for gloal mask
-    feature_presence_matrix, cohorts_order = create_feature_presence_matrix(lists_of_features_and_variables, global_feature_names)
+    feature_presence_matrix, cohorts_order = create_feature_presence_matrix(lists_of_features_and_variables, global_feature_names, default_order)
 
     return global_feature_names, global_variables, feature_presence_matrix, cohorts_order
 

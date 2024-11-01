@@ -31,6 +31,7 @@ class Client:
         self.hash2feature = None
         self.feature2hash = None
         self.hash2variable = None
+        self.position = None
 
     def hash_names(self,
                    names: List[str]) -> dict:
@@ -135,12 +136,19 @@ class Client:
         else:
             index_col = config["index_col"]
 
+        position = None
+        if "position" in config:
+            position = config["position"]
+            if position and not isinstance(position, int):
+                raise ValueError("Position must be an integer")
+
         # set variables
         self.cohort_name = clientname
         self.smpc = smpc
         self.variables = covariates
         self.min_samples = min_samples
         self.separator = separator
+        self.position = position
 
         # load the data
         try:

@@ -45,4 +45,8 @@ flimmaBatchCorrection:
                  # non NaN samples, so that results are fuzzy enough for
                  # attackers to not quess samples.
                  # format: int
+  position: 1    # if a number is given, the client with this config will
+                 # be considered as the numberth client. This makes a difference
+                 # as the last client is used as the reference batch.
+                 # if empty/None, the order is random
 
