@@ -21,11 +21,11 @@ experiment_results = list()
     # basically specifying the corrected data files of the central and federated results
 
 # MICROBIOME
-# experiment_results.append(utils.ExperimentResult(
-#     name="Microbiome",
-#     federated_result_file=os.path.join(base_dir, "microbiome", "after", "FedApp_corrected_data.tsv"),
-#     central_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_Rcorrected.tsv"),
-# ))
+experiment_results.append(utils.ExperimentResult(
+    name="Microbiome",
+    federated_result_file=os.path.join(base_dir, "microbiome", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_Rcorrected.tsv"),
+))
 
 # PROTEOMICS
 experiment_results.append(utils.ExperimentResult(
@@ -36,30 +36,30 @@ experiment_results.append(utils.ExperimentResult(
 ))
 
 # MICROARRAY
-# experiment_results.append(utils.ExperimentResult(
-#     name="Microarray",
-#     federated_result_file=os.path.join(base_dir, "microarray", "after", "FedApp_corrected_data.tsv"),
-#     central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
-# ))
+experiment_results.append(utils.ExperimentResult(
+    name="Microarray",
+    federated_result_file=os.path.join(base_dir, "microarray", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
+))
 
 # SIMULATED
-# experiment_results.append(utils.ExperimentResult(
-#     name="Simulated Balanced",
-#     federated_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"),
-#     central_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "intensities_R_corrected.tsv"),
-# ))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Balanced",
+    federated_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "intensities_R_corrected.tsv"),
+))
 
-# experiment_results.append(utils.ExperimentResult(
-#     name="Simulated Mildly Imbalanced",
-#     federated_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"),
-#     central_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
-# ))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Mildly Imbalanced",
+    federated_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
 
-# experiment_results.append(utils.ExperimentResult(
-#     name="Simulated Strongly Imbalanced",
-#     federated_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"),
-#     central_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
-# ))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Strongly Imbalanced",
+    federated_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
 
 
 ### MAIN, just runs compare_experiments on all experiments and prints the results
