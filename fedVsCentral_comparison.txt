@@ -1,0 +1,86 @@
+_________________________Comparing Microbiome_________________________
+shape of CENTRAL: (845, 485)
+shape of FEDERATED: (845, 485)
+Total comparison
+Maximal difference: 9.947598300641403e-14
+Mean difference: 2.6002883318094706e-14
+Number of NaN values: 0 (Central: 0, Federated: 0)
+_________________________Comparing Microbiome (SMPC)_________________________
+shape of CENTRAL: (845, 485)
+shape of FEDERATED: (845, 485)
+Total comparison
+Maximal difference: 1.4838885675771962e-10
+Mean difference: 2.956653116204876e-11
+Number of NaN values: 0 (Central: 0, Federated: 0)
+_________________________Comparing Proteomics_________________________
+shape of CENTRAL: (3034, 118)
+shape of FEDERATED: (3034, 118)
+Total comparison
+Maximal difference: 2.1316282072803006e-13
+Mean difference: 3.542749812223157e-14
+Number of NaN values: 49834 (Central: 0, Federated: 0)
+_________________________Comparing Proteomics (SMPC)_________________________
+shape of CENTRAL: (3034, 118)
+shape of FEDERATED: (3034, 118)
+Total comparison
+Maximal difference: 1.88893700681092e-09
+Mean difference: 9.958611341495667e-11
+Number of NaN values: 49834 (Central: 0, Federated: 0)
+_________________________Comparing Microarray_________________________
+shape of CENTRAL: (51276, 332)
+shape of FEDERATED: (51276, 332)
+Total comparison
+Maximal difference: 7.993605777301127e-14
+Mean difference: 4.8495195353065246e-15
+Number of NaN values: 6692856 (Central: 0, Federated: 0)
+_________________________Comparing Microarray (SMPC)_________________________
+shape of CENTRAL: (51276, 332)
+shape of FEDERATED: (51276, 332)
+Total comparison
+Maximal difference: 8.546283680743727e-10
+Mean difference: 1.6709417011345923e-10
+Number of NaN values: 6692856 (Central: 0, Federated: 0)
+_________________________Comparing Simulated Balanced_________________________
+shape of CENTRAL: (6000, 600)
+shape of FEDERATED: (6000, 600)
+Total comparison
+Maximal difference: 5.3290705182007514e-14
+Mean difference: 1.8241250957931933e-15
+Number of NaN values: 0 (Central: 0, Federated: 0)
+_________________________Comparing Simulated Balanced (SMPC)_________________________
+shape of CENTRAL: (6000, 600)
+shape of FEDERATED: (6000, 600)
+Total comparison
+Maximal difference: 6.486411407991e-11
+Mean difference: 2.0156597531943743e-11
+Number of NaN values: 0 (Central: 0, Federated: 0)
+_________________________Comparing Simulated Mildly Imbalanced_________________________
+shape of CENTRAL: (6000, 600)
+shape of FEDERATED: (6000, 600)
+Total comparison
+Maximal difference: 5.684341886080802e-14
+Mean difference: 2.1007340279300927e-15
+Number of NaN values: 0 (Central: 0, Federated: 0)
+_________________________Comparing Simulated Mildly Imbalanced (SMPC)_________________________
+shape of CENTRAL: (6000, 600)
+shape of FEDERATED: (6000, 600)
+Total comparison
+Maximal difference: 1.0309797460195114e-10
+Mean difference: 2.49410442828708e-11
+Number of NaN values: 0 (Central: 0, Federated: 0)
+_________________________Comparing Simulated Strongly Imbalanced_________________________
+shape of CENTRAL: (6000, 600)
+shape of FEDERATED: (6000, 600)
+Total comparison
+Maximal difference: 6.039613253960852e-14
+Mean difference: 2.1337348326572476e-15
+Number of NaN values: 0 (Central: 0, Federated: 0)
+_________________________Comparing Simulated Strongly Imbalanced (SMPC)_________________________
+shape of CENTRAL: (6000, 600)
+shape of FEDERATED: (6000, 600)
+Total comparison
+Maximal difference: 2.2828516854644931e-10
+Mean difference: 4.693474527187838e-11
+Number of NaN values: 0 (Central: 0, Federated: 0)
+Final results:
+None
