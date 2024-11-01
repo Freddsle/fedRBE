@@ -7,6 +7,6 @@ flimmaBatchCorrection:
   expression_file_flag: true
   index_col: rowname
   min_samples: 2
-  normalizationMethod: log2(x+1)
+  normalizationMethod: null
   separator: "\t"
   smpc: false
