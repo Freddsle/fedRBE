@@ -8,5 +8,6 @@ flimmaBatchCorrection:
   index_col: Gene
   min_samples: 2
   normalizationMethod: null
+  position: 4
   separator: "\t"
-  smpc: false
+  smpc: true

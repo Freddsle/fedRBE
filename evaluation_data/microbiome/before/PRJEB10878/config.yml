@@ -8,5 +8,6 @@ flimmaBatchCorrection:
   index_col: 0
   min_samples: 0
   normalizationMethod: null
+  position: 0
   separator: "\t"
-  smpc: false
+  smpc: true
