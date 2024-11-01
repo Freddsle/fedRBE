@@ -32,7 +32,6 @@ experiment_results.append(utils.ExperimentResult(
     name="Proteomics",
     federated_result_file=os.path.join(base_dir, "proteomics", "after", "FedApp_corrected_data.tsv"),
     central_result_file=os.path.join(base_dir, "proteomics", "after", "intensities_log_Rcorrected_UNION.tsv"),
-    complete_analysis=True,
 ))
 
 # MICROARRAY
