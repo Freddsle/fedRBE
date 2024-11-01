@@ -53,9 +53,6 @@ class globalFeatureSelection(AppState):
         global_feature_names, global_variables, feature_presence_matrix, cohorts_order = \
               select_common_features_variables(lists_of_features_and_variables, min_clients=1,
                                                default_order=self._app.clients)
-        feature_presence_matrix = reorder_matrix(feature_presence_matrix,
-                                                 self._app.clients,
-                                                 cohorts_order)
         self.broadcast_data((global_feature_names, global_variables, cohorts_order),
                             send_to_self=True, memo="commonGenes")
         self.store(key='feature_presence_matrix', value=feature_presence_matrix)
