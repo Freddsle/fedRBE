@@ -41,10 +41,12 @@ def create_feature_presence_matrix(
     # or as found in self._app.clients
     if any([not isinstance(position, int) for _, position, _, _ in lists_of_features_and_variables]):
         # if any position is None, we use the default order
+        print(f"Using the default cohort order: {default_order}")
         cohorts_order = default_order
     else:
         # if all positions are integers, we use the order of the positions
         cohorts_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[1])]
+        print(f"Using the following config based order: {cohorts_order}")
 
     # we populate the matrix and the dictionary
     for cohort_idx, cohort_name in enumerate(cohorts_order):
@@ -121,6 +123,7 @@ def reorder_matrix(feature_matrix: np.ndarray,
                    all_client_names: List[str],
                    cohorts_order: List[str]) -> np.ndarray:
     """
+    DEPRECATED: already done now in the creation of the feature matrix
     Reorders the columns of a feature matrix according to a specified order of
     clients.
     Args:

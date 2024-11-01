@@ -139,7 +139,6 @@ class ComputeCorrectionState(AppState):
         n = len(client.feature_names)
         k = client.design.shape[1]
         global_mask = create_beta_mask(feauture_presence_matrix, n, k)
-        global_mask.to_csv(os.path.join(os.getcwd(), "mnt", "output", "maskFed.tsv"), sep="\t")
 
         # wait for each client to compute XtX and XtY and collect data
         self.log("[compute_beta] gathering data")
@@ -167,7 +166,6 @@ class IncludeCorrectionState(AppState):
     def run(self):
         # wait for the coordinator to calcualte beta
         beta = self.await_data(n=1, is_json=False, memo="beta")
-        beta.to_csv(os.path.join(os.getcwd(), "mnt", "output", "betasFed.tsv"), sep="\t"),
         client = self.load('client')
 
         # remove the batch effects in own data and safe the results
