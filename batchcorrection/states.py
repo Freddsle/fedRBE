@@ -27,7 +27,7 @@ class InitialState(AppState):
         self.store(key="smpc", value=client.smpc)
         self.store(key='client', value=client)
         self.store(key="separator", value=client.separator)
-        self.configure_smpc() # set the default values
+        self.configure_smpc(exponent=12) # set the default values, we use a bigger exponent though
         # send list of protein names (genes) to coordinator
         # we use the hashed values of the feature names and variables
         self.send_data_to_coordinator((cohort_name, client.position, # for mask creation - to track the cohort
