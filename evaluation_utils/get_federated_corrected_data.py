@@ -102,6 +102,31 @@ set_smpc_true(microbiome_experiment_smpc)
 add_position_to_config(microbiome_experiment_smpc)
 add_position_to_config(microbiome_experiment)
 
+## MICROBIOME v2
+microbiomev2_config_file_changes = \
+    {"flimmaBatchCorrection.data_filename": "UQnorm_log_counts_for_corr.tsv",
+     "flimmaBatchCorrection.design_filename": "design_5C.tsv",
+     "flimmaBatchCorrection.covariates": ["CRC"]}
+microbiomev2_experiment = util.Experiment(
+        name="Microbiome v2",
+        fc_data_dir=data_dir,
+        clients=[os.path.join(data_dir, "microbiome_v2", "before", "China1"),
+                os.path.join(data_dir, "microbiome_v2", "before", "China3"),
+                os.path.join(data_dir, "microbiome_v2", "before", "China5"),
+                os.path.join(data_dir, "microbiome_v2", "before", "France1"),
+                os.path.join(data_dir, "microbiome_v2", "before", "Germany1"),
+                os.path.join(data_dir, "microbiome_v2", "before", "Germany2"),
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config)]*6,
+        config_file_changes=[deepcopy(microbiomev2_config_file_changes)]*6,
+)
+microbiomev2_experiment_smpc = deepcopy(microbiomev2_experiment)
+set_smpc_true(microbiomev2_experiment_smpc)
+add_position_to_config(microbiomev2_experiment_smpc)
+add_position_to_config(microbiomev2_experiment)
+
+
 ## PROTEOMICS
 proteomics_config_file_changes_base = \
     {"flimmaBatchCorrection.data_filename": "intensities_log_UNION.tsv",
@@ -213,6 +238,12 @@ experiments.append(microbiome_experiment)
 result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
 experiments.append(microbiome_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data_smpc.tsv"))
+
+## Microbiome v2
+experiments.append(microbiomev2_experiment)
+result_file_names.append(os.path.join(data_dir, "microbiome_v2", "after", "FedApp_corrected_data.tsv"))
+experiments.append(microbiomev2_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "microbiome_v2", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Proteomics
 experiments.append(proteomics_experiment)
