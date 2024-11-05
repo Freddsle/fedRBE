@@ -103,7 +103,7 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
 def _analyse_differences(differences: List[float], nan_count: int, central_nan_count: int, fed_nan_count: int,
                          result_df: pd.DataFrame, exp: ExperimentResult, feature2diffsum: Union[dict, None] = None,
                          plot: bool = False):
-    print(f"Min difference: {np.mean(differences)}")
+    print(f"Min difference: {np.min(differences)}")
     print(f"Mean difference: {np.mean(differences)}")
     print(f"Maximal difference: {np.max(differences)}")
     print(f"Number of NaN values: {nan_count} (Central: {central_nan_count}, Federated: {fed_nan_count})")
