@@ -104,12 +104,14 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
 def _analyse_differences(differences: List[float], nan_count: int, central_nan_count: int, fed_nan_count: int,
                          result_df: Union[pd.DataFrame, None], exp: ExperimentResult, feature2diffsum: Union[dict, None] = None,
                          plot: bool = False):
+    print(f"Min difference: {np.min(differences)}")
     print(f"Maximal difference: {np.max(differences)}")
     print(f"Mean difference: {np.mean(differences)}")
     print(f"Number of NaN values: {nan_count} (Central: {central_nan_count}, Federated: {fed_nan_count})")
     if result_df is None:
         result_df = pd.DataFrame({
             "Experiment": [exp.name],
+            "Min difference": [np.min(differences)],
             "Maximal difference": [np.max(differences)],
             "Mean difference": [np.mean(differences)],
         })
@@ -145,9 +147,8 @@ def _compare_vals(value1, value2, nan_count, central_nan_count, fed_nan_count, d
         elif np.isnan(value2):
             fed_nan_count += 1
             print(f"Federated result contains NaN: {value1}, central value: {value1}")
-    if value1 != value2:
-        diff = np.abs(value1 - value2)
-        differences.append(diff)
-        if feature2diffsum is not None and feature is not None:
-            feature2diffsum[feature] = diff
+    diff = np.abs(value1 - value2)
+    differences.append(diff)
+    if feature2diffsum is not None and feature is not None:
+        feature2diffsum[feature] = diff
     return nan_count, central_nan_count, fed_nan_count
