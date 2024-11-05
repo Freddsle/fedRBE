@@ -28,7 +28,7 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
                    columns are ["Experiment", "Maximal difference", "Mean difference"]
                    returns None if no comparison could be made
     """
-    result_df = None
+    result_df = pd.DataFrame(columns=["Experiment", "Min difference", "Mean difference", "Max difference"])
     for exp in experiment_results:
         print(f"_________________________Comparing {exp.name}_________________________")
         central_df = pd.read_csv(exp.central_result_file, sep="\t", index_col=0)
@@ -59,19 +59,20 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
         ### Compare value by value ###
         # we extarct all differences and perform basic statiscs on them
         if exp.complete_analysis:
+            tmp_df = result_df.copy() # so we don't dump the result_df
+
             # columnwise comparison
             differences = list()
             nan_count = 0
             fed_nan_count = 0
             central_nan_count = 0
-            result_df = None
             col2diffsum = dict()
             for col in central_df.columns:
                 for value1, value2 in zip(central_df[col].values, federated_df[col].values):
                     nan_count, central_nan_count, fed_nan_count = \
                         _compare_vals(value1, value2, nan_count, central_nan_count, fed_nan_count, differences, col2diffsum, col)
             print("Columnwise comparison")
-            _analyse_differences(differences, nan_count, central_nan_count, fed_nan_count, result_df, exp, col2diffsum)
+            _analyse_differences(differences, nan_count, central_nan_count, fed_nan_count, tmp_df, exp, col2diffsum)
 
 
             # rowwise comparison
@@ -79,21 +80,19 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
             nan_count = 0
             fed_nan_count = 0
             central_nan_count = 0
-            result_df = None
             row2diffsum = dict()
             for row in central_df.index:
                 for value1, value2 in zip(central_df.loc[row].values, federated_df.loc[row].values):
                     nan_count, central_nan_count, fed_nan_count = \
                         _compare_vals(value1, value2, nan_count, central_nan_count, fed_nan_count, differences, row2diffsum, row)
             print("Rowwise comparison")
-            _analyse_differences(differences, nan_count, central_nan_count, fed_nan_count, result_df, exp, row2diffsum)
+            _analyse_differences(differences, nan_count, central_nan_count, fed_nan_count, tmp_df, exp, row2diffsum)
 
         # total comparison
         differences = list()
         nan_count = 0
         fed_nan_count = 0
         central_nan_count = 0
-        result_df = None # reset, we only show this in the end
         for value1, value2 in zip(central_df.values.flatten(), federated_df.values.flatten()):
             nan_count, central_nan_count, fed_nan_count = \
                 _compare_vals(value1, value2, nan_count, central_nan_count, fed_nan_count, differences)
@@ -102,22 +101,14 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
     return result_df
 
 def _analyse_differences(differences: List[float], nan_count: int, central_nan_count: int, fed_nan_count: int,
-                         result_df: Union[pd.DataFrame, None], exp: ExperimentResult, feature2diffsum: Union[dict, None] = None,
+                         result_df: pd.DataFrame, exp: ExperimentResult, feature2diffsum: Union[dict, None] = None,
                          plot: bool = False):
-    print(f"Min difference: {np.min(differences)}")
     print(f"Maximal difference: {np.max(differences)}")
     print(f"Mean difference: {np.mean(differences)}")
     print(f"Number of NaN values: {nan_count} (Central: {central_nan_count}, Federated: {fed_nan_count})")
-    if result_df is None:
-        result_df = pd.DataFrame({
-            "Experiment": [exp.name],
-            "Min difference": [np.min(differences)],
-            "Maximal difference": [np.max(differences)],
-            "Mean difference": [np.mean(differences)],
-        })
-    else:
-        result_df.loc[len(result_df)] = [exp.name, np.max(differences), np.mean(differences)]
 
+    # append a new row
+    result_df.loc[len(result_df)] = [exp.name, np.min(differences), np.mean(differences), np.max(differences)]
     # show the top 10 differences from feature2diffsum
     if feature2diffsum is not None:
         print("Top 10 differences")
@@ -147,8 +138,9 @@ def _compare_vals(value1, value2, nan_count, central_nan_count, fed_nan_count, d
         elif np.isnan(value2):
             fed_nan_count += 1
             print(f"Federated result contains NaN: {value1}, central value: {value1}")
-    diff = np.abs(value1 - value2)
-    differences.append(diff)
-    if feature2diffsum is not None and feature is not None:
-        feature2diffsum[feature] = diff
+    if value1 != value2:
+        diff = np.abs(value1 - value2)
+        differences.append(diff)
+        if feature2diffsum is not None and feature is not None:
+            feature2diffsum[feature] = diff
     return nan_count, central_nan_count, fed_nan_count
