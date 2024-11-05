@@ -30,6 +30,8 @@ class InitialState(AppState):
         self.configure_smpc(exponent=12) # set the default values, we use a bigger exponent though
         # send list of protein names (genes) to coordinator
         # we use the hashed values of the feature names and variables
+        assert isinstance(client.hash2feature, dict)
+        assert isinstance(client.hash2variable, dict)
         self.send_data_to_coordinator((cohort_name, client.position, # for mask creation - to track the cohort
                                        list(client.hash2feature.keys()),
                                        list(client.hash2variable.keys())),
@@ -50,6 +52,7 @@ class globalFeatureSelection(AppState):
         self.log("[global_feature_selection] Gathering features from all clients")
         lists_of_features_and_variables = self.gather_data(is_json=False)
         self.log("[global_feature_selection] Gathered data from all clients")
+        assert self._app is not None
         global_feature_names, global_variables, feature_presence_matrix, cohorts_order = \
               select_common_features_variables(lists_of_features_and_variables, min_clients=1,
                                                default_order=self._app.clients)

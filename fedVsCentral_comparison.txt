@@ -3,7 +3,7 @@ shape of CENTRAL: (845, 485)
 shape of FEDERATED: (845, 485)
 Total comparison
 Maximal difference: 9.947598300641403e-14
-Mean difference: 2.6029111777423072e-14
+Mean difference: 2.6002883318094706e-14
 Number of NaN values: 0 (Central: 0, Federated: 0)
 _________________________Comparing Microbiome (SMPC)_________________________
 shape of CENTRAL: (845, 485)
@@ -17,7 +17,7 @@ shape of CENTRAL: (3034, 118)
 shape of FEDERATED: (3034, 118)
 Total comparison
 Maximal difference: 2.1316282072803006e-13
-Mean difference: 3.5414615178089375e-14
+Mean difference: 3.542375727101445e-14
 Number of NaN values: 49834 (Central: 0, Federated: 0)
 _________________________Comparing Proteomics (SMPC)_________________________
 shape of CENTRAL: (3034, 118)
@@ -30,8 +30,8 @@ _________________________Comparing Microarray_________________________
 shape of CENTRAL: (51276, 332)
 shape of FEDERATED: (51276, 332)
 Total comparison
-Maximal difference: 8.348877145181177e-14
-Mean difference: 4.846824664281335e-15
+Maximal difference: 7.993605777301127e-14
+Mean difference: 4.8388098022667976e-15
 Number of NaN values: 6692856 (Central: 0, Federated: 0)
 _________________________Comparing Microarray (SMPC)_________________________
 shape of CENTRAL: (51276, 332)
@@ -84,3 +84,4 @@ Mean difference: 5.032505734275076e-15
 Number of NaN values: 0 (Central: 0, Federated: 0)
 Final results:
 None
+

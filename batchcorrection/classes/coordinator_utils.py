@@ -45,8 +45,8 @@ def create_feature_presence_matrix(
         cohorts_order = default_order
     else:
         # if all positions are integers, we use the order of the positions
-        cohorts_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[1])]
-        print(f"Using the following config based order: {cohorts_order}")
+        cohorts_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[1])] # type: ignore
+            # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
 
     # we populate the matrix and the dictionary
     for cohort_idx, cohort_name in enumerate(cohorts_order):
@@ -115,7 +115,7 @@ def select_common_features_variables(
         global_variables = None
 
     # Create the feature presence matrix - for gloal mask
-    feature_presence_matrix, cohorts_order = create_feature_presence_matrix(lists_of_features_and_variables, global_feature_names, default_order)
+    feature_presence_matrix, cohorts_order = create_feature_presence_matrix(lists_of_features_and_variables, global_feature_names, default_order) # type: ignore
 
     return global_feature_names, global_variables, feature_presence_matrix, cohorts_order
 
@@ -262,23 +262,12 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         submatrix = XtX_glob[i, :, :][np.ix_(~mask, ~mask)]
 
         if linalg.det(submatrix) == 0:
-            inverse_count += 1 #TODO: rmv
-            print(f"INFO: XtX_glob[{i}] is singular")
+            raise ValueError(
+                "ERROR: Cannot calculate the linear models as the design matrix containing batch information " +\
+                "and covariates is singular, please check for colinearity between covariates/covariates and batches")
 
         invXtX = linalg.inv(submatrix)
         beta[i, ~mask] = invXtX @ XtY_glob[i, ~mask]
-
-        # # TODO: rmv
-        # # if the determant is 0 the inverse cannot be formed so we need
-        # # to use the pseudo inverse instead
-        # if linalg.det(XtX_glob[i, :, :]) == 0:
-        #     inv_XtX = linalg.pinv(XtX_glob[i, :, :])
-        #     print(f"INFO: XtX_glob[{i}] is singular") #TODO: rmv
-        #     print(f"INFO: XtX_glob[{i}]:\n{XtX_glob[i, :, :]}") #TODO: rmv
-        #     inverse_count += 1 #TODO: rmv
-        # else:
-        #     inv_XtX = linalg.inv(XtX_glob[i, :, :])
-        # beta[i, :] = inv_XtX @ XtY_glob[i, :]
 
     print(f"INFO: Shape of beta: {beta.shape}")
     print(f"INFO: Number of pseudo inverses: {inverse_count}") #TODO: rmv

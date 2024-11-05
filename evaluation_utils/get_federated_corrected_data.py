@@ -59,6 +59,8 @@ result_file_names: List[str] = list()
 # Small helper to add a position argument to the config files of an experiment
 # based on the order in clients
 def add_position_to_config(exp: util.Experiment):
+    if not exp.config_file_changes:
+        raise ValueError("ERROR: cannot add the position argument if exp.config_file_changes is not defined")
     if len(exp.config_file_changes) != len(exp.clients):
         raise RuntimeError("Cannot add a position, not all clients have config_file_changes")
     for idx, _ in enumerate(exp.clients):
@@ -67,6 +69,10 @@ def add_position_to_config(exp: util.Experiment):
         exp.config_file_changes[idx] = deepcopy(tmp)
 
 def set_smpc_true(exp: util.Experiment):
+    if not exp.config_file_changes:
+        raise ValueError("ERROR: cannot add the position argument if exp.config_file_changes is not defined")
+    if len(exp.config_file_changes) != len(exp.clients):
+        raise RuntimeError("Cannot add a position, not all clients have config_file_changes")
     for idx, _ in enumerate(exp.clients):
         tmp = exp.config_file_changes[idx]
         tmp["flimmaBatchCorrection.smpc"] = True

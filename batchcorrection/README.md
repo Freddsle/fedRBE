@@ -1,22 +1,22 @@
 # Federated limma remove batch effect - Featurecloud
 ## Description
 Federated implementation of limma remove batch effect. Each client is assumed to 
-represent one batch. Normalization can be applied, multiple input formats are 
-supported, check the [config](#config) for more information.
+represent one batch, multiple batches per client are NOT supported. 
+Normalization can be applied, multiple input formats are supported, 
+check the [config](#config) for more information.
 
 ## Input
-- a datafile in csv format. Either samples x features or features x samples (expression file). See config for more info.
-- `config.yml` as specified in [Config](#config)
-- (Optional) the design matrix with given covariates. Covariates can also be given in the datafile, see [Config](#config). 
+- a datafile in csv format. Either samples x features or features x samples (expression file). See [config](#config) for more info.
+- `config.yml` as specified in [config](#config)
+- (Optional) the design matrix with given covariates. Covariates can also be given in the datafile, see [config](#config). 
 
 ## Output
-The following output is given in each client and only concerns each clients individual data. 
-The CSV format of output files uses the same `seperator` as given in the config files `seperator`.
-The following output is produced:
+The following output is given in each client:
+- `only_batch_corrected_data.csv`: This contains only the features that could be batch corrected. 
+- `report.txt`: This contains textual information about which features were excluded from the batch effect corection.
+Furthermore, it holds the `beta` values calculated for the batch effect correction as well as the internally used design matrix.
 
-- `only_batch_corrected_data.csv`: This contains only the features that could be batch corrected. Only features that are available in ALL clients and are numeric can be batch corrected. 
-- `all_data.csv`: This contains all batch corrected features as well as all other features that could not be batch corrected. CSV format uses the same `seperator` as given in `seperator`.
-- `report.txt`: This contains textual information about which features were excluded from the batch effect corection. Furthermore, it holds the `beta` values calculated for the batch effect correction as well as the internally used design matrix.
+The CSV format of output files uses the same `seperator` as given in the config files `seperator`.
 
 
 ## Config
@@ -24,51 +24,57 @@ Use the config file to customize. Just upload it together with your training dat
 ```
 flimmaBatchCorrection:
   data_filename: "lab_A_protein_groups_matrix.tsv" 
-    # the file containing the expression data. Must be a 2d matrix where
-    # samples are given as columns and features as rows
-  design_filename: lab_A_design.tsv # the file containing covariates
+    # the file containing the expression data/data to be batch corrected. 
+  design_filename: lab_A_design.tsv  # the file containing covariates
                                      # it is read in the following way:
                                      # pd.read_csv(design_file_path, sep=seperator, index_col=0)
+                                     # should therefore be in the format samples x covariates
+                                     # with the first column being the sample indices
   expression_file_flag: True # If true, the datafile is expected to have the samples as columns
                              # and the features as rows. If false, the datafile is expected to have
                              # the samples as rows and the features as columns.
                              # format: boolean
   index_col: "sample" # if expression_file_flag is true, the index_col is the column name of the
-                      # features in the data file. If expression_file_flag is false, the index_col
+                      # features in the data file. 
+                      # If expression_file_flag is false, the index_col
                       # is the column name of the samples in the data file.
                       # if no index_col is given, the index is taken from the 0th column for
-                      # expression files and generated autopmatically for standard samplesxfeatures datafiles
-                      # format: str or int, int is interpreted as the column number
-
+                      # expression files and generated automatically for samples x features datafiles
+                      # format: str or int, int is interpreted as the column index (starting from 0)
   covariates: ['Pyr'] # covariates in linear model. In case a design matrix is given
                       # they are expected in the design matrix, otherwise they are expected 
-                      # to be features in the given data.
+                      # to be features in the given data (in the data_filename file).
                       # format: list of strings
   separator: "\t" # the separator used in the annotation or data file
   design_separator: "\t" # the separator used in the design file
   normalizationMethod: "log2(x+1)" # the method used for normalization, supported:
                                    # "log2(x+1)"
+                                   # if None is given, doesn't the app doesn't normalize
   # The following options are for privacy, we recommend one of these tiers:
   # minimum privacy:
-  #   smpc = False
-  #   min_samples = 0
+  #   smpc = False, min_samples = 0
   # medium privacy, medium slowdown
-  #   smpc = True
-  #   min_samples = 0
+  #   smpc = True, min_samples = 0
   # maximum privacy, medium to high slowdown
-  #   smpc = True
-  #   min_samples = 5
-  # generally minimum or medium privacy is enough, only when covariates are
-  # potentially known privacy might become an issue
+  #   smpc = True, min_samples = 5
+  # We recommend at least medium privacy when using covariates and maximum
+  # privacy if the data contains a lot of missing values
   # With min samples > 0, the program might halt depending on the given data
-  smpc: True
+  smpc: True     # whether to use secure multi party computation to securely
+                 # aggregate information sent from clients to the coordinator
+                 # for more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
   min_samples: 0 # In case a covariat is known to an attacker, this ensures that
                  # in each calculation, the vector of all samples of one protein
                  # and of one covariat contain at least min_samples non Zero 
                  # non NaN samples, so that results are fuzzy enough for
                  # attackers to not quess samples. 
                  # format: int
-
-
-
-
+  position: 1    # if a number x is given, the order of the clients will be
+                 # be determined by sorting after this number x. 
+                 # Example:
+                 # Client1 -> position : 0, Client2 -> position: 5, Client3 -> position: 2
+                 # Order -> Client1, Client3, Client2
+                 # The last client in that order is always used as the reference
+                 # batch, so in this case Client2
+                 # if empty/None, the order is random, making the batch correction
+                 # run non deterministic

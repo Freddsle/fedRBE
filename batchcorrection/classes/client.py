@@ -34,7 +34,7 @@ class Client:
         self.position = None
 
     def hash_names(self,
-                   names: List[str]) -> dict:
+                   names: List[str]) -> Tuple[dict, dict]:
         """
         Hashes the names for privacy reasons.
         """
@@ -45,7 +45,6 @@ class Client:
             hash2name[name_hash] = name
             name2hash[name] = name_hash
         return name2hash, hash2name
-
 
     def hash_covariates(self,
                         covariates: List[str]) -> dict:
@@ -156,7 +155,9 @@ class Client:
         except:
             raise ValueError(f"Client {self.cohort_name}: Error loading dataset.")
         self.normalize(normalizationMethod)
-
+        assert isinstance(self.data, pd.DataFrame)
+        assert self.feature_names is not None
+        assert self.variables is not None
         # Hashing logic
         if use_hashing:
             # we hash the feature names and variables to hide covariates and features
@@ -251,6 +252,7 @@ class Client:
         print(f"finished loading data, shape of data: {self.data.shape}, num_features: {len(self.feature_names)}, num_samples: {self.n_samples}")
 
     def normalize(self, normalizationMethod):
+        assert isinstance(self.data, pd.DataFrame)
         if not normalizationMethod or normalizationMethod == "":
             # do nothing
             return
@@ -266,7 +268,6 @@ class Client:
         Checks if protein_names match global protein group names.
         Important to ensure that client's protein names are in the global protein names. But it's not important that all global protein names are in the client's protein names.
         """
-        #self.validate_feature_names(global_features_hashed)
         self.validate_variables(global_variables_hashed)
         print(f"Client {self.cohort_name}: Inputs validated.")
 
@@ -275,6 +276,8 @@ class Client:
         Checks if the covariates in the local data differ from the global
         intersection of variables. Only uses global variables
         """
+        assert isinstance(self.hash2variable, dict)
+        assert isinstance(self.data, pd.DataFrame)
         # handle global/local variables being None
         if global_variables_hashed is None and self.variables is not None:
             print("WARNING: No common global covariates were selected, but local covariates were selected. The local covariates will be ignored.")
@@ -293,7 +296,7 @@ class Client:
         if len(extra_global_variables) > 0:
             raise Exception("Globally covariates were selected that cannot be represented as this client does not have these covariates")
         if len(extra_local_variables) > 0:
-            print(f"WARNING: Client {self.cohort_name}: {len(extra_local_variables)} extra variables that are not available on all clients will NOT be corrected.")
+            print(f"WARNING: Client {self.cohort_name}: {len(extra_local_variables)} extra covariates that are not available on all clients will NOT be considered in the correction.")
             # we continue but ignore these features
         self.variables = global_variables
         # now we need to check if these variables are in the design matrix/in the data
@@ -326,27 +329,21 @@ class Client:
         # that are not available locally
         # then we correct the order of the features in the data matrix
         # first we ensure that the features are in the loaded data matrix
-        if self.data is None:
-            raise Exception("Data matrix is not loaded yet, cannot set data")
+        assert isinstance(self.data, pd.DataFrame)
 
         # Get features only we have and features only global has
         if not self.feature_names:
             raise Exception("Feature names are not loaded yet, cannot set data")
 
-        extra_local_features = set(self.feature_names).difference(set(global_hashed_features))
-        print(f"feature names: {len(self.feature_names)}")
-        print(f"global features: {len(global_hashed_features)}")
-        print(f"Extra local features: {len(extra_local_features)}")
+        self.extra_local_features = set(self.feature_names).difference(set(global_hashed_features))
+        print(f"Number of features available in this client: {len(self.feature_names)}")
+        print(f"Number of features given globally: {len(global_hashed_features)}")
+        print(f"Number of features only available on this client: {len(self.extra_local_features)}")
         self.extra_global_features = set(global_hashed_features).difference(set(self.feature_names))
-        # print(f"Extra global features: {list(self.extra_global_features)[:10]}")
-        print(f"Extra global features: {len(list(self.extra_global_features))}")
 
+        print(f"Number of features available in other clients but not this client: {len(list(self.extra_global_features))}")
 
-        # we ignore the only us features for now
-        # if len(extra_local_features) > 0:
-        #     print(f"Client {self.cohort_name}: {len(extra_local_features)} features are not available on all clients and will NOT be corrected")
-
-        # for all extra global features we add a columns of zeros
+        # for all extra global features we add NaN values
         # reminder: data is features x samples
 
         print(f"Adding {len(self.extra_global_features)} extra global features")
@@ -355,46 +352,29 @@ class Client:
         self.data.loc[list(self.extra_global_features)] = np.nan
 
         # now we apply the order of the global features to the data matrix
-        print(f"Got {len(global_hashed_features)} global features and {len(self.data.index)} features in the data matrix")
         if set(global_hashed_features) != set(self.data.index):
             raise Exception("INTERNAL ERROR: something went wrong adding all features from all clients, data matrix index != global features list")
-        print(f"Before reindexing got this data: {self.data.shape}")
         self.data = self.data.reindex(global_hashed_features)
-        print(f"After reindexing got this data: {self.data.shape}")
         self.feature_names = global_hashed_features
 
-    def validate_feature_names(self, global_features_hashed):
+    def create_design(self, cohorts: List[str]):
         """
-        DEPRECATED
-        Compares the features gotten from the global aggregation vs the one
-        the client has. It only uses the global features.
+        Creates the design matrix. Loads the covariates from the data or the
+        design file depending on the config to the design matrix,
+        adds an intercept column and adds the batch columns.
+        The created design matrix has samples as rows and these columns,
+        considering k batches exist:
+        intercept, covariates, batch_1, ..., batch_k-1
+        Intercept is always 1, covariates are the covariate values, batch_i
+        has value 0 if the sample belongs to the batch and value 0 otherwise.
+        The reference batch has the value -1 in ALL batch columns.
+        Args:
+            cohorts: The cohort (batch) names. The order given in cohorts
+                is considered as the batch order
+        Returns:
+            None, sets self.design
         """
-        global_features = [self.hash2feature.get(hashed, hashed) for hashed in global_features_hashed]
-        assert self.feature_names is not None
-        extra_local_features = set(self.feature_names).difference(set(global_features))
-        self.num_excluded_federation = 0
-        extra_global_features = set(global_features).difference(set(self.feature_names))
-        if len(extra_global_features) > 0:
-            print(f"Found these additional global features: {extra_global_features}")
-            print("my features are: ", self.feature_names)
-            print("global features are: ", global_features)
-            print(f"len of my features: {len(self.feature_names)}, len of global features: {len(global_features)}")
-            raise Exception("ERROR: Some features found globally were not found locally, this is likely an error with the app")
-        if len(extra_local_features) > 0:
-            self.num_excluded_federation = len(extra_local_features)
-            print(f"Client {self.cohort_name}: These extra features that are not available on all clients will NOT be corrected {extra_local_features}")
-
-        # reorder genes and only look at the global_features
-        self.feature_names = sorted(global_features)
-        if self.data is None:
-            raise Exception("Data matrix is not loaded yet, cannot set data")
-        self.data = self.data.loc[self.feature_names, :]
-        # set feature_names and variables to sets again in case this was changed here
-        self.feature_names = list(self.feature_names)
-        self.variables = list(self.variables) if self.variables else None
-
-    def create_design(self, cohorts):
-        """add covariates to model cohort effects."""
+        assert isinstance(self.rawdata, pd.DataFrame)
         # first add intercept colum
         if self.design is None:
             self.design = pd.DataFrame({'intercept': np.ones(len(self.sample_names))},
@@ -420,7 +400,6 @@ class Client:
         if self.variables:
             # first we ensure that the variables are in the loaded design matrix
             if self.variables_in_data:
-                assert self.data is not None
                 self.design.join(self.rawdata.T[self.variables])
             else:
                 if not all(column_name in self.design.columns for column_name in self.variables):
@@ -437,13 +416,8 @@ class Client:
         # matrix so that XtX=A cannot be solved for X given A
         if self.design.shape[0] <= self.design.shape[1]:
             return f"Privacy Error: There are not enough samples to provide sufficient " +\
-                f"privacy, please more samples than #cohorts + #covariantes " +\
+                f"privacy, please provide more samples than 1 + #cohorts + #covariantes " +\
                 f"({self.design.shape[1]} in this case)"
-
-        pd.set_option('display.max_columns', None)
-        print(f"design was finally created: {self.design}")
-        print(f"shape of design: {self.design.shape}")
-        pd.reset_option('display.max_columns')
         return None
 
     ####### limma: linear regression #########
@@ -456,8 +430,8 @@ class Client:
             - XtY is the XtY vector of shape k
             - Error is a string with an error message or None if no error occured
         """
-        assert self.design is not None
-        assert self.data is not None
+        assert isinstance(self.design, pd.DataFrame)
+        assert isinstance(self.data, pd.DataFrame)
 
         X = self.design.values
         Y = self.data.values  # Y -> features x samples
@@ -498,78 +472,54 @@ class Client:
                     y_boolean = np.where(y != 0, 1, 0)
                     XtY_boolean = x_boolean.T @ y_boolean
                     if not np.all((XtY_boolean >= self.min_samples) | (XtY_boolean == 0)):
-                        return None, None, "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
+                        return np.empty(0), np.empty(0), "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
 
-            # #TODO: rmv:
-            # if 0 == len(non_nan_idxs):
-            #     print(f"In XtX calc, feature {self.data.index[feature_idx]} has NO non-NaN values")
-            #     print(f"This results in the following XtX matrix: \n{self.XtX[feature_idx, :, :]}")
-            #     print(f"This results in the following XtY vector: \n{self.XtY[feature_idx, :]}")
-            #     print(f"shape of x: {x.shape}, shape of y: {y.shape}")
-            #     print(f"XtX shape: {self.XtX[feature_idx, :, :].shape}, XtY shape: {self.XtY[feature_idx, :].shape}")
-            #     print(f"k is {k}, n is {n}")
-            #     if not np.all(self.XtX[feature_idx, :, :] == 0):
-            #         raise ValueError("XtX is not all zeros, although no data was present")
-            #     if not np.all(self.XtY[feature_idx, :] == 0):
-            #         raise ValueError("XtY is not all zeros, although no data was present")
-            # if np.all(y == 0):
-            #     print(f"Feature {feature_idx} has only zeros in Y")
-            #     print(f"This results in the following XtX matrix: \n{self.XtX[feature_idx, :, :]}")
-            #     print(f"This results in the following XtY vector: \n{self.XtY[feature_idx, :]}")
-            #     print(f"shape of x: {x.shape}, shape of y: {y.shape}")
-            #     if not np.all(self.XtX[feature_idx, :, :] == 0):
-            #         raise ValueError("XtX is not all zeros, although no data was present")
-            #     if not np.all(self.XtY[feature_idx, :] == 0):
-            #         raise ValueError("XtY is not all zeros, although no data was present")
-            # if np.all(np.isnan(self.XtX[feature_idx, :, :])):
-            #     print(f"Feature {feature_idx} has only NaN in XtX")
-            #     if not np.all(self.XtX[feature_idx, :, :] == 0):
-            #         raise ValueError("XtX is not all zeros, although no data was present")
-            #     if not np.all(self.XtY[feature_idx, :] == 0):
-            #         raise ValueError("XtY is not all zeros, although no data was present")
-            # if np.all(np.isnan(self.XtY[feature_idx, :])):
-            #     print(f"Feature {feature_idx} has only NaN in XtY")
-            #     if not np.all(self.XtX[feature_idx, :, :] == 0):
-            #         raise ValueError("XtX is not all zeros, although no data was present")
-            #     if not np.all(self.XtY[feature_idx, :] == 0):
-            #         raise ValueError("XtY is not all zeros, although no data was present")
-            if len(non_nan_idxs) == 0:
-                if not np.all(self.XtX[feature_idx, :, :] == 0):
-                    raise ValueError("XtX is not all zeros, although no data was present")
-                if not np.all(self.XtY[feature_idx, :] == 0):
-                    raise ValueError("XtY is not all zeros, although no data was present")
-        print(f"final vectors to be sent: XtX shape: {self.XtX.shape}, XtY shape: {self.XtY.shape}")
         return self.XtX, self.XtY, ""
 
-    ####### limma: removeBatchEffects #########
-
-    def remove_batch_effects(self, beta):
-        """remove batch effects from intensities using server beta coefficients"""
-        #  pg_matrix - np.dot(beta, batch.T)
+    def remove_batch_effects(self, betas: np.ndarray) -> None:
+        """
+        The algorithm is from limma::removeBatchEffect()
+        Uses the linear model represented by the betas to predict the batch
+        effect on the features given the covariates/batch information of the
+        samples. That prediction is than substracted from the real data,
+        effectively removing the batch effect
+        Args:
+            betas: an np.array of shape (#features x (1+#covariates+#batches-1))
+        Returns:
+            None, sets self.data_corrected and adds to self.report
+        """
         assert self.data is not None
         assert self.design is not None
-        print("start remove_batch_effects")
-        print(f"Shape of data: {self.data.shape}")
-        print("Shape of beta: ", beta.shape)
+        print("Start remove_batch_effects")
         self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
-        mask = np.ones(beta.shape[1], dtype=bool)
-            # mask has true for betas concerning clients and false for betas concerning variables and intercept
+        # Create a mask to only consider the betas concerning batches
+        mask = np.ones(betas.shape[1], dtype=bool)
+            # Used to reduce beta to just the beta coefficients representing batches
+            # mask is set to be true for betas concerning clients and
+            # false for betas concerning variables and intercept
+            # this is done so that we predict only the batch effect and then
+            # remove that batch effect, the covariates effect and the intercept
+            # is wanted and should therefore not be removed
         if self.variables:
             mask[[self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]] = False
         else:
             mask[[self.design.columns.get_loc(col) for col in ['intercept']]] = False
-        beta_reduced = beta[:, mask]
+        betas_reduced = betas[:, mask]
             # only keep the betas concerning the clients
-            # shape of beta is #features x [intercept + variables + cohorts-1]
-        if self.variables:
-            dot_product = beta_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
-            # only keep betas concerning this client
-            # the client that set -1 to all clients uses all betas
-        else:
-            dot_product = beta_reduced @ self.design.drop(columns=['intercept']).T
+            # shape of betas is #features x [intercept + #variables + #cohorts-1]
+            # shape of betas_reduces is #features x #cohorts-1
 
-        print(f"Beta_reduced contains {np.sum(np.isnan(beta_reduced))} Nan values")
-        self.data_corrected = np.where(np.isnan(self.data_corrected), self.data_corrected, self.data_corrected - dot_product)
+        # Calculate the prediction of the data only based on the betas concerning
+        # batches (calculate the batch effect)
+        if self.variables:
+            batch_effect = betas_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
+        else:
+            batch_effect = betas_reduced @ self.design.drop(columns=['intercept']).T
+
+        # Substract the calculated batch effect (for NaN values we don't need to substract, we keep them as NaN)
+        assert isinstance(self.data, pd.DataFrame)
+        self.data_corrected = np.where(np.isnan(self.data_corrected), self.data_corrected, self.data_corrected - batch_effect)
+        # Add the column_names/index information from the original DataFrame
         self.data_corrected = pd.DataFrame(self.data_corrected, index=self.data.index, columns=self.data.columns)
         print(f"Shape of corrected data after correction: {self.data_corrected.shape}")
         # now we drop the extra global features that were added and
@@ -581,25 +531,12 @@ class Client:
         print(f"Amount of index found in hash2feature: {len([hashed for hashed in self.data_corrected.index if hashed in self.hash2feature])}/{len(self.data_corrected.index)}")
         self.data_corrected.rename(index=self.hash2feature, inplace=True)
         print(f"After renaming got this data_corrected: {self.data_corrected}")
-        # if self.expr_file_flag:
-        #     # add the removed columns (non numerical ones)
-        #     additional_columns = self.rawdata.T.columns.difference(self.data_corrected.T.columns)
-        #     print(f"Additional columns expr file: {additional_columns}")
-        #     self.data_corrected_and_raw = self.data_corrected.T.join(self.rawdata.T[additional_columns]).T
-        # else:
-        #     # add the removed columns (non numerical ones)
-        #     self.data_corrected = self.data_corrected.T
-        #     additional_columns = self.rawdata.columns.difference(self.data_corrected.columns)
-        #     self.data_corrected_and_raw = self.data_corrected.join(self.rawdata[additional_columns])
-        # generate a report of additional features that were not batch corrected
-        np.set_printoptions(threshold=np.inf)
+        np.set_printoptions(threshold=np.iinfo(np.int64).max)
+            # we should use sys.maxsize, but that might behave a bit weirdly in docker
+            # so we just use the maximum int size which should hopefully be enough
         self.report = ""
         self.report += f"Client {self.cohort_name}:\n"
-        # if len(additional_columns) > 0 or self.num_excluded_federation > 0 or self.num_excluded_numeric > 0:
-        #     self.report += f"{len(additional_columns)} features were not batch corrected in total. Of these:\n"
-        #     self.report += f"{self.num_excluded_numeric} features were excluded for not being numeric data.\n"
-        #     self.report += f"The following features were not batch corrected: {additional_columns}\n"
-        self.report += f"The following betas were used for batch correction:\n{beta}\n"
+        self.report += f"The following betas were used for batch correction:\n{betas}\n"
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
         np.set_printoptions(threshold=1000)
         print(f"remove batch final corrected data shape: {self.data_corrected.shape}")
@@ -608,9 +545,10 @@ class Client:
     def _check_consistency_designfile(self) -> None:
         """
         Used to checks whether the design files row names (samples) are consistent
-        with the given data
+        with the given data (self.data)
         Raises an ValueError if they are not the same
         """
+        assert isinstance(self.data, pd.DataFrame)
         design_samples = self.sample_names
         samples = self.data.columns.values
         if not np.array_equal(sorted(design_samples), sorted(samples)):
