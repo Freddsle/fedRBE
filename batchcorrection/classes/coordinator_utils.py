@@ -16,6 +16,7 @@ def create_feature_presence_matrix(
     clients. The matrix has the shape (num_features, num_clients) and contains
     1 if the feature is present in the client and 0 otherwise. Also returns
     a dictionary indicating which clients contain each feature.
+    Finally, fixes the order of the clients.
 
     Args:
         lists_of_features_and_variables: A list of tuples containing the name of the client,
@@ -32,24 +33,53 @@ def create_feature_presence_matrix(
     """
     feature_index = {feature: idx for idx, feature in enumerate(global_feature_names)}
     num_features = len(global_feature_names)
-    num_cohorts = len(lists_of_features_and_variables)
-
-    # Initialize the matrix
-    matrix = np.zeros((num_features, num_cohorts), dtype=int)
+    all_cohorts = list()
+        # each element is a list of strings representing the batches of one client
+    for cohort_list, _, _, _ in lists_of_features_and_variables:
+        all_cohorts.append(cohort_list)
+    # throw an error if we have duplicates
+    if len(all_cohorts) != len(set(all_cohorts)):
+        raise ValueError("Duplicate cohort names found in the list of features and variables")
 
     # we need to set the order of the cohorts either as sent by the clients
     # or as found in self._app.clients
     if any([not isinstance(position, int) for _, position, _, _ in lists_of_features_and_variables]):
         # if any position is None, we use the default order
-        print(f"Using the default cohort order: {default_order}")
-        cohorts_order = default_order
+        print(f"Using the default client order: {default_order}")
+        # default_order is just the client orders, however we might have
+        # multiple batches per client
+        # use the given default_order to sort all_cohorts
+        # It's a small amount of batches, so we use a very simple O(n^2) algorithm
+        client_order = default_order
     else:
         # if all positions are integers, we use the order of the positions
-        cohorts_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[1])] # type: ignore
+        client_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[1])] # type: ignore
             # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
 
+    # we need to sort the cohorts in the order of the client_order
+    cohorts_order = []
+    for cohort_name in client_order:
+        for cohort_list in all_cohorts:
+            if cohort_name in cohort_list[0]:
+                # cohort_name is a client_name, cohorts_list[0] is a batch string
+                # like "<cohort_name>|<batch_name>"
+                # now we extend to the final list
+                cohorts_order.extend(sorted(cohort_list))
+        else:
+            raise ValueError(f"Client {cohort_name} not found in the list of features and variables")
+    print(f"INFO: Cohorts order: {cohorts_order}")
+
+    # Initialize the matrix
+    num_cohorts = len(cohorts_order)
+    matrix = np.zeros((num_features, num_cohorts), dtype=int)
+
     # we populate the matrix and the dictionary
-    for cohort_idx, cohort_name in enumerate(cohorts_order):
+    for cohort_idx, batch_name in enumerate(cohorts_order):
+        # get the corresponding client name
+        batch_name_list = batch_name.split("|")
+        if len(batch_name_list) > 2:
+            raise ValueError(f"Batch name incorrectly formatted: {batch_name}")
+        cohort_name = batch_name_list[0]
         # get the corresponding features
         features = [features for c_name, _, features, _ in lists_of_features_and_variables if c_name == cohort_name][0]
         for feature in features:

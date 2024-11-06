@@ -6,7 +6,7 @@ from FeatureCloud.app.engine.app import AppState, app_state, Role, LogLevel
 
 from classes.client import Client
 from classes.coordinator_utils import select_common_features_variables, \
-    compute_beta, reorder_matrix, create_beta_mask
+    compute_beta, create_beta_mask
 
 # FeatureCloud requires that apps define the at least the 'initial' state.
 # This state is executed after the app instance is started.
@@ -32,7 +32,7 @@ class InitialState(AppState):
         # we use the hashed values of the feature names and variables
         assert isinstance(client.hash2feature, dict)
         assert isinstance(client.hash2variable, dict)
-        self.send_data_to_coordinator((cohort_name, client.position, # for mask creation - to track the cohort
+        self.send_data_to_coordinator((client.batch_labels, client.position, # for mask creation - to track the cohort
                                        list(client.hash2feature.keys()),
                                        list(client.hash2variable.keys())),
                                     send_to_self=True,

@@ -10,7 +10,7 @@ class Client:
         """
         Please use config_based_init to intialize the class
         """
-        self.cohort_name = None
+        self.client_name = None
         self.smpc = False
         self.covariates = None
         self.min_samples = 0
@@ -141,8 +141,16 @@ class Client:
             if position and not isinstance(position, int):
                 raise ValueError("Position must be an integer")
 
+        self.batch_col = None
+        if "batch_col" in config:
+            self.batch_col = config["batch_col"]
+            if self.batch_col and not isinstance(self.batch_col, str):
+                raise ValueError("Batch column must be a string")
+            if self.batch_col and not design_file_path:
+                raise ValueError("Batch column was given but no design file was given")
+
         # set variables
-        self.cohort_name = clientname
+        self.client_name = clientname
         self.smpc = smpc
         self.variables = covariates
         self.min_samples = min_samples
@@ -153,7 +161,7 @@ class Client:
         try:
             self.open_dataset(datafile_path, expr_file_flag, design_file_path, separator, design_separator, index_col)
         except:
-            raise ValueError(f"Client {self.cohort_name}: Error loading dataset.")
+            raise ValueError(f"Client {self.client_name}: Error loading dataset.")
         self.normalize(normalizationMethod)
         assert isinstance(self.data, pd.DataFrame)
         assert self.feature_names is not None
@@ -163,9 +171,9 @@ class Client:
             # we hash the feature names and variables to hide covariates and features
             # that this client has but other clients do not have
             if not self.feature_names:
-                raise ValueError(f"Client {self.cohort_name}: Error loading feature names.")
+                raise ValueError(f"Client {self.client_name}: Error loading feature names.")
             if not self.variables:
-                raise ValueError(f"Client {self.cohort_name}: Error loading variables.")
+                raise ValueError(f"Client {self.client_name}: Error loading variables.")
 
             self.feature2hash, self.hash2feature = self.hash_names(self.feature_names)
             self.data.rename(index=self.feature2hash, inplace=True)
@@ -191,11 +199,33 @@ class Client:
         All other data is removed from batch correction and added later.
         Furthermore, variables are extracted and added to the design matrix.
         A report of which features were batch corrected is given in the end.
+        Args:
+            datafile_path: Path to the file containing the data to be corrected
+            expr_file_flag: Flag indicating whether the given file is an expression file
+                An expression file has features as rows and samples as columns
+                If False, the file is considered a normal csv file with samples as rows
+                and features as columns
+            design_file_path: Path to the design matrix file
+            separator: Separator used in the data file
+            design_separator: Separator used in the design file
+            index_col: Name of the column that should be used as the index of the data_file
+                If None, the first column is used as the index
         """
         print(f"Opening dataset {datafile_path}")
         self.expr_file_flag = expr_file_flag
+        # Manage the design file
+        self.batch_labels = [self.client_name]
         if design_file_path:
-            self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[self.variables]
+            relevant_cols = []
+            if self.batch_col:
+                relevant_cols.append(self.batch_col)
+            if self.variables:
+                relevant_cols.extend(self.variables)
+            self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[relevant_cols]
+            if self.batch_col:
+                # extract which batches exist
+                self.batch_labels = [f"{self.client_name}|{batchname}" for batchname in self.design[batch_col].unique()]
+
         # first we open the data file
         # expression file flags should have the feature names as the first
         # column per default
@@ -228,7 +258,7 @@ class Client:
             # data cleanup
             # we ensure that we only have numerical values
             if self.data is None:
-                raise ValueError(f"Client {self.cohort_name}: Error loading data.")
+                raise ValueError(f"Client {self.client_name}: Error loading data.")
             self.data = self.data.select_dtypes(include=np.number)
             self.num_excluded_numeric = len(self.rawdata.columns) - len(self.data.columns)
             # finally we transpose as feature x sample data is expected
@@ -269,7 +299,7 @@ class Client:
         Important to ensure that client's protein names are in the global protein names. But it's not important that all global protein names are in the client's protein names.
         """
         self.validate_variables(global_variables_hashed)
-        print(f"Client {self.cohort_name}: Inputs validated.")
+        print(f"Client {self.client_name}: Inputs validated.")
 
     def validate_variables(self, global_variables_hashed):
         """
@@ -296,7 +326,7 @@ class Client:
         if len(extra_global_variables) > 0:
             raise Exception("Globally covariates were selected that cannot be represented as this client does not have these covariates")
         if len(extra_local_variables) > 0:
-            print(f"WARNING: Client {self.cohort_name}: {len(extra_local_variables)} extra covariates that are not available on all clients will NOT be considered in the correction.")
+            print(f"WARNING: Client {self.client_name}: {len(extra_local_variables)} extra covariates that are not available on all clients will NOT be considered in the correction.")
             # we continue but ignore these features
         self.variables = global_variables
         # now we need to check if these variables are in the design matrix/in the data
@@ -370,7 +400,7 @@ class Client:
         The reference batch has the value -1 in ALL batch columns.
         Args:
             cohorts: The cohort (batch) names. The order given in cohorts
-                is considered as the batch order
+                is considered as the batch order. Format is ["client|batch"]
         Returns:
             None, sets self.design
         """
@@ -386,15 +416,43 @@ class Client:
         # Design contains #clients-1 entries, if this client is the one that
         # is excluded it sets -1 to all cohorts, otherwise we set 0 for other
         # cohorts and 1 for this one
-        if self.cohort_name not in cohorts:
+        cohorts_splitlist = [cohort.split("|") for cohort in cohorts]
+            # from format ["client|batch"] to [["client", "batch"]]
+        if self.client_name not in [split_batch[0] for split_batch in cohorts_splitlist]:
+            # we are the reference batch, we just set all batches to -1
             for cohort in cohorts:
                 self.design[cohort] = -1
         else:
-            for cohort in cohorts:
-                if self.cohort_name == cohort:
-                    self.design[cohort] = 1
-                else:
+            # we are not the reference batch, each sample should have 1 for
+            # their batch and 0 for all other batches
+            if len([cohort for cohort in cohorts_splitlist if self.client_name == cohort[0]]) == 1:
+                # We only have one batch, we can set all to 0 except for the
+                # one batch
+                for idx, cohort in enumerate(cohorts):
+                    if self.client_name == cohorts_splitlist[idx][0]:
+                        self.design[cohort] = 1
+                    else:
+                        self.design[cohort] = 0
+            else:
+                # we have multiple batches for this client, we need to decide for
+                # each sample individually
+                # first we set all to 0, then we set for each sample the correct
+                # batch to 1
+                for cohort in cohorts:
                     self.design[cohort] = 0
+                # now we need to extract the batch information from the design file
+                if not self.batch_col:
+                    raise ValueError("Batch column was not given but multiple batches for this client were found")
+                if self.batch_col not in self.design.columns:
+                    raise ValueError(f"Batch column {self.batch_col} was not found in the design matrix")
+                for sample_idx in self.design.index:
+                    batch = self.design.loc[sample_idx, self.batch_col]
+                    self.design.loc[sample_idx, f"{self.client_name}|{batch}"] = 1
+                    # all other batches are already set to 0 (all are 0 initialized before)
+
+        if self.batch_col:
+            # we remove the batch column from the design matrix, not needed anymore
+            self.design = self.design.drop(columns=[self.batch_col])
 
         # if covariates is not None - rearrange columns - intersept column,  covariates columns, all cohorts columns
         if self.variables:
@@ -535,7 +593,7 @@ class Client:
             # we should use sys.maxsize, but that might behave a bit weirdly in docker
             # so we just use the maximum int size which should hopefully be enough
         self.report = ""
-        self.report += f"Client {self.cohort_name}:\n"
+        self.report += f"Client {self.client_name}:\n"
         self.report += f"The following betas were used for batch correction:\n{betas}\n"
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
         np.set_printoptions(threshold=1000)
