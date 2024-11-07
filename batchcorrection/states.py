@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 
+from typing import List, Dict
 from FeatureCloud.app.engine.app import AppState, app_state, Role, LogLevel
 
 from classes.client import Client
@@ -32,9 +33,11 @@ class InitialState(AppState):
         # we use the hashed values of the feature names and variables
         assert isinstance(client.hash2feature, dict)
         assert isinstance(client.hash2variable, dict)
-        self.send_data_to_coordinator((client.batch_labels, client.position, # for mask creation - to track the cohort
-                                       list(client.hash2feature.keys()),
-                                       list(client.hash2variable.keys())),
+        batch_feature_presence_info: Dict[str, List[str]] = client.get_batch_feature_presence_info()
+        self.send_data_to_coordinator((cohort_name,
+                                        list(client.hash2variable.keys()),
+                                        client.position,
+                                        batch_feature_presence_info),
                                     send_to_self=True,
                                     use_smpc=False)
         if self.is_coordinator:
@@ -50,11 +53,11 @@ class globalFeatureSelection(AppState):
     def run(self):
         # wait for each client to send the list of genes they have
         self.log("[global_feature_selection] Gathering features from all clients")
-        lists_of_features_and_variables = self.gather_data(is_json=False)
+        feature_variable_batch_info = self.gather_data(is_json=False)
         self.log("[global_feature_selection] Gathered data from all clients")
         assert self._app is not None
         global_feature_names, global_variables, feature_presence_matrix, cohorts_order = \
-              select_common_features_variables(lists_of_features_and_variables, min_clients=1,
+              select_common_features_variables(feature_variable_batch_info, min_clients=1,
                                                default_order=self._app.clients)
         self.broadcast_data((global_feature_names, global_variables, cohorts_order),
                             send_to_self=True, memo="commonGenes")
@@ -80,7 +83,7 @@ class ValidationState(AppState):
         client.set_data(global_feauture_names_hashed)
         self.log("[validate] Data has been set to contain all global features")
         # get all client names to generate design matrix
-        err = client.create_design(cohorts_order[:-1])
+        err = client.create_design(cohorts_order)
         if err:
             self.log(err, LogLevel.FATAL)
         self.log("[validate] design has been created")

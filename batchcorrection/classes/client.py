@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 import pandas as pd
 import numpy as np
 import hashlib
@@ -10,7 +10,7 @@ class Client:
         """
         Please use config_based_init to intialize the class
         """
-        self.client_name = None
+        self.client_name = ""
         self.smpc = False
         self.covariates = None
         self.min_samples = 0
@@ -32,6 +32,7 @@ class Client:
         self.feature2hash = None
         self.hash2variable = None
         self.position = None
+        self.batch_labels = []
 
     def hash_names(self,
                    names: List[str]) -> Tuple[dict, dict]:
@@ -221,18 +222,18 @@ class Client:
                 relevant_cols.append(self.batch_col)
             if self.variables:
                 relevant_cols.extend(self.variables)
-            self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[relevant_cols]
+            self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=index_col)[relevant_cols]
             if self.batch_col:
                 # extract which batches exist
-                self.batch_labels = [f"{self.client_name}|{batchname}" for batchname in self.design[batch_col].unique()]
+                self.batch_labels = [f"{self.client_name}|{batchname}" for batchname in self.design[self.batch_col].unique()]
 
         # first we open the data file
         # expression file flags should have the feature names as the first
         # column per default
         if expr_file_flag:
             if index_col is None:
-                # In expression files, the defualt is the fiurst column containing the feature names
-                # default would however be to create an index col
+                # In expression files, the defualt is the first column containing the feature names
+                # default pandas behaviour would however be to create an index col
                 index_col = 0
             self.rawdata = pd.read_csv(datafile_path, sep=separator, index_col=index_col)
             print(f"Shape of rawdata(expr_file): {self.rawdata.shape}")
@@ -278,6 +279,10 @@ class Client:
 
         self.feature_names = list(self.data.index.values)
         self.sample_names = list(self.data.columns.values)
+        # we need to ensure that the sample_names are the same as the design matrix index
+        if not self.design is None:
+            if not self.sample_names == list(self.design.index):
+                raise ValueError(f"Client {self.client_name}: Sample names in data and design matrix do not match or are not in the same order")
         self.n_samples = len(self.sample_names)
         print(f"finished loading data, shape of data: {self.data.shape}, num_features: {len(self.feature_names)}, num_samples: {self.n_samples}")
 
@@ -292,6 +297,44 @@ class Client:
             print(f"Normalization method {normalizationMethod} not recognized, no normalization applied")
             return
 
+    def get_batch_feature_presence_info(self) -> Dict[str, List[str]]:
+        """
+        Returns the information about the batches and which features(given as
+        hashed feature names) are available on this client for each batch.
+        Returns:
+            batch_feature_presence_info: Dict with the batch names as keys and
+                a list of hashed feature names as values
+        """
+        assert isinstance(self.data, pd.DataFrame)
+        assert isinstance(self.feature_names, list)
+        assert isinstance(self.hash2feature, dict)
+        assert isinstance(self.design, pd.DataFrame)
+
+        # initialize the dict so we can always append
+        batch_feature_presence_info = {}
+        for batch in self.batch_labels:
+            batch_feature_presence_info[batch] = list()
+
+        # if we only have one batch, we can just return all features
+        if len(self.batch_labels) == 1:
+            batch_feature_presence_info[self.batch_labels[0]] = list(self.hash2feature.keys())
+            return batch_feature_presence_info
+
+        # check for each batch each feature if it is available in the data
+        for batch_label in self.batch_labels:
+            # we get the batch specific data
+            # design is loaded already, so we can get all relevant indices
+            pure_batch_name = batch_label.split("|")[1]
+                # go from "client|batch" to "batch"
+            batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index
+            batch_data = self.data[:, batch_indices]
+                # samples are the index in self.design but columns in self.data
+            for feature in self.feature_names:
+                if feature in batch_data.index and batch_data.loc[feature, :].notnull().any():
+                    # check whether the feature is available in the batch
+                    # and not just NaN values
+                    batch_feature_presence_info[batch_label].append(feature)
+        return batch_feature_presence_info
 
     def validate_inputs(self, global_variables_hashed):
         """
@@ -392,8 +435,8 @@ class Client:
         Creates the design matrix. Loads the covariates from the data or the
         design file depending on the config to the design matrix,
         adds an intercept column and adds the batch columns.
-        The created design matrix has samples as rows and these columns,
-        considering k batches exist:
+        The created design matrix has samples as rows and the following columns,
+        considering k batches are given in cohorts:
         intercept, covariates, batch_1, ..., batch_k-1
         Intercept is always 1, covariates are the covariate values, batch_i
         has value 0 if the sample belongs to the batch and value 0 otherwise.
@@ -404,6 +447,8 @@ class Client:
         Returns:
             None, sets self.design
         """
+        #TODO: fix: start using the last batch given in cohorts as the reference batch
+        # we cannot simply use a clientname anymore as batchname!!!
         assert isinstance(self.rawdata, pd.DataFrame)
         # first add intercept colum
         if self.design is None:
@@ -412,49 +457,46 @@ class Client:
         else:
             self.design['intercept'] = np.ones(len(self.sample_names))
 
-
-        # Design contains #clients-1 entries, if this client is the one that
-        # is excluded it sets -1 to all cohorts, otherwise we set 0 for other
-        # cohorts and 1 for this one
+        # check if we have multiple batches for this client
         cohorts_splitlist = [cohort.split("|") for cohort in cohorts]
-            # from format ["client|batch"] to [["client", "batch"]]
-        if self.client_name not in [split_batch[0] for split_batch in cohorts_splitlist]:
-            # we are the reference batch, we just set all batches to -1
-            for cohort in cohorts:
-                self.design[cohort] = -1
-        else:
-            # we are not the reference batch, each sample should have 1 for
-            # their batch and 0 for all other batches
-            if len([cohort for cohort in cohorts_splitlist if self.client_name == cohort[0]]) == 1:
-                # We only have one batch, we can set all to 0 except for the
-                # one batch
-                for idx, cohort in enumerate(cohorts):
-                    if self.client_name == cohorts_splitlist[idx][0]:
+        if len([split_batch[0] for split_batch in cohorts_splitlist if self.client_name == split_batch[0]]) == 1:
+            # we only have one batch for this client, check if it is the reference batch
+            if self.client_name == cohorts[-1].split("|")[0]:
+                # we are the reference batch, we just set all batches to -1
+                for cohort in cohorts:
+                    self.design[cohort] = -1
+            else:
+                # we are not the reference batch, we set our batch to 1 and all others to 0
+                for cohort in cohorts:
+                    if self.client_name == cohort.split("|")[0]:
                         self.design[cohort] = 1
                     else:
                         self.design[cohort] = 0
-            else:
-                # we have multiple batches for this client, we need to decide for
-                # each sample individually
-                # first we set all to 0, then we set for each sample the correct
-                # batch to 1
-                for cohort in cohorts:
-                    self.design[cohort] = 0
-                # now we need to extract the batch information from the design file
-                if not self.batch_col:
-                    raise ValueError("Batch column was not given but multiple batches for this client were found")
-                if self.batch_col not in self.design.columns:
-                    raise ValueError(f"Batch column {self.batch_col} was not found in the design matrix")
-                for sample_idx in self.design.index:
-                    batch = self.design.loc[sample_idx, self.batch_col]
-                    self.design.loc[sample_idx, f"{self.client_name}|{batch}"] = 1
-                    # all other batches are already set to 0 (all are 0 initialized before)
+        else:
+            # we have multiple batches for this client, we need to decide per
+            # sample
+            if not self.batch_col:
+                raise ValueError("Batch column was not given but multiple batches for this client were found")
+            for cohort_idx, cohorts_split in enumerate(cohorts_splitlist[:-1]):
+                # we iterate all non reference batches
+                if self.client_name != cohorts_split[0]:
+                    # another client, set to 0
+                    self.design[cohorts[cohort_idx]] = 0
+                else:
+                    # 0 initialize this whole batch column
+                    self.design[cohorts[cohort_idx]] = 0
+                    # set the samples of this batch to 1
+                    sample_indices = self.design[self.design[self.batch_col] == cohorts_split[1]].index
+                    self.design.loc[sample_indices, cohorts[cohort_idx]] = 1
+            # now we fix the reference batch
+            reference_batch_indices = self.design[self.design[self.batch_col] == cohorts_splitlist[-1][1]].index
+            self.design.loc[reference_batch_indices, cohorts[-1]] = -1
 
         if self.batch_col:
             # we remove the batch column from the design matrix, not needed anymore
             self.design = self.design.drop(columns=[self.batch_col])
 
-        # if covariates is not None - rearrange columns - intersept column,  covariates columns, all cohorts columns
+        # Rearange columns - intersept column,  covariates columns, all cohorts columns
         if self.variables:
             # first we ensure that the variables are in the loaded design matrix
             if self.variables_in_data:
@@ -467,6 +509,8 @@ class Client:
                 # relevant for the batch correction later as well as for the
                 # computation of betas with sample averaging, be careful
                 # with changing the order
+        else:
+            self.design = self.design.loc[:, ['intercept'] + cohorts]
         # for privacy reasons, we should protect the covariates added to the
         # design matrix. The design matrix itself is completely reproducable for
         # only one cohort. In case covariates are added, we ensure that
@@ -563,7 +607,7 @@ class Client:
         else:
             mask[[self.design.columns.get_loc(col) for col in ['intercept']]] = False
         betas_reduced = betas[:, mask]
-            # only keep the betas concerning the clients
+            # only keep the betas concerning the batches
             # shape of betas is #features x [intercept + #variables + #cohorts-1]
             # shape of betas_reduces is #features x #cohorts-1
 

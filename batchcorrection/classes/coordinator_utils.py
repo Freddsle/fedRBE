@@ -4,52 +4,49 @@ relevant for batch effect correction.
 """
 import numpy as np
 from numpy import linalg
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict
 
 def create_feature_presence_matrix(
-        lists_of_features_and_variables: List[Tuple[str, Union[int, None], List[str], List[str]]],
+        lists_of_features_and_variables: List[Tuple[str, List[str], Union[int, None], Dict[str, List[str]]]],
         global_feature_names: List[str],
         default_order: List[str]
         ) -> Tuple[np.ndarray, List[str]]:
     """
     Creates a matrix that indicates the presence of features in the different
-    clients. The matrix has the shape (num_features, num_clients) and contains
+    clients. The matrix has the shape (num_features, num_batches) and contains
     1 if the feature is present in the client and 0 otherwise. Also returns
     a dictionary indicating which clients contain each feature.
     Finally, fixes the order of the clients.
 
     Args:
-        lists_of_features_and_variables: A list of tuples containing the name of the client,
-        it's position (or None), features, and variables available on each client.
-        Expects hashed variables and features.
+        feature_variable_batch_info: A list of tuples containing four items:
+            the clientname, the list of variables (hashed),
+            the position of the client relevant for ordering,
+            and a dictionary containing as keys the batch names
+            (format is "<client_name>|<batch_name>") and as values the list of
+            features(hashed) available in that batch.
         global_feature_names: A list of all the features that are available on all clients.
         default_order: A list of names of the clients in which to order the clients
 
     Returns:
-        matrix: A matrix of shape (num_features, num_clients) that indicates
+        matrix: A matrix of shape (num_features, num_batches) that indicates
             the presence of features in the different clients. The matrix contains
             1 if the feature is present in the client and 0 otherwise.
         cohorts_order: A list containing the names of the clients.
     """
-    feature_index = {feature: idx for idx, feature in enumerate(global_feature_names)}
+    feature2index = {feature: idx for idx, feature in enumerate(global_feature_names)}
     num_features = len(global_feature_names)
-    all_cohorts = list()
+    all_cohorts: List[List[str]] = list()
         # each element is a list of strings representing the batches of one client
-    for cohort_list, _, _, _ in lists_of_features_and_variables:
-        all_cohorts.append(cohort_list)
-    # throw an error if we have duplicates
-    if len(all_cohorts) != len(set(all_cohorts)):
-        raise ValueError("Duplicate cohort names found in the list of features and variables")
+    for _, _, _, batch_feature_presence_info in lists_of_features_and_variables:
+        # The keys of the dictionary are the batch names of the whole client
+        all_cohorts.append(list(batch_feature_presence_info.keys()))
 
-    # we need to set the order of the cohorts either as sent by the clients
-    # or as found in self._app.clients
+    # we need to set the order of the clients either as sent by the clients
+    # or as found in the given default_order
     if any([not isinstance(position, int) for _, position, _, _ in lists_of_features_and_variables]):
         # if any position is None, we use the default order
         print(f"Using the default client order: {default_order}")
-        # default_order is just the client orders, however we might have
-        # multiple batches per client
-        # use the given default_order to sort all_cohorts
-        # It's a small amount of batches, so we use a very simple O(n^2) algorithm
         client_order = default_order
     else:
         # if all positions are integers, we use the order of the positions
@@ -57,16 +54,20 @@ def create_feature_presence_matrix(
             # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
 
     # we need to sort the cohorts in the order of the client_order
-    cohorts_order = []
-    for cohort_name in client_order:
+    # we do this in an inefficient O(n^2) way, but the number of batches
+    # is so small it doesn't matter and this is way more readable than any fancier
+    # sorting algorithm
+    cohorts_order: List[str] = []
+    for client_name in client_order:
         for cohort_list in all_cohorts:
-            if cohort_name in cohort_list[0]:
-                # cohort_name is a client_name, cohorts_list[0] is a batch string
-                # like "<cohort_name>|<batch_name>"
-                # now we extend to the final list
+            # all cohorts of one client, extract which client
+            referencing_client_name = cohort_list[0].split("|")[0]
+            if client_name == referencing_client_name:
+                # in this case the cohort_list are the batches of the client
+                # we are considering right now from the client_order
                 cohorts_order.extend(sorted(cohort_list))
-        else:
-            raise ValueError(f"Client {cohort_name} not found in the list of features and variables")
+                break
+
     print(f"INFO: Cohorts order: {cohorts_order}")
 
     # Initialize the matrix
@@ -75,21 +76,32 @@ def create_feature_presence_matrix(
 
     # we populate the matrix and the dictionary
     for cohort_idx, batch_name in enumerate(cohorts_order):
-        # get the corresponding client name
-        batch_name_list = batch_name.split("|")
-        if len(batch_name_list) > 2:
+        # batch_name is a string like "<client_label>|<batch_label>"
+        if len(batch_name.split()) > 2:
+            # sanity check of the input
             raise ValueError(f"Batch name incorrectly formatted: {batch_name}")
-        cohort_name = batch_name_list[0]
-        # get the corresponding features
-        features = [features for c_name, _, features, _ in lists_of_features_and_variables if c_name == cohort_name][0]
-        for feature in features:
-            if feature in feature_index:
-                matrix[feature_index[feature], cohort_idx] = 1
+
+        # get the corresponding features, we just iterate over all the
+        # batch information objects and check if the batch_name is in the
+        # batch_feature_presence_info dictionary
+        batch_features = []
+        for _, _, _, batch_feature_presence_info in lists_of_features_and_variables:
+            if batch_name in batch_feature_presence_info:
+                batch_features = batch_feature_presence_info[batch_name]
+                break
+        if len(batch_features) == 0:
+            raise ValueError(f"No features found for batch {batch_name}")
+        for feature in batch_features:
+            if feature in feature2index:
+                # cohort_idx has this feature
+                matrix[feature2index[feature], cohort_idx] = 1
+            # the 0 in the else case is taken care of as the matrix was
+            # initialized with np.zeros
 
     return matrix, cohorts_order
 
 def select_common_features_variables(
-    lists_of_features_and_variables: List[Tuple[str, int, List[str], List[str]]],
+    feature_variable_batch_info: List[Tuple[str, List[str], Union[int, None], Dict[str, List[str]]]],
     default_order: List[str],
     min_clients=2) -> \
         Tuple[List[str], Union[List[str], None], np.ndarray, List[str]]:
@@ -99,9 +111,12 @@ def select_common_features_variables(
     outdated : For the union, only features that are available on at least two clients
     are selected.
     Args:
-        lists_of_features_and_variables: A list of tuples containing the name of the client,
-        it's position (or None), features, and variables available on each client.
-        Expects hashed variables and features.
+        feature_variable_batch_info: A list of tuples containing four items:
+            the clientname, the list of variables (hashed),
+            the position of the client relevant for ordering,
+            and a dictionary containing as keys the batch names
+            (format is "<client_name>|<batch_name>") and as values the list of
+            features(hashed) available in that batch.
         default_order: A list of names of the clients in which to order the clients
         min_clients: The minimum number of clients that should have a feature for the
             feature to be included in the global feature list.
@@ -120,14 +135,14 @@ def select_common_features_variables(
     feature_count = {}
     global_variables = None
 
-    for _, _, features, variables in lists_of_features_and_variables:
+    for _, variables, _, batch_feature_presence_info in feature_variable_batch_info:
         # Count features
-        for feature in features:
-            if feature in feature_count:
-                feature_count[feature] += 1
-            else:
-                feature_count[feature] = 1
-
+        for features in batch_feature_presence_info.values():
+            for feature in features:
+                if feature in feature_count:
+                    feature_count[feature] += 1
+                else:
+                    feature_count[feature] = 1
         # Intersect variables
         if variables:
             if global_variables is None:
@@ -135,7 +150,7 @@ def select_common_features_variables(
             else:
                 global_variables.intersection_update(variables)
 
-    # Select features present in at least two clients
+    # Select features present in at least min_clients clients, also sorting them
     global_feature_names = sorted([feature for feature, count in feature_count.items() if count >= min_clients])
 
     # Sort variables
@@ -144,62 +159,37 @@ def select_common_features_variables(
     else:
         global_variables = None
 
-    # Create the feature presence matrix - for gloal mask
-    feature_presence_matrix, cohorts_order = create_feature_presence_matrix(lists_of_features_and_variables, global_feature_names, default_order) # type: ignore
+    # Create the feature presence matrix - for global mask
+    feature_presence_matrix, cohorts_order = create_feature_presence_matrix(feature_variable_batch_info, global_feature_names, default_order) # type: ignore
 
     return global_feature_names, global_variables, feature_presence_matrix, cohorts_order
-
-def reorder_matrix(feature_matrix: np.ndarray,
-                   all_client_names: List[str],
-                   cohorts_order: List[str]) -> np.ndarray:
-    """
-    DEPRECATED: already done now in the creation of the feature matrix
-    Reorders the columns of a feature matrix according to a specified order of
-    clients.
-    Args:
-        feature_matrix: A matrix of shape (num_features, num_clients) containing
-            the features of the clients.
-        all_client_names: A list containing the names of the clients in
-            the desired order (that will be used for the design matrix).
-        cohorts_order: A list of all the client names.
-    Returns:
-        reordered_matrix: The feature matrix with the columns reordered according
-            to the specified order of clients.
-    """
-    # Create a mapping of column indices
-    index_mapping = {name: idx for idx, name in enumerate(cohorts_order)}
-    ordered_indices = [index_mapping[cohort] for cohort in all_client_names]
-
-    # Reorder the columns
-    reordered_matrix = feature_matrix[:, ordered_indices]
-
-    return reordered_matrix
 
 def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.ndarray:
     """
     Creates a mask that indicates which features are present in the clients
-    and which are not. The mask has the shape (num_features, num_clients) and
-    contains 1 if the feature is absent in the client and 1 otherwise.
+    and which are not. The mask has the shape (num_features, num_batches).
     Args:
-        feature_presence_matrix: A matrix of shape (num_features, num_clients) that indicates
+        feature_presence_matrix: A matrix of shape (num_features, num_batches) that indicates
             the presence of features in the different clients. The matrix contains
             1 if the feature is present in the client and 0 otherwise.
         n: The number of features.
-        k: The number of clients.
+        k: The number of columns in self.design.
     Returns:
-        global_mask: A matrix of shape (num_features, num_clients) that indicates
-            which features are present in the clients. The matrix contains 1
-            if the feature is absent in the client and 1 otherwise.
+        global_mask: A matrix of shape (num_features, num_batches) that indicates
+            which features are present in the batches. The matrix contains 1
+            if the feature is absent in the batch and 1 otherwise. #TODO: fix this desc
     """
 
     # Initialize the mask with zeros
     global_mask = np.zeros((n, k))
     # Get the number of columns in the feature_presence_matrix
-    num_cols = feature_presence_matrix.shape[1]
+    num_batch_cols = feature_presence_matrix.shape[1]
 
     # Iterate over each row in the feature_presence_matrix
-    for i in range(n):
-        row = feature_presence_matrix[i]
+    for feature_idx in range(n):
+        row = feature_presence_matrix[feature_idx]
+            # row is a list of 0s and 1s, 0 means the feature is present in the batch
+            # and 1 means the feature is absent in the batch
 
         # check if we need to do anything - if any batch is missing?
         zero_count = np.sum(row == 0)
@@ -208,34 +198,37 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
         if zero_count == 0:
             continue
 
+        # at least one batch is missing
         # presence of the first and last beach
         last_batch_present = row[-1] == 1
         # transform presence to mask, 0 means present, 1 is absent
+        # basically flip fromn 0 to 1 and vice versa
         transformed_row = np.where(row[:-1] == 0, 1, 0)
 
         if not last_batch_present:
-            # If the last column is 0 (the reference batch is not present),
-            # process the row as described
-            # move a 0 from the last present batch to the first batch
+            # If the last batch is not present, this means for this feature
+            # the reference batch does not have any data.
+            # In this case we set the global mask to 1 for the last batch
+            # that is still present, effectively using it
+            # as the reference batch as with the mask we remove it from the
+            # regression model training
             if 0 in transformed_row:
-                last_zero_index = np.where(transformed_row == 0)[0][-1]
-                transformed_row[last_zero_index] = 1
-            global_mask[i, -num_cols+1:] = transformed_row
+                last_present_index = np.where(transformed_row == 0)[0][-1]
+                transformed_row[last_present_index] = 1
+            global_mask[feature_idx, -num_batch_cols+1:] = transformed_row
 
         else:
-            # Check if there is a last_present_index and it is not zero
-            if 0 in transformed_row:
-                first_absent_index = np.where(transformed_row == 1)[0][0]
-                last_present_indices = np.where(transformed_row == 0)[0]
-                if len(last_present_indices) > 0 and last_present_indices[-1] != 0:
-                    last_present_index = last_present_indices[-1]
-
-                    if last_present_index > first_absent_index:
-                        # in transformed_row interchange values between the first absent and the last present.
-                        # Swap the values
-                        transformed_row[first_absent_index], transformed_row[last_present_index] = \
-                            transformed_row[last_present_index], transformed_row[first_absent_index]
-            global_mask[i, -num_cols+1:] = transformed_row
+            # Check if the feature exists at least in two batches
+            first_absent_index = np.where(transformed_row == 1)[0][0]
+            present_indices = np.where(transformed_row == 0)[0]
+            if len(present_indices) > 1:
+                last_present_index = present_indices[-1]
+                if last_present_index > first_absent_index:
+                    # in transformed_row interchange values between the first absent and the last present.
+                    # Swap the values
+                    transformed_row[first_absent_index], transformed_row[last_present_index] = \
+                        transformed_row[last_present_index], transformed_row[first_absent_index]
+            global_mask[feature_idx, -num_batch_cols+1:] = transformed_row
 
     # Convert to boolean mask
     global_mask = global_mask > 0
