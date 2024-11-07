@@ -153,6 +153,22 @@ set_smpc_true(proteomics_experiment_smpc)
 add_position_to_config(proteomics_experiment_smpc)
 add_position_to_config(proteomics_experiment)
 
+## PROTEOMICS MULTI_BATCH
+proteomics_multibatch_experiment = util.Experiment(
+        name="Proteomics Multi Batch",
+        fc_data_dir=data_dir,
+        clients=[os.path.join(data_dir, "proteomics_multibatch", "before", "center1"),
+                 os.path.join(data_dir, "proteomics_multibatch", "before", "center2"),
+                 os.path.join(data_dir, "proteomics_multibatch", "before", "center3"),
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config)]*3,
+        config_file_changes=[deepcopy(proteomics_config_file_changes_base)]*3,
+)
+proteomics_multibatch_experiment_smpc = deepcopy(proteomics_multibatch_experiment)
+set_smpc_true(proteomics_multibatch_experiment_smpc)
+add_position_to_config(proteomics_multibatch_experiment_smpc)
+add_position_to_config(proteomics_multibatch_experiment)
 
 ## MICROARRAY
 base_microarray_config_file_changes = \
@@ -250,6 +266,12 @@ experiments.append(proteomics_experiment)
 result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
 experiments.append(proteomics_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"))
+
+## Proteomics Multi Batch
+experiments.append(proteomics_multibatch_experiment)
+result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"))
+experiments.append(proteomics_multibatch_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Microarray
 experiments.append(microarray_experiment)

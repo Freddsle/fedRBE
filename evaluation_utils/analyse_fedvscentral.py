@@ -54,6 +54,17 @@ experiment_results.append(utils.ExperimentResult(
     central_result_file=os.path.join(base_dir, "proteomics", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 
+experiment_results.append(utils.ExperimentResult(
+    name="Proteomics Multi Batch",
+    federated_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "intensities_log_Rcorrected_UNION.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="Proteomics Multi Batch (SMPC)",
+    federated_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "intensities_log_Rcorrected_UNION.tsv"),
+))
+
 # MICROARRAY
 experiment_results.append(utils.ExperimentResult(
     name="Microarray",
