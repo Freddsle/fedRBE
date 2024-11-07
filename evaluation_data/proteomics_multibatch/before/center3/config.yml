@@ -1,0 +1,13 @@
+flimmaBatchCorrection:
+  covariates:
+  - Pyr
+  data_filename: intensities_log_UNION.tsv
+  design_filename: design.tsv
+  design_separator: "\t"
+  expression_file_flag: true
+  index_col: rowname
+  min_samples: 2
+  normalizationMethod: null
+  position: 2
+  separator: "\t"
+  smpc: true
