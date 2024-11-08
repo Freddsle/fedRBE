@@ -41,18 +41,17 @@ def create_feature_presence_matrix(
     for _, _, _, batch_feature_presence_info in lists_of_features_and_variables:
         # The keys of the dictionary are the batch names of the whole client
         all_cohorts.append(list(batch_feature_presence_info.keys()))
-
     # we need to set the order of the clients either as sent by the clients
     # or as found in the given default_order
     if any([not isinstance(position, int) for _, _, position, _ in lists_of_features_and_variables]):
         # if any position is None, we use the default order
-        print(f"Using the default client order: {default_order}")
+        print(f"INFO: Using the default client order: {default_order}")
         client_order = default_order
     else:
         # if all positions are integers, we use the order of the positions
         client_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[2])] # type: ignore
             # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
-
+        print(f"INFO: Using given specific client order: {client_order}")
     # we need to sort the cohorts in the order of the client_order
     # we do this in an inefficient O(n^2) way, but the number of batches
     # is so small it doesn't matter and this is way more readable than any fancier
@@ -97,9 +96,6 @@ def create_feature_presence_matrix(
                 matrix[feature2index[feature], cohort_idx] = 1
             # the 0 in the else case is taken care of as the matrix was
             # initialized with np.zeros
-
-    print(f"INFO: presence matrix:\n{matrix}")
-    print(f"INFO: presence matrix total sum: {np.sum(matrix)} with total elements: {matrix.size}")
 
     return matrix, cohorts_order
 
@@ -199,6 +195,7 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
         if zero_count > feature_presence_matrix.shape[1] - 1:
             raise ValueError("The number of zeros in the row is greater than the number of columns")
         if zero_count == 0:
+            # each batch has data, nothing to mask
             continue
 
         # at least one batch is missing
@@ -206,6 +203,8 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
         last_batch_present = row[-1] == 1
         # transform presence to mask, 0 means present, 1 is absent
         # basically flip fromn 0 to 1 and vice versa
+        # furthermore, we eliminated the last batch from the mask as
+        # it is also not in design, we just need the info if it is present
         transformed_row = np.where(row[:-1] == 0, 1, 0)
 
         if not last_batch_present:
@@ -222,21 +221,21 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
 
         else:
             # Check if the feature exists at least in two batches
-            first_absent_index = np.where(transformed_row == 1)[0][0]
-            present_indices = np.where(transformed_row == 0)[0]
-            if len(present_indices) > 1:
-                last_present_index = present_indices[-1]
-                if last_present_index > first_absent_index:
-                    # in transformed_row interchange values between the first absent and the last present.
-                    # Swap the values
-                    transformed_row[first_absent_index], transformed_row[last_present_index] = \
-                        transformed_row[last_present_index], transformed_row[first_absent_index]
+            if 0 in transformed_row:
+                first_absent_index = np.where(transformed_row == 1)[0][0]
+                present_indices = np.where(transformed_row == 0)[0]
+                if len(present_indices) > 0 and present_indices[-1] != 0:
+                    last_present_index = present_indices[-1]
+                    if last_present_index > first_absent_index:
+                        # in transformed_row interchange values between the first absent and the last present.
+                        # Swap the values
+                        transformed_row[first_absent_index], transformed_row[last_present_index] = \
+                            transformed_row[last_present_index], transformed_row[first_absent_index]
             global_mask[feature_idx, -num_batch_cols+1:] = transformed_row
 
     # Convert to boolean mask
     global_mask = global_mask > 0
 
-    print(f"INFO: Global mask true count:\n{np.sum(global_mask)}")
     return global_mask
 
 def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
@@ -280,8 +279,6 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         XtX_glob += XtX
         XtY_glob += XtY
 
-    print(f"INFO: Random XtX entry: {XtX_glob[0]}")
-    print(f"INFO: All XtX entries are the same?: {np.all(XtX_glob == XtX_glob[0])}")
     inverse_count = 0 #TODO: rmv
     # calculate the betas
     # formula is beta = (XtX)^-1 * XtY
@@ -289,10 +286,7 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
     for i in range(0, n):
         # using the mask to remove the columns and rows that are not present
         mask = global_mask[i, :]
-        #print(f"INFO: Mask for feature {i}: {mask}")
         submatrix = XtX_glob[i, :, :][np.ix_(~mask, ~mask)]
-        #print(f"INFO: masked submatrix:\n{submatrix}")
-        #print(f"INFO: submatrix == original XtX?: {np.array_equal(submatrix, XtX_glob[i, :, :])}")
 
         if linalg.det(submatrix) == 0:
             raise ValueError(
@@ -302,6 +296,4 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         invXtX = linalg.inv(submatrix)
         beta[i, ~mask] = invXtX @ XtY_glob[i, ~mask]
 
-    print(f"INFO: Shape of beta: {beta.shape}")
-    print(f"INFO: Number of pseudo inverses: {inverse_count}") #TODO: rmv
     return beta

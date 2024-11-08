@@ -178,7 +178,6 @@ class Client:
 
             self.feature2hash, self.hash2feature = self.hash_names(self.feature_names)
             self.data.rename(index=self.feature2hash, inplace=True)
-            print("shape of data after renaming: ", self.data.shape)
 
             self.feature_names = [self.feature2hash[feature] for feature in self.feature_names]
 
@@ -326,8 +325,8 @@ class Client:
             # design is loaded already, so we can get all relevant indices
             pure_batch_name = batch_label.split("|")[1]
                 # go from "client|batch" to "batch"
-            batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index
-            batch_data = self.data[:, batch_indices]
+            batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index.tolist()
+            batch_data = self.data.loc[:, batch_indices]
                 # samples are the index in self.design but columns in self.data
             for feature in self.feature_names:
                 if feature in batch_data.index and batch_data.loc[feature, :].notnull().any():
@@ -342,7 +341,7 @@ class Client:
         Important to ensure that client's protein names are in the global protein names. But it's not important that all global protein names are in the client's protein names.
         """
         self.validate_variables(global_variables_hashed)
-        print(f"Client {self.client_name}: Inputs validated.")
+        print(f"INFO: Client {self.client_name}: Inputs validated.")
 
     def validate_variables(self, global_variables_hashed):
         """
@@ -525,14 +524,6 @@ class Client:
             return f"Privacy Error: There are not enough samples to provide sufficient " +\
                 f"privacy, please provide more samples than 1 + #cohorts + #covariantes " +\
                 f"({self.design.shape[1]} in this case)"
-        pd.set_option('display.max_rows', None)
-        pd.set_option('display.max_columns', None)
-        pd.set_option('display.width', None)
-
-        pd.set_option('display.max_colwidth', None)
-        print(f"Design matrix created:\n{self.design}")
-        print(f"Design matrix shape: {self.design.shape}")
-        print(f"Design matrix with summed columns: {self.design.sum(axis=0)}")
         return None
 
     ####### limma: linear regression #########
@@ -605,7 +596,7 @@ class Client:
         """
         assert self.data is not None
         assert self.design is not None
-        print("Start remove_batch_effects")
+        print("INFO: Removing the batch effects with the trained betas")
         self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
         # Create a mask to only consider the betas concerning batches
         mask = np.ones(betas.shape[1], dtype=bool)
@@ -636,13 +627,11 @@ class Client:
         self.data_corrected = np.where(np.isnan(self.data_corrected), self.data_corrected, self.data_corrected - batch_effect)
         # Add the column_names/index information from the original DataFrame
         self.data_corrected = pd.DataFrame(self.data_corrected, index=self.data.index, columns=self.data.columns)
-        print(f"Shape of corrected data after correction: {self.data_corrected.shape}")
         # now we drop the extra global features that were added and
         # that we don't actually have data for
         if self.extra_global_features is not None:
             self.data_corrected = self.data_corrected.drop(index=list(self.extra_global_features))
         # finally replace the hashed feature names with the real feature names
-        print(f"Amount of index found in hash2feature: {len([hashed for hashed in self.data_corrected.index if hashed in self.hash2feature])}/{len(self.data_corrected.index)}")
         self.data_corrected.rename(index=self.hash2feature, inplace=True)
         np.set_printoptions(threshold=np.iinfo(np.int64).max)
             # we should use sys.maxsize, but that might behave a bit weirdly in docker
@@ -652,7 +641,7 @@ class Client:
         self.report += f"The following betas were used for batch correction:\n{betas}\n"
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
         np.set_printoptions(threshold=1000)
-        print(f"remove batch final corrected data shape: {self.data_corrected.shape}")
+        print(f"INFO: Shape of corrected data after correction: {self.data_corrected.shape}")
 
     ### Helpers ###
     def _check_consistency_designfile(self) -> None:
