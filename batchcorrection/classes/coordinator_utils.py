@@ -44,13 +44,13 @@ def create_feature_presence_matrix(
 
     # we need to set the order of the clients either as sent by the clients
     # or as found in the given default_order
-    if any([not isinstance(position, int) for _, position, _, _ in lists_of_features_and_variables]):
+    if any([not isinstance(position, int) for _, _, position, _ in lists_of_features_and_variables]):
         # if any position is None, we use the default order
         print(f"Using the default client order: {default_order}")
         client_order = default_order
     else:
         # if all positions are integers, we use the order of the positions
-        client_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[1])] # type: ignore
+        client_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[2])] # type: ignore
             # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
 
     # we need to sort the cohorts in the order of the client_order
@@ -97,6 +97,9 @@ def create_feature_presence_matrix(
                 matrix[feature2index[feature], cohort_idx] = 1
             # the 0 in the else case is taken care of as the matrix was
             # initialized with np.zeros
+
+    print(f"INFO: presence matrix:\n{matrix}")
+    print(f"INFO: presence matrix total sum: {np.sum(matrix)} with total elements: {matrix.size}")
 
     return matrix, cohorts_order
 
@@ -232,6 +235,8 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
 
     # Convert to boolean mask
     global_mask = global_mask > 0
+
+    print(f"INFO: Global mask true count:\n{np.sum(global_mask)}")
     return global_mask
 
 def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
@@ -269,6 +274,7 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
     for XtX, XtY in XtX_XtY_list:
         # due to serialization, the matrices are received as lists
         XtX = np.array(XtX)
+        print(f"INFO: adding XtX:\n{XtX}")
         XtY = np.array(XtY)
         if XtX.shape[0] != n or XtX.shape[1] != k or XtY.shape[0] != n or XtY.shape[1] != k:
             raise ValueError(f"Shape of received XtX or XtY does not match the expected shape: {XtX.shape} {XtY.shape}")
@@ -282,7 +288,10 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
     for i in range(0, n):
         # using the mask to remove the columns and rows that are not present
         mask = global_mask[i, :]
+        print(f"INFO: Mask for feature {i}: {mask}")
         submatrix = XtX_glob[i, :, :][np.ix_(~mask, ~mask)]
+        print(f"INFO: masked submatrix:\n{submatrix}")
+        print(f"INFO: submatrix == original XtX?: {np.array_equal(submatrix, XtX_glob[i, :, :])}")
 
         if linalg.det(submatrix) == 0:
             raise ValueError(

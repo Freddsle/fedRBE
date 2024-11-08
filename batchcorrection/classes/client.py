@@ -222,7 +222,7 @@ class Client:
                 relevant_cols.append(self.batch_col)
             if self.variables:
                 relevant_cols.extend(self.variables)
-            self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=index_col)[relevant_cols]
+            self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[relevant_cols]
             if self.batch_col:
                 # extract which batches exist
                 self.batch_labels = [f"{self.client_name}|{batchname}" for batchname in self.design[self.batch_col].unique()]
@@ -447,8 +447,6 @@ class Client:
         Returns:
             None, sets self.design
         """
-        #TODO: fix: start using the last batch given in cohorts as the reference batch
-        # we cannot simply use a clientname anymore as batchname!!!
         assert isinstance(self.rawdata, pd.DataFrame)
         # first add intercept colum
         if self.design is None:
@@ -460,13 +458,16 @@ class Client:
         # check if we have multiple batches for this client
         cohorts_splitlist = [cohort.split("|") for cohort in cohorts]
         if len([split_batch[0] for split_batch in cohorts_splitlist if self.client_name == split_batch[0]]) == 1:
+            print(f"INFO: Client {self.client_name} has only one batch")
             # we only have one batch for this client, check if it is the reference batch
             if self.client_name == cohorts[-1].split("|")[0]:
+                print(f"INFO: Client {self.client_name} is the reference batch")
                 # we are the reference batch, we just set all batches to -1
                 for cohort in cohorts:
                     self.design[cohort] = -1
             else:
                 # we are not the reference batch, we set our batch to 1 and all others to 0
+                print(f"INFO: Client {self.client_name} is not the reference batch")
                 for cohort in cohorts:
                     if self.client_name == cohort.split("|")[0]:
                         self.design[cohort] = 1
@@ -520,6 +521,13 @@ class Client:
             return f"Privacy Error: There are not enough samples to provide sufficient " +\
                 f"privacy, please provide more samples than 1 + #cohorts + #covariantes " +\
                 f"({self.design.shape[1]} in this case)"
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
+        pd.set_option('display.width', None)
+
+        pd.set_option('display.max_colwidth', None)
+        print(f"Design matrix created:\n{self.design}")
+        print(f"Design matrix with summed columns: {self.design.sum(axis=0)}")
         return None
 
     ####### limma: linear regression #########

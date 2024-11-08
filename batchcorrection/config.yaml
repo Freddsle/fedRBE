@@ -22,7 +22,7 @@ flimmaBatchCorrection:
                       # is the column name of the samples in the data file.
                       # if no index_col is given, the index is taken from the 0th column for
                       # expression files and generated automatically for samples x features datafiles
-                      # the index_col is used for the data_file AND the design_file!
+                      # in the design file, the 0th column is always used as the index
                       # format: str or int, int is interpreted as the column index (starting from 0)
   covariates: ['Pyr'] # covariates in linear model. In case a design matrix is given
                       # they are expected in the design matrix, otherwise they are expected
