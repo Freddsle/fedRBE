@@ -1,4 +1,5 @@
 flimmaBatchCorrection:
+  batch_col: batch
   covariates:
   - Pyr
   data_filename: intensities_log_UNION.tsv
@@ -6,8 +7,8 @@ flimmaBatchCorrection:
   design_separator: "\t"
   expression_file_flag: true
   index_col: rowname
-  min_samples: 2
+  min_samples: 0
   normalizationMethod: null
   position: 0
   separator: "\t"
-  smpc: true
+  smpc: false

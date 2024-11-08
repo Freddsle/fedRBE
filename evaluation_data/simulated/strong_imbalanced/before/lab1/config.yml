@@ -10,4 +10,4 @@ flimmaBatchCorrection:
   normalizationMethod: null
   position: 0
   separator: "\t"
-  smpc: false
+  smpc: true
