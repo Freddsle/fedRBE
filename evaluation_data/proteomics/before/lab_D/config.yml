@@ -1,4 +1,5 @@
 flimmaBatchCorrection:
+  batch_col: null
   covariates:
   - Pyr
   data_filename: intensities_log_UNION.tsv

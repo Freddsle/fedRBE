@@ -1,4 +1,5 @@
 flimmaBatchCorrection:
+  batch_col: null
   covariates:
   - CRC
   data_filename: UQnorm_log_counts_for_corr.tsv

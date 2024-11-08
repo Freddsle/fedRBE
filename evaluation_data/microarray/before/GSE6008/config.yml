@@ -1,4 +1,5 @@
 flimmaBatchCorrection:
+  batch_col: null
   covariates:
   - HGSC
   data_filename: expr_for_correction_UNION.tsv

@@ -1,4 +1,5 @@
 flimmaBatchCorrection:
+  batch_col: null
   covariates:
   - A
   data_filename: intensities.tsv

@@ -255,44 +255,44 @@ add_position_to_config(microarray_experiment)
 
 ### ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
 ## Simulated
-experiments.append(simulated_balanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_balanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
+# experiments.append(simulated_balanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(simulated_balanced_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-experiments.append(simulated_mildly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_mildly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+# experiments.append(simulated_mildly_imbalanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(simulated_mildly_imbalanced_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-experiments.append(simulated_strongly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_strongly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+# experiments.append(simulated_strongly_imbalanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(simulated_strongly_imbalanced_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Microbiome
-experiments.append(microbiome_experiment)
-result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
-experiments.append(microbiome_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data_smpc.tsv"))
+# ## Microbiome
+# experiments.append(microbiome_experiment)
+# result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(microbiome_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Microbiome v2
-experiments.append(microbiomev2_experiment)
-result_file_names.append(os.path.join(data_dir, "microbiome_v2", "after", "FedApp_corrected_data.tsv"))
-experiments.append(microbiomev2_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "microbiome_v2", "after", "FedApp_corrected_data_smpc.tsv"))
+# ## Microbiome v2
+# experiments.append(microbiomev2_experiment)
+# result_file_names.append(os.path.join(data_dir, "microbiome_v2", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(microbiomev2_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "microbiome_v2", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Proteomics
-experiments.append(proteomics_experiment)
-result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
-experiments.append(proteomics_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"))
+# ## Proteomics
+# experiments.append(proteomics_experiment)
+# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(proteomics_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# ## Proteomics Multi Batch
-experiments.append(proteomics_multibatch_experiment)
-result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"))
-experiments.append(proteomics_multibatch_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"))
+# # ## Proteomics Multi Batch
+# experiments.append(proteomics_multibatch_experiment)
+# result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(proteomics_multibatch_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"))
 
 # ## Microarray
 experiments.append(microarray_experiment)
