@@ -32,6 +32,7 @@ base_config = {
         "design_filename": "design.tsv",
         "expression_file_flag": True,
         "index_col": 0,
+        "batch_col": None,
         "covariates": [],
         "separator": "\t",
         "design_separator": "\t",
@@ -206,6 +207,10 @@ add_position_to_config(proteomics_experiment_smpc)
 add_position_to_config(proteomics_experiment)
 
 ## PROTEOMICS MULTI_BATCH
+proteomics_config_file_changes_multibatch = deepcopy(proteomics_config_file_changes_base)
+proteomics_config_file_changes_multibatch["flimmaBatchCorrection.batch_col"] = "batch"
+proteomics_config_file_changes_multibatch["flimmaBatchCorrection.min_samples"] = 0
+    # otherwise we get a privacy error
 proteomics_multibatch_experiment = util.Experiment(
         name="Proteomics Multi Batch",
         fc_data_dir=data_dir,
@@ -215,7 +220,7 @@ proteomics_multibatch_experiment = util.Experiment(
         ],
         app_image_name=app_image_name,
         config_files=[deepcopy(base_config)]*3,
-        config_file_changes=[deepcopy(proteomics_config_file_changes_base)]*3,
+        config_file_changes=[deepcopy(proteomics_config_file_changes_multibatch)]*3,
 )
 proteomics_multibatch_experiment_smpc = deepcopy(proteomics_multibatch_experiment)
 set_smpc_true(proteomics_multibatch_experiment_smpc)
@@ -283,13 +288,13 @@ result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_c
 experiments.append(proteomics_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Proteomics Multi Batch
+# ## Proteomics Multi Batch
 experiments.append(proteomics_multibatch_experiment)
 result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"))
 experiments.append(proteomics_multibatch_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Microarray
+# ## Microarray
 experiments.append(microarray_experiment)
 result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
 experiments.append(microarray_experiment_smpc)

@@ -20,6 +20,40 @@ experiment_results = list()
     # Add all results to this list as utils.ExperimentResult objects
     # basically specifying the corrected data files of the central and federated results
 
+# SIMULATED
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Balanced",
+    federated_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "intensities_R_corrected.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Balanced (SMPC)",
+    federated_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "intensities_R_corrected.tsv"),
+))
+
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Mildly Imbalanced",
+    federated_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Mildly Imbalanced (SMPC)",
+    federated_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
+
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Strongly Imbalanced",
+    federated_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Strongly Imbalanced (SMPC)",
+    federated_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
+
 # MICROBIOME
 experiment_results.append(utils.ExperimentResult(
     name="Microbiome batch=study_accession",
@@ -75,40 +109,6 @@ experiment_results.append(utils.ExperimentResult(
     name="Microarray (SMPC)",
     federated_result_file=os.path.join(base_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"),
     central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
-))
-
-# SIMULATED
-experiment_results.append(utils.ExperimentResult(
-    name="Simulated Balanced",
-    federated_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "intensities_R_corrected.tsv"),
-))
-experiment_results.append(utils.ExperimentResult(
-    name="Simulated Balanced (SMPC)",
-    federated_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "simulated", "balanced", "after", "intensities_R_corrected.tsv"),
-))
-
-experiment_results.append(utils.ExperimentResult(
-    name="Simulated Mildly Imbalanced",
-    federated_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
-))
-experiment_results.append(utils.ExperimentResult(
-    name="Simulated Mildly Imbalanced (SMPC)",
-    federated_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "simulated", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
-))
-
-experiment_results.append(utils.ExperimentResult(
-    name="Simulated Strongly Imbalanced",
-    federated_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
-))
-experiment_results.append(utils.ExperimentResult(
-    name="Simulated Strongly Imbalanced (SMPC)",
-    federated_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
 ))
 
 
