@@ -642,10 +642,8 @@ class Client:
         if self.extra_global_features is not None:
             self.data_corrected = self.data_corrected.drop(index=list(self.extra_global_features))
         # finally replace the hashed feature names with the real feature names
-        print(f"index is {self.data_corrected.index}")
         print(f"Amount of index found in hash2feature: {len([hashed for hashed in self.data_corrected.index if hashed in self.hash2feature])}/{len(self.data_corrected.index)}")
         self.data_corrected.rename(index=self.hash2feature, inplace=True)
-        print(f"After renaming got this data_corrected: {self.data_corrected}")
         np.set_printoptions(threshold=np.iinfo(np.int64).max)
             # we should use sys.maxsize, but that might behave a bit weirdly in docker
             # so we just use the maximum int size which should hopefully be enough
