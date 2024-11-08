@@ -79,6 +79,58 @@ def set_smpc_true(exp: util.Experiment):
         exp.config_file_changes[idx] = deepcopy(tmp)
 
 
+## SIMULATED
+base_simulated_config_file_changes = \
+    {"flimmaBatchCorrection.data_filename": "intensities.tsv",
+     "flimmaBatchCorrection.design_filename": "design.tsv",
+     "flimmaBatchCorrection.covariates": ["A"],
+     "flimmaBatchCorrection.index_col": "rowname"}
+simulated_balanced_experiment = util.Experiment(
+        name="Simulated Balanced",
+        fc_data_dir=data_dir,
+        clients=[os.path.join(data_dir, "simulated", "balanced", "before", "lab1"),
+                 os.path.join(data_dir, "simulated", "balanced", "before", "lab2"),
+                 os.path.join(data_dir, "simulated", "balanced", "before", "lab3"),
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config)]*3,
+        config_file_changes=[base_simulated_config_file_changes]*3,
+)
+simulated_balanced_experiment_smpc = deepcopy(simulated_balanced_experiment)
+set_smpc_true(simulated_balanced_experiment_smpc)
+add_position_to_config(simulated_balanced_experiment_smpc)
+add_position_to_config(simulated_balanced_experiment)
+simulated_mildly_imbalanced_experiment = util.Experiment(
+        name="Simulated Mildly Imbalanced",
+        fc_data_dir=data_dir,
+        clients=[os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab1"),
+                 os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab2"),
+                 os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab3"),
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config)]*3,
+        config_file_changes=[base_simulated_config_file_changes]*3,
+)
+simulated_mildly_imbalanced_experiment_smpc = deepcopy(simulated_mildly_imbalanced_experiment)
+set_smpc_true(simulated_mildly_imbalanced_experiment_smpc)
+add_position_to_config(simulated_mildly_imbalanced_experiment_smpc)
+add_position_to_config(simulated_mildly_imbalanced_experiment)
+simulated_strongly_imbalanced_experiment = util.Experiment(
+        name="Simulated Strongly Imbalanced",
+        fc_data_dir=data_dir,
+        clients=[os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab1"),
+                 os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab2"),
+                 os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab3"),
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config)]*3,
+        config_file_changes=[base_simulated_config_file_changes]*3,
+)
+simulated_strongly_imbalanced_experiment_smpc = deepcopy(simulated_strongly_imbalanced_experiment)
+set_smpc_true(simulated_strongly_imbalanced_experiment_smpc)
+add_position_to_config(simulated_strongly_imbalanced_experiment_smpc)
+add_position_to_config(simulated_strongly_imbalanced_experiment)
+
 ## MICROBIOME
 microbiome_config_file_changes = \
     {"flimmaBatchCorrection.data_filename": "UQnorm_log_counts_for_corr.tsv",
@@ -196,59 +248,23 @@ set_smpc_true(microarray_experiment_smpc)
 add_position_to_config(microarray_experiment_smpc)
 add_position_to_config(microarray_experiment)
 
-## SIMULATED
-base_simulated_config_file_changes = \
-    {"flimmaBatchCorrection.data_filename": "intensities.tsv",
-     "flimmaBatchCorrection.design_filename": "design.tsv",
-     "flimmaBatchCorrection.covariates": ["A"],
-     "flimmaBatchCorrection.index_col": "rowname"}
-simulated_balanced_experiment = util.Experiment(
-        name="Simulated Balanced",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "simulated", "balanced", "before", "lab1"),
-                 os.path.join(data_dir, "simulated", "balanced", "before", "lab2"),
-                 os.path.join(data_dir, "simulated", "balanced", "before", "lab3"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*3,
-        config_file_changes=[base_simulated_config_file_changes]*3,
-)
-simulated_balanced_experiment_smpc = deepcopy(simulated_balanced_experiment)
-set_smpc_true(simulated_balanced_experiment_smpc)
-add_position_to_config(simulated_balanced_experiment_smpc)
-add_position_to_config(simulated_balanced_experiment)
-simulated_mildly_imbalanced_experiment = util.Experiment(
-        name="Simulated Mildly Imbalanced",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab1"),
-                 os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab2"),
-                 os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab3"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*3,
-        config_file_changes=[base_simulated_config_file_changes]*3,
-)
-simulated_mildly_imbalanced_experiment_smpc = deepcopy(simulated_mildly_imbalanced_experiment)
-set_smpc_true(simulated_mildly_imbalanced_experiment_smpc)
-add_position_to_config(simulated_mildly_imbalanced_experiment_smpc)
-add_position_to_config(simulated_mildly_imbalanced_experiment)
-simulated_strongly_imbalanced_experiment = util.Experiment(
-        name="Simulated Strongly Imbalanced",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab1"),
-                 os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab2"),
-                 os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab3"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*3,
-        config_file_changes=[base_simulated_config_file_changes]*3,
-)
-simulated_strongly_imbalanced_experiment_smpc = deepcopy(simulated_strongly_imbalanced_experiment)
-set_smpc_true(simulated_strongly_imbalanced_experiment_smpc)
-add_position_to_config(simulated_strongly_imbalanced_experiment_smpc)
-add_position_to_config(simulated_strongly_imbalanced_experiment)
-
 ### ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
+## Simulated
+experiments.append(simulated_balanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_balanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
+
+experiments.append(simulated_mildly_imbalanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_mildly_imbalanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+
+experiments.append(simulated_strongly_imbalanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_strongly_imbalanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+
 ## Microbiome
 experiments.append(microbiome_experiment)
 result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
@@ -278,23 +294,6 @@ experiments.append(microarray_experiment)
 result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
 experiments.append(microarray_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"))
-
-## Simulated
-experiments.append(simulated_balanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_balanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
-
-experiments.append(simulated_mildly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_mildly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
-
-experiments.append(simulated_strongly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_strongly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
-
 
 
 ### ACTUAL PROGRAM, NO NEED TO CHANGE IF A DIFFERENT EXPERIMENT WANTS TO BE RUN

@@ -274,13 +274,14 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
     for XtX, XtY in XtX_XtY_list:
         # due to serialization, the matrices are received as lists
         XtX = np.array(XtX)
-        print(f"INFO: adding XtX:\n{XtX}")
         XtY = np.array(XtY)
         if XtX.shape[0] != n or XtX.shape[1] != k or XtY.shape[0] != n or XtY.shape[1] != k:
             raise ValueError(f"Shape of received XtX or XtY does not match the expected shape: {XtX.shape} {XtY.shape}")
         XtX_glob += XtX
         XtY_glob += XtY
 
+    print(f"INFO: Random XtX entry: {XtX_glob[0]}")
+    print(f"INFO: All XtX entries are the same?: {np.all(XtX_glob == XtX_glob[0])}")
     inverse_count = 0 #TODO: rmv
     # calculate the betas
     # formula is beta = (XtX)^-1 * XtY
@@ -288,10 +289,10 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
     for i in range(0, n):
         # using the mask to remove the columns and rows that are not present
         mask = global_mask[i, :]
-        print(f"INFO: Mask for feature {i}: {mask}")
+        #print(f"INFO: Mask for feature {i}: {mask}")
         submatrix = XtX_glob[i, :, :][np.ix_(~mask, ~mask)]
-        print(f"INFO: masked submatrix:\n{submatrix}")
-        print(f"INFO: submatrix == original XtX?: {np.array_equal(submatrix, XtX_glob[i, :, :])}")
+        #print(f"INFO: masked submatrix:\n{submatrix}")
+        #print(f"INFO: submatrix == original XtX?: {np.array_equal(submatrix, XtX_glob[i, :, :])}")
 
         if linalg.det(submatrix) == 0:
             raise ValueError(

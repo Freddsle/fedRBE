@@ -455,20 +455,24 @@ class Client:
         else:
             self.design['intercept'] = np.ones(len(self.sample_names))
 
+        design_cohorts = cohorts[:-1]
         # check if we have multiple batches for this client
         cohorts_splitlist = [cohort.split("|") for cohort in cohorts]
+        design_cohorts_splitlist = cohorts_splitlist[:-1]
+        reference_batch_splitlist = cohorts_splitlist[-1]
+
         if len([split_batch[0] for split_batch in cohorts_splitlist if self.client_name == split_batch[0]]) == 1:
             print(f"INFO: Client {self.client_name} has only one batch")
             # we only have one batch for this client, check if it is the reference batch
             if self.client_name == cohorts[-1].split("|")[0]:
                 print(f"INFO: Client {self.client_name} is the reference batch")
                 # we are the reference batch, we just set all batches to -1
-                for cohort in cohorts:
+                for cohort in design_cohorts:
                     self.design[cohort] = -1
             else:
                 # we are not the reference batch, we set our batch to 1 and all others to 0
                 print(f"INFO: Client {self.client_name} is not the reference batch")
-                for cohort in cohorts:
+                for cohort in design_cohorts:
                     if self.client_name == cohort.split("|")[0]:
                         self.design[cohort] = 1
                     else:
@@ -478,20 +482,20 @@ class Client:
             # sample
             if not self.batch_col:
                 raise ValueError("Batch column was not given but multiple batches for this client were found")
-            for cohort_idx, cohorts_split in enumerate(cohorts_splitlist[:-1]):
+            for cohort_idx, cohorts_split in enumerate(design_cohorts_splitlist):
                 # we iterate all non reference batches
                 if self.client_name != cohorts_split[0]:
                     # another client, set to 0
-                    self.design[cohorts[cohort_idx]] = 0
+                    self.design[design_cohorts[cohort_idx]] = 0
                 else:
                     # 0 initialize this whole batch column
-                    self.design[cohorts[cohort_idx]] = 0
+                    self.design[design_cohorts[cohort_idx]] = 0
                     # set the samples of this batch to 1
                     sample_indices = self.design[self.design[self.batch_col] == cohorts_split[1]].index
-                    self.design.loc[sample_indices, cohorts[cohort_idx]] = 1
+                    self.design.loc[sample_indices, design_cohorts[cohort_idx]] = 1
             # now we fix the reference batch
             reference_batch_indices = self.design[self.design[self.batch_col] == cohorts_splitlist[-1][1]].index
-            self.design.loc[reference_batch_indices, cohorts[-1]] = -1
+            self.design.loc[reference_batch_indices, design_cohorts] = -1
 
         if self.batch_col:
             # we remove the batch column from the design matrix, not needed anymore
@@ -505,13 +509,13 @@ class Client:
             else:
                 if not all(column_name in self.design.columns for column_name in self.variables):
                     return f"ERROR: the given variables {self.variables} were not found in the given design matrix file."
-            self.design = self.design.loc[:, ['intercept'] + self.variables + cohorts]
+            self.design = self.design.loc[:, ['intercept'] + self.variables + design_cohorts]
                 # IMPORTANT: this order of intercept, variables, cohorts is
                 # relevant for the batch correction later as well as for the
                 # computation of betas with sample averaging, be careful
                 # with changing the order
         else:
-            self.design = self.design.loc[:, ['intercept'] + cohorts]
+            self.design = self.design.loc[:, ['intercept'] + design_cohorts]
         # for privacy reasons, we should protect the covariates added to the
         # design matrix. The design matrix itself is completely reproducable for
         # only one cohort. In case covariates are added, we ensure that
@@ -527,6 +531,7 @@ class Client:
 
         pd.set_option('display.max_colwidth', None)
         print(f"Design matrix created:\n{self.design}")
+        print(f"Design matrix shape: {self.design.shape}")
         print(f"Design matrix with summed columns: {self.design.sum(axis=0)}")
         return None
 
