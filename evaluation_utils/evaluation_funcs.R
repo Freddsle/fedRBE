@@ -2,10 +2,11 @@ library(variancePartition)
 
 
 lmpv_plot <- function(
-  data, metadata, title, 
+  data, metadata, title = "Variance explained by the model", 
   y_limits = c(0, 1), show_legend = TRUE, 
   form = NULL, max_yval = NULL,
-  median_position = 0.05
+  median_position = 0.05,
+  only_table = FALSE
 ){
   if (is.null(form)){
     form <- ~ Status + Dataset
@@ -17,6 +18,10 @@ lmpv_plot <- function(
 
   # Convert data to long format for ggplot2
   df_long <- reshape2::melt(variance_col)
+
+  if(only_table == TRUE){
+    return(df_long)
+  }
 
   # Calculate the medians for each group
   medians <- df_long %>%
