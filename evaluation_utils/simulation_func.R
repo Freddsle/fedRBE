@@ -118,15 +118,44 @@ add_batch_effect <- function(result_two, batch_info){
     # Step 3: Sample Based on Selected Parameters
     # Generate additive effects for each batch, one per protein
     # additive_effects <- mapply(function(mean, sd) rnorm(n_proteins, mean, sd), additive_params$mean, additive_params$sd)
-    add_batch_effects <- mapply(function(mean, sd) rnorm(1, mean, sd), additive_params$mean, additive_params$sd)
+    repeat {
+        # Generate batch effects using the existing approach
+        add_batch_effects <- mapply(function(mean, sd) rnorm(1, mean, sd), additive_params$mean, additive_params$sd)
+        
+        # Calculate pairwise percentage differences
+        values_sorted <- sort(add_batch_effects)  # Sort values for easier comparison
+        diff1 <- abs(values_sorted[2] - values_sorted[1]) / values_sorted[1] * 100
+        diff2 <- abs(values_sorted[3] - values_sorted[2]) / values_sorted[2] * 100
+        
+        # Check if differences are at least 10%
+        if (diff1 >= 20 && diff2 >= 20) {
+            break  # Stop looping if the condition is met
+        }
+    }
+
     additive_effects <- matrix(rep(add_batch_effects, each = n_proteins), nrow = n_proteins, ncol = n_batches)
     colnames(additive_effects) <- levels(batch_info$batch)
     # print first row
     print(additive_effects[1,])
 
     # Generate multiplicative effects for each batch, one per protein
-    # multiplicative_effects <- mapply(function(shape, scale) rinvgamma(n_proteins, shape, scale), multiplicative_params$shape, multiplicative_params$scale)
-    mult_batch_effects <- mapply(function(shape, scale) rinvgamma(1, shape, scale), multiplicative_params$shape, multiplicative_params$scale)
+    # multiplicative_effects <- mapply(function(shape, scale) 
+    #               rinvgamma(n_proteins, shape, scale), multiplicative_params$shape, multiplicative_params$scale)
+    repeat {
+        # Generate multiplicative batch effects
+        mult_batch_effects <- mapply(function(shape, scale) rinvgamma(1, shape, scale), 
+                                    multiplicative_params$shape, multiplicative_params$scale)
+        
+        # Calculate pairwise percentage differences
+        values_sorted <- sort(mult_batch_effects)  # Sort values for easier comparison
+        diff1 <- abs(values_sorted[2] - values_sorted[1]) / values_sorted[1] * 100
+        diff2 <- abs(values_sorted[3] - values_sorted[2]) / values_sorted[2] * 100
+        
+        # Check if differences are at least 10%
+        if (diff1 >= 20 && diff2 >= 20) {
+            break  # Stop looping if the condition is met
+        }
+    }
     multiplicative_effects <- matrix(rep(mult_batch_effects, each = n_proteins), nrow = n_proteins, ncol = n_batches)
     colnames(multiplicative_effects) <- levels(batch_info$batch)
     # print first row
