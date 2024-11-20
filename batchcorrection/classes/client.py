@@ -449,6 +449,9 @@ class Client:
 
         print(f"Number of features available in other clients but not this client: {len(list(self.extra_global_features))}")
 
+        # remove the local features that cannot be corrected
+        self.data = self.data.drop(index=list(self.extra_local_features))
+
         # for all extra global features we add NaN values
         # reminder: data is features x samples
 
