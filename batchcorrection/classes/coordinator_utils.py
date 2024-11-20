@@ -7,7 +7,7 @@ from numpy import linalg
 from typing import List, Tuple, Union, Dict
 
 def create_feature_presence_matrix(
-        lists_of_features_and_variables: List[Tuple[str, List[str], Union[int, None], Dict[str, List[str]]]],
+        feature_batch_info: List[Tuple[str, Union[int, None], Dict[str, List[str]]]],
         global_feature_names: List[str],
         default_order: List[str]
         ) -> Tuple[np.ndarray, List[str]]:
@@ -38,18 +38,18 @@ def create_feature_presence_matrix(
     num_features = len(global_feature_names)
     all_cohorts: List[List[str]] = list()
         # each element is a list of strings representing the batches of one client
-    for _, _, _, batch_feature_presence_info in lists_of_features_and_variables:
+    for _, _, batch_feature_presence_info in feature_batch_info:
         # The keys of the dictionary are the batch names of the whole client
         all_cohorts.append(list(batch_feature_presence_info.keys()))
     # we need to set the order of the clients either as sent by the clients
     # or as found in the given default_order
-    if any([not isinstance(position, int) for _, _, position, _ in lists_of_features_and_variables]):
+    if any([not isinstance(position, int) for _, position, _ in feature_batch_info]):
         # if any position is None, we use the default order
         print(f"INFO: Using the default client order: {default_order}")
         client_order = default_order
     else:
         # if all positions are integers, we use the order of the positions
-        client_order = [cohort_name for cohort_name, _, _, _ in sorted(lists_of_features_and_variables, key=lambda x: x[2])] # type: ignore
+        client_order = [cohort_name for cohort_name, _, _ in sorted(feature_batch_info, key=lambda x: x[1])] # type: ignore
             # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
         print(f"INFO: Using given specific client order: {client_order}")
     # we need to sort the cohorts in the order of the client_order
@@ -84,7 +84,7 @@ def create_feature_presence_matrix(
         # batch information objects and check if the batch_name is in the
         # batch_feature_presence_info dictionary
         batch_features = []
-        for _, _, _, batch_feature_presence_info in lists_of_features_and_variables:
+        for _, _, batch_feature_presence_info in feature_batch_info:
             if batch_name in batch_feature_presence_info:
                 batch_features = batch_feature_presence_info[batch_name]
                 break
@@ -100,18 +100,18 @@ def create_feature_presence_matrix(
     return matrix, cohorts_order
 
 def select_common_features_variables(
-    feature_variable_batch_info: List[Tuple[str, List[str], Union[int, None], Dict[str, List[str]]]],
+    feature_batch_info: List[Tuple[str, Union[int, None], Dict[str, List[str]]]],
     default_order: List[str],
-    min_clients=2) -> \
-        Tuple[List[str], Union[List[str], None], np.ndarray, List[str]]:
+    min_clients=3) -> \
+        Tuple[List[str], np.ndarray, List[str]]:
     """
     Extracts the union of features and the intersection of variables from the
     lists of features and variables provided by the clients.
     outdated : For the union, only features that are available on at least two clients
     are selected.
     Args:
-        feature_variable_batch_info: A list of tuples containing four items:
-            the clientname, the list of variables (hashed),
+        feature_batch_info: A list of tuples containing items:
+            the clientname,
             the position of the client relevant for ordering,
             and a dictionary containing as keys the batch names
             (format is "<client_name>|<batch_name>") and as values the list of
@@ -132,9 +132,9 @@ def select_common_features_variables(
             cohorts_order: A list of names of the clients in which to order the clients
     """
     feature_count = {}
-    global_variables = None
 
-    for _, variables, _, batch_feature_presence_info in feature_variable_batch_info:
+
+    for _,  _, batch_feature_presence_info in feature_batch_info:
         # Count features
         for features in batch_feature_presence_info.values():
             for feature in features:
@@ -142,26 +142,14 @@ def select_common_features_variables(
                     feature_count[feature] += 1
                 else:
                     feature_count[feature] = 1
-        # Intersect variables
-        if variables:
-            if global_variables is None:
-                global_variables = set(variables)
-            else:
-                global_variables.intersection_update(variables)
 
     # Select features present in at least min_clients clients, also sorting them
     global_feature_names = sorted([feature for feature, count in feature_count.items() if count >= min_clients])
 
-    # Sort variables
-    if global_variables:
-        global_variables = sorted(global_variables)
-    else:
-        global_variables = None
-
     # Create the feature presence matrix - for global mask
-    feature_presence_matrix, cohorts_order = create_feature_presence_matrix(feature_variable_batch_info, global_feature_names, default_order) # type: ignore
+    feature_presence_matrix, cohorts_order = create_feature_presence_matrix(feature_batch_info, global_feature_names, default_order) # type: ignore
 
-    return global_feature_names, global_variables, feature_presence_matrix, cohorts_order
+    return global_feature_names, feature_presence_matrix, cohorts_order
 
 def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.ndarray:
     """
@@ -175,8 +163,8 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
         k: The number of columns in self.design.
     Returns:
         global_mask: A matrix of shape (num_features, num_batches) that indicates
-            which features are present in the batches. The matrix contains 1
-            if the feature is absent in the batch and 1 otherwise. #TODO: fix this desc
+            which features should be ignored in the linear model.
+            The inverse of this mask should be used on XtX and XtY.
     """
 
     # Initialize the mask with zeros
@@ -279,7 +267,6 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         XtX_glob += XtX
         XtY_glob += XtY
 
-    inverse_count = 0 #TODO: rmv
     # calculate the betas
     # formula is beta = (XtX)^-1 * XtY
     # if XtX is singular, we need to use the pseudo inverse
@@ -287,6 +274,9 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         # using the mask to remove the columns and rows that are not present
         mask = global_mask[i, :]
         submatrix = XtX_glob[i, :, :][np.ix_(~mask, ~mask)]
+            # submatrix is of dimension (k, K)
+            # we only take the rows and columns where the mask is set to
+            # False (~ -> not mask)
 
         if linalg.det(submatrix) == 0:
             raise ValueError(

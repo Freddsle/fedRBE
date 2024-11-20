@@ -46,12 +46,15 @@ flimmaBatchCorrection:
   smpc: True     # whether to use secure multi party computation to securely
                  # aggregate information sent from clients to the coordinator
                  # for more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
-  min_samples: 0 # In case a covariat is known to an attacker, this ensures that
-                 # in each calculation, the vector of all samples of one protein
-                 # and of one covariat contain at least min_samples non Zero
-                 # non NaN samples, so that results are fuzzy enough for
-                 # attackers to not quess samples.
+  min_samples: 5 # The minimum number of samples per feature that are required
+                 # to be present and non-missing.
+                 # if for a feature less than min_samples samples are present,
+                 # the client will not send any information about that feature
                  # format: int
+                 # Please not that the actual used min_samples might be different
+                 # as for privacy reasons min_samples = max(min_samples, len(design.columns))
+                 # This is to ensure that a sent Xty matrix always has more samples
+                 # than features so that neither X not y can be reconstructed from the Xty matrix
   position: 1    # if a number x is given, the order of the clients will be
                  # be determined by sorting after this number x.
                  # Example:

@@ -16,7 +16,6 @@ It uses three basic building blocks for this:
     Resultfiles are zip files of the results that depend on the app used.
     Performs multiple sanity checks and is capable of restarting the controller
     if needed. Will retry upto 5 times before raising an error.
-    TODO: change this description
 """
 
 from dataclasses import dataclass

@@ -33,11 +33,43 @@ class InitialState(AppState):
         # we use the hashed values of the feature names and variables
         assert isinstance(client.hash2feature, dict)
         assert isinstance(client.hash2variable, dict)
-        batch_feature_presence_info: Dict[str, List[str]] = client.get_batch_feature_presence_info()
+
+        # exchange the batch_labels and covariates
+        self.send_data_to_coordinator((client.batch_labels,
+                                       list(client.hash2variable.keys())),
+                                    send_to_self=True,
+                                    use_smpc=False)
+        if self.is_coordinator:
+            # union the batch_labels and intersect the covariates
+            list_labels_variables = self.gather_data(is_json=False)
+            global_variables_hashed = set()
+            global_batch_labels = list()
+            for labels, variables in list_labels_variables:
+                # intersect the variables
+                if len(global_variables_hashed) == 0:
+                    global_variables_hashed = set(variables)
+                else:
+                    global_variables_hashed = global_variables_hashed.intersection(set(variables))
+                # extend the batch_labels
+                global_batch_labels.extend(labels)
+            # ensure the batch_labels are unique
+            if len(global_batch_labels) != len(set(global_batch_labels)):
+                self.log("Batch labels are not unique", LogLevel.FATAL)
+            # send around the number of batches and the variables
+            self.broadcast_data((global_variables_hashed, len(global_batch_labels)),
+                                send_to_self=True,
+                                memo="commonVariables")
+        # we receive the common variables and the number of batches
+        global_variables_hashed, num_batches = self.await_data(n=1, is_json=False, memo="commonVariables")
+        self.store(key='global_variables_hashed', value=global_variables_hashed)
+        # now we can calculate the min_samples_per_feature
+        min_samples = max(num_batches+len(global_variables_hashed)+1, client.min_samples)
+
+        batch_feature_presence = client.get_batch_feature_presence_info(min_samples=min_samples)
+
         self.send_data_to_coordinator((cohort_name,
-                                        list(client.hash2variable.keys()),
                                         client.position,
-                                        batch_feature_presence_info),
+                                        batch_feature_presence),
                                     send_to_self=True,
                                     use_smpc=False)
         if self.is_coordinator:
@@ -53,13 +85,19 @@ class globalFeatureSelection(AppState):
     def run(self):
         # wait for each client to send the list of genes they have
         self.log("[global_feature_selection] Gathering features from all clients")
-        feature_variable_batch_info = self.gather_data(is_json=False)
+        feature_information = self.gather_data(is_json=False)
+        # synchronize the covariate and batch information of all clients
+        # so that each client can decide which features it can use
+        # the clients need the info about covariates and batches to know
+        # the shape of the design matrix
+        # and therefore to know how many samples each feature should have out of privacy reasons
+
         self.log("[global_feature_selection] Gathered data from all clients")
         assert self._app is not None
-        global_feature_names, global_variables, feature_presence_matrix, cohorts_order = \
-              select_common_features_variables(feature_variable_batch_info, min_clients=1,
+        global_feature_names, feature_presence_matrix, cohorts_order = \
+              select_common_features_variables(feature_information,
                                                default_order=self._app.clients)
-        self.broadcast_data((global_feature_names, global_variables, cohorts_order),
+        self.broadcast_data((global_feature_names, cohorts_order),
                             send_to_self=True, memo="commonGenes")
         self.store(key='feature_presence_matrix', value=feature_presence_matrix)
         self.log("[global_feature_selection] Data was set to be broadcasted:")
@@ -75,7 +113,8 @@ class ValidationState(AppState):
     def run(self):
         # obtain and safe common genes and indices of design matrix
         self.log("[validate] waiting for common features and covariates")
-        global_feauture_names_hashed, global_variables_hashed, cohorts_order = self.await_data(n=1, is_json=False, memo="commonGenes")
+        global_feauture_names_hashed, cohorts_order = self.await_data(n=1, is_json=False, memo="commonGenes")
+        global_variables_hashed = self.load("global_variables_hashed")
         client = self.load('client')
 
         client.validate_inputs(global_variables_hashed)

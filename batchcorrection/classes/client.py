@@ -94,6 +94,10 @@ class Client:
             print("min_samples was not given so it was set to 0")
         else:
             min_samples = config["min_samples"]
+            try:
+                min_samples = int(min_samples)
+            except:
+                raise ValueError("min_samples must be an integer")
         # read covariates
         if "covariates" not in config:
             covariates = None
@@ -296,43 +300,73 @@ class Client:
             print(f"Normalization method {normalizationMethod} not recognized, no normalization applied")
             return
 
-    def get_batch_feature_presence_info(self) -> Dict[str, List[str]]:
+    def get_batch_feature_presence_info(self, min_samples: int) -> Dict[str, List[str]]:
         """
         Returns the information about the batches and which features(given as
         hashed feature names) are available on this client for each batch.
+        Also transforms the data, removing features that should not be
+        corrected due to privacy concerns.
+
+        Args:
+            min_samples: Minimum number of samples that a feature must
+                have per batch to be considered for the batch effect correction
+
         Returns:
             batch_feature_presence_info: Dict with the batch names as keys and
                 a list of hashed feature names as values
+            features_ignored_privacy: List of hashed feature names that were
+                ignored for privacy reasons
         """
         assert isinstance(self.data, pd.DataFrame)
         assert isinstance(self.feature_names, list)
         assert isinstance(self.hash2feature, dict)
         assert isinstance(self.design, pd.DataFrame)
 
+        print(f"INFO: Each feature must at least have {min_samples} samples in a batch to be considered for batch effect correction. Otherwise, privacy cannot be guaranteed.")
+        print(f"INFO: Detecting unsecure features...")
+
         # initialize the dict so we can always append
         batch_feature_presence_info = {}
+        self.batch2ignorefeature = {}
+        self.batch2sampleidx = {}
         for batch in self.batch_labels:
             batch_feature_presence_info[batch] = list()
-
-        # if we only have one batch, we can just return all features
-        if len(self.batch_labels) == 1:
-            batch_feature_presence_info[self.batch_labels[0]] = list(self.hash2feature.keys())
-            return batch_feature_presence_info
+            self.batch2ignorefeature[batch] = list()
 
         # check for each batch each feature if it is available in the data
         for batch_label in self.batch_labels:
-            # we get the batch specific data
-            # design is loaded already, so we can get all relevant indices
-            pure_batch_name = batch_label.split("|")[1]
+            # clean features to be ingored, different for each batch
+            features_ignored_privacy = list()
+            set_features_ignored_privacy = set()
+            if self.batch_col:
+                pure_batch_name = batch_label.split("|")[1]
                 # go from "client|batch" to "batch"
-            batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index.tolist()
-            batch_data = self.data.loc[:, batch_indices]
-                # samples are the index in self.design but columns in self.data
+                # we have multiple batches for this client
+                # we need to get the corresponding samples
+                batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index.tolist()
+                self.batch2sampleidx[batch_label] = batch_indices
+                batch_data = self.data.loc[:, batch_indices]
+                    # samples are the index in self.design but columns in self.data
+            else:
+                # all samples are from the same batch, just use all data
+                batch_data = self.data
+                self.batch2sampleidx[batch_label] = self.data.columns.tolist()
+
+            # Run the privacy checks, ensuring that each feature has at least
+            # min_samples samples in the batch which are not NaN
+            non_nan_samples = batch_data.notnull().sum(axis=1)
+            features_ignored_privacy.extend(list(non_nan_samples[non_nan_samples < 1].index))
+            set_features_ignored_privacy = set(features_ignored_privacy)
+                # hashtable is better for lookups
+            self.batch2ignorefeature[batch_label] = set_features_ignored_privacy
+
             for feature in self.feature_names:
-                if feature in batch_data.index and batch_data.loc[feature, :].notnull().any():
-                    # check whether the feature is available in the batch
-                    # and not just NaN values
+                if feature in batch_data.index and feature not in set_features_ignored_privacy:
+                    if self.feature2hash is None:
+                        raise NotImplementedError("IMPLEMENTATION ERROR: The feature2hash dict is not set, cannot continue")
                     batch_feature_presence_info[batch_label].append(feature)
+
+
         return batch_feature_presence_info
 
     def validate_inputs(self, global_variables_hashed):
@@ -480,6 +514,8 @@ class Client:
             # we have multiple batches for this client, we need to decide per
             # sample
             if not self.batch_col:
+                print(f"ERROR: Client {self.client_name} has multiple batches but no batch column was given")
+                print(f"The following batches were found for this client: {cohorts}")
                 raise ValueError("Batch column was not given but multiple batches for this client were found")
             for cohort_idx, cohorts_split in enumerate(design_cohorts_splitlist):
                 # we iterate all non reference batches
@@ -538,49 +574,41 @@ class Client:
         """
         assert isinstance(self.design, pd.DataFrame)
         assert isinstance(self.data, pd.DataFrame)
+        assert isinstance(self.batch2ignorefeature, dict)
+        assert isinstance(self.batch2sampleidx, dict)
+        feature2idx = {feature: idx for idx, feature in enumerate(self.data.index)}
+        final_k = self.design.shape[1]
+        final_n = self.data.shape[0]
+        XtX = np.zeros((final_n, final_k, final_k))
+        XtY = np.zeros((final_n, final_k))
+        for batch_label in self.batch_labels:
+            # we need to remove the features that were ignored for privacy reasons
+            # and the features that are not available in the data
+            features_to_ignore = self.batch2ignorefeature[batch_label]
+            relevant_features = [feature for feature in self.data.index if feature not in features_to_ignore]
+            relevant_feature_idxs = [feature2idx[feature] for feature in relevant_features]
+            sample_indices = self.batch2sampleidx[batch_label]
+            # remove samples, the features are ignored by the following loop
+            batch_data = self.data.loc[:, sample_indices]
+            X = self.design.loc[sample_indices].values
+            Y = batch_data.values
+            n = Y.shape[0]  # [0] = rows = features
+            k = self.design.shape[1]  # [1] = columns = covariates + batches
 
-        X = self.design.values
-        Y = self.data.values  # Y -> features x samples
-        n = Y.shape[0]  # [0] = rows = features
-        k = self.design.shape[1]  # [1] = columns = samples
+            # linear models for each row (for each feature)
+            for feature_idx in relevant_feature_idxs:
+                y = Y[feature_idx, :] # y is all values of one specific feature
+                non_nan_idxs = np.argwhere(np.isfinite(y)).reshape(-1)
+                    # gives the indices of the non-NaN values in y as an 1d array
 
-        self.XtX = np.zeros((n, k, k))
-            # for each feature, we calculate the XtX matrix individually
-            # X is of shape k x len([intercept, variables, cohorts]), so XtX
-            # is of shape k x k
-        self.XtY = np.zeros((n, k))
-            # for each feature, we calculate the XtY vector individually
-            # X is of shape k x len([intercept, variables, cohorts]), y is of
-            # len of samples
+                if len(non_nan_idxs) > 0:
+                    x = X[non_nan_idxs, :]
+                    y = y[non_nan_idxs]
+                    # calculate XtX and XtY and add them to the final XtX and XtY
+                    XtX[feature_idx, :, :] += x.T @ x
+                    XtY[feature_idx, :] += x.T @ y
 
-        # linear models for each row (for each feature)
-        for feature_idx in range(n):
-            y = Y[feature_idx, :] # y is all values of one specific feature
-            non_nan_idxs = np.argwhere(np.isfinite(y)).reshape(-1)
-                # gives the indices of the non-NaN values in y as an 1d array
-
-            if len(non_nan_idxs) > 0:
-                x = X[non_nan_idxs, :]
-                y = y[non_nan_idxs]
-                self.XtX[feature_idx, :, :] = x.T @ x
-                self.XtY[feature_idx, :] = x.T @ y
-
-                # privacy check, ensure that y holds enough values
-                # Even when just one value is present, it is unknown which sample
-                # exactly is choosen
-                # counts_y = np.sum((y != 0) & (~np.isnan(y)))
-                # if counts_y > 0 and counts_y < minSamples:
-                #     return None, None, f"Privacy Error: your expression data must not contain a " +\
-                #         f"protein with less than min_sample ({minSamples}) value(s) " +\
-                #         f"that are neither 0 nor NaN."
-                if self.min_samples != 0:
-                    x_boolean = np.where(x != 0, 1, 0)
-                    y_boolean = np.where(y != 0, 1, 0)
-                    XtY_boolean = x_boolean.T @ y_boolean
-                    if not np.all((XtY_boolean >= self.min_samples) | (XtY_boolean == 0)):
-                        return np.empty(0), np.empty(0), "Privacy error, less than minSamples would be represented in a value that you would share. The training was stopped"
-
-        return self.XtX, self.XtY, ""
+        return XtX, XtY, ""
 
     def remove_batch_effects(self, betas: np.ndarray) -> None:
         """
