@@ -69,6 +69,7 @@ class InitialState(AppState):
 
         self.send_data_to_coordinator((cohort_name,
                                         client.position,
+                                        client.reference_batch,
                                         batch_feature_presence),
                                     send_to_self=True,
                                     use_smpc=False)

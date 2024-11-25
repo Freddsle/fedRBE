@@ -47,12 +47,12 @@ flimmaBatchCorrection:
                  # aggregate information sent from clients to the coordinator
                  # for more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
   min_samples: 5 # The minimum number of samples per feature that are required
-                 # to be present and non-missing.
+                 # to be present and non-missing on the whole client.
                  # if for a feature less than min_samples samples are present,
                  # the client will not send any information about that feature
                  # format: int
-                 # Please not that the actual used min_samples might be different
-                 # as for privacy reasons min_samples = max(min_samples, len(design.columns))
+                 # Please note that the actual used min_samples might be different
+                 # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
                  # This is to ensure that a sent Xty matrix always has more samples
                  # than features so that neither X not y can be reconstructed from the Xty matrix
   position: 1    # if a number x is given, the order of the clients will be
@@ -64,3 +64,13 @@ flimmaBatchCorrection:
                  # batch, so in this case Client2
                  # if empty/None, the order is random, making the batch correction
                  # run non deterministic
+  reference_batch: "" # if a string is given, the specified batch is used as
+                      # the reference batch for the batch correction
+                      # if True, this client is used as the reference batch
+                      # if True and multiple batches exist for this client,
+                      # the program will halt
+                      # if False or an empty string, the last client in the order
+                      # determined by the position parameter or the
+                      # coordinator is used as the reference batch
+                      # if the position parameter and the reference_batch parameter
+                      # result in different orders, the program halts

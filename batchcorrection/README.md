@@ -50,25 +50,18 @@ flimmaBatchCorrection:
   normalizationMethod: "log2(x+1)" # the method used for normalization, supported:
                                    # "log2(x+1)"
                                    # if None is given, doesn't the app doesn't normalize
-  # The following options are for privacy, we recommend one of these tiers:
-  # minimum privacy:
-  #   smpc = False, min_samples = 0
-  # medium privacy, medium slowdown
-  #   smpc = True, min_samples = 0
-  # maximum privacy, medium to high slowdown
-  #   smpc = True, min_samples = 5
-  # We recommend at least medium privacy when using covariates and maximum
-  # privacy if the data contains a lot of missing values
-  # With min samples > 0, the program might halt depending on the given data
   smpc: True     # whether to use secure multi party computation to securely
                  # aggregate information sent from clients to the coordinator
                  # for more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
-  min_samples: 0 # In case a covariat is known to an attacker, this ensures that
-                 # in each calculation, the vector of all samples of one protein
-                 # and of one covariat contain at least min_samples non Zero 
-                 # non NaN samples, so that results are fuzzy enough for
-                 # attackers to not quess samples. 
+  min_samples: 5 # The minimum number of samples per feature that are required
+                 # to be present and non-missing on the whole client.
+                 # if for a feature less than min_samples samples are present,
+                 # the client will not send any information about that feature
                  # format: int
+                 # Please note that the actual used min_samples might be different
+                 # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
+                 # This is to ensure that a sent Xty matrix always has more samples
+                 # than features so that neither X not y can be reconstructed from the Xty matrix
   position: 1    # if a number x is given, the order of the clients will be
                  # be determined by sorting after this number x. 
                  # Example:
@@ -78,3 +71,13 @@ flimmaBatchCorrection:
                  # batch, so in this case Client2
                  # if empty/None, the order is random, making the batch correction
                  # run non deterministic
+  reference_batch: "" # if a string is given, the specified batch is used as
+                      # the reference batch for the batch correction
+                      # if True, this client is used as the reference batch
+                      # if True and multiple batches exist for this client,
+                      # the program will halt
+                      # if False or an empty string, the last client in the order
+                      # determined by the position parameter or the
+                      # coordinator is used as the reference batch
+                      # if the position parameter and the reference_batch parameter
+                      # result in different orders, the program halts

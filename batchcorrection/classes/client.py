@@ -146,6 +146,10 @@ class Client:
             if position and not isinstance(position, int):
                 raise ValueError("Position must be an integer")
 
+        reference_batch = None
+        if "reference_batch" in config:
+            reference_batch = config["reference_batch"]
+
         self.batch_col = None
         if "batch_col" in config:
             self.batch_col = config["batch_col"]
@@ -161,6 +165,7 @@ class Client:
         self.min_samples = min_samples
         self.separator = separator
         self.position = position
+        self.reference_batch = reference_batch
 
         # load the data
         try:
@@ -309,7 +314,7 @@ class Client:
 
         Args:
             min_samples: Minimum number of samples that a feature must
-                have per batch to be considered for the batch effect correction
+                have per client to be considered for the batch effect correction
 
         Returns:
             batch_feature_presence_info: Dict with the batch names as keys and
@@ -323,50 +328,60 @@ class Client:
         assert isinstance(self.design, pd.DataFrame)
 
         print(f"INFO: Each feature must at least have {min_samples} samples in a batch to be considered for batch effect correction. Otherwise, privacy cannot be guaranteed.")
-        print(f"INFO: Detecting unsecure features...")
 
         # initialize the dict so we can always append
         batch_feature_presence_info = {}
-        self.batch2ignorefeature = {}
-        self.batch2sampleidx = {}
         for batch in self.batch_labels:
             batch_feature_presence_info[batch] = list()
-            self.batch2ignorefeature[batch] = list()
+
+        # first we need to ensure for each batch that at least 2 samples
+        # are available, otherwise the specific entry of XtY from the
+        # combination of the batch column and y leaks the specific non nan value
+        # of the feature
+        # we only need to do this if we have multiple batches, otherwise the
+        # next step does a more strict check anyways
+        if self.batch_col:
+            for batch_label in self.batch_labels:
+                pure_batch_name = batch_label.split("|")[1]
+                batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index.tolist()
+                batch_data = self.data.loc[:, batch_indices]
+                non_nan_samples = batch_data.notnull().sum(axis=1)
+                # find all features that have less than 2 samples
+                ignore_index = non_nan_samples[non_nan_samples == 1].index
+                if len(ignore_index) > 0:
+                    print(f"INFO: Ignoring the following {len(ignore_index)} features for batch {batch_label} due to privacy reasons: {[self.hash2feature.get(hashed, hashed) for hashed in ignore_index]}")
+
+                # set all batch_indices columns and ingore_index rows to NaN
+                self.data.loc[ignore_index, batch_indices] = np.nan
+
+
+        # Second we check how many samples (non nan!) are available for each feature
+        # for the whole client
+        non_nan_samples = self.data.notnull().sum(axis=1)
+        ignore_index = non_nan_samples[non_nan_samples < min_samples].index
+        if len(ignore_index) > 0:
+            print(f"INFO: Ignoring the following {len(ignore_index)} features for client {self.client_name} due to privacy reasons: {[self.hash2feature.get(hashed, hashed) for hashed in ignore_index]}")
+        # now we set ALL columns of the ignore_index rows to NaN
+        self.data.loc[ignore_index, :] = np.nan
 
         # check for each batch each feature if it is available in the data
         for batch_label in self.batch_labels:
-            # clean features to be ingored, different for each batch
-            features_ignored_privacy = list()
-            set_features_ignored_privacy = set()
             if self.batch_col:
                 pure_batch_name = batch_label.split("|")[1]
                 # go from "client|batch" to "batch"
                 # we have multiple batches for this client
                 # we need to get the corresponding samples
                 batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index.tolist()
-                self.batch2sampleidx[batch_label] = batch_indices
                 batch_data = self.data.loc[:, batch_indices]
                     # samples are the index in self.design but columns in self.data
             else:
                 # all samples are from the same batch, just use all data
                 batch_data = self.data
-                self.batch2sampleidx[batch_label] = self.data.columns.tolist()
-
-            # Run the privacy checks, ensuring that each feature has at least
-            # min_samples samples in the batch which are not NaN
-            non_nan_samples = batch_data.notnull().sum(axis=1)
-            features_ignored_privacy.extend(list(non_nan_samples[non_nan_samples < 1].index))
-            set_features_ignored_privacy = set(features_ignored_privacy)
-                # hashtable is better for lookups
-            self.batch2ignorefeature[batch_label] = set_features_ignored_privacy
 
             for feature in self.feature_names:
-                if feature in batch_data.index and feature not in set_features_ignored_privacy:
-                    if self.feature2hash is None:
-                        raise NotImplementedError("IMPLEMENTATION ERROR: The feature2hash dict is not set, cannot continue")
+                if feature in batch_data.index and not batch_data.loc[feature, :].isnull().all():
+                    # feature is available in this batch and not all samples are NaN
                     batch_feature_presence_info[batch_label].append(feature)
-
-
         return batch_feature_presence_info
 
     def validate_inputs(self, global_variables_hashed):
@@ -577,39 +592,32 @@ class Client:
         """
         assert isinstance(self.design, pd.DataFrame)
         assert isinstance(self.data, pd.DataFrame)
-        assert isinstance(self.batch2ignorefeature, dict)
-        assert isinstance(self.batch2sampleidx, dict)
-        feature2idx = {feature: idx for idx, feature in enumerate(self.data.index)}
-        final_k = self.design.shape[1]
-        final_n = self.data.shape[0]
-        XtX = np.zeros((final_n, final_k, final_k))
-        XtY = np.zeros((final_n, final_k))
-        for batch_label in self.batch_labels:
-            # we need to remove the features that were ignored for privacy reasons
-            # and the features that are not available in the data
-            features_to_ignore = self.batch2ignorefeature[batch_label]
-            relevant_features = [feature for feature in self.data.index if feature not in features_to_ignore]
-            relevant_feature_idxs = [feature2idx[feature] for feature in relevant_features]
-            sample_indices = self.batch2sampleidx[batch_label]
-            # remove samples, the features are ignored by the following loop
-            batch_data = self.data.loc[:, sample_indices]
-            X = self.design.loc[sample_indices].values
-            Y = batch_data.values
-            n = Y.shape[0]  # [0] = rows = features
-            k = self.design.shape[1]  # [1] = columns = covariates + batches
 
-            # linear models for each row (for each feature)
-            for feature_idx in relevant_feature_idxs:
-                y = Y[feature_idx, :] # y is all values of one specific feature
-                non_nan_idxs = np.argwhere(np.isfinite(y)).reshape(-1)
-                    # gives the indices of the non-NaN values in y as an 1d array
+        X = self.design.values
+        Y = self.data.values  # Y -> features x samples
+        n = Y.shape[0]  # [0] = rows = features
+        k = self.design.shape[1]  # [1] = columns = samples
 
-                if len(non_nan_idxs) > 0:
-                    x = X[non_nan_idxs, :]
-                    y = y[non_nan_idxs]
-                    # calculate XtX and XtY and add them to the final XtX and XtY
-                    XtX[feature_idx, :, :] += x.T @ x
-                    XtY[feature_idx, :] += x.T @ y
+        XtX = np.zeros((n, k, k))
+            # for each feature, we calculate the XtX matrix individually
+            # X is of shape k x len([intercept, variables, cohorts]), so XtX
+            # is of shape k x k
+        XtY = np.zeros((n, k))
+            # for each feature, we calculate the XtY vector individually
+            # X is of shape k x len([intercept, variables, cohorts]), y is of
+            # len of samples
+
+        # linear models for each row (for each feature)
+        for feature_idx in range(n):
+            y = Y[feature_idx, :] # y is all values of one specific feature
+            non_nan_idxs = np.argwhere(np.isfinite(y)).reshape(-1)
+                # gives the indices of the non-NaN values in y as an 1d array
+
+            if len(non_nan_idxs) > 0:
+                x = X[non_nan_idxs, :]
+                y = y[non_nan_idxs]
+                XtX[feature_idx, :, :] = x.T @ x
+                XtY[feature_idx, :] = x.T @ y
 
         return XtX, XtY, ""
 

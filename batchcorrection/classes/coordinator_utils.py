@@ -7,7 +7,7 @@ from numpy import linalg
 from typing import List, Tuple, Union, Dict
 
 def create_feature_presence_matrix(
-        feature_batch_info: List[Tuple[str, Union[int, None], Dict[str, List[str]]]],
+        feature_batch_info: List[Tuple[str, Union[int, None], Union[str, bool, None], Dict[str, List[str]]]],
         global_feature_names: List[str],
         default_order: List[str]
         ) -> Tuple[np.ndarray, List[str]]:
@@ -19,9 +19,11 @@ def create_feature_presence_matrix(
     Finally, fixes the order of the clients.
 
     Args:
-        feature_variable_batch_info: A list of tuples containing four items:
+        feature_batch_info: A list of tuples containing four items:
             the clientname, the list of variables (hashed),
             the position of the client relevant for ordering,
+            a boolean indicating if that client is the reference batch.
+            Might also be a string declaring which batch of this client is the reference batch
             and a dictionary containing as keys the batch names
             (format is "<client_name>|<batch_name>") and as values the list of
             features(hashed) available in that batch.
@@ -36,28 +38,63 @@ def create_feature_presence_matrix(
     """
     feature2index = {feature: idx for idx, feature in enumerate(global_feature_names)}
     num_features = len(global_feature_names)
+    reference_batch = None
+    reference_client = None
     all_cohorts: List[List[str]] = list()
         # each element is a list of strings representing the batches of one client
-    for _, _, batch_feature_presence_info in feature_batch_info:
+    for _, _, reference_batch_client, batch_feature_presence_info in feature_batch_info:
         # The keys of the dictionary are the batch names of the whole client
         all_cohorts.append(list(batch_feature_presence_info.keys()))
+        # also find the reference_batch
+        if reference_batch_client and reference_batch:
+            raise ValueError("Multiple reference batches found")
+        if not reference_batch and reference_batch_client:
+            if isinstance(reference_batch_client, str):
+                # we should have multiple batches for this client
+                if len(batch_feature_presence_info) == 1:
+                    raise ValueError("Reference batch is the only batch of the client. Use a boolean flag in reference_batch.")
+                for key, _ in batch_feature_presence_info.items():
+                    if reference_batch_client == key.split("|")[1]:
+                        reference_batch = key
+                        reference_client = key.split("|")[0]
+                        break
+                if not reference_batch:
+                    raise ValueError(f"Reference batch {reference_batch_client} not found in the batch_feature_presence_info")
+            else:
+                # reference_batch_client is a boolean, so client should only
+                # have one batch, which is the reference batch
+                if len(batch_feature_presence_info) != 1:
+                    raise ValueError("Reference batch is not the only batch of the client. Use a string in reference_batch.")
+                reference_batch = list(batch_feature_presence_info.keys())[0]
+                if len(reference_batch.split("|")) != 1:
+                    raise ValueError("Reference batch name is not correctly formatted")
+                reference_client = reference_batch
+
     # we need to set the order of the clients either as sent by the clients
     # or as found in the given default_order
-    if any([not isinstance(position, int) for _, position, _ in feature_batch_info]):
+    if any([not isinstance(position, int) for _, position, _, _ in feature_batch_info]):
         # if any position is None, we use the default order
         print(f"INFO: Using the default client order: {default_order}")
         client_order = default_order
+        if reference_client not in client_order:
+            raise ValueError(f"Reference client {reference_client} not found in the default order")
+        # switch reference_client to the last position
+        client_order.remove(reference_client)
+        client_order.append(reference_client)
     else:
         # if all positions are integers, we use the order of the positions
-        client_order = [cohort_name for cohort_name, _, _ in sorted(feature_batch_info, key=lambda x: x[1])] # type: ignore
+        client_order = [cohort_name for cohort_name, _, _, _ in sorted(feature_batch_info, key=lambda x: x[1])] # type: ignore
             # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
         print(f"INFO: Using given specific client order: {client_order}")
+        if reference_client and reference_client != client_order[-1]:
+            raise ValueError("Reference client is not the last client in the specified order")
+
     # we need to sort the cohorts in the order of the client_order
     # we do this in an inefficient O(n^2) way, but the number of batches
     # is so small it doesn't matter and this is way more readable than any fancier
     # sorting algorithm
     cohorts_order: List[str] = []
-    for client_name in client_order:
+    for idx, client_name in enumerate(client_order):
         for cohort_list in all_cohorts:
             # all cohorts of one client, extract which client
             referencing_client_name = cohort_list[0].split("|")[0]
@@ -65,6 +102,11 @@ def create_feature_presence_matrix(
                 # in this case the cohort_list are the batches of the client
                 # we are considering right now from the client_order
                 cohorts_order.extend(sorted(cohort_list))
+                if idx == len(client_order) - 1 and reference_batch:
+                    # if we are at the last client and we have a reference batch
+                    # we add the reference batch to the end
+                    cohorts_order.remove(reference_batch)
+                    cohorts_order.append(reference_batch)
                 break
 
     print(f"INFO: Cohorts order: {cohorts_order}")
@@ -84,7 +126,7 @@ def create_feature_presence_matrix(
         # batch information objects and check if the batch_name is in the
         # batch_feature_presence_info dictionary
         batch_features = []
-        for _, _, batch_feature_presence_info in feature_batch_info:
+        for _, _, _, batch_feature_presence_info in feature_batch_info:
             if batch_name in batch_feature_presence_info:
                 batch_features = batch_feature_presence_info[batch_name]
                 break
@@ -100,7 +142,7 @@ def create_feature_presence_matrix(
     return matrix, cohorts_order
 
 def select_common_features_variables(
-    feature_batch_info: List[Tuple[str, Union[int, None], Dict[str, List[str]]]],
+    feature_batch_info: List[Tuple[str, Union[int, None], Union[str, bool, None], Dict[str, List[str]]]],
     default_order: List[str],
     min_clients=3) -> \
         Tuple[List[str], np.ndarray, List[str]]:
@@ -113,6 +155,8 @@ def select_common_features_variables(
         feature_batch_info: A list of tuples containing items:
             the clientname,
             the position of the client relevant for ordering,
+            a boolean indicating if that client is the reference batch.
+            Might also be a string declaring which batch of this client is the reference batch
             and a dictionary containing as keys the batch names
             (format is "<client_name>|<batch_name>") and as values the list of
             features(hashed) available in that batch.
@@ -134,17 +178,25 @@ def select_common_features_variables(
     feature_count = {}
 
 
-    for _,  _, batch_feature_presence_info in feature_batch_info:
+    for _, _, _, batch_feature_presence_info in feature_batch_info:
         # Count features
+        client_feature_names = set()
+            # so that we don't count multiple batches of the same client
+            # multiple times
         for features in batch_feature_presence_info.values():
             for feature in features:
-                if feature in feature_count:
+                if feature in client_feature_names:
+                    continue
+                elif feature in feature_count:
                     feature_count[feature] += 1
                 else:
                     feature_count[feature] = 1
+                client_feature_names.add(feature)
 
     # Select features present in at least min_clients clients, also sorting them
     global_feature_names = sorted([feature for feature, count in feature_count.items() if count >= min_clients])
+    print(f"INFO: Found {len(global_feature_names)} features present in at least {min_clients} clients")
+    print(f"INFO: Total number of features shared: {len(feature_count.keys())}")
 
     # Create the feature presence matrix - for global mask
     feature_presence_matrix, cohorts_order = create_feature_presence_matrix(feature_batch_info, global_feature_names, default_order) # type: ignore
