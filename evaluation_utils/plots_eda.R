@@ -77,7 +77,8 @@ umap_plot <- function(
   shape_column = "class",
   quantitative_col_name = 'sample',
   show_legend = TRUE,
-  path = "") {
+  path = "", cbPalette=NULL) {
+  
   # Perform UMAP on the transposed data
   umap_result <- umap(t(na.omit(df)))
   
@@ -90,22 +91,26 @@ umap_plot <- function(
     column_to_rownames(quantitative_col_name)
 
   plot_result <- ggplot(umap_data, aes_string(x = "X1", y = "X2", color = color_column, shape = shape_column)) +
-    geom_point(aes_string(col = color_column), size = 0.9) +
-    # stat_ellipse(type = "t", level = 0.95) + # Add ellipses for each condition
+    geom_point(aes_string(col = color_column), size = 2) +
     theme_minimal() +
-    scale_color_lancet() + 
-    labs(title = title, x = "UMAP 1", y = "UMAP 2") +
+    scale_color_manual(values = cbPalette) + # Use the custom color palette
+    labs(
+      title = title, 
+      x = "UMAP 1", 
+      y = "UMAP 2", 
+      color = "cohorts"  # Update legend label
+    ) +
     guides(color = guide_legend(override.aes = list(size = 3))) # Ensure legend accurately represents centroids
   
-  if(!show_legend){
+  if (!show_legend) {
     plot_result <- plot_result + 
       theme(legend.position = "none")
   }
     
-    if (path == "") {
-        return(plot_result)
+  if (path == "") {
+    return(plot_result)
   } else {
-        ggsave(path, plot_result)
+    ggsave(path, plot_result)
   }
 }
 
