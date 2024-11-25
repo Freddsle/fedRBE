@@ -14,8 +14,8 @@ filter_na_proteins <- function(dt, meta_data, quantitative_column_name) {
 }
 
 
-filter_per_center <- function(intensities, metadata, quantitative_column_name, centers, center_column_name) {
-  cat('Filtering by center - two not-NA per center\n')
+filter_per_center <- function(intensities, metadata, quantitative_column_name, centers, center_column_name, min_samples = 2) {
+  cat('Filtering by ', center_column_name, ' - two not-NA per', center_column_name,'\n')
   cat('\tBefore filtering:', dim(intensities), "\n")
   
   # Initialize a list to store the sample indices for each center
@@ -25,9 +25,9 @@ filter_per_center <- function(intensities, metadata, quantitative_column_name, c
   for (center in centers) {
     center_samples[[center]] <- metadata[metadata[[center_column_name]] == center, ][[quantitative_column_name]]
   }
-  # Determine rows with at least 2 non-NA values across each center's samples
+  # Determine rows with at least 2   non-NA values across each center's samples
   conditions <- sapply(center_samples, function(samples) {
-    rowSums(!is.na(intensities[, samples, drop = FALSE])) >= 2
+    rowSums(!is.na(intensities[, samples, drop = FALSE])) >= min_samples
   })
   # Filter intensities where all conditions across centers are met
   filtered_intensities <- intensities[rowSums(conditions) == length(centers), ]
