@@ -331,11 +331,16 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
             # False (~ -> not mask)
 
         if linalg.det(submatrix) == 0:
-            raise ValueError(
-                "ERROR: Cannot calculate the linear models as the design matrix containing batch information " +\
-                "and covariates is singular, please check for colinearity between covariates/covariates and batches")
-
-        invXtX = linalg.inv(submatrix)
+            invXtX = linalg.pinv(submatrix)
+            print(f"INFO: Error at feature {i}")
+            print(f"Mask: {mask}")
+            print(f"submatrix: {submatrix}")
+            print(f"full XTX: {XtX_glob[i, :, :]}")
+            # raise ValueError(
+            #     "ERROR: Cannot calculate the linear models as the design matrix containing batch information " +\
+            #     "and covariates is singular, please check for colinearity between covariates/covariates and batches")
+        else:
+            invXtX = linalg.inv(submatrix)
         beta[i, ~mask] = invXtX @ XtY_glob[i, ~mask]
 
     return beta
