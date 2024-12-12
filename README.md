@@ -71,4 +71,3 @@ TODO: description
 The documentation for the implementation can be found in the corresponding 
 subfolders README at [batchcorrection/README.md](batchcorrection/README.md)
 and in the [paper](TODO: ref the paper) 
-
