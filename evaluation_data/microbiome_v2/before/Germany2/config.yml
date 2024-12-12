@@ -1,0 +1,14 @@
+flimmaBatchCorrection:
+  batch_col: null
+  covariates:
+  - CRC
+  data_filename: UQnorm_log_counts_for_corr.tsv
+  design_filename: design_5C.tsv
+  design_separator: "\t"
+  expression_file_flag: true
+  index_col: 0
+  min_samples: 0
+  normalizationMethod: null
+  position: 5
+  separator: "\t"
+  smpc: true

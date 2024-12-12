@@ -158,3 +158,20 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+
+# FeatureCloud related files
+batchcorrection/data/tests
+batchcorrection/data/logs
+batchcorrection/data/site_info.json
+batchcorrection/logs
+batchcorrection/tests
+evaluation_data/site_info.json
+evaluation_data/tests/
+evaluation_data/testbed-*
+evaluation_data/workflows
+**/individual_results
+
+# these files are too big!
+evaluation_data/microarray/after/*.tsv
+evaluation_data/microarray/after/*.csv
