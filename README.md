@@ -4,7 +4,7 @@ This repository serves two purposes
 hereby called fedRBE, in the subfolder `batchcorrection`. 
 The implementation uses the [FeatureCloud platform](http://dx.doi.org/10.2196/42621)
 1. Contains the code to reproduce the analyses of fedRBE done in 
-this [paper](TODO:link).
+this [paper](https://arxiv.org/abs/2412.05894).
 
 # The fedRBE FeatureCloud app
 As the app is also published in the [FeatureCloud store](https://featurecloud.ai/app-store), it can
@@ -18,8 +18,32 @@ The app can then be used using the [Featurecloud testbed](https://featurecloud.a
 please read the [FeatureCloud documentation](https://featurecloud.ai/assets/developer_documentation/index.html) 
 for more information.
 
-# Reproduction of the paper/example usage
-To run fedRBE on some sample data, ensure the prerequisites of FeatureCloud are met and 
+# Reproduction of the paper
+
+## Prerequisites
+To use fedRBE, the [prerequisites of FeatureCloud need to be fullfilled](https://featurecloud.ai/developers)
+In short:
+1. Docker needs to be installed
+1. The `featurecloud` pip package must be installed: `pip install featurecloud`
+1. the FeatureCloud controller needs to be started: `featurecloud controller start`
+
+Furthermore, the app image itself needs to be downloaded. It is provided in the
+docker registry of featurecloud, but built on the linux/amd64 platform.
+Especially if you're using a Macbook with any of the M-series chips or any other device
+not compatible with linux/amd64, please build the image locally:
+```
+cd ./batchcorrection
+docker build . -t featurecloud.ai/bcorrect:latest
+```
+Otherwise, you can simply pull it:
+``` 
+featurecloud app download featurecloud.ai/bcorrect
+# alternatively:
+docker pull featurecloud.ai/bcorrect:latest
+```
+
+## Small example run
+To run fedRBE on some sample data, ensure the prerequisites are met and 
 run the example script:
 ```
 python3 ./evaluation_utils/run_sample_experiment.py
@@ -29,7 +53,7 @@ python3 ./evaluation_utils/run_sample_experiment.py
 #TODO
 
 ## Getting the federated (fedRBE) corrected data
-We provide a utility script to reproduce the results given in the [paper](TODO:link)
+We provide a utility script to reproduce the results given in the [paper](https://arxiv.org/abs/2412.05894)
 The centrally normalized and batch corrected data is provided directly, if a
 full reproduction is wanted, please ensure that the data provided to the
 federated batch efffect correction in the folders in the `before` folder of
@@ -75,5 +99,4 @@ TODO: description
 # Implementation of federated limma RBE
 The documentation for the implementation can be found in the corresponding 
 subfolders README at [batchcorrection/README.md](batchcorrection/README.md)
-and in the [paper](TODO: ref the paper) 
-
+and in the [paper](https://arxiv.org/abs/2412.05894) 

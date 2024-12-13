@@ -26,11 +26,11 @@ try:
         controller_image=""
     )
 except Exception as e:
-    raise Exception(f"Failed to start the controller with the correct folder: {e}")
+    raise Exception(f"Failed to start the featurecloud controller with the correct folder: {e}")
 
 # wait for the controller to be online
 time_passed = 0
-print("Restarting the controller with the correct folder")
+print("(Re)starting the featurecloud controller with the correct folder")
 while True:
     try:
         response = requests.get("http://localhost:8000")
@@ -45,23 +45,13 @@ while True:
     time_passed += 5
     time.sleep(5)
 
-# get the app image
-try:
-    fc_app.download(
-        name="featurecloud.ai/fedrbe",
-        tag="latest"
-    )
-except Exception as e:
-    print(f"Failed to download the app image: {e}")
-    print(f"you can manually download it via docker pull featurecloud.ai/app/fedrbe:latest")
-
 # we simply run the Microbiome experiment as sample data
 print("Starting the experiment")
 fc_test.start(
     controller_host='http://localhost:8000',
     client_dirs=client_paths,
     generic_dir="",
-    app_image="featurecloud.ai/app/fedrbe:latest",
+    app_image="featurecloud.ai/bcorrect:latest",
     channel="local",
     query_interval=5,
     download_results=""

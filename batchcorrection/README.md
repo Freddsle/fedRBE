@@ -5,7 +5,7 @@ represent one batch, multiple batches per client are NOT supported.
 Normalization can be applied, multiple input formats are supported, 
 check the [config](#config) for more information.
 The app is provided for free for all use, including commercial use. THe app is open source 
-and the source code can be reviewed on [github](https://github.com/LohmannJens/removeBatch/tree/main/batchcorrection).
+and the source code can be reviewed on [github](https://github.com/Freddsle/removeBatch/tree/main/batchcorrection).
 
 ## Usage
 ### Prerequisites
@@ -15,8 +15,24 @@ In short:
 1. The `featurecloud` pip package must be installed: `pip install featurecloud`
 1. the FeatureCloud controller needs to be started: `featurecloud controller start`
 
+Furthermore, the app image itself needs to be downloaded. It is provided in the
+docker registry of featurecloud, but built on the linux/amd64 platform.
+Especially if you're using a Macbook with any of the M-series chips or any other device
+not compatible with linux/amd64, please build the image locally:
+```
+cd ./batchcorrection
+docker build . -t featurecloud.ai/bcorrect:latest
+```
+Otherwise, you can simply pull it:
+``` 
+featurecloud app download featurecloud.ai/bcorrect
+# alternatively:
+docker pull featurecloud.ai/bcorrect:latest
+```
+
 ### Running the provided sample data
-After installing the prerequisites, you can run the [provided bash script](TODO: write and provide this script).
+After taking care of the the prerequisites, you can run the 
+[provided bash script](https://github.com/Freddsle/removeBatch/blob/main/evaluation_utils/run_sample_experiment.py).
 Simply clone the repository and start the script:
 ```
 git clone git@github.com:LohmannJens/removeBatch.git
@@ -28,10 +44,6 @@ done with the app.
 ### Simulation of a federated workflow
 In case fedRBE should be used to test how it would work, with the different
 datasets all on the same machine, the testbed of FeatureCloud can be used.
-For this purpose, first [download the app] (https://featurecloud.ai/app/fedrbe).
-You need to be logged in to access downloading the app.
-
-TODO: different CPU architectures
 
 Then, you can use the [testbed of FeatureCloud to run the app](https://featurecloud.ai/development/test)
 
