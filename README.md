@@ -19,6 +19,11 @@ please read the [FeatureCloud documentation](https://featurecloud.ai/assets/deve
 for more information.
 
 # Reproduction of the paper/example usage
+To run fedRBE on some sample data, ensure the prerequisites of FeatureCloud are met and 
+run the example script:
+```
+python3 ./evaluation_utils/run_sample_experiment.py
+```
 
 ## Getting the centrally (limma::RemoveBatchEffect()) corrected data
 #TODO
@@ -71,3 +76,4 @@ TODO: description
 The documentation for the implementation can be found in the corresponding 
 subfolders README at [batchcorrection/README.md](batchcorrection/README.md)
 and in the [paper](TODO: ref the paper) 
+

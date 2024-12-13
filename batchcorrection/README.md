@@ -4,6 +4,41 @@ Federated implementation of limma remove batch effect. Each client is assumed to
 represent one batch, multiple batches per client are NOT supported. 
 Normalization can be applied, multiple input formats are supported, 
 check the [config](#config) for more information.
+The app is provided for free for all use, including commercial use. THe app is open source 
+and the source code can be reviewed on [github](https://github.com/LohmannJens/removeBatch/tree/main/batchcorrection).
+
+## Usage
+### Prerequisites
+To use fedRBE, the [prerequisites of FeatureCloud need to be fullfilled](https://featurecloud.ai/developers)
+In short:
+1. Docker needs to be installed
+1. The `featurecloud` pip package must be installed: `pip install featurecloud`
+1. the FeatureCloud controller needs to be started: `featurecloud controller start`
+
+### Running the provided sample data
+After installing the prerequisites, you can run the [provided bash script](TODO: write and provide this script).
+Simply clone the repository and start the script:
+```
+git clone git@github.com:LohmannJens/removeBatch.git
+python3 ./evaluation_utils/run_sample_experiment.py
+```
+The given repository contains the app but furthermore includes all the experiments
+done with the app.
+
+### Simulation of a federated workflow
+In case fedRBE should be used to test how it would work, with the different
+datasets all on the same machine, the testbed of FeatureCloud can be used.
+For this purpose, first [download the app] (https://featurecloud.ai/app/fedrbe).
+You need to be logged in to access downloading the app.
+
+TODO: different CPU architectures
+
+Then, you can use the [testbed of FeatureCloud to run the app](https://featurecloud.ai/development/test)
+
+### Running a federated workflow
+To run a federated workflow, simply follow the steps of [creating/joining a project](https://featurecloud.ai/projects)
+in FeatureCloud. A project should be joined by at least 3 different clients.
+
 
 ## Input
 - a datafile in csv format. Either samples x features or features x samples (expression file). See [config](#config) for more info.
@@ -17,6 +52,7 @@ The following output is given in each client:
 Furthermore, it holds the `beta` values calculated for the batch effect correction as well as the internally used design matrix.
 
 The CSV format of output files uses the same `seperator` as given in the config files `seperator`.
+
 
 
 ## Config
