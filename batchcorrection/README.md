@@ -4,7 +4,7 @@ Federated implementation of limma remove batch effect. Each client is assumed to
 represent one batch, multiple batches per client are NOT supported. 
 Normalization can be applied, multiple input formats are supported, 
 check the [config](#config) for more information.
-The app is provided for free for all use, including commercial use. THe app is open source 
+The app is provided for free for all use, including commercial use. The app is open source 
 and the source code can be reviewed on [github](https://github.com/Freddsle/removeBatch/tree/main/batchcorrection).
 
 ## Usage
@@ -20,7 +20,6 @@ docker registry of featurecloud, but built on the linux/amd64 platform.
 Especially if you're using a Macbook with any of the M-series chips or any other device
 not compatible with linux/amd64, please build the image locally:
 ```
-cd ./batchcorrection
 docker build . -t featurecloud.ai/bcorrect:latest
 ```
 Otherwise, you can simply pull it:
@@ -35,7 +34,7 @@ After taking care of the the prerequisites, you can run the
 [provided bash script](https://github.com/Freddsle/removeBatch/blob/main/evaluation_utils/run_sample_experiment.py).
 Simply clone the repository and start the script:
 ```
-git clone git@github.com:LohmannJens/removeBatch.git
+git clone git@github.com:Freddsle/removeBatch.git
 python3 ./evaluation_utils/run_sample_experiment.py
 ```
 The given repository contains the app but furthermore includes all the experiments
