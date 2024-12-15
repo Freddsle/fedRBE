@@ -1,130 +1,177 @@
-# Federated limma remove batch effect - Featurecloud
-## Description
-Federated implementation of limma remove batch effect. Each client is assumed to 
-represent one batch, multiple batches per client are NOT supported. 
-Normalization can be applied, multiple input formats are supported, 
-check the [config](#config) for more information.
-The app is provided for free for all use, including commercial use. The app is open source 
-and the source code can be reviewed on [github](https://github.com/Freddsle/removeBatch/tree/main/batchcorrection).
+# Federated Limma Remove Batch Effect (fedRBE) - FeatureCloud
+
+**A federated implementation of the limma `removeBatchEffect` method.** 
+Each client is assumed to represent one batch (no multiple batches per client). Supports normalization, various input formats, and secure computation.
+
+- **Open Source & Free**: [GitHub Repository](https://github.com/Freddsle/removeBatch/tree/main/batchcorrection)  
+- **Federated Privacy-preserving tool**: Based on [FeatureCloud](https://featurecloud.ai/app/fedrbe) platform  
+- **Preprint**: [ArXiv](https://doi.org/10.48550/arXiv.2412.05894)
+
+---
+
+## Table of Contents
+- [Federated Limma Remove Batch Effect (fedRBE) - FeatureCloud](#federated-limma-remove-batch-effect-fedrbe---featurecloud)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Prerequisites](#prerequisites)
+  - [Usage](#usage)
+    - [Simulating a Federated Workflow Locally](#simulating-a-federated-workflow-locally)
+    - [Running a True Federated Workflow](#running-a-true-federated-workflow)
+  - [Input Requirements](#input-requirements)
+  - [Outputs](#outputs)
+  - [Configuration (config.yml)](#configuration-configyml)
+  - [Additional Resources](#additional-resources)
+
+---
+
+## Overview
+`fedRBE` applies limma’s batch effect removal in a **federated** setting — data remains with the client, and only summary information is shared. Each client hosts one batch. Multiple input formats and normalization methods are supported. For advanced parameters, see the [Configuration](#configuration-configyml) section.
+
+---
+
+## Prerequisites
+Before using `fedRBE`, ensure:
+1. **Docker** is installed ([FeatureCloud prerequisites](https://featurecloud.ai/developers)).
+2. **FeatureCloud CLI**:
+   ```bash
+   pip install featurecloud
+   featurecloud controller start
+   ```
+3. **App Image**:  
+   - For linux/amd64:
+     ```bash
+     featurecloud app download featurecloud.ai/bcorrect
+     ```
+     or
+     ```bash
+     docker pull featurecloud.ai/bcorrect:latest
+     ```
+   - For non-linux/ARM (e.g., Mac M-series):
+     ```bash
+     docker build . -t featurecloud.ai/bcorrect:latest
+     ```
+
+The app image which is provided in the docker registry of featurecloud built on the linux/amd64 platform. Especially if you're using a Macbook with any of the M-series chips or any other device not compatible with linux/amd64, please build the image locally.
+
+---
 
 ## Usage
-### Prerequisites
-To use fedRBE, the [prerequisites of FeatureCloud need to be fullfilled](https://featurecloud.ai/developers)
-In short:
-1. Docker needs to be installed
-1. The `featurecloud` pip package must be installed: `pip install featurecloud`
-1. the FeatureCloud controller needs to be started: `featurecloud controller start`
 
-Furthermore, the app image itself needs to be downloaded. It is provided in the
-docker registry of featurecloud, but built on the linux/amd64 platform.
-Especially if you're using a Macbook with any of the M-series chips or any other device
-not compatible with linux/amd64, please build the image locally:
-```
-docker build . -t featurecloud.ai/bcorrect:latest
-```
-Otherwise, you can simply pull it:
-``` 
-featurecloud app download featurecloud.ai/bcorrect
-# alternatively:
-docker pull featurecloud.ai/bcorrect:latest
-```
+### Simulating a Federated Workflow Locally
+To test how `fedRBE` behaves with multiple datasets on one machine:
 
-### Running the provided sample data
-After taking care of the the prerequisites, you can run the 
-[provided bash script](https://github.com/Freddsle/removeBatch/blob/main/evaluation_utils/run_sample_experiment.py).
-Simply clone the repository and start the script:
-```
+```bash
 git clone git@github.com:Freddsle/removeBatch.git
 python3 ./evaluation_utils/run_sample_experiment.py
 ```
-The given repository contains the app but furthermore includes all the experiments
-done with the app.
+  
+This runs experiments bundled with the app, illustrating how `fedRBE` works.
+The given repository contains the app but furthermore includes all the experiments done with the app.
 
-### Simulation of a federated workflow
-In case fedRBE should be used to test how it would work, with the different
-datasets all on the same machine, the testbed of FeatureCloud can be used.
+### Running a True Federated Workflow
+For an actual multi-party setting:
+1. **Create a Project** in [FeatureCloud](https://featurecloud.ai/projects) and invite at least 3 clients.
+2. **Clients Join with Tokens** provided by the coordinator.
+3. **Each Client** uploads their data and `config.yml` to their local FeatureCloud instance.
+4. **Start the Project**: `fedRBE` runs securely, never sharing raw data.
 
-Then, you can use the [testbed of FeatureCloud to run the app](https://featurecloud.ai/development/test)
+See [HOW TO GUIDE](../how_to_guide.md) for guidance on creating and joining projects.
 
-### Running a federated workflow
-To run a federated workflow, simply follow the steps of [creating/joining a project](https://featurecloud.ai/projects)
-in FeatureCloud. A project should be joined by at least 3 different clients.
+---
 
+## Input Requirements
+- **Data File**: CSV or TSV with either:
+  - Samples x Features, or
+  - Features x Samples
+- **`config.yml`**: Configuration file controlling formats, normalization, and additional parameters.
+- **Optional Design Matrix**: CSV/TSV with covariates (samples x covariates).
 
-## Input
-- a datafile in csv format. Either samples x features or features x samples (expression file). See [config](#config) for more info.
-- `config.yml` as specified in [config](#config)
-- (Optional) the design matrix with given covariates. Covariates can also be given in the datafile, see [config](#config). 
+For details, see the [Configuration](#configuration-configyml) section.
 
-## Output
-The following output is given in each client:
-- `only_batch_corrected_data.csv`: This contains only the features that could be batch corrected. 
-- `report.txt`: This contains textual information about which features were excluded from the batch effect corection.
-Furthermore, it holds the `beta` values calculated for the batch effect correction as well as the internally used design matrix.
+---
 
-The CSV format of output files uses the same `seperator` as given in the config files `seperator`.
+## Outputs
+Each client after completion receives:
+- **`only_batch_corrected_data.csv`**: Batch-corrected features.
+- **`report.txt`**: Includes:
+  - Excluded features (and why)
+  - Calculated beta values
+  - Internally used design matrix
 
+**Note**: Output files use the same `separator` defined in `config.yml`.
 
+---
 
-## Config
-Use the config file to customize. Just upload it together with your training data as `config.yml`
-```
+## Configuration (config.yml)
+Upload a `config.yml` alongside your data. Adjust parameters as needed:
+
+```yaml
 flimmaBatchCorrection:
-  data_filename: "lab_A_protein_groups_matrix.tsv" 
-    # the file containing the expression data/data to be batch corrected. 
-  design_filename: lab_A_design.tsv  # the file containing covariates
-                                     # it is read in the following way:
-                                     # pd.read_csv(design_file_path, sep=seperator, index_col=0)
-                                     # should therefore be in the format samples x covariates
-                                     # with the first column being the sample indices
-  expression_file_flag: True # If true, the datafile is expected to have the samples as columns
-                             # and the features as rows. If false, the datafile is expected to have
-                             # the samples as rows and the features as columns.
-                             # format: boolean
-  index_col: "sample" # if expression_file_flag is true, the index_col is the column name of the
-                      # features in the data file. 
-                      # If expression_file_flag is false, the index_col
-                      # is the column name of the samples in the data file.
-                      # if no index_col is given, the index is taken from the 0th column for
-                      # expression files and generated automatically for samples x features datafiles
-                      # format: str or int, int is interpreted as the column index (starting from 0)
-  covariates: ['Pyr'] # covariates in linear model. In case a design matrix is given
-                      # they are expected in the design matrix, otherwise they are expected 
-                      # to be features in the given data (in the data_filename file).
-                      # format: list of strings
-  separator: "\t" # the separator used in the annotation or data file
-  design_separator: "\t" # the separator used in the design file
-  normalizationMethod: "log2(x+1)" # the method used for normalization, supported:
-                                   # "log2(x+1)"
-                                   # if None is given, doesn't the app doesn't normalize
-  smpc: True     # whether to use secure multi party computation to securely
-                 # aggregate information sent from clients to the coordinator
-                 # for more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
-  min_samples: 5 # The minimum number of samples per feature that are required
-                 # to be present and non-missing on the whole client.
-                 # if for a feature less than min_samples samples are present,
-                 # the client will not send any information about that feature
-                 # format: int
-                 # Please note that the actual used min_samples might be different
-                 # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
-                 # This is to ensure that a sent Xty matrix always has more samples
-                 # than features so that neither X not y can be reconstructed from the Xty matrix
-  position: 1    # if a number x is given, the order of the clients will be
-                 # be determined by sorting after this number x. 
-                 # Example:
-                 # Client1 -> position : 0, Client2 -> position: 5, Client3 -> position: 2
-                 # Order -> Client1, Client3, Client2
-                 # The last client in that order is always used as the reference
-                 # batch, so in this case Client2
-                 # if empty/None, the order is random, making the batch correction
-                 # run non deterministic
-  reference_batch: "" # if a string is given, the specified batch is used as
-                      # the reference batch for the batch correction
-                      # if True, this client is used as the reference batch
-                      # if True and multiple batches exist for this client,
-                      # the program will halt
-                      # if False or an empty string, the last client in the order
-                      # determined by the position parameter or the
-                      # coordinator is used as the reference batch
-                      # if the position parameter and the reference_batch parameter
-                      # result in different orders, the program halts
+  data_filename: "lab_A_protein_groups_matrix.tsv"
+    # Main data file: either features x samples or samples x features.
+
+  design_filename: "lab_A_design.tsv"
+    # Optional design matrix: samples x covariates.
+    # Must have first column as sample indices.
+    # it is read in the following way:
+    # pd.read_csv(design_file_path, sep=seperator, index_col=0)
+    # should therefore be in the format samples x covariates
+    # with the first column being the sample indices
+
+  expression_file_flag: True
+    # True: data_file = features (rows) x samples (columns)
+    # False: data_file = samples (rows) x features (columns)
+    # format: boolean
+
+  index_col: "sample"
+    # If expression_file_flag True: index_col is the feature column name.
+    # If expression_file_flag False: index_col is the sample column name.
+    # If not given, defaults apply - the index is taken from the 0th column for
+    # expression files and generated automatically for samples x features datafiles
+    # format: str or int, int is interpreted as the column index (starting from 0)
+
+  covariates: ["Pyr"]
+    # Covariates included in the linear model.
+    # If no design file, covariates must be present as features in the data file.
+
+  separator: "\t"
+    # Separator for main data file.
+
+  design_separator: "\t"
+    # Separator for design file.
+
+  normalizationMethod: "log2(x+1)"
+    # Normalization: "log2(x+1)" or None.
+    # If None, no normalization is applied.
+    # More options will be available in future versions.
+
+  smpc: True
+    # Enable secure multiparty computation for privacy-preserving aggregation.
+    # For more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
+
+  min_samples: 5      # format: int
+    # Minimum samples per feature required. Adjusted for privacy if needed.
+    # If for a feature less than min_samples samples are present,
+    # the client will not send any information about that feature
+    # Please note that the actual used min_samples might be different
+    # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
+    # This is to ensure that a sent Xty matrix always has more samples
+    # than features so that neither X not y can be reconstructed from the Xty matrix.
+
+  position: 1      # format: int
+    # Defines client order. The last client in order is the reference batch.
+    # Example:
+    #  C1(position=0), C2(position=2), C3(position=1) -> Order: C1, C3, C2 (C2 is reference).
+    # If empty/None, the order is random, making the batch correction run non deterministic
+
+  reference_batch: ""
+    # Explicitly set a reference batch (string) or leave empty.
+    # Conflicts in ordering/reference will halt execution.
+```
+
+---
+
+## Additional Resources
+- **FeatureCloud Docs**: [featurecloud.ai](https://featurecloud.ai/)
+- **SMPC & Privacy Docs**: [Privacy-preserving techniques](https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation)
+- **GitHub Repo**: [removeBatch](https://github.com/Freddsle/removeBatch)
