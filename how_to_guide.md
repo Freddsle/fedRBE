@@ -8,6 +8,24 @@ For more technical details and advanced usage and specific implementation detail
 For a more formal description and details, see the fedRBE's preprint on [ArXiv](https://doi.org/10.48550/arXiv.2412.05894).
 
 
+## List of Contents
+
+- [Getting Started with Federated Limma Remove Batch Effect (fedRBE)](#getting-started-with-federated-limma-remove-batch-effect-fedrbe)
+  - [List of Contents](#list-of-contents)
+  - [Key Concepts](#key-concepts)
+  - [Minimal Requirements and Setup](#minimal-requirements-and-setup)
+  - [Understanding the Workflow](#understanding-the-workflow)
+  - [File Preparation](#file-preparation)
+  - [Step-by-Step Scenario](#step-by-step-scenario)
+  - [Results and Output:](#results-and-output)
+  - [Single-Machine Simulations using the Provided Sample Data](#single-machine-simulations-using-the-provided-sample-data)
+  - [Troubleshooting Tips](#troubleshooting-tips)
+    - [Choosing the Correct Data Orientation](#choosing-the-correct-data-orientation)
+    - [Incorporating Covariates](#incorporating-covariates)
+    - [Selecting a Reference Batch](#selecting-a-reference-batch)
+  - [Glossary \& Further Resources](#glossary--further-resources)
+
+
 ## Key Concepts
 
 - **Federated learning**: Federation allows multiple participants (clients) to collaborate on data analysis without directly sharing their raw data. This ensures privacy while still enabling collaborative results.
