@@ -1,7 +1,7 @@
 # Getting Started with Federated Limma Remove Batch Effect (fedRBE)
 
 This guide is designed for beginners who want a quick and easy way to start using `fedRBE` and test its functionality. 
-For more technical details and advanced usage and specific implementation details, please refer to the [main README file](../batchcorrection/README.md).
+For more technical details and advanced usage and specific implementation details, please refer to the [main README file](https://freddsle.github.io/fedRBE/batchcorrection/).
 
 `fedRBE` allows you to remove batch effects from data in a federated manner, ensuring data privacy.
 
@@ -34,7 +34,7 @@ For a more formal description and details, see the fedRBE's preprint on [ArXiv](
 
 ## Minimal Requirements and Setup
 
-**Prerequisites** (see [README](../batchcorrection/README.md#prerequisites) for details):
+**Prerequisites** (see [README](https://freddsle.github.io/fedRBE/batchcorrection/#prerequisites) for details):
 1. **Docker** installed (check [Docker website](https://www.docker.com/) for installation instructions).
 2. **FeatureCloud CLI** installed and running:
    ```bash
@@ -67,7 +67,7 @@ You need two main inputs:
 3. and **Optional Design File** with covariates (if needed).
 
 <p align="center">
-   <img src="./figures/how_to1.png" alt="Required files figure" width="50%">
+   <img src="../figures/how_to1.png" alt="Required files figure" width="70%">
 </p>
 
 **Minimal Example Directory Structure**:
@@ -96,7 +96,7 @@ flimmaBatchCorrection:
   reference_batch: ""  # if True, this client is used as the reference batch
 ```
 
-For more details on the `config.yml` parameters, see the [main README](../batchcorrection/README.md#config).
+For more details on the `config.yml` parameters, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/#config).
 
 ## Step-by-Step Scenario
 
@@ -108,7 +108,7 @@ For more details on the `config.yml` parameters, see the [main README](../batchc
    - The coordinator **creates tokens** and sends them to Clients A, B, and C.
 
    <p align="center">
-   <img src="./figures/how_to2.png" alt="Coordinator step 1" width="70%">
+   <img src="../figures/how_to2.png" alt="Coordinator step 1" width="70%">
    </p>
    
 2. **Client Setup**:
@@ -120,7 +120,7 @@ For more details on the `config.yml` parameters, see the [main README](../batchc
    - After joining, each client uploads their data and config file to the FeatureCloud GUI client as a one .zip file (without any folder structure inside). It will not be sent to the coordinator or other clients, but makes it available for the Docker container with the app.
 
    <p align="center">
-   <img src="./figures/how_to3.png" alt="Required files figure" width="70%">
+   <img src="../figures/how_to3.png" alt="Required files figure" width="70%">
    </p>
    
 4. **Running fedRBE**:
@@ -150,7 +150,7 @@ If you’d like to test everything on one machine, you can run the provided samp
    python3 ./evaluation_utils/run_sample_experiment.py
    ```
    
-This will start a local simulation of multiple clients and show you how the batch correction is applied in practice. More details can be found in the [main README](../batchcorrection/README.md#running-the-provided-sample-data).
+This will start a local simulation of multiple clients and show you how the batch correction is applied in practice. More details can be found in the [main README](https://freddsle.github.io/fedRBE/batchcorrection/#running-the-provided-sample-data).
 
 
 ## Troubleshooting Tips
@@ -195,9 +195,9 @@ reference_batch: ""
 - **limma**: A popular R package for differential expression analysis. `RemoveBatchEffect` is a function from limma.
 
 For more advanced configurations and detailed explanations, see the 
-[main README](../batchcorrection/README.md#config) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
+[main README](https://freddsle.github.io/fedRBE/batchcorrection/#config) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
 
 If you encounter difficulties, please:
 - Check the logs for error messages.
-- Revisit the [main README](../batchcorrection/README.md).
+- Revisit the [main README](https://freddsle.github.io/fedRBE/batchcorrection/).
 - Reach out to the support by creating an issue on the [GitHub repository](https://github.com/Freddsle/fedRBE)

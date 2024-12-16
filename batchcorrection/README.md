@@ -76,7 +76,7 @@ For an actual multi-party setting:
 3. **Each Client** uploads their data and `config.yml` to their local FeatureCloud instance.
 4. **Start the Project**: `fedRBE` runs securely, never sharing raw data.
 
-See [HOW TO GUIDE](../docs/how_to_guide.md) for guidance on creating and joining projects.
+See [HOW TO GUIDE](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for guidance on creating and joining projects.
 
 ---
 
@@ -177,7 +177,7 @@ flimmaBatchCorrection:
 The app has the following states:
 
 <p align="center">
-   <img src="../figures/states.png" alt="fedRBE app states" width="30%">
+   <img src="../figures/states.png" alt="fedRBE app states" width="60%">
 </p>
 
 ---

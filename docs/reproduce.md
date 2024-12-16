@@ -29,9 +29,9 @@ Before you begin, ensure you have the following installed and configured:
 
 1. **Docker**: Essential for containerizing applications. [Install Docker](https://www.docker.com/get-started).
 2. **Git**: For cloning the repository. [Install Git](https://git-scm.com/downloads).
-4. **FeatureCloud CLI**: Get and configure the FeatureCloud CLI using our [installation guide](../batchcorrection/README.md#prerequisites).
-5. **Python 3.8+**: Required for running Python scripts.
-6. **R** : Necessary for running R scripts. [Install R](https://www.r-project.org/).
+3. **FeatureCloud CLI**: Get and configure the FeatureCloud CLI using our [installation guide](https://freddsle.github.io/fedRBE/batchcorrection/#prerequisites).
+4. **Python 3.8+**: Required for running Python scripts.
+5. **R** : Necessary for running R scripts. [Install R](https://www.r-project.org/).
 
 ### Install Required Packages
 
