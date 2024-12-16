@@ -20,6 +20,7 @@ Each client is assumed to represent one batch (no multiple batches per client). 
   - [Input Requirements](#input-requirements)
   - [Outputs](#outputs)
   - [Configuration (config.yml)](#configuration-configyml)
+  - [FeatureCloud App states](#featurecloud-app-states)
   - [Additional Resources](#additional-resources)
 
 ---
@@ -171,6 +172,15 @@ flimmaBatchCorrection:
 
 ---
 
+## FeatureCloud App states
+
+The app has the following states:
+
+<p align="center">
+   <img src="../figures/states.png" alt="fedRBE app states" width="30%">
+</p>
+
+---
 ## Additional Resources
 - **FeatureCloud Docs**: [featurecloud.ai](https://featurecloud.ai/)
 - **SMPC & Privacy Docs**: [Privacy-preserving techniques](https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation)

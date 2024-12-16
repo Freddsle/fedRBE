@@ -1,102 +1,221 @@
-# Purpose of this repository
-This repository serves two purposes
-1. Contains a federated version of the limma batch effect removal algorithm,
-hereby called fedRBE, in the subfolder `batchcorrection`. 
-The implementation uses the [FeatureCloud platform](http://dx.doi.org/10.2196/42621)
-1. Contains the code to reproduce the analyses of fedRBE done in 
-this [paper](https://arxiv.org/abs/2412.05894).
 
-# The fedRBE FeatureCloud app
-As the app is also published in the [FeatureCloud store](https://featurecloud.ai/app-store), it can
-be accessed from there directly. Otherwise, it can be built locally by 
-the following commands:
-```
-cd batchcorrection
-docker build . -t <tag-of-the-app>
-```
-The app can then be used using the [Featurecloud testbed](https://featurecloud.ai/development/test), 
-please read the [FeatureCloud documentation](https://featurecloud.ai/assets/developer_documentation/index.html) 
-for more information.
+# Federated Limma Remove Batch Effect (fedRBE)
 
-# Reproduction of the paper
+[![License](https://img.shields.io/github/license/Freddsle/removeBatch)](LICENSE)
+[![ArXiv](https://img.shields.io/badge/ArXiv-2412.05894-B31B1B)](https://arxiv.org/abs/2412.05894)
 
-## Prerequisites
-To use fedRBE, the [prerequisites of FeatureCloud need to be fullfilled](https://featurecloud.ai/developers)
-In short:
-1. Docker needs to be installed
-1. The `featurecloud` pip package must be installed: `pip install featurecloud`
-1. the FeatureCloud controller needs to be started: `featurecloud controller start`
+---
 
-Furthermore, the app image itself needs to be downloaded. It is provided in the
-docker registry of featurecloud, but built on the linux/amd64 platform.
-Especially if you're using a Macbook with any of the M-series chips or any other device
-not compatible with linux/amd64, please build the image locally:
+## Table of Contents
+- [Federated Limma Remove Batch Effect (fedRBE)](#federated-limma-remove-batch-effect-fedrbe)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Architecture Overview](#architecture-overview)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Clone the Repository](#clone-the-repository)
+    - [Get the `fedRBE` App](#get-the-fedrbe-app)
+  - [Usage](#usage)
+    - [Quick Start](#quick-start)
+  - [Reproducing the Paper](#reproducing-the-paper)
+    - [Steps to Reproduce](#steps-to-reproduce)
+  - [Configuration](#configuration)
+    - [Example `config.yml`](#example-configyml)
+  - [Examples](#examples)
+    - [Single-Machine Simulation](#single-machine-simulation)
+  - [Troubleshooting](#troubleshooting)
+  - [License](#license)
+  - [Contact Information](#contact-information)
+
+
+---
+
+The **Federated Limma Remove Batch Effect (fedRBE)** offers a federated implementation of the limma `removeBatchEffect` algorithm. Implemented within the [FeatureCloud](https://featurecloud.ai/) platform, `fedRBE` enables batch effect correction in a privacy-preserving manner, ensuring that raw data remains decentralized.
+
+This repository serves two main purposes:
+1. **fedRBE Implementation**: Located in the `batchcorrection` subfolder, providing the federated batch effect removal tool.
+2. **Reproducibility**: Contains code and scripts to reproduce the analyses presented in our [ArXiv preprint](https://arxiv.org/abs/2412.05894).
+
+For usage instructions and how-to guides, refer to the [How To Guide](./how_to.md).
+For more detailed information on the `fedRBE` implementation and configuration, see the [README](./batchcorrection/README.md).
+
+
+---
+
+## Features
+
+- **Federated Learning**: Collaborate across multiple clients without sharing raw data, ensuring data privacy.
+- **Batch Effect Removal**: Effectively removes non-biological variations using limma’s `removeBatchEffect` in a federated setting.
+- **Flexible Input Formats**: Supports various data formats.
+- **Secure Computation**: Utilizes Secure Multiparty Computation (SMPC) for privacy-preserving data aggregation.
+- **Easy Integration**: Integrates with the FeatureCloud platform for streamlined workflow management.
+
+<p align="center">
+   <img src="./figures/readme1.png" alt="fedRBE app states" width="30%">
+</p>
+
+---
+
+## Architecture Overview
+
+`fedRBE` operates within the FeatureCloud ecosystem. The workflow involves a coordinator managing the project and multiple clients performing batch effect correction locally. Data remains with each client, and only summary statistics are shared, ensuring data privacy throughout the process.
+
+<p align="center">
+   <img src="./figures/readme2.png" alt="fedRBE app states" width="30%">
+</p>
+
+_For a detailed workflow, see the [How To Guide](./how_to.md#understanding-the-workflow)._
+
+---
+
+## Installation
+
+### Prerequisites
+
+Before installing `fedRBE`, ensure you have the following installed:
+1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
+2. **FeatureCloud CLI**:
+   ```bash
+   pip install featurecloud
+   featurecloud controller start
+   ```
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/Freddsle/removeBatch.git
+cd removeBatch
 ```
-cd ./batchcorrection
-docker build . -t featurecloud.ai/bcorrect:latest
-```
-Otherwise, you can simply pull it:
-``` 
+
+This will clone the repository to your local machine with example files and simulation scripts.
+
+### Get the `fedRBE` App
+
+pull the pre-built image:
+
+```bash
 featurecloud app download featurecloud.ai/bcorrect
-# alternatively:
+# Or directly via Docker
 docker pull featurecloud.ai/bcorrect:latest
 ```
 
-## Small example run
-To run fedRBE on some sample data, ensure the prerequisites are met and 
-run the example script:
-```
-python3 ./evaluation_utils/run_sample_experiment.py
-```
+_**Note**: 
+Alternatively, If you are using a non-linux/amd64 architecture (e.g., Mac M-series), you may need to build the image locally as shown below._
 
-## Getting the centrally (limma::RemoveBatchEffect()) corrected data
-#TODO
+Navigate to the `batchcorrection` directory and build the Docker image:
 
-## Getting the federated (fedRBE) corrected data
-We provide a utility script to reproduce the results given in the [paper](https://arxiv.org/abs/2412.05894)
-The centrally normalized and batch corrected data is provided directly, if a
-full reproduction is wanted, please ensure that the data provided to the
-federated batch efffect correction in the folders in the `before` folder of
-each data set has underwent the same normalization than in central.
-
-- [get_federated_corrected_data.py](evaluation_utils/get_federated_corrected_data.py)
-This script runs the federated batch effect removal on the data provided in
-`evaluation_data`. Can be extended to use more data, see the description in the
-file. Uses the [featurecloud_api_extension.py](evaluation_utils/featurecloud_api_extension.py)
-script. If extended, the [analyse_fedvscentral.py](evaluation_utils/analyse_fedvscentral.py)
-script should also be extended to also analyse results. Before running this script,
-please build the batchcorrection app via
-```
+```bash
 cd batchcorrection
-docker build . -t bcorrect
+docker build . -t featurecloud.ai/bcorrect:latest
 ```
 
-## Comparing limma::RemoveBatchEffect() to fedRBE
-This can be done using the provided script:
-- [analyse_fedvscentral.py](evaluation_utils/analyse_fedvscentral.py):
-This script checks the differences between federated batch effect corrected data
-and centralized batch effect corrected data provided in the repo. 
-Tests to see that the results have the same index, columns and gives the 
-mean and maximum difference element wise. 
-Uses the results produced by [get_federated_corrected_data.py](evaluation_utils/get_federated_corrected_data.py)
-Please note that some of the data exceeds GitHubs file size limit, so they
-are provided in zip format. If this script throws a FileNotFound error, you
-probably just need to unzip the corresponding files/generate them using.
+---
 
-# Additional utils
-A few other files can provide additional use cases:
-1. [featurecloud_api_extension.py](evaluation_utils/featurecloud_api_extension.py)
-This script can be used to to run a featurecloud app with multiple folders simulating
-multiple clients. See the file for more information. This is used by the `get_federated_corrected_data.py` script.
-[get_federated_corrected_data.py](evaluation_utils/get_federated_corrected_data.py)
-1. [filtering.R](evaluation_utils/filtering.R)
-TODO: description
-1. [plots_eda.R](evaluation_utils/plots_eda.R)
-TODO: description
-1. [upset_plot.R](evaluation_utils/upset_plot.py)
-TODO: description
+## Usage
 
-# Implementation of federated limma RBE
-The documentation for the implementation can be found in the corresponding 
-subfolders README at [batchcorrection/README.md](batchcorrection/README.md)
-and in the [paper](https://arxiv.org/abs/2412.05894) 
+### Quick Start
+
+Run simulations locally to understand `fedRBE`'s behavior:
+
+1. **Start the FeatureCloud Controller**:
+   ```bash
+   featurecloud controller start
+   ```
+
+2. **Build or Pull the `fedRBE` App** as per the [Installation](#installation) instructions.
+
+3. **Run a Sample Experiment**:
+   ```bash
+   python3 ./evaluation_utils/run_sample_experiment.py
+   ```
+
+_For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](./how_to.md)._
+
+---
+
+## Reproducing the Paper
+
+This repository includes all necessary code and data to reproduce the analyses presented in our [ArXiv preprint](https://arxiv.org/abs/2412.05894).
+
+### Steps to Reproduce
+
+1. **Ensure Prerequisites are Met**:
+   - Docker installed
+   - FeatureCloud CLI installed and running (`featurecloud controller start`)
+   - `fedRBE` app built or pulled as per the [Installation](#installation) section
+
+2. **Run the Federated Batch Effect Removal**:
+   ```bash
+   python3 ./evaluation_utils/get_federated_corrected_data.py
+   ```
+
+3. **Compare with Centralized Correction**:
+   ```bash
+   python3 ./evaluation_utils/analyse_fedvscentral.py
+   ```
+
+---
+
+## Configuration
+
+`fedRBE` is highly configurable via the `config.yml` file. This file controls data formats, normalization methods, and other essential parameters.
+
+### Example `config.yml`
+
+```yaml
+flimmaBatchCorrection:
+  data_filename: "expression_data_client1.csv"
+  expression_file_flag: False
+  index_col: "GeneIDs"
+  covariates: ["Pyr"]
+  separator: ","
+  design_separator: ","
+  normalizationMethod: "log2(x+1)"
+  smpc: True
+  min_samples: 2
+  position: 1
+  reference_batch: ""
+```
+
+_For a comprehensive list of configuration options, refer to the [Configuration Section](./batchcorrection/README.md#config) in the batchcorrection README._
+
+---
+
+## Examples
+
+### Single-Machine Simulation
+
+To simulate a federated workflow on a single machine using provided sample data:
+
+1. **Run the Sample Experiment**:
+   ```bash
+   python3 ./evaluation_utils/run_sample_experiment.py
+   ```
+
+2. **Review Results**:
+   - Batch-corrected data: `only_batch_corrected_data.csv`
+   - Report: `report.txt`
+
+---
+
+## Troubleshooting
+
+Encountering issues? Here are some common problems and their solutions:
+
+- **Missing Files**: Ensure `config.yml` and data files are in the correct directory.
+- **Incorrect Format**: Verify `expression_file_flag` and `index_col` settings in `config.yml`.
+- **No Output Produced**: Check `report.txt` and logs for error messages.
+
+_For detailed troubleshooting tips, refer to the [How To Guide](./how_to.md#troubleshooting-tips)._
+
+
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE).
+
+---
+
+## Contact Information
+
+For questions, issues, or support, please open an issue on the [GitHub repository](https://github.com/Freddsle/removeBatch).
+
