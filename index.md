@@ -8,4 +8,4 @@ layout: default
 
 ---
 
-{% include_relative ./README.md %}
+{% include_relative README.md %}
