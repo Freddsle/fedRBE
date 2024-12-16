@@ -1,5 +1,6 @@
-# Python 
+# Python
 ipykernel
 pandas
 matplotlib
 seaborn
+featurecloud==0.1.0
