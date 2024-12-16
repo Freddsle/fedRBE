@@ -52,7 +52,7 @@ For more detailed information on the `fedRBE` implementation and configuration, 
 - **Easy Integration**: Integrates with the FeatureCloud platform for streamlined workflow management.
 
 <p align="center">
-   <img src="../figures/readme1.png" alt="fedRBE app states" width="60%">
+   <img src="./figures/readme1.png" alt="fedRBE app states" width="70%">
 </p>
 
 ---
@@ -62,7 +62,7 @@ For more detailed information on the `fedRBE` implementation and configuration, 
 `fedRBE` operates within the FeatureCloud ecosystem. The workflow involves a coordinator managing the project and multiple clients performing batch effect correction locally. Data remains with each client, and only summary statistics are shared, ensuring data privacy throughout the process.
 
 <p align="center">
-   <img src="../figures/readme2.png" alt="fedRBE app states" width="60%">
+   <img src="./figures/readme2.png" alt="fedRBE app states" width="70%">
 </p>
 
 _For a detailed workflow, see the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#understanding-the-workflow)._
