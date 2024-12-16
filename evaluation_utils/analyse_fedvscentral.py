@@ -56,24 +56,14 @@ experiment_results.append(utils.ExperimentResult(
 
 # MICROBIOME
 experiment_results.append(utils.ExperimentResult(
-    name="Microbiome batch=study_accession",
+    name="Microbiome batch=country",
     federated_result_file=os.path.join(base_dir, "microbiome", "after", "FedApp_corrected_data.tsv"),
     central_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_Rcorrected.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Microbiome batch=study_accession (SMPC)",
+    name="Microbiome batch=country (SMPC)",
     federated_result_file=os.path.join(base_dir, "microbiome", "after", "FedApp_corrected_data_smpc.tsv"),
     central_result_file=os.path.join(base_dir, "microbiome", "after", "normalized_logmin_counts_5centers_Rcorrected.tsv"),
-))
-experiment_results.append(utils.ExperimentResult(
-    name="Microbiome batch=country",
-    federated_result_file=os.path.join(base_dir, "microbiome_v2", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "microbiome_v2", "after", "normalized_logmin_counts_5centers_Rcorrected.tsv"),
-))
-experiment_results.append(utils.ExperimentResult(
-    name="Microbiome batch=country (SMPC)",
-    federated_result_file=os.path.join(base_dir, "microbiome_v2", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "microbiome_v2", "after", "normalized_logmin_counts_5centers_Rcorrected.tsv"),
 ))
 
 # PROTEOMICS

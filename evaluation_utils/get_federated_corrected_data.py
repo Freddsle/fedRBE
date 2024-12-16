@@ -44,7 +44,7 @@ base_config = {
 }
 
 # The name of the docker image that contains the application to be tested
-app_image_name = "bcorrect"
+app_image_name = "featurecloud.ai/bcorrect"
 
 ### SETTING THE EXPERIMENTS
 experiments: List[util.Experiment] = list()
@@ -66,7 +66,7 @@ def add_position_to_config(exp: util.Experiment):
         raise RuntimeError("Cannot add a position, not all clients have config_file_changes")
     for idx, _ in enumerate(exp.clients):
         tmp = exp.config_file_changes[idx]
-        tmp["flimmaBatchCorrection.position"] = idx
+        tmp["flimmaBatchCorrection"]["position"] = idx
         exp.config_file_changes[idx] = deepcopy(tmp)
 
 def set_smpc_true(exp: util.Experiment):
@@ -76,26 +76,30 @@ def set_smpc_true(exp: util.Experiment):
         raise RuntimeError("Cannot add a position, not all clients have config_file_changes")
     for idx, _ in enumerate(exp.clients):
         tmp = exp.config_file_changes[idx]
-        tmp["flimmaBatchCorrection.smpc"] = True
+        tmp["flimmaBatchCorrection"]["smpc"] = True
         exp.config_file_changes[idx] = deepcopy(tmp)
 
 
 ## SIMULATED
-base_simulated_config_file_changes = \
-    {"flimmaBatchCorrection.data_filename": "intensities.tsv",
-     "flimmaBatchCorrection.design_filename": "design.tsv",
-     "flimmaBatchCorrection.covariates": ["A"],
-     "flimmaBatchCorrection.index_col": "rowname"}
+base_simulated_config_file_changes = {
+    "flimmaBatchCorrection": {
+        "data_filename": "intensities.tsv",
+        "design_filename": "design.tsv",
+        "covariates": ["A"],
+        "index_col": "rowname"
+    }
+}
 simulated_balanced_experiment = util.Experiment(
-        name="Simulated Balanced",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "simulated", "balanced", "before", "lab1"),
-                 os.path.join(data_dir, "simulated", "balanced", "before", "lab2"),
-                 os.path.join(data_dir, "simulated", "balanced", "before", "lab3"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*3,
-        config_file_changes=[base_simulated_config_file_changes]*3,
+    name="Simulated Balanced",
+    fc_data_dir=data_dir,
+    clients=[
+        os.path.join(data_dir, "simulated", "balanced", "before", "lab1"),
+        os.path.join(data_dir, "simulated", "balanced", "before", "lab2"),
+        os.path.join(data_dir, "simulated", "balanced", "before", "lab3"),
+    ],
+    app_image_name=app_image_name,
+    config_files=[deepcopy(base_config) for _ in range(3)],
+    config_file_changes=[deepcopy(base_simulated_config_file_changes) for _ in range(3)],
 )
 simulated_balanced_experiment_smpc = deepcopy(simulated_balanced_experiment)
 set_smpc_true(simulated_balanced_experiment_smpc)
@@ -109,8 +113,8 @@ simulated_mildly_imbalanced_experiment = util.Experiment(
                  os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab3"),
         ],
         app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*3,
-        config_file_changes=[base_simulated_config_file_changes]*3,
+        config_files=[deepcopy(base_config) for _ in range(3)],
+        config_file_changes=[deepcopy(base_simulated_config_file_changes) for _ in range(3)],
 )
 simulated_mildly_imbalanced_experiment_smpc = deepcopy(simulated_mildly_imbalanced_experiment)
 set_smpc_true(simulated_mildly_imbalanced_experiment_smpc)
@@ -124,8 +128,8 @@ simulated_strongly_imbalanced_experiment = util.Experiment(
                  os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab3"),
         ],
         app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*3,
-        config_file_changes=[base_simulated_config_file_changes]*3,
+        config_files=[deepcopy(base_config) for _ in range(3)],
+        config_file_changes=[deepcopy(base_simulated_config_file_changes) for _ in range(3)],
 )
 simulated_strongly_imbalanced_experiment_smpc = deepcopy(simulated_strongly_imbalanced_experiment)
 set_smpc_true(simulated_strongly_imbalanced_experiment_smpc)
@@ -133,73 +137,56 @@ add_position_to_config(simulated_strongly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_strongly_imbalanced_experiment)
 
 ## MICROBIOME
-microbiome_config_file_changes = \
-    {"flimmaBatchCorrection.data_filename": "UQnorm_log_counts_for_corr.tsv",
-     "flimmaBatchCorrection.design_filename": "design_5C.tsv",
-     "flimmaBatchCorrection.covariates": ["CRC"]}
-microbiome_experiment = util.Experiment(
-        name="Microbiome",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "microbiome", "before", "PRJEB10878"),
-                os.path.join(data_dir, "microbiome", "before", "PRJEB27928"),
-                os.path.join(data_dir, "microbiome", "before", "PRJEB6070"),
-                os.path.join(data_dir, "microbiome", "before", "PRJNA429097"),
-                os.path.join(data_dir, "microbiome", "before", "PRJNA731589"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*5,
-        config_file_changes=[deepcopy(microbiome_config_file_changes)]*5,
-)
-microbiome_experiment_smpc = deepcopy(microbiome_experiment)
-set_smpc_true(microbiome_experiment_smpc)
-add_position_to_config(microbiome_experiment_smpc)
-add_position_to_config(microbiome_experiment)
-
-## MICROBIOME v2
-microbiomev2_config_file_changes = \
-    {"flimmaBatchCorrection.data_filename": "UQnorm_log_counts_for_corr.tsv",
-     "flimmaBatchCorrection.design_filename": "design_5C.tsv",
-     "flimmaBatchCorrection.covariates": ["CRC"]}
+microbiomev2_config_file_changes = {
+    "flimmaBatchCorrection": {
+        "data_filename": "UQnorm_log_counts_for_corr.tsv",
+        "design_filename": "design_5C.tsv",
+        "covariates": ["CRC"]
+    }
+}
 microbiomev2_experiment = util.Experiment(
-        name="Microbiome v2",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "microbiome_v2", "before", "China1"),
-                os.path.join(data_dir, "microbiome_v2", "before", "China3"),
-                os.path.join(data_dir, "microbiome_v2", "before", "China5"),
-                os.path.join(data_dir, "microbiome_v2", "before", "France1"),
-                os.path.join(data_dir, "microbiome_v2", "before", "Germany1"),
-                os.path.join(data_dir, "microbiome_v2", "before", "Germany2"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*6,
-        config_file_changes=[deepcopy(microbiomev2_config_file_changes)]*6,
+    name="Microbiome v2",
+    fc_data_dir=data_dir,
+    clients=[
+        os.path.join(data_dir, "microbiome", "before", "China1"),
+        os.path.join(data_dir, "microbiome", "before", "China3"),
+        os.path.join(data_dir, "microbiome", "before", "China5"),
+        os.path.join(data_dir, "microbiome", "before", "France1"),
+        os.path.join(data_dir, "microbiome", "before", "Germany1"),
+        os.path.join(data_dir, "microbiome", "before", "Germany2"),
+    ],
+    app_image_name=app_image_name,
+    config_files=[deepcopy(base_config) for _ in range(6)],
+    config_file_changes=[deepcopy(microbiomev2_config_file_changes) for _ in range(6)],
 )
 microbiomev2_experiment_smpc = deepcopy(microbiomev2_experiment)
 set_smpc_true(microbiomev2_experiment_smpc)
 add_position_to_config(microbiomev2_experiment_smpc)
 add_position_to_config(microbiomev2_experiment)
 
-
 ## PROTEOMICS
-proteomics_config_file_changes_base = \
-    {"flimmaBatchCorrection.data_filename": "intensities_log_UNION.tsv",
-     "flimmaBatchCorrection.design_filename": "design.tsv",
-     "flimmaBatchCorrection.covariates": ["Pyr"],
-     "flimmaBatchCorrection.index_col": "rowname",
-     "flimmaBatchCorrection.min_samples": 2}
-
+proteomics_config_file_changes_base = {
+    "flimmaBatchCorrection": {
+        "data_filename": "intensities_log_UNION.tsv",
+        "design_filename": "design.tsv",
+        "covariates": ["Pyr"],
+        "index_col": "rowname",
+        "min_samples": 2
+    }
+}
 proteomics_experiment = util.Experiment(
-        name="Proteomics",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "proteomics", "before", "lab_A"),
-                 os.path.join(data_dir, "proteomics", "before", "lab_B"),
-                 os.path.join(data_dir, "proteomics", "before", "lab_C"),
-                 os.path.join(data_dir, "proteomics", "before", "lab_D"),
-                 os.path.join(data_dir, "proteomics", "before", "lab_E"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*5,
-        config_file_changes=[deepcopy(proteomics_config_file_changes_base)]*5,
+    name="Proteomics",
+    fc_data_dir=data_dir,
+    clients=[
+        os.path.join(data_dir, "proteomics", "before", "lab_A"),
+        os.path.join(data_dir, "proteomics", "before", "lab_B"),
+        os.path.join(data_dir, "proteomics", "before", "lab_C"),
+        os.path.join(data_dir, "proteomics", "before", "lab_D"),
+        os.path.join(data_dir, "proteomics", "before", "lab_E"),
+    ],
+    app_image_name=app_image_name,
+    config_files=[deepcopy(base_config) for _ in range(5)],
+    config_file_changes=[deepcopy(proteomics_config_file_changes_base) for _ in range(5)],
 )
 proteomics_experiment_smpc = deepcopy(proteomics_experiment)
 set_smpc_true(proteomics_experiment_smpc)
@@ -208,19 +195,20 @@ add_position_to_config(proteomics_experiment)
 
 ## PROTEOMICS MULTI_BATCH
 proteomics_config_file_changes_multibatch = deepcopy(proteomics_config_file_changes_base)
-proteomics_config_file_changes_multibatch["flimmaBatchCorrection.batch_col"] = "batch"
-proteomics_config_file_changes_multibatch["flimmaBatchCorrection.min_samples"] = 0
-    # otherwise we get a privacy error
+proteomics_config_file_changes_multibatch["flimmaBatchCorrection"]["batch_col"] = "batch"
+proteomics_config_file_changes_multibatch["flimmaBatchCorrection"]["min_samples"] = 0  # To avoid privacy error
+
 proteomics_multibatch_experiment = util.Experiment(
-        name="Proteomics Multi Batch",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "proteomics_multibatch", "before", "center1"),
-                 os.path.join(data_dir, "proteomics_multibatch", "before", "center2"),
-                 os.path.join(data_dir, "proteomics_multibatch", "before", "center3"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*3,
-        config_file_changes=[deepcopy(proteomics_config_file_changes_multibatch)]*3,
+    name="Proteomics Multi Batch",
+    fc_data_dir=data_dir,
+    clients=[
+        os.path.join(data_dir, "proteomics_multibatch", "before", "center1"),
+        os.path.join(data_dir, "proteomics_multibatch", "before", "center2"),
+        os.path.join(data_dir, "proteomics_multibatch", "before", "center3"),
+    ],
+    app_image_name=app_image_name,
+    config_files=[deepcopy(base_config) for _ in range(3)],
+    config_file_changes=[deepcopy(proteomics_config_file_changes_multibatch) for _ in range(3)],
 )
 proteomics_multibatch_experiment_smpc = deepcopy(proteomics_multibatch_experiment)
 set_smpc_true(proteomics_multibatch_experiment_smpc)
@@ -228,73 +216,71 @@ add_position_to_config(proteomics_multibatch_experiment_smpc)
 add_position_to_config(proteomics_multibatch_experiment)
 
 ## MICROARRAY
-base_microarray_config_file_changes = \
-    {"flimmaBatchCorrection.data_filename": "expr_for_correction_UNION.tsv",
-     "flimmaBatchCorrection.design_filename": "design.tsv",
-     "flimmaBatchCorrection.covariates": ["HGSC"],
-     "flimmaBatchCorrection.index_col": "Gene",
-     "flimmaBatchCorrection.min_samples": 2}
+base_microarray_config_file_changes = {
+    "flimmaBatchCorrection": {
+        "data_filename": "expr_for_correction_UNION.tsv",
+        "design_filename": "design.tsv",
+        "covariates": ["HGSC"],
+        "index_col": "Gene",
+        "min_samples": 2
+    }
+}
 microarray_experiment = util.Experiment(
-        name="Microarray",
-        fc_data_dir=data_dir,
-        clients=[os.path.join(data_dir, "microarray", "before", "GSE6008"),
-                 os.path.join(data_dir, "microarray", "before", "GSE14407"),
-                 os.path.join(data_dir, "microarray", "before", "GSE26712"),
-                 os.path.join(data_dir, "microarray", "before", "GSE38666"),
-                 os.path.join(data_dir, "microarray", "before", "GSE40595"),
-                 os.path.join(data_dir, "microarray", "before", "GSE69428"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config)]*6,
-        config_file_changes=[base_microarray_config_file_changes]*6,
+    name="Microarray",
+    fc_data_dir=data_dir,
+    clients=[
+        os.path.join(data_dir, "microarray", "before", "GSE6008"),
+        os.path.join(data_dir, "microarray", "before", "GSE14407"),
+        os.path.join(data_dir, "microarray", "before", "GSE26712"),
+        os.path.join(data_dir, "microarray", "before", "GSE38666"),
+        os.path.join(data_dir, "microarray", "before", "GSE40595"),
+        os.path.join(data_dir, "microarray", "before", "GSE69428"),
+    ],
+    app_image_name=app_image_name,
+    config_files=[deepcopy(base_config) for _ in range(6)],
+    config_file_changes=[deepcopy(base_microarray_config_file_changes) for _ in range(6)],
 )
 microarray_experiment_smpc = deepcopy(microarray_experiment)
 set_smpc_true(microarray_experiment_smpc)
 add_position_to_config(microarray_experiment_smpc)
 add_position_to_config(microarray_experiment)
 
-### ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
-## Simulated
-# experiments.append(simulated_balanced_experiment)
-# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(simulated_balanced_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
+## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
+# Simulated
+experiments.append(simulated_balanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_balanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# experiments.append(simulated_mildly_imbalanced_experiment)
-# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(simulated_mildly_imbalanced_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+experiments.append(simulated_mildly_imbalanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_mildly_imbalanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# experiments.append(simulated_strongly_imbalanced_experiment)
-# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(simulated_strongly_imbalanced_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+experiments.append(simulated_strongly_imbalanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_strongly_imbalanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# ## Microbiome
-# experiments.append(microbiome_experiment)
-# result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(microbiome_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data_smpc.tsv"))
+## Microbiome v2
+experiments.append(microbiomev2_experiment)
+result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
+experiments.append(microbiomev2_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# ## Microbiome v2
-# experiments.append(microbiomev2_experiment)
-# result_file_names.append(os.path.join(data_dir, "microbiome_v2", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(microbiomev2_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "microbiome_v2", "after", "FedApp_corrected_data_smpc.tsv"))
+## Proteomics
+experiments.append(proteomics_experiment)
+result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
+experiments.append(proteomics_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# ## Proteomics
-# experiments.append(proteomics_experiment)
-# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(proteomics_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"))
+## Proteomics Multi Batch
+experiments.append(proteomics_multibatch_experiment)
+result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"))
+experiments.append(proteomics_multibatch_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# # ## Proteomics Multi Batch
-# experiments.append(proteomics_multibatch_experiment)
-# result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(proteomics_multibatch_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"))
-
-# ## Microarray
+## Microarray
 experiments.append(microarray_experiment)
 result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
 experiments.append(microarray_experiment_smpc)

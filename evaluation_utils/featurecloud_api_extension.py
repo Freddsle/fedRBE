@@ -404,20 +404,17 @@ class Experiment():
             self.config_files = [deepcopy(config) for config in self.config_files]
             if self.config_file_changes:
                 for config_changes, config in zip(self.config_file_changes, self.config_files):
-                    # Go from flattened to nested format
-                    for key, value in config_changes.items():
-                        if "." in key:
-                            keys = key.split(".")
-                            config_pointer = config
-                            for k in keys[:-1]:
-                                if k not in config_pointer:
-                                    raise RuntimeError(f"Key {k} to be modified not found in the config file {config}!")
-                                config_pointer = config[k]
-                            if keys[-1] not in config_pointer:
-                                raise RuntimeError(f"Key {keys[-1]} to be modified not found in the config file {config}!")
-                            config_pointer[keys[-1]] = value
-                        else:
-                            config[key] = value
+                    # Make sure flimmaBatchCorrection exists in the base config
+                    if "flimmaBatchCorrection" not in config:
+                        raise RuntimeError("Base config does not have 'flimmaBatchCorrection' section.")
+                    
+                    # Extract changes intended for flimmaBatchCorrection
+                    flimma_changes = config_changes.get("flimmaBatchCorrection", {})
+
+                    # Update only the flimmaBatchCorrection section
+                    for key, value in flimma_changes.items():
+                        config["flimmaBatchCorrection"][key] = value
+                        
         if not self.config_files:
             raise RuntimeError("No config files given!")
         ### os manipulations to get the config files in the correct client folders

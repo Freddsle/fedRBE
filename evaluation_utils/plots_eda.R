@@ -261,3 +261,66 @@ heatmap_plot <- function(pg_matrix, batch_info, name, condition="condition", lab
     return(resulting_plot)
 }
 
+
+plots_multiple <- function(intensities, metadata, name, simulated = FALSE){
+
+  if(simulated){
+    pca_plot_study <- 
+    pca_plot(
+        intensities, metadata, 
+        title = name,
+        quantitative_col_name = 'file',
+        col_col = "lab", shape_col = "condition")
+
+    boxplot <- boxplot_plot_groupped(
+        intensities, metadata, 
+        title = name,
+        color_col = 'lab', quantitativeColumnName = 'file', 
+        path = '')
+
+    density_plot <- plotIntensityDensity(
+        intensities, metadata, 
+        quantitativeColumnName = 'file', 
+        colorColumnName = 'lab',
+        title = name)
+
+    layout <- pca_plot_study /
+                boxplot /
+                density_plot
+
+    return(layout)
+  
+  } else {
+
+    pca_plot_study <- pca_plot(
+        intensities, metadata, 
+        title = name,
+        quantitative_col_name = 'file',
+        col_col = "lab", shape_col = "condition")
+
+    pca_plot_class <- pca_plot(
+        intensities, metadata, 
+        title = name,
+        quantitative_col_name = 'file',
+        shape_col = "lab", col_col = "condition")
+
+    boxplot <- boxplot_plot(
+        intensities, metadata, 
+        title = name,
+        color_col = 'lab', quantitativeColumnName = 'file', 
+        path = '')
+
+    density_plot <- plotIntensityDensity(
+        intensities, metadata, 
+        quantitativeColumnName = 'file', 
+        colorColumnName = 'lab',
+        title = name)
+
+    layout <- (pca_plot_class | pca_plot_study) /
+                boxplot /
+                density_plot
+
+    return(layout)
+
+  }
+}

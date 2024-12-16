@@ -143,6 +143,7 @@ This repository includes all necessary code and data to reproduce the analyses p
    - Docker installed
    - FeatureCloud CLI installed and running (`featurecloud controller start`)
    - `fedRBE` app built or pulled as per the [Installation](#installation) section
+   - Install necessary dependencies.
 
 2. **Run the Federated Batch Effect Removal**:
    ```bash
@@ -153,6 +154,8 @@ This repository includes all necessary code and data to reproduce the analyses p
    ```bash
    python3 ./evaluation_utils/analyse_fedvscentral.py
    ```
+
+_For detailed instructions on reproducing the paper, refer to the [Reproducibility Guide](./reproduce)._
 
 ---
 

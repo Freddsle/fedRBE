@@ -1,0 +1,13 @@
+# R packages
+tidyverse
+gridextra
+patchwork
+umap
+ggsci
+viridis
+irkernel
+reshape2
+limma
+variancepartition
+invgamma
+devtools
