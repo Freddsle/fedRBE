@@ -36,7 +36,7 @@ This repository serves two main purposes:
 1. **fedRBE Implementation**: Located in the `batchcorrection` subfolder, providing the federated batch effect removal tool.
 2. **Reproducibility**: Contains code and scripts to reproduce the analyses presented in our [ArXiv preprint](https://arxiv.org/abs/2412.05894).
 
-For usage instructions and how-to guides, refer to the [How To Guide](./how_to.md).
+For usage instructions and how-to guides, refer to the [How To Guide](./how_to_guide.md).
 For more detailed information on the `fedRBE` implementation and configuration, see the [README](./batchcorrection/README.md).
 
 
@@ -64,7 +64,7 @@ For more detailed information on the `fedRBE` implementation and configuration, 
    <img src="./figures/readme2.png" alt="fedRBE app states" width="30%">
 </p>
 
-_For a detailed workflow, see the [How To Guide](./how_to.md#understanding-the-workflow)._
+_For a detailed workflow, see the [How To Guide](./how_to_guide.md#understanding-the-workflow)._
 
 ---
 
@@ -129,7 +129,7 @@ Run simulations locally to understand `fedRBE`'s behavior:
    python3 ./evaluation_utils/run_sample_experiment.py
    ```
 
-_For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](./how_to.md)._
+_For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](./how_to_guide.md)._
 
 ---
 
@@ -177,7 +177,7 @@ flimmaBatchCorrection:
   reference_batch: ""
 ```
 
-_For a comprehensive list of configuration options, refer to the [Configuration Section](./batchcorrection/README.md#config) in the batchcorrection README._
+_For a comprehensive list of configuration options, refer to the [Configuration Section](./batchcorrection/README.md##configuration-configyml) in the batchcorrection README._
 
 ---
 
@@ -198,6 +198,7 @@ To simulate a federated workflow on a single machine using provided sample data:
 
 ---
 
+
 ## Troubleshooting
 
 Encountering issues? Here are some common problems and their solutions:
@@ -206,7 +207,7 @@ Encountering issues? Here are some common problems and their solutions:
 - **Incorrect Format**: Verify `expression_file_flag` and `index_col` settings in `config.yml`.
 - **No Output Produced**: Check `report.txt` and logs for error messages.
 
-_For detailed troubleshooting tips, refer to the [How To Guide](./how_to.md#troubleshooting-tips)._
+_For detailed troubleshooting tips, refer to the [How To Guide](./how_to_guide.md#troubleshooting-tips)._
 
 
 ## License
