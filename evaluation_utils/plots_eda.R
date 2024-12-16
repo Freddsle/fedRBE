@@ -69,6 +69,25 @@ pca_plot <- function(
 }
 
 
+plots_normtumor <- function(expr, metadata, i, dataset){
+    pca_plot <- pca_plot(expr, metadata, 
+        paste0(dataset , i, ", norm_vs_tumor"),
+        col_col = 'Status', shape_col = "Dataset", quantitative_col_name = 'Sample_geo_ID')
+
+    boxplot <- boxplot_plot(expr, metadata, 
+        title = paste0(dataset , i, ", norm_vs_tumor"),
+        color_col = 'Status', quantitativeColumnName = 'Sample_geo_ID', 
+        path = '')
+
+    density_plot <- plotIntensityDensity(expr, metadata, 
+        quantitativeColumnName = 'Sample_geo_ID', 
+        colorColumnName = 'Status',
+        title = paste0(dataset , i, ", norm_vs_tumor"))
+
+    return(list(pca_plot, density_plot, boxplot))
+}
+
+
 
 umap_plot <- function(
   df, metadata, 
@@ -92,8 +111,14 @@ umap_plot <- function(
 
   plot_result <- ggplot(umap_data, aes_string(x = "X1", y = "X2", color = color_column, shape = shape_column)) +
     geom_point(aes_string(col = color_column), size = 2) +
-    theme_minimal() +
-    scale_color_manual(values = cbPalette) + # Use the custom color palette
+    theme_minimal()
+
+  if (!is.null(cbPalette)) {
+    plot_result <- plot_result + scale_color_manual(values = cbPalette)
+
+  }
+  
+  plot_result <- plot_result +
     labs(
       title = title, 
       x = "UMAP 1", 

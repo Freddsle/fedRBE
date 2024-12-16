@@ -11,7 +11,7 @@ Do not contain NA values.
 
 Central run:  
 - limmaRBE with Status (normal / tumor) as covariates and dataset as batches.
-- without NA.
+- with NA for the smaller dataset.
 
 # Structure
 
@@ -20,8 +20,6 @@ In /before folder there are two versions on the dataset.
 - the save but folder per datasets - for App. Contains additionally design file - covariates info in sutable for App format.
 
 For App log2 transformation must be OFF.
-
-"Expression for correction" file is filtered (keeping only intersected rows).
 
 
 Info (rows x cols):
