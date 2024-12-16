@@ -1,7 +1,7 @@
 # Getting Started with Federated Limma Remove Batch Effect (fedRBE)
 
 This guide is designed for beginners who want a quick and easy way to start using `fedRBE` and test its functionality. 
-For more technical details and advanced usage and specific implementation details, please refer to the [main README file](./batchcorrection/README.md).
+For more technical details and advanced usage and specific implementation details, please refer to the [main README file](../batchcorrection/README.md).
 
 `fedRBE` allows you to remove batch effects from data in a federated manner, ensuring data privacy.
 
@@ -34,7 +34,7 @@ For a more formal description and details, see the fedRBE's preprint on [ArXiv](
 
 ## Minimal Requirements and Setup
 
-**Prerequisites** (see [README](./batchcorrection/README.md#prerequisites) for details):
+**Prerequisites** (see [README](../batchcorrection/README.md#prerequisites) for details):
 1. **Docker** installed (check [Docker website](https://www.docker.com/) for installation instructions).
 2. **FeatureCloud CLI** installed and running:
    ```bash
@@ -96,7 +96,7 @@ flimmaBatchCorrection:
   reference_batch: ""  # if True, this client is used as the reference batch
 ```
 
-For more details on the `config.yml` parameters, see the [main README](./batchcorrection/README.md#config).
+For more details on the `config.yml` parameters, see the [main README](../batchcorrection/README.md#config).
 
 ## Step-by-Step Scenario
 
@@ -143,14 +143,14 @@ If you’d like to test everything on one machine, you can run the provided samp
 1. Ensure prerequisites are met (Docker, `featurecloud` package, configured FeatureCloud controller and the app image).
 2. Clone the repository:
    ```bash
-   git clone git@github.com:Freddsle/removeBatch.git
+   git clone git@github.com:Freddsle/fedRBE.git
    ```
 3. Run the provided sample experiment:
    ```bash
    python3 ./evaluation_utils/run_sample_experiment.py
    ```
    
-This will start a local simulation of multiple clients and show you how the batch correction is applied in practice. More details can be found in the [main README](./batchcorrection/README.md#running-the-provided-sample-data).
+This will start a local simulation of multiple clients and show you how the batch correction is applied in practice. More details can be found in the [main README](../batchcorrection/README.md#running-the-provided-sample-data).
 
 
 ## Troubleshooting Tips
@@ -195,9 +195,9 @@ reference_batch: ""
 - **limma**: A popular R package for differential expression analysis. `RemoveBatchEffect` is a function from limma.
 
 For more advanced configurations and detailed explanations, see the 
-[main README](./batchcorrection/README.md#config) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
+[main README](../batchcorrection/README.md#config) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
 
 If you encounter difficulties, please:
 - Check the logs for error messages.
-- Revisit the [main README](./batchcorrection/README.md).
-- Reach out to the support by creating an issue on the [GitHub repository](https://github.com/Freddsle/removeBatch)
+- Revisit the [main README](../batchcorrection/README.md).
+- Reach out to the support by creating an issue on the [GitHub repository](https://github.com/Freddsle/fedRBE)

@@ -1,7 +1,7 @@
 
 # Federated Limma Remove Batch Effect (fedRBE)
 
-[![License](https://img.shields.io/github/license/Freddsle/removeBatch)](LICENSE)
+[![License](https://img.shields.io/github/license/Freddsle/fedRBE)](LICENSE)
 [![ArXiv](https://img.shields.io/badge/ArXiv-2412.05894-B31B1B)](https://arxiv.org/abs/2412.05894)
 
 ---
@@ -36,7 +36,7 @@ This repository serves two main purposes:
 1. **fedRBE Implementation**: Located in the `batchcorrection` subfolder, providing the federated batch effect removal tool.
 2. **Reproducibility**: Contains code and scripts to reproduce the analyses presented in our [ArXiv preprint](https://arxiv.org/abs/2412.05894).
 
-For usage instructions and how-to guides, refer to the [How To Guide](./how_to_guide.md).
+For usage instructions and how-to guides, refer to the [How To Guide](./docs/how_to_guide.md).
 For more detailed information on the `fedRBE` implementation and configuration, see the [README](./batchcorrection/README.md).
 
 
@@ -64,7 +64,7 @@ For more detailed information on the `fedRBE` implementation and configuration, 
    <img src="./figures/readme2.png" alt="fedRBE app states" width="30%">
 </p>
 
-_For a detailed workflow, see the [How To Guide](./how_to_guide.md#understanding-the-workflow)._
+_For a detailed workflow, see the [How To Guide](./docs/how_to_guide.md#understanding-the-workflow)._
 
 ---
 
@@ -83,7 +83,7 @@ Before installing `fedRBE`, ensure you have the following installed:
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/Freddsle/removeBatch.git
+git clone https://github.com/Freddsle/fedRBE.git
 cd removeBatch
 ```
 
@@ -129,7 +129,7 @@ Run simulations locally to understand `fedRBE`'s behavior:
    python3 ./evaluation_utils/run_sample_experiment.py
    ```
 
-_For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](./how_to_guide.md)._
+_For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](./docs/how_to_guide.md)._
 
 ---
 
@@ -210,7 +210,7 @@ Encountering issues? Here are some common problems and their solutions:
 - **Incorrect Format**: Verify `expression_file_flag` and `index_col` settings in `config.yml`.
 - **No Output Produced**: Check `report.txt` and logs for error messages.
 
-_For detailed troubleshooting tips, refer to the [How To Guide](./how_to_guide.md#troubleshooting-tips)._
+_For detailed troubleshooting tips, refer to the [How To Guide](./docs/how_to_guide.md#troubleshooting-tips)._
 
 
 ## License
@@ -221,5 +221,5 @@ This project is licensed under the [Apache License 2.0](LICENSE).
 
 ## Contact Information
 
-For questions, issues, or support, please open an issue on the [GitHub repository](https://github.com/Freddsle/removeBatch).
+For questions, issues, or support, please open an issue on the [GitHub repository](https://github.com/Freddsle/fedRBE).
 

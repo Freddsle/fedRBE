@@ -3,7 +3,7 @@
 **A federated implementation of the limma `removeBatchEffect` method.** 
 Each client is assumed to represent one batch (no multiple batches per client). Supports normalization, various input formats, and secure computation.
 
-- **Open Source & Free**: [GitHub Repository](https://github.com/Freddsle/removeBatch/tree/main/batchcorrection)  
+- **Open Source & Free**: [GitHub Repository](https://github.com/Freddsle/fedRBE/tree/main/batchcorrection)  
 - **Federated Privacy-preserving tool**: Based on [FeatureCloud](https://featurecloud.ai/app/fedrbe) platform  
 - **Preprint**: [ArXiv](https://doi.org/10.48550/arXiv.2412.05894)
 
@@ -62,7 +62,7 @@ The app image which is provided in the docker registry of featurecloud built on 
 To test how `fedRBE` behaves with multiple datasets on one machine:
 
 ```bash
-git clone git@github.com:Freddsle/removeBatch.git
+git clone git@github.com:Freddsle/fedRBE.git
 python3 ./evaluation_utils/run_sample_experiment.py
 ```
   
@@ -76,7 +76,7 @@ For an actual multi-party setting:
 3. **Each Client** uploads their data and `config.yml` to their local FeatureCloud instance.
 4. **Start the Project**: `fedRBE` runs securely, never sharing raw data.
 
-See [HOW TO GUIDE](../how_to_guide.md) for guidance on creating and joining projects.
+See [HOW TO GUIDE](../docs/how_to_guide.md) for guidance on creating and joining projects.
 
 ---
 
@@ -184,4 +184,4 @@ The app has the following states:
 ## Additional Resources
 - **FeatureCloud Docs**: [featurecloud.ai](https://featurecloud.ai/)
 - **SMPC & Privacy Docs**: [Privacy-preserving techniques](https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation)
-- **GitHub Repo**: [removeBatch](https://github.com/Freddsle/removeBatch)
+- **GitHub Repo**: [removeBatch](https://github.com/Freddsle/fedRBE)

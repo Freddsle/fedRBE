@@ -29,7 +29,7 @@ Before you begin, ensure you have the following installed and configured:
 
 1. **Docker**: Essential for containerizing applications. [Install Docker](https://www.docker.com/get-started).
 2. **Git**: For cloning the repository. [Install Git](https://git-scm.com/downloads).
-4. **FeatureCloud CLI**: Get and configure the FeatureCloud CLI using our [installation guide](./batchcorrection/README.md#prerequisites).
+4. **FeatureCloud CLI**: Get and configure the FeatureCloud CLI using our [installation guide](../batchcorrection/README.md#prerequisites).
 5. **Python 3.8+**: Required for running Python scripts.
 6. **R** : Necessary for running R scripts. [Install R](https://www.r-project.org/).
 
@@ -315,18 +315,18 @@ Encountering issues? Below are common problems and their solutions:
 - **Inconsistent Results**:
   - **Solution**: Ensure that the same configuration parameters and filtering rules are used for both federated and centralized corrections.
 
-For unresolved issues, consider reaching out via the [GitHub Issues](https://github.com/Freddsle/removeBatch/issues) page.
+For unresolved issues, consider reaching out via the [GitHub Issues](https://github.com/Freddsle/fedRBE/issues) page.
 
 ## Additional Resources
 
 - **FeatureCloud Documentation**: [https://featurecloud.ai/assets/developer_documentation/index.html](https://featurecloud.ai/assets/developer_documentation/index.html)
 - **limma Package Documentation**: [https://bioconductor.org/packages/release/bioc/html/limma.html](https://bioconductor.org/packages/release/bioc/html/limma.html)
 - **ArXiv Preprint**: [https://arxiv.org/abs/2412.05894](https://arxiv.org/abs/2412.05894)
-- **GitHub Repository**: [https://github.com/Freddsle/removeBatch](https://github.com/Freddsle/removeBatch)
+- **GitHub Repository**: [https://github.com/Freddsle/fedRBE](https://github.com/Freddsle/fedRBE)
 - **Federated Learning Overview**: [https://en.wikipedia.org/wiki/Federated_learning](https://en.wikipedia.org/wiki/Federated_learning)
 
 ## Contact Information
 
 For questions, issues, or support, please:
 
-- **Open an Issue**: [GitHub Issues](https://github.com/Freddsle/removeBatch/issues)
+- **Open an Issue**: [GitHub Issues](https://github.com/Freddsle/fedRBE/issues)
