@@ -1,7 +1,7 @@
 # Federated Limma Remove Batch Effect (fedRBE) - FeatureCloud
 
 **A federated implementation of the limma `removeBatchEffect` method.** 
-Each client is assumed to represent one batch (no multiple batches per client). Supports normalization, various input formats, and secure computation.
+Supports normalization, various input formats, multiple batches per client and secure computation.
 
 - **Open Source & Free**: [GitHub Repository](https://github.com/Freddsle/fedRBE/tree/main/batchcorrection)  
 - **Federated Privacy-preserving tool**: Based on [FeatureCloud](https://featurecloud.ai/app/fedrbe) platform  
@@ -26,7 +26,7 @@ Each client is assumed to represent one batch (no multiple batches per client). 
 ---
 
 ## Overview
-`fedRBE` applies limma’s batch effect removal in a **federated** setting — data remains with the client, and only summary information is shared. Each client hosts one batch. Multiple input formats and normalization methods are supported. For advanced parameters, see the [Configuration](#configuration-configyml) section.
+`fedRBE` applies limma’s batch effect removal in a **federated** setting — data remains with the client, and only summary information is shared. Multiple input formats and normalization methods are supported. For advanced parameters, see the [Configuration](#configuration-configyml) section.
 
 ---
 
@@ -61,12 +61,22 @@ The app image which is provided in the docker registry of featurecloud built on 
 ### Simulating a Federated Workflow Locally
 To test how `fedRBE` behaves with multiple datasets on one machine:
 
-```bash
-git clone git@github.com:Freddsle/fedRBE.git
-python3 ./evaluation_utils/run_sample_experiment.py
-```
+1. **Start the FeatureCloud Controller with the correct input folder**:
+   ```bash
+   featurecloud controller start --data-dir=./evaluation_data/simulated/mild_imbalanced/before/
+   ```
+
+2. **Run a Sample Experiment**:
+   ```bash
+   featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
+   ```
+   Alternatively, you can start the experiment from the [frontend](https://featurecloud.ai/development/test/new)
+
+   Select 3 clients, add lab1, lab2, lab3 respecitvely for the 3 clients to their path. 
+   
+   Use `featurecloud.ai/bcorrect:latest` as the app image.
   
-This runs experiments bundled with the app, illustrating how `fedRBE` works.
+This runs an experiment bundled with the app, illustrating how `fedRBE` works.
 The given repository contains the app but furthermore includes all the experiments done with the app.
 
 ### Running a True Federated Workflow

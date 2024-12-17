@@ -118,17 +118,22 @@ docker build . -t featurecloud.ai/bcorrect:latest
 
 Run simulations locally to understand `fedRBE`'s behavior:
 
-1. **Start the FeatureCloud Controller**:
+1. **Start the FeatureCloud Controller with the correct input folder**:
    ```bash
-   featurecloud controller start
+   featurecloud controller start --data-dir=./evaluation_data/simulated/mild_imbalanced/before/
    ```
 
 2. **Build or Pull the `fedRBE` App** as per the [Installation](#installation) instructions.
 
 3. **Run a Sample Experiment**:
    ```bash
-   python3 ./evaluation_utils/run_sample_experiment.py
+   featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
    ```
+   Alternatively, you can start the experiment from the [frontend](https://featurecloud.ai/development/test/new)
+
+   Select 3 clients, add lab1, lab2, lab3 respecitvely for the 3 clients to their path. 
+   
+   Use `featurecloud.ai/bcorrect:latest` as the app image.
 
 _For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)._
 
