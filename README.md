@@ -80,6 +80,8 @@ Before installing `fedRBE`, ensure you have the following installed:
    pip install featurecloud
    featurecloud controller start
    ```
+For Windows users, git must also be installed and added to PATH. We recommend
+and tested using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
 ### Clone the Repository
 
