@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/github/license/Freddsle/fedRBE)](LICENSE)
 [![ArXiv](https://img.shields.io/badge/ArXiv-2412.05894-B31B1B)](https://arxiv.org/abs/2412.05894)
 [![Documentation](https://img.shields.io/badge/Documentation-GitHub%20Pages-007EC6)](https://freddsle.github.io/fedRBE/)
+[![GitHub](https://img.shields.io/badge/GitHub-Freddsle%2FfedRBE-181717)](https://github.com/Freddsle/fedRBE)
 
 ---
 
@@ -40,6 +41,7 @@ This repository serves two main purposes:
 For usage instructions and how-to guides, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html).
 For more detailed information on the `fedRBE` implementation and configuration, see the [README](https://freddsle.github.io/fedRBE/batchcorrection/).
 
+The App is located at [FeatureCloud](https://featurecloud.ai/app/fedrbe) and can be used directly from the platform.
 
 ---
 
@@ -103,7 +105,7 @@ docker pull featurecloud.ai/bcorrect:latest
 ```
 
 _**Note**: 
-Alternatively, If you are using a non-linux/amd64 architecture (e.g., Mac M-series), you may need to build the image locally as shown below._
+Alternatively, If you are using a ARM architecture (e.g., Mac M-series), you may need to build the image locally as shown below._
 
 Navigate to the `batchcorrection` directory and build the Docker image:
 

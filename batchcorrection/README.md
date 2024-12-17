@@ -151,6 +151,12 @@ flimmaBatchCorrection:
   design_separator: "\t"
     # Separator for design file.
 
+  batch_col: "batch"
+    # Column name in the design file that contains batch information 
+    # (if multiple batches present in one client).
+    # If not given, all client data is considered as one batch.
+    # format: str
+
   normalizationMethod: "log2(x+1)"
     # Normalization: "log2(x+1)" or None.
     # If None, no normalization is applied.

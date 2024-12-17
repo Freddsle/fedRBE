@@ -16,6 +16,7 @@ This guide provides step-by-step instructions to reproduce the analyses and resu
     - [2. Obtaining Federated Corrected Data](#2-obtaining-federated-corrected-data)
     - [3. Obtaining Centrally Corrected Data](#3-obtaining-centrally-corrected-data)
     - [4. Comparing Federated and Central Corrections](#4-comparing-federated-and-central-corrections)
+    - [5. Produce tables and figures](#5-produce-tables-and-figures)
   - [Utility Scripts Overview](#utility-scripts-overview)
   - [Troubleshooting](#troubleshooting)
   - [Additional Resources](#additional-resources)
@@ -147,13 +148,11 @@ fedRBE/
 │       ├── simulation_func.R
 │       ├── upset_plot.py
 │       └── utils_analyse.py
-├── evaluation/                                 # Main evaluation scripts
+├── evaluation/                                 # Main evaluation scripts to produce results and figures
 │   ├── eval_simulation/                        # Evaluations on simulated data
-│   ├── evaluation_microarray.ipynb
+│   ├── evaluation_microarray.ipynb             # Evaluation of microarray datasets
 │   ├── evaluation_microbiome.ipynb
 │   ├── evaluation_proteomics.ipynb
-│   ├── evaluation_simulated_3runs.ipynb
-│   └── evaluation_simulated.ipynb
 └── [other directories/files]
 ```
 
@@ -240,6 +239,10 @@ Output:
 
 - Comparison Metrics: Printed in the console and saved as `fed_vc_cent_results.tsv` in the `evaluation_data/ directory.
 - Visualizations: Generated plots showcasing the comparison results.
+
+### 5. Produce tables and figures
+
+To reproduce the tables and figures from the preprint, run the provided Jupyter notebooks in the `evaluation/` directory.
 
 ## Utility Scripts Overview
 

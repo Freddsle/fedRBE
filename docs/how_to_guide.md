@@ -114,6 +114,7 @@ For more details on the `config.yml` parameters, see the [main README](https://f
 2. **Client Setup**:
    - **Client A, B, C**: Place `expression_data_client.csv` and `config.yml` in a local folder.
    - Adjust `config.yml` parameters as needed (e.g., change `data_filename` to match the correct file name).
+   - In case of multiple batches in one client, the client should provide a `design.csv` file with batch information and specify this column name in the `config.yml` parameter `batch_col`.
    
 3. **Joining the Project**:
    - Each client uses the FeatureCloud to login and join the project using the provided token.
