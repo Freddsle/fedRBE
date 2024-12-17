@@ -27,6 +27,7 @@
     - [Single-Machine Simulation](#single-machine-simulation)
   - [Troubleshooting](#troubleshooting)
   - [License](#license)
+  - [How to cite](#how-to-cite)
   - [Contact Information](#contact-information)
 
 
@@ -226,6 +227,27 @@ _For detailed troubleshooting tips, refer to the [How To Guide](https://freddsle
 ## License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
+
+---
+
+## How to cite
+
+If you use `fedRBE` in your research, please cite our [ArXiv preprint](https://arxiv.org/abs/2412.05894):
+
+ > Burankova, Y., Klemm, J., Lohmann, J.J., Taheri, A., Probul, N., Baumbach, J. and Zolotareva, O., 2024. FedRBE--a decentralized privacy-preserving federated batch effect correction tool for omics data based on limma. arXiv preprint arXiv:2412.05894.
+
+   ```bibtex
+   @misc{burankova2024fedrbedecentralizedprivacypreserving,
+         title={FedRBE -- a decentralized privacy-preserving federated batch effect correction tool for omics data based on limma}, 
+         author={Yuliya Burankova and Julian Klemm and Jens J. G. Lohmann and Ahmad Taheri and Niklas Probul and Jan Baumbach and Olga Zolotareva},
+         year={2024},
+         eprint={2412.05894},
+         archivePrefix={arXiv},
+         primaryClass={q-bio.QM},
+         url={https://arxiv.org/abs/2412.05894}, 
+   }
+   ```
+
 
 ---
 
