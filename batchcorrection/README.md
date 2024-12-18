@@ -62,12 +62,18 @@ The app image which is provided in the docker registry of featurecloud built on 
 ### Simulating a Federated Workflow Locally
 To test how `fedRBE` behaves with multiple datasets on one machine:
 
-1. **Start the FeatureCloud Controller with the correct input folder**:
+1. **Ensure the full repository including sample data is cloned and the current working directory**:
+   ```bash
+   git clone https://github.com/Freddsle/fedRBE.git
+   cd fedRBE
+   ```
+
+2. **Start the FeatureCloud Controller with the correct input folder**:
    ```bash
    featurecloud controller start --data-dir=./evaluation_data/simulated/mild_imbalanced/before/
    ```
 
-2. **Run a Sample Experiment**:
+3. **Run a Sample Experiment**:
    ```bash
    featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
    ```
@@ -201,4 +207,4 @@ The app has the following states:
 ## Additional Resources
 - **FeatureCloud Docs**: [featurecloud.ai](https://featurecloud.ai/)
 - **SMPC & Privacy Docs**: [Privacy-preserving techniques](https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation)
-- **GitHub Repo**: [removeBatch](https://github.com/Freddsle/fedRBE)
+- **GitHub Repo**: [fedRBE](https://github.com/Freddsle/fedRBE)

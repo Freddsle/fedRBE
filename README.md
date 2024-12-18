@@ -90,7 +90,7 @@ and tested using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
 ```bash
 git clone https://github.com/Freddsle/fedRBE.git
-cd removeBatch
+cd fedRBE
 ```
 
 This will clone the repository to your local machine with example files and simulation scripts.
@@ -123,14 +123,20 @@ docker build . -t featurecloud.ai/bcorrect:latest
 
 Run simulations locally to understand `fedRBE`'s behavior:
 
-1. **Start the FeatureCloud Controller with the correct input folder**:
+1. **Ensure the full repository including sample data is cloned and the current working directory**:
+   ```bash
+   git clone https://github.com/Freddsle/fedRBE.git
+   cd fedRBE
+   ```
+
+2. **Start the FeatureCloud Controller with the correct input folder**:
    ```bash
    featurecloud controller start --data-dir=./evaluation_data/simulated/mild_imbalanced/before/
    ```
 
-2. **Build or Pull the `fedRBE` App** as per the [Installation](#installation) instructions.
+3. **Build or Pull the `fedRBE` App** as per the [Installation](#installation) instructions.
 
-3. **Run a Sample Experiment**:
+4. **Run a Sample Experiment**:
    ```bash
    featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
    ```
