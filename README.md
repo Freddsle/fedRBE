@@ -62,7 +62,7 @@ The App is located at [FeatureCloud](https://featurecloud.ai/app/fedrbe) and can
 
 ## Architecture Overview
 
-`fedRBE` operates within the FeatureCloud ecosystem. The workflow involves a coordinator managing the project and multiple clients performing batch effect correction locally. Data remains with each client, and only summary statistics are shared, ensuring data privacy throughout the process.
+`fedRBE` operates within the FeatureCloud ecosystem. The workflow involves multiple clients performing batch effect correction locally. One of the clients is also acting as a coordinator, aggregating summary statistics. Data remains with each client, and only summary statistics are shared, ensuring data privacy throughout the process.
 
 <p align="center">
    <img src="./figures/readme2.png" alt="fedRBE app states" width="80%">
