@@ -1,7 +1,7 @@
 
 # Federated Limma Remove Batch Effect (fedRBE)
 
-[![License](https://img.shields.io/github/license/Freddsle/fedRBE)](LICENSE)
+[![License](https://img.shields.io/github/license/Freddsle/fedRBE)](https://github.com/Freddsle/fedRBE/blob/main/LICENSE)
 [![ArXiv](https://img.shields.io/badge/ArXiv-2412.05894-B31B1B)](https://arxiv.org/abs/2412.05894)
 [![Documentation](https://img.shields.io/badge/Documentation-GitHub%20Pages-007EC6)](https://freddsle.github.io/fedRBE/)
 [![GitHub](https://img.shields.io/badge/GitHub-Freddsle%2FfedRBE-181717)](https://github.com/Freddsle/fedRBE)
