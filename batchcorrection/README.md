@@ -6,6 +6,7 @@ Supports normalization, various input formats, multiple batches per client and s
 - **Open Source & Free**: [GitHub Repository](https://github.com/Freddsle/fedRBE/tree/main/batchcorrection)  
 - **Federated Privacy-preserving tool**: Based on [FeatureCloud](https://featurecloud.ai/app/fedrbe) platform  
 - **Preprint**: [ArXiv](https://doi.org/10.48550/arXiv.2412.05894)
+- **Full Documentation**: [GitHub Pages](https://freddsle.github.io/fedRBE/)
 
 ---
 
