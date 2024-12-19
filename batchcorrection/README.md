@@ -8,7 +8,7 @@
   </tr>
 </table>
 
-# Federated Limma Remove Batch Effect (fedRBE) - FeatureCloud <!-- omit in toc -->
+# fedRBE - FeatureCloud <!-- omit in toc -->
 
 **A federated implementation of the limma `removeBatchEffect` method.** 
 Supports normalization, various input formats, multiple batches per client and secure computation.

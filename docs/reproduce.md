@@ -8,7 +8,7 @@
   </tr>
 </table>
 
-# Reproduce the Federated Limma Remove Batch Effect (fedRBE) Preprint <!-- omit in toc -->
+# Reproduce the fedRBE Preprint <!-- omit in toc -->
 
 This guide provides step-by-step instructions to reproduce the analyses and results from the [fedRBE preprint](https://arxiv.org/abs/2412.05894). It leverages the utility scripts and data provided in this repository to demonstrate both centralized and federated batch effect correction using limma and fedRBE, respectively.
 

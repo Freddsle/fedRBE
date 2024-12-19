@@ -9,7 +9,7 @@
 </table>
 
 
-# Federated Limma Remove Batch Effect (fedRBE) <!-- omit in toc -->
+# Federated limma remove batch effect (fedRBE) <!-- omit in toc -->
 
 [![License](https://img.shields.io/github/license/Freddsle/fedRBE)](https://github.com/Freddsle/fedRBE/blob/main/LICENSE)
 [![ArXiv](https://img.shields.io/badge/ArXiv-2412.05894-B31B1B)](https://arxiv.org/abs/2412.05894)
@@ -102,7 +102,7 @@ This will clone the repository to your local machine with example files and simu
 - **limma**: A popular R package for differential expression analysis. `RemoveBatchEffect` is a function from limma.
 
 For more advanced configurations and detailed explanations, see the 
-[main README](https://freddsle.github.io/fedRBE/batchcorrection/#config) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
+[main README](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
 
 If you encounter difficulties, please:
 - Check the logs for error messages.
