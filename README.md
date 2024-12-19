@@ -1,15 +1,18 @@
 
+<table>
+  <tr>
+    <td><a href="https://freddsle.github.io/fedRBE/docs/how_to_guide.html"><img src="https://img.shields.io/badge/HowTo_Guide-Click_Here!-007EC6?style=for-the-badge" alt="HowTo Guide"></a></td>
+    <td><a href="https://freddsle.github.io/fedRBE/"><img src="https://img.shields.io/badge/Documentation-Click_Here!-007EC6?style=for-the-badge" alt="Documentation"></a></td>
+    <td><a href="https://github.com/Freddsle/fedRBE/"><img src="https://img.shields.io/badge/GitHub-Click_Here!-007EC6?style=for-the-badge" alt="GitHub"></a></td>
+    <td><a href="https://featurecloud.ai/app/fedrbe"><img src="https://img.shields.io/badge/FeatureCloud_App-Click_Here!-007EC6?style=for-the-badge" alt="FeatureCloud App"></a></td>
+  </tr>
+</table>
+
+
 # Federated Limma Remove Batch Effect (fedRBE) <!-- omit in toc -->
 
 [![License](https://img.shields.io/github/license/Freddsle/fedRBE)](https://github.com/Freddsle/fedRBE/blob/main/LICENSE)
 [![ArXiv](https://img.shields.io/badge/ArXiv-2412.05894-B31B1B)](https://arxiv.org/abs/2412.05894)
-[![Documentation](https://img.shields.io/badge/Documentation-GitHub%20Pages-007EC6)](https://freddsle.github.io/fedRBE/)
-[![GitHub](https://img.shields.io/badge/GitHub-Freddsle%2FfedRBE-181717)](https://github.com/Freddsle/fedRBE)
-
----
-
-| [![HowTo Guide](https://img.shields.io/badge/HowTo_Guide-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) | [![Documentation](https://img.shields.io/badge/Documentation-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/) | [![GitHub](https://img.shields.io/badge/GitHub-Click_Here!-007EC6?style=for-the-badge)](https://github.com/Freddsle/fedRBE/)  | [![FeatureCloud App](https://img.shields.io/badge/FeatureCloud_App-Click_Here!-007EC6?style=for-the-badge)](https://featurecloud.ai/app/fedrbe)|
-|---|---|---|---|
 
 ---
 
