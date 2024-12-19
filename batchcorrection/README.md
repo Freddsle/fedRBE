@@ -1,4 +1,7 @@
-# Federated Limma Remove Batch Effect (fedRBE) - FeatureCloud
+| [![HowTo Guide](https://img.shields.io/badge/HowTo_Guide-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) | [![Documentation](https://img.shields.io/badge/Documentation-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/) | [![GitHub](https://img.shields.io/badge/GitHub-Click_Here!-007EC6?style=for-the-badge)](https://github.com/Freddsle/fedRBE/)  | [![FeatureCloud App](https://img.shields.io/badge/FeatureCloud_App-Click_Here!-007EC6?style=for-the-badge)](https://featurecloud.ai/app/fedrbe)|
+|---|---|---|---|
+
+# Federated Limma Remove Batch Effect (fedRBE) - FeatureCloud <!-- omit in toc -->
 
 **A federated implementation of the limma `removeBatchEffect` method.** 
 Supports normalization, various input formats, multiple batches per client and secure computation.
@@ -10,19 +13,17 @@ Supports normalization, various input formats, multiple batches per client and s
 
 ---
 
-## Table of Contents
-- [Federated Limma Remove Batch Effect (fedRBE) - FeatureCloud](#federated-limma-remove-batch-effect-fedrbe---featurecloud)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Prerequisites](#prerequisites)
-  - [Usage](#usage)
-    - [Simulating a Federated Workflow Locally](#simulating-a-federated-workflow-locally)
-    - [Running a True Federated Workflow](#running-a-true-federated-workflow)
-  - [Input Requirements](#input-requirements)
-  - [Outputs](#outputs)
-  - [Configuration (config.yml)](#configuration-configyml)
-  - [FeatureCloud App states](#featurecloud-app-states)
-  - [Additional Resources](#additional-resources)
+## Table of Contents <!-- omit in toc -->
+- [Overview](#overview)
+- [Prerequisites and setup](#prerequisites-and-setup)
+- [Usage](#usage)
+  - [Simulating a federated Workflow Locally](#simulating-a-federated-workflow-locally)
+  - [Running a true federated workflow](#running-a-true-federated-workflow)
+- [Input requirements](#input-requirements)
+- [Outputs](#outputs)
+- [Configuration (config.yml)](#configuration-configyml)
+- [FeatureCloud App states](#featurecloud-app-states)
+- [Additional resources](#additional-resources)
 
 ---
 
@@ -31,7 +32,8 @@ Supports normalization, various input formats, multiple batches per client and s
 
 ---
 
-## Prerequisites
+## Prerequisites and setup
+
 Before using `fedRBE`, ensure:
 1. **Docker** is installed ([FeatureCloud prerequisites](https://featurecloud.ai/developers)).
 2. **FeatureCloud CLI**:
@@ -42,16 +44,23 @@ Before using `fedRBE`, ensure:
 3. **App Image**:  
    - For linux/amd64:
      ```bash
+     # pull the pre-built image
      featurecloud app download featurecloud.ai/bcorrect
      ```
-     or
+     or directly via Docker
      ```bash
      docker pull featurecloud.ai/bcorrect:latest
      ```
-   - For non-linux/ARM (e.g., Mac M-series):
+   - Alternatively, If you are using a ARM architecture (e.g., Mac M-series), you may need to build the image locally as shown below._
      ```bash
      docker build . -t featurecloud.ai/bcorrect:latest
      ```
+
+     or build the image from GitHub locally:
+     ```bash
+      cd batchcorrection
+      docker build . -t featurecloud.ai/bcorrect:latest
+      ```
 
 The app image which is provided in the docker registry of featurecloud built on the linux/amd64 platform. Especially if you're using a Macbook with any of the M-series chips or any other device not compatible with linux/amd64, please build the image locally.
 
@@ -59,7 +68,7 @@ The app image which is provided in the docker registry of featurecloud built on 
 
 ## Usage
 
-### Simulating a Federated Workflow Locally
+### Simulating a federated Workflow Locally
 To test how `fedRBE` behaves with multiple datasets on one machine:
 
 1. **Ensure the full repository including sample data is cloned and the current working directory**:
@@ -86,7 +95,7 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
 This runs an experiment bundled with the app, illustrating how `fedRBE` works.
 The given repository contains the app but furthermore includes all the experiments done with the app.
 
-### Running a True Federated Workflow
+### Running a true federated workflow
 For an actual multi-party setting:
 1. **Create a Project** in [FeatureCloud](https://featurecloud.ai/projects) and invite at least 3 clients.
 2. **Clients Join with Tokens** provided by the coordinator.
@@ -97,7 +106,7 @@ See [HOW TO GUIDE](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for
 
 ---
 
-## Input Requirements
+## Input requirements
 - **Data File**: CSV or TSV with either:
   - Samples x Features, or
   - Features x Samples
@@ -200,11 +209,11 @@ flimmaBatchCorrection:
 The app has the following states:
 
 <p align="center">
-   <img src="../figures/states.png" alt="fedRBE app states" width="60%">
+   <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE app states" width="60%">
 </p>
 
 ---
-## Additional Resources
+## Additional resources
 - **FeatureCloud Docs**: [featurecloud.ai](https://featurecloud.ai/)
 - **SMPC & Privacy Docs**: [Privacy-preserving techniques](https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation)
 - **GitHub Repo**: [fedRBE](https://github.com/Freddsle/fedRBE)

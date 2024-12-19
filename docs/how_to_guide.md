@@ -1,4 +1,7 @@
-# Getting Started with Federated Limma Remove Batch Effect (fedRBE)
+|[![Documentation](https://img.shields.io/badge/Documentation-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/) | [![GitHub](https://img.shields.io/badge/GitHub-Click_Here!-007EC6?style=for-the-badge)](https://github.com/Freddsle/fedRBE/)  | [![FeatureCloud App](https://img.shields.io/badge/FeatureCloud_App-Click_Here!-007EC6?style=for-the-badge)](https://featurecloud.ai/app/fedrbe)|
+|---|---|---|
+
+# Getting started with federated limma remove batch effect (fedRBE) <!-- omit in toc -->
 
 This guide is designed for beginners who want a quick and easy way to start using `fedRBE` and test its functionality. 
 For more technical details and advanced usage and specific implementation details, please refer to the [main README file](https://freddsle.github.io/fedRBE/batchcorrection/).
@@ -8,49 +11,30 @@ For more technical details and advanced usage and specific implementation detail
 For a more formal description and details, see the fedRBE's preprint on [ArXiv](https://doi.org/10.48550/arXiv.2412.05894).
 
 
-## List of Contents
+## List of contents <!-- omit in toc -->
 
-- [Getting Started with Federated Limma Remove Batch Effect (fedRBE)](#getting-started-with-federated-limma-remove-batch-effect-fedrbe)
-  - [List of Contents](#list-of-contents)
-  - [Key Concepts](#key-concepts)
-  - [Minimal Requirements and Setup](#minimal-requirements-and-setup)
-  - [Understanding the Workflow](#understanding-the-workflow)
-  - [File Preparation](#file-preparation)
-  - [Step-by-Step Scenario](#step-by-step-scenario)
-  - [Results and Output:](#results-and-output)
-  - [Single-Machine Simulations using the Provided Sample Data](#single-machine-simulations-using-the-provided-sample-data)
-  - [Troubleshooting Tips](#troubleshooting-tips)
-    - [Choosing the Correct Data Orientation](#choosing-the-correct-data-orientation)
-    - [Incorporating Covariates](#incorporating-covariates)
-    - [Selecting a Reference Batch](#selecting-a-reference-batch)
-  - [Glossary \& Further Resources](#glossary--further-resources)
+- [Minimal requirements and setup](#minimal-requirements-and-setup)
+- [Understanding the workflow](#understanding-the-workflow)
+- [File preparation](#file-preparation)
+- [Step-by-step scenario](#step-by-step-scenario)
+- [Results and output:](#results-and-output)
+- [Single-machine simulations using the provided sample data](#single-machine-simulations-using-the-provided-sample-data)
+- [Troubleshooting tips](#troubleshooting-tips)
+  - [Choosing the correct data orientation](#choosing-the-correct-data-orientation)
+  - [Incorporating covariates](#incorporating-covariates)
+  - [Selecting a reference batch](#selecting-a-reference-batch)
 
 
-## Key Concepts
-
-- **Federated learning**: Federation allows multiple participants (clients) to collaborate on data analysis without directly sharing their raw data. This ensures privacy while still enabling collaborative results.
-  
-- **Batch Effects**: When data come from different sources (e.g., different labs, time points, or technologies), they can contain systematic non-biological differences (batch effects) that make direct comparisons misleading. 
-
-## Minimal Requirements and Setup
+## Minimal requirements and setup
 
 **Prerequisites** (see [README](https://freddsle.github.io/fedRBE/batchcorrection/#prerequisites) for details):
 1. **Docker** installed (check [Docker website](https://www.docker.com/) for installation instructions).
-2. **FeatureCloud CLI** installed and running:
-   ```bash
-   pip install featurecloud
-   featurecloud controller start
-   ```
-3. **App Image** (either build locally or pull):
-   ```bash
-   # Pull (linux/amd64):
-   featurecloud app download featurecloud.ai/bcorrect
-   
-   # Or build (for non-amd64 architectures - e.g., ARM (Mac M1)):
-   docker build . -t featurecloud.ai/bcorrect:latest
-   ```
+2. **FeatureCloud CLI** installed and running.
+3. **App Image** (either build locally or pull).
 
-## Understanding the Workflow
+For installation and setup details, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/##prerequisites-and-setup).
+
+## Understanding the workflow
 
 Below is a simplified workflow of how to use `fedRBE`:
 1. **Coordinator creates a FeatureCloud project and distributes tokens** to at least 3 participants.
@@ -59,7 +43,7 @@ Below is a simplified workflow of how to use `fedRBE`:
 4. **fedRBE aligns and corrects batch effects** without sharing raw data.
 5. **Results are produced locally at each client**, ensuring privacy.
 
-## File Preparation
+## File preparation
 
 You need two main inputs:
 1. **Expression Data File** (CSV/TSV)
@@ -98,7 +82,7 @@ flimmaBatchCorrection:
 
 For more details on the `config.yml` parameters, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/#config).
 
-## Step-by-Step Scenario
+## Step-by-step scenario
 
 **Scenario**: Three clients (A, B, and C) collaborate on a federated analysis. Video tutorial: [link](https://featurecloud.ai/researchers).
 
@@ -128,7 +112,7 @@ For more details on the `config.yml` parameters, see the [main README](https://f
    - After all clients join, the coordinator starts the project.
    - The app runs locally at each client, securely combining results.
    
-## Results and Output:
+## Results and output:
 
 After completion, each client finds:
    - `only_batch_corrected_data.csv`: The batch-corrected expression data.
@@ -136,31 +120,20 @@ After completion, each client finds:
    - logs: Detailed logs of the process.
    
 
-## Single-Machine Simulations using the Provided Sample Data
+## Single-machine simulations using the provided sample data
 
 If you’d like to test everything on one machine, you can run the provided sample data and test script. This simulates multiple clients locally, so you can see the federated workflow in action without needing multiple machines.
 
-**Steps:**
-1. Ensure prerequisites are met (Docker, `featurecloud` package, configured FeatureCloud controller and the app image).
-2. Clone the repository:
-   ```bash
-   git clone git@github.com:Freddsle/fedRBE.git
-   ```
-3. Run the provided sample experiment:
-   ```bash
-   python3 ./evaluation_utils/run_sample_experiment.py
-   ```
-   
-This will start a local simulation of multiple clients and show you how the batch correction is applied in practice. More details can be found in the [main README](https://freddsle.github.io/fedRBE/batchcorrection/#running-the-provided-sample-data).
+For instructions, see the [Local Test Simulation](https://freddsle.github.io/fedRBE/docs/local_test.html) guide.
 
 
-## Troubleshooting Tips
+## Troubleshooting tips
 
 - **Missing Files**: If you see "file not found," ensure that `config.yml` and data files are in the same directory.
 - **Incorrect Format**: Check if `expression_file_flag` and `index_col` are set correctly based on your data orientation.
 - **No Output Produced**: Review `report.txt` and logs. 
 
-### Choosing the Correct Data Orientation
+### Choosing the correct data orientation
 
 Depending on how your data is structured, you must correctly set `expression_file_flag` in your `config.yml`:
 
@@ -171,7 +144,7 @@ Depending on how your data is structured, you must correctly set `expression_fil
   `expression_file_flag: False` and `index_col: <sample_id_column>`
 
 
-### Incorporating Covariates
+### Incorporating covariates
 
 If you have additional covariates (e.g., age, treatment type) that might influence your data, you can include them either directly in the `design_filename` file or list them in your `config.yml` under `covariates`. If no separate design file is provided, these covariates must exist as features in the main data file.
 
@@ -180,7 +153,7 @@ If you have additional covariates (e.g., age, treatment type) that might influen
 covariates: ["Age", "Treatment"]
 ```
 
-### Selecting a Reference Batch
+### Selecting a reference batch
 
 `fedRBE` needs a reference batch to align the other batches against. By default, if no `reference_batch` is set, it uses the last client in the positional order defined by the `position` parameter. If all parameters are unset, it may choose a batch at random, resulting in non-deterministic runs.
 
@@ -190,15 +163,3 @@ position: 2
 reference_batch: ""
 ```
 
-## Glossary & Further Resources
-
-- **FeatureCloud**: A platform enabling federated analyses. [FeatureCloud docs](https://featurecloud.ai/)
-- **limma**: A popular R package for differential expression analysis. `RemoveBatchEffect` is a function from limma.
-
-For more advanced configurations and detailed explanations, see the 
-[main README](https://freddsle.github.io/fedRBE/batchcorrection/#config) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
-
-If you encounter difficulties, please:
-- Check the logs for error messages.
-- Revisit the [main README](https://freddsle.github.io/fedRBE/batchcorrection/).
-- Reach out to the support by creating an issue on the [GitHub repository](https://github.com/Freddsle/fedRBE)

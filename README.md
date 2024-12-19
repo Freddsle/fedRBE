@@ -1,5 +1,5 @@
 
-# Federated Limma Remove Batch Effect (fedRBE)
+# Federated Limma Remove Batch Effect (fedRBE) <!-- omit in toc -->
 
 [![License](https://img.shields.io/github/license/Freddsle/fedRBE)](https://github.com/Freddsle/fedRBE/blob/main/LICENSE)
 [![ArXiv](https://img.shields.io/badge/ArXiv-2412.05894-B31B1B)](https://arxiv.org/abs/2412.05894)
@@ -8,85 +8,79 @@
 
 ---
 
-## Table of Contents
-- [Federated Limma Remove Batch Effect (fedRBE)](#federated-limma-remove-batch-effect-fedrbe)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Architecture Overview](#architecture-overview)
-  - [Installation](#installation)
-    - [Prerequisites](#prerequisites)
-    - [Clone the Repository](#clone-the-repository)
-    - [Get the `fedRBE` App](#get-the-fedrbe-app)
-  - [Usage](#usage)
-    - [Quick Start](#quick-start)
-  - [Reproducing the Paper](#reproducing-the-paper)
-    - [Steps to Reproduce](#steps-to-reproduce)
+| [![HowTo Guide](https://img.shields.io/badge/HowTo_Guide-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) | [![Documentation](https://img.shields.io/badge/Documentation-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/) | [![GitHub](https://img.shields.io/badge/GitHub-Click_Here!-007EC6?style=for-the-badge)](https://github.com/Freddsle/fedRBE/)  | [![FeatureCloud App](https://img.shields.io/badge/FeatureCloud_App-Click_Here!-007EC6?style=for-the-badge)](https://featurecloud.ai/app/fedrbe)|
+|---|---|---|---|
+
+---
+
+## Table of Contents <!-- omit in toc -->
+- [Architecture overview](#architecture-overview)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Clone the repository](#clone-the-repository)
+- [Usage](#usage)
+  - [Glossary \& further resources](#glossary--further-resources)
+  - [Input and Output](#input-and-output)
   - [Configuration](#configuration)
-    - [Example `config.yml`](#example-configyml)
-  - [Examples](#examples)
-    - [Single-Machine Simulation](#single-machine-simulation)
-  - [Troubleshooting](#troubleshooting)
-  - [License](#license)
-  - [How to cite](#how-to-cite)
-  - [Contact Information](#contact-information)
+  - [Quick start](#quick-start)
+- [Reproducing the paper](#reproducing-the-paper)
+- [Single-machine simulation](#single-machine-simulation)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+- [How to cite](#how-to-cite)
+- [Contact information](#contact-information)
 
 
 ---
 
-The **Federated Limma Remove Batch Effect (fedRBE)** offers a federated implementation of the limma `removeBatchEffect` algorithm. Implemented within the [FeatureCloud](https://featurecloud.ai/) platform, `fedRBE` enables batch effect correction in a privacy-preserving manner, ensuring that raw data remains decentralized.
+## Architecture overview
 
-This repository serves two main purposes:
-1. **fedRBE Implementation**: Located in the `batchcorrection` subfolder, providing the federated batch effect removal tool.
-2. **Reproducibility**: Contains code and scripts to reproduce the analyses presented in our [ArXiv preprint](https://arxiv.org/abs/2412.05894).
+The **Federated Limma Remove Batch Effect (fedRBE)** is a federated implementation of the limma `removeBatchEffect` algorithm, developed within the [FeatureCloud](https://featurecloud.ai/) platform. It enables privacy-preserving batch effect correction by keeping raw data decentralized and utilizing Secure Multiparty Computation (SMPC) for secure data aggregation.
 
-For usage instructions and how-to guides, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html).
-For more detailed information on the `fedRBE` implementation and configuration, see the [README](https://freddsle.github.io/fedRBE/batchcorrection/).
-
-The App is located at [FeatureCloud](https://featurecloud.ai/app/fedrbe) and can be used directly from the platform.
-
----
-
-## Features
-
-- **Federated Learning**: Collaborate across multiple clients without sharing raw data, ensuring data privacy.
-- **Batch Effect Removal**: Effectively removes non-biological variations using limma’s `removeBatchEffect` in a federated setting.
-- **Flexible Input Formats**: Supports various data formats.
-- **Secure Computation**: Utilizes Secure Multiparty Computation (SMPC) for privacy-preserving data aggregation.
-- **Easy Integration**: Integrates with the FeatureCloud platform for streamlined workflow management.
+fedRBE allows multiple participants to collaboratively remove batch effects from their data without sharing raw data, ensuring privacy. It effectively eliminates non-biological variations arising from different sources such as labs, time points, or technologies, using limma’s `removeBatchEffect`. The tool supports various data formats and seamlessly integrates with the FeatureCloud platform for streamlined workflow management.
 
 <p align="center">
    <img src="./figures/readme1.png" alt="fedRBE app states" width="80%">
+   <br>
+   <em>fedRBE app states. <a href="https://arxiv.org/abs/2412.05894" target="_blank">Source: ArXiv 2412.05894</a></em>
 </p>
 
----
 
-## Architecture Overview
+The repository serves two main purposes:
+- **fedRBE Implementation**: Located in the `batchcorrection` subfolder, providing the federated batch effect removal tool.
+- **Reproducibility**: Contains code and scripts to reproduce the analyses presented in our [ArXiv preprint](https://arxiv.org/abs/2412.05894).
 
-`fedRBE` operates within the FeatureCloud ecosystem. The workflow involves multiple clients performing batch effect correction locally. One of the clients is also acting as a coordinator, aggregating summary statistics. Data remains with each client, and only summary statistics are shared, ensuring data privacy throughout the process.
 
 <p align="center">
-   <img src="./figures/readme2.png" alt="fedRBE app states" width="80%">
+   <img src="./figures/readme2.png" alt="fedRBE architecture" width="80%">
+   <br>
+   <em>fedRBE architecture. <a href="https://arxiv.org/abs/2412.05894" target="_blank">Source: ArXiv 2412.05894</a></em>
 </p>
 
-_For a detailed workflow, see the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#understanding-the-workflow)._
+
+You can access and use the `fedRBE` app directly on [FeatureCloud](https://featurecloud.ai/app/fedrbe). 
+
+For detailed usage instructions and implementation information, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) and the [README](https://freddsle.github.io/fedRBE/batchcorrection/).
+
+For a comprehensive overview of the workflow, please consult the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#understanding-the-workflow).
 
 ---
-
 ## Installation
 
 ### Prerequisites
 
 Before installing `fedRBE`, ensure you have the following installed:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
-2. **FeatureCloud CLI**:
-   ```bash
-   pip install featurecloud
-   featurecloud controller start
-   ```
-For Windows users, git must also be installed and added to PATH. We recommend
-and tested using [WSL](https://docs.docker.com/desktop/features/wsl/).
+2. **FeatureCloud CLI**.
+   For Windows users, git must also be installed and added to PATH. We recommend
+   and tested using [WSL](https://docs.docker.com/desktop/features/wsl/).
+3. **App Image** (either build locally or pull).
 
-### Clone the Repository
+For installation and setup details, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/##prerequisites-and-setup).
+
+### Clone the repository
+
+If you want to run the simulations locally, clone the repository (or check [Quick Start](#quick-start) below):
 
 ```bash
 git clone https://github.com/Freddsle/fedRBE.git
@@ -95,66 +89,83 @@ cd fedRBE
 
 This will clone the repository to your local machine with example files and simulation scripts.
 
-### Get the `fedRBE` App
-
-pull the pre-built image:
-
-```bash
-featurecloud app download featurecloud.ai/bcorrect
-# Or directly via Docker
-docker pull featurecloud.ai/bcorrect:latest
-```
-
-_**Note**: 
-Alternatively, If you are using a ARM architecture (e.g., Mac M-series), you may need to build the image locally as shown below._
-
-Navigate to the `batchcorrection` directory and build the Docker image:
-
-```bash
-cd batchcorrection
-docker build . -t featurecloud.ai/bcorrect:latest
-```
-
 ---
 
 ## Usage
 
-### Quick Start
+### Glossary & further resources
 
-Run simulations locally to understand `fedRBE`'s behavior:
+- **FeatureCloud**: A platform enabling federated analyses. [FeatureCloud docs](https://featurecloud.ai/)
+- **limma**: A popular R package for differential expression analysis. `RemoveBatchEffect` is a function from limma.
 
-1. **Ensure the full repository including sample data is cloned and the current working directory**:
-   ```bash
-   git clone https://github.com/Freddsle/fedRBE.git
-   cd fedRBE
-   ```
+For more advanced configurations and detailed explanations, see the 
+[main README](https://freddsle.github.io/fedRBE/batchcorrection/#config) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
 
-2. **Start the FeatureCloud Controller with the correct input folder**:
-   ```bash
-   featurecloud controller start --data-dir=./evaluation_data/simulated/mild_imbalanced/before/
-   ```
-
-3. **Build or Pull the `fedRBE` App** as per the [Installation](#installation) instructions.
-
-4. **Run a Sample Experiment**:
-   ```bash
-   featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
-   ```
-   Alternatively, you can start the experiment from the [frontend](https://featurecloud.ai/development/test/new)
-
-   Select 3 clients, add lab1, lab2, lab3 respecitvely for the 3 clients to their path. 
-   
-   Use `featurecloud.ai/bcorrect:latest` as the app image.
-
-_For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)._
+If you encounter difficulties, please:
+- Check the logs for error messages.
+- Revisit the [main README](https://freddsle.github.io/fedRBE/batchcorrection/).
+- Reach out to the support by creating an issue on the [GitHub repository](https://github.com/Freddsle/fedRBE)
 
 ---
 
-## Reproducing the Paper
+
+### Input and Output
+
+For files preparation, format, config file, and output details, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#file-preparation).
+
+In summary, you need two main inputs and one optional file:
+
+<p align="center">
+   <img src="./figures/how_to1.png" alt="Required files figure" width="50%">
+   <br>
+   <em>Input files required for fedRBE.</em>
+</p>
+
+Output files include:
+- **Corrected Data**: The batch-corrected data in the same format as the input.
+- **Report**: A summary of the correction process and results.
+
+
+---
+
+
+### Configuration
+
+`fedRBE` is highly configurable via the `config.yml` file. This file controls data formats, normalization methods, and other essential parameters.
+
+**Example `config.yml`**:
+
+   ```yaml
+   flimmaBatchCorrection:
+   data_filename: "expression_data_client1.csv"
+   expression_file_flag: False
+   index_col: "GeneIDs"
+   covariates: ["Pyr"]
+   separator: ","
+   design_separator: ","
+   normalizationMethod: "log2(x+1)"
+   smpc: True
+   min_samples: 2
+   position: 1
+   reference_batch: ""
+   ```
+
+_For a comprehensive list of configuration options, refer to the [Configuration Section](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml) in the batchcorrection README._
+
+---
+
+### Quick start
+
+1. For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)
+2. For a step-by-step instructions on how to simulate collaboration via test environment, refer to the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html)
+
+---
+
+## Reproducing the paper
 
 This repository includes all necessary code and data to reproduce the analyses presented in our [ArXiv preprint](https://arxiv.org/abs/2412.05894).
 
-### Steps to Reproduce
+Steps to Reproduce:
 
 1. **Ensure Prerequisites are Met**:
    - Docker installed
@@ -172,52 +183,19 @@ This repository includes all necessary code and data to reproduce the analyses p
    python3 ./evaluation_utils/analyse_fedvscentral.py
    ```
 
-_For detailed instructions on reproducing the paper, refer to the [Reproducibility Guide](./reproduce)._
+_For detailed instructions on reproducing the paper, refer to the [Reproducibility Guide](https://freddsle.github.io/fedRBE/docs/reproduce.html)._
+
 
 ---
 
-## Configuration
-
-`fedRBE` is highly configurable via the `config.yml` file. This file controls data formats, normalization methods, and other essential parameters.
-
-### Example `config.yml`
-
-```yaml
-flimmaBatchCorrection:
-  data_filename: "expression_data_client1.csv"
-  expression_file_flag: False
-  index_col: "GeneIDs"
-  covariates: ["Pyr"]
-  separator: ","
-  design_separator: ","
-  normalizationMethod: "log2(x+1)"
-  smpc: True
-  min_samples: 2
-  position: 1
-  reference_batch: ""
-```
-
-_For a comprehensive list of configuration options, refer to the [Configuration Section](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml) in the batchcorrection README._
-
----
-
-## Examples
-
-### Single-Machine Simulation
+## Single-machine simulation
 
 To simulate a federated workflow on a single machine using provided sample data:
 
-1. **Run the Sample Experiment**:
-   ```bash
-   python3 ./evaluation_utils/run_sample_experiment.py
-   ```
-
-2. **Review Results**:
-   - Batch-corrected data: `only_batch_corrected_data.csv`
-   - Report: `report.txt`
+1. Check the [Prerequisites](#prerequisites) and [Clone the Repository](#clone-the-repository).
+2. **Run the Sample Experiment** according to the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html).
 
 ---
-
 
 ## Troubleshooting
 
@@ -254,10 +232,9 @@ If you use `fedRBE` in your research, please cite our [ArXiv preprint](https://a
    }
    ```
 
-
 ---
 
-## Contact Information
+## Contact information
 
 For questions, issues, or support, please open an issue on the [GitHub repository](https://github.com/Freddsle/fedRBE).
 

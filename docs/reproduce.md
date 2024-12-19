@@ -1,30 +1,31 @@
-# Reproduce the Federated Limma Remove Batch Effect (fedRBE) Preprint
+| [![HowTo Guide](https://img.shields.io/badge/HowTo_Guide-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) | [![Documentation](https://img.shields.io/badge/Documentation-Click_Here!-007EC6?style=for-the-badge)](https://freddsle.github.io/fedRBE/) | [![GitHub](https://img.shields.io/badge/GitHub-Click_Here!-007EC6?style=for-the-badge)](https://github.com/Freddsle/fedRBE/)  | [![FeatureCloud App](https://img.shields.io/badge/FeatureCloud_App-Click_Here!-007EC6?style=for-the-badge)](https://featurecloud.ai/app/fedrbe)|
+|---|---|---|---|
+
+# Reproduce the Federated Limma Remove Batch Effect (fedRBE) Preprint <!-- omit in toc -->
 
 This guide provides step-by-step instructions to reproduce the analyses and results from the [fedRBE preprint](https://arxiv.org/abs/2412.05894). It leverages the utility scripts and data provided in this repository to demonstrate both centralized and federated batch effect correction using limma and fedRBE, respectively.
 
-## Table of Contents
+## Table of Contents <!-- omit in toc -->
 
-- [Reproduce the Federated Limma Remove Batch Effect (fedRBE) Preprint](#reproduce-the-federated-limma-remove-batch-effect-fedrbe-preprint)
-  - [Table of Contents](#table-of-contents)
-  - [Prerequisites and Setup](#prerequisites-and-setup)
-    - [Install Required Packages](#install-required-packages)
-      - [Option 1: Using Mamba with `environment.yml`](#option-1-using-mamba-with-environmentyml)
-      - [Option 2: Using `pip` and `R` Requirements Files](#option-2-using-pip-and-r-requirements-files)
-  - [Repository Structure](#repository-structure)
-  - [Running the Analysis](#running-the-analysis)
-    - [1. Running a Sample Federated Experiment](#1-running-a-sample-federated-experiment)
-    - [2. Obtaining Federated Corrected Data](#2-obtaining-federated-corrected-data)
-    - [3. Obtaining Centrally Corrected Data](#3-obtaining-centrally-corrected-data)
-    - [4. Comparing Federated and Central Corrections](#4-comparing-federated-and-central-corrections)
-    - [5. Produce tables and figures](#5-produce-tables-and-figures)
-  - [Utility Scripts Overview](#utility-scripts-overview)
-  - [Troubleshooting](#troubleshooting)
-  - [Additional Resources](#additional-resources)
-  - [Contact Information](#contact-information)
+- [Prerequisites and setup](#prerequisites-and-setup)
+  - [Install required packages](#install-required-packages)
+    - [Option 1: Using mamba with `environment.yml`](#option-1-using-mamba-with-environmentyml)
+    - [Option 2: Using `pip` and `R` requirements files](#option-2-using-pip-and-r-requirements-files)
+- [Repository structure](#repository-structure)
+- [Running the analysis](#running-the-analysis)
+  - [1. Running a sample federated experiment](#1-running-a-sample-federated-experiment)
+  - [2. Obtaining federated corrected data](#2-obtaining-federated-corrected-data)
+  - [3. Obtaining centrally corrected data](#3-obtaining-centrally-corrected-data)
+  - [4. Comparing federated and central corrections](#4-comparing-federated-and-central-corrections)
+  - [5. Produce tables and figures](#5-produce-tables-and-figures)
+- [Utility scripts overview](#utility-scripts-overview)
+- [Troubleshooting](#troubleshooting)
+- [Additional resources](#additional-resources)
+- [Contact information](#contact-information)
 
 ---
 
-## Prerequisites and Setup
+## Prerequisites and setup
 
 Before you begin, ensure you have the following installed and configured:
 
@@ -34,13 +35,13 @@ Before you begin, ensure you have the following installed and configured:
 4. **Python 3.8+**: Required for running Python scripts.
 5. **R** : Necessary for running R scripts. [Install R](https://www.r-project.org/).
 
-### Install Required Packages
+### Install required packages
 
 You can install the necessary packages using **Conda**/**Mamba** or manually via `pip` and `R` requirements files.
 
 We suggest using Conda/Mamba for a consistent environment setup.
 
-#### Option 1: Using Mamba with `environment.yml`
+#### Option 1: Using mamba with `environment.yml`
 
 This is the recommended method as it sets up both Python and R dependencies in a single environment.
 
@@ -58,7 +59,7 @@ This is the recommended method as it sets up both Python and R dependencies in a
    mamba activate fedRBE
    ```
 
-#### Option 2: Using `pip` and `R` Requirements Files
+#### Option 2: Using `pip` and `R` requirements files
 
 If you prefer not to use Mamba, you can install Python and R dependencies separately.
 
@@ -118,7 +119,7 @@ If you prefer not to use Mamba, you can install Python and R dependencies separa
 
 ---
 
-## Repository Structure
+## Repository structure
 
 Understanding the repository layout helps in navigating the files and scripts.
 
@@ -156,11 +157,11 @@ fedRBE/
 └── [other directories/files]
 ```
 
-## Running the Analysis
+## Running the analysis
 
 This section guides you through running both federated and centralized batch effect corrections and comparing their results.
 
-### 1. Running a Sample Federated Experiment
+### 1. Running a sample federated experiment
 
 To simulate a federated workflow on a single machine using provided sample data:
 
@@ -174,7 +175,7 @@ What this does:
 - Results are aggregated securely without sharing raw data.
 
 
-### 2. Obtaining Federated Corrected Data
+### 2. Obtaining federated corrected data
 
 Use the provided utility script to perform federated batch effect correction on your datasets.
 
@@ -199,7 +200,7 @@ Customization:
 
 - To extend to more datasets, add additional [datasets] in `evaluation_data/[dataset]/before/` following the existing structure.
 
-### 3. Obtaining Centrally Corrected Data
+### 3. Obtaining centrally corrected data
 
 Perform centralized batch effect correction using limma's `removeBatchEffect` for comparison.
 
@@ -219,7 +220,7 @@ Perform centralized batch effect correction using limma's `removeBatchEffect` fo
 
 _Note: The preprocessing steps and centralized correction are already implemented in the provided notebooks. It is possible to skip this step completely and use the provided corrected data._
 
-### 4. Comparing Federated and Central Corrections
+### 4. Comparing federated and central corrections
 
 Use the provided script to analyze and compare the results of federated and centralized batch effect corrections.
 
@@ -244,7 +245,7 @@ Output:
 
 To reproduce the tables and figures from the preprint, run the provided Jupyter notebooks in the `evaluation/` directory.
 
-## Utility Scripts Overview
+## Utility scripts overview
 
 This repository includes several utility scripts to facilitate data processing, analysis, and visualization placed in `evaluation_utils/`.
 
@@ -320,7 +321,7 @@ Encountering issues? Below are common problems and their solutions:
 
 For unresolved issues, consider reaching out via the [GitHub Issues](https://github.com/Freddsle/fedRBE/issues) page.
 
-## Additional Resources
+## Additional resources
 
 - **FeatureCloud Documentation**: [https://featurecloud.ai/assets/developer_documentation/index.html](https://featurecloud.ai/assets/developer_documentation/index.html)
 - **limma Package Documentation**: [https://bioconductor.org/packages/release/bioc/html/limma.html](https://bioconductor.org/packages/release/bioc/html/limma.html)
@@ -328,7 +329,7 @@ For unresolved issues, consider reaching out via the [GitHub Issues](https://git
 - **GitHub Repository**: [https://github.com/Freddsle/fedRBE](https://github.com/Freddsle/fedRBE)
 - **Federated Learning Overview**: [https://en.wikipedia.org/wiki/Federated_learning](https://en.wikipedia.org/wiki/Federated_learning)
 
-## Contact Information
+## Contact information
 
 For questions, issues, or support, please:
 
