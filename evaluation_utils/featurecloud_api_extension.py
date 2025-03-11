@@ -432,17 +432,19 @@ class Experiment():
         containers = dockerclient.containers.list()
 
         # Iterate through the containers
+        image_name = self.app_image_name
+        if "/" in image_name:
+            image_name = image_name.split("/")[-1]
         for container in containers:
-            # Check if the container is running the specified image
-            for tag in container.image.tags:
-                if self.app_image_name in tag:
-                    # Stop the container
-                    try:
-                        container.stop()
-                    except Exception as e:
-                        print(f"WARNING: failed to stop a container, will try to continue the workflow. Error: {e}")
-                    print(f"Stopped leftover container: {container.id} running image {self.app_image_name}")
-                    time.sleep(5) # just to make sure the container is really removed
+            if image_name in container.name:
+                # Stop the container
+                try:
+                    container.stop()
+                except Exception as e:
+                    print(f"WARNING: failed to stop a container, will try to continue the workflow. Error: {e}")
+                print(f"Stopped leftover container: {container.id} running image {self.app_image_name}")
+                time.sleep(5) # just to make sure the container is really removed
+
 ### Helper functions
 def hash_file(file_path, exclude=None):
     """Generate a SHA-256 hash of the contents of a file."""
