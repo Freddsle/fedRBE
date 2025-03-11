@@ -87,9 +87,9 @@ class Experiment():
                                              # None for default
     controller_host: Union[str, None] = None # The controller host to be used
                                     # if None, DEFAULT_CONTROLLER_HOST is used
-    timeout: int = 3600 # The timeout in seconds for the test. if a test takes
+    timeout: int = 900  # The timeout in seconds for the test. if a test takes
                         # longer than this, it is stopped and retried
-                        # default is 60 minutes
+                        # default is 15 minutes
 
     def run_test(self, retry: int = 0) -> Tuple[List[str], int, ExperimentResult]:
         """
@@ -407,14 +407,14 @@ class Experiment():
                     # Make sure flimmaBatchCorrection exists in the base config
                     if "flimmaBatchCorrection" not in config:
                         raise RuntimeError("Base config does not have 'flimmaBatchCorrection' section.")
-                    
+
                     # Extract changes intended for flimmaBatchCorrection
                     flimma_changes = config_changes.get("flimmaBatchCorrection", {})
 
                     # Update only the flimmaBatchCorrection section
                     for key, value in flimma_changes.items():
                         config["flimmaBatchCorrection"][key] = value
-                        
+
         if not self.config_files:
             raise RuntimeError("No config files given!")
         ### os manipulations to get the config files in the correct client folders
