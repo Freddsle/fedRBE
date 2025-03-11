@@ -138,6 +138,7 @@ For instructions, see the [Local Test Simulation](https://freddsle.github.io/fed
 - **Missing Files**: If you see "file not found," ensure that `config.yml` and data files are in the same directory.
 - **Incorrect Format**: Check if `expression_file_flag` and `index_col` are set correctly based on your data orientation.
 - **No Output Produced**: Review `report.txt` and logs. 
+- **Errors with Test runs**: Ensure the is no leftover running Docker containers. Restart Docker / System if necessary. 
 
 ### Choosing the correct data orientation
 

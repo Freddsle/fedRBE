@@ -204,7 +204,7 @@ Output:
 _Note: The script may take some time to complete, depending on the dataset size and the number of clients._
 
 Customization:
-
+- If you want to run the correction not on all datasets, comment the corresponding lines in the script (248-287, depending on the dataset).
 - To extend to more datasets, add additional [datasets] in `evaluation_data/[dataset]/before/` following the existing structure.
 
 ### 3. Obtaining centrally corrected data
@@ -317,6 +317,9 @@ Encountering issues? Below are common problems and their solutions:
 - **FeatureCloud Controller Not Starting**:
   - **Solution**: Verify that no other services are occupying the required ports. Check logs for error messages. Check if you have logged in to FeatureCloud.ai.
   
+- **Errors with Test runs**: 
+  - **Solution**: Ensure the is no leftover running Docker containers. Restart Docker / System if necessary. 
+
 - **Script Execution Errors**:
   - **Solution**: Ensure all prerequisites are installed. Check file paths and permissions.
   

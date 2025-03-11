@@ -207,6 +207,7 @@ Encountering issues? Here are some common problems and their solutions:
 - **Missing Files**: Ensure `config.yml` and data files are in the correct directory.
 - **Incorrect Format**: Verify `expression_file_flag` and `index_col` settings in `config.yml`.
 - **No Output Produced**: Check `report.txt` and logs for error messages.
+- **Errors with Test runs**: Ensure the is no leftover running Docker containers. Restart Docker / System if necessary. 
 
 _For detailed troubleshooting tips, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#troubleshooting-tips)._
 

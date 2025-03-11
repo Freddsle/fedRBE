@@ -93,6 +93,8 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
 
 3. **Run a Sample Experiment**:
    ```bash
+   # if you have the controller running in a different folder, stop it first
+   # featurecloud controller stop 
    featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
    ```
    Alternatively, you can start the experiment from the [frontend](https://featurecloud.ai/development/test/new)
