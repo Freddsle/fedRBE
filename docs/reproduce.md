@@ -202,6 +202,7 @@ Output:
 - Report files: detailed logs and correction reports.
 
 _Note: The script may take some time to complete, depending on the dataset size and the number of clients._
+_Note 2: The microarray data processing is commented out in the script. To process this dataset one need >16GB RAM. To run the correction on microarray datasets, uncomment the corresponding lines in the script (get_federated_corrected_data.py, 248-287)._
 
 Customization:
 - If you want to run the correction not on all datasets, comment the corresponding lines in the script (248-287, depending on the dataset).

@@ -281,10 +281,10 @@ experiments.append(proteomics_multibatch_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Microarray
-experiments.append(microarray_experiment)
-result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
-experiments.append(microarray_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"))
+# experiments.append(microarray_experiment)
+# result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(microarray_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"))
 
 
 ### ACTUAL PROGRAM, NO NEED TO CHANGE IF A DIFFERENT EXPERIMENT WANTS TO BE RUN
