@@ -20,7 +20,8 @@ pca_plot <- function(
     pc_x = "PC1",  # Default principal component for the x-axis
     pc_y = "PC2",  # Default principal component for the y-axis
     show_legend = TRUE,
-    cbPalette = NULL
+    cbPalette = NULL,
+    point_size = 2
     ){
   pca <- prcomp(t(na.omit(df)))
   pca_df <- pca$x %>%
@@ -33,7 +34,6 @@ pca_plot <- function(
   # Update the ggplot function call to use dynamic PC columns
   pca_plotting <- pca_df %>%
       ggplot(aes_string(x = pc_x, y = pc_y, color = col_col, shape = shape_col)) +
-
   if(shape_col != ""){
     if(length(unique(batch_info[[shape_col]])) > 6){
       shapes_codes <- c(0, 1, 3, 8, 7, 15, 19)
@@ -43,7 +43,7 @@ pca_plot <- function(
   }
 
   pca_plotting <- pca_plotting + 
-    geom_point(size=2) +
+    geom_point(size=point_size) +
     theme_classic() +
     labs(title = title,
          x = glue::glue("{pc_x} [{round(var_expl[pc_x]*100, 2)}%]"),

@@ -205,8 +205,7 @@ def main():
 
     ### SIMULATION: all: initial ###
     ### Initial reading of the input folder
-
-    send_feature_variable_batch_info = list()
+    list_labels_variables = list()
     for clientWrapper in clientWrappers:
         # define the client class
         cohort_name = clientWrapper.id
@@ -217,35 +216,60 @@ def main():
         clientWrapper.client_class = client
         assert isinstance(client.hash2feature, dict)
         assert isinstance(client.hash2variable, dict)
-        batch_feature_presence_info: Dict[str, List[str]] = client.get_batch_feature_presence_info()
-        send_feature_variable_batch_info.append((cohort_name,
-                                            list(client.hash2variable.keys()),
-                                            client.position,
-                                            batch_feature_presence_info))
-        
-        
+        list_labels_variables.append((client.batch_labels, list(client.hash2variable.keys())))
+    
     ### SIMULATION: Coordinator: global_feature_selection ###
     ### Aggregate the features and variables
 
+    for clientWrapper in clientWrappers:
+        if clientWrapper.is_coordinator:
+            time_tracker["Coordinator"] = time.time()
+            client = clientWrapper.client_class
+            # get the batch labels and variables
+            global_variables_hashed = set()
+            global_batch_labels = list()
+            for labels, variables in list_labels_variables:
+                # intersect the variables
+                if len(global_variables_hashed) == 0:
+                    global_variables_hashed = set(variables)
+                else:
+                    global_variables_hashed = global_variables_hashed.intersection(set(variables))
+                # extend the batch_labels
+                global_batch_labels.extend(labels)
+            # ensure the batch_labels are unique
+            if len(global_batch_labels) != len(set(global_batch_labels)):
+                print("Batch labels are not unique, please check the input data")
+    
+    ### SIMULATION: All: send_feature_variable_batch_info ###
     # obtain and safe common genes and indices of design matrix
     # wait for each client to send the list of genes they have
     # also memo the feature presence matrix and feature_to_cohorts
 
-    broadcast_features_variables = tuple()
+    feature_information = list()
+    for clientWrapper in clientWrappers:
+        # define the client class
+        cohort_name = clientWrapper.id
+        client = clientWrapper.client_class
+        num_batches = len(global_batch_labels)
+        # now we can calculate the min_samples_per_feature
+        min_samples = max(num_batches+len(global_variables_hashed)+1, client.min_samples)
+        batch_feature_presence: Dict[str, List[str]] = client.get_batch_feature_presence_info(min_samples=min_samples)
+        feature_information.append((cohort_name,
+                                    client.position,
+                                    client.reference_batch,
+                                    batch_feature_presence))
+
     for clientWrapper in clientWrappers:
         if clientWrapper.is_coordinator:
-
-            time_tracker["Coordinator"] = time.time()
-
-            global_feature_names, global_variables, feature_presence_matrix, cohorts_order = \
+            global_feature_names, feature_presence_matrix, cohorts_order = \
                 select_common_features_variables(
-                    feature_variable_batch_info=send_feature_variable_batch_info,
+                    feature_information,
                     min_clients=1,
                     default_order=cohort_names
                 )
 
             # memo the feature presence matrix and feature_to_cohorts
-            broadcast_features_variables = global_feature_names, global_variables, cohorts_order
+            broadcast_features_variables = global_feature_names, cohorts_order
             print(f"Got this final cohort order: {cohorts_order}")
             end_time = time.time()
             time_tracker["Coordinator"] = end_time - time_tracker["Coordinator"]
@@ -258,7 +282,7 @@ def main():
 
         time_tracker[clientWrapper.id] = time.time()
 
-        global_feauture_names_hashed, global_variables_hashed, cohorts_order = \
+        global_feauture_names_hashed, cohorts_order = \
             broadcast_features_variables
         client = clientWrapper.client_class
         client.validate_inputs(global_variables_hashed)
@@ -364,8 +388,9 @@ def main():
 
         client = clientWrapper.client_class
 
+        assert broadcast_betas is not None
         # remove the batch effects in own data and safe the results
-        client.remove_batch_effects(beta)
+        client.remove_batch_effects(broadcast_betas)
         print(f"DEBUG: Shape of corrected data: {client.data_corrected.shape}")
 
         end_time = time.time()

@@ -1,24 +1,33 @@
 name: fedRBE
 channels:
   - conda-forge
+  - bioconda
+  - r
+channel_priority: strict        # ← ensures deterministic resolution
 dependencies:
+  # Core
+  - python=3.11                  # lock interpreter version
   - ipykernel
-  - conda-forge::r-tidyverse
-  - ca-certificates
-  - openssl
-  - conda-forge::r-gridextra
-  - conda-forge::r-patchwork
-  - conda-forge::r-umap
-  - conda-forge::r-ggsci
-  - conda-forge::r-viridis
-  - conda-forge::r-irkernel
-  - conda-forge::r-reshape2
-  - bioconda::bioconductor-limma
-  - bioconda::bioconductor-variancepartition
-  - r::r-invgamma
-  - r-devtools
   - pandas
   - matplotlib
   - seaborn
+  - openssl
   - certifi
-prefix: /home/yuliya/miniforge3/envs/fedRBE
+  - ca-certificates
+
+  # R stack (all pulled from conda‑forge unless overridden)
+  - r-base=4.3
+  - r-tidyverse
+  - r-gridextra
+  - r-patchwork
+  - r-umap
+  - r-ggsci
+  - r-viridis
+  - r-irkernel
+  - r-reshape2
+  - r-devtools
+  - r-invgamma                       # from “r” channel
+
+  # Bioconductor
+  - bioconductor-limma               
+  - bioconductor-variancepartition
