@@ -23,14 +23,25 @@ def stop_all_bcorrect_containers():
             # Stop the containers.
             subprocess.run(["docker", "stop"] + container_ids, check=True)
             print("Stopped containers:", container_ids)
-        else:
-            print("No containers found for featurecloud.ai/bcorrect:latest.")
     except subprocess.CalledProcessError as e:
-        raise Exception(f"Failed to stop bcorrect containers: {e.output.decode().strip()}")
+        raise Exception(f"Failed to stop running bcorrect containers: {e.output.decode().strip()}")
     except Exception as e:
         raise Exception(f"Unexpected error when stopping bcorrect containers: {e}")
 
+def pull_bcorrect_image():
+    """
+    Pulls the latest version of the 'featurecloud.ai/bcorrect:latest' Docker image.
+    """
+    try:
+        subprocess.run(["docker", "pull", "featurecloud.ai/bcorrect:latest"], check=True)
+        print("Pulled the latest bcorrect image successfully.")
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"Failed to pull the bcorrect image: {e.output.decode().strip()}")
+    except Exception as e:
+        raise Exception(f"Unexpected error when pulling bcorrect image: {e}")
+
 # Stop all containers using the specified image.
+pull_bcorrect_image()
 stop_all_bcorrect_containers()
 
 script_path = os.path.dirname(os.path.abspath(__file__))  # path of this script
@@ -72,7 +83,7 @@ while True:
     time_passed += 5
     time.sleep(5)
 
-# we simply run the Microbiome experiment as sample data
+# we simply run the simulated/mildly_imbalanced experiment as sample data
 print("Starting the experiment")
 fc_test.start(
     controller_host='http://localhost:8000',
