@@ -57,6 +57,9 @@ Run simulations locally to understand `fedRBE`'s behavior:
    python3 ./evaluation_utils/run_sample_experiment.py
    ```
    This will start a local simulation of multiple clients and show you how the batch correction is applied in practice. 
+
+   You can monitor the logs of the batch effect correction run and receive the final results of the
+   different clients on the [frontend in your browser](https://featurecloud.ai/development/test).
    
 _For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)._
 
