@@ -77,7 +77,7 @@ The app image which is provided in the docker registry of featurecloud built on 
 
 ## Usage
 
-### Simulating a federated Workflow Locally
+### Simulating a federated Workflow Locally (No login required)
 To test how `fedRBE` behaves with multiple datasets on one machine:
 
 1. **Ensure the full repository including sample data is cloned and the current working directory**:
@@ -106,7 +106,7 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
 This runs an experiment bundled with the app, illustrating how `fedRBE` works.
 The given repository contains the app but furthermore includes all the experiments done with the app.
 
-### Running a true federated workflow
+### Running a true federated workflow (Login required)
 For an actual multi-party setting:
 1. **Create a Project** in [FeatureCloud](https://featurecloud.ai/projects) and invite at least 3 clients.
 2. **Clients Join with Tokens** provided by the coordinator.
@@ -114,6 +114,7 @@ For an actual multi-party setting:
 4. **Start the Project**: `fedRBE` runs securely, never sharing raw data.
 
 See [HOW TO GUIDE](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for guidance on creating and joining projects.
+Please note that an account and login is required for this to protect the federated workflow from malicious participants.
 
 ---
 
