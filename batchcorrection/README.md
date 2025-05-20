@@ -11,7 +11,7 @@
 # fedRBE - FeatureCloud <!-- omit in toc -->
 
 **A federated implementation of the limma `removeBatchEffect` method.** 
-Supports normalization, various input formats, multiple batches per client and secure computation.
+Supports log scaling and multiple batches per client and secure computation.
 
 - **Open Source & Free**: [GitHub Repository](https://github.com/Freddsle/fedRBE/tree/main/batchcorrection)  
 - **Federated Privacy-preserving tool**: Based on [FeatureCloud](https://featurecloud.ai/app/fedrbe) platform  
@@ -37,7 +37,7 @@ Supports normalization, various input formats, multiple batches per client and s
 ---
 
 ## Overview
-`fedRBE` applies limma’s batch effect removal in a **federated** setting — data remains with the client, and only summary information is shared. Multiple input formats and normalization methods are supported. For advanced parameters, see the [Configuration](#configuration-configyml) section.
+`fedRBE` applies limma’s batch effect removal in a **federated** setting — data remains with the client, and only summary information is shared. For advanced parameters, see the [Configuration](#configuration-configyml) section.
 
 ---
 
