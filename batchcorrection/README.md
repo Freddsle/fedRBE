@@ -37,7 +37,15 @@ Supports log scaling and multiple batches per client and secure computation.
 ---
 
 ## Overview
-`fedRBE` applies limma’s batch effect removal in a **federated** setting — data remains with the client, and only summary information is shared. For advanced parameters, see the [Configuration](#configuration-configyml) section.
+`fedRBE` is a privacy-preserving tool for removing batch effects from omics data distributed across multiple research centers. It leverages the limma's `removeBatchEffect()` method and utilizes **federated learning (FL)** and **secure multi-party computation (SMPC)** to ensure data privacy. Sensitive data remains on each participant's site, and only summary-level information is shared.
+
+fedRBE supports two usage modes:
+
+* [Federated mode](#running-a-true-federated-workflow-login-required): Removes batch effects from decentralized, sensitive data. (Registration required)
+
+* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Runs fedRBE locally to simulate federated batch effect correction. (No registration or login required)
+
+ For advanced parameters, see the [Configuration](#configuration-configyml) section.
 
 ---
 
