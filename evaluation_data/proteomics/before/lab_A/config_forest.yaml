@@ -1,0 +1,15 @@
+simple_forest:
+  data_filename: "data.csv"
+  csv_seperator: ","
+  train_test_ratio: 0.8
+  predicted_feature_name: "Pyr"
+  num_estimators_total: 100
+  max_depth: 10
+  min_samples_split: 2
+  min_samples_leaf: 1
+  max_features: 'sqrt'
+  max_samples: 0.75
+  bootstrap: true
+  random_state: 42
+  features_as_columns: true
+  sample_col: null
