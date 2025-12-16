@@ -1,0 +1,49 @@
+experiment_name,metric_name,metric_value
+Balanced Simulated Data (uncorrected) - train test split,MCC (overall),1.0
+Balanced Simulated Data (uncorrected) - train test split,F1_score (overall),1.0
+Balanced Simulated Data (corrected) - train test split,MCC (overall),1.0
+Balanced Simulated Data (corrected) - train test split,F1_score (overall),1.0
+Mildly Imbalanced Simulated Data (uncorrected) - train test split,MCC (overall),1.0
+Mildly Imbalanced Simulated Data (uncorrected) - train test split,F1_score (overall),1.0
+Mildly Imbalanced Simulated Data (corrected) - train test split,MCC (overall),1.0
+Mildly Imbalanced Simulated Data (corrected) - train test split,F1_score (overall),1.0
+Strongly Imbalanced Simulated Data (uncorrected) - train test split,MCC (overall),0.9833333333333332
+Strongly Imbalanced Simulated Data (uncorrected) - train test split,F1_score (overall),0.9916666666666668
+Strongly Imbalanced Simulated Data (corrected) - train test split,MCC (overall),1.0
+Strongly Imbalanced Simulated Data (corrected) - train test split,F1_score (overall),1.0
+Proteomics Data (uncorrected) - train test split,MCC (overall),0.92
+Proteomics Data (uncorrected) - train test split,F1_score (overall),0.96
+Proteomics Data (corrected) - train test split,MCC (overall),1.0
+Proteomics Data (corrected) - train test split,F1_score (overall),1.0
+Microarray Data (uncorrected) - train test split,MCC (overall),0.8529411764705882
+Microarray Data (uncorrected) - train test split,F1_score (overall),0.9264705882352942
+Microarray Data (corrected) - train test split,MCC (overall),0.8823529411764706
+Microarray Data (corrected) - train test split,F1_score (overall),0.9411764705882352
+Microbiome Data (uncorrected) - train test split,MCC (overall),0.6481481481481481
+Microbiome Data (uncorrected) - train test split,F1_score (overall),0.8240740740740741
+Microbiome Data (corrected) - train test split,MCC (overall),0.6666666666666666
+Microbiome Data (corrected) - train test split,F1_score (overall),0.8333333333333334
+Balanced Simulated Data (uncorrected) - leave one cohort out,MCC (average),0.9207597400576848
+Balanced Simulated Data (uncorrected) - leave one cohort out,F1 Score (average),0.9560335497835496
+Balanced Simulated Data (corrected) - leave one cohort out,MCC (average),1.0
+Balanced Simulated Data (corrected) - leave one cohort out,F1 Score (average),1.0
+Mildly Imbalanced Simulated Data (uncorrected) - leave one cohort out,MCC (average),1.0
+Mildly Imbalanced Simulated Data (uncorrected) - leave one cohort out,F1 Score (average),1.0
+Mildy Imbalanced Simulated Data (corrected) - leave one cohort out,MCC (average),1.0
+Mildy Imbalanced Simulated Data (corrected) - leave one cohort out,F1 Score (average),1.0
+Strongly Imbalanced Simulated Data (uncorrected) - leave one cohort out,MCC (average),0.4268221832757492
+Strongly Imbalanced Simulated Data (uncorrected) - leave one cohort out,F1 Score (average),0.6424447819035601
+Strongly Imbalanced Simulated Data (corrected) - leave one cohort out,MCC (average),1.0
+Strongly Imbalanced Simulated Data (corrected) - leave one cohort out,F1 Score (average),1.0
+Proteomics Data (uncorrected) - leave one cohort out,MCC (average),0.0251976315339484
+Proteomics Data (uncorrected) - leave one cohort out,F1 Score (average),0.3504518329070759
+Proteomics Data (corrected) - leave one cohort out,MCC (average),1.0
+Proteomics Data (corrected) - leave one cohort out,F1 Score (average),1.0
+Microarray Data (uncorrected) - leave one cohort out,MCC (average),0.5
+Microarray Data (uncorrected) - leave one cohort out,F1 Score (average),0.8450719661911434
+Microarray Data (corrected) - leave one cohort out,MCC (average),0.5841578675029997
+Microarray Data (corrected) - leave one cohort out,F1 Score (average),0.834107315686263
+Microbiome Data (uncorrected) - leave one cohort out,MCC (average),0.4876699177938821
+Microbiome Data (uncorrected) - leave one cohort out,F1 Score (average),0.7409292978356334
+Microbiome Data (corrected) - leave one cohort out,MCC (average),0.490411113262671
+Microbiome Data (corrected) - leave one cohort out,F1 Score (average),0.7617042200755708
