@@ -9,6 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 import pickle
+import sklearn
 
 from .fc_fedlearnsim_helper.protocolfedlearning import ProtocolFedLearning
 
@@ -27,7 +28,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         data_filename: "data.csv"
             # the file containing data, see further down as another expected input
         csv_seperator: "\t"
-        train_test_ratio: 0.8
+        train_test_ratio: 1.0
             # ratio of samples to take as training data
             # makes sure that training and test data both contain all to be predicted
         predicted_feature_name: "cancer"
@@ -99,12 +100,19 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     train_ratio = config.get('train_test_ratio', 0.8)
     random_state = config.get('random_state', 42)
 
-    X_train, X_test, y_train, y_test = train_test_split(
+    if train_ratio >= 1.0:
+        print("Using all data for training (no test split).")
+        X_train = X
+        y_train = y
+        X_test = X
+        y_test = y
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(
         X, y,
         train_size=train_ratio,
         random_state=random_state,
         stratify=y
-    )
+        )
 
     # Get number of clients (this would come from the protocol)
     # For now, we'll get it after gathering data
@@ -146,7 +154,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     # Filter datasets to only include common features
     X_train = X_train[common_features]
     X_test = X_test[common_features]
-    X = X[common_features]
 
     # Calculate trees per client
     num_clients = len(protocol_fed_learning.clients)
@@ -212,7 +219,9 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     for cls in classes:
         # Convert to binary: current class vs rest
         y_test_binary = (y_test == cls).astype(int)
+            # is this entry equal to the class?
         y_pred_binary = (y_pred_test == cls).astype(int)
+            # is this entry predicted as the class?
 
         total_tp += int(np.sum((y_test_binary == 1) & (y_pred_binary == 1)))
         total_tn += int(np.sum((y_test_binary == 0) & (y_pred_binary == 0)))
@@ -262,27 +271,60 @@ def main(protocol_fed_learning: ProtocolFedLearning,
 
         # Create metrics data
         metrics_data = [
-            [global_num_samples_training, global_num_samples_test, num_classes,
-             'overall', 'MCC', mcc, total_tp, total_tn, total_fp, total_fn],
-            [global_num_samples_training, global_num_samples_test, num_classes,
-             'overall', 'F1_score', f1, total_tp, total_tn, total_fp, total_fn]
+            {
+                'num_samples_training': global_num_samples_training,
+                'num_samples_test': global_num_samples_test,
+                'num_classes': num_classes,
+                'class': 'overall',
+                'metric': 'MCC',
+                'score': mcc,
+            },
+            {
+                'num_samples_training': global_num_samples_training,
+                'num_samples_test': global_num_samples_test,
+                'num_classes': num_classes,
+                'class': 'overall',
+                'metric': 'F1_score',
+                'score': f1,
+            }
         ]
 
         # Save metrics (only coordinator)
-        metrics_df = pd.DataFrame(
-            metrics_data,
-            columns=['num_samples_training', 'num_samples_test', 'num_classes',
-                     'class', 'metric', 'score', 'TP', 'TN', 'FP', 'FN']
-        )
+        metrics_df = pd.DataFrame(data=metrics_data)
 
         metrics_path = os.path.join(outputfolder, "metrics.csv")
         metrics_df.to_csv(metrics_path, index=False)
 
-        # print(f"\nGlobal Metrics Summary:")
-        # print(f"  Total training samples: {global_num_samples_training}")
-        # print(f"  Total test samples: {global_num_samples_test}")
-        # print(f"  MCC: {mcc:.4f}")
-        # print(f"  F1: {f1:.4f}")
+        # Save the global model and relevant information
+        model_path = os.path.join(outputfolder, "global_model.pkl")
+        with open(model_path, 'wb') as f:
+            pickle.dump(global_forest, f)
+        model_description_path = os.path.join(outputfolder, "model_description.txt")
+        with open(model_description_path, 'w') as f:
+            f.write(f"Global Random Forest with {len(global_forest.estimators_)} trees\n")
+            f.write("To load the model, use:\n")
+            f.write("import pickle\n")
+            f.write("import yaml\n")
+            f.write("model_info = yaml.safe_load(open('model_info.yaml', 'r'))\n")
+            f.write("with open('global_model.pkl', 'rb') as f:\n")
+            f.write("    global_forest = pickle.load(f)\n")
+            f.write("predictions = global_forest.predict(X_test[model_info['used_features']])\n")
+            f.write("Model is based on from sklearn.ensemble import RandomForestClassifier\n")
+            f.write("from sklearn.tree import DecisionTreeClassifier\n")
+            f.write(f"sklearn version used: {sklearn.__version__}\n")
+
+        model_info_path = os.path.join(outputfolder, "model_info.yaml")
+        with open(model_info_path, 'w') as f:
+            yaml.dump({
+                'num_trees': len(global_forest.estimators_),
+                'max_depth': max_depth,
+                'min_samples_split': min_samples_split,
+                'min_samples_leaf': min_samples_leaf,
+                'max_features': max_features,
+                'random_state': random_state,
+                'used_features': common_features
+            }, f)
+
 
     # Save predictions (all clients save their local predictions)
     # Combine train and test data with predictions
@@ -294,13 +336,16 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     X_train_pred['dataset'] = 'train'
 
     # Test predictions
-    X_test_pred = X_test.copy()
-    X_test_pred[config['predicted_feature_name']] = y_test
-    X_test_pred['prediction_simple_forest'] = y_pred_test
-    X_test_pred['dataset'] = 'test'
+    if train_ratio < 1.0:
+        X_test_pred = X_test.copy()
+        X_test_pred[config['predicted_feature_name']] = y_test
+        X_test_pred['prediction_simple_forest'] = y_pred_test
+        X_test_pred['dataset'] = 'test'
 
-    # Combine train and test
-    pred_df = pd.concat([X_train_pred, X_test_pred], axis=0)
+        # Combine train and test
+        pred_df = pd.concat([X_train_pred, X_test_pred], axis=0)
+    else:
+        pred_df = X_train_pred
 
     pred_path = os.path.join(outputfolder, "pred.csv")
     pred_df.to_csv(pred_path, sep=separator)

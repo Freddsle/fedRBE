@@ -5,37 +5,215 @@ from fc_fed_forest_simple_app.fedForestSimple import main
 from fc_fed_forest_simple_app.fc_fedlearnsim_helper.run_app_simulation import run_simulation_native
 
 import pandas as pd
+import pickle
+import yaml
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import matthews_corrcoef, f1_score
 
-class ClassificationExperiment:
+SCRIPT_FOLDER = Path(__file__).parent
+DEFAULT_RESULTFILE = SCRIPT_FOLDER / "classification_metric_report.csv"
+
+def create_append_row_resultfile(resultfile: Path, experiment_name:str, metric_name: str, metric_value: float, ):
+    """ Creates or appends a row to the given resultfile with the given metric name and value """
+    data = {
+        'experiment_name': experiment_name,
+        'metric_name': metric_name,
+        'metric_value': metric_value
+    }
+    if resultfile.exists():
+        df_existing = pd.read_csv(resultfile)
+        df_new = pd.DataFrame([data])
+        df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+        df_combined.to_csv(resultfile, index=False)
+    else:
+        df = pd.DataFrame([data])
+        df.to_csv(resultfile, index=False)
+
+class ClassificationExperimentLeaveOneCohortOut:
+    """
+    A helper class that runs a leave one cohort out style cross validation on the given
+    input folders, each containing a config.yml and data file.
+    It collects all results into a given common output folder <cohort_left_out>_<client_name>_<name>
+    It then prints out the classification metrics for the left out cohort using the model saved
+    in the coordinator's output folder.
+    """
+
     name: str # The name to report that's associated with this experiment
-    input_folders: List[str] # The client folders containing the config.yml and data file
-    output_folders: List[str] # where to write the final metrics (and predictions)
+    input_folders: List[Path] # The client folders containing the config.yml and data file
+    output_base_folder: Path # where to write the final metrics (and predictions).
+                            # Per simulation run a subfolder will be
+    predicted_column: str # The name of the column containing the predicted labels
+    resultfile: Path # The path to the result file to write the classification metrics to
 
-    def __init__(self, name: str, input_folders: List[str], output_folders: List[str]):
+    def __init__(self, name: str, input_folders: List[str], output_base_folder: str, predicted_column: str,
+                 resultfile: Path = DEFAULT_RESULTFILE):
         self.name = name
-        self.input_folders = input_folders
-        self.output_folders = output_folders
+        self.input_folders = [Path(f) for f in input_folders]
+        self.output_base_folder = Path(output_base_folder)
+        self.predicted_column = predicted_column
+        self.resultfile = resultfile
 
     def run_experiment(self):
-        run_simulation_native(clientpaths=self.input_folders,
-                              outputfolders=self.output_folders,
-                              generic_dir=None,
-                              fed_learning_main_function=main)
+        print("="*(62+len(self.name)))
+        print("="*30 + f" {self.name} " + "="*30)
+        print("="*(62+len(self.name)))
+        average_mcc = 0.0
+        average_f1 = 0.0
+        n_clients = len(self.input_folders)
+        for test_client_folder in self.input_folders:
+            run_input_folders = [f for f in self.input_folders if f != test_client_folder]
+            test_client_name = test_client_folder.name
+            output_folders = [f"{self.output_base_folder}/{test_client_folder.name}_{f.name}_{self.name}" for f in run_input_folders]
+            for out_folder in output_folders:
+                out_path = Path(out_folder)
+                out_path.mkdir(parents=True, exist_ok=True)
+            # overwrite the train_test_ratio of the config_forest.yaml files to 1.0 (use all data for training)
+            for client_folder in run_input_folders:
+                config_forest_path = client_folder / 'config_forest.yaml'
+                if config_forest_path.exists():
+                    with open(config_forest_path, 'r') as f:
+                        config_forest = yaml.safe_load(f)
+                    config_forest['simple_forest']['train_test_ratio'] = 1.0
+                    with open(config_forest_path, 'w') as f:
+                        yaml.safe_dump(config_forest, f)
+                else:
+                    print(f"ERROR: config_forest.yaml not found in {client_folder}. Skipping.")
+                    return
+            run_simulation_native(clientpaths=[str(f) for f in run_input_folders],
+                                  outputfolders=output_folders,
+                                  generic_dir=None,
+                                  fed_learning_main_function=main)
 
-        # Collect and print metrics from coordinator only (first client)
-        print(f"\n{'='*60}")
-        print(f"Metrics for {self.name}")
-        print(f"{'='*60}")
+            # collect the resulting model
+            coordinator_output_folder = output_folders[0]  # Assuming the first output folder is the coordinator's
+            model_path = Path(coordinator_output_folder) / 'global_model.pkl'
+            if not model_path.exists():
+                print(f"Model not found in {model_path}. Skipping evaluation for {test_client_name}.")
+                continue
+            # Load the model
+            with open(model_path, 'rb') as f:
+                global_forest: RandomForestClassifier = pickle.load(f)
+            with open(Path(coordinator_output_folder) / 'model_info.yaml', 'r') as f:
+                model_info = yaml.safe_load(f)
 
-        # Only check coordinator's output folder (first one)
-        output_path = Path(self.output_folders[0])
-        metrics_file = output_path / "metrics.csv"
+            # Load the test data
+            test_data_path = test_client_folder / 'data.csv'
+            if not test_data_path.exists():
+                print(f"Test data not found in {test_data_path}. Skipping evaluation for {test_client_name}.")
+                continue
 
-        if metrics_file.exists():
-            metrics_df = pd.read_csv(metrics_file)
-            print(f"\nCoordinator ({output_path.name}):")
+            test_data = pd.read_csv(test_data_path)
+            used_features = model_info['used_features']
+
+            # transpose if needed
+            if not any(col in test_data.columns for col in used_features):
+                test_data = test_data.transpose()
+
+            if not all(feature in test_data.columns for feature in used_features + [self.predicted_column]):
+                print(f"Test data in {test_data_path} does not contain all required features. Adding NaNs for missing features.")
+                missing_features = set(used_features + [self.predicted_column]) - set(test_data.columns)
+                #print(f"Features missing: {missing_features}")
+                # Create all missing columns at once
+                missing_df = pd.DataFrame({feature: float('nan') for feature in missing_features},
+                                        index=test_data.index)
+                test_data = pd.concat([test_data, missing_df], axis=1)
+
+            true_labels = test_data[self.predicted_column].values
+            predictions = global_forest.predict(test_data[used_features])
+
+            mcc = matthews_corrcoef(true_labels, predictions)
+            f1 = f1_score(true_labels, predictions, average='weighted')
+            average_mcc += mcc / n_clients
+            average_f1 += f1 / n_clients
+            print(f"Results for test cohort '{test_client_name}' using model trained on all other cohorts:")
+            print(f"  MCC: {mcc:.4f}")
+            print(f"  F1 Score: {f1:.4f}")
+        print("-"*(62+len(self.name)))
+        print(f"Average MCC across all test cohorts: {average_mcc:.4f}")
+        print(f"Average F1 Score across all test cohorts: {average_f1:.4f}")
+        print("="*(62+len(self.name)))
+        print()
+        create_append_row_resultfile(
+            resultfile=self.resultfile,
+            experiment_name=f"{self.name}",
+            metric_name="MCC (average)",
+            metric_value=average_mcc
+        )
+        create_append_row_resultfile(
+            resultfile=self.resultfile,
+            experiment_name=f"{self.name}",
+            metric_name="F1 Score (average)",
+            metric_value=average_f1 #type: ignore
+        )
+
+class ClassificationExperimentTrainTestSplit:
+    """
+    A helper class that runs trains a simple RandomForestClassifier on the given
+    input folders, each containing a config.yml and data file.
+    A 80/20 train test split is used within each cohort.
+    It then reports the MCC and F1 score over the test data.
+    It collects all results into the output folders <client_name>_<name>.
+    It then prints out the classification metrics for the test data as calculated by
+    the random forest classifier.
+    """
+    name: str # The name to report that's associated with this experiment
+    input_folders: List[Path] # The client folders containing the config.yml and data file
+    output_base_folder: Path # where to write the final metrics (and predictions).
+                            # Per simulation run a subfolder will be
+    train_test_ratio: float = 0.8 # The train test split ratio to use
+    resultfile: Path # The path to the result file to write the classification metrics to
+
+    def __init__(self, name: str, input_folders: List[str], output_base_folder: str,
+                  train_test_ratio: float = 0.8, resultfile: Path = DEFAULT_RESULTFILE):
+        self.name = name
+        self.input_folders = [Path(f) for f in input_folders]
+        self.output_base_folder = Path(output_base_folder)
+        self.train_test_ratio = train_test_ratio
+        self.resultfile = resultfile
+
+    def run_experiment(self):
+        print("="*(62+len(self.name)))
+        print("="*30 + f" {self.name} " + "="*30)
+        print("="*(62+len(self.name)))
+        output_folders = [f"{self.output_base_folder}/{input_folder.name}_{self.name}" for input_folder in self.input_folders]
+        for out_folder in output_folders:
+            out_path = Path(out_folder)
+            out_path.mkdir(parents=True, exist_ok=True)
+        # overwrite the train_test_ratio of the config_forest.yaml files to 0.8
+        for client_folder in self.input_folders:
+            config_forest_path = client_folder / 'config_forest.yaml'
+            #print(f"Setting train_test_ratio to {self.train_test_ratio} in {config_forest_path}")
+            if config_forest_path.exists():
+                with open(config_forest_path, 'r') as f:
+                    config_forest = yaml.safe_load(f)
+                config_forest['simple_forest']['train_test_ratio'] = self.train_test_ratio
+                with open(config_forest_path, 'w') as f:
+                    yaml.safe_dump(config_forest, f)
+            else:
+                print(f"ERROR: config_forest.yaml not found in {client_folder}. Skipping.")
+                return
+        run_simulation_native(clientpaths=[str(f) for f in self.input_folders],
+                                outputfolders=output_folders,
+                                generic_dir=None,
+                                fed_learning_main_function=main)
+
+        # read the metrics files and print the results
+        coordinator_output_folder = output_folders[0]  # Assuming the first output folder is the coordinator's
+        metrics_path = Path(coordinator_output_folder) / 'metrics.csv'
+        if metrics_path.exists():
+            metrics_df = pd.read_csv(metrics_path)
+            print(f"\nCoordinator ({coordinator_output_folder}):")
             for _, row in metrics_df.iterrows():
                 if pd.notna(row['score']):
-                    print(f"  {row['class']} - {row['metric']}: {row['score']:.4f}")
+                    metric_suffix = row['class']
+                    metric_name = row['metric']
+                    metric_value = row['score']
+                    print(f"{metric_name} ({metric_suffix}): {metric_value:.4f}")
+                    create_append_row_resultfile(
+                        resultfile=self.resultfile,
+                        experiment_name=f"{self.name}",
+                        metric_name=f"{metric_name} ({metric_suffix})",
+                        metric_value=metric_value
+                    )
         else:
-            print(f"\nWarning: No metrics file found at {metrics_file}")
+            print(f"\nWarning: No metrics file found at {metrics_path}")
