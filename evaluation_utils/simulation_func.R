@@ -103,6 +103,67 @@ generate_data <- function(
 }
 
 
+apply_rotation_effect_1pc <- function(X, batch_vec, target_batch, angle_deg = 25, pc = 1) {
+    # X: proteins x samples matrix
+    # batch_vec: length == ncol(X)
+    # target_batch: which batch label to rotate (e.g., "batch2")
+    # angle_deg: rotation angle (degrees); 0 => no-op
+    # pc: axis PC index (default 1). Rotation is done in (PCpc, PCpc+1) plane.
+
+    if (is.null(target_batch) || is.na(target_batch) || angle_deg == 0) return(X)
+
+    batch_chr <- as.character(batch_vec)
+    idx <- which(batch_chr == target_batch)
+    if (length(idx) == 0) return(X)
+
+    # Center by protein means (keeps per-protein mean structure stable)
+    mu <- rowMeans(X, na.rm = TRUE)
+    Xc <- sweep(X, 1, mu, "-")
+
+    # Neutralize NAs for SVD math (if you ever call after missingness)
+    if (anyNA(Xc)) Xc[is.na(Xc)] <- 0
+
+    pc <- as.integer(pc)
+    k <- max(2L, pc + 1L)  # need pc and pc+1 to define a rotation plane
+
+    # Truncated SVD in protein space
+    sv <- svd(Xc, nu = k, nv = 0)
+
+    if (ncol(sv$u) < (pc + 1L)) return(X)  # degenerate edge case
+
+    u1 <- sv$u[, pc]
+    u2 <- sv$u[, pc + 1L]  # <-- key fix: use the *actual* next PC direction
+
+    # Fix signs deterministically (avoid run-to-run random flips)
+    j1 <- which.max(abs(u1)); if (u1[j1] < 0) u1 <- -u1
+    j2 <- which.max(abs(u2)); if (u2[j2] < 0) u2 <- -u2
+
+    # Rotation in (u1, u2) plane
+    theta <- angle_deg * pi / 180
+    ct <- cos(theta); st <- sin(theta)
+
+    # Project target batch columns to (u1, u2) coordinates
+    a1 <- as.numeric(crossprod(u1, Xc[, idx, drop = FALSE]))
+    a2 <- as.numeric(crossprod(u2, Xc[, idx, drop = FALSE]))
+
+    # Rotate coordinates
+    a1p <- ct * a1 - st * a2
+    a2p <- st * a1 + ct * a2
+
+    # Rank-2 update only on target batch columns
+    Xc[, idx] <- Xc[, idx, drop = FALSE] +
+        u1 %*% t(a1p - a1) +
+        u2 %*% t(a2p - a2)
+
+    # Add means back
+    Xrot <- sweep(Xc, 1, mu, "+")
+    rownames(Xrot) <- rownames(X)
+    colnames(Xrot) <- colnames(X)
+    Xrot
+}
+
+
+
 add_batch_effect <- function(result_two, batch_info){
 
     # Assuming 'result_two' is your data matrix and 'batch_info' is a vector indicating the batch for each column
@@ -177,6 +238,33 @@ add_batch_effect <- function(result_two, batch_info){
 
     # Apply batch effects
     data_with_batch_effects <- result_two + additive_effects_matrix + multiplicative_effects_matrix * noise_effect
+
+    # ---- Rotation effect (optional): one batch, 1 PC ----
+    # Enable by setting either:
+    #   attr(batch_info, "rotation") <- list(batch="batch2", angle_deg=25, pc=1)
+    # or by adding columns rotation_batch + rotation_angle_deg (single unique value each).
+    rot <- attr(batch_info, "rotation")
+
+    if (is.null(rot) &&
+        ("rotation_batch" %in% names(batch_info)) &&
+        ("rotation_angle_deg" %in% names(batch_info))) {
+
+        rb <- unique(na.omit(as.character(batch_info$rotation_batch)))
+        ra <- unique(na.omit(as.numeric(batch_info$rotation_angle_deg)))
+        if (length(rb) >= 1 && length(ra) >= 1) {
+            rot <- list(batch = rb[1], angle_deg = ra[1], pc = 1)
+        }
+    }
+
+    if (!is.null(rot) && !is.null(rot$batch) && !is.null(rot$angle_deg) && rot$angle_deg != 0) {
+        data_with_batch_effects <- apply_rotation_effect_1pc(
+            X = data_with_batch_effects,
+            batch_vec = batch_info$batch,
+            target_batch = as.character(rot$batch),
+            angle_deg = as.numeric(rot$angle_deg),
+            pc = ifelse(is.null(rot$pc), 1, as.integer(rot$pc))
+        )
+    }
 
     return(data_with_batch_effects)
 }

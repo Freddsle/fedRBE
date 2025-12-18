@@ -156,14 +156,22 @@ def _concat_federated_results(clientWrappers: List[ClientWrapper],
 def main():
     parser = argparse.ArgumentParser(description='Run simulation with specified mode.')
     parser.add_argument('mode', type=str, help='Mode to use in simulation (e.g., "balanced", "strong_imbalanced")')
+    parser.add_argument('rotation', type=int, help='Whether rotation was applied during simulation', default=False)
     args = parser.parse_args()
 
     mode = args.mode
+    rotation = bool(args.rotation)
+
+    if rotation:
+        folder_name = "simulated_rotation"
+    else:
+        folder_name = "simulated"
+
 
     # First define the basefolder where all files are located
     base_dir = os.path.join("..", "..")
     # Go back to the git repo's root dir
-    base_dir = os.path.join(base_dir, "evaluation_data", "simulated", mode, "before")
+    base_dir = os.path.join(base_dir, "evaluation_data", folder_name, mode, "before")
 
 
     print("Starting simulation")
@@ -422,9 +430,9 @@ def main():
     federated_df, intersect_features = _concat_federated_results(clientWrappers, samples_in_columns=True)
 
     # Simulation data
-    federated_df.to_csv(os.path.join("..", "..", "evaluation_data", "simulated", mode, "after", "FedSim_corrected_data_v2.tsv"), sep="\t")
+    federated_df.to_csv(os.path.join("..", "..", "evaluation_data", folder_name, mode, "after", "FedSim_corrected_data_v2.tsv"), sep="\t")
     print(f"DEBUG: Shape of federated data: {federated_df.shape}")
-    print(f"Results saved to: {os.path.join('..', '..', 'evaluation_data', 'simulated', mode, 'after', 'FedSim_corrected_data_v2.tsv')}")
+    print(f"Results saved to: {os.path.join('..', '..', 'evaluation_data', folder_name, mode, 'after', 'FedSim_corrected_data_v2.tsv')}")
 
 
 if __name__ == "__main__":
