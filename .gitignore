@@ -186,3 +186,10 @@ evaluation/eval_simulation/lmpv_plots/*.pdf
 # tmp submission folder
 00_submit/*
 figures/*
+
+# rotation simulation
+evaluation_data/simulated_rotation/*/after/runs/*.tsv
+evaluation_data/simulated_rotation/*/before/intermediate/plots/*.png
+evaluation_data/simulated_rotation/*/before/*/*.tsv
+evaluation_data/simulated_rotation/*/after/*.tsv
+evaluation_data/simulated_rotation/*/all_metadata.tsv
