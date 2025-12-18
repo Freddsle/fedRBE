@@ -175,3 +175,14 @@ evaluation_data/workflows
 # these files are too big!
 evaluation_data/microarray/after/*.tsv
 evaluation_data/microarray/after/*.csv
+evaluation_data/microarray/before/all_expression_UNION.tsv
+
+# to many files
+evaluation/eval_simulation/*/lmvp/*.tsv
+evaluation_data/simulated/*/after/runs/*.tsv
+evaluation_data/simulated/*/before/intermediate/*.tsv
+evaluation/eval_simulation/lmpv_plots/*.pdf
+
+# tmp submission folder
+00_submit/*
+figures/*
