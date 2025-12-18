@@ -1,49 +1,233 @@
-experiment_name,metric_name,metric_value
-Balanced Simulated Data (uncorrected) - train test split,MCC (overall),1.0
-Balanced Simulated Data (uncorrected) - train test split,F1_score (overall),1.0
-Balanced Simulated Data (corrected) - train test split,MCC (overall),1.0
-Balanced Simulated Data (corrected) - train test split,F1_score (overall),1.0
-Mildly Imbalanced Simulated Data (uncorrected) - train test split,MCC (overall),1.0
-Mildly Imbalanced Simulated Data (uncorrected) - train test split,F1_score (overall),1.0
-Mildly Imbalanced Simulated Data (corrected) - train test split,MCC (overall),1.0
-Mildly Imbalanced Simulated Data (corrected) - train test split,F1_score (overall),1.0
-Strongly Imbalanced Simulated Data (uncorrected) - train test split,MCC (overall),0.9833333333333332
-Strongly Imbalanced Simulated Data (uncorrected) - train test split,F1_score (overall),0.9916666666666668
-Strongly Imbalanced Simulated Data (corrected) - train test split,MCC (overall),1.0
-Strongly Imbalanced Simulated Data (corrected) - train test split,F1_score (overall),1.0
-Proteomics Data (uncorrected) - train test split,MCC (overall),0.92
-Proteomics Data (uncorrected) - train test split,F1_score (overall),0.96
-Proteomics Data (corrected) - train test split,MCC (overall),1.0
-Proteomics Data (corrected) - train test split,F1_score (overall),1.0
-Microarray Data (uncorrected) - train test split,MCC (overall),0.8529411764705882
-Microarray Data (uncorrected) - train test split,F1_score (overall),0.9264705882352942
-Microarray Data (corrected) - train test split,MCC (overall),0.8823529411764706
-Microarray Data (corrected) - train test split,F1_score (overall),0.9411764705882352
-Microbiome Data (uncorrected) - train test split,MCC (overall),0.6481481481481481
-Microbiome Data (uncorrected) - train test split,F1_score (overall),0.8240740740740741
-Microbiome Data (corrected) - train test split,MCC (overall),0.6666666666666666
-Microbiome Data (corrected) - train test split,F1_score (overall),0.8333333333333334
-Balanced Simulated Data (uncorrected) - leave one cohort out,MCC (average),0.9207597400576848
-Balanced Simulated Data (uncorrected) - leave one cohort out,F1 Score (average),0.9560335497835496
-Balanced Simulated Data (corrected) - leave one cohort out,MCC (average),1.0
-Balanced Simulated Data (corrected) - leave one cohort out,F1 Score (average),1.0
-Mildly Imbalanced Simulated Data (uncorrected) - leave one cohort out,MCC (average),1.0
-Mildly Imbalanced Simulated Data (uncorrected) - leave one cohort out,F1 Score (average),1.0
-Mildy Imbalanced Simulated Data (corrected) - leave one cohort out,MCC (average),1.0
-Mildy Imbalanced Simulated Data (corrected) - leave one cohort out,F1 Score (average),1.0
-Strongly Imbalanced Simulated Data (uncorrected) - leave one cohort out,MCC (average),0.4268221832757492
-Strongly Imbalanced Simulated Data (uncorrected) - leave one cohort out,F1 Score (average),0.6424447819035601
-Strongly Imbalanced Simulated Data (corrected) - leave one cohort out,MCC (average),1.0
-Strongly Imbalanced Simulated Data (corrected) - leave one cohort out,F1 Score (average),1.0
-Proteomics Data (uncorrected) - leave one cohort out,MCC (average),0.0251976315339484
-Proteomics Data (uncorrected) - leave one cohort out,F1 Score (average),0.3504518329070759
-Proteomics Data (corrected) - leave one cohort out,MCC (average),1.0
-Proteomics Data (corrected) - leave one cohort out,F1 Score (average),1.0
-Microarray Data (uncorrected) - leave one cohort out,MCC (average),0.5
-Microarray Data (uncorrected) - leave one cohort out,F1 Score (average),0.8450719661911434
-Microarray Data (corrected) - leave one cohort out,MCC (average),0.5841578675029997
-Microarray Data (corrected) - leave one cohort out,F1 Score (average),0.834107315686263
-Microbiome Data (uncorrected) - leave one cohort out,MCC (average),0.4876699177938821
-Microbiome Data (uncorrected) - leave one cohort out,F1 Score (average),0.7409292978356334
-Microbiome Data (corrected) - leave one cohort out,MCC (average),0.490411113262671
-Microbiome Data (corrected) - leave one cohort out,F1 Score (average),0.7617042200755708
+data_name,data_preprocessing_name,metric_name,metric_value,predicted_client_name,cross_validation_method
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9833333333333332,All,Train-Test-Split
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9916666666666668,All,Train-Test-Split
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.875,lab2,Train-Test-Split
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9375,lab2,Train-Test-Split
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split
+Proteomics Data,uncorrected,MCC,0.92,All,Train-Test-Split
+Proteomics Data,uncorrected,F1_score,0.96,All,Train-Test-Split
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split
+Proteomics Data,uncorrected,MCC,0.6,lab_C,Train-Test-Split
+Proteomics Data,uncorrected,F1_score,0.8,lab_C,Train-Test-Split
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split
+Microarray Data,uncorrected,MCC,0.8529411764705882,All,Train-Test-Split
+Microarray Data,uncorrected,F1_score,0.9264705882352942,All,Train-Test-Split
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Train-Test-Split
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Train-Test-Split
+Microarray Data,uncorrected,F1_score,0.5,GSE69428,Train-Test-Split
+Microarray Data,corrected,MCC,0.8823529411764706,All,Train-Test-Split
+Microarray Data,corrected,F1_score,0.9411764705882352,All,Train-Test-Split
+Microarray Data,corrected,MCC,0.6,GSE14407,Train-Test-Split
+Microarray Data,corrected,F1_score,0.8,GSE14407,Train-Test-Split
+Microarray Data,corrected,MCC,0.9487179487179488,GSE26712,Train-Test-Split
+Microarray Data,corrected,F1_score,0.9743589743589745,GSE26712,Train-Test-Split
+Microarray Data,corrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split
+Microarray Data,corrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split
+Microarray Data,corrected,MCC,1.0,GSE69428,Train-Test-Split
+Microarray Data,corrected,F1_score,1.0,GSE69428,Train-Test-Split
+Microbiome Data,uncorrected,MCC,0.6481481481481481,All,Train-Test-Split
+Microbiome Data,uncorrected,F1_score,0.8240740740740741,All,Train-Test-Split
+Microbiome Data,uncorrected,MCC,0.8,China1,Train-Test-Split
+Microbiome Data,uncorrected,F1_score,0.9,China1,Train-Test-Split
+Microbiome Data,uncorrected,MCC,0.7391304347826086,China3,Train-Test-Split
+Microbiome Data,uncorrected,F1_score,0.8695652173913043,China3,Train-Test-Split
+Microbiome Data,uncorrected,MCC,0.6190476190476191,China5,Train-Test-Split
+Microbiome Data,uncorrected,F1_score,0.8095238095238095,China5,Train-Test-Split
+Microbiome Data,uncorrected,MCC,0.5238095238095238,France1,Train-Test-Split
+Microbiome Data,uncorrected,F1_score,0.7619047619047619,France1,Train-Test-Split
+Microbiome Data,uncorrected,MCC,0.7333333333333333,Germany1,Train-Test-Split
+Microbiome Data,uncorrected,F1_score,0.8666666666666667,Germany1,Train-Test-Split
+Microbiome Data,uncorrected,MCC,0.25,Germany2,Train-Test-Split
+Microbiome Data,uncorrected,F1_score,0.625,Germany2,Train-Test-Split
+Microbiome Data,corrected,MCC,0.6666666666666666,All,Train-Test-Split
+Microbiome Data,corrected,F1_score,0.8333333333333334,All,Train-Test-Split
+Microbiome Data,corrected,MCC,0.6,China1,Train-Test-Split
+Microbiome Data,corrected,F1_score,0.8,China1,Train-Test-Split
+Microbiome Data,corrected,MCC,0.5652173913043478,China3,Train-Test-Split
+Microbiome Data,corrected,F1_score,0.782608695652174,China3,Train-Test-Split
+Microbiome Data,corrected,MCC,0.7142857142857143,China5,Train-Test-Split
+Microbiome Data,corrected,F1_score,0.8571428571428571,China5,Train-Test-Split
+Microbiome Data,corrected,MCC,0.8095238095238095,France1,Train-Test-Split
+Microbiome Data,corrected,F1_score,0.9047619047619048,France1,Train-Test-Split
+Microbiome Data,corrected,MCC,0.8666666666666667,Germany1,Train-Test-Split
+Microbiome Data,corrected,F1_score,0.9333333333333332,Germany1,Train-Test-Split
+Microbiome Data,corrected,MCC,0.25,Germany2,Train-Test-Split
+Microbiome Data,corrected,F1_score,0.625,Germany2,Train-Test-Split
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out
+Balanced Simulated Data,uncorrected,MCC,0.7622792201730545,lab2,Leave-One-Cohort-Out
+Balanced Simulated Data,uncorrected,F1_score,0.8681006493506493,lab2,Leave-One-Cohort-Out
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9279607271383368,lab1,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9755368814192342,lab1,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.3525058226889108,lab2,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.501797464291446,lab2,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,MCC,0.1259881576697424,lab_E,Leave-One-Cohort-Out
+Proteomics Data,uncorrected,F1_score,0.4666666666666666,lab_E,Leave-One-Cohort-Out
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out
+Microarray Data,corrected,MCC,0.7071067811865476,GSE14407,Leave-One-Cohort-Out
+Microarray Data,corrected,F1_score,0.8285714285714286,GSE14407,Leave-One-Cohort-Out
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out
+Microarray Data,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out
+Microarray Data,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,MCC,0.6438265394445771,China1,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,F1_score,0.8241889576655246,China1,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,MCC,0.5438823285737561,China3,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,F1_score,0.7748135123614662,China3,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,MCC,0.5015718285732118,China5,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,F1_score,0.7076851719708862,China5,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,MCC,0.4379212585974223,France1,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,F1_score,0.6910439851616322,France1,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,MCC,0.2891703601366998,Germany1,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,F1_score,0.6472901432337933,Germany1,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out
+Microbiome Data,uncorrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out
+Microbiome Data,corrected,MCC,0.5721450241272974,China1,Leave-One-Cohort-Out
+Microbiome Data,corrected,F1_score,0.7924107142857143,China1,Leave-One-Cohort-Out
+Microbiome Data,corrected,MCC,0.5728175889651488,China3,Leave-One-Cohort-Out
+Microbiome Data,corrected,F1_score,0.7837979801984123,China3,Leave-One-Cohort-Out
+Microbiome Data,corrected,MCC,0.5293519585275472,China5,Leave-One-Cohort-Out
+Microbiome Data,corrected,F1_score,0.7285754985754985,China5,Leave-One-Cohort-Out
+Microbiome Data,corrected,MCC,0.4481445626126795,France1,Leave-One-Cohort-Out
+Microbiome Data,corrected,F1_score,0.7259149694694125,France1,Leave-One-Cohort-Out
+Microbiome Data,corrected,MCC,0.4443123854772016,Germany1,Leave-One-Cohort-Out
+Microbiome Data,corrected,F1_score,0.7623533408241658,Germany1,Leave-One-Cohort-Out
+Microbiome Data,corrected,MCC,0.3756951598661515,Germany2,Leave-One-Cohort-Out
+Microbiome Data,corrected,F1_score,0.7771728171002218,Germany2,Leave-One-Cohort-Out

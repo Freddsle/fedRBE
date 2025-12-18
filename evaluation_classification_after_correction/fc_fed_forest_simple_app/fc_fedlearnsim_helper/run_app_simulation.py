@@ -66,7 +66,7 @@ def run_simulation_featurecloud(data_path: str, clientnames: List[str], generic_
     print('You can follow the test along at https://featurecloud.ai/development/test')
 
 def run_simulation_native(clientpaths: List[str], outputfolders: List[str], generic_dir: Optional[str],
-                          fed_learning_main_function: Callable[Tuple[ProtocolFedLearning, Optional[str], Optional[str]], Tuple[None]]):
+                          fed_learning_main_function: Callable[[ProtocolFedLearning, Optional[str], Optional[str]], None]):
     """
     Using the helpers from src.helper.localfedlearningsimulator.py, run the simulation natively.
 

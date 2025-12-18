@@ -48,7 +48,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
             # Which col contains the feature names. By default the first column.
     - <data.csv>: The file containing the data to be used
     # Resulting output in outputfolder:
-    - metrics.csv: A simple csv with the following columns:
+    - global_metrics.csv: A simple csv with the following columns:
         [num_samples_training, num_samples_test, num_classes, metric, score]
         The following metrics are tested: MCC, F1_score
     - <pred.csv>: The given data in the format of columns being features.
@@ -101,7 +101,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     random_state = config.get('random_state', 42)
 
     if train_ratio >= 1.0:
-        print("Using all data for training (no test split).")
+        #print("Using all data for training (no test split).")
         X_train = X
         y_train = y
         X_test = X
@@ -201,7 +201,8 @@ def main(protocol_fed_learning: ProtocolFedLearning,
 
     # All clients (including coordinator) receive global forest
     global_forest_data = protocol_fed_learning.await_data(n=1, unwrap=True)
-    global_forest = pickle.loads(global_forest_data)
+    global_forest = pickle.loads(global_forest_data) #type: ignore
+        # we just sent a pickle.dumps object, linters complain but interpreters are fine
 
     # Phase 3: Calculate local confusion matrix counts and share with coordinator
     y_pred_test = global_forest.predict(X_test)
@@ -229,7 +230,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         total_fn += int(np.sum((y_test_binary == 1) & (y_pred_binary == 0)))
 
     # Create local metrics with aggregated counts
-    local_metrics = {
+    local_confusion_matrix = {
         'num_samples_training': len(X_train),
         'num_samples_test': len(X_test),
         'num_classes': num_classes,
@@ -239,8 +240,40 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         'FN': total_fn
     }
 
+    # store the local metrics
+    mcc_numerator = (total_tp * total_tn) - (total_fp * total_fn)
+    mcc_denominator = np.sqrt((total_tp + total_fp) * (total_tp + total_fn) * (total_tn + total_fp) * (total_tn + total_fn))
+    local_mcc = mcc_numerator / mcc_denominator if mcc_denominator != 0 else 0.0
+    local_f1_numerator = 2 * total_tp
+    local_f1_denominator = 2 * total_tp + total_fp + total_fn
+    local_f1 = local_f1_numerator / local_f1_denominator if local_f1_denominator != 0 else np.nan
+
+    local_metrics_data = [
+        {
+            'num_samples_training': len(X_train),
+            'num_samples_test': len(X_test),
+            'num_classes': num_classes,
+            'class': 'local_client',
+            'metric': 'MCC',
+            'score': local_mcc,
+        },
+        {
+            'num_samples_training': len(X_train),
+            'num_samples_test': len(X_test),
+            'num_classes': num_classes,
+            'class': 'local_client',
+            'metric': 'F1_score',
+            'score': local_f1,
+        }
+    ]
+
+    # Save local metrics
+    local_metrics_df = pd.DataFrame(data=local_metrics_data)
+    local_metrics_path = os.path.join(outputfolder, "local_metrics.csv")
+    local_metrics_df.to_csv(local_metrics_path, index=False)
+
     # Send local metrics to coordinator
-    protocol_fed_learning.send_data_to_coordinator(local_metrics, send_to_self=True)
+    protocol_fed_learning.send_data_to_coordinator(local_confusion_matrix, send_to_self=True)
 
     if protocol_fed_learning.is_coordinator:
         # Gather all local metrics from clients
@@ -270,7 +303,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         f1 = numerator / denominator if denominator != 0 else 0.0
 
         # Create metrics data
-        metrics_data = [
+        global_metrics_data = [
             {
                 'num_samples_training': global_num_samples_training,
                 'num_samples_test': global_num_samples_test,
@@ -290,9 +323,9 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         ]
 
         # Save metrics (only coordinator)
-        metrics_df = pd.DataFrame(data=metrics_data)
+        metrics_df = pd.DataFrame(data=global_metrics_data)
 
-        metrics_path = os.path.join(outputfolder, "metrics.csv")
+        metrics_path = os.path.join(outputfolder, "global_metrics.csv")
         metrics_df.to_csv(metrics_path, index=False)
 
         # Save the global model and relevant information

@@ -13,12 +13,21 @@ from sklearn.metrics import matthews_corrcoef, f1_score
 SCRIPT_FOLDER = Path(__file__).parent
 DEFAULT_RESULTFILE = SCRIPT_FOLDER / "classification_metric_report.csv"
 
-def create_append_row_resultfile(resultfile: Path, experiment_name:str, metric_name: str, metric_value: float, ):
+def create_append_row_resultfile(resultfile: Path,
+                                 data_name:str,
+                                 data_preprocessing_name: str,
+                                 metric_name: str,
+                                 metric_value: float,
+                                 predicted_client_name: str,
+                                 cross_validation_method: str) -> None:
     """ Creates or appends a row to the given resultfile with the given metric name and value """
     data = {
-        'experiment_name': experiment_name,
+        'data_name': data_name,
+        'data_preprocessing_name': data_preprocessing_name,
         'metric_name': metric_name,
-        'metric_value': metric_value
+        'metric_value': metric_value,
+        'predicted_client_name': predicted_client_name,
+        'cross_validation_method': cross_validation_method
     }
     if resultfile.exists():
         df_existing = pd.read_csv(resultfile)
@@ -38,32 +47,36 @@ class ClassificationExperimentLeaveOneCohortOut:
     in the coordinator's output folder.
     """
 
-    name: str # The name to report that's associated with this experiment
+    data_name: str # The name to report that's associated with this experiment
+    preprocessing_name: str # A suffix to append to the name
     input_folders: List[Path] # The client folders containing the config.yml and data file
     output_base_folder: Path # where to write the final metrics (and predictions).
                             # Per simulation run a subfolder will be
     predicted_column: str # The name of the column containing the predicted labels
     resultfile: Path # The path to the result file to write the classification metrics to
 
-    def __init__(self, name: str, input_folders: List[str], output_base_folder: str, predicted_column: str,
+    def __init__(self, data_name: str, preprocessing_name: str, input_folders: List[str], output_base_folder: str,
+                 predicted_column: str,
                  resultfile: Path = DEFAULT_RESULTFILE):
-        self.name = name
+        self.data_name = data_name
+        self.preprocessing_name = preprocessing_name
         self.input_folders = [Path(f) for f in input_folders]
         self.output_base_folder = Path(output_base_folder)
         self.predicted_column = predicted_column
         self.resultfile = resultfile
 
     def run_experiment(self):
-        print("="*(62+len(self.name)))
-        print("="*30 + f" {self.name} " + "="*30)
-        print("="*(62+len(self.name)))
+        num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
+        print("="*num_characters)
+        print("="*30 + f" {self.data_name} ({self.preprocessing_name}) " + "="*30)
+        print("="*num_characters)
         average_mcc = 0.0
         average_f1 = 0.0
         n_clients = len(self.input_folders)
         for test_client_folder in self.input_folders:
             run_input_folders = [f for f in self.input_folders if f != test_client_folder]
             test_client_name = test_client_folder.name
-            output_folders = [f"{self.output_base_folder}/{test_client_folder.name}_{f.name}_{self.name}" for f in run_input_folders]
+            output_folders = [f"{self.output_base_folder}/{test_client_folder.name}_{f.name}_{self.data_name}" for f in run_input_folders]
             for out_folder in output_folders:
                 out_path = Path(out_folder)
                 out_path.mkdir(parents=True, exist_ok=True)
@@ -121,30 +134,38 @@ class ClassificationExperimentLeaveOneCohortOut:
             true_labels = test_data[self.predicted_column].values
             predictions = global_forest.predict(test_data[used_features])
 
-            mcc = matthews_corrcoef(true_labels, predictions)
-            f1 = f1_score(true_labels, predictions, average='weighted')
+            mcc = float(matthews_corrcoef(true_labels, predictions)) # type: ignore
+            f1 = float(f1_score(true_labels, predictions, average='weighted')) # type: ignore
+                # linting ignored as just bc of differences between pandas arrays and numpy arrays
+                # no actual interpreter issues
             average_mcc += mcc / n_clients
             average_f1 += f1 / n_clients
             print(f"Results for test cohort '{test_client_name}' using model trained on all other cohorts:")
             print(f"  MCC: {mcc:.4f}")
             print(f"  F1 Score: {f1:.4f}")
-        print("-"*(62+len(self.name)))
+            create_append_row_resultfile(
+                resultfile=self.resultfile,
+                data_name=f"{self.data_name}",
+                data_preprocessing_name=self.preprocessing_name,
+                metric_name="MCC",
+                metric_value=mcc,
+                predicted_client_name=test_client_name,
+                cross_validation_method="Leave-One-Cohort-Out"
+            )
+            create_append_row_resultfile(
+                resultfile=self.resultfile,
+                data_name=f"{self.data_name}",
+                data_preprocessing_name=self.preprocessing_name,
+                metric_name="F1_score",
+                metric_value=f1,
+                predicted_client_name=test_client_name,
+                cross_validation_method="Leave-One-Cohort-Out"
+            )
+        print("-"*(62+len(self.data_name) + len(self.preprocessing_name) + 3))
         print(f"Average MCC across all test cohorts: {average_mcc:.4f}")
         print(f"Average F1 Score across all test cohorts: {average_f1:.4f}")
-        print("="*(62+len(self.name)))
+        print("="*(62+len(self.data_name) + len(self.preprocessing_name) + 3))
         print()
-        create_append_row_resultfile(
-            resultfile=self.resultfile,
-            experiment_name=f"{self.name}",
-            metric_name="MCC (average)",
-            metric_value=average_mcc
-        )
-        create_append_row_resultfile(
-            resultfile=self.resultfile,
-            experiment_name=f"{self.name}",
-            metric_name="F1 Score (average)",
-            metric_value=average_f1 #type: ignore
-        )
 
 class ClassificationExperimentTrainTestSplit:
     """
@@ -156,26 +177,30 @@ class ClassificationExperimentTrainTestSplit:
     It then prints out the classification metrics for the test data as calculated by
     the random forest classifier.
     """
-    name: str # The name to report that's associated with this experiment
+    data_name: str # The name to report that's associated with this experiment
+    preprocessing_name: str # A suffix to append to the name
     input_folders: List[Path] # The client folders containing the config.yml and data file
     output_base_folder: Path # where to write the final metrics (and predictions).
                             # Per simulation run a subfolder will be
     train_test_ratio: float = 0.8 # The train test split ratio to use
     resultfile: Path # The path to the result file to write the classification metrics to
 
-    def __init__(self, name: str, input_folders: List[str], output_base_folder: str,
+    def __init__(self, data_name: str, preprocessing_name: str,
+                 input_folders: List[str], output_base_folder: str,
                   train_test_ratio: float = 0.8, resultfile: Path = DEFAULT_RESULTFILE):
-        self.name = name
+        self.data_name = data_name
+        self.preprocessing_name = preprocessing_name
         self.input_folders = [Path(f) for f in input_folders]
         self.output_base_folder = Path(output_base_folder)
         self.train_test_ratio = train_test_ratio
         self.resultfile = resultfile
 
     def run_experiment(self):
-        print("="*(62+len(self.name)))
-        print("="*30 + f" {self.name} " + "="*30)
-        print("="*(62+len(self.name)))
-        output_folders = [f"{self.output_base_folder}/{input_folder.name}_{self.name}" for input_folder in self.input_folders]
+        num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
+        print("="*num_characters)
+        print("="*30 + f" {self.data_name} ({self.preprocessing_name}) " + "="*30)
+        print("="*num_characters)
+        output_folders = [f"{self.output_base_folder}/{input_folder.name}_{self.data_name + self.preprocessing_name}" for input_folder in self.input_folders]
         for out_folder in output_folders:
             out_path = Path(out_folder)
             out_path.mkdir(parents=True, exist_ok=True)
@@ -198,22 +223,33 @@ class ClassificationExperimentTrainTestSplit:
                                 fed_learning_main_function=main)
 
         # read the metrics files and print the results
-        coordinator_output_folder = output_folders[0]  # Assuming the first output folder is the coordinator's
-        metrics_path = Path(coordinator_output_folder) / 'metrics.csv'
+        for input_folder, output_folder in zip(self.input_folders, output_folders):
+            test_client_name = input_folder.name
+            global_metrics_path = Path(output_folder) / 'global_metrics.csv'
+            local_metrics_path = Path(output_folder) / 'local_metrics.csv'
+            # just read both, it checks if the file exists
+            self.read_metrics(global_metrics_path, "All")
+            self.read_metrics(local_metrics_path, test_client_name)
+
+    def read_metrics(self,
+                     metrics_path: Path,
+                     client_name: str) -> None:
+        """
+        Reads the given metrics file, appends results to the resultfile and prints them.
+        """
         if metrics_path.exists():
             metrics_df = pd.read_csv(metrics_path)
-            print(f"\nCoordinator ({coordinator_output_folder}):")
             for _, row in metrics_df.iterrows():
-                if pd.notna(row['score']):
-                    metric_suffix = row['class']
-                    metric_name = row['metric']
-                    metric_value = row['score']
-                    print(f"{metric_name} ({metric_suffix}): {metric_value:.4f}")
-                    create_append_row_resultfile(
-                        resultfile=self.resultfile,
-                        experiment_name=f"{self.name}",
-                        metric_name=f"{metric_name} ({metric_suffix})",
-                        metric_value=metric_value
-                    )
-        else:
-            print(f"\nWarning: No metrics file found at {metrics_path}")
+                metric_suffix = row['class']
+                metric_name = row['metric']
+                metric_value = row['score']
+                print(f"{client_name}: {metric_name} ({metric_suffix}): {metric_value:.4f}")
+                create_append_row_resultfile(
+                    resultfile=self.resultfile,
+                    data_name=f"{self.data_name}",
+                    data_preprocessing_name=self.preprocessing_name,
+                    metric_name=f"{metric_name}",
+                    metric_value=metric_value,
+                    predicted_client_name=client_name,
+                    cross_validation_method="Train-Test-Split"
+                )

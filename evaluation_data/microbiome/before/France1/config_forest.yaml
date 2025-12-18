@@ -13,4 +13,3 @@ simple_forest:
   random_state: 42
   sample_col: null
   train_test_ratio: 1.0
-
