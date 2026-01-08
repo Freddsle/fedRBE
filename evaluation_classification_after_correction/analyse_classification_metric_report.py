@@ -48,6 +48,8 @@ for metric_name in df['metric_name'].unique():
             y='metric_value',
             hue='data_preprocessing_name',
         )
+        plt.xlabel("")
+        plt.ylabel(metric_name)
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
 
@@ -66,6 +68,8 @@ for metric_name in df['metric_name'].unique():
             y='metric_value',
             hue='data_preprocessing_name',
         )
+        plt.xlabel("")
+        plt.ylabel(metric_name)
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
 
