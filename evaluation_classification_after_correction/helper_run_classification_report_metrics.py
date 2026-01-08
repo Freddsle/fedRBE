@@ -19,7 +19,8 @@ def create_append_row_resultfile(resultfile: Path,
                                  metric_name: str,
                                  metric_value: float,
                                  predicted_client_name: str,
-                                 cross_validation_method: str) -> None:
+                                 cross_validation_method: str,
+                                 seed: int) -> None:
     """ Creates or appends a row to the given resultfile with the given metric name and value """
     data = {
         'data_name': data_name,
@@ -27,7 +28,8 @@ def create_append_row_resultfile(resultfile: Path,
         'metric_name': metric_name,
         'metric_value': metric_value,
         'predicted_client_name': predicted_client_name,
-        'cross_validation_method': cross_validation_method
+        'cross_validation_method': cross_validation_method,
+        'seed': seed
     }
     if resultfile.exists():
         df_existing = pd.read_csv(resultfile)
@@ -65,7 +67,7 @@ class ClassificationExperimentLeaveOneCohortOut:
         self.predicted_column = predicted_column
         self.resultfile = resultfile
 
-    def run_experiment(self):
+    def run_experiment(self, seed: int):
         num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
         print("="*num_characters)
         print("="*30 + f" {self.data_name} ({self.preprocessing_name}) " + "="*30)
@@ -87,6 +89,7 @@ class ClassificationExperimentLeaveOneCohortOut:
                     with open(config_forest_path, 'r') as f:
                         config_forest = yaml.safe_load(f)
                     config_forest['simple_forest']['train_test_ratio'] = 1.0
+                    config_forest['simple_forest']['random_state'] = seed
                     with open(config_forest_path, 'w') as f:
                         yaml.safe_dump(config_forest, f)
                 else:
@@ -150,7 +153,8 @@ class ClassificationExperimentLeaveOneCohortOut:
                 metric_name="MCC",
                 metric_value=mcc,
                 predicted_client_name=test_client_name,
-                cross_validation_method="Leave-One-Cohort-Out"
+                cross_validation_method="Leave-One-Cohort-Out",
+                seed=seed
             )
             create_append_row_resultfile(
                 resultfile=self.resultfile,
@@ -159,7 +163,8 @@ class ClassificationExperimentLeaveOneCohortOut:
                 metric_name="F1_score",
                 metric_value=f1,
                 predicted_client_name=test_client_name,
-                cross_validation_method="Leave-One-Cohort-Out"
+                cross_validation_method="Leave-One-Cohort-Out",
+                seed=seed
             )
         print("-"*(62+len(self.data_name) + len(self.preprocessing_name) + 3))
         print(f"Average MCC across all test cohorts: {average_mcc:.4f}")
@@ -195,7 +200,7 @@ class ClassificationExperimentTrainTestSplit:
         self.train_test_ratio = train_test_ratio
         self.resultfile = resultfile
 
-    def run_experiment(self):
+    def run_experiment(self, seed: int):
         num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
         print("="*num_characters)
         print("="*30 + f" {self.data_name} ({self.preprocessing_name}) " + "="*30)
@@ -212,6 +217,7 @@ class ClassificationExperimentTrainTestSplit:
                 with open(config_forest_path, 'r') as f:
                     config_forest = yaml.safe_load(f)
                 config_forest['simple_forest']['train_test_ratio'] = self.train_test_ratio
+                config_forest['simple_forest']['random_state'] = seed
                 with open(config_forest_path, 'w') as f:
                     yaml.safe_dump(config_forest, f)
             else:
@@ -228,12 +234,13 @@ class ClassificationExperimentTrainTestSplit:
             global_metrics_path = Path(output_folder) / 'global_metrics.csv'
             local_metrics_path = Path(output_folder) / 'local_metrics.csv'
             # just read both, it checks if the file exists
-            self.read_metrics(global_metrics_path, "All")
-            self.read_metrics(local_metrics_path, test_client_name)
+            self.read_metrics(global_metrics_path, "All", seed)
+            self.read_metrics(local_metrics_path, test_client_name, seed)
 
     def read_metrics(self,
                      metrics_path: Path,
-                     client_name: str) -> None:
+                     client_name: str,
+                     seed: int) -> None:
         """
         Reads the given metrics file, appends results to the resultfile and prints them.
         """
@@ -251,5 +258,6 @@ class ClassificationExperimentTrainTestSplit:
                     metric_name=f"{metric_name}",
                     metric_value=metric_value,
                     predicted_client_name=client_name,
-                    cross_validation_method="Train-Test-Split"
+                    cross_validation_method="Train-Test-Split",
+                    seed=seed
                 )

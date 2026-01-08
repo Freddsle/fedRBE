@@ -79,3 +79,9 @@ for metric_name in df['metric_name'].unique():
         figure.savefig(output_png, bbox_inches='tight', dpi=100)
         plt.close()
         print(f"Saved plot to {output_png}")
+
+# summary statistics
+summary = df.groupby(['data_preprocessing_name', 'cross_validation_method', 'metric_name', 'data_name', 'predicted_client_name'])['metric_value'].agg(['mean', 'std', 'count'])
+summary_output_file = os.path.join(SCRIPT_DIR, "classification_metric_report_summary.csv")
+summary.to_csv(summary_output_file)
+print(f"\nSummary statistics saved to {summary_output_file}")
