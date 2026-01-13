@@ -1,0 +1,21 @@
+fc_kmeans:
+  algorithm:
+    k_max: 6
+    k_min: 2
+    k_step: 1
+    cluster_on: column
+  input:
+    delimiter: "\t"
+    dir: ""
+    file: intensities.tsv
+  output:
+    centroids: centroids.csv
+    clustering: clustering.csv
+    delimiter: ;
+    dir: kmeans
+    silhouette: silhouette.csv
+  scaling:
+    center: true
+    log_transform: false
+    max_nan_fraction: 1
+    variance: true

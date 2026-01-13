@@ -164,7 +164,13 @@ apply_rotation_effect_1pc <- function(X, batch_vec, target_batch, angle_deg = 25
 
 
 
-add_batch_effect <- function(result_two, batch_info){
+add_batch_effect <- function(
+    result_two, 
+    batch_info,
+    mean_additive = sample(c(0, 0.7, -1.5)),
+    sd_additive = sample(c(0.5, 1, 1.5)),
+    shape_multiplicative = sample(c(3, 1, 5))
+    ){
 
     # Assuming 'result_two' is your data matrix and 'batch_info' is a vector indicating the batch for each column
     n_batches <- length(unique(batch_info$batch))
@@ -172,9 +178,17 @@ add_batch_effect <- function(result_two, batch_info){
     n_proteins <- nrow(result_two)
 
     # For Additive Effects
-    additive_params <- data.frame(mean = sample(c(0, 0.7, -1.5)), sd = sample(c(0.5, 1, 1.5)), row.names = levels(batch_info$batch)) 
+    additive_params <- data.frame(
+        mean = mean_additive, 
+        sd = sd_additive, 
+        row.names = levels(batch_info$batch)
+    ) 
     # For Multiplicative Effects
-    multiplicative_params <- data.frame(shape = sample(c(3, 1, 5)), scale = sample(c(2, 1, 0.5)), row.names = levels(batch_info$batch)) 
+    multiplicative_params <- data.frame(
+        shape = shape_multiplicative, 
+        scale = sample(c(2, 1, 0.5)), 
+        row.names = levels(batch_info$batch)
+    ) 
 
     # Step 3: Sample Based on Selected Parameters
     # Generate additive effects for each batch, one per protein
