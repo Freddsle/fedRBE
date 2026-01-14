@@ -13,7 +13,9 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import shutil
+import sys
 import time
 import zipfile
 from pathlib import Path
@@ -21,18 +23,28 @@ from typing import Iterable, List, Sequence
 
 import pandas as pd
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 try:
-    from FeatureCloud.api.imp.controller import commands as fc_controller
-    from FeatureCloud.api.imp.test import commands as fc_test
+    from evaluation_utils import featurecloud_api_extension as fc_utils
 except ImportError as exc:  # pragma: no cover - only needed when running the script
     raise SystemExit(
-        "FeatureCloud SDK is not available. Install FeatureCloud to run this script."
+        "FeatureCloud SDK or its dependencies are not available. Install FeatureCloud to run this script."
     ) from exc
 
-DEFAULT_CONTROLLER_HOST = "http://localhost:8000"
+DEFAULT_CONTROLLER_HOST = fc_utils.DEFAULT_CONTROLLER_HOST
 DEFAULT_MODES = ("balanced", "mild_imbalanced", "strong_imbalanced")
 DEFAULT_CLIENT_DIRS = ("lab1", "lab2", "lab3")
 DEFAULT_K_VALUES = (2, 3)
+KMEANS_CONFIG_PATTERNS = ("config_kmeans*.yml", "config_kmeans*.yaml")
+
+
+class KMeansExperiment(fc_utils.Experiment):
+    def _set_config_files(self) -> None:
+        # KMeans uses config_kmeans*.yml/.yaml; avoid overwriting config.yml.
+        return
 
 
 def parse_csv_list(value: str) -> List[str]:
@@ -44,8 +56,36 @@ def parse_k_values(value: str) -> List[int]:
     return [int(item) for item in items]
 
 
+def find_kmeans_config(directory: Path) -> Path:
+    candidates = []
+    for pattern in KMEANS_CONFIG_PATTERNS:
+        candidates.extend(directory.glob(pattern))
+    if not candidates:
+        raise FileNotFoundError(f"Missing config_kmeans*.yml/.yaml in {directory}")
+
+    candidates = sorted(candidates, key=lambda path: path.name)
+    for name in ("config_kmeans.yml", "config_kmeans.yaml"):
+        for candidate in candidates:
+            if candidate.name == name:
+                return candidate
+    return candidates[0]
+
+
 def read_metadata(path: Path) -> pd.DataFrame:
-    df = pd.read_csv(path, sep="\t", index_col=0)
+    with path.open(newline="") as handle:
+        reader = csv.reader(handle, delimiter="\t")
+        header = next(reader)
+        rows = []
+        for row in reader:
+            if len(row) == len(header) + 1:
+                row = row[1:]
+            if len(row) != len(header):
+                raise ValueError(
+                    f"Unexpected column count in metadata {path}: {len(row)}"
+                )
+            rows.append(dict(zip(header, row)))
+
+    df = pd.DataFrame(rows)
     missing = {"file", "condition", "lab"} - set(df.columns)
     if missing:
         raise ValueError(f"Missing columns in metadata {path}: {sorted(missing)}")
@@ -76,21 +116,35 @@ def prepare_inputs(
     run_id: int,
     input_variant: str,
     client_dirs: Sequence[str],
+    corrected_suffixes: Sequence[str],
 ) -> Path:
     metadata = read_metadata(mode_root / "all_metadata.tsv")
     condition_levels = sorted(metadata["condition"].dropna().unique())
 
-    if input_variant == "before":
+    if input_variant == "before_corrected":
         intensities_path = (
             mode_root
             / "before"
             / "intermediate"
             / f"{run_id}_intensities_data.tsv"
         )
-        target_base = mode_root / "before"
-    elif input_variant == "before_corrected":
-        intensities_path = mode_root / "after" / "runs" / f"{run_id}_FedSim_corrected.tsv"
         target_base = mode_root / "before_corrected"
+    elif input_variant == "before":
+        intensities_path = None
+        for suffix in corrected_suffixes:
+            candidate = mode_root / "after" / "runs" / f"{run_id}_{suffix}.tsv"
+            if candidate.exists():
+                intensities_path = candidate
+                break
+        if intensities_path is None:
+            checked = ", ".join(
+                f"{run_id}_{suffix}.tsv" for suffix in corrected_suffixes
+            )
+            raise FileNotFoundError(
+                f"Missing corrected intensities for run {run_id} in {mode_root / 'after' / 'runs'} "
+                f"(checked: {checked})"
+            )
+        target_base = mode_root / "before"
     else:
         raise ValueError(f"Unknown input variant: {input_variant}")
 
@@ -114,74 +168,19 @@ def prepare_inputs(
         lab_dir = target_base / lab
         lab_dir.mkdir(parents=True, exist_ok=True)
 
-        # Ensure config is present (the app looks for config_kmeans*.yml)
-        config_dest = lab_dir / "config_kmeans.yml"
-        if not config_dest.exists():
-            config_src = mode_root / "before" / lab / "config_kmeans.yml"
-            if not config_src.exists():
-                raise FileNotFoundError(f"Missing config_kmeans.yml in {config_src}")
-            shutil.copy2(config_src, config_dest)
+        # Ensure config is present (the app looks for config_kmeans*.yml/.yaml)
+        try:
+            find_kmeans_config(lab_dir)
+        except FileNotFoundError:
+            if input_variant == "before":
+                raise
+            config_src = find_kmeans_config(mode_root / "before" / lab)
+            shutil.copy2(config_src, lab_dir / config_src.name)
 
         write_intensities(intensities[lab_meta["file"]], lab_dir / "intensities.tsv")
         write_design(lab_meta, lab_dir / "design.tsv", condition_levels)
 
     return target_base
-
-
-def start_controller(data_dir: Path) -> None:
-    fc_controller.stop(name=fc_controller.DEFAULT_CONTROLLER_NAME)
-    time.sleep(5)
-    fc_controller.start(
-        name=fc_controller.DEFAULT_CONTROLLER_NAME,
-        port=8000,
-        data_dir=str(data_dir),
-        controller_image="",
-        with_gpu=False,
-        mount="",
-        blockchain_address="",
-    )
-    time.sleep(5)
-
-
-def run_featurecloud_test(
-    app_image: str,
-    data_dir: Path,
-    client_dirs: Sequence[str],
-    controller_host: str,
-    query_interval: int,
-    timeout: int,
-) -> tuple[int, List[Path]]:
-    exp_id = fc_test.start(
-        controller_host=controller_host,
-        client_dirs=",".join(client_dirs),
-        generic_dir="",
-        app_image=app_image,
-        channel="local",
-        query_interval=query_interval,
-        download_results="tests",
-    )
-    exp_id = int(exp_id)
-    start_time = time.time()
-
-    while True:
-        info = fc_test.info(controller_host=controller_host, test_id=exp_id)
-        status = info.iloc[0]["status"]
-        if status == "finished":
-            instances = info.iloc[0]["instances"]
-            break
-        if status in ("error", "stopped"):
-            raise RuntimeError(f"FeatureCloud test {exp_id} ended with status: {status}")
-        if time.time() - start_time > timeout:
-            fc_test.stop(controller_host=controller_host, test_id=exp_id)
-            raise RuntimeError(f"FeatureCloud test {exp_id} timed out after {timeout}s")
-        time.sleep(query_interval)
-
-    instances = sorted(instances, key=lambda item: item.get("id", 0))
-    result_files = []
-    for inst in instances:
-        filename = f"results_test_{exp_id}_client_{inst['id']}_{inst['name']}.zip"
-        result_files.append(data_dir / "tests" / "tests" / filename)
-    return exp_id, result_files
 
 
 def wait_for_paths(paths: Iterable[Path], timeout: int = 120) -> None:
@@ -194,11 +193,23 @@ def wait_for_paths(paths: Iterable[Path], timeout: int = 120) -> None:
         raise FileNotFoundError(f"Result files not found: {missing}")
 
 
+def parse_test_id(paths: Iterable[Path]) -> int | None:
+    test_ids = set()
+    for path in paths:
+        match = re.search(r"results_test_(\d+)_client_", path.name)
+        if match:
+            test_ids.add(int(match.group(1)))
+    if len(test_ids) == 1:
+        return test_ids.pop()
+    return None
+
+
 def extract_clustering(
     zip_path: Path,
     output_dir: Path,
     client_idx: int,
     k_values: Sequence[int],
+    keep_extracted: bool,
 ) -> None:
     with zipfile.ZipFile(zip_path, "r") as zf:
         members = set(zf.namelist())
@@ -210,18 +221,60 @@ def extract_clustering(
             extracted = output_dir / member
             target = output_dir / f"{client_idx}_{k}_clustering.csv"
             target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.move(str(extracted), str(target))
+            if keep_extracted:
+                shutil.copy2(extracted, target)
+            else:
+                shutil.move(str(extracted), str(target))
 
-    kmeans_dir = output_dir / "kmeans"
-    if kmeans_dir.exists():
-        shutil.rmtree(kmeans_dir)
+    if not keep_extracted:
+        kmeans_dir = output_dir / "kmeans"
+        if kmeans_dir.exists():
+            shutil.rmtree(kmeans_dir)
+
+
+def aggregate_fed_clusters(
+    mode_root: Path,
+    run_id: int,
+    run_output: Path,
+    client_dirs: Sequence[str],
+    k_values: Sequence[int],
+    input_variant: str,
+    column_prefix: str,
+) -> Path:
+    metadata = read_metadata(mode_root / "all_metadata.tsv").set_index("file")
+
+    aggregated = []
+    for k in k_values:
+        lab_frames = []
+        for idx, _lab in enumerate(client_dirs, start=1):
+            clustering_path = run_output / f"{idx}_{k}_clustering.csv"
+            if not clustering_path.exists():
+                raise FileNotFoundError(f"Missing clustering file: {clustering_path}")
+            df = pd.read_csv(clustering_path, sep=";", index_col=0)
+            if df.empty:
+                raise ValueError(f"Empty clustering file: {clustering_path}")
+            df.columns = [f"{column_prefix}_{k}clusters"]
+            lab_frames.append(df)
+        aggregated.append(pd.concat(lab_frames, axis=0))
+
+    merged = metadata.join(pd.concat(aggregated, axis=1), how="left")
+    variant_label = "before" if input_variant == "before_corrected" else "after"
+    output_root = mode_root / "after" / "kmeans_res" / "runs"
+    output_root.mkdir(parents=True, exist_ok=True)
+    output_path = output_root / f"{run_id}_metadata_{variant_label}_fedclusters.tsv"
+    merged.reset_index().to_csv(output_path, sep="\t", index=False)
+    return output_path
 
 
 def ensure_configs(data_dir: Path, client_dirs: Sequence[str]) -> None:
     for lab in client_dirs:
-        config_path = data_dir / lab / "config_kmeans.yml"
-        if not config_path.exists():
-            raise FileNotFoundError(f"Missing config_kmeans.yml in {config_path}")
+        lab_dir = data_dir / lab
+        try:
+            find_kmeans_config(lab_dir)
+        except FileNotFoundError as exc:
+            raise FileNotFoundError(
+                f"Missing config_kmeans*.yml/.yaml in {lab_dir}"
+            ) from exc
 
 
 def run_repetitions(
@@ -233,12 +286,16 @@ def run_repetitions(
     app_image: str,
     client_dirs: Sequence[str],
     k_values: Sequence[int],
+    corrected_suffixes: Sequence[str],
     controller_host: str,
     query_interval: int,
     timeout: int,
     prepare: bool,
     restart_controller: bool,
     skip_existing: bool,
+    aggregate_output: bool,
+    column_prefix: str,
+    debug: bool,
 ) -> None:
     current_data_dir: Path | None = None
 
@@ -262,42 +319,78 @@ def run_repetitions(
                     continue
 
             if prepare:
-                prepare_inputs(mode_root, run_id, input_variant, client_dirs)
+                prepare_inputs(
+                    mode_root,
+                    run_id,
+                    input_variant,
+                    client_dirs,
+                    corrected_suffixes,
+                )
 
             data_dir = (mode_root / input_variant).resolve()
             ensure_configs(data_dir, client_dirs)
 
-            if restart_controller or data_dir != current_data_dir:
-                print(f"Starting controller for {data_dir}")
-                start_controller(data_dir)
-                current_data_dir = data_dir
-
-            print(f"[{mode} run {run_id}] Starting FeatureCloud test")
-            exp_id, zip_paths = run_featurecloud_test(
-                app_image=app_image,
-                data_dir=data_dir,
-                client_dirs=client_dirs,
+            experiment = KMeansExperiment(
+                name=f"fed_kmeans_{mode}_run_{run_id}",
+                clients=[str(data_dir / lab) for lab in client_dirs],
+                app_image_name=app_image,
+                fc_data_dir=str(data_dir),
                 controller_host=controller_host,
                 query_interval=query_interval,
                 timeout=timeout,
             )
-            wait_for_paths(zip_paths)
+
+            if restart_controller or data_dir != current_data_dir:
+                print(f"Starting controller for {data_dir}")
+                experiment._startup()
+                current_data_dir = data_dir
+
+            print(f"[{mode} run {run_id}] Starting FeatureCloud test")
+            zip_files, _, exp_meta = experiment.run_test()
+            zip_paths = [Path(path) for path in zip_files]
+            wait_for_paths(zip_paths, timeout=timeout)
+            test_id = parse_test_id(zip_paths)
 
             run_output.mkdir(parents=True, exist_ok=True)
             for idx, zip_path in enumerate(zip_paths, start=1):
-                shutil.copy2(zip_path, run_output / zip_path.name)
-                extract_clustering(zip_path, run_output, idx, k_values)
+                copied_zip = run_output / zip_path.name
+                shutil.copy2(zip_path, copied_zip)
+                extract_clustering(
+                    copied_zip,
+                    run_output,
+                    idx,
+                    k_values,
+                    keep_extracted=debug,
+                )
+
+            aggregated_path = None
+            if aggregate_output:
+                aggregated_path = aggregate_fed_clusters(
+                    mode_root=mode_root,
+                    run_id=run_id,
+                    run_output=run_output,
+                    client_dirs=client_dirs,
+                    k_values=k_values,
+                    input_variant=input_variant,
+                    column_prefix=column_prefix,
+                )
 
             manifest = {
                 "mode": mode,
                 "run_id": run_id,
                 "input_variant": input_variant,
                 "app_image": app_image,
-                "test_id": exp_id,
+                "test_id": test_id,
                 "client_dirs": list(client_dirs),
                 "k_values": list(k_values),
                 "data_dir": str(data_dir),
                 "zip_files": [p.name for p in zip_paths],
+                "aggregated_result": str(aggregated_path) if aggregated_path else None,
+                "experiment_meta": {
+                    "experiment_name": exp_meta.experiment_name,
+                    "input_hashes": exp_meta.input_hashes,
+                    "config": exp_meta.config,
+                },
                 "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
             }
             (run_output / "manifest.json").write_text(
@@ -310,6 +403,8 @@ def main() -> None:
     script_dir = Path(__file__).resolve().parent
     repo_root = script_dir.parent
     default_data_root = repo_root / "evaluation_data" / "simulated_rotation"
+
+    # run_federated_kmeans_repetitions.py --modes balanced --start 1 --end 1 --prepare-inputs
 
     parser = argparse.ArgumentParser(
         description="Run federated k-means clustering across repetitions."
@@ -343,6 +438,11 @@ def main() -> None:
         help="Comma-separated K values to extract (default: 2,3)",
     )
     parser.add_argument(
+        "--corrected-suffixes",
+        default="R_corrected",
+        help="Comma-separated suffixes for corrected inputs (default: R_corrected)",
+    )
+    parser.add_argument(
         "--data-root",
         default=str(default_data_root),
         help="Path to evaluation_data/simulated_rotation",
@@ -350,14 +450,14 @@ def main() -> None:
     parser.add_argument(
         "--controller-host",
         default=DEFAULT_CONTROLLER_HOST,
-        help="Controller host URL",
+        help="Controller host URL. Default: " + DEFAULT_CONTROLLER_HOST,
     )
-    parser.add_argument("--query-interval", type=int, default=5, help="Poll interval")
-    parser.add_argument("--timeout", type=int, default=1800, help="Test timeout (s)")
+    parser.add_argument("--query-interval", type=int, default=5, help="Poll interval. Default: 5s")
+    parser.add_argument("--timeout", type=int, default=1800, help="Test timeout (s). Default: 1800s")
     parser.add_argument(
         "--prepare-inputs",
         action="store_true",
-        help="Regenerate inputs from intermediate or FedSim outputs per run",
+        help="Regenerate inputs from intermediate or corrected outputs per run. Default: False",
     )
     parser.add_argument(
         "--restart-controller",
@@ -367,7 +467,22 @@ def main() -> None:
     parser.add_argument(
         "--skip-existing",
         action="store_true",
-        help="Skip runs with existing clustering outputs",
+        help="Skip runs with existing clustering outputs. Default: False",
+    )
+    parser.add_argument(
+        "--aggregate-output",
+        action="store_true",
+        help="Write per-run aggregated metadata with Fed clusters. Default: False",
+    )
+    parser.add_argument(
+        "--cluster-prefix",
+        default="Fed",
+        help="Prefix for aggregated cluster columns (default: Fed)",
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Keep extracted kmeans folders in the run output for inspection.",
     )
 
     args = parser.parse_args()
@@ -381,12 +496,16 @@ def main() -> None:
         app_image=args.app_image,
         client_dirs=parse_csv_list(args.client_dirs),
         k_values=parse_k_values(args.k_values),
+        corrected_suffixes=parse_csv_list(args.corrected_suffixes),
         controller_host=args.controller_host,
         query_interval=args.query_interval,
         timeout=args.timeout,
         prepare=args.prepare_inputs,
         restart_controller=args.restart_controller,
         skip_existing=args.skip_existing,
+        aggregate_output=args.aggregate_output,
+        column_prefix=args.cluster_prefix,
+        debug=args.debug,
     )
 
 
