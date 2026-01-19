@@ -36,6 +36,7 @@ if len(duplicates) > 0:
 for metric_name in df['metric_name'].unique():
     for cv_method in df['cross_validation_method'].unique():
         df_subset = df[(df['metric_name'] == metric_name) & (df['cross_validation_method'] == cv_method)]
+
         # filter out average rows
         df_subset = df_subset[df_subset['predicted_client_name'] != AVERAGE_CLIENT_NAME]
         print(f"Using {len(df_subset)} rows for metric '{metric_name}' and CV method '{cv_method}'")
@@ -67,6 +68,7 @@ for metric_name in df['metric_name'].unique():
             x='data_name',
             y='metric_value',
             hue='data_preprocessing_name',
+            medianprops=dict(color='red'),
         )
         plt.xlabel("")
         plt.ylabel(metric_name)
