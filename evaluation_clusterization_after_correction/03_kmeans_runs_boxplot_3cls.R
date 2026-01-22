@@ -10,7 +10,7 @@ suppressPackageStartupMessages({
   library(mclust)
 })
 
-source(file.path("utils", "rotation_utils.R"))
+source(file.path("..", "evaluation_utils", "rotation_utils.R"))
 
 truth_col <- "condition"
 min_truth_classes <- 2L
@@ -127,7 +127,7 @@ calculate_metrics <- function(true_labels, predicted_labels) {
   n <- sum(cm)
   numerator <- (c_val * n) - sum(p_k * t_k)
   denominator <- sqrt((n^2 - sum(t_k^2)) * (n^2 - sum(p_k^2)))
-  mcc <- if (denominator == 0) NA_real_ else numerator / denominator
+  mcc <- if (denominator == 0) 0 else numerator / denominator
 
   ari <- mclust::adjustedRandIndex(
     as.character(true_labels),
@@ -367,9 +367,34 @@ for (mode in modes) {
   metrics_res_full <- rbind(metrics_res_full, mode_metrics)
 }
 
-p <- plot_rotation_metrics(metrics_res_full)
+plot_dir <- file.path("results")
+dir.create(plot_dir, showWarnings = FALSE, recursive = TRUE)
 
+debug_plot_drop <- TRUE
+debug_drop_path <- file.path(plot_dir, "plot_dropped_rows_3cls.tsv")
+debug_na_summary <- TRUE
+
+p <- plot_rotation_metrics(
+  metrics_res_full,
+  debug_drop = debug_plot_drop,
+  debug_path = debug_drop_path,
+  na_summary = debug_na_summary
+)
 print(p)
+ggsave(file.path(plot_dir, "metrics_runs_boxplot_3cls.png"), p, width = 13, height = 7.5, dpi = 320)
 
-# Optional save (relative to evaluation_clusterization_after_correction/)
-ggsave("metrics_runs_boxplot_3cls.png", p, width = 13, height = 7.5, dpi = 320)
+p_mccari <- plot_rotation_metrics(
+  metrics_res_full,
+  metrics = c("MCC", "ARI"),
+  debug_drop = debug_plot_drop,
+  debug_path = debug_drop_path,
+  na_summary = debug_na_summary
+)
+print(p_mccari)
+ggsave(
+  file.path(plot_dir, "metrics_runs_boxplot_3cls_MCCARI.png"),
+  p_mccari,
+  width = 6,
+  height = 7.5,
+  dpi = 320
+)

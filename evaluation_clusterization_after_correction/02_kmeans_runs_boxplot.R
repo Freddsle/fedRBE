@@ -65,11 +65,14 @@ normalize_binary <- function(x, label = "value") {
     return(x)
   }
   uniq <- sort(unique(x[!is.na(x)]))
-  if (!all(uniq %in% c(0, 1))) {
-    warning(paste("Normalizing non-binary labels for", label, ":", paste(uniq, collapse = ",")))
-    x <- as.integer(as.factor(x)) - 1L
+  if (all(uniq %in% c(0, 1))) {
+    return(x)
   }
-  x
+  if (all(uniq %in% c(1, 2))) {
+    return(as.integer(as.factor(x)) - 1L)
+  }
+  warning(paste("Normalizing non-binary labels for", label, ":", paste(uniq, collapse = ",")))
+  as.integer(as.factor(x)) - 1L
 }
 
 align_to_truth <- function(pred, truth, label = "pred") {
@@ -305,9 +308,43 @@ for (mode in modes) {
   metrics_res_full <- rbind(metrics_res_full, mode_metrics)
 }
 
-p <- plot_rotation_metrics(metrics_res_full)
+plot_dir <- file.path("results")
+dir.create(plot_dir, showWarnings = FALSE, recursive = TRUE)
 
+# save full metrics result into a file in the results directory
+write_delim(
+  metrics_res_full,
+  file = file.path(plot_dir, "metrics_res_runs_full.tsv"),
+  delim = "\t",
+  col_names = TRUE
+)
+
+debug_plot_drop <- TRUE
+debug_drop_path <- file.path(plot_dir, "plot_dropped_rows_2cls.tsv")
+debug_na_summary <- TRUE
+
+p <- plot_rotation_metrics(
+  metrics_res_full,
+  debug_drop = debug_plot_drop,
+  debug_path = debug_drop_path,
+  na_summary = debug_na_summary
+)
+print(head(metrics_res_full))
 print(p)
+ggsave(file.path(plot_dir, "metrics_runs_boxplot.png"), p, width = 13, height = 7.5, dpi = 320)
 
-# Optional save (relative to evaluation_clusterization_after_correction/)
-ggsave("metrics_runs_boxplot.png", p, width = 13, height = 7.5, dpi = 320)
+p_mccari <- plot_rotation_metrics(
+  metrics_res_full,
+  metrics = c("MCC", "ARI"),
+  debug_drop = debug_plot_drop,
+  debug_path = debug_drop_path,
+  na_summary = debug_na_summary
+)
+print(p_mccari)
+ggsave(
+  file.path(plot_dir, "metrics_runs_boxplot_MCCARI.png"),
+  p_mccari,
+  width = 6,
+  height = 7.5,
+  dpi = 320
+)
