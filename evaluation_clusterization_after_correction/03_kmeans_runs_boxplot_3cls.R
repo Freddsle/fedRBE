@@ -12,8 +12,8 @@ suppressPackageStartupMessages({
 
 source(file.path("..", "evaluation_utils", "rotation_utils.R"))
 
-truth_col <- "condition"
-min_truth_classes <- 2L
+truth_col <- "lab"
+min_truth_classes <- 3L
 
 permute_vec <- function(x) {
   if (length(x) <= 1) {

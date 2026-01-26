@@ -13,8 +13,20 @@ suppressPackageStartupMessages({
 source(file.path("..", "evaluation_utils", "rotation_utils.R"))
 
 calculate_metrics <- function(true_labels, predicted_labels) {
-  true_labels <- factor(true_labels, levels = c(0, 1))
-  predicted_labels <- factor(predicted_labels, levels = c(0, 1))
+  mask <- !is.na(true_labels) & !is.na(predicted_labels)
+  if (!any(mask)) {
+    return(list(
+      accuracy = NA_real_,
+      precision = NA_real_,
+      recall = NA_real_,
+      f1_score = NA_real_,
+      mcc = NA_real_,
+      ari = NA_real_
+    ))
+  }
+
+  true_labels <- factor(true_labels[mask], levels = c(0, 1))
+  predicted_labels <- factor(predicted_labels[mask], levels = c(0, 1))
 
   cm <- table(True = true_labels, Predicted = predicted_labels)
   cm <- cm[levels(true_labels), levels(predicted_labels), drop = FALSE]

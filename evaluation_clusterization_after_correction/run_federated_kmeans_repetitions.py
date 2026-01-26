@@ -362,6 +362,8 @@ def run_repetitions(
                     k_values,
                     keep_extracted=debug,
                 )
+                if copied_zip.exists():
+                    copied_zip.unlink()
 
             aggregated_path = None
             if aggregate_output:

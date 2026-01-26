@@ -114,6 +114,25 @@ normalize_cluster_labels <- function(x, k, label = "") {
   factor(mapped, levels = 0:(k - 1))
 }
 
+compute_ari <- function(truth, clusters, label = "") {
+  mask <- !is.na(truth) & !is.na(clusters)
+  if (!any(mask)) {
+    warning(paste("No overlapping labels for ARI", label))
+    return(NA_real_)
+  }
+  mclust::adjustedRandIndex(
+    as.character(truth[mask]),
+    as.character(clusters[mask])
+  )
+}
+
+format_metric_line <- function(value, label = "ARI") {
+  if (is.na(value)) {
+    return(paste0(label, "=NA"))
+  }
+  paste0(label, "=", sprintf("%.3f", value))
+}
+
 make_pca_panel <- function(intensities,
                            plot_meta,
                            color_col,
@@ -141,15 +160,25 @@ build_cluster_plots <- function(intensities,
                                 row_label,
                                 cb_palette,
                                 shape_col,
-                                show_legend) {
+                                show_legend,
+                                panel_metrics = NULL,
+                                metric_label = "ARI") {
+  if (!is.null(panel_metrics) && length(panel_metrics) != length(cluster_cols)) {
+    warning("panel_metrics length does not match cluster_cols; skipping metric labels.")
+    panel_metrics <- NULL
+  }
   plots <- vector("list", length(cluster_cols))
   for (i in seq_along(cluster_cols)) {
+    title_parts <- c(row_label, panel_titles[i])
+    if (!is.null(panel_metrics)) {
+      title_parts <- c(title_parts, format_metric_line(panel_metrics[i], metric_label))
+    }
     plots[[i]] <- make_pca_panel(
       intensities,
       plot_meta,
       color_col = cluster_cols[i],
       shape_col = shape_col,
-      title = paste(row_label, panel_titles[i], sep = "\n"),
+      title = paste(title_parts, collapse = "\n"),
       cb_palette = cb_palette,
       show_legend = show_legend && i == 1
     )
@@ -164,14 +193,17 @@ plot_run_clusters <- function(intensities_before,
                               mode,
                               run_id,
                               out_dir) {
-  cluster_cols <- c(
+  cluster_cols_before <- c(
     sprintf("BeforeC_Cntrl_%dclusters", k),
+    sprintf("BeforeC_Fed_%dclusters", k)
+  )
+  cluster_cols_after <- c(
     sprintf("AfterC_Cntrl_%dclusters", k),
-    sprintf("BeforeC_Fed_%dclusters", k),
     sprintf("AfterC_Fed_%dclusters", k)
   )
+  cluster_cols_all <- c(cluster_cols_before, cluster_cols_after)
 
-  missing_cols <- cluster_cols[!cluster_cols %in% colnames(metadata)]
+  missing_cols <- cluster_cols_all[!cluster_cols_all %in% colnames(metadata)]
   if (length(missing_cols) > 0) {
     warning(
       paste(
@@ -188,7 +220,7 @@ plot_run_clusters <- function(intensities_before,
       lab = factor(lab)
     ) %>%
     mutate(across(
-      all_of(cluster_cols),
+      all_of(cluster_cols_all),
       ~ normalize_cluster_labels(.x, k, label = cur_column())
     ))
 
@@ -205,15 +237,25 @@ plot_run_clusters <- function(intensities_before,
     extra_title <- "Lab"
   }
 
+  truth_vals <- plot_meta[[extra_color_col]]
+  ari_before <- vapply(
+    cluster_cols_before,
+    function(col) compute_ari(truth_vals, plot_meta[[col]], label = col),
+    numeric(1)
+  )
+  ari_after <- vapply(
+    cluster_cols_after,
+    function(col) compute_ari(truth_vals, plot_meta[[col]], label = col),
+    numeric(1)
+  )
+
   extra_levels <- levels(factor(plot_meta[[extra_color_col]]))
   extra_palette <- scales::hue_pal()(length(extra_levels))
 
   cb_palette <- scales::hue_pal()(k)
   panel_titles <- c(
-    "Before correction (central)",
-    "After correction (central)",
-    "Before correction (federated)",
-    "After correction (federated)"
+    "Central clusters",
+    "Federated clusters"
   )
 
   extra_before <- make_pca_panel(
@@ -238,22 +280,24 @@ plot_run_clusters <- function(intensities_before,
   plots_before <- c(list(extra_before), build_cluster_plots(
     intensities_before,
     plot_meta,
-    cluster_cols,
+    cluster_cols_before,
     panel_titles,
     "Before correction intensities",
     cb_palette,
     shape_col,
-    TRUE
+    TRUE,
+    panel_metrics = ari_before
   ))
   plots_after <- c(list(extra_after), build_cluster_plots(
     intensities_after,
     plot_meta,
-    cluster_cols,
+    cluster_cols_after,
     panel_titles,
     "After correction intensities",
     cb_palette,
     shape_col,
-    FALSE
+    FALSE,
+    panel_metrics = ari_after
   ))
 
   row_before <- wrap_plots(plots_before, nrow = 1)
