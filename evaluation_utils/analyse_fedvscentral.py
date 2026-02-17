@@ -54,6 +54,40 @@ experiment_results.append(utils.ExperimentResult(
     central_result_file=os.path.join(base_dir, "simulated", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
 ))
 
+# SIMULATED ROTATION
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Rotation",
+    federated_result_file=os.path.join(base_dir, "simulated_rotation", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated_rotation", "after", "intensities_R_corrected.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Rotation (SMPC)",
+    federated_result_file=os.path.join(base_dir, "simulated_rotation", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated_rotation", "after", "intensities_R_corrected.tsv"),
+))
+
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Rotation Mildly Imbalanced",
+    federated_result_file=os.path.join(base_dir, "simulated_rotation_mild_imbalanced", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated_rotation_mild_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Rotation Mildly Imbalanced (SMPC)",
+    federated_result_file=os.path.join(base_dir, "simulated_rotation_mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated_rotation_mild_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
+
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Rotation Strongly Imbalanced",
+    federated_result_file=os.path.join(base_dir, "simulated_rotation_strong_imbalanced", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated_rotation_strong_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="Simulated Rotation Strongly Imbalanced (SMPC)",
+    federated_result_file=os.path.join(base_dir, "simulated_rotation_strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "simulated_rotation_strong_imbalanced", "after", "intensities_R_corrected.tsv"),
+))
+
 # MICROBIOME
 experiment_results.append(utils.ExperimentResult(
     name="Microbiome batch=country",
