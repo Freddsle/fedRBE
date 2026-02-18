@@ -1,24 +1,25 @@
 {
   "covariate": "Pyr",
-  "rotation": "features x samples",
-  "samplename_column": null,
-  "featurename_column": "index",
+  "datafile": {
+    "filename": "full_corrected_data.csv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": null
+  },
+  "designfile": null,
   "cohorts": [
     {
       "name": "center1",
-      "folder": "individual_results/center1",
-      "datafile": "TODO: add filename"
+      "folder": "individual_results/center1"
     },
     {
       "name": "center2",
-      "folder": "individual_results/center2",
-      "datafile": "TODO: add filename"
+      "folder": "individual_results/center2"
     },
     {
       "name": "center3",
-      "folder": "individual_results/center3",
-      "datafile": "TODO: add filename"
+      "folder": "individual_results/center3"
     }
-  ],
-  "csv_separator": ","
+  ]
 }

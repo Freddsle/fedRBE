@@ -1,39 +1,43 @@
 {
   "covariate": "CRC",
-  "rotation": "samples x features",
-  "samplename_column": "sample",
-  "featurename_column": null,
+  "datafile": {
+    "filename": "UQnorm_log_counts_for_corr.tsv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": null
+  },
+  "designfile": {
+    "filename": "design.tsv",
+    "separator": "\t",
+    "rotation": "samples x features",
+    "samplename_column": "sample",
+    "featurename_column": null
+  },
   "cohorts": [
     {
       "name": "China1",
-      "folder": "China1",
-      "datafile": "design.tsv"
+      "folder": "China1"
     },
     {
       "name": "China3",
-      "folder": "China3",
-      "datafile": "design.tsv"
+      "folder": "China3"
     },
     {
       "name": "China5",
-      "folder": "China5",
-      "datafile": "design.tsv"
+      "folder": "China5"
     },
     {
       "name": "France1",
-      "folder": "France1",
-      "datafile": "design.tsv"
+      "folder": "France1"
     },
     {
       "name": "Germany1",
-      "folder": "Germany1",
-      "datafile": "design.tsv"
+      "folder": "Germany1"
     },
     {
       "name": "Germany2",
-      "folder": "Germany2",
-      "datafile": "design.tsv"
+      "folder": "Germany2"
     }
-  ],
-  "csv_separator": "\t"
+  ]
 }

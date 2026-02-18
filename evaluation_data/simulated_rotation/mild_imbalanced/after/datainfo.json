@@ -1,24 +1,25 @@
 {
-  "covariate": "condition",
-  "rotation": "features x samples",
-  "samplename_column": null,
-  "featurename_column": "index",
+  "covariate": "A",
+  "datafile": {
+    "filename": "full_corrected_data.csv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": null
+  },
+  "designfile": null,
   "cohorts": [
     {
       "name": "lab1",
-      "folder": "individual_results/lab1",
-      "datafile": "full_corrected_data.csv"
+      "folder": "individual_results/lab1"
     },
     {
       "name": "lab2",
-      "folder": "individual_results/lab2",
-      "datafile": "full_corrected_data.csv"
+      "folder": "individual_results/lab2"
     },
     {
       "name": "lab3",
-      "folder": "individual_results/lab3",
-      "datafile": "full_corrected_data.csv"
+      "folder": "individual_results/lab3"
     }
-  ],
-  "csv_separator": "\t"
+  ]
 }

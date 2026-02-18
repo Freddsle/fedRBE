@@ -1,24 +1,31 @@
 {
-  "covariate": "condition",
-  "rotation": "features x samples",
-  "samplename_column": null,
-  "featurename_column": "index",
+  "covariate": "A",
+  "datafile": {
+    "filename": "intensities.tsv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": "rowname"
+  },
+  "designfile": {
+    "filename": "design.tsv",
+    "separator": "\t",
+    "rotation": "samples x features",
+    "samplename_column": "file",
+    "featurename_column": null
+  },
   "cohorts": [
     {
       "name": "lab1",
-      "folder": "lab1",
-      "datafile": "design.tsv"
+      "folder": "lab1"
     },
     {
       "name": "lab2",
-      "folder": "lab2",
-      "datafile": "design.tsv"
+      "folder": "lab2"
     },
     {
       "name": "lab3",
-      "folder": "lab3",
-      "datafile": "design.tsv"
+      "folder": "lab3"
     }
-  ],
-  "csv_separator": "\t"
+  ]
 }
