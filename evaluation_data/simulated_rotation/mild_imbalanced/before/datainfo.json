@@ -1,0 +1,23 @@
+{
+  "covariate": "condition",
+  "rotation": "features x samples",
+  "samplename_column": null,
+  "featurename_column": "index",
+  "cohorts": [
+    {
+      "name": "lab1",
+      "folder": "lab1",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "lab2",
+      "folder": "lab2",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "lab3",
+      "folder": "lab3",
+      "datafile": "design.tsv"
+    }
+  ]
+}

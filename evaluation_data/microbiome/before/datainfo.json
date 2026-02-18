@@ -1,0 +1,38 @@
+{
+  "covariate": "CRC",
+  "rotation": "samples x features",
+  "samplename_column": "sample",
+  "featurename_column": null,
+  "cohorts": [
+    {
+      "name": "China1",
+      "folder": "China1",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "China3",
+      "folder": "China3",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "China5",
+      "folder": "China5",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "France1",
+      "folder": "France1",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "Germany1",
+      "folder": "Germany1",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "Germany2",
+      "folder": "Germany2",
+      "datafile": "design.tsv"
+    }
+  ]
+}

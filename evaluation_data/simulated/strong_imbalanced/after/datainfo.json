@@ -1,0 +1,23 @@
+{
+  "covariate": "condition",
+  "rotation": "samples x features",
+  "samplename_column": "file",
+  "featurename_column": null,
+  "cohorts": [
+    {
+      "name": "lab1",
+      "folder": "individual_results/lab1",
+      "datafile": "data.csv"
+    },
+    {
+      "name": "lab2",
+      "folder": "individual_results/lab2",
+      "datafile": "data.csv"
+    },
+    {
+      "name": "lab3",
+      "folder": "individual_results/lab3",
+      "datafile": "data.csv"
+    }
+  ]
+}

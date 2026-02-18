@@ -1,0 +1,23 @@
+{
+  "covariate": "Pyr",
+  "rotation": "features x samples",
+  "samplename_column": null,
+  "featurename_column": "index",
+  "cohorts": [
+    {
+      "name": "center1",
+      "folder": "individual_results/center1",
+      "datafile": "TODO: add filename"
+    },
+    {
+      "name": "center2",
+      "folder": "individual_results/center2",
+      "datafile": "TODO: add filename"
+    },
+    {
+      "name": "center3",
+      "folder": "individual_results/center3",
+      "datafile": "TODO: add filename"
+    }
+  ]
+}

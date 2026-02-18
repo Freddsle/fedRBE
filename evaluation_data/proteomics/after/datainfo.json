@@ -1,0 +1,33 @@
+{
+  "covariate": "Pyr",
+  "rotation": "samples x features",
+  "samplename_column": "file",
+  "featurename_column": null,
+  "cohorts": [
+    {
+      "name": "lab_A",
+      "folder": "individual_results/lab_A",
+      "datafile": "data.csv"
+    },
+    {
+      "name": "lab_B",
+      "folder": "individual_results/lab_B",
+      "datafile": "data.csv"
+    },
+    {
+      "name": "lab_C",
+      "folder": "individual_results/lab_C",
+      "datafile": "data.csv"
+    },
+    {
+      "name": "lab_D",
+      "folder": "individual_results/lab_D",
+      "datafile": "data.csv"
+    },
+    {
+      "name": "lab_E",
+      "folder": "individual_results/lab_E",
+      "datafile": "data.csv"
+    }
+  ]
+}

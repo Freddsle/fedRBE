@@ -1,0 +1,23 @@
+{
+  "covariate": "Pyr",
+  "rotation": "features x samples",
+  "samplename_column": null,
+  "featurename_column": "index",
+  "cohorts": [
+    {
+      "name": "center1",
+      "folder": "center1",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "center2",
+      "folder": "center2",
+      "datafile": "design.tsv"
+    },
+    {
+      "name": "center3",
+      "folder": "center3",
+      "datafile": "design.tsv"
+    }
+  ]
+}
