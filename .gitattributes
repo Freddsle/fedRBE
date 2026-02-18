@@ -1,0 +1,2 @@
+evaluation_data/simulated/balanced/after/individual_results/**/*.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/simulated/balanced/after/individual_results/**/*.txt filter=lfs diff=lfs merge=lfs -text
