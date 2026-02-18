@@ -126,8 +126,9 @@ In summary, you need two main inputs and one optional file:
 
 Output files include:
 - **Corrected Data**: The batch-corrected data in the same format as the input.
+- **Corrected Data with covariates**: As the covariates aren't corrected, there is seperate output
+containing the corrected data as well as the covariate information.
 - **Report**: A summary of the correction process and results.
-
 
 ---
 
@@ -172,9 +173,8 @@ Steps to Reproduce:
 
 1. **Ensure Prerequisites are Met**:
    - Docker installed
-   - FeatureCloud CLI installed and running (`featurecloud controller start`)
+   - Install necessary dependencies (`requirements.txt` and `requirements_r.txt`)
    - `fedRBE` app built or pulled as per the [Installation](#installation) section
-   - Install necessary dependencies.
 
 2. **Run the Federated Batch Effect Removal**:
    ```bash

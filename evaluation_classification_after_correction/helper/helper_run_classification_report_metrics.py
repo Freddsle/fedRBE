@@ -11,7 +11,30 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import matthews_corrcoef, f1_score
 
 SCRIPT_FOLDER = Path(__file__).parent
-DEFAULT_RESULTFILE = SCRIPT_FOLDER / "classification_metric_report.csv"
+RESULTS_FOLDER = SCRIPT_FOLDER.parent / "results"
+RESULTS_FOLDER.mkdir(exist_ok=True)
+DEFAULT_RESULTFILE = RESULTS_FOLDER / "classification_metric_report.csv"
+
+# TODO: add as a base var the forest config and always add it to the relevant folder before execution
+# could also extend run_simulation_native to contain two parameters
+# for config file name and config file content (list of dict?)
+'''
+simple_forest:
+  bootstrap: true
+  csv_seperator: ','
+  data_filename: data.csv
+  features_as_columns: true
+  max_depth: 10
+  max_features: sqrt
+  max_samples: 0.75
+  min_samples_leaf: 1
+  min_samples_split: 2
+  num_estimators_total: 100
+  predicted_feature_name: HGSC
+  random_state: 42
+  sample_col: 0
+  train_test_ratio: 1.0
+'''
 
 def create_append_row_resultfile(resultfile: Path,
                                  data_name:str,
@@ -65,7 +88,11 @@ class ClassificationExperimentLeaveOneCohortOut:
         self.input_folders = [Path(f) for f in input_folders]
         self.output_base_folder = Path(output_base_folder)
         self.predicted_column = predicted_column
-        self.resultfile = resultfile
+        # Ensure results are always written to the results folder
+        if resultfile == SCRIPT_FOLDER.parent / "classification_metric_report.csv":
+            self.resultfile = RESULTS_FOLDER / "classification_metric_report.csv"
+        else:
+            self.resultfile = resultfile
 
     def run_experiment(self, seed: int):
         num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
@@ -198,7 +225,11 @@ class ClassificationExperimentTrainTestSplit:
         self.input_folders = [Path(f) for f in input_folders]
         self.output_base_folder = Path(output_base_folder)
         self.train_test_ratio = train_test_ratio
-        self.resultfile = resultfile
+        # Ensure results are always written to the results folder
+        if resultfile == SCRIPT_FOLDER.parent / "classification_metric_report.csv":
+            self.resultfile = RESULTS_FOLDER / "classification_metric_report.csv"
+        else:
+            self.resultfile = resultfile
 
     def run_experiment(self, seed: int):
         num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5

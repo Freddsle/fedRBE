@@ -3,14 +3,18 @@ Runs a federated random forest classification on batch effect and non batch effe
 data and compares the results. Uses a native simulation approach.
 """
 from pathlib import Path
-from helper_run_classification_report_metrics import ClassificationExperimentLeaveOneCohortOut
+from evaluation_classification_after_correction.helper.helper_run_classification_report_metrics import ClassificationExperimentLeaveOneCohortOut
 
 SCRIPT_FOLDER = Path(__file__).parent
 EVALUATION_DATA_FOLDER = SCRIPT_FOLDER.parent / "evaluation_data"
 NUM_RUNS = 10
 
+RESULTS_FILE = SCRIPT_FOLDER / "results" / "classification_metric_report.csv"
+
 for num_run in range(NUM_RUNS):
     seed = 42 + num_run
+
+    # SIMULATED
     # Balanced Simulated Data
     folder_balanced = EVALUATION_DATA_FOLDER / "simulated" / "balanced"
     experiment_balanced_uncorrected = ClassificationExperimentLeaveOneCohortOut(
@@ -22,7 +26,8 @@ for num_run in range(NUM_RUNS):
             str(folder_balanced / "before" / "lab3"),
         ],
         output_base_folder= str(folder_balanced / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        resultfile=RESULTS_FILE
     )
 
     experiment_balanced_corrected = ClassificationExperimentLeaveOneCohortOut(
@@ -34,11 +39,11 @@ for num_run in range(NUM_RUNS):
             str(folder_balanced / "after" / "individual_results" / "lab3"),
         ],
         output_base_folder= str(folder_balanced / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        resultfile=RESULTS_FILE
     )
     experiment_balanced_uncorrected.run_experiment(seed=seed)
     experiment_balanced_corrected.run_experiment(seed=seed)
-
 
     # Mildly Imbalanced Simulated Data
     folder_mildly_imbalanced = EVALUATION_DATA_FOLDER / "simulated" / "mild_imbalanced"
@@ -89,6 +94,90 @@ for num_run in range(NUM_RUNS):
             str(folder_strongly_imbalanced / "after" / "individual_results" / "lab3"),
         ],
         output_base_folder= str(folder_strongly_imbalanced / "after" / "individual_results"),
+        predicted_column="condition"
+    )
+    experiment_strongly_imbalanced_uncorrected.run_experiment(seed=seed)
+    experiment_strongly_imbalanced_corrected.run_experiment(seed=seed)
+
+    # ROTATIONAL SIMULATED
+    # Balanced Simulated Data (rotation)
+    folder_balanced_rotation = EVALUATION_DATA_FOLDER / "simulated_rotation" / "balanced"
+    experiment_balanced_uncorrected = ClassificationExperimentLeaveOneCohortOut(
+        data_name = "Balanced Simulated Data (Rotational Batch Effect)",
+        preprocessing_name="uncorrected",
+        input_folders=[
+            str(folder_balanced_rotation / "before" / "lab1"),
+            str(folder_balanced_rotation / "before" / "lab2"),
+            str(folder_balanced_rotation / "before" / "lab3"),
+        ],
+        output_base_folder= str(folder_balanced_rotation / "after" / "individual_results"),
+        predicted_column="condition"
+    )
+
+    experiment_balanced_corrected = ClassificationExperimentLeaveOneCohortOut(
+        data_name = "Balanced Simulated Data (Rotational Batch Effect)",
+        preprocessing_name="corrected",
+        input_folders=[
+            str(folder_balanced_rotation / "after" / "individual_results" / "lab1"),
+            str(folder_balanced_rotation / "after" / "individual_results" / "lab2"),
+            str(folder_balanced_rotation / "after" / "individual_results" / "lab3"),
+        ],
+        output_base_folder= str(folder_balanced_rotation / "after" / "individual_results"),
+        predicted_column="condition"
+    )
+    experiment_balanced_uncorrected.run_experiment(seed=seed)
+    experiment_balanced_corrected.run_experiment(seed=seed)
+
+
+    # Mildly Imbalanced Simulated Data
+    folder_mildly_imbalanced_rotation = EVALUATION_DATA_FOLDER / "simulated_rotation" / "mild_imbalanced"
+    experiment_mildly_imbalanced_uncorrected = ClassificationExperimentLeaveOneCohortOut(
+        data_name = "Mildly Imbalanced Simulated Data (Rotational Batch Effect)",
+        preprocessing_name="uncorrected",
+        input_folders=[
+            str(folder_mildly_imbalanced_rotation / "before" / "lab1"),
+            str(folder_mildly_imbalanced_rotation / "before" / "lab2"),
+            str(folder_mildly_imbalanced_rotation / "before" / "lab3"),
+        ],
+        output_base_folder= str(folder_mildly_imbalanced_rotation / "after" / "individual_results"),
+        predicted_column="condition"
+    )
+    experiment_mildly_imbalanced_corrected = ClassificationExperimentLeaveOneCohortOut(
+        data_name = "Mildly Imbalanced Simulated Data (Rotational Batch Effect)",
+        preprocessing_name="corrected",
+        input_folders=[
+            str(folder_mildly_imbalanced_rotation / "after" / "individual_results" / "lab1"),
+            str(folder_mildly_imbalanced_rotation / "after" / "individual_results" / "lab2"),
+            str(folder_mildly_imbalanced_rotation / "after" / "individual_results" / "lab3"),
+        ],
+        output_base_folder= str(folder_mildly_imbalanced_rotation / "after" / "individual_results"),
+        predicted_column="condition"
+    )
+    experiment_mildly_imbalanced_uncorrected.run_experiment(seed=seed)
+    experiment_mildly_imbalanced_corrected.run_experiment(seed=seed)
+
+    # Strong Imbalanced Simulated Data
+    folder_strongly_imbalanced_rotation = EVALUATION_DATA_FOLDER / "simulated_rotation" / "strong_imbalanced"
+    experiment_strongly_imbalanced_uncorrected = ClassificationExperimentLeaveOneCohortOut(
+        data_name = "Strongly Imbalanced Simulated Data (Rotational Batch Effect)",
+        preprocessing_name="uncorrected",
+        input_folders=[
+            str(folder_strongly_imbalanced_rotation / "before" / "lab1"),
+            str(folder_strongly_imbalanced_rotation / "before" / "lab2"),
+            str(folder_strongly_imbalanced_rotation / "before" / "lab3"),
+        ],
+        output_base_folder= str(folder_strongly_imbalanced_rotation / "after" / "individual_results"),
+        predicted_column="condition"
+    )
+    experiment_strongly_imbalanced_corrected = ClassificationExperimentLeaveOneCohortOut(
+        data_name = "Strongly Imbalanced Simulated Data (Rotational Batch Effect)",
+        preprocessing_name="corrected",
+        input_folders=[
+            str(folder_strongly_imbalanced_rotation / "after" / "individual_results" / "lab1"),
+            str(folder_strongly_imbalanced_rotation / "after" / "individual_results" / "lab2"),
+            str(folder_strongly_imbalanced_rotation / "after" / "individual_results" / "lab3"),
+        ],
+        output_base_folder= str(folder_strongly_imbalanced_rotation / "after" / "individual_results"),
         predicted_column="condition"
     )
     experiment_strongly_imbalanced_uncorrected.run_experiment(seed=seed)
