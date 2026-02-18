@@ -17,27 +17,27 @@
   "cohorts": [
     {
       "name": "GSE14407",
-      "folder": "individual_results/GSE14407"
+      "folder": "GSE14407"
     },
     {
       "name": "GSE26712",
-      "folder": "individual_results/GSE26712"
+      "folder": "GSE26712"
     },
     {
       "name": "GSE38666",
-      "folder": "individual_results/GSE38666"
+      "folder": "GSE38666"
     },
     {
       "name": "GSE40595",
-      "folder": "individual_results/GSE40595"
+      "folder": "GSE40595"
     },
     {
       "name": "GSE6008",
-      "folder": "individual_results/GSE6008"
+      "folder": "GSE6008"
     },
     {
       "name": "GSE69428",
-      "folder": "individual_results/GSE69428"
+      "folder": "GSE69428"
     }
   ]
 }
