@@ -34,5 +34,6 @@
       "folder": "individual_results/GSE69428",
       "datafile": "data.csv"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

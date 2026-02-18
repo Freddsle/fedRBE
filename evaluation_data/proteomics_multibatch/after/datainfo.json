@@ -19,5 +19,6 @@
       "folder": "individual_results/center3",
       "datafile": "TODO: add filename"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

@@ -29,5 +29,6 @@
       "folder": "lab_E",
       "datafile": "design.tsv"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

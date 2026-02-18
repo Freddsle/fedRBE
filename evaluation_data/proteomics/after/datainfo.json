@@ -29,5 +29,6 @@
       "folder": "individual_results/lab_E",
       "datafile": "data.csv"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

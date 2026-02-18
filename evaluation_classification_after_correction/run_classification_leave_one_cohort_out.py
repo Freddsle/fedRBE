@@ -27,6 +27,7 @@ for num_run in range(NUM_RUNS):
         ],
         output_base_folder= str(folder_balanced / "after" / "individual_results"),
         predicted_column="condition",
+        datainfo_file=str(folder_balanced / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE
     )
 
@@ -40,6 +41,7 @@ for num_run in range(NUM_RUNS):
         ],
         output_base_folder= str(folder_balanced / "after" / "individual_results"),
         predicted_column="condition",
+        datainfo_file=str(folder_balanced / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE
     )
     experiment_balanced_uncorrected.run_experiment(seed=seed)
@@ -56,7 +58,8 @@ for num_run in range(NUM_RUNS):
             str(folder_mildly_imbalanced / "before" / "lab3"),
         ],
         output_base_folder= str(folder_mildly_imbalanced / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_mildly_imbalanced / "before" / "datainfo.json"),
     )
     experiment_mildly_imbalanced_corrected = ClassificationExperimentLeaveOneCohortOut(
         data_name = "Mildly Imbalanced Simulated Data",
@@ -67,7 +70,8 @@ for num_run in range(NUM_RUNS):
             str(folder_mildly_imbalanced / "after" / "individual_results" / "lab3"),
         ],
         output_base_folder= str(folder_mildly_imbalanced / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_mildly_imbalanced / "after" / "datainfo.json"),
     )
     experiment_mildly_imbalanced_uncorrected.run_experiment(seed=seed)
     experiment_mildly_imbalanced_corrected.run_experiment(seed=seed)
@@ -83,7 +87,8 @@ for num_run in range(NUM_RUNS):
             str(folder_strongly_imbalanced / "before" / "lab3"),
         ],
         output_base_folder= str(folder_strongly_imbalanced / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_strongly_imbalanced / "before" / "datainfo.json"),
     )
     experiment_strongly_imbalanced_corrected = ClassificationExperimentLeaveOneCohortOut(
         data_name = "Strongly Imbalanced Simulated Data",
@@ -94,7 +99,8 @@ for num_run in range(NUM_RUNS):
             str(folder_strongly_imbalanced / "after" / "individual_results" / "lab3"),
         ],
         output_base_folder= str(folder_strongly_imbalanced / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_strongly_imbalanced / "after" / "datainfo.json"),
     )
     experiment_strongly_imbalanced_uncorrected.run_experiment(seed=seed)
     experiment_strongly_imbalanced_corrected.run_experiment(seed=seed)
@@ -111,7 +117,8 @@ for num_run in range(NUM_RUNS):
             str(folder_balanced_rotation / "before" / "lab3"),
         ],
         output_base_folder= str(folder_balanced_rotation / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_balanced_rotation / "before" / "datainfo.json"),
     )
 
     experiment_balanced_corrected = ClassificationExperimentLeaveOneCohortOut(
@@ -123,7 +130,8 @@ for num_run in range(NUM_RUNS):
             str(folder_balanced_rotation / "after" / "individual_results" / "lab3"),
         ],
         output_base_folder= str(folder_balanced_rotation / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_balanced_rotation / "after" / "datainfo.json"),
     )
     experiment_balanced_uncorrected.run_experiment(seed=seed)
     experiment_balanced_corrected.run_experiment(seed=seed)
@@ -140,7 +148,8 @@ for num_run in range(NUM_RUNS):
             str(folder_mildly_imbalanced_rotation / "before" / "lab3"),
         ],
         output_base_folder= str(folder_mildly_imbalanced_rotation / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_mildly_imbalanced_rotation / "before" / "datainfo.json"),
     )
     experiment_mildly_imbalanced_corrected = ClassificationExperimentLeaveOneCohortOut(
         data_name = "Mildly Imbalanced Simulated Data (Rotational Batch Effect)",
@@ -151,7 +160,8 @@ for num_run in range(NUM_RUNS):
             str(folder_mildly_imbalanced_rotation / "after" / "individual_results" / "lab3"),
         ],
         output_base_folder= str(folder_mildly_imbalanced_rotation / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_mildly_imbalanced_rotation / "after" / "datainfo.json"),
     )
     experiment_mildly_imbalanced_uncorrected.run_experiment(seed=seed)
     experiment_mildly_imbalanced_corrected.run_experiment(seed=seed)
@@ -167,7 +177,8 @@ for num_run in range(NUM_RUNS):
             str(folder_strongly_imbalanced_rotation / "before" / "lab3"),
         ],
         output_base_folder= str(folder_strongly_imbalanced_rotation / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_strongly_imbalanced_rotation / "before" / "datainfo.json"),
     )
     experiment_strongly_imbalanced_corrected = ClassificationExperimentLeaveOneCohortOut(
         data_name = "Strongly Imbalanced Simulated Data (Rotational Batch Effect)",
@@ -178,7 +189,8 @@ for num_run in range(NUM_RUNS):
             str(folder_strongly_imbalanced_rotation / "after" / "individual_results" / "lab3"),
         ],
         output_base_folder= str(folder_strongly_imbalanced_rotation / "after" / "individual_results"),
-        predicted_column="condition"
+        predicted_column="condition",
+        datainfo_file=str(folder_strongly_imbalanced_rotation / "after" / "datainfo.json"),
     )
     experiment_strongly_imbalanced_uncorrected.run_experiment(seed=seed)
     experiment_strongly_imbalanced_corrected.run_experiment(seed=seed)
@@ -196,7 +208,8 @@ for num_run in range(NUM_RUNS):
             str(folder_proteomics / "before" / "lab_E"),
         ],
         output_base_folder= str(folder_proteomics / "after" / "individual_results"),
-        predicted_column="Pyr"
+        predicted_column="Pyr",
+        datainfo_file=str(folder_proteomics / "before" / "datainfo.json"),
     )
     experiment_proteomics_corrected = ClassificationExperimentLeaveOneCohortOut(
         data_name = "Proteomics Data",
@@ -209,7 +222,8 @@ for num_run in range(NUM_RUNS):
             str(folder_proteomics / "after" / "individual_results" / "lab_E"),
         ],
         output_base_folder= str(folder_proteomics / "after" / "individual_results"),
-        predicted_column="Pyr"
+        predicted_column="Pyr",
+        datainfo_file=str(folder_proteomics / "after" / "datainfo.json"),
     )
     experiment_proteomics_uncorrected.run_experiment(seed=seed)
     experiment_proteomics_corrected.run_experiment(seed=seed)
@@ -228,7 +242,8 @@ for num_run in range(NUM_RUNS):
             str(folder_microarray / "before" / "GSE69428"),
         ],
         output_base_folder= str(folder_microarray / "after" / "individual_results"),
-        predicted_column="HGSC"
+        predicted_column="HGSC",
+        datainfo_file=str(folder_microarray / "before" / "datainfo.json"),
     )
     experiment_microarray_corrected = ClassificationExperimentLeaveOneCohortOut(
         data_name = "Microarray Data",
@@ -242,7 +257,8 @@ for num_run in range(NUM_RUNS):
             str(folder_microarray / "after" / "individual_results" / "GSE69428"),
         ],
         output_base_folder= str(folder_microarray / "after" / "individual_results"),
-        predicted_column="HGSC"
+        predicted_column="HGSC",
+        datainfo_file=str(folder_microarray / "after" / "datainfo.json"),
     )
     experiment_microarray_uncorrected.run_experiment(seed=seed)
     experiment_microarray_corrected.run_experiment(seed=seed)
@@ -261,7 +277,8 @@ for num_run in range(NUM_RUNS):
             str(folder_microbiome / "before" / "Germany2"),
         ],
         output_base_folder= str(folder_microbiome / "after" / "individual_results"),
-        predicted_column="CRC"
+        predicted_column="CRC",
+        datainfo_file=str(folder_microbiome / "before" / "datainfo.json"),
     )
     experiment_microbiome_corrected = ClassificationExperimentLeaveOneCohortOut(
         data_name = "Microbiome Data",
@@ -275,7 +292,8 @@ for num_run in range(NUM_RUNS):
             str(folder_microbiome / "after" / "individual_results" / "Germany2"),
         ],
         output_base_folder= str(folder_microbiome / "after" / "individual_results"),
-        predicted_column="CRC"
+        predicted_column="CRC",
+        datainfo_file=str(folder_microbiome / "after" / "datainfo.json"),
     )
     experiment_microbiome_uncorrected.run_experiment(seed=seed)
     experiment_microbiome_corrected.run_experiment(seed=seed)

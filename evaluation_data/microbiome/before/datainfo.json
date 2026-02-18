@@ -34,5 +34,6 @@
       "folder": "Germany2",
       "datafile": "design.tsv"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

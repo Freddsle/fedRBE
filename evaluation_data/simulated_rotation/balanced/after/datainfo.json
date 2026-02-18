@@ -19,5 +19,6 @@
       "folder": "individual_results/lab3_Balanced Simulated Data (Rotational Batch Effect)corrected",
       "datafile": "TODO: add filename"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

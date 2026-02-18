@@ -34,5 +34,6 @@
       "folder": "GSE69428",
       "datafile": "design.tsv"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

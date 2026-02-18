@@ -19,5 +19,6 @@
       "folder": "individual_results/lab3",
       "datafile": "full_corrected_data.csv"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

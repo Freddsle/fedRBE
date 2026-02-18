@@ -1,5 +1,7 @@
-from typing import List
+from typing import List, Optional
 from pathlib import Path
+import copy
+import json
 
 from fc_fed_forest_simple_app.fedForestSimple import main
 from fc_fed_forest_simple_app.fc_fedlearnsim_helper.run_app_simulation import run_simulation_native
@@ -15,26 +17,67 @@ RESULTS_FOLDER = SCRIPT_FOLDER.parent / "results"
 RESULTS_FOLDER.mkdir(exist_ok=True)
 DEFAULT_RESULTFILE = RESULTS_FOLDER / "classification_metric_report.csv"
 
-# TODO: add as a base var the forest config and always add it to the relevant folder before execution
-# could also extend run_simulation_native to contain two parameters
-# for config file name and config file content (list of dict?)
-'''
-simple_forest:
-  bootstrap: true
-  csv_seperator: ','
-  data_filename: data.csv
-  features_as_columns: true
-  max_depth: 10
-  max_features: sqrt
-  max_samples: 0.75
-  min_samples_leaf: 1
-  min_samples_split: 2
-  num_estimators_total: 100
-  predicted_feature_name: HGSC
-  random_state: 42
-  sample_col: 0
-  train_test_ratio: 1.0
-'''
+BASE_FOREST_CONFIG = {
+    'simple_forest': {
+        'bootstrap': True,
+        'csv_seperator': ',',
+        'data_filename': 'data.csv',
+        'features_as_columns': True,
+        'max_depth': 10,
+        'max_features': 'sqrt',
+        'max_samples': 0.75,
+        'min_samples_leaf': 1,
+        'min_samples_split': 2,
+        'num_estimators_total': 100,
+        'predicted_feature_name': 'label',
+        'random_state': 42,
+        'sample_col': 0,
+        'train_test_ratio': 1.0,
+    }
+}
+
+
+def _build_forest_config(datainfo_file: Optional[Path],
+                          seed: int,
+                          train_test_ratio: float) -> dict:
+    """
+    Builds a forest config dict from the base config, overriding values derived
+    from an optional datainfo JSON file.
+
+    Fields read from datainfo.json:
+      - covariate          → predicted_feature_name
+      - rotation           → features_as_columns  ("samples x features" → True)
+      - csv_separator      → csv_seperator  (optional, falls back to ',')
+      - cohorts[0].datafile → data_filename
+    """
+    config = copy.deepcopy(BASE_FOREST_CONFIG)
+    sf = config['simple_forest']
+    if datainfo_file is not None and datainfo_file.exists():
+        with open(datainfo_file, 'r') as f:
+            datainfo = json.load(f)
+        if 'covariate' in datainfo:
+            sf['predicted_feature_name'] = datainfo['covariate']
+        if 'rotation' in datainfo:
+            sf['features_as_columns'] = 'samples x features' in datainfo['rotation']
+        if 'csv_separator' in datainfo:
+            sf['csv_seperator'] = datainfo['csv_separator']
+        cohorts = datainfo.get('cohorts', [])
+        if cohorts and 'datafile' in cohorts[0]:
+            sf['data_filename'] = cohorts[0]['datafile']
+    sf['random_state'] = seed
+    sf['train_test_ratio'] = train_test_ratio
+    return config
+
+
+def _write_forest_config(client_folder: Path,
+                          datainfo_file: Optional[Path],
+                          seed: int,
+                          train_test_ratio: float) -> None:
+    """Writes (or overwrites) config_forest.yaml in the given client folder."""
+    config = _build_forest_config(datainfo_file, seed, train_test_ratio)
+    config_forest_path = client_folder / 'config_forest.yaml'
+    with open(config_forest_path, 'w') as f:
+        yaml.safe_dump(config, f)
 
 def create_append_row_resultfile(resultfile: Path,
                                  data_name:str,
@@ -78,16 +121,19 @@ class ClassificationExperimentLeaveOneCohortOut:
     output_base_folder: Path # where to write the final metrics (and predictions).
                             # Per simulation run a subfolder will be
     predicted_column: str # The name of the column containing the predicted labels
+    datainfo_file: Optional[Path] # Path to the datainfo.json describing the dataset
     resultfile: Path # The path to the result file to write the classification metrics to
 
     def __init__(self, data_name: str, preprocessing_name: str, input_folders: List[str], output_base_folder: str,
                  predicted_column: str,
+                 datainfo_file: Optional[str] = None,
                  resultfile: Path = DEFAULT_RESULTFILE):
         self.data_name = data_name
         self.preprocessing_name = preprocessing_name
         self.input_folders = [Path(f) for f in input_folders]
         self.output_base_folder = Path(output_base_folder)
         self.predicted_column = predicted_column
+        self.datainfo_file = Path(datainfo_file) if datainfo_file is not None else None
         # Ensure results are always written to the results folder
         if resultfile == SCRIPT_FOLDER.parent / "classification_metric_report.csv":
             self.resultfile = RESULTS_FOLDER / "classification_metric_report.csv"
@@ -111,17 +157,7 @@ class ClassificationExperimentLeaveOneCohortOut:
                 out_path.mkdir(parents=True, exist_ok=True)
             # overwrite the train_test_ratio of the config_forest.yaml files to 1.0 (use all data for training)
             for client_folder in run_input_folders:
-                config_forest_path = client_folder / 'config_forest.yaml'
-                if config_forest_path.exists():
-                    with open(config_forest_path, 'r') as f:
-                        config_forest = yaml.safe_load(f)
-                    config_forest['simple_forest']['train_test_ratio'] = 1.0
-                    config_forest['simple_forest']['random_state'] = seed
-                    with open(config_forest_path, 'w') as f:
-                        yaml.safe_dump(config_forest, f)
-                else:
-                    print(f"ERROR: config_forest.yaml not found in {client_folder}. Skipping.")
-                    return
+                _write_forest_config(client_folder, self.datainfo_file, seed, train_test_ratio=1.0)
             run_simulation_native(clientpaths=[str(f) for f in run_input_folders],
                                   outputfolders=output_folders,
                                   generic_dir=None,
@@ -215,16 +251,20 @@ class ClassificationExperimentTrainTestSplit:
     output_base_folder: Path # where to write the final metrics (and predictions).
                             # Per simulation run a subfolder will be
     train_test_ratio: float = 0.8 # The train test split ratio to use
+    datainfo_file: Optional[Path] # Path to the datainfo.json describing the dataset
     resultfile: Path # The path to the result file to write the classification metrics to
 
     def __init__(self, data_name: str, preprocessing_name: str,
                  input_folders: List[str], output_base_folder: str,
-                  train_test_ratio: float = 0.8, resultfile: Path = DEFAULT_RESULTFILE):
+                  train_test_ratio: float = 0.8,
+                  datainfo_file: Optional[str] = None,
+                  resultfile: Path = DEFAULT_RESULTFILE):
         self.data_name = data_name
         self.preprocessing_name = preprocessing_name
         self.input_folders = [Path(f) for f in input_folders]
         self.output_base_folder = Path(output_base_folder)
         self.train_test_ratio = train_test_ratio
+        self.datainfo_file = Path(datainfo_file) if datainfo_file is not None else None
         # Ensure results are always written to the results folder
         if resultfile == SCRIPT_FOLDER.parent / "classification_metric_report.csv":
             self.resultfile = RESULTS_FOLDER / "classification_metric_report.csv"
@@ -240,20 +280,9 @@ class ClassificationExperimentTrainTestSplit:
         for out_folder in output_folders:
             out_path = Path(out_folder)
             out_path.mkdir(parents=True, exist_ok=True)
-        # overwrite the train_test_ratio of the config_forest.yaml files to 0.8
+        # write config_forest.yaml to each client folder
         for client_folder in self.input_folders:
-            config_forest_path = client_folder / 'config_forest.yaml'
-            #print(f"Setting train_test_ratio to {self.train_test_ratio} in {config_forest_path}")
-            if config_forest_path.exists():
-                with open(config_forest_path, 'r') as f:
-                    config_forest = yaml.safe_load(f)
-                config_forest['simple_forest']['train_test_ratio'] = self.train_test_ratio
-                config_forest['simple_forest']['random_state'] = seed
-                with open(config_forest_path, 'w') as f:
-                    yaml.safe_dump(config_forest, f)
-            else:
-                print(f"ERROR: config_forest.yaml not found in {client_folder}. Skipping.")
-                return
+            _write_forest_config(client_folder, self.datainfo_file, seed, train_test_ratio=self.train_test_ratio)
         run_simulation_native(clientpaths=[str(f) for f in self.input_folders],
                                 outputfolders=output_folders,
                                 generic_dir=None,

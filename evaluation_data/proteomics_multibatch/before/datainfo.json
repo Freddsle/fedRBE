@@ -19,5 +19,6 @@
       "folder": "center3",
       "datafile": "design.tsv"
     }
-  ]
+  ],
+  "csv_separator": ","
 }

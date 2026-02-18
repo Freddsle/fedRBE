@@ -34,5 +34,6 @@
       "folder": "individual_results/Germany2",
       "datafile": "data.csv"
     }
-  ]
+  ],
+  "csv_separator": ","
 }
