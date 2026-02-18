@@ -20,5 +20,5 @@
       "datafile": "full_corrected_data.csv"
     }
   ],
-  "csv_separator": ","
+  "csv_separator": "\t"
 }

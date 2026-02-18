@@ -6,19 +6,19 @@
   "cohorts": [
     {
       "name": "lab1",
-      "folder": "individual_results/lab1_Balanced Simulated Data (Rotational Batch Effect)corrected",
-      "datafile": "TODO: add filename"
+      "folder": "individual_results/lab1",
+      "datafile": "full_corrected_data.csv"
     },
     {
       "name": "lab2",
-      "folder": "individual_results/lab2_Balanced Simulated Data (Rotational Batch Effect)corrected",
-      "datafile": "TODO: add filename"
+      "folder": "individual_results/lab2",
+      "datafile": "full_corrected_data.csv"
     },
     {
       "name": "lab3",
-      "folder": "individual_results/lab3_Balanced Simulated Data (Rotational Batch Effect)corrected",
-      "datafile": "TODO: add filename"
+      "folder": "individual_results/lab3",
+      "datafile": "full_corrected_data.csv"
     }
   ],
-  "csv_separator": ","
+  "csv_separator": "\t"
 }

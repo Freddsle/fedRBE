@@ -20,5 +20,5 @@
       "datafile": "design.tsv"
     }
   ],
-  "csv_separator": ","
+  "csv_separator": "\t"
 }

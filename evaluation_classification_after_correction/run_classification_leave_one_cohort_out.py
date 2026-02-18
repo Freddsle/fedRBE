@@ -3,7 +3,7 @@ Runs a federated random forest classification on batch effect and non batch effe
 data and compares the results. Uses a native simulation approach.
 """
 from pathlib import Path
-from evaluation_classification_after_correction.helper.helper_run_classification_report_metrics import ClassificationExperimentLeaveOneCohortOut
+from helper.helper_run_classification_report_metrics import ClassificationExperimentLeaveOneCohortOut
 
 SCRIPT_FOLDER = Path(__file__).parent
 EVALUATION_DATA_FOLDER = SCRIPT_FOLDER.parent / "evaluation_data"

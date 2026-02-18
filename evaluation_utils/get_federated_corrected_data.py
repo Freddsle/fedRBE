@@ -428,6 +428,15 @@ for exp, result_filename in zip(experiments, result_file_names):
         for cohort in datainfo.get("cohorts", []):
             cohort["folder"] = os.path.join("individual_results", cohort["name"])
             cohort["datafile"] = "full_corrected_data.csv"
+        # full_corrected_data.csv is written by the app using client.separator,
+        # which comes from the experiment's config. Derive it from the first client's
+        # merged config (base + changes) so it is never hardcoded here.
+        client0_config = deepcopy(exp.config_files[0])
+        if exp.config_file_changes:
+            for key, val in exp.config_file_changes[0].get("flimmaBatchCorrection", {}).items():
+                client0_config["flimmaBatchCorrection"][key] = val
+        output_separator = client0_config["flimmaBatchCorrection"].get("separator", "\t")
+        datainfo["csv_separator"] = output_separator
         with open(datainfo_path, "w") as f:
             json.dump(datainfo, f, indent=2)
         print(f"Updated datainfo.json at {datainfo_path}")
