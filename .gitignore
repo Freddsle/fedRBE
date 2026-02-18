@@ -213,3 +213,6 @@ evaluation_data/simulated_rotation/*/before/lab*/config_forest.yaml
 # Classification evaluation: temporary output folders and generated config files
 **/classification_evaluation_output_*/
 evaluation_data/**/config_forest.yaml
+
+# anything with tmp in the name is meant to be temporary
+**/tmp*
