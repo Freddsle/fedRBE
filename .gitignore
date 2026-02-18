@@ -209,3 +209,7 @@ evaluation_data/simulated_rotation/*/before_corrected/lab*/design.tsv
 evaluation_clusterization_after_correction/old/02_clustering.ipynb
 evaluation_data/simulated_rotation/*/after/kmeans_res/
 evaluation_data/simulated_rotation/*/before/lab*/config_forest.yaml
+
+# Classification evaluation: temporary output folders and generated config files
+**/classification_evaluation_output_*/
+evaluation_data/**/config_forest.yaml
