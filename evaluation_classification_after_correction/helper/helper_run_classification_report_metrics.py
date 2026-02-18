@@ -23,7 +23,7 @@ BASE_FOREST_CONFIG = {
     'simple_forest': {
         'bootstrap': True,
         'csv_seperator': ',',
-        'data_filename': 'data.csv',
+        'data_filename': 'tmp_data.csv',
         'features_as_columns': True,
         'max_depth': 10,
         'max_features': 'sqrt',
@@ -192,23 +192,23 @@ class DataInfo:
     def prepare_cohort_data_files(self) -> None:
         """
         For every cohort, load data via :meth:`receive_data` and write a
-        ``data.csv`` (comma-separated, samples × features + covariate) into
+        ``tmp_data.csv`` (comma-separated, samples × features + covariate) into
         the cohort folder so the federated forest app can consume it.
         """
         for cohort in self.cohorts:
             cohort_folder = self._base_folder / cohort.folder
             df = self.receive_data(cohort_folder)
-            df.to_csv(cohort_folder / 'data.csv', sep=',')
+            df.to_csv(cohort_folder / 'tmp_data.csv', sep=',')
 
     def cleanup_cohort_data_files(self,
                                     also_config_forest: bool = False,
                                     output_folders: Optional[List[Path]] = None) -> None:
         """
-        Remove the generated ``data.csv`` from every cohort folder.
+        Remove the generated ``tmp_data.csv`` from every cohort folder.
         Pass ``also_config_forest=True`` to also remove ``config_forest.yaml``.
         Pass ``output_folders`` to also delete those directories entirely.
         """
-        targets = ['data.csv']
+        targets = ['tmp_data.csv']
         if also_config_forest:
             targets.append('config_forest.yaml')
         for cohort in self.cohorts:
@@ -234,14 +234,14 @@ def _write_forest_config(client_folder: Path,
     """
     Write (or overwrite) ``config_forest.yaml`` in *client_folder*.
 
-    The config always references ``data.csv`` (written by
+    The config always references ``tmp_data.csv`` (written by
     :meth:`DataInfo.prepare_cohort_data_files`) with comma separator and
     samples-as-rows orientation.
     """
     config = copy.deepcopy(BASE_FOREST_CONFIG)
     sf = config['simple_forest']
     sf['predicted_feature_name'] = covariate
-    sf['data_filename'] = 'data.csv'
+    sf['data_filename'] = 'tmp_data.csv'
     sf['features_as_columns'] = True
     sf['csv_seperator'] = ','
     sf['random_state'] = seed
@@ -300,7 +300,7 @@ class ClassificationExperimentLeaveOneCohortOut:
 
     Per-cohort output folders are placed next to the cohort folders::
 
-        <cohorts_parent>/classification_evaluation_output_<cohort_name>/
+        <cohorts_parent>/tmp_classification_evaluation_output_<cohort_name>/
     """
 
     data_name: str
@@ -340,9 +340,9 @@ class ClassificationExperimentLeaveOneCohortOut:
             train_names = [n for j, n in enumerate(cohort_names) if j != i]
 
             # Coordinator output is the first element; others are sibling folders
-            eval_base = cohorts_parent / f"classification_evaluation_output_{test_name}"
+            eval_base = cohorts_parent / f"tmp_classification_evaluation_output_{test_name}"
             output_folders = [str(eval_base)] + [
-                str(cohorts_parent / f"classification_evaluation_output_{test_name}_{name}")
+                str(cohorts_parent / f"tmp_classification_evaluation_output_{test_name}_{name}")
                 for name in train_names[1:]
             ]
             for out_folder in output_folders:
@@ -369,8 +369,8 @@ class ClassificationExperimentLeaveOneCohortOut:
             with open(coordinator_output_folder / 'model_info.yaml', 'r') as f:
                 model_info = yaml.safe_load(f)
 
-            # Load test data from the prepared data.csv
-            test_data_path = test_folder / 'data.csv'
+            # Load test data from the prepared tmp_data.csv
+            test_data_path = test_folder / 'tmp_data.csv'
             if not test_data_path.exists():
                 print(f"Test data not found in {test_data_path}. Skipping evaluation for {test_name}.")
                 continue
@@ -428,10 +428,10 @@ class ClassificationExperimentLeaveOneCohortOut:
         all_output_folders: List[Path] = []
         for i, test_name in enumerate(cohort_names):
             train_names = [n for j, n in enumerate(cohort_names) if j != i]
-            all_output_folders.append(cohorts_parent / f"classification_evaluation_output_{test_name}")
+            all_output_folders.append(cohorts_parent / f"tmp_classification_evaluation_output_{test_name}")
             for name in train_names[1:]:
                 all_output_folders.append(
-                    cohorts_parent / f"classification_evaluation_output_{test_name}_{name}"
+                    cohorts_parent / f"tmp_classification_evaluation_output_{test_name}_{name}"
                 )
         self.datainfo.cleanup_cohort_data_files(also_config_forest=True,
                                                 output_folders=all_output_folders)
@@ -453,7 +453,7 @@ class ClassificationExperimentTrainTestSplit:
 
     Per-cohort output folders are placed next to the cohort folders::
 
-        <cohorts_parent>/classification_evaluation_output_<cohort_name>/
+        <cohorts_parent>/tmp_classification_evaluation_output_<cohort_name>/
     """
 
     data_name: str
@@ -485,7 +485,7 @@ class ClassificationExperimentTrainTestSplit:
         cohorts_parent = cohort_folders[0].parent
 
         output_folders = [
-            str(cohorts_parent / f"classification_evaluation_output_{name}")
+            str(cohorts_parent / f"tmp_classification_evaluation_output_{name}")
             for name in cohort_names
         ]
         for out_folder in output_folders:
