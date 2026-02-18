@@ -216,8 +216,8 @@ class IncludeCorrectionState(AppState):
         print(f"DEBUG: Shape of corrected data: {client.data_corrected.shape}")
         client.data_corrected.to_csv(os.path.join(os.getcwd(), "mnt", "output", "only_batch_corrected_data.csv"),
                                      sep=self.load("separator"))
-        # client.data_corrected_and_raw.to_csv(os.path.join(os.getcwd(), "mnt", "output", "all_data.csv"),
-        #                              sep=self.load("separator"))
+        client.full_corrected_data.to_csv(os.path.join(os.getcwd(), "mnt", "output", "full_corrected_data.csv"),
+                                          sep=self.load("separator"))
         with open(os.path.join(os.getcwd(), "mnt", "output", "report.txt"), "w") as f:
             f.write(client.report)
         return 'terminal'
