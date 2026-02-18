@@ -192,7 +192,7 @@ add_position_to_config(simulated_rotation_strongly_imbalanced_experiment)
 microbiomev2_config_file_changes = {
     "flimmaBatchCorrection": {
         "data_filename": "UQnorm_log_counts_for_corr.tsv",
-        "design_filename": "design_5C.tsv",
+        "design_filename": "design.tsv",
         "covariates": ["CRC"]
     }
 }

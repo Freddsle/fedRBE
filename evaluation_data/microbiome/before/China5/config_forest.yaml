@@ -12,4 +12,4 @@ simple_forest:
   predicted_feature_name: CRC
   random_state: 42
   sample_col: null
-  train_test_ratio: 1.0
+  train_test_ratio: 0.8

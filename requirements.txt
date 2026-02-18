@@ -3,4 +3,4 @@ ipykernel
 pandas
 matplotlib
 seaborn
-featurecloud==0.1.0
+featurecloud
