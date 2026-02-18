@@ -1,6 +1,6 @@
 {
   "covariate": "condition",
-  "rotation": "samples x features",
+  "rotation": "features x samples",
   "samplename_column": "file",
   "featurename_column": null,
   "cohorts": [
@@ -19,6 +19,5 @@
       "folder": "individual_results/lab3",
       "datafile": "full_corrected_data.csv"
     }
-  ],
-  "csv_separator": "\t"
+  ]
 }
