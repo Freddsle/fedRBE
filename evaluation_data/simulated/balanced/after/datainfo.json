@@ -1,8 +1,13 @@
 {
-  "covariate": "condition",
-  "rotation": "features x samples",
-  "samplename_column": "file",
-  "featurename_column": null,
+  "covariate": "A",
+  "datafile": {
+    "filename": "full_corrected_data.csv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": null
+  },
+  "designfile": null,
   "cohorts": [
     {
       "name": "lab1",
@@ -19,5 +24,6 @@
       "folder": "individual_results/lab3",
       "datafile": "full_corrected_data.csv"
     }
-  ]
+  ],
+  "csv_separator": "\t"
 }
