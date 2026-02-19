@@ -294,7 +294,7 @@ class ResultFile:
         )
         return bool(mask.any())
 
-    def append_experiment(self,
+    def upsert_experiment(self,
                           data_name: str,
                           data_preprocessing_name: str,
                           metric_name: str,
@@ -303,10 +303,10 @@ class ResultFile:
                           cross_validation_method: str,
                           seed: int) -> None:
         """
-        Append a new row to the result file.
+        Write a row to the result file.
 
-        Always writes the row regardless of whether an identical experiment
-        entry already exists.
+        If a row with matching identifying columns already exists, its
+        ``metric_value`` is updated in place.  Otherwise a new row is appended.
         """
         data = {
             'data_name': data_name,
@@ -318,11 +318,20 @@ class ResultFile:
             'seed': seed,
         }
         if self.path.exists():
-            df_combined = pd.concat(
-                [pd.read_csv(self.path), pd.DataFrame([data])],
-                ignore_index=True,
+            df = pd.read_csv(self.path)
+            mask = (
+                (df['data_name'] == data_name)
+                & (df['data_preprocessing_name'] == data_preprocessing_name)
+                & (df['metric_name'] == metric_name)
+                & (df['predicted_client_name'] == predicted_client_name)
+                & (df['cross_validation_method'] == cross_validation_method)
+                & (df['seed'] == seed)
             )
-            df_combined.to_csv(self.path, index=False)
+            if mask.any():
+                df.loc[mask, 'metric_value'] = metric_value
+            else:
+                df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
+            df.to_csv(self.path, index=False)
         else:
             pd.DataFrame([data]).to_csv(self.path, index=False)
 
@@ -462,7 +471,7 @@ class ClassificationExperimentLeaveOneCohortOut:
             print(f"Results for test cohort '{test_name}' using model trained on all other cohorts:")
             print(f"  MCC: {mcc:.4f}")
             print(f"  F1 Score: {f1:.4f}")
-            self.resultfile.append_experiment(
+            self.resultfile.upsert_experiment(
                 data_name=self.data_name,
                 data_preprocessing_name=self.preprocessing_name,
                 metric_name="MCC",
@@ -471,7 +480,7 @@ class ClassificationExperimentLeaveOneCohortOut:
                 cross_validation_method="Leave-One-Cohort-Out",
                 seed=seed,
             )
-            self.resultfile.append_experiment(
+            self.resultfile.upsert_experiment(
                 data_name=self.data_name,
                 data_preprocessing_name=self.preprocessing_name,
                 metric_name="F1_score",
@@ -589,7 +598,7 @@ class ClassificationExperimentTrainTestSplit:
                 metric_name = row['metric']
                 metric_value = row['score']
                 print(f"{client_name}: {metric_name} ({metric_suffix}): {metric_value:.4f}")
-                self.resultfile.append_experiment(
+                self.resultfile.upsert_experiment(
                     data_name=self.data_name,
                     data_preprocessing_name=self.preprocessing_name,
                     metric_name=f"{metric_name}",
