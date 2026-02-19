@@ -17,7 +17,6 @@ from sklearn.metrics import matthews_corrcoef, f1_score
 SCRIPT_FOLDER = Path(__file__).parent
 RESULTS_FOLDER = SCRIPT_FOLDER.parent / "results"
 RESULTS_FOLDER.mkdir(exist_ok=True)
-DEFAULT_RESULTFILE = RESULTS_FOLDER / "classification_metric_report.csv"
 
 BASE_FOREST_CONFIG = {
     'simple_forest': {
@@ -252,35 +251,83 @@ def _write_forest_config(client_folder: Path,
 
 
 # ---------------------------------------------------------------------------
-# Result file helper
+# Result file class
 # ---------------------------------------------------------------------------
 
-def create_append_row_resultfile(resultfile: Path,
-                                 data_name: str,
-                                 data_preprocessing_name: str,
-                                 metric_name: str,
-                                 metric_value: float,
-                                 predicted_client_name: str,
-                                 cross_validation_method: str,
-                                 seed: int) -> None:
-    """Creates or appends a row to *resultfile* with the given metric name and value."""
-    data = {
-        'data_name': data_name,
-        'data_preprocessing_name': data_preprocessing_name,
-        'metric_name': metric_name,
-        'metric_value': metric_value,
-        'predicted_client_name': predicted_client_name,
-        'cross_validation_method': cross_validation_method,
-        'seed': seed
-    }
-    if resultfile.exists():
-        df_existing = pd.read_csv(resultfile)
-        df_new = pd.DataFrame([data])
-        df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-        df_combined.to_csv(resultfile, index=False)
-    else:
-        df = pd.DataFrame([data])
-        df.to_csv(resultfile, index=False)
+class ResultFile:
+    """
+    Manages a CSV result file for classification experiments.
+
+    The file has these columns::
+
+        data_name, data_preprocessing_name, metric_name, metric_value,
+        predicted_client_name, cross_validation_method, seed
+    """
+
+    def __init__(self, path: Union[str, Path]) -> None:
+        self.path = Path(path)
+
+    def check_experiment(self,
+                         data_name: str,
+                         data_preprocessing_name: str,
+                         metric_name: str,
+                         predicted_client_name: str,
+                         cross_validation_method: str,
+                         seed: int) -> bool:
+        """
+        Return ``True`` if there is already a row whose values match *all*
+        provided columns (every column except ``metric_value``).
+
+        Use this to detect whether a given experiment result has been recorded
+        before so that re-running can be skipped.
+        """
+        if not self.path.exists():
+            return False
+        df = pd.read_csv(self.path)
+        mask = (
+            (df['data_name'] == data_name)
+            & (df['data_preprocessing_name'] == data_preprocessing_name)
+            & (df['metric_name'] == metric_name)
+            & (df['predicted_client_name'] == predicted_client_name)
+            & (df['cross_validation_method'] == cross_validation_method)
+            & (df['seed'] == seed)
+        )
+        return bool(mask.any())
+
+    def append_experiment(self,
+                          data_name: str,
+                          data_preprocessing_name: str,
+                          metric_name: str,
+                          metric_value: float,
+                          predicted_client_name: str,
+                          cross_validation_method: str,
+                          seed: int) -> None:
+        """
+        Append a new row to the result file.
+
+        Always writes the row regardless of whether an identical experiment
+        entry already exists.
+        """
+        data = {
+            'data_name': data_name,
+            'data_preprocessing_name': data_preprocessing_name,
+            'metric_name': metric_name,
+            'metric_value': metric_value,
+            'predicted_client_name': predicted_client_name,
+            'cross_validation_method': cross_validation_method,
+            'seed': seed,
+        }
+        if self.path.exists():
+            df_combined = pd.concat(
+                [pd.read_csv(self.path), pd.DataFrame([data])],
+                ignore_index=True,
+            )
+            df_combined.to_csv(self.path, index=False)
+        else:
+            pd.DataFrame([data]).to_csv(self.path, index=False)
+
+
+DEFAULT_RESULTFILE = ResultFile(RESULTS_FOLDER / "classification_metric_report.csv")
 
 
 # ---------------------------------------------------------------------------
@@ -306,17 +353,17 @@ class ClassificationExperimentLeaveOneCohortOut:
     data_name: str
     preprocessing_name: str
     datainfo: DataInfo
-    resultfile: Path
+    resultfile: ResultFile
 
     def __init__(self, data_name: str, preprocessing_name: str,
                  datainfo: DataInfo,
-                 resultfile: Path = DEFAULT_RESULTFILE) -> None:
+                 resultfile: ResultFile = DEFAULT_RESULTFILE) -> None:
         self.data_name = data_name
         self.preprocessing_name = preprocessing_name
         self.datainfo = datainfo
         self.resultfile = resultfile
 
-    def run_experiment(self, seed: int) -> None:
+    def run_experiment(self, seed: int, force_run: bool = False) -> None:
         num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
         print("=" * num_characters)
         print("=" * 30 + f" {self.data_name} ({self.preprocessing_name}) " + "=" * 30)
@@ -336,6 +383,18 @@ class ClassificationExperimentLeaveOneCohortOut:
         average_f1 = 0.0
 
         for i, (test_folder, test_name) in enumerate(zip(cohort_folders, cohort_names)):
+            if not force_run and self.resultfile.check_experiment(
+                data_name=self.data_name,
+                data_preprocessing_name=self.preprocessing_name,
+                metric_name="MCC",
+                predicted_client_name=test_name,
+                cross_validation_method="Leave-One-Cohort-Out",
+                seed=seed,
+            ):
+                print(f"Skipping test cohort '{test_name}' — "
+                      f"results for seed={seed} already exist in {self.resultfile.path}.")
+                continue
+
             train_folders = [f for j, f in enumerate(cohort_folders) if j != i]
             train_names = [n for j, n in enumerate(cohort_names) if j != i]
 
@@ -403,8 +462,7 @@ class ClassificationExperimentLeaveOneCohortOut:
             print(f"Results for test cohort '{test_name}' using model trained on all other cohorts:")
             print(f"  MCC: {mcc:.4f}")
             print(f"  F1 Score: {f1:.4f}")
-            create_append_row_resultfile(
-                resultfile=self.resultfile,
+            self.resultfile.append_experiment(
                 data_name=self.data_name,
                 data_preprocessing_name=self.preprocessing_name,
                 metric_name="MCC",
@@ -413,8 +471,7 @@ class ClassificationExperimentLeaveOneCohortOut:
                 cross_validation_method="Leave-One-Cohort-Out",
                 seed=seed,
             )
-            create_append_row_resultfile(
-                resultfile=self.resultfile,
+            self.resultfile.append_experiment(
                 data_name=self.data_name,
                 data_preprocessing_name=self.preprocessing_name,
                 metric_name="F1_score",
@@ -460,19 +517,31 @@ class ClassificationExperimentTrainTestSplit:
     preprocessing_name: str
     datainfo: DataInfo
     train_test_ratio: float
-    resultfile: Path
+    resultfile: ResultFile
 
     def __init__(self, data_name: str, preprocessing_name: str,
                  datainfo: DataInfo,
                  train_test_ratio: float = 0.8,
-                 resultfile: Path = DEFAULT_RESULTFILE) -> None:
+                 resultfile: ResultFile = DEFAULT_RESULTFILE) -> None:
         self.data_name = data_name
         self.preprocessing_name = preprocessing_name
         self.datainfo = datainfo
         self.train_test_ratio = train_test_ratio
         self.resultfile = resultfile
 
-    def run_experiment(self, seed: int) -> None:
+    def run_experiment(self, seed: int, force_run: bool = False) -> None:
+        if not force_run and self.resultfile.check_experiment(
+            data_name=self.data_name,
+            data_preprocessing_name=self.preprocessing_name,
+            metric_name="MCC",
+            predicted_client_name="All",
+            cross_validation_method="Train-Test-Split",
+            seed=seed,
+        ):
+            print(f"Skipping '{self.data_name}' ({self.preprocessing_name}) — "
+                  f"results for seed={seed} already exist in {self.resultfile.path}.")
+            return
+
         num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
         print("=" * num_characters)
         print("=" * 30 + f" {self.data_name} ({self.preprocessing_name}) " + "=" * 30)
@@ -520,8 +589,7 @@ class ClassificationExperimentTrainTestSplit:
                 metric_name = row['metric']
                 metric_value = row['score']
                 print(f"{client_name}: {metric_name} ({metric_suffix}): {metric_value:.4f}")
-                create_append_row_resultfile(
-                    resultfile=self.resultfile,
+                self.resultfile.append_experiment(
                     data_name=self.data_name,
                     data_preprocessing_name=self.preprocessing_name,
                     metric_name=f"{metric_name}",

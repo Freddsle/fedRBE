@@ -51,12 +51,8 @@ Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.95,All,Train
 Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.975,All,Train-Test-Split,42
 Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,42
 Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,42
-Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,All,Train-Test-Split,42
-Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,All,Train-Test-Split,42
 Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.85,lab2,Train-Test-Split,42
 Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.925,lab2,Train-Test-Split,42
-Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,All,Train-Test-Split,42
-Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,All,Train-Test-Split,42
 Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,42
 Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,42
 Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,All,Train-Test-Split,42
@@ -1763,3 +1759,1403 @@ Microbiome Data,corrected,MCC,0.4666666666666667,Germany1,Train-Test-Split,51
 Microbiome Data,corrected,F1_score,0.7333333333333333,Germany1,Train-Test-Split,51
 Microbiome Data,corrected,MCC,0.75,Germany2,Train-Test-Split,51
 Microbiome Data,corrected,F1_score,0.875,Germany2,Train-Test-Split,51
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data,uncorrected,MCC,0.7622792201730545,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data,uncorrected,F1_score,0.8681006493506493,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9279607271383368,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9755368814192342,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.3525058226889108,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.501797464291446,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.840168050416806,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.91999199919992,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.840168050416806,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.91999199919992,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5487032611687344,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7036336485813839,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5197053753770204,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7747993927564519,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.6169254532967279,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.763789217835414,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5487032611687344,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7036336485813839,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5197053753770204,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7747993927564519,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6169254532967279,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.763789217835414,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2519516299301344,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7399482312338223,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.2519516299301344,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7399482312338223,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,MCC,0.1259881576697424,lab_E,Leave-One-Cohort-Out,42
+Proteomics Data,uncorrected,F1_score,0.4666666666666666,lab_E,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,42
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,42
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,42
+Microarray Data,corrected,MCC,0.7071067811865476,GSE14407,Leave-One-Cohort-Out,42
+Microarray Data,corrected,F1_score,0.8285714285714286,GSE14407,Leave-One-Cohort-Out,42
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,42
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,42
+Microarray Data,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,42
+Microarray Data,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,42
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,42
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,42
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,42
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,MCC,0.6438265394445771,China1,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,F1_score,0.8241889576655246,China1,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,MCC,0.5438823285737561,China3,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,F1_score,0.7748135123614662,China3,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,MCC,0.5015718285732118,China5,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,F1_score,0.7076851719708862,China5,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,MCC,0.4379212585974223,France1,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,F1_score,0.6910439851616322,France1,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,MCC,0.2891703601366998,Germany1,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,F1_score,0.6472901432337933,Germany1,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out,42
+Microbiome Data,uncorrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,MCC,0.5721450241272974,China1,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,F1_score,0.7924107142857143,China1,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,MCC,0.5728175889651488,China3,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,F1_score,0.7837979801984123,China3,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,MCC,0.5293519585275472,China5,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,F1_score,0.7285754985754985,China5,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,MCC,0.4481445626126795,France1,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,F1_score,0.7259149694694125,France1,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,MCC,0.4443123854772016,Germany1,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,F1_score,0.7623533408241658,Germany1,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,MCC,0.3756951598661515,Germany2,Leave-One-Cohort-Out,42
+Microbiome Data,corrected,F1_score,0.7771728171002218,Germany2,Leave-One-Cohort-Out,42
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data,uncorrected,MCC,0.7622792201730545,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data,uncorrected,F1_score,0.8681006493506493,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8660254037844386,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9519713261648748,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.4095333055726555,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.5681120430447855,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.840168050416806,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.91999199919992,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.840168050416806,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.91999199919992,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5063696835418333,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6648953502945231,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.531893754977849,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7815238095238095,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5711084612855699,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7284170414792603,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5063696835418333,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6648953502945231,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.531893754977849,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7815238095238095,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5711084612855699,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7284170414792603,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1868161794392683,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6999192897497982,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.1868161794392683,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6999192897497982,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,43
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,43
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,43
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,43
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,43
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,43
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,43
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,43
+Microarray Data,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,43
+Microarray Data,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,43
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,43
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,43
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,43
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,MCC,0.6578997818419274,China1,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,F1_score,0.8339285714285714,China1,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,MCC,0.5479312287116537,China3,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,F1_score,0.7750517598343685,China3,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,MCC,0.4748805441668119,China5,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,F1_score,0.6987464625079304,China5,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,MCC,0.4131101105366349,France1,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,F1_score,0.6819054120681154,France1,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,MCC,0.3049771000798635,Germany1,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,F1_score,0.6605633802816901,Germany1,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,MCC,0.4564354645876384,Germany2,Leave-One-Cohort-Out,43
+Microbiome Data,uncorrected,F1_score,0.7573934837092732,Germany2,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,MCC,0.6150224029846124,China1,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,F1_score,0.8131696428571429,China1,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,MCC,0.6381522091037566,China3,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,F1_score,0.8183652173913043,China3,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,MCC,0.5032206605139818,China5,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,F1_score,0.7195282971862966,China5,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,MCC,0.5270923093941878,France1,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,F1_score,0.765069973830925,France1,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,MCC,0.4155828472938427,Germany1,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,F1_score,0.7604828973843057,Germany1,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out,43
+Microbiome Data,corrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out,43
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data,uncorrected,MCC,0.7539407580617106,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data,uncorrected,F1_score,0.8628571428571428,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8660254037844386,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9519713261648748,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.4377851091863374,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.599259959061565,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8300415031127594,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9149978749468736,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8300415031127594,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9149978749468736,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5063696835418333,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6648953502945231,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5261871807535161,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7753660637381568,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5544551331709777,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7151520864756159,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5063696835418333,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6648953502945231,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5261871807535161,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7753660637381568,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5544551331709777,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7151520864756159,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2519516299301344,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7399482312338223,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.2519516299301344,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7399482312338223,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,MCC,0.3077935056255462,lab_E,Leave-One-Cohort-Out,44
+Proteomics Data,uncorrected,F1_score,0.5901328273244781,lab_E,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,44
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,44
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,44
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,44
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,44
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,44
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,44
+Microarray Data,corrected,MCC,0.8017837257372731,GSE38666,Leave-One-Cohort-Out,44
+Microarray Data,corrected,F1_score,0.8967032967032967,GSE38666,Leave-One-Cohort-Out,44
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,44
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,44
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,44
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,MCC,0.6624235282504026,China1,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,F1_score,0.8343680709534368,China1,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,MCC,0.5376472618263383,China3,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,F1_score,0.7665018186142852,China3,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,MCC,0.501891583332003,China5,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,F1_score,0.6951757371645588,China5,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,MCC,0.3969414710956452,France1,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,F1_score,0.6711113390430278,France1,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,MCC,0.3243464396914987,Germany1,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,F1_score,0.646421475561835,Germany1,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,MCC,0.4819992036541475,Germany2,Leave-One-Cohort-Out,44
+Microbiome Data,uncorrected,F1_score,0.7791353383458647,Germany2,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,MCC,0.5485139501408625,China1,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,F1_score,0.7816665733169037,China1,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,MCC,0.6381522091037566,China3,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,F1_score,0.8183652173913043,China3,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,MCC,0.5154286366079848,China5,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,F1_score,0.718182174604193,China5,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,MCC,0.5340088317562671,France1,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,F1_score,0.7652494960248251,France1,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,MCC,0.4251801091344347,Germany1,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,F1_score,0.7499282061210332,Germany1,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out,44
+Microbiome Data,corrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out,44
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data,uncorrected,MCC,0.7639154141901762,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data,uncorrected,F1_score,0.8738616009485608,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8118441408859888,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9290767903364968,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.553338966697959,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.7135333645882168,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.84,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.92,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.84,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.92,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5204164998665332,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6779999999999999,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5028576647462712,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7618181818181818,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5711084612855699,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7284170414792603,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5204164998665332,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6779999999999999,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5028576647462712,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7618181818181818,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5711084612855699,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7284170414792603,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1572427255082877,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6796238244514107,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.1572427255082877,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6796238244514107,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,MCC,-0.1259881576697424,lab_E,Leave-One-Cohort-Out,45
+Proteomics Data,uncorrected,F1_score,0.3696969696969697,lab_E,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,45
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,45
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,45
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,45
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,45
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,45
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,45
+Microarray Data,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,45
+Microarray Data,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,45
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,45
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,45
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,45
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,MCC,0.7007771606992425,China1,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,F1_score,0.8546874999999999,China1,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,MCC,0.5497107348021267,China3,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,F1_score,0.7661416623053452,China3,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,MCC,0.4884935722933688,China5,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,F1_score,0.6842679530249518,China5,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,MCC,0.3645555017033666,France1,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,F1_score,0.649154420107049,France1,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,MCC,0.3396496749506491,Germany1,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,F1_score,0.6600037938066108,Germany1,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out,45
+Microbiome Data,uncorrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,MCC,0.5014728815029046,China1,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,F1_score,0.7599025974025975,China1,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,MCC,0.6339115801911256,China3,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,F1_score,0.8182288948790645,China3,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,MCC,0.4740047904616955,China5,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,F1_score,0.6863553113553114,China5,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,MCC,0.437660671841683,France1,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,F1_score,0.7162606456724103,France1,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,MCC,0.4737974741302027,Germany1,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,F1_score,0.7637017758726271,Germany1,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,MCC,0.4819992036541475,Germany2,Leave-One-Cohort-Out,45
+Microbiome Data,corrected,F1_score,0.7791353383458647,Germany2,Leave-One-Cohort-Out,45
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data,uncorrected,MCC,0.8079571632467768,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data,uncorrected,F1_score,0.899507587177168,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8118441408859888,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9290767903364968,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.4947274449181536,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.6582225003911751,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8500425031877656,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9249981249531238,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8500425031877656,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9249981249531238,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5204164998665332,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6779999999999999,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5447047794019222,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7826224582863888,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5835920751217647,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7382190811621921,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5204164998665332,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6779999999999999,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5447047794019222,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7826224582863888,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5835920751217647,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7382190811621921,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2182178902359924,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.72,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.2182178902359924,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.72,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,MCC,-0.1259881576697424,lab_E,Leave-One-Cohort-Out,46
+Proteomics Data,uncorrected,F1_score,0.3696969696969697,lab_E,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,46
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,46
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,46
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,46
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,46
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,46
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,46
+Microarray Data,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,46
+Microarray Data,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,46
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,46
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,46
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,46
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,MCC,0.6523192111715244,China1,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,F1_score,0.8325771324863883,China1,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,MCC,0.5708260120618346,China3,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,F1_score,0.7746315401621223,China3,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,MCC,0.501891583332003,China5,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,F1_score,0.6951757371645588,China5,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,MCC,0.3807630134691717,France1,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,F1_score,0.6601966873706004,France1,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,MCC,0.3709934845483705,Germany1,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,F1_score,0.6866738894907908,Germany1,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out,46
+Microbiome Data,uncorrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,MCC,0.5215830018344338,China1,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,F1_score,0.769793557168784,China1,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,MCC,0.6497139153520672,China3,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,F1_score,0.8267796248934356,China3,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,MCC,0.4877683523033602,China5,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,F1_score,0.6970783233669832,China5,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,MCC,0.4202806519839119,France1,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,F1_score,0.7063348416289592,France1,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,MCC,0.5409424255538442,Germany1,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,F1_score,0.7899571341090018,Germany1,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,MCC,0.4819992036541475,Germany2,Leave-One-Cohort-Out,46
+Microbiome Data,corrected,F1_score,0.7791353383458647,Germany2,Leave-One-Cohort-Out,46
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data,uncorrected,MCC,0.8259685381260148,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data,uncorrected,F1_score,0.9096748293857888,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8660254037844386,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9519713261648748,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.4661265430288854,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.6292549019607843,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8500425031877656,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9249981249531238,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8500425031877656,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9249981249531238,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4364357804719848,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5960224375318716,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5684993638729131,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7961806493436334,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5168397117784516,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6844186176275996,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4364357804719848,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.5960224375318716,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5684993638729131,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7961806493436334,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5168397117784516,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6844186176275996,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.3546040716334876,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7666666666666667,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.3546040716334876,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7666666666666667,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,47
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,47
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,47
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,47
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,47
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,47
+Microarray Data,corrected,MCC,0.6224424109697394,GSE26712,Leave-One-Cohort-Out,47
+Microarray Data,corrected,F1_score,0.962882861819032,GSE26712,Leave-One-Cohort-Out,47
+Microarray Data,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,47
+Microarray Data,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,47
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,47
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,47
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,47
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,MCC,0.6749553918606662,China1,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,F1_score,0.8434147374364765,China1,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,MCC,0.4791563436165859,China3,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,F1_score,0.7314959826468779,China3,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,MCC,0.4751190677306072,China5,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,F1_score,0.6732279641816808,China5,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,MCC,0.3807630134691717,France1,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,F1_score,0.6601966873706004,France1,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,MCC,0.387107574738274,Germany1,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,F1_score,0.6997884744363618,Germany1,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,MCC,0.4819992036541475,Germany2,Leave-One-Cohort-Out,47
+Microbiome Data,uncorrected,F1_score,0.7791353383458647,Germany2,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,MCC,0.524966261808367,China1,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,F1_score,0.7708333333333334,China1,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,MCC,0.6339115801911256,China3,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,F1_score,0.8182288948790645,China3,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,MCC,0.4602674009822994,China5,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,F1_score,0.6755096556913045,China5,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,MCC,0.4425505663315176,France1,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,F1_score,0.7159322442809672,France1,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,MCC,0.5602485106939196,Germany1,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,F1_score,0.8025748995692368,Germany1,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out,47
+Microbiome Data,corrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out,47
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data,uncorrected,MCC,0.94,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data,uncorrected,F1_score,0.97,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8660254037844386,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9519713261648748,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.3811812499312437,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.5356744704570792,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8601720516172061,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.92999299929993,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8601720516172061,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.92999299929993,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4504426164614508,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6102857142857143,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5517181142520791,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.783021483021483,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5084322977157767,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6774090338268584,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4504426164614508,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6102857142857143,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5517181142520791,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.783021483021483,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5084322977157767,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6774090338268584,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2882783300985275,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7253918495297806,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.2882783300985275,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7253918495297806,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,48
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,48
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,48
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,48
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,48
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,48
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,48
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,48
+Microarray Data,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,48
+Microarray Data,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,48
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,48
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,48
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,48
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,MCC,0.7007771606992425,China1,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,F1_score,0.8546874999999999,China1,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,MCC,0.4935870254653955,China3,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,F1_score,0.7403162055335969,China3,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,MCC,0.4751190677306072,China5,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,F1_score,0.6732279641816808,China5,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,MCC,0.3807630134691717,France1,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,F1_score,0.6601966873706004,France1,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,MCC,0.4035689896161464,Germany1,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,F1_score,0.7127740355174527,Germany1,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,MCC,0.4819992036541475,Germany2,Leave-One-Cohort-Out,48
+Microbiome Data,uncorrected,F1_score,0.7791353383458647,Germany2,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,MCC,0.4385964912280701,China1,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,F1_score,0.7291666666666666,China1,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,MCC,0.6849911109448377,China3,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,F1_score,0.844101662404092,China3,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,MCC,0.5015718285732118,China5,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,F1_score,0.7076851719708862,China5,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,MCC,0.4334607234315053,France1,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,F1_score,0.7163711037936709,France1,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,MCC,0.5326289969571041,Germany1,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,F1_score,0.8012387219724265,Germany1,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,MCC,0.4819992036541475,Germany2,Leave-One-Cohort-Out,48
+Microbiome Data,corrected,F1_score,0.7791353383458647,Germany2,Leave-One-Cohort-Out,48
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data,uncorrected,MCC,0.9504277887790924,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data,uncorrected,F1_score,0.9749943737340904,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8118441408859888,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9290767903364968,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.4236592728681617,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.5838383838383838,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8601720516172061,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.92999299929993,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8601720516172061,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.92999299929993,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4364357804719848,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5960224375318716,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4990230478780273,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7553653754438027,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4399413450640598,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6186353329210472,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4364357804719848,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.5960224375318716,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4990230478780273,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7553653754438027,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4399413450640598,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6186353329210472,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2882783300985275,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7253918495297806,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.2882783300985275,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7253918495297806,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,MCC,0.50709255283711,lab_E,Leave-One-Cohort-Out,49
+Proteomics Data,uncorrected,F1_score,0.7482517482517483,lab_E,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,49
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,49
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,49
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,49
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,49
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,49
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,49
+Microarray Data,corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,49
+Microarray Data,corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,49
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,49
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,49
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,49
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,MCC,0.6578997818419274,China1,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,F1_score,0.8339285714285714,China1,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,MCC,0.5580007811146942,China3,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,F1_score,0.7751141733322774,China3,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,MCC,0.461754461353594,China5,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,F1_score,0.6620487833006574,China5,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,MCC,0.406056239620491,France1,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,F1_score,0.6692027389580747,France1,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,MCC,0.4035689896161464,Germany1,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,F1_score,0.7127740355174527,Germany1,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,MCC,0.4819992036541475,Germany2,Leave-One-Cohort-Out,49
+Microbiome Data,uncorrected,F1_score,0.7791353383458647,Germany2,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,MCC,0.4581022539134642,China1,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,F1_score,0.7390245623941277,China1,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,MCC,0.6849911109448377,China3,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,F1_score,0.844101662404092,China3,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,MCC,0.4877683523033602,China5,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,F1_score,0.6970783233669832,China5,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,MCC,0.459754525374666,France1,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,F1_score,0.7259125188536952,France1,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,MCC,0.5537860424126382,Germany1,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,F1_score,0.8137089201877933,Germany1,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,MCC,0.4819992036541475,Germany2,Leave-One-Cohort-Out,49
+Microbiome Data,corrected,F1_score,0.7791353383458647,Germany2,Leave-One-Cohort-Out,49
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data,uncorrected,MCC,0.8864052604279183,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data,uncorrected,F1_score,0.939783219590526,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8660254037844386,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9519713261648748,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.3525058226889108,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.501797464291446,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.840168050416806,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.91999199919992,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.840168050416806,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.91999199919992,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4223786877537082,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5814876456279605,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5215695834186321,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.769022869022869,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4573295603800235,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6338101898428745,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4223786877537082,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.5814876456279605,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5215695834186321,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.769022869022869,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4573295603800235,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6338101898428745,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2296396633859229,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6833333333333333,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.2296396633859229,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6833333333333333,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,MCC,0.7071067811865476,lab_E,Leave-One-Cohort-Out,50
+Proteomics Data,uncorrected,F1_score,0.8285714285714286,lab_E,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,50
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,50
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,50
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,50
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,50
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,50
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,50
+Microarray Data,corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,50
+Microarray Data,corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,50
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,50
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,50
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,50
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,MCC,0.6775760560563594,China1,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,F1_score,0.8440475523692169,China1,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,MCC,0.4796917904025322,China3,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,F1_score,0.7213603724453563,China3,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,MCC,0.4483855706412344,China5,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,F1_score,0.6507232084155162,China5,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,MCC,0.3900947488027469,France1,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,F1_score,0.6580896686159844,France1,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,MCC,0.4066525227065612,Germany1,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,F1_score,0.7374464176362523,Germany1,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,MCC,0.4564354645876384,Germany2,Leave-One-Cohort-Out,50
+Microbiome Data,uncorrected,F1_score,0.7573934837092732,Germany2,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,MCC,0.4385964912280701,China1,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,F1_score,0.7291666666666666,China1,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,MCC,0.6849911109448377,China3,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,F1_score,0.844101662404092,China3,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,MCC,0.5015718285732118,China5,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,F1_score,0.7076851719708862,China5,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,MCC,0.4820778498392363,France1,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,F1_score,0.7355231239857281,France1,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,MCC,0.5122998410135837,Germany1,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,F1_score,0.7887585251770363,Germany1,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,MCC,0.5397918963594132,Germany2,Leave-One-Cohort-Out,50
+Microbiome Data,corrected,F1_score,0.8217382536801775,Germany2,Leave-One-Cohort-Out,50
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data,uncorrected,MCC,0.8422598823413766,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data,uncorrected,F1_score,0.9143814056558636,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8660254037844386,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9519713261648748,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.3379631847096873,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.484268214055448,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.82,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.91,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.82,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.91,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4504426164614508,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6102857142857143,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5261871807535161,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7753660637381568,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4915391523114242,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6631784163504685,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4504426164614508,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6102857142857143,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5261871807535161,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7753660637381568,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4915391523114242,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6631784163504685,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1572427255082877,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6796238244514107,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.1572427255082877,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6796238244514107,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.1814814814814814,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.0,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,MCC,0.4392976851069794,lab_C,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,F1_score,0.6115942028985507,lab_C,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,MCC,0.4472135954999579,lab_E,Leave-One-Cohort-Out,51
+Proteomics Data,uncorrected,F1_score,0.625,lab_E,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,51
+Proteomics Data,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,51
+Microarray Data,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,51
+Microarray Data,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,51
+Microarray Data,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,51
+Microarray Data,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,51
+Microarray Data,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,51
+Microarray Data,corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,51
+Microarray Data,corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,51
+Microarray Data,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51
+Microarray Data,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51
+Microarray Data,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,51
+Microarray Data,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,51
+Microarray Data,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,51
+Microarray Data,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,MCC,0.629770740892962,China1,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,F1_score,0.821645299145299,China1,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,MCC,0.4841593034198268,China3,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,F1_score,0.7100409761757988,China3,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,MCC,0.4483855706412344,China5,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,F1_score,0.6507232084155162,China5,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,MCC,0.406056239620491,France1,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,F1_score,0.6692027389580747,France1,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,MCC,0.3540874846175034,Germany1,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,F1_score,0.69951506272659,Germany1,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,MCC,0.5397918963594132,Germany2,Leave-One-Cohort-Out,51
+Microbiome Data,uncorrected,F1_score,0.8217382536801775,Germany2,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,MCC,0.4385964912280701,China1,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,F1_score,0.7291666666666666,China1,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,MCC,0.7155225726654298,China3,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,F1_score,0.8608695652173913,China3,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,MCC,0.4877683523033602,China5,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,F1_score,0.6970783233669832,China5,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,MCC,0.4650621118012422,France1,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,F1_score,0.7254901960784313,France1,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,MCC,0.4927143099141771,Germany1,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,F1_score,0.7762515528451349,Germany1,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out,51
+Microbiome Data,corrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out,51
