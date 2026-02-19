@@ -1,0 +1,1765 @@
+data_name,data_preprocessing_name,metric_name,metric_value,predicted_client_name,cross_validation_method,seed
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,42
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,42
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,42
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,42
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,42
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,42
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,42
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,42
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,42
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,42
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,42
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,42
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9833333333333332,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9916666666666668,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.875,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9375,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.95,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.975,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.85,lab2,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.925,lab2,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.85,lab2,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.925,lab2,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8666666666666667,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9333333333333332,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4285714285714285,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8666666666666667,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9333333333333332,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4285714285714285,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8833333333333333,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9416666666666668,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.875,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9375,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9166666666666666,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9583333333333334,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8833333333333333,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9416666666666668,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9166666666666666,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9583333333333334,lab3,Train-Test-Split,42
+Proteomics Data,uncorrected,MCC,0.92,All,Train-Test-Split,42
+Proteomics Data,uncorrected,F1_score,0.96,All,Train-Test-Split,42
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,42
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,42
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,42
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,42
+Proteomics Data,uncorrected,MCC,0.6,lab_C,Train-Test-Split,42
+Proteomics Data,uncorrected,F1_score,0.8,lab_C,Train-Test-Split,42
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,42
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,42
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,42
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,42
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,42
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,42
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,42
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,42
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,42
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,42
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,42
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,42
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,42
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,42
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,42
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,42
+Microarray Data,uncorrected,MCC,0.8529411764705882,All,Train-Test-Split,42
+Microarray Data,uncorrected,F1_score,0.9264705882352942,All,Train-Test-Split,42
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,42
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,42
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,42
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,42
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Train-Test-Split,42
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split,42
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,42
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,42
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,42
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,42
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Train-Test-Split,42
+Microarray Data,uncorrected,F1_score,0.5,GSE69428,Train-Test-Split,42
+Microarray Data,corrected,MCC,0.8823529411764706,All,Train-Test-Split,42
+Microarray Data,corrected,F1_score,0.9411764705882352,All,Train-Test-Split,42
+Microarray Data,corrected,MCC,0.6,GSE14407,Train-Test-Split,42
+Microarray Data,corrected,F1_score,0.8,GSE14407,Train-Test-Split,42
+Microarray Data,corrected,MCC,0.9487179487179488,GSE26712,Train-Test-Split,42
+Microarray Data,corrected,F1_score,0.9743589743589745,GSE26712,Train-Test-Split,42
+Microarray Data,corrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,42
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,42
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,42
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,42
+Microarray Data,corrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,42
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,42
+Microarray Data,corrected,MCC,1.0,GSE69428,Train-Test-Split,42
+Microarray Data,corrected,F1_score,1.0,GSE69428,Train-Test-Split,42
+Microbiome Data,uncorrected,MCC,0.6481481481481481,All,Train-Test-Split,42
+Microbiome Data,uncorrected,F1_score,0.8240740740740741,All,Train-Test-Split,42
+Microbiome Data,uncorrected,MCC,0.8,China1,Train-Test-Split,42
+Microbiome Data,uncorrected,F1_score,0.9,China1,Train-Test-Split,42
+Microbiome Data,uncorrected,MCC,0.7391304347826086,China3,Train-Test-Split,42
+Microbiome Data,uncorrected,F1_score,0.8695652173913043,China3,Train-Test-Split,42
+Microbiome Data,uncorrected,MCC,0.6190476190476191,China5,Train-Test-Split,42
+Microbiome Data,uncorrected,F1_score,0.8095238095238095,China5,Train-Test-Split,42
+Microbiome Data,uncorrected,MCC,0.5238095238095238,France1,Train-Test-Split,42
+Microbiome Data,uncorrected,F1_score,0.7619047619047619,France1,Train-Test-Split,42
+Microbiome Data,uncorrected,MCC,0.7333333333333333,Germany1,Train-Test-Split,42
+Microbiome Data,uncorrected,F1_score,0.8666666666666667,Germany1,Train-Test-Split,42
+Microbiome Data,uncorrected,MCC,0.25,Germany2,Train-Test-Split,42
+Microbiome Data,uncorrected,F1_score,0.625,Germany2,Train-Test-Split,42
+Microbiome Data,corrected,MCC,0.6666666666666666,All,Train-Test-Split,42
+Microbiome Data,corrected,F1_score,0.8333333333333334,All,Train-Test-Split,42
+Microbiome Data,corrected,MCC,0.6,China1,Train-Test-Split,42
+Microbiome Data,corrected,F1_score,0.8,China1,Train-Test-Split,42
+Microbiome Data,corrected,MCC,0.5652173913043478,China3,Train-Test-Split,42
+Microbiome Data,corrected,F1_score,0.782608695652174,China3,Train-Test-Split,42
+Microbiome Data,corrected,MCC,0.7142857142857143,China5,Train-Test-Split,42
+Microbiome Data,corrected,F1_score,0.8571428571428571,China5,Train-Test-Split,42
+Microbiome Data,corrected,MCC,0.8095238095238095,France1,Train-Test-Split,42
+Microbiome Data,corrected,F1_score,0.9047619047619048,France1,Train-Test-Split,42
+Microbiome Data,corrected,MCC,0.8666666666666667,Germany1,Train-Test-Split,42
+Microbiome Data,corrected,F1_score,0.9333333333333332,Germany1,Train-Test-Split,42
+Microbiome Data,corrected,MCC,0.25,Germany2,Train-Test-Split,42
+Microbiome Data,corrected,F1_score,0.625,Germany2,Train-Test-Split,42
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,43
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,43
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,43
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,43
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,43
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,43
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,43
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,43
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,43
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,43
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,43
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,43
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.95,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.975,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.875,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9375,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9583333333333334,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9791666666666666,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9833333333333332,All,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9916666666666668,All,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.95,lab2,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.975,lab2,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,lab2,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,lab2,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8666666666666667,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9333333333333332,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4285714285714285,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8666666666666667,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9333333333333332,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4285714285714285,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9666666666666668,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9833333333333332,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9666666666666668,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9833333333333332,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,43
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,43
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,43
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,43
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,43
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,43
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,43
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,43
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,43
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,43
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,43
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,43
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,43
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,43
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,43
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,43
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,43
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,43
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,43
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,43
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,43
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,43
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,43
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,43
+Microarray Data,uncorrected,MCC,0.8823529411764706,All,Train-Test-Split,43
+Microarray Data,uncorrected,F1_score,0.9411764705882352,All,Train-Test-Split,43
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,43
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,43
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,43
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,43
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Train-Test-Split,43
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split,43
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,43
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,43
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,43
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,43
+Microarray Data,uncorrected,MCC,0.5,GSE69428,Train-Test-Split,43
+Microarray Data,uncorrected,F1_score,0.75,GSE69428,Train-Test-Split,43
+Microarray Data,corrected,MCC,0.9705882352941176,All,Train-Test-Split,43
+Microarray Data,corrected,F1_score,0.9852941176470588,All,Train-Test-Split,43
+Microarray Data,corrected,MCC,1.0,GSE14407,Train-Test-Split,43
+Microarray Data,corrected,F1_score,1.0,GSE14407,Train-Test-Split,43
+Microarray Data,corrected,MCC,1.0,GSE26712,Train-Test-Split,43
+Microarray Data,corrected,F1_score,1.0,GSE26712,Train-Test-Split,43
+Microarray Data,corrected,MCC,1.0,GSE38666,Train-Test-Split,43
+Microarray Data,corrected,F1_score,1.0,GSE38666,Train-Test-Split,43
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,43
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,43
+Microarray Data,corrected,MCC,1.0,GSE6008,Train-Test-Split,43
+Microarray Data,corrected,F1_score,1.0,GSE6008,Train-Test-Split,43
+Microarray Data,corrected,MCC,0.5,GSE69428,Train-Test-Split,43
+Microarray Data,corrected,F1_score,0.75,GSE69428,Train-Test-Split,43
+Microbiome Data,uncorrected,MCC,0.4814814814814814,All,Train-Test-Split,43
+Microbiome Data,uncorrected,F1_score,0.7407407407407407,All,Train-Test-Split,43
+Microbiome Data,uncorrected,MCC,0.5,China1,Train-Test-Split,43
+Microbiome Data,uncorrected,F1_score,0.75,China1,Train-Test-Split,43
+Microbiome Data,uncorrected,MCC,0.7391304347826086,China3,Train-Test-Split,43
+Microbiome Data,uncorrected,F1_score,0.8695652173913043,China3,Train-Test-Split,43
+Microbiome Data,uncorrected,MCC,0.5238095238095238,China5,Train-Test-Split,43
+Microbiome Data,uncorrected,F1_score,0.7619047619047619,China5,Train-Test-Split,43
+Microbiome Data,uncorrected,MCC,0.1428571428571428,France1,Train-Test-Split,43
+Microbiome Data,uncorrected,F1_score,0.5714285714285714,France1,Train-Test-Split,43
+Microbiome Data,uncorrected,MCC,0.4666666666666667,Germany1,Train-Test-Split,43
+Microbiome Data,uncorrected,F1_score,0.7333333333333333,Germany1,Train-Test-Split,43
+Microbiome Data,uncorrected,MCC,0.5,Germany2,Train-Test-Split,43
+Microbiome Data,uncorrected,F1_score,0.75,Germany2,Train-Test-Split,43
+Microbiome Data,corrected,MCC,0.5925925925925926,All,Train-Test-Split,43
+Microbiome Data,corrected,F1_score,0.7962962962962963,All,Train-Test-Split,43
+Microbiome Data,corrected,MCC,0.7,China1,Train-Test-Split,43
+Microbiome Data,corrected,F1_score,0.85,China1,Train-Test-Split,43
+Microbiome Data,corrected,MCC,0.7391304347826086,China3,Train-Test-Split,43
+Microbiome Data,corrected,F1_score,0.8695652173913043,China3,Train-Test-Split,43
+Microbiome Data,corrected,MCC,0.6190476190476191,China5,Train-Test-Split,43
+Microbiome Data,corrected,F1_score,0.8095238095238095,China5,Train-Test-Split,43
+Microbiome Data,corrected,MCC,0.1428571428571428,France1,Train-Test-Split,43
+Microbiome Data,corrected,F1_score,0.5714285714285714,France1,Train-Test-Split,43
+Microbiome Data,corrected,MCC,0.6,Germany1,Train-Test-Split,43
+Microbiome Data,corrected,F1_score,0.8,Germany1,Train-Test-Split,43
+Microbiome Data,corrected,MCC,1.0,Germany2,Train-Test-Split,43
+Microbiome Data,corrected,F1_score,1.0,Germany2,Train-Test-Split,43
+Balanced Simulated Data,uncorrected,MCC,0.9833333333333332,All,Train-Test-Split,44
+Balanced Simulated Data,uncorrected,F1_score,0.9916666666666668,All,Train-Test-Split,44
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,44
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,44
+Balanced Simulated Data,uncorrected,MCC,0.95,lab2,Train-Test-Split,44
+Balanced Simulated Data,uncorrected,F1_score,0.975,lab2,Train-Test-Split,44
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,44
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,44
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,44
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,44
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,44
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,44
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.95,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.975,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.75,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.875,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9791666666666666,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9895833333333334,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.95,All,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.975,All,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.85,lab2,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.925,lab2,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,All,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,All,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.85,lab2,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.925,lab2,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.85,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.925,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8888888888888888,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9444444444444444,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4285714285714285,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.85,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.925,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8888888888888888,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9444444444444444,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4285714285714285,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8333333333333334,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9166666666666666,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.875,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9375,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8541666666666666,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9270833333333334,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8333333333333334,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9166666666666666,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8541666666666666,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9270833333333334,lab3,Train-Test-Split,44
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,44
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,44
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,44
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,44
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,44
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,44
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,44
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,44
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,44
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,44
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,44
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,44
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,44
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,44
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,44
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,44
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,44
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,44
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,44
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,44
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,44
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,44
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,44
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,44
+Microarray Data,uncorrected,MCC,0.8235294117647058,All,Train-Test-Split,44
+Microarray Data,uncorrected,F1_score,0.9117647058823528,All,Train-Test-Split,44
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,44
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,44
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,44
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,44
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,44
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,44
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,44
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,44
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,44
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,44
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Train-Test-Split,44
+Microarray Data,uncorrected,F1_score,0.5,GSE69428,Train-Test-Split,44
+Microarray Data,corrected,MCC,0.8823529411764706,All,Train-Test-Split,44
+Microarray Data,corrected,F1_score,0.9411764705882352,All,Train-Test-Split,44
+Microarray Data,corrected,MCC,0.6,GSE14407,Train-Test-Split,44
+Microarray Data,corrected,F1_score,0.8,GSE14407,Train-Test-Split,44
+Microarray Data,corrected,MCC,0.9487179487179488,GSE26712,Train-Test-Split,44
+Microarray Data,corrected,F1_score,0.9743589743589745,GSE26712,Train-Test-Split,44
+Microarray Data,corrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,44
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,44
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,44
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,44
+Microarray Data,corrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,44
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,44
+Microarray Data,corrected,MCC,1.0,GSE69428,Train-Test-Split,44
+Microarray Data,corrected,F1_score,1.0,GSE69428,Train-Test-Split,44
+Microbiome Data,uncorrected,MCC,0.5185185185185185,All,Train-Test-Split,44
+Microbiome Data,uncorrected,F1_score,0.7592592592592593,All,Train-Test-Split,44
+Microbiome Data,uncorrected,MCC,0.3,China1,Train-Test-Split,44
+Microbiome Data,uncorrected,F1_score,0.65,China1,Train-Test-Split,44
+Microbiome Data,uncorrected,MCC,0.391304347826087,China3,Train-Test-Split,44
+Microbiome Data,uncorrected,F1_score,0.6956521739130435,China3,Train-Test-Split,44
+Microbiome Data,uncorrected,MCC,0.6190476190476191,China5,Train-Test-Split,44
+Microbiome Data,uncorrected,F1_score,0.8095238095238095,China5,Train-Test-Split,44
+Microbiome Data,uncorrected,MCC,0.7142857142857143,France1,Train-Test-Split,44
+Microbiome Data,uncorrected,F1_score,0.8571428571428571,France1,Train-Test-Split,44
+Microbiome Data,uncorrected,MCC,0.6,Germany1,Train-Test-Split,44
+Microbiome Data,uncorrected,F1_score,0.8,Germany1,Train-Test-Split,44
+Microbiome Data,uncorrected,MCC,0.5,Germany2,Train-Test-Split,44
+Microbiome Data,uncorrected,F1_score,0.75,Germany2,Train-Test-Split,44
+Microbiome Data,corrected,MCC,0.5925925925925926,All,Train-Test-Split,44
+Microbiome Data,corrected,F1_score,0.7962962962962963,All,Train-Test-Split,44
+Microbiome Data,corrected,MCC,0.1,China1,Train-Test-Split,44
+Microbiome Data,corrected,F1_score,0.55,China1,Train-Test-Split,44
+Microbiome Data,corrected,MCC,0.6521739130434783,China3,Train-Test-Split,44
+Microbiome Data,corrected,F1_score,0.8260869565217391,China3,Train-Test-Split,44
+Microbiome Data,corrected,MCC,0.7142857142857143,China5,Train-Test-Split,44
+Microbiome Data,corrected,F1_score,0.8571428571428571,China5,Train-Test-Split,44
+Microbiome Data,corrected,MCC,0.7142857142857143,France1,Train-Test-Split,44
+Microbiome Data,corrected,F1_score,0.8571428571428571,France1,Train-Test-Split,44
+Microbiome Data,corrected,MCC,0.6,Germany1,Train-Test-Split,44
+Microbiome Data,corrected,F1_score,0.8,Germany1,Train-Test-Split,44
+Microbiome Data,corrected,MCC,1.0,Germany2,Train-Test-Split,44
+Microbiome Data,corrected,F1_score,1.0,Germany2,Train-Test-Split,44
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,45
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,45
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,45
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,45
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,45
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,45
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,45
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,45
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,45
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,45
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,45
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,45
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.85,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.925,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.625,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.8125,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.875,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9375,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9833333333333332,All,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9916666666666668,All,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.95,lab2,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.975,lab2,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,lab2,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,lab2,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8666666666666667,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9333333333333332,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4285714285714285,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8666666666666667,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9333333333333332,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4285714285714285,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.85,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.925,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.875,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9375,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.875,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9375,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.85,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.925,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab3,Train-Test-Split,45
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,45
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,45
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,45
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,45
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,45
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,45
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,45
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,45
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,45
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,45
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,45
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,45
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,45
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,45
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,45
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,45
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,45
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,45
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,45
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,45
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,45
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,45
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,45
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,45
+Microarray Data,uncorrected,MCC,0.8529411764705882,All,Train-Test-Split,45
+Microarray Data,uncorrected,F1_score,0.9264705882352942,All,Train-Test-Split,45
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,45
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,45
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,45
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,45
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,45
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,45
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,45
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,45
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,45
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,45
+Microarray Data,uncorrected,MCC,0.5,GSE69428,Train-Test-Split,45
+Microarray Data,uncorrected,F1_score,0.75,GSE69428,Train-Test-Split,45
+Microarray Data,corrected,MCC,0.8823529411764706,All,Train-Test-Split,45
+Microarray Data,corrected,F1_score,0.9411764705882352,All,Train-Test-Split,45
+Microarray Data,corrected,MCC,0.6,GSE14407,Train-Test-Split,45
+Microarray Data,corrected,F1_score,0.8,GSE14407,Train-Test-Split,45
+Microarray Data,corrected,MCC,0.9487179487179488,GSE26712,Train-Test-Split,45
+Microarray Data,corrected,F1_score,0.9743589743589745,GSE26712,Train-Test-Split,45
+Microarray Data,corrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,45
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,45
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,45
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,45
+Microarray Data,corrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,45
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,45
+Microarray Data,corrected,MCC,1.0,GSE69428,Train-Test-Split,45
+Microarray Data,corrected,F1_score,1.0,GSE69428,Train-Test-Split,45
+Microbiome Data,uncorrected,MCC,0.5,All,Train-Test-Split,45
+Microbiome Data,uncorrected,F1_score,0.75,All,Train-Test-Split,45
+Microbiome Data,uncorrected,MCC,0.5,China1,Train-Test-Split,45
+Microbiome Data,uncorrected,F1_score,0.75,China1,Train-Test-Split,45
+Microbiome Data,uncorrected,MCC,0.9130434782608696,China3,Train-Test-Split,45
+Microbiome Data,uncorrected,F1_score,0.9565217391304348,China3,Train-Test-Split,45
+Microbiome Data,uncorrected,MCC,0.5238095238095238,China5,Train-Test-Split,45
+Microbiome Data,uncorrected,F1_score,0.7619047619047619,China5,Train-Test-Split,45
+Microbiome Data,uncorrected,MCC,0.238095238095238,France1,Train-Test-Split,45
+Microbiome Data,uncorrected,F1_score,0.6190476190476191,France1,Train-Test-Split,45
+Microbiome Data,uncorrected,MCC,0.0666666666666666,Germany1,Train-Test-Split,45
+Microbiome Data,uncorrected,F1_score,0.5333333333333333,Germany1,Train-Test-Split,45
+Microbiome Data,uncorrected,MCC,0.75,Germany2,Train-Test-Split,45
+Microbiome Data,uncorrected,F1_score,0.875,Germany2,Train-Test-Split,45
+Microbiome Data,corrected,MCC,0.5740740740740741,All,Train-Test-Split,45
+Microbiome Data,corrected,F1_score,0.7870370370370371,All,Train-Test-Split,45
+Microbiome Data,corrected,MCC,0.5,China1,Train-Test-Split,45
+Microbiome Data,corrected,F1_score,0.75,China1,Train-Test-Split,45
+Microbiome Data,corrected,MCC,0.8260869565217391,China3,Train-Test-Split,45
+Microbiome Data,corrected,F1_score,0.9130434782608696,China3,Train-Test-Split,45
+Microbiome Data,corrected,MCC,0.7142857142857143,China5,Train-Test-Split,45
+Microbiome Data,corrected,F1_score,0.8571428571428571,China5,Train-Test-Split,45
+Microbiome Data,corrected,MCC,0.4285714285714285,France1,Train-Test-Split,45
+Microbiome Data,corrected,F1_score,0.7142857142857143,France1,Train-Test-Split,45
+Microbiome Data,corrected,MCC,0.2,Germany1,Train-Test-Split,45
+Microbiome Data,corrected,F1_score,0.6,Germany1,Train-Test-Split,45
+Microbiome Data,corrected,MCC,0.75,Germany2,Train-Test-Split,45
+Microbiome Data,corrected,F1_score,0.875,Germany2,Train-Test-Split,45
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,46
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,46
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,46
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,46
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,46
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,46
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,46
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,46
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,46
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,46
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,46
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,46
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.95,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.975,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.75,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.875,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.875,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9375,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9791666666666666,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9895833333333334,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9666666666666668,All,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9833333333333332,All,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9,lab2,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.95,lab2,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9666666666666668,All,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9833333333333332,All,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9,lab2,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.95,lab2,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8333333333333334,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9166666666666666,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8333333333333334,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9166666666666666,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.2857142857142857,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8333333333333334,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9166666666666666,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.625,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8125,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8958333333333334,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9479166666666666,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8333333333333334,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9166666666666666,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.625,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8125,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8958333333333334,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9479166666666666,lab3,Train-Test-Split,46
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,46
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,46
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,46
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,46
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,46
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,46
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,46
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,46
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,46
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,46
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,46
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,46
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,46
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,46
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,46
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,46
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,46
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,46
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,46
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,46
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,46
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,46
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,46
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,46
+Microarray Data,uncorrected,MCC,0.9117647058823528,All,Train-Test-Split,46
+Microarray Data,uncorrected,F1_score,0.9558823529411764,All,Train-Test-Split,46
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,46
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,46
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,46
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,46
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Train-Test-Split,46
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split,46
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,46
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,46
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,46
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,46
+Microarray Data,uncorrected,MCC,1.0,GSE69428,Train-Test-Split,46
+Microarray Data,uncorrected,F1_score,1.0,GSE69428,Train-Test-Split,46
+Microarray Data,corrected,MCC,0.9117647058823528,All,Train-Test-Split,46
+Microarray Data,corrected,F1_score,0.9558823529411764,All,Train-Test-Split,46
+Microarray Data,corrected,MCC,0.6,GSE14407,Train-Test-Split,46
+Microarray Data,corrected,F1_score,0.8,GSE14407,Train-Test-Split,46
+Microarray Data,corrected,MCC,1.0,GSE26712,Train-Test-Split,46
+Microarray Data,corrected,F1_score,1.0,GSE26712,Train-Test-Split,46
+Microarray Data,corrected,MCC,1.0,GSE38666,Train-Test-Split,46
+Microarray Data,corrected,F1_score,1.0,GSE38666,Train-Test-Split,46
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,46
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,46
+Microarray Data,corrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,46
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,46
+Microarray Data,corrected,MCC,0.5,GSE69428,Train-Test-Split,46
+Microarray Data,corrected,F1_score,0.75,GSE69428,Train-Test-Split,46
+Microbiome Data,uncorrected,MCC,0.4629629629629629,All,Train-Test-Split,46
+Microbiome Data,uncorrected,F1_score,0.7314814814814815,All,Train-Test-Split,46
+Microbiome Data,uncorrected,MCC,0.5,China1,Train-Test-Split,46
+Microbiome Data,uncorrected,F1_score,0.75,China1,Train-Test-Split,46
+Microbiome Data,uncorrected,MCC,0.3043478260869565,China3,Train-Test-Split,46
+Microbiome Data,uncorrected,F1_score,0.6521739130434783,China3,Train-Test-Split,46
+Microbiome Data,uncorrected,MCC,0.6190476190476191,China5,Train-Test-Split,46
+Microbiome Data,uncorrected,F1_score,0.8095238095238095,China5,Train-Test-Split,46
+Microbiome Data,uncorrected,MCC,0.5238095238095238,France1,Train-Test-Split,46
+Microbiome Data,uncorrected,F1_score,0.7619047619047619,France1,Train-Test-Split,46
+Microbiome Data,uncorrected,MCC,0.4666666666666667,Germany1,Train-Test-Split,46
+Microbiome Data,uncorrected,F1_score,0.7333333333333333,Germany1,Train-Test-Split,46
+Microbiome Data,uncorrected,MCC,0.25,Germany2,Train-Test-Split,46
+Microbiome Data,uncorrected,F1_score,0.625,Germany2,Train-Test-Split,46
+Microbiome Data,corrected,MCC,0.6481481481481481,All,Train-Test-Split,46
+Microbiome Data,corrected,F1_score,0.8240740740740741,All,Train-Test-Split,46
+Microbiome Data,corrected,MCC,0.6,China1,Train-Test-Split,46
+Microbiome Data,corrected,F1_score,0.8,China1,Train-Test-Split,46
+Microbiome Data,corrected,MCC,0.7391304347826086,China3,Train-Test-Split,46
+Microbiome Data,corrected,F1_score,0.8695652173913043,China3,Train-Test-Split,46
+Microbiome Data,corrected,MCC,0.7142857142857143,China5,Train-Test-Split,46
+Microbiome Data,corrected,F1_score,0.8571428571428571,China5,Train-Test-Split,46
+Microbiome Data,corrected,MCC,0.7142857142857143,France1,Train-Test-Split,46
+Microbiome Data,corrected,F1_score,0.8571428571428571,France1,Train-Test-Split,46
+Microbiome Data,corrected,MCC,0.6,Germany1,Train-Test-Split,46
+Microbiome Data,corrected,F1_score,0.8,Germany1,Train-Test-Split,46
+Microbiome Data,corrected,MCC,0.25,Germany2,Train-Test-Split,46
+Microbiome Data,corrected,F1_score,0.625,Germany2,Train-Test-Split,46
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,47
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,47
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,47
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,47
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,47
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,47
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,47
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,47
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,47
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,47
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,47
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,47
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8833333333333333,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9416666666666668,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8541666666666666,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9270833333333334,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.95,All,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.975,All,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.85,lab2,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.925,lab2,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,All,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,All,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.85,lab2,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.925,lab2,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8666666666666667,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9333333333333332,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4285714285714285,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8666666666666667,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9333333333333332,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4285714285714285,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7142857142857143,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9333333333333332,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9666666666666668,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.75,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.875,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9375,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.96875,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9333333333333332,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9666666666666668,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.75,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.875,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9375,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.96875,lab3,Train-Test-Split,47
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,47
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,47
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,47
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,47
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,47
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,47
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,47
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,47
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,47
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,47
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,47
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,47
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,47
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,47
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,47
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,47
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,47
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,47
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,47
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,47
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,47
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,47
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,47
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,47
+Microarray Data,uncorrected,MCC,0.9117647058823528,All,Train-Test-Split,47
+Microarray Data,uncorrected,F1_score,0.9558823529411764,All,Train-Test-Split,47
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,47
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,47
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,47
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,47
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Train-Test-Split,47
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split,47
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,47
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,47
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,47
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,47
+Microarray Data,uncorrected,MCC,1.0,GSE69428,Train-Test-Split,47
+Microarray Data,uncorrected,F1_score,1.0,GSE69428,Train-Test-Split,47
+Microarray Data,corrected,MCC,0.9411764705882352,All,Train-Test-Split,47
+Microarray Data,corrected,F1_score,0.9705882352941176,All,Train-Test-Split,47
+Microarray Data,corrected,MCC,0.6,GSE14407,Train-Test-Split,47
+Microarray Data,corrected,F1_score,0.8,GSE14407,Train-Test-Split,47
+Microarray Data,corrected,MCC,1.0,GSE26712,Train-Test-Split,47
+Microarray Data,corrected,F1_score,1.0,GSE26712,Train-Test-Split,47
+Microarray Data,corrected,MCC,1.0,GSE38666,Train-Test-Split,47
+Microarray Data,corrected,F1_score,1.0,GSE38666,Train-Test-Split,47
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,47
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,47
+Microarray Data,corrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,47
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,47
+Microarray Data,corrected,MCC,1.0,GSE69428,Train-Test-Split,47
+Microarray Data,corrected,F1_score,1.0,GSE69428,Train-Test-Split,47
+Microbiome Data,uncorrected,MCC,0.5,All,Train-Test-Split,47
+Microbiome Data,uncorrected,F1_score,0.75,All,Train-Test-Split,47
+Microbiome Data,uncorrected,MCC,0.5,China1,Train-Test-Split,47
+Microbiome Data,uncorrected,F1_score,0.75,China1,Train-Test-Split,47
+Microbiome Data,uncorrected,MCC,0.5652173913043478,China3,Train-Test-Split,47
+Microbiome Data,uncorrected,F1_score,0.782608695652174,China3,Train-Test-Split,47
+Microbiome Data,uncorrected,MCC,0.3333333333333333,China5,Train-Test-Split,47
+Microbiome Data,uncorrected,F1_score,0.6666666666666666,China5,Train-Test-Split,47
+Microbiome Data,uncorrected,MCC,0.5238095238095238,France1,Train-Test-Split,47
+Microbiome Data,uncorrected,F1_score,0.7619047619047619,France1,Train-Test-Split,47
+Microbiome Data,uncorrected,MCC,0.8666666666666667,Germany1,Train-Test-Split,47
+Microbiome Data,uncorrected,F1_score,0.9333333333333332,Germany1,Train-Test-Split,47
+Microbiome Data,uncorrected,MCC,0.0,Germany2,Train-Test-Split,47
+Microbiome Data,uncorrected,F1_score,0.5,Germany2,Train-Test-Split,47
+Microbiome Data,corrected,MCC,0.5,All,Train-Test-Split,47
+Microbiome Data,corrected,F1_score,0.75,All,Train-Test-Split,47
+Microbiome Data,corrected,MCC,0.1,China1,Train-Test-Split,47
+Microbiome Data,corrected,F1_score,0.55,China1,Train-Test-Split,47
+Microbiome Data,corrected,MCC,0.5652173913043478,China3,Train-Test-Split,47
+Microbiome Data,corrected,F1_score,0.782608695652174,China3,Train-Test-Split,47
+Microbiome Data,corrected,MCC,0.4285714285714285,China5,Train-Test-Split,47
+Microbiome Data,corrected,F1_score,0.7142857142857143,China5,Train-Test-Split,47
+Microbiome Data,corrected,MCC,0.7142857142857143,France1,Train-Test-Split,47
+Microbiome Data,corrected,F1_score,0.8571428571428571,France1,Train-Test-Split,47
+Microbiome Data,corrected,MCC,0.7333333333333333,Germany1,Train-Test-Split,47
+Microbiome Data,corrected,F1_score,0.8666666666666667,Germany1,Train-Test-Split,47
+Microbiome Data,corrected,MCC,0.5,Germany2,Train-Test-Split,47
+Microbiome Data,corrected,F1_score,0.75,Germany2,Train-Test-Split,47
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,48
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,48
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,48
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,48
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,48
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,48
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,48
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,48
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,48
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,48
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,48
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,48
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9833333333333332,All,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9916666666666668,All,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.95,lab2,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.975,lab2,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,lab2,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,lab2,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8833333333333333,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9416666666666668,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8833333333333333,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9416666666666668,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9166666666666666,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9583333333333334,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9375,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.96875,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9166666666666666,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9583333333333334,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9375,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.96875,lab3,Train-Test-Split,48
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,48
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,48
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,48
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,48
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,48
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,48
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,48
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,48
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,48
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,48
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,48
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,48
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,48
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,48
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,48
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,48
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,48
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,48
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,48
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,48
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,48
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,48
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,48
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,48
+Microarray Data,uncorrected,MCC,0.8529411764705882,All,Train-Test-Split,48
+Microarray Data,uncorrected,F1_score,0.9264705882352942,All,Train-Test-Split,48
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,48
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,48
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,48
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,48
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Train-Test-Split,48
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split,48
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,48
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,48
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,48
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,48
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Train-Test-Split,48
+Microarray Data,uncorrected,F1_score,0.5,GSE69428,Train-Test-Split,48
+Microarray Data,corrected,MCC,0.8823529411764706,All,Train-Test-Split,48
+Microarray Data,corrected,F1_score,0.9411764705882352,All,Train-Test-Split,48
+Microarray Data,corrected,MCC,1.0,GSE14407,Train-Test-Split,48
+Microarray Data,corrected,F1_score,1.0,GSE14407,Train-Test-Split,48
+Microarray Data,corrected,MCC,0.9487179487179488,GSE26712,Train-Test-Split,48
+Microarray Data,corrected,F1_score,0.9743589743589745,GSE26712,Train-Test-Split,48
+Microarray Data,corrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,48
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,48
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,48
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,48
+Microarray Data,corrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,48
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,48
+Microarray Data,corrected,MCC,0.5,GSE69428,Train-Test-Split,48
+Microarray Data,corrected,F1_score,0.75,GSE69428,Train-Test-Split,48
+Microbiome Data,uncorrected,MCC,0.5370370370370371,All,Train-Test-Split,48
+Microbiome Data,uncorrected,F1_score,0.7685185185185185,All,Train-Test-Split,48
+Microbiome Data,uncorrected,MCC,0.2,China1,Train-Test-Split,48
+Microbiome Data,uncorrected,F1_score,0.6,China1,Train-Test-Split,48
+Microbiome Data,uncorrected,MCC,0.8260869565217391,China3,Train-Test-Split,48
+Microbiome Data,uncorrected,F1_score,0.9130434782608696,China3,Train-Test-Split,48
+Microbiome Data,uncorrected,MCC,0.6190476190476191,China5,Train-Test-Split,48
+Microbiome Data,uncorrected,F1_score,0.8095238095238095,China5,Train-Test-Split,48
+Microbiome Data,uncorrected,MCC,0.4285714285714285,France1,Train-Test-Split,48
+Microbiome Data,uncorrected,F1_score,0.7142857142857143,France1,Train-Test-Split,48
+Microbiome Data,uncorrected,MCC,0.6,Germany1,Train-Test-Split,48
+Microbiome Data,uncorrected,F1_score,0.8,Germany1,Train-Test-Split,48
+Microbiome Data,uncorrected,MCC,0.5,Germany2,Train-Test-Split,48
+Microbiome Data,uncorrected,F1_score,0.75,Germany2,Train-Test-Split,48
+Microbiome Data,corrected,MCC,0.5185185185185185,All,Train-Test-Split,48
+Microbiome Data,corrected,F1_score,0.7592592592592593,All,Train-Test-Split,48
+Microbiome Data,corrected,MCC,0.3,China1,Train-Test-Split,48
+Microbiome Data,corrected,F1_score,0.65,China1,Train-Test-Split,48
+Microbiome Data,corrected,MCC,0.6521739130434783,China3,Train-Test-Split,48
+Microbiome Data,corrected,F1_score,0.8260869565217391,China3,Train-Test-Split,48
+Microbiome Data,corrected,MCC,0.7142857142857143,China5,Train-Test-Split,48
+Microbiome Data,corrected,F1_score,0.8571428571428571,China5,Train-Test-Split,48
+Microbiome Data,corrected,MCC,0.3333333333333333,France1,Train-Test-Split,48
+Microbiome Data,corrected,F1_score,0.6666666666666666,France1,Train-Test-Split,48
+Microbiome Data,corrected,MCC,0.6,Germany1,Train-Test-Split,48
+Microbiome Data,corrected,F1_score,0.8,Germany1,Train-Test-Split,48
+Microbiome Data,corrected,MCC,0.5,Germany2,Train-Test-Split,48
+Microbiome Data,corrected,F1_score,0.75,Germany2,Train-Test-Split,48
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,49
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,49
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,49
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,49
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,49
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,49
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,49
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,49
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,49
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,49
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,49
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,49
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.8333333333333334,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9166666666666666,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.75,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.875,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.625,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.8125,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.875,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9375,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.95,All,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.975,All,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.85,lab2,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.925,lab2,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,All,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,All,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.85,lab2,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.925,lab2,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.95,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5714285714285714,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7857142857142857,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.95,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5714285714285714,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.7857142857142857,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.625,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8125,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8541666666666666,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9270833333333334,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.625,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8125,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8541666666666666,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9270833333333334,lab3,Train-Test-Split,49
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,49
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,49
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,49
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,49
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,49
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,49
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,49
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,49
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,49
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,49
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,49
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,49
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,49
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,49
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,49
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,49
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,49
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,49
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,49
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,49
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,49
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,49
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,49
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,49
+Microarray Data,uncorrected,MCC,0.8235294117647058,All,Train-Test-Split,49
+Microarray Data,uncorrected,F1_score,0.9117647058823528,All,Train-Test-Split,49
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,49
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,49
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,49
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,49
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,49
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,49
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,49
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,49
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,49
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,49
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Train-Test-Split,49
+Microarray Data,uncorrected,F1_score,0.5,GSE69428,Train-Test-Split,49
+Microarray Data,corrected,MCC,0.9411764705882352,All,Train-Test-Split,49
+Microarray Data,corrected,F1_score,0.9705882352941176,All,Train-Test-Split,49
+Microarray Data,corrected,MCC,0.6,GSE14407,Train-Test-Split,49
+Microarray Data,corrected,F1_score,0.8,GSE14407,Train-Test-Split,49
+Microarray Data,corrected,MCC,1.0,GSE26712,Train-Test-Split,49
+Microarray Data,corrected,F1_score,1.0,GSE26712,Train-Test-Split,49
+Microarray Data,corrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,49
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,49
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,49
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,49
+Microarray Data,corrected,MCC,1.0,GSE6008,Train-Test-Split,49
+Microarray Data,corrected,F1_score,1.0,GSE6008,Train-Test-Split,49
+Microarray Data,corrected,MCC,1.0,GSE69428,Train-Test-Split,49
+Microarray Data,corrected,F1_score,1.0,GSE69428,Train-Test-Split,49
+Microbiome Data,uncorrected,MCC,0.5740740740740741,All,Train-Test-Split,49
+Microbiome Data,uncorrected,F1_score,0.7870370370370371,All,Train-Test-Split,49
+Microbiome Data,uncorrected,MCC,0.4,China1,Train-Test-Split,49
+Microbiome Data,uncorrected,F1_score,0.7,China1,Train-Test-Split,49
+Microbiome Data,uncorrected,MCC,0.4782608695652174,China3,Train-Test-Split,49
+Microbiome Data,uncorrected,F1_score,0.7391304347826086,China3,Train-Test-Split,49
+Microbiome Data,uncorrected,MCC,0.8095238095238095,China5,Train-Test-Split,49
+Microbiome Data,uncorrected,F1_score,0.9047619047619048,China5,Train-Test-Split,49
+Microbiome Data,uncorrected,MCC,0.7142857142857143,France1,Train-Test-Split,49
+Microbiome Data,uncorrected,F1_score,0.8571428571428571,France1,Train-Test-Split,49
+Microbiome Data,uncorrected,MCC,0.6,Germany1,Train-Test-Split,49
+Microbiome Data,uncorrected,F1_score,0.8,Germany1,Train-Test-Split,49
+Microbiome Data,uncorrected,MCC,0.25,Germany2,Train-Test-Split,49
+Microbiome Data,uncorrected,F1_score,0.625,Germany2,Train-Test-Split,49
+Microbiome Data,corrected,MCC,0.7222222222222222,All,Train-Test-Split,49
+Microbiome Data,corrected,F1_score,0.8611111111111112,All,Train-Test-Split,49
+Microbiome Data,corrected,MCC,0.7,China1,Train-Test-Split,49
+Microbiome Data,corrected,F1_score,0.85,China1,Train-Test-Split,49
+Microbiome Data,corrected,MCC,0.8260869565217391,China3,Train-Test-Split,49
+Microbiome Data,corrected,F1_score,0.9130434782608696,China3,Train-Test-Split,49
+Microbiome Data,corrected,MCC,0.8095238095238095,China5,Train-Test-Split,49
+Microbiome Data,corrected,F1_score,0.9047619047619048,China5,Train-Test-Split,49
+Microbiome Data,corrected,MCC,0.9047619047619048,France1,Train-Test-Split,49
+Microbiome Data,corrected,F1_score,0.9523809523809524,France1,Train-Test-Split,49
+Microbiome Data,corrected,MCC,0.4666666666666667,Germany1,Train-Test-Split,49
+Microbiome Data,corrected,F1_score,0.7333333333333333,Germany1,Train-Test-Split,49
+Microbiome Data,corrected,MCC,0.25,Germany2,Train-Test-Split,49
+Microbiome Data,corrected,F1_score,0.625,Germany2,Train-Test-Split,49
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,50
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,50
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,50
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,50
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,50
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,50
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,50
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,50
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,50
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,50
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,50
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,50
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9666666666666668,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9833333333333332,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9583333333333334,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9791666666666666,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9166666666666666,All,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9583333333333334,All,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.75,lab2,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.875,lab2,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9166666666666666,All,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9583333333333334,All,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.75,lab2,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.875,lab2,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8333333333333334,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9166666666666666,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.3571428571428571,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6785714285714286,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.972972972972973,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9864864864864864,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8333333333333334,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9166666666666666,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.3571428571428571,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6785714285714286,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.972972972972973,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9864864864864864,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8666666666666667,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9333333333333332,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.875,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9375,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8958333333333334,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9479166666666666,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8666666666666667,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9333333333333332,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8958333333333334,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9479166666666666,lab3,Train-Test-Split,50
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,50
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,50
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,50
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,50
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,50
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,50
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,50
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,50
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,50
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,50
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,50
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,50
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,50
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,50
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,50
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,50
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,50
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,50
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,50
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,50
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,50
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,50
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,50
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,50
+Microarray Data,uncorrected,MCC,0.8823529411764706,All,Train-Test-Split,50
+Microarray Data,uncorrected,F1_score,0.9411764705882352,All,Train-Test-Split,50
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,50
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,50
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,50
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,50
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Train-Test-Split,50
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split,50
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,50
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,50
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,50
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,50
+Microarray Data,uncorrected,MCC,0.5,GSE69428,Train-Test-Split,50
+Microarray Data,uncorrected,F1_score,0.75,GSE69428,Train-Test-Split,50
+Microarray Data,corrected,MCC,0.8823529411764706,All,Train-Test-Split,50
+Microarray Data,corrected,F1_score,0.9411764705882352,All,Train-Test-Split,50
+Microarray Data,corrected,MCC,0.6,GSE14407,Train-Test-Split,50
+Microarray Data,corrected,F1_score,0.8,GSE14407,Train-Test-Split,50
+Microarray Data,corrected,MCC,1.0,GSE26712,Train-Test-Split,50
+Microarray Data,corrected,F1_score,1.0,GSE26712,Train-Test-Split,50
+Microarray Data,corrected,MCC,0.6666666666666666,GSE38666,Train-Test-Split,50
+Microarray Data,corrected,F1_score,0.8333333333333334,GSE38666,Train-Test-Split,50
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,50
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,50
+Microarray Data,corrected,MCC,1.0,GSE6008,Train-Test-Split,50
+Microarray Data,corrected,F1_score,1.0,GSE6008,Train-Test-Split,50
+Microarray Data,corrected,MCC,0.0,GSE69428,Train-Test-Split,50
+Microarray Data,corrected,F1_score,0.5,GSE69428,Train-Test-Split,50
+Microbiome Data,uncorrected,MCC,0.6111111111111112,All,Train-Test-Split,50
+Microbiome Data,uncorrected,F1_score,0.8055555555555556,All,Train-Test-Split,50
+Microbiome Data,uncorrected,MCC,0.7,China1,Train-Test-Split,50
+Microbiome Data,uncorrected,F1_score,0.85,China1,Train-Test-Split,50
+Microbiome Data,uncorrected,MCC,0.5652173913043478,China3,Train-Test-Split,50
+Microbiome Data,uncorrected,F1_score,0.782608695652174,China3,Train-Test-Split,50
+Microbiome Data,uncorrected,MCC,0.9047619047619048,China5,Train-Test-Split,50
+Microbiome Data,uncorrected,F1_score,0.9523809523809524,China5,Train-Test-Split,50
+Microbiome Data,uncorrected,MCC,0.3333333333333333,France1,Train-Test-Split,50
+Microbiome Data,uncorrected,F1_score,0.6666666666666666,France1,Train-Test-Split,50
+Microbiome Data,uncorrected,MCC,0.7333333333333333,Germany1,Train-Test-Split,50
+Microbiome Data,uncorrected,F1_score,0.8666666666666667,Germany1,Train-Test-Split,50
+Microbiome Data,uncorrected,MCC,0.25,Germany2,Train-Test-Split,50
+Microbiome Data,uncorrected,F1_score,0.625,Germany2,Train-Test-Split,50
+Microbiome Data,corrected,MCC,0.6666666666666666,All,Train-Test-Split,50
+Microbiome Data,corrected,F1_score,0.8333333333333334,All,Train-Test-Split,50
+Microbiome Data,corrected,MCC,0.6,China1,Train-Test-Split,50
+Microbiome Data,corrected,F1_score,0.8,China1,Train-Test-Split,50
+Microbiome Data,corrected,MCC,0.7391304347826086,China3,Train-Test-Split,50
+Microbiome Data,corrected,F1_score,0.8695652173913043,China3,Train-Test-Split,50
+Microbiome Data,corrected,MCC,0.9047619047619048,China5,Train-Test-Split,50
+Microbiome Data,corrected,F1_score,0.9523809523809524,China5,Train-Test-Split,50
+Microbiome Data,corrected,MCC,0.5238095238095238,France1,Train-Test-Split,50
+Microbiome Data,corrected,F1_score,0.7619047619047619,France1,Train-Test-Split,50
+Microbiome Data,corrected,MCC,0.4666666666666667,Germany1,Train-Test-Split,50
+Microbiome Data,corrected,F1_score,0.7333333333333333,Germany1,Train-Test-Split,50
+Microbiome Data,corrected,MCC,0.75,Germany2,Train-Test-Split,50
+Microbiome Data,corrected,F1_score,0.875,Germany2,Train-Test-Split,50
+Balanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,51
+Balanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,51
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,51
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,51
+Balanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,51
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,51
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,51
+Balanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,51
+Balanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,51
+Balanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,51
+Balanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,51
+Balanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,51
+Balanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.9833333333333332,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9916666666666668,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,uncorrected,MCC,0.875,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,0.9375,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,uncorrected,MCC,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,uncorrected,F1_score,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,corrected,MCC,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data,corrected,F1_score,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9166666666666666,All,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9583333333333334,All,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.75,lab2,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.875,lab2,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9166666666666666,All,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9583333333333334,All,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.75,lab2,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.875,lab2,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8833333333333333,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9416666666666668,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8833333333333333,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9416666666666668,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.95,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9166666666666666,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9583333333333334,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.95,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.5,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.75,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9166666666666666,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9583333333333334,lab3,Train-Test-Split,51
+Proteomics Data,uncorrected,MCC,1.0,All,Train-Test-Split,51
+Proteomics Data,uncorrected,F1_score,1.0,All,Train-Test-Split,51
+Proteomics Data,uncorrected,MCC,1.0,lab_A,Train-Test-Split,51
+Proteomics Data,uncorrected,F1_score,1.0,lab_A,Train-Test-Split,51
+Proteomics Data,uncorrected,MCC,1.0,lab_B,Train-Test-Split,51
+Proteomics Data,uncorrected,F1_score,1.0,lab_B,Train-Test-Split,51
+Proteomics Data,uncorrected,MCC,1.0,lab_C,Train-Test-Split,51
+Proteomics Data,uncorrected,F1_score,1.0,lab_C,Train-Test-Split,51
+Proteomics Data,uncorrected,MCC,1.0,lab_D,Train-Test-Split,51
+Proteomics Data,uncorrected,F1_score,1.0,lab_D,Train-Test-Split,51
+Proteomics Data,uncorrected,MCC,1.0,lab_E,Train-Test-Split,51
+Proteomics Data,uncorrected,F1_score,1.0,lab_E,Train-Test-Split,51
+Proteomics Data,corrected,MCC,1.0,All,Train-Test-Split,51
+Proteomics Data,corrected,F1_score,1.0,All,Train-Test-Split,51
+Proteomics Data,corrected,MCC,1.0,lab_A,Train-Test-Split,51
+Proteomics Data,corrected,F1_score,1.0,lab_A,Train-Test-Split,51
+Proteomics Data,corrected,MCC,1.0,lab_B,Train-Test-Split,51
+Proteomics Data,corrected,F1_score,1.0,lab_B,Train-Test-Split,51
+Proteomics Data,corrected,MCC,1.0,lab_C,Train-Test-Split,51
+Proteomics Data,corrected,F1_score,1.0,lab_C,Train-Test-Split,51
+Proteomics Data,corrected,MCC,1.0,lab_D,Train-Test-Split,51
+Proteomics Data,corrected,F1_score,1.0,lab_D,Train-Test-Split,51
+Proteomics Data,corrected,MCC,1.0,lab_E,Train-Test-Split,51
+Proteomics Data,corrected,F1_score,1.0,lab_E,Train-Test-Split,51
+Microarray Data,uncorrected,MCC,0.8529411764705882,All,Train-Test-Split,51
+Microarray Data,uncorrected,F1_score,0.9264705882352942,All,Train-Test-Split,51
+Microarray Data,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,51
+Microarray Data,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,51
+Microarray Data,uncorrected,MCC,0.8974358974358975,GSE26712,Train-Test-Split,51
+Microarray Data,uncorrected,F1_score,0.9487179487179488,GSE26712,Train-Test-Split,51
+Microarray Data,uncorrected,MCC,1.0,GSE38666,Train-Test-Split,51
+Microarray Data,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split,51
+Microarray Data,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,51
+Microarray Data,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,51
+Microarray Data,uncorrected,MCC,0.6666666666666666,GSE6008,Train-Test-Split,51
+Microarray Data,uncorrected,F1_score,0.8333333333333334,GSE6008,Train-Test-Split,51
+Microarray Data,uncorrected,MCC,0.0,GSE69428,Train-Test-Split,51
+Microarray Data,uncorrected,F1_score,0.5,GSE69428,Train-Test-Split,51
+Microarray Data,corrected,MCC,0.8529411764705882,All,Train-Test-Split,51
+Microarray Data,corrected,F1_score,0.9264705882352942,All,Train-Test-Split,51
+Microarray Data,corrected,MCC,-0.2,GSE14407,Train-Test-Split,51
+Microarray Data,corrected,F1_score,0.4,GSE14407,Train-Test-Split,51
+Microarray Data,corrected,MCC,1.0,GSE26712,Train-Test-Split,51
+Microarray Data,corrected,F1_score,1.0,GSE26712,Train-Test-Split,51
+Microarray Data,corrected,MCC,1.0,GSE38666,Train-Test-Split,51
+Microarray Data,corrected,F1_score,1.0,GSE38666,Train-Test-Split,51
+Microarray Data,corrected,MCC,1.0,GSE40595,Train-Test-Split,51
+Microarray Data,corrected,F1_score,1.0,GSE40595,Train-Test-Split,51
+Microarray Data,corrected,MCC,1.0,GSE6008,Train-Test-Split,51
+Microarray Data,corrected,F1_score,1.0,GSE6008,Train-Test-Split,51
+Microarray Data,corrected,MCC,0.0,GSE69428,Train-Test-Split,51
+Microarray Data,corrected,F1_score,0.5,GSE69428,Train-Test-Split,51
+Microbiome Data,uncorrected,MCC,0.5925925925925926,All,Train-Test-Split,51
+Microbiome Data,uncorrected,F1_score,0.7962962962962963,All,Train-Test-Split,51
+Microbiome Data,uncorrected,MCC,0.7,China1,Train-Test-Split,51
+Microbiome Data,uncorrected,F1_score,0.85,China1,Train-Test-Split,51
+Microbiome Data,uncorrected,MCC,0.6521739130434783,China3,Train-Test-Split,51
+Microbiome Data,uncorrected,F1_score,0.8260869565217391,China3,Train-Test-Split,51
+Microbiome Data,uncorrected,MCC,0.7142857142857143,China5,Train-Test-Split,51
+Microbiome Data,uncorrected,F1_score,0.8571428571428571,China5,Train-Test-Split,51
+Microbiome Data,uncorrected,MCC,0.5238095238095238,France1,Train-Test-Split,51
+Microbiome Data,uncorrected,F1_score,0.7619047619047619,France1,Train-Test-Split,51
+Microbiome Data,uncorrected,MCC,0.3333333333333333,Germany1,Train-Test-Split,51
+Microbiome Data,uncorrected,F1_score,0.6666666666666666,Germany1,Train-Test-Split,51
+Microbiome Data,uncorrected,MCC,0.5,Germany2,Train-Test-Split,51
+Microbiome Data,uncorrected,F1_score,0.75,Germany2,Train-Test-Split,51
+Microbiome Data,corrected,MCC,0.6666666666666666,All,Train-Test-Split,51
+Microbiome Data,corrected,F1_score,0.8333333333333334,All,Train-Test-Split,51
+Microbiome Data,corrected,MCC,0.7,China1,Train-Test-Split,51
+Microbiome Data,corrected,F1_score,0.85,China1,Train-Test-Split,51
+Microbiome Data,corrected,MCC,0.7391304347826086,China3,Train-Test-Split,51
+Microbiome Data,corrected,F1_score,0.8695652173913043,China3,Train-Test-Split,51
+Microbiome Data,corrected,MCC,0.7142857142857143,China5,Train-Test-Split,51
+Microbiome Data,corrected,F1_score,0.8571428571428571,China5,Train-Test-Split,51
+Microbiome Data,corrected,MCC,0.6190476190476191,France1,Train-Test-Split,51
+Microbiome Data,corrected,F1_score,0.8095238095238095,France1,Train-Test-Split,51
+Microbiome Data,corrected,MCC,0.4666666666666667,Germany1,Train-Test-Split,51
+Microbiome Data,corrected,F1_score,0.7333333333333333,Germany1,Train-Test-Split,51
+Microbiome Data,corrected,MCC,0.75,Germany2,Train-Test-Split,51
+Microbiome Data,corrected,F1_score,0.875,Germany2,Train-Test-Split,51

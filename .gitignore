@@ -171,12 +171,6 @@ evaluation_data/tests/
 evaluation_data/testbed-*
 evaluation_data/workflows
 **/individual_results
-!evaluation_data/simulated/balanced/after/individual_results/
-
-# these files are too big!
-evaluation_data/microarray/after/*.tsv
-evaluation_data/microarray/after/*.csv
-evaluation_data/microarray/before/all_expression_UNION.tsv
 
 # to many files
 evaluation/eval_simulation/*/lmvp/*.tsv
@@ -216,3 +210,19 @@ evaluation_data/**/config_forest.yaml
 
 # anything with tmp in the name is meant to be temporary
 **/tmp*
+
+# Allow specific files to be used in git lfs
+## Allow all federated corrected data
+!evaluation_data/**/after/individual_results/*/full_corrected_data.csv
+!evaluation_data/**/after/individual_results/*/only_batch_corrected_data.csv
+!evaluation_data/**/after/individual_results/*/report.txt
+
+## Also the centrally corrected data
+!evaluation_data/**/after/intensities_R_corrected.tsv
+
+## Allow the simulated rotation before data
+## This data is too big but is added to git lfs
+## Other data in simulated_rotation is prohibided so we need to
+## specifically add it here
+!evaluation_data/simulated_rotation/*/before/lab*/design.tsv
+!evaluation_data/simulated_rotation/*/before/lab*/intensities.tsv
