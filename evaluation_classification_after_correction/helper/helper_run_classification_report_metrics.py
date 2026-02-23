@@ -182,6 +182,13 @@ class DataInfo:
             data_df = data_df.join(design_df[[self.covariate]], how='inner')
         # else: covariate is expected to already be a column in data_df
 
+        # Ensure the covariate column exists after loading/merging.
+        if self.covariate not in data_df.columns:
+            raise ValueError(
+                f"Covariate '{self.covariate}' not found in cohort data at {cohort_folder}. "
+                "Either provide a designfile with this covariate or include it in the datafile."
+            )
+
         return data_df
 
     # ------------------------------------------------------------------
