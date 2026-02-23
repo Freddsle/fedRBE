@@ -2319,3 +2319,483 @@ Microbiome Data,corrected,MCC,0.4927143099141771,Germany1,Leave-One-Cohort-Out,5
 Microbiome Data,corrected,F1_score,0.7762515528451349,Germany1,Leave-One-Cohort-Out,51
 Microbiome Data,corrected,MCC,0.5096471914376256,Germany2,Leave-One-Cohort-Out,51
 Microbiome Data,corrected,F1_score,0.8005540166204985,Germany2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0833333333333333,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5416666666666666,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.15,lab1,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.575,lab1,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1,lab3,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.55,lab3,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8833333333333333,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9416666666666668,All,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.65,lab1,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.825,lab1,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.6833333333333333,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8416666666666667,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.945945945945946,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.972972972972973,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7166666666666667,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8583333333333333,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7708333333333334,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8854166666666666,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1833333333333333,All,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5916666666666667,All,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.35,lab1,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.675,lab1,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2,lab3,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6,lab3,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9,All,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.95,All,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.75,lab1,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.875,lab1,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,lab2,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,lab2,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7166666666666667,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8583333333333333,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9285714285714286,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9642857142857144,lab2,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8833333333333333,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9416666666666668,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.75,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.875,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2166666666666666,All,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6083333333333333,All,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.3,lab1,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.65,lab1,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.35,lab3,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.675,lab3,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9,All,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.95,All,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.7,lab1,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.85,lab1,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7166666666666667,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8583333333333333,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9285714285714286,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9642857142857144,lab2,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.6666666666666666,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8333333333333334,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.75,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.875,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1666666666666666,All,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5833333333333334,All,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab3,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,All,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,All,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.85,lab1,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.925,lab1,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7166666666666667,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8583333333333333,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7333333333333333,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8666666666666667,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.5,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.75,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8333333333333334,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9166666666666666,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,All,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,All,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.45,lab1,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.725,lab1,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.3,lab3,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.65,lab3,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9333333333333332,All,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9666666666666668,All,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8,lab1,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9,lab1,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7166666666666667,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8583333333333333,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9285714285714286,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9642857142857144,lab2,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.95,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,All,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,All,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab1,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab3,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8333333333333334,All,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9166666666666666,All,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.55,lab1,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.775,lab1,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.95,lab2,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.975,lab2,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.3666666666666666,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6833333333333333,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4324324324324324,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7162162162162162,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.95,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.05,All,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.525,All,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.15,lab1,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.575,lab1,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab3,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9166666666666666,All,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9583333333333334,All,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.75,lab1,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.875,lab1,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7166666666666667,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8583333333333333,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9285714285714286,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9642857142857144,lab2,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8833333333333333,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9416666666666668,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.75,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.875,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0166666666666666,All,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5083333333333333,All,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.05,lab1,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.525,lab1,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab3,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9333333333333332,All,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9666666666666668,All,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8,lab1,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9,lab1,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.75,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.875,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.4444444444444444,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7222222222222222,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8833333333333333,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9416666666666668,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9791666666666666,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9895833333333334,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0166666666666666,All,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5083333333333333,All,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab1,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.05,lab3,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.525,lab3,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9666666666666668,All,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9833333333333332,All,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9,lab1,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.95,lab1,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.85,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.972972972972973,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9864864864864864,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.8333333333333334,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.9166666666666666,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.75,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.875,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9375,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.96875,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0833333333333333,All,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5416666666666666,All,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.15,lab1,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.575,lab1,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5,lab2,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1,lab3,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.55,lab3,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8833333333333333,All,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9416666666666668,All,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.65,lab1,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.825,lab1,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.7166666666666667,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.8583333333333333,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2222222222222222,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6111111111111112,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.2857142857142857,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6428571428571429,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,All,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab2,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.9,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.95,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.25,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.625,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9833333333333332,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916666666666668,All,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,51
