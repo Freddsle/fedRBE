@@ -64,19 +64,18 @@ for num_run in range(NUM_RUNS):
 
     # SIMULATED ROTATIONAL BATCH EFFECT
     # Balanced Simulated Data (rotation)
-    #TODO: remove the force_run again, just there while debugging the simulated rotation data
     folder_balanced_rotation = EVALUATION_DATA_FOLDER / "simulated_rotation" / "balanced"
     ClassificationExperimentTrainTestSplit(
         data_name="Balanced Simulated Data (Rotational Batch Effect)",
         preprocessing_name="uncorrected",
         datainfo=DataInfo(folder_balanced_rotation / "before" / "datainfo.json"),
-    ).run_experiment(seed=seed, force_run=True)
+    ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
         data_name="Balanced Simulated Data (Rotational Batch Effect)",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_balanced_rotation / "after" / "datainfo.json"),
-    ).run_experiment(seed=seed, force_run=True)
+    ).run_experiment(seed=seed)
 
     # Mildly Imbalanced Simulated Data (rotation)
     folder_mildly_imbalanced_rotation = EVALUATION_DATA_FOLDER / "simulated_rotation" / "mild_imbalanced"
@@ -84,13 +83,13 @@ for num_run in range(NUM_RUNS):
         data_name="Mildly Imbalanced Simulated Data (Rotational Batch Effect)",
         preprocessing_name="uncorrected",
         datainfo=DataInfo(folder_mildly_imbalanced_rotation / "before" / "datainfo.json"),
-    ).run_experiment(seed=seed, force_run=True)
+    ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
         data_name="Mildly Imbalanced Simulated Data (Rotational Batch Effect)",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_mildly_imbalanced_rotation / "after" / "datainfo.json"),
-    ).run_experiment(seed=seed, force_run=True)
+    ).run_experiment(seed=seed)
 
     # Strong Imbalanced Simulated Data (rotation)
     folder_strongly_imbalanced_rotation = EVALUATION_DATA_FOLDER / "simulated_rotation" / "strong_imbalanced"
@@ -98,13 +97,13 @@ for num_run in range(NUM_RUNS):
         data_name="Strongly Imbalanced Simulated Data (Rotational Batch Effect)",
         preprocessing_name="uncorrected",
         datainfo=DataInfo(folder_strongly_imbalanced_rotation / "before" / "datainfo.json"),
-    ).run_experiment(seed=seed, force_run=True)
+    ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
         data_name="Strongly Imbalanced Simulated Data (Rotational Batch Effect)",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_strongly_imbalanced_rotation / "after" / "datainfo.json"),
-    ).run_experiment(seed=seed, force_run=True)
+    ).run_experiment(seed=seed)
 
     # Proteomics Data
     folder_proteomics = EVALUATION_DATA_FOLDER / "proteomics"

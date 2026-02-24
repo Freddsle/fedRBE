@@ -2799,3 +2799,363 @@ Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.875
 Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9375,lab2,Train-Test-Split,51
 Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Train-Test-Split,51
 Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Train-Test-Split,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6353919399098565,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8142150586226807,lab1,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8643325211229224,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9298245614035088,lab2,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333333,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8736560715914885,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.942572463768116,lab2,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0949157995752499,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7320158102766798,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4803844614152613,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6438596491228069,lab2,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9827275434511512,lab3,Leave-One-Cohort-Out,42
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916515426497275,lab3,Leave-One-Cohort-Out,42
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6302948515057396,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8084484323016434,lab1,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8662596863272839,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.92974708952228,lab2,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333333,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8744113029827315,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9428571428571428,lab2,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1889822365046136,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7540757749712974,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4803844614152613,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6438596491228069,lab2,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9827275434511512,lab3,Leave-One-Cohort-Out,43
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916515426497275,lab3,Leave-One-Cohort-Out,43
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6169805196574918,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.80389692017599,lab1,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8643325211229224,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9298245614035088,lab2,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0146789237925025,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3656118379365612,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.889700583636793,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.949878880063095,lab2,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.3150630189063022,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7887445887445887,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4519336586604706,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6143934632306726,lab2,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9784364486051428,lab3,Leave-One-Cohort-Out,44
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.989559443957511,lab3,Leave-One-Cohort-Out,44
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6338464418719028,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8144386769979186,lab1,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8844332774281066,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9398496240601504,lab2,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0146789237925025,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3656118379365612,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.921250249723204,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.964199200045068,lab2,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.3150630189063022,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7887445887445887,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4661265430288854,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6292549019607843,lab2,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9827275434511512,lab3,Leave-One-Cohort-Out,45
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916515426497275,lab3,Leave-One-Cohort-Out,45
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6539685511376775,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8244690187818151,lab1,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8627652804480125,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9298878205128206,lab2,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333333,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9058084772370488,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9571428571428572,lab2,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,-0.0800640769025435,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6985915492957746,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4803844614152613,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6438596491228069,lab2,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9784364486051428,lab3,Leave-One-Cohort-Out,46
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.989559443957511,lab3,Leave-One-Cohort-Out,46
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6446583712203042,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8193496587715776,lab1,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.873545050779584,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.934868107918535,lab2,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.047739480405262,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3684348739495798,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9219875541790412,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.96436743121826,lab2,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,-0.0800640769025435,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.6985915492957746,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4803844614152613,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6438596491228069,lab2,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9741558354989898,lab3,Leave-One-Cohort-Out,47
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9874652266404844,lab3,Leave-One-Cohort-Out,47
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6942127696692268,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8445297023496076,lab1,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8828295892956407,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.939903846153846,lab2,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333333,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9058084772370488,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9571428571428572,lab2,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.711111111111111,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4947274449181536,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6582225003911751,lab2,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9827275434511512,lab3,Leave-One-Cohort-Out,48
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9916515426497275,lab3,Leave-One-Cohort-Out,48
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6325671057369402,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8146246148450612,lab1,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8815882896709472,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9399459513562206,lab2,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333333,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.889700583636793,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.949878880063095,lab2,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.1720618004029213,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7485714285714286,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4803844614152613,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6438596491228069,lab2,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9741558354989898,lab3,Leave-One-Cohort-Out,49
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9874652266404844,lab3,Leave-One-Cohort-Out,49
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6574382586514257,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8240100565681963,lab1,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8721393653860685,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.9349202773397411,lab2,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333333,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.921250249723204,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.964199200045068,lab2,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.3202563076101742,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.7655712050078247,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4947274449181536,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6582225003911751,lab2,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.9784364486051428,lab3,Leave-One-Cohort-Out,50
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.989559443957511,lab3,Leave-One-Cohort-Out,50
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3333333333333332,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.6665646596785909,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.8291628982011858,lab1,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.8520901845725957,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.924908012315086,lab2,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Balanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.047739480405262,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.3684348739495798,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.921250249723204,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.964199200045068,lab2,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51
+Mildly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.711111111111111,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.5121212121212121,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.4947274449181536,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.6582225003911751,lab2,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,MCC,0.987029282303069,lab3,Leave-One-Cohort-Out,51
+Strongly Imbalanced Simulated Data (Rotational Batch Effect),corrected,F1_score,0.993741585410632,lab3,Leave-One-Cohort-Out,51
