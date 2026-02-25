@@ -193,10 +193,9 @@ class Experiment():
                 raise RuntimeError(f"Data directory should not contain .. ! data-dir: {self.fc_data_dir}")
             fc_controller.start(name=fc_controller.DEFAULT_CONTROLLER_NAME,
                                 port=8000, data_dir=self.fc_data_dir,
-                                controller_image="fc_controller",
+                                controller_image="",
                                 with_gpu=False, mount="",
                                 blockchain_address="")
-            # TODO: change back to the original empty string for the controller image!
         except Exception as e:
             raise RuntimeError(f"Could not start the controller! Error: {e}") from e
 
