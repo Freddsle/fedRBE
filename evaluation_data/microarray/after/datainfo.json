@@ -1,0 +1,37 @@
+{
+  "covariate": "HGSC",
+  "datafile": {
+    "filename": "full_corrected_data.csv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": null
+  },
+  "designfile": null,
+  "cohorts": [
+    {
+      "name": "GSE14407",
+      "folder": "individual_results/GSE14407"
+    },
+    {
+      "name": "GSE26712",
+      "folder": "individual_results/GSE26712"
+    },
+    {
+      "name": "GSE38666",
+      "folder": "individual_results/GSE38666"
+    },
+    {
+      "name": "GSE40595",
+      "folder": "individual_results/GSE40595"
+    },
+    {
+      "name": "GSE6008",
+      "folder": "individual_results/GSE6008"
+    },
+    {
+      "name": "GSE69428",
+      "folder": "individual_results/GSE69428"
+    }
+  ]
+}

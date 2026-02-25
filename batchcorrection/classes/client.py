@@ -33,6 +33,7 @@ class Client:
         self.hash2variable = None
         self.position = None
         self.batch_labels = []
+        self.full_corrected_data = None
 
     def hash_names(self,
                    names: List[str]) -> Tuple[dict, dict]:
@@ -681,6 +682,28 @@ class Client:
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
         np.set_printoptions(threshold=1000)
         print(f"INFO: Shape of corrected data after correction: {self.data_corrected.shape}")
+
+        # Build full_corrected_data: batch-corrected features + covariate rows
+        # so that downstream tasks (e.g. classification) retain covariate information.
+        if self.variables:
+            if self.variables_in_data:
+                # Covariates were embedded in the original data file (no separate design file).
+                if self.expr_file_flag:
+                    # rawdata is features × samples; covariate rows are still present.
+                    cov_data = self.rawdata.loc[self.variables]
+                else:
+                    # rawdata is samples × (features + covariates); covariates are columns.
+                    cov_data = self.rawdata[self.variables].T
+            else:
+                # Covariates were provided via a design file and are still in self.design.
+                cov_data = self.design[self.variables].T
+            # Align to exactly the samples present in data_corrected
+            # (guards against samples dropped by all-NaN filtering).
+            cov_data = cov_data[self.data_corrected.columns]
+            self.full_corrected_data = pd.concat([self.data_corrected, cov_data])
+        else:
+            self.full_corrected_data = self.data_corrected.copy()
+        print(f"INFO: Shape of full corrected data (features + covariates): {self.full_corrected_data.shape}")
 
     ### Helpers ###
     def _check_consistency_designfile(self) -> None:

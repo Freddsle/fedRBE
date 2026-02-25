@@ -1,0 +1,33 @@
+{
+  "covariate": "Pyr",
+  "datafile": {
+    "filename": "full_corrected_data.csv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": null
+  },
+  "designfile": null,
+  "cohorts": [
+    {
+      "name": "lab_A",
+      "folder": "individual_results/lab_A"
+    },
+    {
+      "name": "lab_B",
+      "folder": "individual_results/lab_B"
+    },
+    {
+      "name": "lab_C",
+      "folder": "individual_results/lab_C"
+    },
+    {
+      "name": "lab_D",
+      "folder": "individual_results/lab_D"
+    },
+    {
+      "name": "lab_E",
+      "folder": "individual_results/lab_E"
+    }
+  ]
+}

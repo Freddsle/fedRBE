@@ -1,0 +1,15 @@
+# All batch effect corrected data is added via git lfs
+evaluation_data/**/after/individual_results/*/full_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/**/after/individual_results/*/only_batch_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/**/after/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/**/after/FedApp_corrected_data_smpc.tsv filter=lfs diff=lfs merge=lfs -text
+
+# Specific data files that are too big
+evaluation_data/microarray/after/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/microarray/after/FedApp_corrected_data_smpc.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/microarray/after/central_corrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
+# Simulated rotation all input data before correction
+evaluation_data/simulated_rotation/*/before/lab*/intensities.tsv filter=lfs diff=lfs merge=lfs -text
+# Simulated rotation all corrected data after central correction
+# Federated correction is caught above
+evaluation_data/simulated_rotation/*/after/intensities_R_corrected.tsv filter=lfs diff=lfs merge=lfs -text

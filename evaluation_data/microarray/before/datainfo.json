@@ -1,0 +1,43 @@
+{
+  "covariate": "HGSC",
+  "datafile": {
+    "filename": "expr_for_correction_UNION.tsv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": null
+  },
+  "designfile": {
+    "filename": "design.tsv",
+    "separator": "\t",
+    "rotation": "samples x features",
+    "samplename_column": "file",
+    "featurename_column": null
+  },
+  "cohorts": [
+    {
+      "name": "GSE14407",
+      "folder": "GSE14407"
+    },
+    {
+      "name": "GSE26712",
+      "folder": "GSE26712"
+    },
+    {
+      "name": "GSE38666",
+      "folder": "GSE38666"
+    },
+    {
+      "name": "GSE40595",
+      "folder": "GSE40595"
+    },
+    {
+      "name": "GSE6008",
+      "folder": "GSE6008"
+    },
+    {
+      "name": "GSE69428",
+      "folder": "GSE69428"
+    }
+  ]
+}

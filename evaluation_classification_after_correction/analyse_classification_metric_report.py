@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PLOTS_DIR = os.path.join(SCRIPT_DIR, "plots")
-RESULTS_FILE = os.path.join(SCRIPT_DIR, "classification_metric_report.csv")
+RESULTS_FILE = os.path.join(SCRIPT_DIR, "results", "classification_metric_report.csv")
 AVERAGE_CLIENT_NAME = "All"
     # in the predicted_client_name column, this value is treated as being the average
     # over multiple runs that are otherwise identical

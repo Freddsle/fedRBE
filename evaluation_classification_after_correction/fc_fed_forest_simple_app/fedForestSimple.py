@@ -88,7 +88,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         feature_name_col = config.get('feature_name_col', 0)
         df = df.set_index(df.columns[feature_name_col])
         df = df.T  # Transpose so samples are rows
-
+        print(df.head())
         target_col = config['predicted_feature_name']
         y = df[target_col]
         X = df.drop(columns=[target_col])

@@ -11,4 +11,4 @@ flimmaBatchCorrection:
   normalizationMethod: null
   position: 1
   separator: "\t"
-  smpc: true
+  smpc: false

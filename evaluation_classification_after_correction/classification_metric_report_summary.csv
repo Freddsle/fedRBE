@@ -2,6 +2,9 @@ data_preprocessing_name,cross_validation_method,metric_name,data_name,predicted_
 corrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data,lab1,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data,lab2,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data,lab3,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab1,0.8197145037615676,0.01158237198885719,10
+corrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab2,0.9333679851985698,0.005318354130398628,10
+corrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE14407,0.7868498833290123,0.014659456718644206,10
 corrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE26712,0.9695190554126724,0.002331720749969035,10
 corrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE38666,0.8521401627897134,0.02394635947510089,10
@@ -17,6 +20,9 @@ corrected,Leave-One-Cohort-Out,F1_score,Microbiome Data,Germany2,0.7917668490645
 corrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data,lab1,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data,lab2,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data,lab3,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab1,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.9556438112390626,0.008825516866156352,10
+corrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_A,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_B,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_C,1.0,0.0,10
@@ -25,9 +31,15 @@ corrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_E,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data,lab1,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data,lab2,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data,lab3,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab1,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.6437614111979018,0.013745030348252025,10
+corrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.9903956541163044,0.0020214635218349522,10
 corrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data,lab1,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data,lab2,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data,lab3,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data (Rotational Batch Effect),lab1,0.6465923469039156,0.022284682495255854,10
+corrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data (Rotational Batch Effect),lab2,0.8704315766154084,0.010402036325743096,10
+corrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE14407,0.6482307312464279,0.020686935271622044,10
 corrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE26712,0.6902108845288984,0.023811414444426703,10
 corrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE38666,0.7260069175069781,0.03984580041426368,10
@@ -43,6 +55,9 @@ corrected,Leave-One-Cohort-Out,MCC,Microbiome Data,Germany2,0.4882072636592657,0
 corrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data,lab1,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data,lab2,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data,lab3,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab1,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.9024823799670557,0.01945069700313489,10
+corrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_A,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_B,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_C,1.0,0.0,10
@@ -51,10 +66,17 @@ corrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_E,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data,lab1,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data,lab2,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data,lab3,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab1,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.48041648435201234,0.013457297428502008,10
+corrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.9801560472921083,0.004144177596432833,10
 corrected,Train-Test-Split,F1_score,Balanced Simulated Data,All,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Balanced Simulated Data,lab1,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Balanced Simulated Data,lab2,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Balanced Simulated Data,lab3,1.0,0.0,10
+corrected,Train-Test-Split,F1_score,Balanced Simulated Data (Rotational Batch Effect),All,0.9550000000000001,0.01932503014547343,10
+corrected,Train-Test-Split,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab1,0.8699999999999999,0.05244044240850758,10
+corrected,Train-Test-Split,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab2,0.9949999999999999,0.010540925533894603,10
+corrected,Train-Test-Split,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Microarray Data,All,0.9514705882352941,0.018406846426979033,10
 corrected,Train-Test-Split,F1_score,Microarray Data,GSE14407,0.8,0.16329931618554522,10
 corrected,Train-Test-Split,F1_score,Microarray Data,GSE26712,0.9897435897435898,0.013240968704982571,10
@@ -73,6 +95,10 @@ corrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data,All,1.0,0.0
 corrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data,lab1,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data,lab2,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data,lab3,1.0,0.0,10
+corrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),All,0.9966666666666667,0.004303314829119282,10
+corrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab1,1.0,0.0,10
+corrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.9857142857142858,0.018442777839082873,10
+corrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Proteomics Data,All,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Proteomics Data,lab_A,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Proteomics Data,lab_B,1.0,0.0,10
@@ -83,10 +109,18 @@ corrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data,All,1.0,0
 corrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data,lab1,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data,lab2,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data,lab3,1.0,0.0,10
+corrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),All,0.9966666666666667,0.004303314829119269,10
+corrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab1,1.0,0.0,10
+corrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.975,0.03227486121839514,10
+corrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Balanced Simulated Data,All,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Balanced Simulated Data,lab1,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Balanced Simulated Data,lab2,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Balanced Simulated Data,lab3,1.0,0.0,10
+corrected,Train-Test-Split,MCC,Balanced Simulated Data (Rotational Batch Effect),All,0.9099999999999999,0.03865006029094688,10
+corrected,Train-Test-Split,MCC,Balanced Simulated Data (Rotational Batch Effect),lab1,0.74,0.10488088481701517,10
+corrected,Train-Test-Split,MCC,Balanced Simulated Data (Rotational Batch Effect),lab2,0.99,0.02108185106778923,10
+corrected,Train-Test-Split,MCC,Balanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Microarray Data,All,0.9029411764705882,0.036813692853958,10
 corrected,Train-Test-Split,MCC,Microarray Data,GSE14407,0.6,0.32659863237109044,10
 corrected,Train-Test-Split,MCC,Microarray Data,GSE26712,0.9794871794871796,0.026481937409965187,10
@@ -105,6 +139,10 @@ corrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data,All,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data,lab1,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data,lab2,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data,lab3,1.0,0.0,10
+corrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),All,0.9933333333333334,0.008606629658238798,10
+corrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab1,1.0,0.0,10
+corrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.9714285714285715,0.03688555567816586,10
+corrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Proteomics Data,All,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Proteomics Data,lab_A,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Proteomics Data,lab_B,1.0,0.0,10
@@ -115,9 +153,16 @@ corrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data,All,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data,lab1,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data,lab2,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data,lab3,1.0,0.0,10
+corrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),All,0.9933333333333334,0.008606629658238786,10
+corrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab1,1.0,0.0,10
+corrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.95,0.06454972243679029,10
+corrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab3,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data,lab1,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data,lab2,0.908126145805044,0.04195915037852129,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data,lab3,1.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab1,0.3333333333333332,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab2,0.3333333333333332,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab3,0.3333333333333332,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE14407,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE26712,0.9237516869095816,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE38666,1.0,0.0,10
@@ -133,6 +178,9 @@ uncorrected,Leave-One-Cohort-Out,F1_score,Microbiome Data,Germany2,0.78547286243
 uncorrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data,lab1,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data,lab2,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data,lab3,1.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab1,0.45,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.5121212121212121,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.34680934237722816,0.01742288351118165,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_A,0.3333333333333333,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_B,0.309462915601023,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_C,0.3396760443307758,0.09554230202588862,10
@@ -141,9 +189,15 @@ uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_E,0.49980166102082
 uncorrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data,lab1,0.9474595209417973,0.01462209455708504,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data,lab2,0.577575876598033,0.07468809512170965,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data,lab3,0.45,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab1,0.7397128717130179,0.03470339634200386,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.5121212121212121,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.45,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data,lab1,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data,lab2,0.8295433245519174,0.07435586582863346,10
 uncorrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data,lab3,1.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data (Rotational Batch Effect),lab1,0.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data (Rotational Batch Effect),lab2,0.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Balanced Simulated Data (Rotational Batch Effect),lab3,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE14407,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE26712,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE38666,1.0,0.0,10
@@ -159,6 +213,9 @@ uncorrected,Leave-One-Cohort-Out,MCC,Microbiome Data,Germany2,0.4909601214464157
 uncorrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data,lab1,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data,lab2,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data,lab3,1.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab1,0.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.0124836808395529,0.019523873457620997,10
 uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_A,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_B,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_C,0.04392976851069794,0.13891812557774844,10
@@ -167,10 +224,17 @@ uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_E,0.18432182774794192,0
 uncorrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data,lab1,0.8559645572502935,0.03594842864272298,10
 uncorrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data,lab2,0.42093267222909053,0.06933777606087266,10
 uncorrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data,lab3,0.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab1,0.12462140281004763,0.16087871368313778,10
+uncorrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Balanced Simulated Data,All,0.9991666666666668,0.0026352313834736053,10
 uncorrected,Train-Test-Split,F1_score,Balanced Simulated Data,lab1,1.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Balanced Simulated Data,lab2,0.9974999999999999,0.007905694150420957,10
 uncorrected,Train-Test-Split,F1_score,Balanced Simulated Data,lab3,1.0,0.0,10
+uncorrected,Train-Test-Split,F1_score,Balanced Simulated Data (Rotational Batch Effect),All,0.5533333333333333,0.04533823502911814,10
+uncorrected,Train-Test-Split,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab1,0.605,0.09036961141150637,10
+uncorrected,Train-Test-Split,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab2,0.5,0.0,10
+uncorrected,Train-Test-Split,F1_score,Balanced Simulated Data (Rotational Batch Effect),lab3,0.5549999999999999,0.06540472290116194,10
 uncorrected,Train-Test-Split,F1_score,Microarray Data,All,0.9323529411764705,0.015808348526075586,10
 uncorrected,Train-Test-Split,F1_score,Microarray Data,GSE14407,1.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Microarray Data,GSE26712,0.9487179487179487,0.0,10
@@ -189,6 +253,10 @@ uncorrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data,All,1.0,0
 uncorrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data,lab1,1.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data,lab2,1.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data,lab3,1.0,0.0,10
+uncorrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),All,0.8400000000000001,0.055666555777223764,10
+uncorrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab1,0.6222222222222222,0.03513641844631531,10
+uncorrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.6428571428571429,0.0,10
+uncorrected,Train-Test-Split,F1_score,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.9675675675675676,0.088774173196937,10
 uncorrected,Train-Test-Split,F1_score,Proteomics Data,All,0.9960000000000001,0.012649110640673542,10
 uncorrected,Train-Test-Split,F1_score,Proteomics Data,lab_A,1.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Proteomics Data,lab_B,1.0,0.0,10
@@ -199,10 +267,18 @@ uncorrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data,All,0.9
 uncorrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data,lab1,0.975,0.05270462766947299,10
 uncorrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data,lab2,0.925,0.07095577652469333,10
 uncorrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data,lab3,0.9739583333333334,0.02873775235633132,10
+uncorrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),All,0.915,0.044755853469161846,10
+uncorrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab1,0.9125,0.10290907529357056,10
+uncorrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.625,0.0,10
+uncorrected,Train-Test-Split,F1_score,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.9635416666666666,0.05109006586653533,10
 uncorrected,Train-Test-Split,MCC,Balanced Simulated Data,All,0.9983333333333333,0.005270462766947373,10
 uncorrected,Train-Test-Split,MCC,Balanced Simulated Data,lab1,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Balanced Simulated Data,lab2,0.9949999999999999,0.015811388300841906,10
 uncorrected,Train-Test-Split,MCC,Balanced Simulated Data,lab3,1.0,0.0,10
+uncorrected,Train-Test-Split,MCC,Balanced Simulated Data (Rotational Batch Effect),All,0.10666666666666662,0.09067647005823627,10
+uncorrected,Train-Test-Split,MCC,Balanced Simulated Data (Rotational Batch Effect),lab1,0.21000000000000002,0.1807392228230128,10
+uncorrected,Train-Test-Split,MCC,Balanced Simulated Data (Rotational Batch Effect),lab2,0.0,0.0,10
+uncorrected,Train-Test-Split,MCC,Balanced Simulated Data (Rotational Batch Effect),lab3,0.11000000000000001,0.1308094458023239,10
 uncorrected,Train-Test-Split,MCC,Microarray Data,All,0.8647058823529411,0.03161669705215115,10
 uncorrected,Train-Test-Split,MCC,Microarray Data,GSE14407,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Microarray Data,GSE26712,0.8974358974358975,0.0,10
@@ -221,6 +297,10 @@ uncorrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data,All,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data,lab1,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data,lab2,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data,lab3,1.0,0.0,10
+uncorrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),All,0.6799999999999999,0.11133311155444757,10
+uncorrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab1,0.2444444444444444,0.07027283689263064,10
+uncorrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.2857142857142857,0.0,10
+uncorrected,Train-Test-Split,MCC,Mildly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.9351351351351351,0.17754834639387407,10
 uncorrected,Train-Test-Split,MCC,Proteomics Data,All,0.992,0.025298221281347053,10
 uncorrected,Train-Test-Split,MCC,Proteomics Data,lab_A,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Proteomics Data,lab_B,1.0,0.0,10
@@ -231,3 +311,7 @@ uncorrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data,All,0.934999
 uncorrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data,lab1,0.95,0.10540925533894598,10
 uncorrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data,lab2,0.85,0.14191155304938666,10
 uncorrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data,lab3,0.9479166666666666,0.057475504712662676,10
+uncorrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),All,0.8300000000000001,0.08951170693832369,10
+uncorrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab1,0.825,0.20581815058714115,10
+uncorrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab2,0.25,0.0,10
+uncorrected,Train-Test-Split,MCC,Strongly Imbalanced Simulated Data (Rotational Batch Effect),lab3,0.9270833333333334,0.10218013173307056,10

@@ -21,7 +21,7 @@ for center in centers:
     intensities_t = intensities.T
 
     # Read design file to get CRC target
-    design_path = f"before/{center}/design_5C.tsv"
+    design_path = f"before/{center}/design.tsv"
     design = pd.read_csv(design_path, sep='\t')
 
     # Match samples and add CRC column
@@ -56,7 +56,7 @@ for corrected_file, center in corrected_files:
     corrected_t = corrected.T
 
     # Read design file to get CRC target
-    design_path = f"before/{center}/design_5C.tsv"
+    design_path = f"before/{center}/design.tsv"
     design = pd.read_csv(design_path, sep='\t')
 
     # Match samples and add CRC column

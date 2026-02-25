@@ -1,0 +1,31 @@
+{
+  "covariate": "Pyr",
+  "datafile": {
+    "filename": "intensities_log_UNION.tsv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": "rowname"
+  },
+  "designfile": {
+    "filename": "design.tsv",
+    "separator": "\t",
+    "rotation": "samples x features",
+    "samplename_column": "file",
+    "featurename_column": null
+  },
+  "cohorts": [
+    {
+      "name": "center1",
+      "folder": "center1"
+    },
+    {
+      "name": "center2",
+      "folder": "center2"
+    },
+    {
+      "name": "center3",
+      "folder": "center3"
+    }
+  ]
+}
