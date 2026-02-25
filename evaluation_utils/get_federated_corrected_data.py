@@ -46,7 +46,7 @@ base_config = {
 
 # The name of the docker image that contains the application to be tested
 app_image_name = "bcorrect:latest"
-#TODO: change this again
+#TODO: change this to the featurecloud image again
 
 ### SETTING THE EXPERIMENTS
 experiments: List[util.Experiment] = list()

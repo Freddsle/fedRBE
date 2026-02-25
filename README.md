@@ -181,6 +181,9 @@ Steps to Reproduce:
    ```bash
    python3 ./evaluation_utils/get_federated_corrected_data.py
    ```
+   This takes a few hours. If you just want to have one small fedRBE run on one dataset, use
+   `./evaluation_utils/run_sample_experiment.py` instead. This only takes around 5-20 minutes, 
+   only correcting the `simulated/mild_imbalanced` data.
 
 3. **Compare with Centralized Correction**:
    ```bash

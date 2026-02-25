@@ -1,4 +1,3 @@
-# TODO: desc of this package, basically only the run funcs are needed
 '''
 Purpose
 This package serves as a helper for federated learning simulation using the FeatureCloud framework.
