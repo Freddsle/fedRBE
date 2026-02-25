@@ -94,22 +94,11 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
    cd fedRBE
    ```
 
-2. **Start the FeatureCloud Controller with the correct input folder**:
+2. **Run a Sample Experiment**:
    ```bash
-   featurecloud controller start --data-dir=./evaluation_data/simulated/mild_imbalanced/before/
+   python3 ./evaluation_utils/run_sample_experiment.py
    ```
-
-3. **Run a Sample Experiment**:
-   ```bash
-   # if you have the controller running in a different folder, stop it first
-   # featurecloud controller stop 
-   featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
-   ```
-   Alternatively, you can start the experiment from the [frontend](https://featurecloud.ai/development/test/new)
-
-   Select 3 clients, add lab1, lab2, lab3 respecitvely for the 3 clients to their path. 
-   
-   Use `featurecloud.ai/bcorrect:latest` as the app image.
+  You can then watch the run in your browser, the script outputs the relevant link.
   
 This runs an experiment bundled with the app, illustrating how `fedRBE` works.
 The given repository contains the app but furthermore includes all the experiments done with the app.
@@ -139,6 +128,7 @@ For details, see the [Configuration](#configuration-configyml) section.
 
 ## Outputs
 Each client after completion receives:
+- **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
 - **`report.txt`**: Includes:
   - Excluded features (and why)

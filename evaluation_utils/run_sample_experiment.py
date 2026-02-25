@@ -40,59 +40,60 @@ def pull_bcorrect_image():
     except Exception as e:
         raise Exception(f"Unexpected error when pulling bcorrect image: {e}")
 
-# Stop all containers using the specified image.
-pull_bcorrect_image()
-stop_all_bcorrect_containers()
+### MAIN SCRIPT!
+if __name__ == "__main__":
+    # Stop all containers using the specified image.
+    pull_bcorrect_image()
+    stop_all_bcorrect_containers()
 
-script_path = os.path.dirname(os.path.abspath(__file__))  # path of this script
-data_path = os.path.join(os.path.dirname(script_path), "evaluation_data", "simulated", "mild_imbalanced", "before")
-client_paths = 'lab1,lab2,lab3'
+    script_path = os.path.dirname(os.path.abspath(__file__))  # path of this script
+    data_path = os.path.join(os.path.dirname(script_path), "evaluation_data", "simulated", "mild_imbalanced", "before")
+    client_paths = 'lab1,lab2,lab3'
 
-# Ensure the controller is started with the correct folder.
-# First stop it.
-controller.stop("")
-
-# Then start it.
-try:
-    controller.start(
-        name=controller.DEFAULT_CONTROLLER_NAME,
-        port=8000,
-        data_dir=data_path,
-        mount="",
-        with_gpu=False,
-        blockchain_address="",
-        controller_image=""
-    )
-except Exception as e:
-    raise Exception(f"Failed to start the FeatureCloud controller with the correct folder: {e}")
-
-# wait for the controller to be online
-time_passed = 0
-print("(Re)starting the featurecloud controller with the correct folder")
-while True:
+    # Ensure the controller is started with the correct folder.
+    # First stop it.
+    controller.stop("")
+    # Then start it.
     try:
-        response = requests.get("http://localhost:8000")
-        if response.status_code == 200:
-            break
+        controller.start(
+            name=controller.DEFAULT_CONTROLLER_NAME,
+            port=8000,
+            data_dir=data_path,
+            mount="",
+            with_gpu=False,
+            blockchain_address="",
+            controller_image=""
+        )
     except Exception as e:
-        pass
+        raise Exception(f"Failed to start the FeatureCloud controller with the correct folder: {e}")
 
-    if time_passed > 60:
-        print(time)
-        raise Exception("Controller did not start in time")
-    time_passed += 5
-    time.sleep(5)
+    # wait for the controller to be online
+    time_passed = 0
+    print("(Re)starting the featurecloud controller with the correct folder")
+    while True:
+        try:
+            response = requests.get("http://localhost:8000")
+            if response.status_code == 200:
+                break
+        except Exception as e:
+            pass
 
-# we simply run the simulated/mildly_imbalanced experiment as sample data
-print("Starting the experiment")
-fc_test.start(
-    controller_host='http://localhost:8000',
-    client_dirs=client_paths,
-    generic_dir="",
-    app_image="featurecloud.ai/bcorrect:latest",
-    channel="local",
-    query_interval=5,
-    download_results=""
-)
-print("Experiment started successfully")
-print("You can follow the process of the experiment in the browser: https://featurecloud.ai/development/test")
+        if time_passed > 60:
+            print(f"Time passed: {time_passed}. Stopping the script. Please try again.")
+            raise Exception("Controller did not start in time")
+        time_passed += 5
+        time.sleep(5)
+
+    # we simply run the simulated/mildly_imbalanced experiment as sample data
+    print("Starting the experiment")
+    fc_test.start(
+        controller_host='http://localhost:8000',
+        client_dirs=client_paths,
+        generic_dir="",
+        app_image="featurecloud.ai/bcorrect:latest",
+        channel="local",
+        query_interval=5,
+        download_results=""
+    )
+    print("Experiment started successfully")
+    print("You can follow the process of the experiment in the browser: https://featurecloud.ai/development/test")

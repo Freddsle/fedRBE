@@ -189,6 +189,9 @@ Steps to Reproduce:
    ```bash
    python3 ./evaluation_utils/analyse_fedvscentral.py
    ```
+   The centralized correction is precomputed and available in each dataset folder as
+   `<data_folder>/after/central_corrected_UNION.tsv`. This script compares the federated results to 
+   that precomputed centrally corrected data.
 
 _For detailed instructions on reproducing the paper, refer to the [Reproducibility Guide](https://freddsle.github.io/fedRBE/docs/reproduce.html)._
 

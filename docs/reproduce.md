@@ -38,7 +38,7 @@ Before you begin, ensure you have the following installed and configured:
 
 1. **Docker**: Essential for containerizing applications. [Install Docker](https://www.docker.com/get-started).
 2. **Git**: For cloning the repository. [Install Git](https://git-scm.com/downloads).
-3. **FeatureCloud CLI**: Get and configure the FeatureCloud CLI using our [installation guide](https://freddsle.github.io/fedRBE/batchcorrection/#prerequisites).
+3. **Git LFS**: This repository uses [Git Large File Storage](https://git-lfs.com/) for large data files. Install it before cloning to ensure all data files are retrieved correctly.
 4. **Python 3.8+**: Required for running Python scripts.
 5. **R** : Necessary for running R scripts. [Install R](https://www.r-project.org/).
 
@@ -55,8 +55,8 @@ This is the recommended method as it sets up both Python and R dependencies in a
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/Freddsle/fedRBE
+   cd fedRBE
    ```
 
 2. **Create and Activate the Mamba/Conda Environment:**
@@ -73,8 +73,8 @@ If you prefer not to use Mamba, you can install Python and R dependencies separa
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/Freddsle/fedRBE
+   cd fedRBE
    ```
 
 2. **Set Up Python Environment:**
@@ -83,7 +83,9 @@ If you prefer not to use Mamba, you can install Python and R dependencies separa
 
      ```bash
      python3 -m venv fedrbe_env
-     source fedrbe_env/bin/activate  # On Windows: fedrbe_env\Scripts\activate
+     source fedrbe_env/bin/activate  
+      # On Windows: fedrbe_env\Scripts\activate
+      # fedrbe_env/bin also contains other activate scripts e.g. for fish users
      ```
 
    - **Upgrade `pip`:**
@@ -150,9 +152,9 @@ fedRBE/
 │       ├── featurecloud_api_extension.py
 │       ├── fedRBE_simulation_scrip_simdata.py
 │       ├── filtering.R
-│       ├── get_federated_corrected_data.py
+│       ├── get_federated_corrected_data.py     # A script performing fedRBE on all datasets and save the results.
 │       ├── plots_eda.R
-│       ├── run_sample_experiment.py
+│       ├── run_sample_experiment.py            # A script performing fedRBE on one dataset only
 │       ├── simulation_func.R
 │       ├── upset_plot.py
 │       └── utils_analyse.py
@@ -198,14 +200,16 @@ Steps Performed by the Script:
 
 Output:
 
-- Corrected data: saved in `evaluation_data/after/federated/`.
-- Report files: detailed logs and correction reports.
+- Corrected data: saved in `evaluation_data/[dataset]/after/individual_results/`. Furthermore stores the merged corrected data of all clients directly in `evaluation_data/[dataset]/after/` as `FedApp_corrected_data.tsv` or `FedApp_corrected_data.tsv` if SMPC was used.
+- Report files: In `evaluation_data/[dataset]/after/individual_results/`, detailed logs and correction reports can be found.
 
-_Note: The script may take some time to complete, depending on the dataset size and the number of clients._
-_Note 2: The microarray data processing is commented out in the script. To process this dataset one need >16GB RAM. To run the correction on microarray datasets, uncomment the corresponding lines in the script (get_federated_corrected_data.py, 248-287)._
+_Note: The script may take some time to complete, depending on the dataset size and the number of clients. It usually takes a few hours upto a day.
+_Note 2: To process this dataset one need >16GB RAM. To skip the correction on microarray datasets, comment the corresponding lines in the script (get_federated_corrected_data.py, search for `experiments.append(microarray_experiment)` to find the relevant 4 lines of code)._
+_Note 3: This was already performed and the fedRBE corrected data is stored in the repository.
+You can skip this if you just want to look at the results._
 
 Customization:
-- If you want to run the correction not on all datasets, comment the corresponding lines in the script (248-287, depending on the dataset).
+- If you want to run the correction not on all datasets, comment the corresponding lines in the script (you can just search for the comment `## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS` in `get_federated_corrected_data.py`).
 - To extend to more datasets, add additional [datasets] in `evaluation_data/[dataset]/before/` following the existing structure.
 
 ### 3. Obtaining centrally corrected data
@@ -247,7 +251,6 @@ What This Does:
 Output:
 
 - Comparison Metrics: Printed in the console and saved as `fed_vc_cent_results.tsv` in the `evaluation_data/ directory.
-- Visualizations: Generated plots showcasing the comparison results.
 
 ### 5. Produce tables and figures
 
@@ -265,6 +268,7 @@ This repository includes several utility scripts to facilitate data processing, 
     - Assigns datasets to each client.
     - Executes the fedRBE app to perform batch effect correction.
     - Collects and stores the corrected data.
+    - This is done for all datasets.
 
 - `analyse_fedvscentral.py`: Compares the results of federated and centralized batch effect corrections.
 
@@ -278,10 +282,10 @@ This repository includes several utility scripts to facilitate data processing, 
 - `featurecloud_api_extension.py`: Extends FeatureCloud API functionalities to support custom workflows and simulations. 
 
     Functionality:
-
-    - Provides additional API endpoints for managing federated experiments.
-    - Supports custom simulations and workflows.
-    - This script is primarily used by other utility scripts to manage federated experiments programmatically.
+    
+    - Helper script used by `get_federated_corrected_data.py`.
+    - Forms an API wrapper around the FeatureCloud testbed, allowing to run simulated federated learning
+    with utility features such as automatic restarts and automatic result extraction.
 
 - `filtering.R`: Includes neccesary filters for data preprocessing before centralized batch effect correction using limma's `removeBatchEffect`.
     
