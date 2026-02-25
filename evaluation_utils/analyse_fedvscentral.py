@@ -56,34 +56,34 @@ experiment_results.append(utils.ExperimentResult(
 
 # SIMULATED ROTATION
 experiment_results.append(utils.ExperimentResult(
-    name="Simulated Balanced",
+    name="Simulated Rotation Balanced",
     federated_result_file=os.path.join(base_dir, "simulated_rotation", "balanced", "after", "FedApp_corrected_data.tsv"),
     central_result_file=os.path.join(base_dir, "simulated_rotation", "balanced", "after", "intensities_R_corrected.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Simulated Balanced (SMPC)",
+    name="Simulated Rotation Balanced (SMPC)",
     federated_result_file=os.path.join(base_dir, "simulated_rotation", "balanced", "after", "FedApp_corrected_data_smpc.tsv"),
     central_result_file=os.path.join(base_dir, "simulated_rotation", "balanced", "after", "intensities_R_corrected.tsv"),
 ))
 
 experiment_results.append(utils.ExperimentResult(
-    name="Simulated Mildly Imbalanced",
+    name="Simulated Rotation Mildly Imbalanced",
     federated_result_file=os.path.join(base_dir, "simulated_rotation", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"),
     central_result_file=os.path.join(base_dir, "simulated_rotation", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Simulated Mildly Imbalanced (SMPC)",
+    name="Simulated Rotation Mildly Imbalanced (SMPC)",
     federated_result_file=os.path.join(base_dir, "simulated_rotation", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"),
     central_result_file=os.path.join(base_dir, "simulated_rotation", "mild_imbalanced", "after", "intensities_R_corrected.tsv"),
 ))
 
 experiment_results.append(utils.ExperimentResult(
-    name="Simulated Strongly Imbalanced",
+    name="Simulated Rotation Strongly Imbalanced",
     federated_result_file=os.path.join(base_dir, "simulated_rotation", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"),
     central_result_file=os.path.join(base_dir, "simulated_rotation", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Simulated Strongly Imbalanced (SMPC)",
+    name="Simulated Rotation Strongly Imbalanced (SMPC)",
     federated_result_file=os.path.join(base_dir, "simulated_rotation", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"),
     central_result_file=os.path.join(base_dir, "simulated_rotation", "strong_imbalanced", "after", "intensities_R_corrected.tsv"),
 ))
