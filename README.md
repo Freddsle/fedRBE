@@ -175,6 +175,7 @@ Steps to Reproduce:
    - Docker installed
    - Install necessary dependencies (`requirements.txt` and `requirements_r.txt`)
    - `fedRBE` app built or pulled as per the [Installation](#installation) section
+   - Git LFS installed: This repository uses [Git Large File Storage](https://git-lfs.com/) for large data files. Install it before cloning to ensure all data files are retrieved correctly. 
 
 2. **Run the Federated Batch Effect Removal**:
    ```bash
