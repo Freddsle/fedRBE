@@ -47,7 +47,7 @@ if __name__ == "__main__":
     stop_all_bcorrect_containers()
 
     script_path = os.path.dirname(os.path.abspath(__file__))  # path of this script
-    data_path = os.path.join(os.path.dirname(script_path), "evaluation_data", "simulated", "mild_imbalanced", "before")
+    data_path = os.path.join(script_path, "evaluation_data", "simulated", "mild_imbalanced", "before")
     client_paths = 'lab1,lab2,lab3'
 
     # Ensure the controller is started with the correct folder.

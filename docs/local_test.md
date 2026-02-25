@@ -54,7 +54,7 @@ Run simulations locally to understand `fedRBE`'s behavior:
 
    Also, it is possible to run experiment via the command line **script**:
    ```bash
-   python3 ./evaluation_utils/run_sample_experiment.py
+   python3 ./run_sample_experiment.py
    ```
    This will start a local simulation of multiple clients and show you how the batch correction is applied in practice. 
 

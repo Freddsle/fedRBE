@@ -145,16 +145,15 @@ fedRBE/
 │   ├── proteomics/                             # Proteomics datasets
 │   ├── proteomics_multibatch/                  # Multi-batch proteomics datasets (several ba)
 │   └── simulated/                              # Simulated datasets
+├── analyse_fedvscentral.py                     # Compares federated and centralized batch effect corrections.
+├── get_federated_corrected_data.py             # A script performing fedRBE on all datasets and save the results.
+├── run_sample_experiment.py                    # A script performing fedRBE on one dataset only
 ├── evaluation_utils/                           # Utility scripts for evaluations
-│       ├── analyse_fedvscentral.py
-│       ├── debugging_analyse_experiments.py
 │       ├── evaluation_funcs.R
 │       ├── featurecloud_api_extension.py
 │       ├── fedRBE_simulation_scrip_simdata.py
 │       ├── filtering.R
-│       ├── get_federated_corrected_data.py     # A script performing fedRBE on all datasets and save the results.
 │       ├── plots_eda.R
-│       ├── run_sample_experiment.py            # A script performing fedRBE on one dataset only
 │       ├── simulation_func.R
 │       ├── upset_plot.py
 │       └── utils_analyse.py
@@ -175,7 +174,7 @@ This section guides you through running both federated and centralized batch eff
 To simulate a federated workflow on a single machine using provided sample data:
 
 ```bash
-python3 ./evaluation_utils/run_sample_experiment.py
+python3 ./run_sample_experiment.py
 ```
 
 What this does:
@@ -189,7 +188,7 @@ What this does:
 Use the provided utility script to perform federated batch effect correction on your datasets.
 
 ```bash
-python3 ./evaluation_utils/get_federated_corrected_data.py
+python3 ./get_federated_corrected_data.py
 ```
 
 Steps Performed by the Script:
@@ -237,7 +236,7 @@ _Note: The preprocessing steps and centralized correction are already implemente
 Use the provided script to analyze and compare the results of federated and centralized batch effect corrections.
 
 ```bash
-python3 ./evaluation_utils/analyse_fedvscentral.py
+python3 ./analyse_fedvscentral.py
 ```
 
 What This Does:
@@ -258,9 +257,9 @@ To reproduce the tables and figures from the preprint, run the provided Jupyter 
 
 ## Utility scripts overview
 
-This repository includes several utility scripts to facilitate data processing, analysis, and visualization placed in `evaluation_utils/`.
+This repository includes several utility scripts to facilitate data processing, analysis, and visualization. The main script `get_federated_corrected_data.py` is located at the repository root; the remaining helpers are placed in `evaluation_utils/`.
 
-- `get_federated_corrected_data.py`: Automates the federated batch effect correction process using fedRBE.
+- `get_federated_corrected_data.py` (repo root): Automates the federated batch effect correction process using fedRBE.
 
     Functionality:
 
@@ -270,7 +269,7 @@ This repository includes several utility scripts to facilitate data processing, 
     - Collects and stores the corrected data.
     - This is done for all datasets.
 
-- `analyse_fedvscentral.py`: Compares the results of federated and centralized batch effect corrections.
+- `analyse_fedvscentral.py` (repo root): Compares the results of federated and centralized batch effect corrections.
 
     Functionality:
 

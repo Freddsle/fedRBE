@@ -18,14 +18,14 @@ import pandas as pd
 import time
 from copy import deepcopy
 
-import featurecloud_api_extension as util
+from evaluation_utils import featurecloud_api_extension as util
 
 
 
 ### SETTINGS
 ## GENERALT SETTINGS
 # The directory that contains ALL data needed in ANY experiment.
-data_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'evaluation_data'))
+data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'evaluation_data'))
 # The base configuration file used in ALL experiments, all keys can be overwritten by the experiments.
 base_config = {
     "flimmaBatchCorrection": {

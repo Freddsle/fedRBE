@@ -96,7 +96,7 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
 
 2. **Run a Sample Experiment**:
    ```bash
-   python3 ./evaluation_utils/run_sample_experiment.py
+   python3 ./run_sample_experiment.py
    ```
   You can then watch the run in your browser, the script outputs the relevant link.
   

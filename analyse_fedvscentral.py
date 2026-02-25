@@ -11,11 +11,11 @@ experiment_results list. This can be found under the ### EXPERIMENT RESULTS
 comment.
 """
 import os
-import utils_analyse as utils
+from evaluation_utils import utils_analyse as utils
 
 
 ### EXPERIMENT RESULTS
-base_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "evaluation_data")
+base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "evaluation_data")
 experiment_results = list()
     # Add all results to this list as utils.ExperimentResult objects
     # basically specifying the corrected data files of the central and federated results

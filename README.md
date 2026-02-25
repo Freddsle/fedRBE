@@ -179,15 +179,15 @@ Steps to Reproduce:
 
 2. **Run the Federated Batch Effect Removal**:
    ```bash
-   python3 ./evaluation_utils/get_federated_corrected_data.py
+   python3 ./get_federated_corrected_data.py
    ```
    This takes a few hours. If you just want to have one small fedRBE run on one dataset, use
-   `./evaluation_utils/run_sample_experiment.py` instead. This only takes around 5-20 minutes, 
+   `./run_sample_experiment.py` instead. This only takes around 5-20 minutes, 
    only correcting the `simulated/mild_imbalanced` data.
 
 3. **Compare with Centralized Correction**:
    ```bash
-   python3 ./evaluation_utils/analyse_fedvscentral.py
+   python3 ./analyse_fedvscentral.py
    ```
    The centralized correction is precomputed and available in each dataset folder as
    `<data_folder>/after/central_corrected_UNION.tsv`. This script compares the federated results to 
