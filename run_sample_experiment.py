@@ -1,7 +1,7 @@
 import os
 import subprocess
-import requests
 import time
+import urllib.request
 
 import FeatureCloud.api.imp.test.commands as fc_test
 import FeatureCloud.api.imp.controller.commands as controller
@@ -69,19 +69,20 @@ if __name__ == "__main__":
 
     # wait for the controller to be online
     time_passed = 0
+    time_started = time.time()
     print("(Re)starting the featurecloud controller with the correct folder")
     while True:
         try:
-            response = requests.get("http://localhost:8000")
-            if response.status_code == 200:
-                break
-        except Exception as e:
-            pass
+            with urllib.request.urlopen("http://localhost:8000", timeout=5) as response:
+                if response.getcode() == 200:
+                    break
+        except Exception:
+            time.sleep(5)
 
         if time_passed > 60:
             print(f"Time passed: {time_passed}. Stopping the script. Please try again.")
             raise Exception("Controller did not start in time")
-        time_passed += 5
+        time_passed = time.time() - time_started
         time.sleep(5)
 
     # we simply run the simulated/mildly_imbalanced experiment as sample data
