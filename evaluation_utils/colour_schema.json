@@ -1,0 +1,15 @@
+{
+  "palette": [
+    "#E69F00",
+    "#56B4E9",
+    "#009E73",
+    "#F5C710",
+    "#0072B2",
+    "#D55E00",
+    "#CC79A7",
+    "#000000"
+  ],
+  "background": "#ffffff",
+  "grid": "#d3d3d3",
+  "boxplot_median_marker_color": "#FF0000"
+}
