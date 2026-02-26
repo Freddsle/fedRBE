@@ -53,12 +53,13 @@ fedRBE supports two usage modes:
 
 Before using `fedRBE`, ensure:
 1. **Docker** is installed ([FeatureCloud prerequisites](https://featurecloud.ai/developers)).
-2. **FeatureCloud CLI**:
+1. **Python3** is installed. [Installation Instructions](https://www.python.org/doc/).
+1. **FeatureCloud CLI**:
    ```bash
    pip install featurecloud
    featurecloud controller start
    ```
-3. **App Image**:  
+1. **App Image**:  
    - For linux/amd64:
      ```bash
      # pull the pre-built image

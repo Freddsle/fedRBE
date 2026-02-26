@@ -74,10 +74,11 @@ For a comprehensive overview of the workflow, please consult the [How To Guide](
 
 Before installing `fedRBE`, ensure you have the following installed:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
-2. **FeatureCloud CLI**.
+1. **Python3**: [Installation Instructions](https://www.python.org/doc/).
+1. **FeatureCloud CLI**.
    For Windows users, git must also be installed and added to PATH. We recommend
    and tested using [WSL](https://docs.docker.com/desktop/features/wsl/).
-3. **App Image** (either build locally or pull).
+1. **App Image** (either build locally or pulled).
 
 For installation and setup details, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/##prerequisites-and-setup).
 
@@ -159,9 +160,17 @@ _For a comprehensive list of configuration options, refer to the [Configuration 
 ---
 
 ### Quick start
+If you simply want to try out fedRBE quickly:
+1. Make sure that docker is installed and the featurecloud pip package is installed as stated in the [prerequisites](#prerequisites).
+1. Run the sample experiment script:
+```bash
+python3 run_sample_experiment.py
+```
+This will run fedRBE on an example simulated data dataset.
 
+Furthermore, there are detailed instructions for more specific, non sample data usage:
 1. For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)
-2. For a step-by-step instructions on how to simulate collaboration via test environment, refer to the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html)
+2. For a step-by-step instructions on how to generally simulate collaboration via test environment, refer to the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html)
 
 ---
 
