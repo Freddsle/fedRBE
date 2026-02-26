@@ -17,6 +17,7 @@ from sklearn.metrics import matthews_corrcoef, f1_score
 SCRIPT_FOLDER = Path(__file__).parent
 RESULTS_FOLDER = SCRIPT_FOLDER.parent / "results"
 RESULTS_FOLDER.mkdir(exist_ok=True)
+TRAIN_TEST_RATIO = 0.8
 
 BASE_FOREST_CONFIG = {
     'simple_forest': {
@@ -537,7 +538,7 @@ class ClassificationExperimentTrainTestSplit:
 
     def __init__(self, data_name: str, preprocessing_name: str,
                  datainfo: DataInfo,
-                 train_test_ratio: float = 0.8,
+                 train_test_ratio: float = TRAIN_TEST_RATIO,
                  resultfile: ResultFile = DEFAULT_RESULTFILE) -> None:
         self.data_name = data_name
         self.preprocessing_name = preprocessing_name

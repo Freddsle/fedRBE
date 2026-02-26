@@ -11,6 +11,9 @@ dependencies:
   - pandas
   - matplotlib
   - seaborn
+  - featurecloud
+  - pyyaml
+  - scikit-learn
   - openssl
   - certifi
   - ca-certificates

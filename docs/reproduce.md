@@ -255,9 +255,33 @@ Output:
 
 To reproduce the tables and figures from the preprint, run the provided Jupyter notebooks in the `evaluation/` directory.
 
+### 6. Reproduce the classification analysis comparing fedRBE corrected to non corrected data
+
+This is split into three python scripts. Make sure the required python packages from `requirements.txt` are installed!
+
+First run the classification experiments. This takes multiple hours, so the repo already contains the relevant results if you want to skip this. 
+
+The classification experiments are split into the two different experiment types:
+1. **train_test_split**: Each client reserves 20% of the data as test data, trains on the other 80% and reports metrics when predicting on the test data. This takes upto an hour. To run it, simply run
+```bash
+python3 evaluation_classification_after_correction/run_classification_train_test_split.py
+```
+1. **leave_one_cohort_out**: The classification model is trained on all except one client. Then the model is used to predict on all of the data of the left out client and the client reports the metrics. Therefore, *n_clients* models are trained. For this reason, this takes multiple hours. To run it, simply run:
+```bash
+python3 evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py
+```
+
+The experiment results are saved in `evaluation_classification_after_correction/results`.
+
+To finally visualize the experiments with plot, simply run the corresponding analyze script:
+```bash
+python3 evaluation_classification_after_correction/analyse_classification_metric_report.py
+```
+The resulting plots can be found in `evaluation_classification_after_correction/plots`.
+
 ## Utility scripts overview
 
-This repository includes several utility scripts to facilitate data processing, analysis, and visualization. The main script `generate_fedrbe_corrected_datasets.py` is located at the repository root; the remaining helpers are placed in `evaluation_utils/`.
+This repository includes several utility scripts to facilitate data processing, analysis, and visualization. All main scripts are located at the repository root; the remaining helpers are placed in `evaluation_utils/`.
 
 - `generate_fedrbe_corrected_datasets.py` (repo root): Automates the federated batch effect correction process using fedRBE.
 
