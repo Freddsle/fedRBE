@@ -188,7 +188,7 @@ Steps to Reproduce:
 
 2. **Run the Federated Batch Effect Removal**:
    ```bash
-   python3 ./get_federated_corrected_data.py
+   python3 ./generate_fedrbe_corrected_datasets.py
    ```
    This takes a few hours. If you just want to have one small fedRBE run on one dataset, use
    `./run_sample_experiment.py` instead. This only takes around 5-20 minutes, 

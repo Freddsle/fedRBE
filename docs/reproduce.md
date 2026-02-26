@@ -146,7 +146,7 @@ fedRBE/
 │   ├── proteomics_multibatch/                  # Multi-batch proteomics datasets (several ba)
 │   └── simulated/                              # Simulated datasets
 ├── analyse_fedvscentral.py                     # Compares federated and centralized batch effect corrections.
-├── get_federated_corrected_data.py             # A script performing fedRBE on all datasets and save the results.
+├── generate_fedrbe_corrected_datasets.py       # A script performing fedRBE on all datasets and save the results.
 ├── run_sample_experiment.py                    # A script performing fedRBE on one dataset only
 ├── evaluation_utils/                           # Utility scripts for evaluations
 │       ├── evaluation_funcs.R
@@ -188,7 +188,7 @@ What this does:
 Use the provided utility script to perform federated batch effect correction on your datasets.
 
 ```bash
-python3 ./get_federated_corrected_data.py
+python3 ./generate_fedrbe_corrected_datasets.py
 ```
 
 Steps Performed by the Script:
@@ -203,12 +203,12 @@ Output:
 - Report files: In `evaluation_data/[dataset]/after/individual_results/`, detailed logs and correction reports can be found.
 
 _Note: The script may take some time to complete, depending on the dataset size and the number of clients. It usually takes a few hours upto a day.
-_Note 2: To process this dataset one need >16GB RAM. To skip the correction on microarray datasets, comment the corresponding lines in the script (get_federated_corrected_data.py, search for `experiments.append(microarray_experiment)` to find the relevant 4 lines of code)._
+_Note 2: To process this dataset one need >16GB RAM. To skip the correction on microarray datasets, comment the corresponding lines in the script (generate_fedrbe_corrected_datasets.py, search for `experiments.append(microarray_experiment)` to find the relevant 4 lines of code)._
 _Note 3: This was already performed and the fedRBE corrected data is stored in the repository.
 You can skip this if you just want to look at the results._
 
 Customization:
-- If you want to run the correction not on all datasets, comment the corresponding lines in the script (you can just search for the comment `## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS` in `get_federated_corrected_data.py`).
+- If you want to run the correction not on all datasets, comment the corresponding lines in the script (you can just search for the comment `## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS` in `generate_fedrbe_corrected_datasets.py`).
 - To extend to more datasets, add additional [datasets] in `evaluation_data/[dataset]/before/` following the existing structure.
 
 ### 3. Obtaining centrally corrected data
@@ -257,9 +257,9 @@ To reproduce the tables and figures from the preprint, run the provided Jupyter 
 
 ## Utility scripts overview
 
-This repository includes several utility scripts to facilitate data processing, analysis, and visualization. The main script `get_federated_corrected_data.py` is located at the repository root; the remaining helpers are placed in `evaluation_utils/`.
+This repository includes several utility scripts to facilitate data processing, analysis, and visualization. The main script `generate_fedrbe_corrected_datasets.py` is located at the repository root; the remaining helpers are placed in `evaluation_utils/`.
 
-- `get_federated_corrected_data.py` (repo root): Automates the federated batch effect correction process using fedRBE.
+- `generate_fedrbe_corrected_datasets.py` (repo root): Automates the federated batch effect correction process using fedRBE.
 
     Functionality:
 
@@ -282,7 +282,7 @@ This repository includes several utility scripts to facilitate data processing, 
 
     Functionality:
     
-    - Helper script used by `get_federated_corrected_data.py`.
+    - Helper script used by `generate_fedrbe_corrected_datasets.py`.
     - Forms an API wrapper around the FeatureCloud testbed, allowing to run simulated federated learning
     with utility features such as automatic restarts and automatic result extraction.
 
