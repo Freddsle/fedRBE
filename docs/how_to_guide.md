@@ -10,7 +10,7 @@
 # Getting started with federated limma remove batch effect (fedRBE) <!-- omit in toc -->
 
 This guide is designed for beginners who want a quick and easy way to start using `fedRBE` and test its functionality. 
-For more technical details and advanced usage and specific implementation details, please refer to the [main README file](https://freddsle.github.io/fedRBE/batchcorrection/).
+For more technical details and advanced usage and specific implementation details, please refer to the [app README](https://freddsle.github.io/fedRBE/batchcorrection/).
 
 `fedRBE` allows you to remove batch effects from data in a federated manner, ensuring data privacy.
 
@@ -23,7 +23,7 @@ For a more formal description and details, see the fedRBE's preprint on [ArXiv](
 - [Understanding the workflow](#understanding-the-workflow)
 - [File preparation](#file-preparation)
 - [Step-by-step scenario](#step-by-step-scenario)
-- [Results and output:](#results-and-output)
+- [Results and output](#results-and-output)
 - [Single-machine simulations using the provided sample data](#single-machine-simulations-using-the-provided-sample-data)
 - [Troubleshooting tips](#troubleshooting-tips)
   - [Choosing the correct data orientation](#choosing-the-correct-data-orientation)
@@ -33,12 +33,16 @@ For a more formal description and details, see the fedRBE's preprint on [ArXiv](
 
 ## Minimal requirements and setup
 
-**Prerequisites** (see [README](https://freddsle.github.io/fedRBE/batchcorrection/#prerequisites) for details):
-1. **Docker** installed (check [Docker website](https://www.docker.com/) for installation instructions).
-2. **FeatureCloud CLI** installed and running.
-3. **App Image** (either build locally or pull).
+Ensure you have the following installed before starting:
+1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
+1. **Python 3.8+**: [Installation Instructions](https://www.python.org/)
+1. **FeatureCloud CLI**:
+   ```bash
+   pip install featurecloud
+   ```
+1. **FeatureCloud account**: Register at [featurecloud.ai](https://featurecloud.ai/) and obtain coordinator/participant tokens.
 
-For installation and setup details, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/##prerequisites-and-setup).
+For Windows users, we recommend using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
 ## Understanding the workflow
 
@@ -86,11 +90,11 @@ flimmaBatchCorrection:
   reference_batch: ""  # if True, this client is used as the reference batch
 ```
 
-For more details on the `config.yml` parameters, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/#config).
+For more details on the `config.yml` parameters, see the [app README](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml).
 
 ## Step-by-step scenario
 
-**Scenario**: Three clients (A, B, and C) collaborate on a federated analysis. Video tutorial: [link](https://featurecloud.ai/researchers).
+**Scenario**: Three clients (A, B, and C) collaborate on a federated analysis. Video tutorial: [FeatureCloud tutorial](https://featurecloud.ai/researchers).
 
 1. **Coordinator Actions**:  
    - The coordinator logs into the FeatureCloud platform and **creates a new project**.
@@ -118,7 +122,7 @@ For more details on the `config.yml` parameters, see the [main README](https://f
    - After all clients join, the coordinator starts the project.
    - The app runs locally at each client, securely combining results.
    
-## Results and output:
+## Results and output
 
 After completion, each client finds:
    - `only_batch_corrected_data.csv`: The batch-corrected expression data.
@@ -169,4 +173,3 @@ covariates: ["Age", "Treatment"]
 position: 2
 reference_batch: ""
 ```
-

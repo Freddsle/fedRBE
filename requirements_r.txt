@@ -1,11 +1,11 @@
 # R packages
 tidyverse
-gridextra
+gridExtra
 patchwork
 umap
 ggsci
 viridis
-irkernel
+IRkernel
 reshape2
 limma
 variancepartition

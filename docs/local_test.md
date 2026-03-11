@@ -16,17 +16,19 @@ For more detailed information and advanced usage, please refer to the [Documenta
 
 ## Prerequisites and setup
 
-Before installing `fedRBE`, ensure you have the following installed:
+Ensure you have the following installed before starting:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
-2. **FeatureCloud CLI**.
-   For Windows users, git must also be installed and added to PATH. We recommend
-   and tested using [WSL](https://docs.docker.com/desktop/features/wsl/).
-3. **App Image** (either build locally or pull).
+1. **Python 3.8+**: [Installation Instructions](https://www.python.org/)
+1. **FeatureCloud CLI**:
+   ```bash
+   pip install featurecloud
+   ```
+1. **App Image** (either pull or build locally — see [Installation](https://freddsle.github.io/fedRBE/#installation)).
 
-For installation and setup details, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/##prerequisites-and-setup).
+For Windows users, git must also be installed and added to PATH. We recommend using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
 
-## Quick start
+## Usage
 
 Run simulations locally to understand `fedRBE`'s behavior:
 
@@ -35,15 +37,14 @@ Run simulations locally to understand `fedRBE`'s behavior:
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
    ```
+   > **Note**: The sample data used in this guide is not tracked by Git LFS. If you need the full evaluation datasets, install [Git LFS](https://git-lfs.com/) and run `git lfs pull` after cloning.
 
 2. **Start the FeatureCloud Controller with the correct input folder**:
    ```bash
    featurecloud controller start --data-dir=./evaluation_data/simulated/mild_imbalanced/before/
    ```
 
-3. **Build or Pull the `fedRBE` App** as per the [Installation](#installation) instructions.
-
-4. **Run a Sample Experiment**:
+3. **Run a Sample Experiment**:
    ```bash
    featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
    ```
@@ -52,15 +53,7 @@ Run simulations locally to understand `fedRBE`'s behavior:
    
    Use `featurecloud.ai/bcorrect:latest` as the app image.
 
-   Also, it is possible to run experiment via the command line **script**:
-   ```bash
-   python3 ./run_sample_experiment.py
-   ```
-   This will start a local simulation of multiple clients and show you how the batch correction is applied in practice. 
-
    You can monitor the logs of the batch effect correction run and receive the final results of the
    different clients on the [frontend in your browser](https://featurecloud.ai/development/test).
    
 _For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)._
-
-More details can be found in the [main README](https://freddsle.github.io/fedRBE/batchcorrection/#running-the-provided-sample-data).

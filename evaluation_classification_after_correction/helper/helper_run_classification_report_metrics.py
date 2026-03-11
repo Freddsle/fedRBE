@@ -21,7 +21,6 @@ TRAIN_TEST_RATIO = 0.8
 
 BASE_FOREST_CONFIG = {
     'simple_forest': {
-        'bootstrap': True,
         'csv_seperator': ',',
         'data_filename': 'tmp_data.csv',
         'features_as_columns': True,

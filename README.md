@@ -22,10 +22,10 @@
   - [Prerequisites](#prerequisites)
   - [Clone the repository](#clone-the-repository)
 - [Usage](#usage)
+  - [Quick start](#quick-start)
   - [Glossary \& further resources](#glossary--further-resources)
   - [Input and Output](#input-and-output)
   - [Configuration](#configuration)
-  - [Quick start](#quick-start)
 - [Reproducing the paper](#reproducing-the-paper)
 - [Single-machine simulation](#single-machine-simulation)
 - [Troubleshooting](#troubleshooting)
@@ -74,13 +74,17 @@ For a comprehensive overview of the workflow, please consult the [How To Guide](
 
 Before installing `fedRBE`, ensure you have the following installed:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
-1. **Python3**: [Installation Instructions](https://www.python.org/doc/).
-1. **FeatureCloud CLI**.
-   For Windows users, git must also be installed and added to PATH. We recommend
-   and tested using [WSL](https://docs.docker.com/desktop/features/wsl/).
-1. **App Image** (either build locally or pulled).
+2. **Python 3.8+**: [Installation Instructions](https://www.python.org/doc/)
+3. **Python dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-For installation and setup details, see the [main README](https://freddsle.github.io/fedRBE/batchcorrection/##prerequisites-and-setup).
+Additional requirements depend on the use case:
+- **Running fedRBE in a federated manner via the FeatureCloud platform**: FeatureCloud account
+- **Reproducing the paper**: R + dependencies from `requirements_r.txt`, Git LFS
+
+For Windows users, we recommend using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
 ### Clone the repository
 
@@ -97,17 +101,32 @@ This will clone the repository to your local machine with example files and simu
 
 ## Usage
 
+### Quick start
+If you simply want to try out fedRBE quickly:
+1. Make sure the [prerequisites](#prerequisites) are fulfilled!
+2. Run the sample experiment script:
+```bash
+python3 run_sample_experiment.py
+```
+This will run fedRBE on an example simulated data dataset.
+
+Furthermore, there are detailed instructions for more specific, non sample data usage:
+1. For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)
+2. For a step-by-step instructions on how to generally simulate collaboration via test environment, refer to the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html)
+
+---
+
 ### Glossary & further resources
 
 - **FeatureCloud**: A platform enabling federated analyses. [FeatureCloud docs](https://featurecloud.ai/)
-- **limma**: A popular R package for differential expression analysis. `RemoveBatchEffect` is a function from limma.
+- **limma**: A popular R package for differential expression analysis. `removeBatchEffect` is a function from limma.
 
 For more advanced configurations and detailed explanations, see the 
-[main README](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
+[app README](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
 
 If you encounter difficulties, please:
 - Check the logs for error messages.
-- Revisit the [main README](https://freddsle.github.io/fedRBE/batchcorrection/).
+- Revisit the [app README](https://freddsle.github.io/fedRBE/batchcorrection/).
 - Reach out to the support by creating an issue on the [GitHub repository](https://github.com/Freddsle/fedRBE)
 
 ---
@@ -127,7 +146,7 @@ In summary, you need two main inputs and one optional file:
 
 Output files include:
 - **Corrected Data**: The batch-corrected data in the same format as the input.
-- **Corrected Data with covariates**: As the covariates aren't corrected, there is seperate output
+- **Corrected Data with covariates**: As the covariates aren't corrected, there is separate output
 containing the corrected data as well as the covariate information.
 - **Report**: A summary of the correction process and results.
 
@@ -142,35 +161,20 @@ containing the corrected data as well as the covariate information.
 
    ```yaml
    flimmaBatchCorrection:
-   data_filename: "expression_data_client1.csv"
-   expression_file_flag: False
-   index_col: "GeneIDs"
-   covariates: ["Pyr"]
-   separator: ","
-   design_separator: ","
-   normalizationMethod: "log2(x+1)"
-   smpc: True
-   min_samples: 2
-   position: 1
-   reference_batch: ""
+      data_filename: "expression_data_client1.csv"
+      expression_file_flag: False
+      index_col: "GeneIDs"
+      covariates: ["Pyr"]
+      separator: ","
+      design_separator: ","
+      normalizationMethod: "log2(x+1)"
+      smpc: True
+      min_samples: 2
+      position: 1
+      reference_batch: ""
    ```
 
 _For a comprehensive list of configuration options, refer to the [Configuration Section](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml) in the batchcorrection README._
-
----
-
-### Quick start
-If you simply want to try out fedRBE quickly:
-1. Make sure that docker is installed and the featurecloud pip package is installed as stated in the [prerequisites](#prerequisites).
-1. Run the sample experiment script:
-```bash
-python3 run_sample_experiment.py
-```
-This will run fedRBE on an example simulated data dataset.
-
-Furthermore, there are detailed instructions for more specific, non sample data usage:
-1. For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)
-2. For a step-by-step instructions on how to generally simulate collaboration via test environment, refer to the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html)
 
 ---
 
@@ -178,31 +182,9 @@ Furthermore, there are detailed instructions for more specific, non sample data 
 
 This repository includes all necessary code and data to reproduce the analyses presented in our [ArXiv preprint](https://arxiv.org/abs/2412.05894).
 
-Steps to Reproduce:
 
-1. **Ensure Prerequisites are Met**:
-   - Docker installed
-   - Install necessary dependencies (`requirements.txt` and `requirements_r.txt`)
-   - `fedRBE` app built or pulled as per the [Installation](#installation) section
-   - Git LFS installed: This repository uses [Git Large File Storage](https://git-lfs.com/) for large data files. Install it before cloning to ensure all data files are retrieved correctly. 
 
-2. **Run the Federated Batch Effect Removal**:
-   ```bash
-   python3 ./generate_fedrbe_corrected_datasets.py
-   ```
-   This takes a few hours. If you just want to have one small fedRBE run on one dataset, use
-   `./run_sample_experiment.py` instead. This only takes around 5-20 minutes, 
-   only correcting the `simulated/mild_imbalanced` data.
-
-3. **Compare with Centralized Correction**:
-   ```bash
-   python3 ./analyse_fedvscentral.py
-   ```
-   The centralized correction is precomputed and available in each dataset folder as
-   `<data_folder>/after/central_corrected_UNION.tsv`. This script compares the federated results to 
-   that precomputed centrally corrected data.
-
-_For detailed instructions on reproducing the paper, refer to the [Reproducibility Guide](https://freddsle.github.io/fedRBE/docs/reproduce.html)._
+For detailed instructions on reproducing the paper, refer to the [Reproducibility Guide](https://freddsle.github.io/fedRBE/docs/reproduce.html).
 
 
 ---
@@ -211,8 +193,12 @@ _For detailed instructions on reproducing the paper, refer to the [Reproducibili
 
 To simulate a federated workflow on a single machine using provided sample data:
 
-1. Check the [Prerequisites](#prerequisites) and [Clone the Repository](#clone-the-repository).
-2. **Run the Sample Experiment** according to the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html).
+### Option 1: Using the helper python script 
+If you just want to run fedRBE with sample data, please refer to the [Quick Start](#quick-start).
+
+### Option 2: Using the FeatureCloud Simulation framework
+Please refer to the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html) for
+how to run a simulation using any correctly formatted test data.
 
 ---
 
