@@ -157,7 +157,7 @@ What This Does:
 
 Output:
 
-- Comparison Metrics: Printed in the console and saved as `fed_vc_cent_results.tsv` in the `evaluation_data/ directory.
+- Comparison Metrics: Printed in the console and saved as `fed_vc_cent_results.tsv` in the `evaluation_data/` directory.
 
 ### 4. Produce tables and figures
 
