@@ -37,7 +37,7 @@ Run simulations locally to understand `fedRBE`'s behavior:
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
    ```
-   > **Note**: The sample data used in this guide is not tracked by Git LFS. If you need the full evaluation datasets, install [Git LFS](https://git-lfs.com/) and run `git lfs pull` after cloning.
+   > **Note**: Some of the sample data used in this guide is tracked by Git LFS. If you need the full evaluation datasets, install [Git LFS](https://git-lfs.com/) and run `git lfs pull` after cloning.
 
 2. **Start the FeatureCloud Controller with the correct input folder**:
    ```bash
