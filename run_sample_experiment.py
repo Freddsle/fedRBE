@@ -1,3 +1,8 @@
+'''
+Starts an example, simulated run of fedRBE.
+Runs fedRBE on the simulated, mildly imbalanced dataset as sample data.
+Ensures the prerequisites are met.
+'''
 import os
 import subprocess
 import time

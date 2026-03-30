@@ -2,8 +2,11 @@
 This file is used to run the federated batch correction experiments.
 It uses featurecloud_api_extension.py to run the experiments.
 The Experiment class is used to define experiments that are then run.
-To change the experiments done, define a new Experiment object
+To add a new dataset, define a new Experiment object
 and add it to the experiments list.
+To skip a certain dataset, simply comment out the addition of the corresponding
+Experiment object to the experiments list below this comment:
+## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
 See the Experiment class and the examples below for more information.
 To change the postprocessing done, change the logic under the
 ###POSTPROCESSING comment.
@@ -137,86 +140,6 @@ set_smpc_true(simulated_strongly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_strongly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_strongly_imbalanced_experiment)
 
-## SIMULATED ROTATION
-simulated_rotation_balanced_experiment = util.Experiment(
-    name="Simulated Rotation Balanced",
-    fc_data_dir=data_dir,
-    clients=[
-        os.path.join(data_dir, "simulated_rotation", "balanced", "before", "lab1"),
-        os.path.join(data_dir, "simulated_rotation", "balanced", "before", "lab2"),
-        os.path.join(data_dir, "simulated_rotation", "balanced", "before", "lab3"),
-    ],
-    app_image_name=app_image_name,
-    config_files=[deepcopy(base_config) for _ in range(3)],
-    config_file_changes=[deepcopy(base_simulated_config_file_changes) for _ in range(3)],
-)
-simulated_rotation_balanced_experiment_smpc = deepcopy(simulated_rotation_balanced_experiment)
-set_smpc_true(simulated_rotation_balanced_experiment_smpc)
-add_position_to_config(simulated_rotation_balanced_experiment_smpc)
-add_position_to_config(simulated_rotation_balanced_experiment)
-
-simulated_rotation_mildly_imbalanced_experiment = util.Experiment(
-        name="Simulated Rotation Mildly Imbalanced",
-        fc_data_dir=data_dir,
-        clients=[
-            os.path.join(data_dir, "simulated_rotation", "mild_imbalanced", "before", "lab1"),
-            os.path.join(data_dir, "simulated_rotation", "mild_imbalanced", "before", "lab2"),
-            os.path.join(data_dir, "simulated_rotation", "mild_imbalanced", "before", "lab3"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config) for _ in range(3)],
-        config_file_changes=[deepcopy(base_simulated_config_file_changes) for _ in range(3)],
-)
-simulated_rotation_mildly_imbalanced_experiment_smpc = deepcopy(simulated_rotation_mildly_imbalanced_experiment)
-set_smpc_true(simulated_rotation_mildly_imbalanced_experiment_smpc)
-add_position_to_config(simulated_rotation_mildly_imbalanced_experiment_smpc)
-add_position_to_config(simulated_rotation_mildly_imbalanced_experiment)
-
-simulated_rotation_strongly_imbalanced_experiment = util.Experiment(
-        name="Simulated Rotation Strongly Imbalanced",
-        fc_data_dir=data_dir,
-        clients=[
-            os.path.join(data_dir, "simulated_rotation", "strong_imbalanced", "before", "lab1"),
-            os.path.join(data_dir, "simulated_rotation", "strong_imbalanced", "before", "lab2"),
-            os.path.join(data_dir, "simulated_rotation", "strong_imbalanced", "before", "lab3"),
-        ],
-        app_image_name=app_image_name,
-        config_files=[deepcopy(base_config) for _ in range(3)],
-        config_file_changes=[deepcopy(base_simulated_config_file_changes) for _ in range(3)],
-)
-simulated_rotation_strongly_imbalanced_experiment_smpc = deepcopy(simulated_rotation_strongly_imbalanced_experiment)
-set_smpc_true(simulated_rotation_strongly_imbalanced_experiment_smpc)
-add_position_to_config(simulated_rotation_strongly_imbalanced_experiment_smpc)
-add_position_to_config(simulated_rotation_strongly_imbalanced_experiment)
-
-## MICROBIOME
-microbiomev2_config_file_changes = {
-    "flimmaBatchCorrection": {
-        "data_filename": "UQnorm_log_counts_for_corr.tsv",
-        "design_filename": "design.tsv",
-        "covariates": ["CRC"]
-    }
-}
-microbiomev2_experiment = util.Experiment(
-    name="Microbiome v2",
-    fc_data_dir=data_dir,
-    clients=[
-        os.path.join(data_dir, "microbiome", "before", "China1"),
-        os.path.join(data_dir, "microbiome", "before", "China3"),
-        os.path.join(data_dir, "microbiome", "before", "China5"),
-        os.path.join(data_dir, "microbiome", "before", "France1"),
-        os.path.join(data_dir, "microbiome", "before", "Germany1"),
-        os.path.join(data_dir, "microbiome", "before", "Germany2"),
-    ],
-    app_image_name=app_image_name,
-    config_files=[deepcopy(base_config) for _ in range(6)],
-    config_file_changes=[deepcopy(microbiomev2_config_file_changes) for _ in range(6)],
-)
-microbiomev2_experiment_smpc = deepcopy(microbiomev2_experiment)
-set_smpc_true(microbiomev2_experiment_smpc)
-add_position_to_config(microbiomev2_experiment_smpc)
-add_position_to_config(microbiomev2_experiment)
-
 ## PROTEOMICS
 proteomics_config_file_changes_base = {
     "flimmaBatchCorrection": {
@@ -314,28 +237,6 @@ experiments.append(simulated_strongly_imbalanced_experiment)
 result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
 experiments.append(simulated_strongly_imbalanced_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
-
-# Simulated rotation
-experiments.append(simulated_rotation_balanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated_rotation", "balanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_rotation_balanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated_rotation", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
-
-experiments.append(simulated_rotation_mildly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated_rotation", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_rotation_mildly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated_rotation", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
-
-experiments.append(simulated_rotation_strongly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated_rotation", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_rotation_strongly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated_rotation", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
-
-## Microbiome v2
-experiments.append(microbiomev2_experiment)
-result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data.tsv"))
-experiments.append(microbiomev2_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "microbiome", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Proteomics
 experiments.append(proteomics_experiment)
