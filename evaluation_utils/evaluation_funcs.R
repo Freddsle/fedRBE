@@ -14,19 +14,31 @@ lmpv_plot <- function(
 
   # Extract variance explained by the model
   varPart <- fitExtractVarPartModel(na.omit(data), form, metadata)
-  variance_col <- as.matrix(varPart[,1:2])
+  model_terms <- setdiff(colnames(varPart), "Residuals")
+  if (length(model_terms) == 0) {
+    stop("No model terms available to plot after removing residual variance.", call. = FALSE)
+  }
+  variance_col <- as.matrix(varPart[, model_terms, drop = FALSE])
 
   # Convert data to long format for ggplot2
   df_long <- reshape2::melt(variance_col)
 
-  if(only_table == TRUE){
+  if (isTRUE(only_table)) {
     return(df_long)
   }
 
   # Calculate the medians for each group
   medians <- df_long %>%
     dplyr::group_by(Var2) %>%
-    dplyr::summarize(median_value = median(value, na.rm = TRUE))
+    dplyr::summarize(median_value = median(value, na.rm = TRUE), .groups = "drop") %>%
+    dplyr::mutate(
+      label_y = median_value + ifelse(median_value > 0.8, -0.05, median_position)
+    )
+
+  effective_y_limits <- y_limits
+  if (!is.null(max_yval)) {
+    effective_y_limits[2] <- max_yval
+  }
 
   # Create the boxplot using ggplot2
   res_plots <- ggplot(df_long, aes(x = Var2, y = value, fill = Var2)) +
@@ -35,29 +47,21 @@ lmpv_plot <- function(
          y = "Variance explained, %") +
     scale_fill_discrete(name = "Column") +
     theme_minimal() +
-    ylim(y_limits) +
+    coord_cartesian(ylim = effective_y_limits) +
     # Add the median values to the plot with conditional positioning
     geom_text(
       data = medians,
       aes(
         x = Var2,
-        y = median_value,
+        y = label_y,
         label = sprintf("%.2f", median_value)
       ),
-      # Conditional y position adjustment
-      nudge_y = ifelse(medians$median_value > 0.8, -0.05, median_position), # Adjust y position conditionally
       nudge_x = -0.2, # Nudge text to the left
       size = 3, # Adjust text size as needed
       color = "black" # Text color
     ) +
      # no name for x-axis
     xlab("") 
-
-  # Adjust y-axis limits if max_yval is provided
-  if (!is.null(max_yval)){
-    res_plots <- res_plots + 
-      coord_cartesian(ylim = c(0, max_yval))
-  }
 
   # Remove legend if specified
   if (!show_legend){
@@ -73,9 +77,9 @@ calculated_differences <- function(central_results, fed_results){
     differences <- as.matrix(abs(central_results - fed_results))
     
     # max min mean 
-    max_diff <- max(differences, na.rm = T)
-    min_diff <- min(differences, na.rm = T)
-    mean_diff <- mean(differences, na.rm = T)
+    max_diff <- max(differences, na.rm = TRUE)
+    min_diff <- min(differences, na.rm = TRUE)
+    mean_diff <- mean(differences, na.rm = TRUE)
 
-    return(c(max_diff, min_diff, mean_diff))
+    return(c(max_diff = max_diff, min_diff = min_diff, mean_diff = mean_diff))
 }
