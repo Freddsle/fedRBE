@@ -3,6 +3,7 @@ suppressPackageStartupMessages({
   library(stringr)
 })
 
+#' Strip whitespace and surrounding quotes from a value.
 rd_normalize_token <- function(x) {
   out <- as.character(x)
   out <- str_trim(out)
@@ -11,12 +12,14 @@ rd_normalize_token <- function(x) {
   out
 }
 
+#' Split a comma-separated string into a trimmed character vector.
 rd_parse_csv_list <- function(value) {
   parts <- unlist(str_split(value, ","))
   parts <- trimws(parts)
   parts[nzchar(parts)]
 }
 
+#' Return the directory of the currently executing script, or getwd().
 rd_get_script_dir <- function() {
   args <- commandArgs(trailingOnly = FALSE)
   file_arg <- "^--file="
@@ -27,6 +30,8 @@ rd_get_script_dir <- function() {
   normalizePath(getwd(), mustWork = TRUE)
 }
 
+#' Return a named list of dataset configurations keyed by dataset name.
+#' Each config contains paths to before/after matrices and site discovery info.
 rd_dataset_configs <- function(repo_root) {
   data_root <- file.path(repo_root, "evaluation_data")
   list(
@@ -62,6 +67,10 @@ rd_dataset_configs <- function(repo_root) {
   )
 }
 
+#' Resolve the path to the corrected matrix.
+#' @param cfg Dataset config from rd_dataset_configs().
+#' @param source "central", "federated", or "auto" (try federated first).
+#' @return File path to the corrected matrix.
 rd_choose_corrected_path <- function(cfg, source) {
   if (source == "central") {
     if (!file.exists(cfg$corrected_central)) {
@@ -88,6 +97,7 @@ rd_choose_corrected_path <- function(cfg, source) {
   )
 }
 
+#' Load a TSV expression matrix with the first column as row names.
 rd_load_feature_matrix <- function(path) {
   df <- read_delim(path, delim = "\t", show_col_types = FALSE, progress = FALSE)
   if (ncol(df) < 2) {
@@ -112,6 +122,7 @@ rd_load_feature_matrix <- function(path) {
   numeric_df
 }
 
+#' Load and merge per-site uncorrected matrices into a single data frame.
 rd_load_before_matrix_from_sites <- function(cfg) {
   if (is.null(cfg$before_sites_root) || is.null(cfg$before_site_glob) || is.null(cfg$before_site_matrix_file)) {
     return(rd_load_feature_matrix(cfg$before_matrix))
@@ -172,6 +183,7 @@ rd_load_before_matrix_from_sites <- function(cfg) {
   as.data.frame(merged, check.names = FALSE)
 }
 
+#' Reorder matrix columns to match file_order; error if any samples missing.
 rd_align_matrix_to_files <- function(matrix, file_order, label) {
   missing <- setdiff(file_order, colnames(matrix))
   if (length(missing) > 0) {
@@ -184,11 +196,13 @@ rd_align_matrix_to_files <- function(matrix, file_order, label) {
   matrix[, file_order, drop = FALSE]
 }
 
+#' Replace all NA values in a data frame with 0.
 rd_replace_na_with_zero <- function(df) {
   df[is.na(df)] <- 0
   df
 }
 
+#' Drop feature rows containing any NA value.
 rd_drop_rows_with_any_na <- function(df, label = "matrix") {
   total_rows <- nrow(df)
   out <- df[stats::complete.cases(df), , drop = FALSE]
@@ -207,6 +221,7 @@ rd_drop_rows_with_any_na <- function(df, label = "matrix") {
   out
 }
 
+#' Generate all permutations of a character vector (for small sets).
 rd_permute_values <- function(values) {
   if (length(values) <= 1) {
     return(list(values))
@@ -224,6 +239,7 @@ rd_permute_values <- function(values) {
   out
 }
 
+#' Map cluster labels to truth labels via best-match permutation (<=7) or majority vote.
 rd_align_predictions_to_truth <- function(predicted, truth) {
   pred_chr <- as.character(predicted)
   truth_chr <- as.character(truth)

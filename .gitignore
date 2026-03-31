@@ -216,3 +216,14 @@ evaluation_data/**/config_forest.yaml
 
 
 evaluation_clusterization_after_correction/real_datasets/*/fc_kmeans_res/*
+
+
+# Ignore big files and data files
+evaluation_data/microarray/before/all_expression_UNION.tsv
+evaluation_clusterization_after_correction/real_datasets/microarray/inputs/before/tests/*
+evaluation_clusterization_after_correction/real_datasets/proteomics/*
+evaluation_clusterization_after_correction/real_datasets/microarray/kmeans_res/*
+evaluation_clusterization_after_correction/real_datasets/microarray/results/pca/*
+evaluation_clusterization_after_correction/real_datasets/proteomics/kmeans_res/*
+evaluation_clusterization_after_correction/real_datasets/proteomics/results/pca/*
+evaluation_clusterization_after_correction/real_datasets/results/*
