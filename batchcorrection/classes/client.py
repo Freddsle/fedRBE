@@ -548,8 +548,13 @@ class Client:
                     sample_indices = self.design[self.design[self.batch_col] == cohorts_split[1]].index
                     self.design.loc[sample_indices, design_cohorts[cohort_idx]] = 1
             # now we fix the reference batch
-            reference_batch_indices = self.design[self.design[self.batch_col] == cohorts_splitlist[-1][1]].index
-            self.design.loc[reference_batch_indices, design_cohorts] = -1
+            reference_batch_split = cohorts_splitlist[-1]
+            if len(reference_batch_split) > 1 and reference_batch_split[0] == self.client_name:
+                # Reference batch belongs to this client - mark its samples as -1
+                reference_batch_indices = self.design[self.design[self.batch_col] == reference_batch_split[1]].index
+                self.design.loc[reference_batch_indices, design_cohorts] = -1
+            # else: reference batch is from another client (single-batch),
+            # no local samples to mark as reference
 
         if self.batch_col:
             # we remove the batch column from the design matrix, not needed anymore
