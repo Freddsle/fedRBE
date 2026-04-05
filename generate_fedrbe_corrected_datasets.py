@@ -95,7 +95,7 @@ base_simulated_config_file_changes = {
 }
 simulated_balanced_experiment = util.Experiment(
     name="Simulated Balanced",
-    fc_data_dir=data_dir,
+    fc_data_dir=os.path.join(data_dir, "simulated", "balanced"),
     clients=[
         os.path.join(data_dir, "simulated", "balanced", "before", "lab1"),
         os.path.join(data_dir, "simulated", "balanced", "before", "lab2"),
@@ -111,7 +111,7 @@ add_position_to_config(simulated_balanced_experiment_smpc)
 add_position_to_config(simulated_balanced_experiment)
 simulated_mildly_imbalanced_experiment = util.Experiment(
         name="Simulated Mildly Imbalanced",
-        fc_data_dir=data_dir,
+        fc_data_dir=os.path.join(data_dir, "simulated", "mild_imbalanced"),
         clients=[os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab1"),
                  os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab2"),
                  os.path.join(data_dir, "simulated", "mild_imbalanced", "before", "lab3"),
@@ -126,7 +126,7 @@ add_position_to_config(simulated_mildly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_mildly_imbalanced_experiment)
 simulated_strongly_imbalanced_experiment = util.Experiment(
         name="Simulated Strongly Imbalanced",
-        fc_data_dir=data_dir,
+        fc_data_dir=os.path.join(data_dir, "simulated", "strong_imbalanced"),
         clients=[os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab1"),
                  os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab2"),
                  os.path.join(data_dir, "simulated", "strong_imbalanced", "before", "lab3"),
@@ -152,7 +152,7 @@ proteomics_config_file_changes_base = {
 }
 proteomics_experiment = util.Experiment(
     name="Proteomics",
-    fc_data_dir=data_dir,
+    fc_data_dir=os.path.join(data_dir, "proteomics"),
     clients=[
         os.path.join(data_dir, "proteomics", "before", "lab_A"),
         os.path.join(data_dir, "proteomics", "before", "lab_B"),
@@ -169,22 +169,26 @@ set_smpc_true(proteomics_experiment_smpc)
 add_position_to_config(proteomics_experiment_smpc)
 add_position_to_config(proteomics_experiment)
 
-## PROTEOMICS MULTI_BATCH
+## PROTEOMICS MULTI_BATCH (Quartet, PXD045065)
+# 4 centers (labs): APT and FDU have 2 internal batches each (DDA + DIA),
+# NVG and BGI have 1 batch each (single batch name for all samples).
+# All centers use batch_col: batch.
 proteomics_config_file_changes_multibatch = deepcopy(proteomics_config_file_changes_base)
+proteomics_config_file_changes_multibatch["flimmaBatchCorrection"]["covariates"] = ["D6", "F7", "M8"]
 proteomics_config_file_changes_multibatch["flimmaBatchCorrection"]["batch_col"] = "batch"
 proteomics_config_file_changes_multibatch["flimmaBatchCorrection"]["min_samples"] = 0  # To avoid privacy error
 
+quartet_centers = ["APT", "FDU", "NVG", "BGI"]
 proteomics_multibatch_experiment = util.Experiment(
     name="Proteomics Multi Batch",
-    fc_data_dir=data_dir,
+    fc_data_dir=os.path.join(data_dir, "proteomics_multibatch"),
     clients=[
-        os.path.join(data_dir, "proteomics_multibatch", "before", "center1"),
-        os.path.join(data_dir, "proteomics_multibatch", "before", "center2"),
-        os.path.join(data_dir, "proteomics_multibatch", "before", "center3"),
+        os.path.join(data_dir, "proteomics_multibatch", "before", center)
+        for center in quartet_centers
     ],
     app_image_name=app_image_name,
-    config_files=[deepcopy(base_config) for _ in range(3)],
-    config_file_changes=[deepcopy(proteomics_config_file_changes_multibatch) for _ in range(3)],
+    config_files=[deepcopy(base_config) for _ in range(4)],
+    config_file_changes=[deepcopy(proteomics_config_file_changes_multibatch) for _ in range(4)],
 )
 proteomics_multibatch_experiment_smpc = deepcopy(proteomics_multibatch_experiment)
 set_smpc_true(proteomics_multibatch_experiment_smpc)
@@ -203,7 +207,7 @@ base_microarray_config_file_changes = {
 }
 microarray_experiment = util.Experiment(
     name="Microarray",
-    fc_data_dir=data_dir,
+    fc_data_dir=os.path.join(data_dir, "microarray"),
     clients=[
         os.path.join(data_dir, "microarray", "before", "GSE6008"),
         os.path.join(data_dir, "microarray", "before", "GSE14407"),
@@ -293,16 +297,18 @@ for exp, result_filename in zip(experiments, result_file_names):
     client_names = [os.path.basename(client_path) for client_path in exp.clients]
 
     # Extract all output files from each client's zip into individual_results/<clientname>/
-    for idx, (zipfilename, client_name) in enumerate(zip(result_files_zipped, client_names)):
-        while True:
-            if os.path.exists(os.path.join(data_dir, "tests", "tests", zipfilename)):
+    for idx, (zip_path, client_name) in enumerate(zip(result_files_zipped, client_names)):
+        for _ in range(60):
+            if os.path.exists(zip_path):
                 break
-            print(f"Waiting for file {zipfilename} to be available...")
+            print(f"Waiting for file {zip_path} to be available...")
             time.sleep(5)
+        else:
+            raise RuntimeError(f"Zip file not found after timeout: {zip_path}")
         client_result_dir = os.path.join(individual_results_dir, client_name)
         if not os.path.exists(client_result_dir):
             os.makedirs(client_result_dir)
-        with zipfile.ZipFile(os.path.join(data_dir, "tests", "tests", zipfilename), 'r') as zip_ref:
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_names = zip_ref.namelist()
             for fname in ["only_batch_corrected_data.csv", "full_corrected_data.csv", "report.txt"]:
                 if fname in zip_names:
