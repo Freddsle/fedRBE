@@ -42,16 +42,25 @@ class InitialState(AppState):
         if self.is_coordinator:
             # union the batch_labels and intersect the covariates
             list_labels_variables = self.gather_data(is_json=False)
-            global_variables_hashed = set()
+            global_variables_hashed = None  # will become a list, not a set
             global_batch_labels = list()
             for labels, variables in list_labels_variables:
-                # intersect the variables
-                if len(global_variables_hashed) == 0:
-                    global_variables_hashed = set(variables)
+                # intersect the variables while preserving deterministic order
+                # (the order of the first client's list, which comes from the
+                # config file). Using a set here would cause non-deterministic
+                # iteration order across Docker containers with different
+                # PYTHONHASHSEED values, leading to misaligned design matrix
+                # columns and wrong batch correction for features with NAs.
+                if global_variables_hashed is None:
+                    global_variables_hashed = list(variables)
                 else:
-                    global_variables_hashed = global_variables_hashed.intersection(set(variables))
+                    var_set = set(variables)
+                    global_variables_hashed = [v for v in global_variables_hashed
+                                               if v in var_set]
                 # extend the batch_labels
                 global_batch_labels.extend(labels)
+            if global_variables_hashed is None:
+                global_variables_hashed = []
             # ensure the batch_labels are unique
             if len(global_batch_labels) != len(set(global_batch_labels)):
                 self.log("Batch labels are not unique", LogLevel.FATAL)

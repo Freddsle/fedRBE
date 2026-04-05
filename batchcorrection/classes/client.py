@@ -233,6 +233,8 @@ class Client:
                 relevant_cols.extend(self.variables)
             self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[relevant_cols]
             if self.batch_col:
+                # ensure batch column is string so label reconstruction via split works
+                self.design[self.batch_col] = self.design[self.batch_col].astype(str)
                 # extract which batches exist
                 self.batch_labels = [f"{self.client_name}|{batchname}" for batchname in self.design[self.batch_col].unique()]
 
