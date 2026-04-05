@@ -1,5 +1,5 @@
 flimmaBatchCorrection:
-  batch_col: null
+  batch_col: batch
   covariates:
   - D6
   - F7
@@ -12,5 +12,6 @@ flimmaBatchCorrection:
   min_samples: 0
   normalizationMethod: null
   position: 2
+  reference_batch: false
   separator: "\t"
   smpc: true
