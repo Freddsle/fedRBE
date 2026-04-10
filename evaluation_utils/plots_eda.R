@@ -49,15 +49,37 @@ pca_plot <- function(
     pc_y = "PC2",  # Default principal component for the y-axis
     show_legend = TRUE,
     cbPalette = NULL,
-    point_size = 2
+    point_size = 2,
+    use_nipals = FALSE
     ){
-  pca <- prcomp(t(na.omit(df)))
-  pca_df <- pca$x %>%
-    as.data.frame() %>%
-    rownames_to_column(quantitative_col_name) %>% 
-    left_join(batch_info, by = quantitative_col_name)
-  var_expl <- pca$sdev^2 / sum(pca$sdev^2)
-  names(var_expl) <- paste0("PC", 1:length(var_expl))
+  if (use_nipals) {
+    if (!requireNamespace("nipals", quietly = TRUE)) stop("Package 'nipals' is required for NIPALS PCA. Install it with install.packages('nipals').")
+    ncomp <- max(as.integer(sub("PC", "", c(pc_x, pc_y))))
+    res <- nipals::nipals(
+      t(df),
+      ncomp = ncomp,
+      center = TRUE,
+      scale = TRUE,
+      maxiter = 500,
+      startcol = function(x) sum(!is.na(x))
+    )
+    scores <- res$scores %*% diag(res$eig)
+    colnames(scores) <- paste0("PC", seq_len(ncol(scores)))
+    pca_df <- scores %>%
+      as.data.frame() %>%
+      rownames_to_column(quantitative_col_name) %>%
+      left_join(batch_info, by = quantitative_col_name)
+    var_expl <- res$eig^2 / sum(res$eig^2)
+    names(var_expl) <- paste0("PC", seq_along(var_expl))
+  } else {
+    pca <- prcomp(t(na.omit(df)))
+    pca_df <- pca$x %>%
+      as.data.frame() %>%
+      rownames_to_column(quantitative_col_name) %>% 
+      left_join(batch_info, by = quantitative_col_name)
+    var_expl <- pca$sdev^2 / sum(pca$sdev^2)
+    names(var_expl) <- paste0("PC", 1:length(var_expl))
+  }
 
   missing_pcs <- setdiff(c(pc_x, pc_y), colnames(pca_df))
   if (length(missing_pcs) > 0) {
@@ -256,13 +278,14 @@ heatmap_plot <- function(pg_matrix, batch_info, name, condition="condition", lab
 }
 
 
-plots_multiple <- function(intensities, metadata, name, simulated = FALSE){
+plots_multiple <- function(intensities, metadata, name, simulated = FALSE, use_nipals = FALSE){
 
   pca_plot_study <- pca_plot(
       intensities, metadata,
       title = name,
       quantitative_col_name = 'file',
-      col_col = "lab", shape_col = "condition")
+      col_col = "lab", shape_col = "condition",
+      use_nipals = use_nipals)
 
   density_plot <- plotIntensityDensity(
       intensities, metadata,
@@ -285,7 +308,8 @@ plots_multiple <- function(intensities, metadata, name, simulated = FALSE){
         intensities, metadata,
         title = name,
         quantitative_col_name = 'file',
-        shape_col = "lab", col_col = "condition")
+        shape_col = "lab", col_col = "condition",
+        use_nipals = use_nipals)
 
     boxplot <- boxplot_plot(
         intensities, metadata,
