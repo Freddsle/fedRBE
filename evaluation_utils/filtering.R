@@ -48,9 +48,9 @@ filter_per_center <- function(
     center_samples,
     function(samples) {
       if (is.null(min_fraction)) {
-        min_samples
+        as.integer(min_samples)
       } else {
-        max(min_samples, ceiling(length(samples) * min_fraction))
+        as.integer(max(min_samples, ceiling(length(samples) * min_fraction)))
       }
     },
     integer(1)
@@ -81,7 +81,7 @@ filter_per_center <- function(
 }
 
 fedrbe_min_samples <- function(num_batches, covariates = character(), min_samples = 0) {
-  max(num_batches + length(covariates) + 1, min_samples)
+  as.integer(max(num_batches + length(covariates) + 1, min_samples))
 }
 
 filter_fedrbe_client <- function(

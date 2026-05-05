@@ -67,7 +67,7 @@ class DataInfo:
     Expected JSON structure::
 
         {
-          "covariate": "<column_name>",
+          "covariates": ["<column_name>"],
           "datafile": {
             "filename": "...",
             "separator": "\\t",
@@ -83,7 +83,7 @@ class DataInfo:
         }
     """
 
-    covariate: str
+    covariates: Optional[List[str]]
     datafile: FileSpec
     designfile: Optional[FileSpec]
     cohorts: List[CohortInfo]
@@ -94,7 +94,9 @@ class DataInfo:
         with open(self._path, 'r') as f:
             raw = json.load(f)
 
-        self.covariate = raw['covariate']
+        self.covariates = raw['covariates']
+        if not self.covariates or len(self.covariates) == 0:
+            self.covariates = None
 
         df_raw = raw['datafile']
         self.datafile = FileSpec(
@@ -179,15 +181,17 @@ class DataInfo:
         if self.designfile is not None:
             design_df = self._load_file(self.designfile, cohort_folder)
             # Merge only the covariate column, aligning on sample index
-            data_df = data_df.join(design_df[[self.covariate]], how='inner')
-        # else: covariate is expected to already be a column in data_df
+            if self.covariates is not None:
+                data_df = data_df.join(design_df[self.covariates], how='inner')
+        # else: covariates is expected to already be columns in data_df
 
         # Ensure the covariate column exists after loading/merging.
-        if self.covariate not in data_df.columns:
-            raise ValueError(
-                f"Covariate '{self.covariate}' not found in cohort data at {cohort_folder}. "
-                "Either provide a designfile with this covariate or include it in the datafile."
-            )
+        for cov in self.covariates or []:
+            if cov not in data_df.columns:
+                raise ValueError(
+                    f"Covariate '{cov}' not found in cohort data at {cohort_folder}. "
+                    "Either provide a designfile with this covariate or include it in the datafile."
+                )
 
         return data_df
 
@@ -389,7 +393,10 @@ class ClassificationExperimentLeaveOneCohortOut:
 
         cohort_folders = self.datainfo.cohort_folders
         cohort_names = [c.name for c in self.datainfo.cohorts]
-        predicted_column = self.datainfo.covariate
+        if self.datainfo.covariates is None or len(self.datainfo.covariates) == 0:
+            raise ValueError("DataInfo must specify at least one covariate column, no target exists to classify on.")
+        predicted_column = self.datainfo.covariates[0]
+            # TODO: Do all covariates in a loop here,just for now to make it work
         n_clients = len(cohort_folders)
         cohorts_parent = cohort_folders[0].parent
         # ensure all cohorts share the same parent
@@ -575,9 +582,11 @@ class ClassificationExperimentTrainTestSplit:
         ]
         for out_folder in output_folders:
             Path(out_folder).mkdir(parents=True, exist_ok=True)
+        if not self.datainfo.covariates or len(self.datainfo.covariates) == 0:
+            raise ValueError("DataInfo must specify at least one covariate column, no target exists to classify on.")
 
         for client_folder in cohort_folders:
-            _write_forest_config(client_folder, self.datainfo.covariate, seed,
+            _write_forest_config(client_folder, self.datainfo.covariates[0], seed,
                                   train_test_ratio=self.train_test_ratio)
 
         run_simulation_native(clientpaths=[str(f) for f in cohort_folders],

@@ -1,0 +1,35 @@
+{
+  "covariates": ["D6", "F7", "M8"],
+  "datafile": {
+    "filename": "full_corrected_data.csv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": {},
+    "featurename_column": "rowname"
+  },
+  "designfile": {
+    "filename": "design.tsv",
+    "separator": "\t",
+    "rotation": "samples x features",
+    "samplename_column": "file",
+    "featurename_column": {}
+  },
+  "cohorts": [
+    {
+      "name": "APT",
+      "folder": "individual_results/APT"
+    },
+    {
+      "name": "FDU",
+      "folder": "individual_results/FDU"
+    },
+    {
+      "name": "NVG",
+      "folder": "individual_results/NVG"
+    },
+    {
+      "name": "BGI",
+      "folder": "individual_results/BGI"
+    }
+  ]
+}

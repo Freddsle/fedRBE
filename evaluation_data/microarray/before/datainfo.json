@@ -1,5 +1,5 @@
 {
-  "covariate": "HGSC",
+  "covariates": ["HGSC"],
   "datafile": {
     "filename": "expr_for_correction_UNION.tsv",
     "separator": "\t",

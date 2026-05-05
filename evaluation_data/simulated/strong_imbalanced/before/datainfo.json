@@ -1,5 +1,5 @@
 {
-  "covariate": "A",
+  "covariates": ["A"],
   "datafile": {
     "filename": "intensities.tsv",
     "separator": "\t",
