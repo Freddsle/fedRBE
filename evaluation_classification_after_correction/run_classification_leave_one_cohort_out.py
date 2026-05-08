@@ -67,6 +67,22 @@ for num_run in range(NUM_RUNS):
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
+    # Microarray Data
+    folder_microarray = EVALUATION_DATA_FOLDER / "microarray"
+    ClassificationExperimentLeaveOneCohortOut(
+        data_name="Microarray Data",
+        preprocessing_name="uncorrected",
+        datainfo=DataInfo(folder_microarray / "before" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
+
+    ClassificationExperimentLeaveOneCohortOut(
+        data_name="Microarray Data",
+        preprocessing_name="corrected",
+        datainfo=DataInfo(folder_microarray / "after" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
+
     # Proteomics Data
     folder_proteomics = EVALUATION_DATA_FOLDER / "proteomics"
     ClassificationExperimentLeaveOneCohortOut(
@@ -83,18 +99,18 @@ for num_run in range(NUM_RUNS):
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
-    # Microarray Data
-    folder_microarray = EVALUATION_DATA_FOLDER / "microarray"
+    # Proteomics Multibatch Data
+    folder_proteomics_multibatch = EVALUATION_DATA_FOLDER / "proteomics_multibatch"
     ClassificationExperimentLeaveOneCohortOut(
-        data_name="Microarray Data",
+        data_name="Proteomics Multibatch Data",
         preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_microarray / "before" / "datainfo.json"),
+        datainfo=DataInfo(folder_proteomics_multibatch / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentLeaveOneCohortOut(
-        data_name="Microarray Data",
+        data_name="Proteomics Multibatch Data",
         preprocessing_name="corrected",
-        datainfo=DataInfo(folder_microarray / "after" / "datainfo.json"),
+        datainfo=DataInfo(folder_proteomics_multibatch / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
