@@ -4,16 +4,10 @@
     "filename": "full_corrected_data.csv",
     "separator": "\t",
     "rotation": "features x samples",
-    "samplename_column": {},
-    "featurename_column": "rowname"
+    "samplename_column": null,
+    "featurename_column": null
   },
-  "designfile": {
-    "filename": "design.tsv",
-    "separator": "\t",
-    "rotation": "samples x features",
-    "samplename_column": "file",
-    "featurename_column": {}
-  },
+  "designfile": null,
   "cohorts": [
     {
       "name": "APT",
