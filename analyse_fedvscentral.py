@@ -89,6 +89,18 @@ experiment_results.append(utils.ExperimentResult(
     central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
 ))
 
+# ccRCC PROTEOMICS
+experiment_results.append(utils.ExperimentResult(
+    name="ccRCC Proteomics",
+    federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="ccRCC Proteomics (SMPC)",
+    federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
+))
+
 
 ### MAIN, just runs compare_experiments on all experiments and prints the results
 result_df = utils.compare_experiments(experiment_results)

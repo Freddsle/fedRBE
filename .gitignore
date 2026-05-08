@@ -227,3 +227,7 @@ evaluation_clusterization_after_correction/real_datasets/microarray/results/pca/
 evaluation_clusterization_after_correction/real_datasets/proteomics/kmeans_res/*
 evaluation_clusterization_after_correction/real_datasets/proteomics/results/pca/*
 evaluation_clusterization_after_correction/real_datasets/results/*
+
+# ignore the archive and not used data
+evaluation_data/ccRCC_studies/data/*
+evaluation_data/00_archiv/*

@@ -225,8 +225,37 @@ set_smpc_true(microarray_experiment_smpc)
 add_position_to_config(microarray_experiment_smpc)
 add_position_to_config(microarray_experiment)
 
+## ccRCC PROTEOMICS (3 studies: PDC000127, PXD030344, PXD042844)
+# Condition column derived from binary Normal/Tumor columns (see prepare_ccRCC_data.py).
+# Data matrices use 'Gene' as the row index column.
+ccRCC_config_file_changes_base = {
+    "flimmaBatchCorrection": {
+        "data_filename": "report_filtered.tsv",
+        "design_filename": "design.tsv",
+        "covariates": ["Condition"],
+        "index_col": "Gene",
+        "min_samples": 2
+    }
+}
+ccRCC_proteomics_experiment = util.Experiment(
+    name="ccRCC Proteomics",
+    fc_data_dir=os.path.join(data_dir, "ccRCC_studies"),
+    clients=[
+        os.path.join(data_dir, "ccRCC_studies", "before", "PDC000127"),
+        os.path.join(data_dir, "ccRCC_studies", "before", "PXD030344"),
+        os.path.join(data_dir, "ccRCC_studies", "before", "PXD042844"),
+    ],
+    app_image_name=app_image_name,
+    config_files=[deepcopy(base_config) for _ in range(3)],
+    config_file_changes=[deepcopy(ccRCC_config_file_changes_base) for _ in range(3)],
+)
+ccRCC_proteomics_experiment_smpc = deepcopy(ccRCC_proteomics_experiment)
+set_smpc_true(ccRCC_proteomics_experiment_smpc)
+add_position_to_config(ccRCC_proteomics_experiment_smpc)
+add_position_to_config(ccRCC_proteomics_experiment)
+
 ## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
-# Simulated
+# # Simulated
 experiments.append(simulated_balanced_experiment)
 result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
 experiments.append(simulated_balanced_experiment_smpc)
@@ -259,6 +288,12 @@ experiments.append(microarray_experiment)
 result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
 experiments.append(microarray_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"))
+
+## ccRCC Proteomics
+experiments.append(ccRCC_proteomics_experiment)
+result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"))
+experiments.append(ccRCC_proteomics_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ### ACTUAL PROGRAM, NO NEED TO CHANGE IF A DIFFERENT EXPERIMENT WANTS TO BE RUN
 
