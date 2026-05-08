@@ -623,7 +623,7 @@ class ClassificationExperimentTrainTestSplit:
                 raise ValueError("DataInfo must specify at least one covariate column, no target exists to classify on.")
 
             for client_folder in cohort_folders:
-                _write_forest_config(client_folder, self.datainfo.covariates[0], seed,
+                _write_forest_config(client_folder, predicted_column, seed,
                                         train_test_ratio=self.train_test_ratio)
 
             run_simulation_native(clientpaths=[str(f) for f in cohort_folders],

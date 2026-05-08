@@ -11,7 +11,7 @@ from helper.helper_run_classification_report_metrics import (
 
 SCRIPT_FOLDER = Path(__file__).parent
 EVALUATION_DATA_FOLDER = SCRIPT_FOLDER.parent / "evaluation_data"
-NUM_RUNS = 1 # TODO: change back to 10 after testing
+NUM_RUNS = 10
 RESULTS_FILE = ResultFile(SCRIPT_FOLDER / "results" / "classification_metric_report.csv")
 
 for num_run in range(NUM_RUNS):
