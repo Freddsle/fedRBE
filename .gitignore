@@ -162,25 +162,21 @@ cython_debug/
 
 
 # FeatureCloud related files
-batchcorrection/data/tests
-batchcorrection/data/logs
-batchcorrection/data/site_info.json
-batchcorrection/logs
-batchcorrection/tests
-evaluation_data/site_info.json
-evaluation_data/tests/
-evaluation_data/testbed-*
-evaluation_data/workflows
+**/tests/
+**/logs/
+**/workflows/
+**/testbed-*/
+**/site_info.json
 **/individual_results/**
 !**/individual_results/
 !**/individual_results/*/
+
 # to many files
 evaluation/eval_simulation/*/lmvp/*.tsv
 evaluation_data/simulated/*/after/runs/*.tsv
 evaluation_data/simulated/*/before/intermediate/*.tsv
 evaluation/eval_simulation/lmpv_plots/*.pdf
-evaluation_data/simulated/mild_imbalanced/before/site_info.json
-evaluation_data/simulated/mild_imbalanced/before/tests/
+
 
 # tmp submission folder
 00_submit/*
@@ -220,7 +216,7 @@ evaluation_clusterization_after_correction/real_datasets/*/fc_kmeans_res/*
 
 # Ignore big files and data files
 evaluation_data/microarray/before/all_expression_UNION.tsv
-evaluation_clusterization_after_correction/real_datasets/microarray/inputs/before/tests/*
+
 evaluation_clusterization_after_correction/real_datasets/proteomics/*
 evaluation_clusterization_after_correction/real_datasets/microarray/kmeans_res/*
 evaluation_clusterization_after_correction/real_datasets/microarray/results/pca/*
@@ -231,3 +227,4 @@ evaluation_clusterization_after_correction/real_datasets/results/*
 # ignore the archive and not used data
 evaluation_data/ccRCC_studies/data/*
 evaluation_data/00_archiv/*
+
