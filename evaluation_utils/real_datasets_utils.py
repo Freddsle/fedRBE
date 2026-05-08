@@ -19,14 +19,7 @@ import numpy as np
 import pandas as pd
 import yaml
 from sklearn.cluster import KMeans
-from sklearn.metrics import (
-    accuracy_score,
-    adjusted_rand_score,
-    f1_score,
-    matthews_corrcoef,
-    precision_score,
-    recall_score,
-)
+from sklearn.metrics import adjusted_rand_score
 
 
 # ---------------------------------------------------------------------------
@@ -206,6 +199,47 @@ def load_before_matrix_from_sites(cfg: DatasetConfig, clients: Sequence[Path]) -
     return merged
 
 
+def load_before_matrix_from_dir(before_dir: Path, filename: str = "intensities.tsv") -> pd.DataFrame:
+    """Merge per-subdirectory matrices into a single features x samples DataFrame.
+
+    Iterates direct subdirectories of *before_dir* in sorted order, loads *filename*
+    from each, and concatenates column-wise.  Suitable for simulated data where labs are
+    plain sub-folders (no DatasetConfig required).
+    """
+    parts: List[pd.DataFrame] = []
+    for sub in sorted(before_dir.iterdir()):
+        matrix_path = sub / filename
+        if sub.is_dir() and matrix_path.exists():
+            parts.append(load_feature_matrix(matrix_path))
+
+    if not parts:
+        raise FileNotFoundError(f"No {filename!r} files found in subdirectories of {before_dir}")
+
+    merged = pd.concat(parts, axis=1, join="outer")
+    dup_cols = merged.columns[merged.columns.duplicated()].unique().tolist()
+    if dup_cols:
+        raise ValueError(
+            f"Duplicate sample columns while merging matrices under {before_dir}. "
+            f"Examples: {dup_cols[:5]}"
+        )
+    if merged.empty:
+        raise ValueError(f"Merged matrix is empty for {before_dir}")
+    return merged
+
+
+def filter_matrix_to_available(
+    matrix: pd.DataFrame, metadata: pd.DataFrame, label: str
+) -> pd.DataFrame:
+    """Restrict matrix columns to samples listed in metadata, then drop any-NA feature rows.
+
+    Unlike :func:`align_matrix_to_metadata`, this does NOT raise when samples are absent
+    from the matrix — it silently keeps only the intersection.  Use this when the matrix
+    may contain a subset of all samples (e.g. per-run simulated data).
+    """
+    available = [s for s in metadata["file"] if s in matrix.columns]
+    return drop_rows_with_any_na(matrix.loc[:, available], label)
+
+
 # ---------------------------------------------------------------------------
 # Matrix alignment and filtering
 # ---------------------------------------------------------------------------
@@ -326,51 +360,15 @@ def align_predictions_to_truth(predicted: pd.Series, truth: pd.Series) -> pd.Ser
 
 
 def calculate_metrics(true_labels: pd.Series, predicted_labels: pd.Series) -> Dict[str, float]:
-    """Compute accuracy, precision, recall, F1, MCC, and ARI from aligned labels."""
+    """Compute ARI from aligned labels."""
     mask = true_labels.notna() & predicted_labels.notna()
     if not mask.any():
-        return {
-            "Accuracy": np.nan,
-            "Precision": np.nan,
-            "Recall": np.nan,
-            "F1_Score": np.nan,
-            "MCC": np.nan,
-            "ARI": np.nan,
-            "N": 0,
-        }
+        return {"ARI": np.nan, "N": 0}
 
     y_true = true_labels[mask].astype(str)
     y_pred = predicted_labels[mask].astype(str)
-    labels = sorted(y_true.unique())
-
-    accuracy = float(accuracy_score(y_true, y_pred))
-    if len(labels) == 2:
-        positive_label = labels[-1]
-        precision = float(
-            precision_score(y_true, y_pred, pos_label=positive_label, zero_division=0)
-        )
-        recall = float(recall_score(y_true, y_pred, pos_label=positive_label, zero_division=0))
-        f1 = float(f1_score(y_true, y_pred, pos_label=positive_label, zero_division=0))
-    else:
-        precision = float(precision_score(y_true, y_pred, average="macro", zero_division=0))
-        recall = float(recall_score(y_true, y_pred, average="macro", zero_division=0))
-        f1 = float(f1_score(y_true, y_pred, average="macro", zero_division=0))
-
-    try:
-        mcc = float(matthews_corrcoef(y_true, y_pred))
-    except Exception:
-        mcc = np.nan
     ari = float(adjusted_rand_score(y_true, y_pred))
-
-    return {
-        "Accuracy": accuracy,
-        "Precision": precision,
-        "Recall": recall,
-        "F1_Score": f1,
-        "MCC": mcc,
-        "ARI": ari,
-        "N": int(mask.sum()),
-    }
+    return {"ARI": ari, "N": int(mask.sum())}
 
 
 # ---------------------------------------------------------------------------
@@ -516,10 +514,10 @@ def evaluate_metrics(
     k_condition: int,
     k_batch: int,
 ) -> pd.DataFrame:
-    """Compute all metrics for central and federated k-means results.
+    """Compute ARI for central and federated k-means results.
 
     Returns a DataFrame with one row per (target, method) combination,
-    containing ARI, MCC, accuracy, precision, recall, F1, and sample count.
+    containing ARI and sample count.
     """
     records: List[Dict] = []
     by_file_before_fed = (
@@ -580,21 +578,9 @@ def evaluate_metrics(
 
 
 def save_metrics_tables(metrics_df: pd.DataFrame, output_dir: Path) -> None:
-    """Save full and MCC/ARI-only metrics tables as TSV files.
-
-    Creates ``metrics_all.tsv`` (all columns) and ``metrics_mcc_ari.tsv``
-    (Dataset, Target, K, Method, MCC, ARI, N only).
-    """
+    """Save ARI metrics table as a TSV file."""
     output_dir.mkdir(parents=True, exist_ok=True)
-    metrics_df.to_csv(output_dir / "metrics_all.tsv", sep="\t", index=False)
-
-    subset_cols = ["Dataset", "Target", "K", "Method", "MCC", "ARI", "N"]
-    subset = (
-        metrics_df[subset_cols]
-        if not metrics_df.empty
-        else pd.DataFrame(columns=subset_cols)
-    )
-    subset.to_csv(output_dir / "metrics_mcc_ari.tsv", sep="\t", index=False)
+    metrics_df.to_csv(output_dir / "metrics_ari.tsv", sep="\t", index=False)
 
 
 # ---------------------------------------------------------------------------
