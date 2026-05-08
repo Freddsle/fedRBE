@@ -175,6 +175,7 @@ cython_debug/
 evaluation/eval_simulation/*/lmvp/*.tsv
 evaluation_data/simulated/*/after/runs/*.tsv
 evaluation_data/simulated/*/before/intermediate/*.tsv
+evaluation_clusterization_after_correction/simulated/outputs/
 evaluation/eval_simulation/lmpv_plots/*.pdf
 
 
