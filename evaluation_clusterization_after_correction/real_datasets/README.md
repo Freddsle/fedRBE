@@ -97,15 +97,15 @@ launches a new federated test or aggregates existing results.
    docker build -t fc_kmeans_upd .
    ```
 
-3. Start the FeatureCloud controller:
-   ```bash
-   featurecloud controller start
-   ```
+3. Open `03_federated_runs.ipynb`.
+4. Set `RERUN_FEDERATED = True` in the **Configuration** cell.
+5. Adjust `CONTROLLER_HOST`, `TIMEOUT`, and `QUERY_INTERVAL` if needed.
+6. Run all cells.
 
-4. Open `03_federated_runs.ipynb`.
-5. Set `RERUN_FEDERATED = True` in the **Configuration** cell.
-6. Adjust `CONTROLLER_HOST`, `TIMEOUT`, and `QUERY_INTERVAL` if needed.
-7. Run all cells.
+   The notebook starts and stops the FeatureCloud controller automatically for each
+   dataset variant (via `_startup()`), pointing it at the correct
+   `<dataset>/inputs/{before,corrected}/` directory. Docker must be running;
+   no manual `featurecloud controller start` is needed.
 
    Result zip files are saved by the FeatureCloud controller to
    `<dataset>/inputs/{before,corrected}/tests/tests/results_test_<id>_client_<id>_<name>.zip`

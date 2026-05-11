@@ -20,6 +20,7 @@ import pandas as pd
 import yaml
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
+from sklearn.preprocessing import StandardScaler
 
 
 # ---------------------------------------------------------------------------
@@ -297,11 +298,12 @@ def run_central_kmeans(
     feature_by_sample: pd.DataFrame, k_values: Sequence[int], seed: int
 ) -> Dict[int, pd.Series]:
     """Run k-means for each k and return {k: Series of cluster labels indexed by sample name}."""
-    data = scale_like_federated(feature_by_sample)
+    # StandardScaler: center + scale by population std (ddof=0), per feature — sklearn default
+    data = StandardScaler().fit_transform(feature_by_sample.to_numpy(dtype=float).T)
     samples = list(feature_by_sample.columns)
     outputs: Dict[int, pd.Series] = {}
     for k in sorted(set(k_values)):
-        km = KMeans(n_clusters=k, n_init=50, random_state=seed)
+        km = KMeans(n_clusters=k, random_state=seed)
         labels = km.fit_predict(data)
         outputs[k] = pd.Series(labels, index=samples)
     return outputs
@@ -562,8 +564,7 @@ def evaluate_metrics(
         for method_name, predicted in method_specs:
             if predicted is None:
                 continue
-            aligned = align_predictions_to_truth(predicted, truth)
-            metrics = calculate_metrics(truth, aligned)
+            metrics = calculate_metrics(truth, predicted)
             records.append(
                 {
                     "Dataset": dataset_name,
