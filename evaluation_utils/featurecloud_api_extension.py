@@ -425,25 +425,37 @@ class Experiment():
 
     def _kill_leftover_container(self):
         """
-        Eliminates any containers left of the app image
+        Eliminates any containers left of the app image.
+        Matches by image tag because FeatureCloud strips underscores from
+        image names when generating container names (e.g. fc_kmeans_upd ->
+        fc_fckmeansupd_*), so matching by container.name is unreliable.
+        Uses remove(force=True) to both stop and remove containers so they
+        are fully disconnected from Docker networks.
         """
         print("Killing leftover containers...")
         dockerclient = docker.from_env()
-        containers = dockerclient.containers.list()
+        # include stopped containers — they stay on networks until removed
+        containers = dockerclient.containers.list(all=True)
 
-        # Iterate through the containers
         image_name = self.app_image_name
         if "/" in image_name:
             image_name = image_name.split("/")[-1]
+        # FC strips underscores when naming containers, so also try without them
+        image_name_no_underscores = image_name.replace("_", "")
+
         for container in containers:
-            if image_name in container.name:
-                # Stop the container
+            tags = container.image.tags if container.image else []
+            name_match = (
+                image_name in container.name
+                or image_name_no_underscores in container.name
+            )
+            image_match = any(image_name in tag for tag in tags)
+            if name_match or image_match:
                 try:
-                    container.stop()
+                    container.remove(force=True)  # stops + removes in one call
+                    print(f"Removed leftover container: {container.id} (image: {self.app_image_name})")
                 except Exception as e:
-                    print(f"WARNING: failed to stop a container, will try to continue the workflow. Error: {e}")
-                print(f"Stopped leftover container: {container.id} running image {self.app_image_name}")
-                time.sleep(5) # just to make sure the container is really removed
+                    print(f"WARNING: failed to remove container {container.id}, will try to continue. Error: {e}")
 
 ### Helper functions
 def hash_file(file_path, exclude=None):

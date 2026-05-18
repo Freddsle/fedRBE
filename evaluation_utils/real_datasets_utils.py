@@ -397,7 +397,13 @@ def write_design(df: pd.DataFrame, path: Path) -> None:
     out.to_csv(path, sep="\t", index=False, quoting=csv.QUOTE_NONNUMERIC)
 
 
-def write_kmeans_config(path: Path, k_values: Sequence[int]) -> None:
+def write_kmeans_config(
+    path: Path,
+    k_values: Sequence[int],
+    n_init_local: int = 50,
+    n_init_global: int = 50,
+    max_global_iter: int = 1,
+) -> None:
     """Write a ``config_kmeans.yml`` for the FeatureCloud fc_kmeans app."""
     k_min = min(k_values)
     k_max = max(k_values)
@@ -408,6 +414,9 @@ def write_kmeans_config(path: Path, k_values: Sequence[int]) -> None:
         f"    k_min: {k_min}\n"
         "    k_step: 1\n"
         "    cluster_on: column\n"
+        f"    n_init_local: {n_init_local}\n"
+        f"    n_init_global: {n_init_global}\n"
+        f"    max_global_iter: {max_global_iter}\n"
         "  input:\n"
         "    delimiter: \"\\t\"\n"
         "    dir: \"\"\n"
