@@ -1,19 +1,13 @@
 {
   "covariates": ["Condition"],
   "datafile": {
-    "filename": "report_filtered.tsv",
+    "filename": "full_corrected_data.csv",
     "separator": "\t",
     "rotation": "features x samples",
     "samplename_column": null,
-    "featurename_column": "Gene"
-  },
-  "designfile": {
-    "filename": "design.tsv",
-    "separator": "\t",
-    "rotation": "samples x features",
-    "samplename_column": "rowname",
     "featurename_column": null
   },
+  "designfile": null,
   "cohorts": [
     {
       "name": "PDC000127",
