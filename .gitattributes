@@ -5,8 +5,6 @@ evaluation_data/**/after/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs
 evaluation_data/**/after/FedApp_corrected_data_smpc.tsv filter=lfs diff=lfs merge=lfs -text
 
 # Specific data files that are too big
-evaluation_data/microarray/after/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/microarray/after/FedApp_corrected_data_smpc.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/microarray/after/central_corrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
 
 # Simulated rotation all input data before correction
