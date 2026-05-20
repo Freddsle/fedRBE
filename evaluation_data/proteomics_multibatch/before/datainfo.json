@@ -1,10 +1,10 @@
 {
-  "covariate": "Pyr",
+  "covariates": ["D6", "F7", "M8"],
   "datafile": {
     "filename": "intensities_log_UNION.tsv",
     "separator": "\t",
     "rotation": "features x samples",
-    "samplename_column": null,
+    "samplename_column": {},
     "featurename_column": "rowname"
   },
   "designfile": {
@@ -12,20 +12,24 @@
     "separator": "\t",
     "rotation": "samples x features",
     "samplename_column": "file",
-    "featurename_column": null
+    "featurename_column": {}
   },
   "cohorts": [
     {
-      "name": "center1",
-      "folder": "center1"
+      "name": "APT",
+      "folder": "APT"
     },
     {
-      "name": "center2",
-      "folder": "center2"
+      "name": "FDU",
+      "folder": "FDU"
     },
     {
-      "name": "center3",
-      "folder": "center3"
+      "name": "NVG",
+      "folder": "NVG"
+    },
+    {
+      "name": "BGI",
+      "folder": "BGI"
     }
   ]
 }

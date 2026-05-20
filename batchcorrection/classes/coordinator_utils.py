@@ -66,9 +66,10 @@ def create_feature_presence_matrix(
                 if len(batch_feature_presence_info) != 1:
                     raise ValueError("Reference batch is not the only batch of the client. Use a string in reference_batch.")
                 reference_batch = list(batch_feature_presence_info.keys())[0]
-                if len(reference_batch.split("|")) != 1:
-                    raise ValueError("Reference batch name is not correctly formatted")
-                reference_client = reference_batch
+                if "|" in reference_batch:
+                    reference_client = reference_batch.split("|")[0]
+                else:
+                    reference_client = reference_batch
 
     # we need to set the order of the clients either as sent by the clients
     # or as found in the given default_order

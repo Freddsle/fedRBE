@@ -1,5 +1,5 @@
 {
-  "covariate": "Pyr",
+  "covariates": ["D6", "F7", "M8"],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",
@@ -10,16 +10,20 @@
   "designfile": null,
   "cohorts": [
     {
-      "name": "center1",
-      "folder": "individual_results/center1"
+      "name": "APT",
+      "folder": "individual_results/APT"
     },
     {
-      "name": "center2",
-      "folder": "individual_results/center2"
+      "name": "FDU",
+      "folder": "individual_results/FDU"
     },
     {
-      "name": "center3",
-      "folder": "individual_results/center3"
+      "name": "NVG",
+      "folder": "individual_results/NVG"
+    },
+    {
+      "name": "BGI",
+      "folder": "individual_results/BGI"
     }
   ]
 }

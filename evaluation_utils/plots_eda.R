@@ -8,6 +8,34 @@ library(ggsci)
 
 library(viridis)
 
+build_scatter_mapping <- function(x, y, color_col, shape_col = NULL) {
+  mapping <- list(x = rlang::sym(x), y = rlang::sym(y), color = rlang::sym(color_col))
+  if (!is.null(shape_col) && nzchar(shape_col)) {
+    mapping$shape <- rlang::sym(shape_col)
+  }
+  do.call(ggplot2::aes, mapping)
+}
+
+prepare_intensity_plot_data <- function(matrix_like, metadata_df, quantitativeColumnName) {
+  as.data.frame(matrix_like, check.names = FALSE) %>%
+    tidyr::pivot_longer(
+      cols = dplyr::everything(),
+      names_to = "file",
+      values_to = "Intensity"
+    ) %>%
+    dplyr::left_join(
+      metadata_df,
+      by = stats::setNames(quantitativeColumnName, "file")
+    )
+}
+
+save_plot_if_requested <- function(plot_obj, path, width = NULL, height = NULL) {
+  if (!is.null(path) && nzchar(path)) {
+    ggsave(path, plot_obj, width = width, height = height)
+  }
+  plot_obj
+}
+
 
 pca_plot <- function(
     df, 
@@ -21,25 +49,51 @@ pca_plot <- function(
     pc_y = "PC2",  # Default principal component for the y-axis
     show_legend = TRUE,
     cbPalette = NULL,
-    point_size = 2
+    point_size = 2,
+    use_nipals = FALSE
     ){
-  pca <- prcomp(t(na.omit(df)))
-  pca_df <- pca$x %>%
-    as.data.frame() %>%
-    rownames_to_column(quantitative_col_name) %>% 
-    left_join(batch_info, by = quantitative_col_name)
-  var_expl <- pca$sdev^2 / sum(pca$sdev^2)
-  names(var_expl) <- paste0("PC", 1:length(var_expl))
+  if (use_nipals) {
+    if (!requireNamespace("nipals", quietly = TRUE)) stop("Package 'nipals' is required for NIPALS PCA. Install it with install.packages('nipals').")
+    ncomp <- max(as.integer(sub("PC", "", c(pc_x, pc_y))))
+    res <- nipals::nipals(
+      t(df),
+      ncomp = ncomp,
+      center = TRUE,
+      scale = TRUE,
+      maxiter = 500,
+      startcol = function(x) sum(!is.na(x))
+    )
+    scores <- res$scores %*% diag(res$eig)
+    colnames(scores) <- paste0("PC", seq_len(ncol(scores)))
+    pca_df <- scores %>%
+      as.data.frame() %>%
+      rownames_to_column(quantitative_col_name) %>%
+      left_join(batch_info, by = quantitative_col_name)
+    var_expl <- res$eig^2 / sum(res$eig^2)
+    names(var_expl) <- paste0("PC", seq_along(var_expl))
+  } else {
+    pca <- prcomp(t(na.omit(df)))
+    pca_df <- pca$x %>%
+      as.data.frame() %>%
+      rownames_to_column(quantitative_col_name) %>% 
+      left_join(batch_info, by = quantitative_col_name)
+    var_expl <- pca$sdev^2 / sum(pca$sdev^2)
+    names(var_expl) <- paste0("PC", 1:length(var_expl))
+  }
 
-  # Update the ggplot function call to use dynamic PC columns
-  pca_plotting <- pca_df %>%
-      ggplot(aes_string(x = pc_x, y = pc_y, color = col_col, shape = shape_col)) +
-  if(shape_col != ""){
-    if(length(unique(batch_info[[shape_col]])) > 6){
-      shapes_codes <- c(0, 1, 3, 8, 7, 15, 19)
-      pca_plotting <- pca_plotting + 
-        scale_shape_manual(values = shapes_codes)
-    }    
+  missing_pcs <- setdiff(c(pc_x, pc_y), colnames(pca_df))
+  if (length(missing_pcs) > 0) {
+    stop("Requested principal component(s) not available: ", paste(missing_pcs, collapse = ", "), call. = FALSE)
+  }
+
+  pca_plotting <- ggplot(
+    pca_df,
+    build_scatter_mapping(pc_x, pc_y, col_col, shape_col)
+  )
+
+  if (nzchar(shape_col) && length(unique(pca_df[[shape_col]])) > 6) {
+    shapes_codes <- c(0, 1, 3, 8, 7, 15, 19)
+    pca_plotting <- pca_plotting + scale_shape_manual(values = shapes_codes)
   }
 
   pca_plotting <- pca_plotting + 
@@ -59,13 +113,7 @@ pca_plot <- function(
     pca_plotting <- pca_plotting + scale_color_manual(values = cbPalette)
   }
 
-
-  if (path == "") {
-    return(pca_plotting)
-  } else {
-    ggsave(path, pca_plotting, width = 5, height = 5)
-    return(pca_plotting)
-  }
+  save_plot_if_requested(pca_plotting, path, width = 5, height = 5)
 }
 
 
@@ -109,8 +157,8 @@ umap_plot <- function(
     left_join(metadata, by = quantitative_col_name) %>%
     column_to_rownames(quantitative_col_name)
 
-  plot_result <- ggplot(umap_data, aes_string(x = "X1", y = "X2", color = color_column, shape = shape_column)) +
-    geom_point(aes_string(col = color_column), size = 2) +
+  plot_result <- ggplot(umap_data, build_scatter_mapping("X1", "X2", color_column, shape_column)) +
+    geom_point(size = 2) +
     theme_minimal()
 
   if (!is.null(cbPalette)) {
@@ -132,51 +180,33 @@ umap_plot <- function(
       theme(legend.position = "none")
   }
     
-  if (path == "") {
-    return(plot_result)
-  } else {
-    ggsave(path, plot_result)
-  }
+  save_plot_if_requested(plot_result, path)
 }
 
 # boxplot
 boxplot_plot <- function(matrix, metadata_df, quantitativeColumnName, color_col, title, path="",
                          remove_xnames=FALSE) {
-  # Reshape data into long format
-  long_data <- tidyr::gather(matrix, 
-                             key = "file", value = "Intensity")
-  merged_data <- merge(long_data, metadata_df, by.x = "file", by.y = quantitativeColumnName)
+  merged_data <- prepare_intensity_plot_data(matrix, metadata_df, quantitativeColumnName)
   
   # Log tranformed scale
   boxplot <- ggplot(merged_data, aes(x = file, y = Intensity, fill = .data[[color_col]])) + 
     geom_boxplot() +
     stat_summary(fun = mean, geom = "point", shape = 4, size = 3, color = "red") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
-    # adjust fonsize for the x-axis
-    theme(axis.text.x = element_text(size = 8)) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 8)) +
     labs(title = title) 
 
   if(remove_xnames){
     boxplot <- boxplot + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
   }
 
-  if(path == "") {
-    return(boxplot)
-  } else {
-      ggsave(path, boxplot)
-      return(boxplot)
-  }
+  save_plot_if_requested(boxplot, path)
 }
 
 boxplot_plot_groupped <- function(matrix, metadata_df, quantitativeColumnName, color_col, title, path="",
                          remove_xnames=FALSE, y_limits=NULL,
                          show_legend=TRUE, cbPalette=NULL) {
-                          
-  
-  # Reshape data into long format and group by color_col
-  long_data <- tidyr::gather(matrix, key = "file", value = "Intensity")
-  merged_data <- merge(long_data, metadata_df, by.x = "file", by.y = quantitativeColumnName)
+  merged_data <- prepare_intensity_plot_data(matrix, metadata_df, quantitativeColumnName)
   
   # Group by color_col
   merged_data_grouped <- merged_data %>%
@@ -184,7 +214,7 @@ boxplot_plot_groupped <- function(matrix, metadata_df, quantitativeColumnName, c
   
   # Log transformed scale
   boxplot <- ggplot(merged_data_grouped, aes(x = .data[[color_col]], y = Intensity, fill = .data[[color_col]])) + 
-    geom_violin(trim = F) +
+    geom_violin(trim = FALSE) +
     stat_summary(fun = median, geom = "crossbar", width = 0.35, color = "black", position = position_dodge(width = 0.2)) +
     stat_summary(fun = mean, geom = "point", shape = 4, size = 3, color = "darkred") +
     theme_minimal() +
@@ -199,7 +229,7 @@ boxplot_plot_groupped <- function(matrix, metadata_df, quantitativeColumnName, c
   }
 
   if (!is.null(y_limits)) {
-    boxplot <- boxplot + ylim(y_limits)
+    boxplot <- boxplot + coord_cartesian(ylim = y_limits)
   }
 
   if (!is.null(cbPalette)) {
@@ -211,12 +241,7 @@ boxplot_plot_groupped <- function(matrix, metadata_df, quantitativeColumnName, c
     boxplot <- boxplot + theme(legend.position = "none")
   }
 
-  if(path == "") {
-    return(boxplot)
-  } else {
-      ggsave(path, boxplot)
-      return(boxplot)
-  }
+  save_plot_if_requested(boxplot, path)
 }
 
 
@@ -224,12 +249,8 @@ boxplot_plot_groupped <- function(matrix, metadata_df, quantitativeColumnName, c
 plotIntensityDensity <- function(
     intensities_df, metadata_df, quantitativeColumnName, colorColumnName, title, path=""
 ) {
-  # Reshape the intensities_df from wide to long format
-  long_intensities <- reshape2::melt(intensities_df, 
-    variable.name = "Sample", value.name = "Intensity")
-  
-  # Adjust the merge function based on your metadata column names
-  merged_data <- merge(long_intensities, metadata_df, by.x = "Sample", by.y = quantitativeColumnName)
+  merged_data <- prepare_intensity_plot_data(intensities_df, metadata_df, quantitativeColumnName) %>%
+    dplyr::rename(Sample = file)
   
   # Plot the data
   results <- ggplot(merged_data, aes(x = Intensity, color = .data[[colorColumnName]])) +  
@@ -239,12 +260,7 @@ plotIntensityDensity <- function(
          x = "Intensity",
          y = "Density")
 
-  if(path == "") {
-    return(results)
-  } else {
-    ggsave(path, results)
-    return(results)
-  }
+  save_plot_if_requested(results, path)
 }
 
 
@@ -262,65 +278,49 @@ heatmap_plot <- function(pg_matrix, batch_info, name, condition="condition", lab
 }
 
 
-plots_multiple <- function(intensities, metadata, name, simulated = FALSE){
+plots_multiple <- function(intensities, metadata, name, simulated = FALSE, use_nipals = FALSE){
 
-  if(simulated){
-    pca_plot_study <- 
-    pca_plot(
-        intensities, metadata, 
-        title = name,
-        quantitative_col_name = 'file',
-        col_col = "lab", shape_col = "condition")
+  pca_plot_study <- pca_plot(
+      intensities, metadata,
+      title = name,
+      quantitative_col_name = 'file',
+      col_col = "lab", shape_col = "condition",
+      use_nipals = use_nipals)
 
+  density_plot <- plotIntensityDensity(
+      intensities, metadata,
+      quantitativeColumnName = 'file',
+      colorColumnName = 'lab',
+      title = name)
+
+  if (simulated) {
     boxplot <- boxplot_plot_groupped(
-        intensities, metadata, 
+        intensities, metadata,
         title = name,
-        color_col = 'lab', quantitativeColumnName = 'file', 
+        color_col = 'lab', quantitativeColumnName = 'file',
         path = '')
-
-    density_plot <- plotIntensityDensity(
-        intensities, metadata, 
-        quantitativeColumnName = 'file', 
-        colorColumnName = 'lab',
-        title = name)
 
     layout <- pca_plot_study /
                 boxplot /
                 density_plot
-
-    return(layout)
-  
   } else {
-
-    pca_plot_study <- pca_plot(
-        intensities, metadata, 
-        title = name,
-        quantitative_col_name = 'file',
-        col_col = "lab", shape_col = "condition")
-
     pca_plot_class <- pca_plot(
-        intensities, metadata, 
+        intensities, metadata,
         title = name,
         quantitative_col_name = 'file',
-        shape_col = "lab", col_col = "condition")
+        shape_col = "lab", col_col = "condition",
+        use_nipals = use_nipals)
 
     boxplot <- boxplot_plot(
-        intensities, metadata, 
+        intensities, metadata,
         title = name,
-        color_col = 'lab', quantitativeColumnName = 'file', 
+        color_col = 'lab', quantitativeColumnName = 'file',
         path = '')
-
-    density_plot <- plotIntensityDensity(
-        intensities, metadata, 
-        quantitativeColumnName = 'file', 
-        colorColumnName = 'lab',
-        title = name)
 
     layout <- (pca_plot_class | pca_plot_study) /
                 boxplot /
                 density_plot
-
-    return(layout)
-
   }
+
+  return(layout)
 }

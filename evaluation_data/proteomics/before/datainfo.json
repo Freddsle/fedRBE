@@ -1,5 +1,5 @@
 {
-  "covariate": "Pyr",
+  "covariates": ["Pyr"],
   "datafile": {
     "filename": "intensities_log_UNION.tsv",
     "separator": "\t",

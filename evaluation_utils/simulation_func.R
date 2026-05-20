@@ -2,26 +2,117 @@ library(invgamma)
 library(RobNorm)
 library(tidyverse)
 
+normalize_count <- function(n, max_n = NULL) {
+    out <- max(0L, as.integer(round(n)))
+    if (!is.null(max_n)) {
+        out <- min(out, max_n)
+    }
+    out
+}
+
+take_first_values <- function(x, n) {
+    n <- normalize_count(n, length(x))
+    if (n == 0L) {
+        return(x[0])
+    }
+    x[seq_len(n)]
+}
+
+take_first_rows <- function(x, n) {
+    n <- normalize_count(n, nrow(x))
+    if (n == 0L) {
+        return(x[0, , drop = FALSE])
+    }
+    x[seq_len(n), , drop = FALSE]
+}
+
+take_last_rows <- function(x, n) {
+    n <- normalize_count(n, nrow(x))
+    if (n == 0L) {
+        return(x[0, , drop = FALSE])
+    }
+    x[seq.int(nrow(x) - n + 1L, nrow(x)), , drop = FALSE]
+}
+
+drop_first_rows <- function(x, n) {
+    n <- normalize_count(n, nrow(x))
+    if (n >= nrow(x)) {
+        return(x[0, , drop = FALSE])
+    }
+    x[seq.int(n + 1L, nrow(x)), , drop = FALSE]
+}
+
+drop_last_rows <- function(x, n) {
+    keep_n <- nrow(x) - normalize_count(n, nrow(x))
+    if (keep_n <= 0L) {
+        return(x[0, , drop = FALSE])
+    }
+    x[seq_len(keep_n), , drop = FALSE]
+}
+
+sample_effects_with_min_spacing <- function(first_param, second_param, sampler, min_pct_diff = 20) {
+    pct_diff <- function(a, b) abs(a - b) / max(abs(b), .Machine$double.eps) * 100
+
+    repeat {
+        effects <- mapply(sampler, first_param, second_param)
+        if (length(effects) < 2) {
+            return(effects)
+        }
+
+        sorted_effects <- sort(effects)
+        pairwise_diffs <- mapply(
+            pct_diff,
+            sorted_effects[-1],
+            sorted_effects[-length(sorted_effects)]
+        )
+
+        if (all(pairwise_diffs >= min_pct_diff)) {
+            return(effects)
+        }
+    }
+}
+
+expand_effects_by_sample <- function(effect_values, batch_vec, n_rows, col_names = NULL) {
+    batch_chr <- as.character(batch_vec)
+    missing_batches <- setdiff(unique(batch_chr), names(effect_values))
+    if (length(missing_batches) > 0) {
+        stop(
+            "Missing effect values for batches: ",
+            paste(missing_batches, collapse = ", "),
+            call. = FALSE
+        )
+    }
+
+    matrix(
+        rep(unname(effect_values[batch_chr]), each = n_rows),
+        nrow = n_rows,
+        ncol = length(batch_chr),
+        dimnames = list(NULL, col_names)
+    )
+}
+
 ################################################################################################
-# use RobNorm func, but with different IG parameters
+# Adapted from RobNorm sim.dat.fn with modified IG parameters
 sim.dat.fn = function(row.frac, col.frac, mu.up, mu.down, n, m, nu.fix=TRUE) {
-	# mu.00 = rnorm(n, 0, 2) 	# --- changes here
     mu.00 = rnorm(n, 0, 1)
-	var.00 = rinvgamma(n, 2, 3) # --- changes here
-    # var.00 = rinvgamma(n, 5, 2)
+    var.00 = rinvgamma(n, 2, 3)
 
     X.0 = matrix(rnorm(n*m, 
 					outer(mu.00, rep(1, m)),
 					sqrt(outer(var.00, rep(1, m)))), 
 				n, m) # the null matrix
     
-	S = matrix(0, n, m) 
-	if (row.frac*col.frac > 0) {
-	   	   bk.nm = round(n*row.frac * m*col.frac)
+	S = matrix(0, n, m)
+	signal_rows <- normalize_count(n * row.frac, n)
+	signal_cols <- normalize_count(m * col.frac, m)
+	if (signal_rows > 0L && signal_cols > 0L) {
+		   bk.nm <- signal_rows * signal_cols
 		   a = rbinom(1, bk.nm, 0.8)
-		   S[ 1:round(n*row.frac), 1:(m*col.frac)] = sample(c(rep(mu.up, a), rep(0, bk.nm-a)), bk.nm) # the shifted mean of the signal mx
+		   S[seq_len(signal_rows), seq_len(signal_cols)] =
+               sample(c(rep(mu.up, a), rep(0, bk.nm-a)), bk.nm) # the shifted mean of the signal mx
 		   a = rbinom(1, bk.nm, 0.8)
-		   S[ (n-round(n*row.frac)+1):n, (m-m*col.frac+1):m] = sample(c(rep(mu.down, a), rep(0, bk.nm-a)), bk.nm) # the signal mx of shifted mean 		  
+		   S[seq.int(n - signal_rows + 1L, n), seq.int(m - signal_cols + 1L, m)] =
+               sample(c(rep(mu.down, a), rep(0, bk.nm-a)), bk.nm) # the signal mx of shifted mean
 	}
 
 	X = X.0 + S 
@@ -33,22 +124,20 @@ sim.dat.fn = function(row.frac, col.frac, mu.up, mu.down, n, m, nu.fix=TRUE) {
 
 
 select_proportions <- function(mode_version){
-    if(mode_version == "balanced"|| mode_version == "imbalanced_balanced"){
-        percent_batch1 <- 0.6
-        percent_batch2 <- 0.6
-        percent_batch3 <- 0.6
-    } else if (mode_version == 'mild_imbalanced') {
-        percent_batch1 <- 0.4
-        percent_batch2 <- 0.5
-        percent_batch3 <- 0.66
-    } else if(mode_version == "strong_imbalanced"){
-        percent_batch1 <- 0.2
-        percent_batch2 <- 0.5
-        percent_batch3 <- 0.7
+    proportions <- switch(
+        mode_version,
+        balanced = list(0.6, 0.6, 0.6),
+        imbalanced_balanced = list(0.6, 0.6, 0.6),
+        mild_imbalanced = list(0.4, 0.5, 0.66),
+        strong_imbalanced = list(0.2, 0.5, 0.7),
+        NULL
+    )
+
+    if (is.null(proportions)) {
+        stop("Unknown mode_version: ", mode_version, call. = FALSE)
     }
 
-    return(list(percent_batch1, percent_batch2, percent_batch3))
-
+    return(proportions)
 }
 
 
@@ -60,43 +149,60 @@ generate_data <- function(
     mode_version = "balanced",
     m = 600
     ){
+    if (is.null(batch_info)) {
+        stop("batch_info must be provided.", call. = FALSE)
+    }
 
     # add A condition
-    data_mu1 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_A, mu.up=mu_1, mu.down=0, n=2500, m=m, nu.fix=TRUE)
+    data_mu1 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_A, mu.up=mu_1, mu.down=0, n=2500, m=m, nu.fix=nu.fix)
     # add B condition
-    data_mu2 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_B, mu.up=0, mu.down=mu_1, n=2500, m=m, nu.fix=TRUE)
+    data_mu2 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_B, mu.up=0, mu.down=mu_1, n=2500, m=m, nu.fix=nu.fix)
 
     # % of confounder in batches
     b_proportions <- select_proportions(mode_version)
+    get_condition_files <- function(batch_name, condition_name) {
+        batch_info$file[batch_info$batch == batch_name & batch_info$condition == condition_name]
+    }
+
     # rearrange the data7
-    batch1_size <- round(b_proportions[[1]] * length(batch_info[batch_info$batch == "batch1" & batch_info$condition == "B",]$file))
-    batch2_size <- round(b_proportions[[2]] * length(batch_info[batch_info$batch == "batch2" & batch_info$condition == "B",]$file))
-    batch3_size <- round(b_proportions[[3]] * length(batch_info[batch_info$batch == "batch3" & batch_info$condition == "B",]$file))
+    batch1_files <- get_condition_files("batch1", "B")
+    batch2_files <- get_condition_files("batch2", "B")
+    batch3_files <- get_condition_files("batch3", "B")
+    batch1_size <- normalize_count(b_proportions[[1]] * length(batch1_files), length(batch1_files))
+    batch2_size <- normalize_count(b_proportions[[2]] * length(batch2_files), length(batch2_files))
+    batch3_size <- normalize_count(b_proportions[[3]] * length(batch3_files), length(batch3_files))
     need_to_generate <- (batch1_size + batch2_size + batch3_size) / m
     # add confounder
-    data_mu7 <- sim.dat.fn(row.frac=frac_7, col.frac=need_to_generate, mu.up=0, mu.down=-1*mu_4, n=1000, m=m,  nu.fix=TRUE)
+    data_mu7 <- sim.dat.fn(row.frac=frac_7, col.frac=need_to_generate, mu.up=0, mu.down=-1*mu_4, n=1000, m=m,  nu.fix=nu.fix)
     cat(ncol(data_mu7$dat) * need_to_generate, "\n")
 
     new_names <- c(
-        batch_info[batch_info$batch == "batch1" & batch_info$condition == "B",]$file[1:batch1_size],
-        batch_info[batch_info$batch == "batch2" & batch_info$condition == "B",]$file[1:batch2_size],
-        batch_info[batch_info$batch == "batch3" & batch_info$condition == "B",]$file[1:batch3_size])
+        take_first_values(batch1_files, batch1_size),
+        take_first_values(batch2_files, batch2_size),
+        take_first_values(batch3_files, batch3_size)
+    )
 
-    all_other_names <- c(colnames(data_mu7$dat)[1:length(batch_info[batch_info$condition == "A",]$file)], 
-        setdiff(batch_info[batch_info$condition == "B",]$file, new_names))
+    a_condition_files <- batch_info$file[batch_info$condition == "A"]
+    b_condition_files <- batch_info$file[batch_info$condition == "B"]
+    all_other_names <- c(
+        a_condition_files,
+        setdiff(b_condition_files, new_names)
+    )
     
     colnames(data_mu7$dat) <- c(all_other_names, new_names)
     data_mu7$dat <- data_mu7$dat[, batch_info$file]
 
+    mu1_signal_rows <- normalize_count(frac_1 * nrow(data_mu1$dat), nrow(data_mu1$dat))
+    mu7_signal_rows <- normalize_count(frac_7 * nrow(data_mu7$dat), nrow(data_mu7$dat))
+
     # Combine all the data
     data_allmu <- rbind(
-        data_mu1$dat[c(1:(frac_1*2500)),],
-        data_mu2$dat[c((2500+1-frac_1*2500):2500),],
-        data_mu7$dat[c((1000+1-frac_7*1000):1000),],
-
-        data_mu1$dat[c((frac_1*2500+1):2500),],
-        data_mu2$dat[c(1:(2500-frac_1*2500)),],
-        data_mu7$dat[c(1:(1000-frac_7*1000)),]
+        take_first_rows(data_mu1$dat, mu1_signal_rows),
+        take_last_rows(data_mu2$dat, mu1_signal_rows),
+        take_last_rows(data_mu7$dat, mu7_signal_rows),
+        drop_first_rows(data_mu1$dat, mu1_signal_rows),
+        drop_last_rows(data_mu2$dat, mu1_signal_rows),
+        drop_last_rows(data_mu7$dat, mu7_signal_rows)
         )
 
     return(data_allmu)
@@ -196,82 +302,54 @@ add_batch_effect <- function(
     ){
 
     # Assuming 'result_two' is your data matrix and 'batch_info' is a vector indicating the batch for each column
-    n_batches <- length(unique(batch_info$batch))
+    batch_levels <- unique(as.character(batch_info$batch))
+    n_batches <- length(batch_levels)
     n_cols <- ncol(result_two)
     n_proteins <- nrow(result_two)
 
     # For Additive Effects
     additive_params <- data.frame(
-        mean = mean_additive, 
-        sd = sd_additive, 
-        row.names = levels(batch_info$batch)
+        mean = rep(mean_additive, length.out = n_batches),
+        sd = rep(sd_additive, length.out = n_batches),
+        row.names = batch_levels
     ) 
     # For Multiplicative Effects
+    mult_scale <- sample(c(2, 1, 0.5), 1)
     multiplicative_params <- data.frame(
-        shape = shape_multiplicative, 
-        scale = sample(c(2, 1, 0.5)), 
-        row.names = levels(batch_info$batch)
+        shape = rep(shape_multiplicative, length.out = n_batches),
+        scale = rep(mult_scale, length.out = n_batches),
+        row.names = batch_levels
     ) 
 
-    pct_diff <- function(a, b) abs(a - b) / max(abs(b), .Machine$double.eps) * 100
-
     repeat {
-        # Step 3: Sample Based on Selected Parameters
-        # Generate additive effects for each batch, one per protein
-        # additive_effects <- mapply(function(mean, sd) rnorm(n_proteins, mean, sd), additive_params$mean, additive_params$sd)
-        repeat {
-            # Generate batch effects using the existing approach
-            add_batch_effects <- mapply(function(mean, sd) rnorm(1, mean, sd), additive_params$mean, additive_params$sd)
-            
-            # Calculate pairwise percentage differences
-            values_sorted <- sort(add_batch_effects)  # Sort values for easier comparison
-            diff1 <- pct_diff(values_sorted[2], values_sorted[1])
-            diff2 <- pct_diff(values_sorted[3], values_sorted[2])
-            
-            # Check if differences are at least 20%
-            if (diff1 >= 20 && diff2 >= 20) {
-                break  # Stop looping if the condition is met
-            }
-        }
+        add_batch_effects <- sample_effects_with_min_spacing(
+            additive_params$mean,
+            additive_params$sd,
+            function(mean, sd) rnorm(1, mean, sd)
+        )
+        names(add_batch_effects) <- batch_levels
+        print(add_batch_effects)
 
-        additive_effects <- matrix(rep(add_batch_effects, each = n_proteins), nrow = n_proteins, ncol = n_batches)
-        colnames(additive_effects) <- levels(batch_info$batch)
-        # print first row
-        print(additive_effects[1,])
+        mult_batch_effects <- sample_effects_with_min_spacing(
+            multiplicative_params$shape,
+            multiplicative_params$scale,
+            function(shape, scale) rinvgamma(1, shape, scale)
+        )
+        names(mult_batch_effects) <- batch_levels
+        print(mult_batch_effects)
 
-        # Generate multiplicative effects for each batch, one per protein
-        # multiplicative_effects <- mapply(function(shape, scale) 
-        #               rinvgamma(n_proteins, shape, scale), multiplicative_params$shape, multiplicative_params$scale)
-        repeat {
-            # Generate multiplicative batch effects
-            mult_batch_effects <- mapply(function(shape, scale) rinvgamma(1, shape, scale), 
-                                        multiplicative_params$shape, multiplicative_params$scale)
-            
-            # Calculate pairwise percentage differences
-            values_sorted <- sort(mult_batch_effects)  # Sort values for easier comparison
-            diff1 <- pct_diff(values_sorted[2], values_sorted[1])
-            diff2 <- pct_diff(values_sorted[3], values_sorted[2])
-            
-            # Check if differences are at least 20%
-            if (diff1 >= 20 && diff2 >= 20) {
-                break  # Stop looping if the condition is met
-            }
-        }
-        multiplicative_effects <- matrix(rep(mult_batch_effects, each = n_proteins), nrow = n_proteins, ncol = n_batches)
-        colnames(multiplicative_effects) <- levels(batch_info$batch)
-        # print first row
-        print(multiplicative_effects[1,])
-        
-        # Create matrices for applying effects to samples
-        additive_effects_matrix <- matrix(nrow = n_proteins, ncol = n_cols)
-        multiplicative_effects_matrix <- matrix(nrow = n_proteins, ncol = n_cols)
-
-        # Apply the batch-specific effects to each sample
-        for (sample in 1:n_cols) {
-            batch <- batch_info$batch[sample]
-            additive_effects_matrix[, sample] <- additive_effects[, batch]
-            multiplicative_effects_matrix[, sample] <- multiplicative_effects[, batch]
-        }
+        additive_effects_matrix <- expand_effects_by_sample(
+            add_batch_effects,
+            batch_info$batch,
+            n_proteins,
+            colnames(result_two)
+        )
+        multiplicative_effects_matrix <- expand_effects_by_sample(
+            mult_batch_effects,
+            batch_info$batch,
+            n_proteins,
+            colnames(result_two)
+        )
 
         # Noise
         noise_effect <- matrix(rnorm(n_cols * n_proteins, mean = 0, sd = 0.5), nrow = n_proteins, ncol = n_cols)
@@ -320,11 +398,6 @@ add_batch_effect <- function(
 
 
 simulateMissingValues <- function(df, alpha, beta) {
-  # Ensure matrixStats is available
-  if (!require(matrixStats)) {
-    install.packages("matrixStats")
-    library(matrixStats)
-  }
   df <- as.matrix(df)
 
   # Number of total values
@@ -343,41 +416,15 @@ simulateMissingValues <- function(df, alpha, beta) {
 
   # Simulate MAR: Randomly replace additional values without touching MNAR values
   num_MAR <- round(N * alpha * (1 - beta))
-  available_indices <- which(is.na(df) == FALSE, arr.ind = TRUE)
-  selected_indices <- available_indices[sample(nrow(available_indices), num_MAR), ]
-  df[selected_indices] <- NA
+  available_indices <- which(!is.na(df), arr.ind = TRUE)
+
+  if (nrow(available_indices) > 0) {
+    num_MAR <- min(num_MAR, nrow(available_indices))
+    if (num_MAR > 0) {
+      selected_indices <- available_indices[sample(nrow(available_indices), num_MAR), , drop = FALSE]
+      df[selected_indices] <- NA
+    }
+  }
 
   return(df)
-}
-
-
-create_plots <- function(pg_matrix, metadata, name, plot_file_prefix){
-        # plots
-    plot_pca <- pca_plot(pg_matrix, metadata, 
-        title=paste0(name, " PCA"), 
-        quantitative_col_name='file', 
-        col_col='condition', 
-        shape_col='batch')
-    plot_boxplot <- boxplot_pg(pg_matrix, metadata, 
-        title=paste0(name, " Boxplot"), 
-        color_col='condition', 
-        quantitativeColumnName='file')
-    plot_density <- plotIntensityDensityByPool(pg_matrix, metadata, 
-        title=paste0(name, " Density"), 
-        poolColumnName='condition', 
-        quantitativeColumnName='file')
-    plot_heatmap <- heatmap_nocor_plot(
-        pg_matrix, metadata, name,
-        condition="condition", lab="batch")
-
-    layout <- (plot_density | plot_pca) /
-            (plot_boxplot | plot_heatmap)
-            
-    if(plot_file_prefix == ""){
-        return(layout)
-    }
-    # save plot
-    ggsave(
-        file = paste0(plot_file_prefix, "_plots.svg"), 
-        plot = layout, width = 11, height = 10)
 }

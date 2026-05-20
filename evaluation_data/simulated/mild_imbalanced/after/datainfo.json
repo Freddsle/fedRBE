@@ -1,5 +1,5 @@
 {
-  "covariate": "A",
+  "covariates": ["A"],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",

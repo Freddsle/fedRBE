@@ -10,12 +10,13 @@ corrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_B,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_C,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_D,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_E,1.0,0.0,10
-corrected,Leave-One-Cohort-Out,F1_score,Simulated Additive Batch,lab1,1.0,0.0,10
-corrected,Leave-One-Cohort-Out,F1_score,Simulated Additive Batch,lab2,1.0,0.0,10
-corrected,Leave-One-Cohort-Out,F1_score,Simulated Additive Batch,lab3,1.0,0.0,10
-corrected,Leave-One-Cohort-Out,F1_score,Simulated Rotational Batch,lab1,0.8197145037615676,0.01158237198885719,10
-corrected,Leave-One-Cohort-Out,F1_score,Simulated Rotational Batch,lab2,0.9333679851985698,0.005318354130398628,10
-corrected,Leave-One-Cohort-Out,F1_score,Simulated Rotational Batch,lab3,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,F1_score,Proteomics Multibatch Data,APT,0.9883020819862925,0.025798286879805492,30
+corrected,Leave-One-Cohort-Out,F1_score,Proteomics Multibatch Data,BGI,1.0,0.0,30
+corrected,Leave-One-Cohort-Out,F1_score,Proteomics Multibatch Data,FDU,0.9957002457002456,0.013119779093400213,30
+corrected,Leave-One-Cohort-Out,F1_score,Proteomics Multibatch Data,NVG,0.9754385964912281,0.04910768067168331,30
+corrected,Leave-One-Cohort-Out,F1_score,ccRCC Data,PDC000127,0.9652556154311285,0.002521746814105401,10
+corrected,Leave-One-Cohort-Out,F1_score,ccRCC Data,PXD030344,0.9737051246087777,0.0009083838847490604,10
+corrected,Leave-One-Cohort-Out,F1_score,ccRCC Data,PXD042844,0.9868995633187773,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE14407,0.6482307312464279,0.020686935271622044,10
 corrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE26712,0.6902108845288984,0.023811414444426703,10
 corrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE38666,0.7260069175069781,0.03984580041426368,10
@@ -27,12 +28,13 @@ corrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_B,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_C,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_D,1.0,0.0,10
 corrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_E,1.0,0.0,10
-corrected,Leave-One-Cohort-Out,MCC,Simulated Additive Batch,lab1,1.0,0.0,10
-corrected,Leave-One-Cohort-Out,MCC,Simulated Additive Batch,lab2,1.0,0.0,10
-corrected,Leave-One-Cohort-Out,MCC,Simulated Additive Batch,lab3,1.0,0.0,10
-corrected,Leave-One-Cohort-Out,MCC,Simulated Rotational Batch,lab1,0.6465923469039156,0.022284682495255854,10
-corrected,Leave-One-Cohort-Out,MCC,Simulated Rotational Batch,lab2,0.8704315766154084,0.010402036325743096,10
-corrected,Leave-One-Cohort-Out,MCC,Simulated Rotational Batch,lab3,1.0,0.0,10
+corrected,Leave-One-Cohort-Out,MCC,Proteomics Multibatch Data,APT,0.9701095535012507,0.06552661028563143,30
+corrected,Leave-One-Cohort-Out,MCC,Proteomics Multibatch Data,BGI,1.0,0.0,30
+corrected,Leave-One-Cohort-Out,MCC,Proteomics Multibatch Data,FDU,0.9888523316638639,0.03401472172141461,30
+corrected,Leave-One-Cohort-Out,MCC,Proteomics Multibatch Data,NVG,0.9389937661105331,0.12055167569795963,30
+corrected,Leave-One-Cohort-Out,MCC,ccRCC Data,PDC000127,0.9313526717452214,0.004843745766535949,10
+corrected,Leave-One-Cohort-Out,MCC,ccRCC Data,PXD030344,0.9475423601821726,0.001843561508913028,10
+corrected,Leave-One-Cohort-Out,MCC,ccRCC Data,PXD042844,0.9738367658276124,0.0,10
 corrected,Train-Test-Split,F1_score,Microarray Data,All,0.9514705882352941,0.018406846426979033,10
 corrected,Train-Test-Split,F1_score,Microarray Data,GSE14407,0.8,0.16329931618554522,10
 corrected,Train-Test-Split,F1_score,Microarray Data,GSE26712,0.9897435897435898,0.013240968704982571,10
@@ -46,14 +48,15 @@ corrected,Train-Test-Split,F1_score,Proteomics Data,lab_B,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Proteomics Data,lab_C,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Proteomics Data,lab_D,1.0,0.0,10
 corrected,Train-Test-Split,F1_score,Proteomics Data,lab_E,1.0,0.0,10
-corrected,Train-Test-Split,F1_score,Simulated Additive Batch,All,1.0,0.0,10
-corrected,Train-Test-Split,F1_score,Simulated Additive Batch,lab1,1.0,0.0,10
-corrected,Train-Test-Split,F1_score,Simulated Additive Batch,lab2,1.0,0.0,10
-corrected,Train-Test-Split,F1_score,Simulated Additive Batch,lab3,1.0,0.0,10
-corrected,Train-Test-Split,F1_score,Simulated Rotational Batch,All,0.9550000000000001,0.01932503014547343,10
-corrected,Train-Test-Split,F1_score,Simulated Rotational Batch,lab1,0.8699999999999999,0.05244044240850758,10
-corrected,Train-Test-Split,F1_score,Simulated Rotational Batch,lab2,0.9949999999999999,0.010540925533894603,10
-corrected,Train-Test-Split,F1_score,Simulated Rotational Batch,lab3,1.0,0.0,10
+corrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,APT,0.9933333333333334,0.036514837167011066,30
+corrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,All,0.9875,0.0302646373819689,30
+corrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,BGI,1.0,0.0,30
+corrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,FDU,0.9933333333333334,0.03651483716701106,30
+corrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,NVG,0.9555555555555556,0.11524863454725345,30
+corrected,Train-Test-Split,F1_score,ccRCC Studies Data,All,0.9831460674157302,0.007490636704119829,10
+corrected,Train-Test-Split,F1_score,ccRCC Studies Data,PDC000127,0.9846153846153847,0.021622411351578625,10
+corrected,Train-Test-Split,F1_score,ccRCC Studies Data,PXD030344,0.9763440860215054,0.013217984885007698,10
+corrected,Train-Test-Split,F1_score,ccRCC Studies Data,PXD042844,0.9956521739130435,0.009166022203386595,10
 corrected,Train-Test-Split,MCC,Microarray Data,All,0.9029411764705882,0.036813692853958,10
 corrected,Train-Test-Split,MCC,Microarray Data,GSE14407,0.6,0.32659863237109044,10
 corrected,Train-Test-Split,MCC,Microarray Data,GSE26712,0.9794871794871796,0.026481937409965187,10
@@ -67,14 +70,15 @@ corrected,Train-Test-Split,MCC,Proteomics Data,lab_B,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Proteomics Data,lab_C,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Proteomics Data,lab_D,1.0,0.0,10
 corrected,Train-Test-Split,MCC,Proteomics Data,lab_E,1.0,0.0,10
-corrected,Train-Test-Split,MCC,Simulated Additive Batch,All,1.0,0.0,10
-corrected,Train-Test-Split,MCC,Simulated Additive Batch,lab1,1.0,0.0,10
-corrected,Train-Test-Split,MCC,Simulated Additive Batch,lab2,1.0,0.0,10
-corrected,Train-Test-Split,MCC,Simulated Additive Batch,lab3,1.0,0.0,10
-corrected,Train-Test-Split,MCC,Simulated Rotational Batch,All,0.9099999999999999,0.03865006029094688,10
-corrected,Train-Test-Split,MCC,Simulated Rotational Batch,lab1,0.74,0.10488088481701517,10
-corrected,Train-Test-Split,MCC,Simulated Rotational Batch,lab2,0.99,0.02108185106778923,10
-corrected,Train-Test-Split,MCC,Simulated Rotational Batch,lab3,1.0,0.0,10
+corrected,Train-Test-Split,MCC,Proteomics Multibatch Data,APT,0.9866666666666667,0.07302967433402216,30
+corrected,Train-Test-Split,MCC,Proteomics Multibatch Data,All,0.975,0.060529274763937775,30
+corrected,Train-Test-Split,MCC,Proteomics Multibatch Data,BGI,1.0,0.0,30
+corrected,Train-Test-Split,MCC,Proteomics Multibatch Data,FDU,0.9866666666666667,0.07302967433402216,30
+corrected,Train-Test-Split,MCC,Proteomics Multibatch Data,NVG,0.9111111111111111,0.23049726909450693,30
+corrected,Train-Test-Split,MCC,ccRCC Studies Data,All,0.9662921348314606,0.014981273408239707,10
+corrected,Train-Test-Split,MCC,ccRCC Studies Data,PDC000127,0.9692307692307693,0.04324482270315733,10
+corrected,Train-Test-Split,MCC,ccRCC Studies Data,PXD030344,0.9526881720430108,0.02643596977001544,10
+corrected,Train-Test-Split,MCC,ccRCC Studies Data,PXD042844,0.9913043478260869,0.018332044406773194,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE14407,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE26712,0.9237516869095816,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE38666,1.0,0.0,10
@@ -83,15 +87,16 @@ uncorrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE6008,0.783703703703
 uncorrected,Leave-One-Cohort-Out,F1_score,Microarray Data,GSE69428,0.3629764065335753,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_A,0.3333333333333333,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_B,0.309462915601023,0.0,10
-uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_C,0.3396760443307758,0.09554230202588862,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_C,0.36880591701563564,0.13011456328909382,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_D,0.3333333333333333,0.0,10
 uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Data,lab_E,0.49980166102082607,0.18611192905174795,10
-uncorrected,Leave-One-Cohort-Out,F1_score,Simulated Additive Batch,lab1,1.0,0.0,10
-uncorrected,Leave-One-Cohort-Out,F1_score,Simulated Additive Batch,lab2,0.908126145805044,0.04195915037852129,10
-uncorrected,Leave-One-Cohort-Out,F1_score,Simulated Additive Batch,lab3,1.0,0.0,10
-uncorrected,Leave-One-Cohort-Out,F1_score,Simulated Rotational Batch,lab1,0.3333333333333332,0.0,10
-uncorrected,Leave-One-Cohort-Out,F1_score,Simulated Rotational Batch,lab2,0.3333333333333332,0.0,10
-uncorrected,Leave-One-Cohort-Out,F1_score,Simulated Rotational Batch,lab3,0.3333333333333332,0.0,10
+uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Multibatch Data,APT,0.7999482369115991,0.1193331084780424,30
+uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Multibatch Data,BGI,0.8703081232492997,0.1657171736037481,30
+uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Multibatch Data,FDU,0.6428571428571428,0.0,30
+uncorrected,Leave-One-Cohort-Out,F1_score,Proteomics Multibatch Data,NVG,0.6428571428571428,0.0,30
+uncorrected,Leave-One-Cohort-Out,F1_score,ccRCC Data,PDC000127,0.6794527917590811,0.05630971524636641,10
+uncorrected,Leave-One-Cohort-Out,F1_score,ccRCC Data,PXD030344,0.9696092607207989,0.0031253282722542262,10
+uncorrected,Leave-One-Cohort-Out,F1_score,ccRCC Data,PXD042844,0.9890817535493024,0.004244854674644537,10
 uncorrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE14407,1.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE26712,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE38666,1.0,0.0,10
@@ -100,15 +105,16 @@ uncorrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE6008,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Microarray Data,GSE69428,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_A,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_B,0.0,0.0,10
-uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_C,0.04392976851069794,0.13891812557774844,10
+uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_C,0.09770447494583842,0.18601108116741016,10
 uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_D,0.0,0.0,10
 uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Data,lab_E,0.18432182774794192,0.2905461112808369,10
-uncorrected,Leave-One-Cohort-Out,MCC,Simulated Additive Batch,lab1,1.0,0.0,10
-uncorrected,Leave-One-Cohort-Out,MCC,Simulated Additive Batch,lab2,0.8295433245519174,0.07435586582863346,10
-uncorrected,Leave-One-Cohort-Out,MCC,Simulated Additive Batch,lab3,1.0,0.0,10
-uncorrected,Leave-One-Cohort-Out,MCC,Simulated Rotational Batch,lab1,0.0,0.0,10
-uncorrected,Leave-One-Cohort-Out,MCC,Simulated Rotational Batch,lab2,0.0,0.0,10
-uncorrected,Leave-One-Cohort-Out,MCC,Simulated Rotational Batch,lab3,0.0,0.0,10
+uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Multibatch Data,APT,0.47996569153272345,0.34649728004621844,30
+uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Multibatch Data,BGI,0.6421995441236968,0.4658717831781522,30
+uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Multibatch Data,FDU,0.0,0.0,30
+uncorrected,Leave-One-Cohort-Out,MCC,Proteomics Multibatch Data,NVG,0.0,0.0,30
+uncorrected,Leave-One-Cohort-Out,MCC,ccRCC Data,PDC000127,0.5022212170332209,0.05258655855325368,10
+uncorrected,Leave-One-Cohort-Out,MCC,ccRCC Data,PXD030344,0.9393866811214874,0.006135087660790596,10
+uncorrected,Leave-One-Cohort-Out,MCC,ccRCC Data,PXD042844,0.9784315365169458,0.008319754634551757,10
 uncorrected,Train-Test-Split,F1_score,Microarray Data,All,0.9323529411764705,0.015808348526075586,10
 uncorrected,Train-Test-Split,F1_score,Microarray Data,GSE14407,1.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Microarray Data,GSE26712,0.9487179487179487,0.0,10
@@ -122,14 +128,15 @@ uncorrected,Train-Test-Split,F1_score,Proteomics Data,lab_B,1.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Proteomics Data,lab_C,0.9800000000000001,0.06324555320336758,10
 uncorrected,Train-Test-Split,F1_score,Proteomics Data,lab_D,1.0,0.0,10
 uncorrected,Train-Test-Split,F1_score,Proteomics Data,lab_E,1.0,0.0,10
-uncorrected,Train-Test-Split,F1_score,Simulated Additive Batch,All,0.9991666666666668,0.0026352313834736053,10
-uncorrected,Train-Test-Split,F1_score,Simulated Additive Batch,lab1,1.0,0.0,10
-uncorrected,Train-Test-Split,F1_score,Simulated Additive Batch,lab2,0.9974999999999999,0.007905694150420957,10
-uncorrected,Train-Test-Split,F1_score,Simulated Additive Batch,lab3,1.0,0.0,10
-uncorrected,Train-Test-Split,F1_score,Simulated Rotational Batch,All,0.5533333333333333,0.04533823502911814,10
-uncorrected,Train-Test-Split,F1_score,Simulated Rotational Batch,lab1,0.605,0.09036961141150637,10
-uncorrected,Train-Test-Split,F1_score,Simulated Rotational Batch,lab2,0.5,0.0,10
-uncorrected,Train-Test-Split,F1_score,Simulated Rotational Batch,lab3,0.5549999999999999,0.06540472290116194,10
+uncorrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,APT,0.8933333333333333,0.10148325268098495,30
+uncorrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,All,0.8541666666666666,0.07216878364870322,30
+uncorrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,BGI,0.9,0.15536386656646636,30
+uncorrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,FDU,0.8866666666666667,0.10080138659874614,30
+uncorrected,Train-Test-Split,F1_score,Proteomics Multibatch Data,NVG,0.6888888888888888,0.08456937723415416,30
+uncorrected,Train-Test-Split,F1_score,ccRCC Studies Data,All,0.9893258426966292,0.005586679359616533,10
+uncorrected,Train-Test-Split,F1_score,ccRCC Studies Data,PDC000127,0.9846153846153847,0.017928356378976912,10
+uncorrected,Train-Test-Split,F1_score,ccRCC Studies Data,PXD030344,0.9870967741935484,0.008481834814479717,10
+uncorrected,Train-Test-Split,F1_score,ccRCC Studies Data,PXD042844,0.9978260869565216,0.006874516652539958,10
 uncorrected,Train-Test-Split,MCC,Microarray Data,All,0.8647058823529411,0.03161669705215115,10
 uncorrected,Train-Test-Split,MCC,Microarray Data,GSE14407,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Microarray Data,GSE26712,0.8974358974358975,0.0,10
@@ -143,11 +150,12 @@ uncorrected,Train-Test-Split,MCC,Proteomics Data,lab_B,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Proteomics Data,lab_C,0.96,0.12649110640673517,10
 uncorrected,Train-Test-Split,MCC,Proteomics Data,lab_D,1.0,0.0,10
 uncorrected,Train-Test-Split,MCC,Proteomics Data,lab_E,1.0,0.0,10
-uncorrected,Train-Test-Split,MCC,Simulated Additive Batch,All,0.9983333333333333,0.005270462766947373,10
-uncorrected,Train-Test-Split,MCC,Simulated Additive Batch,lab1,1.0,0.0,10
-uncorrected,Train-Test-Split,MCC,Simulated Additive Batch,lab2,0.9949999999999999,0.015811388300841906,10
-uncorrected,Train-Test-Split,MCC,Simulated Additive Batch,lab3,1.0,0.0,10
-uncorrected,Train-Test-Split,MCC,Simulated Rotational Batch,All,0.10666666666666662,0.09067647005823627,10
-uncorrected,Train-Test-Split,MCC,Simulated Rotational Batch,lab1,0.21000000000000002,0.1807392228230128,10
-uncorrected,Train-Test-Split,MCC,Simulated Rotational Batch,lab2,0.0,0.0,10
-uncorrected,Train-Test-Split,MCC,Simulated Rotational Batch,lab3,0.11000000000000001,0.1308094458023239,10
+uncorrected,Train-Test-Split,MCC,Proteomics Multibatch Data,APT,0.7866666666666667,0.20296650536196995,30
+uncorrected,Train-Test-Split,MCC,Proteomics Multibatch Data,All,0.7083333333333334,0.14433756729740646,30
+uncorrected,Train-Test-Split,MCC,Proteomics Multibatch Data,BGI,0.8,0.3107277331329327,30
+uncorrected,Train-Test-Split,MCC,Proteomics Multibatch Data,FDU,0.7733333333333333,0.20160277319749237,30
+uncorrected,Train-Test-Split,MCC,Proteomics Multibatch Data,NVG,0.3777777777777777,0.1691387544683083,30
+uncorrected,Train-Test-Split,MCC,ccRCC Studies Data,All,0.9786516853932584,0.011173358719233147,10
+uncorrected,Train-Test-Split,MCC,ccRCC Studies Data,PDC000127,0.9692307692307693,0.03585671275795388,10
+uncorrected,Train-Test-Split,MCC,ccRCC Studies Data,PXD030344,0.9741935483870968,0.016963669628959465,10
+uncorrected,Train-Test-Split,MCC,ccRCC Studies Data,PXD042844,0.9956521739130435,0.01374903330507987,10

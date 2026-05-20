@@ -1,0 +1,25 @@
+{
+  "covariates": ["Condition"],
+  "datafile": {
+    "filename": "full_corrected_data.csv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": null
+  },
+  "designfile": null,
+  "cohorts": [
+    {
+      "name": "PDC000127",
+      "folder": "individual_results/PDC000127"
+    },
+    {
+      "name": "PXD030344",
+      "folder": "individual_results/PXD030344"
+    },
+    {
+      "name": "PXD042844",
+      "folder": "individual_results/PXD042844"
+    }
+  ]
+}

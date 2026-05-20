@@ -4,6 +4,9 @@ from typing import List, Union
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 
+FAILURE_THRESHOLD = 1e-10
+RESULT_DF_COLUMNS = ["Experiment", "Min difference", "Mean difference", "Max difference"]
+
 @dataclass
 class ExperimentResult():
     name: str
@@ -25,10 +28,10 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
         experiment_results: List of ExperimentResult objects
     Returns:
         result_df: DataFrame containing the maximal and mean difference of the experiments
-                   columns are ["Experiment", "Maximal difference", "Mean difference"]
+                   columns are RESULT_DF_COLUMNS
                    returns None if no comparison could be made
     """
-    result_df = pd.DataFrame(columns=["Experiment", "Min difference", "Mean difference", "Max difference"])
+    result_df = pd.DataFrame(columns=RESULT_DF_COLUMNS)
     for exp in experiment_results:
         print(f"_________________________Comparing {exp.name}_________________________")
         central_df = pd.read_csv(exp.central_result_file, sep="\t", index_col=0)
@@ -97,7 +100,10 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
             nan_count, central_nan_count, fed_nan_count = \
                 _compare_vals(value1, value2, nan_count, central_nan_count, fed_nan_count, differences)
         print("Total comparison")
-        _analyse_differences(differences, nan_count, central_nan_count, fed_nan_count, result_df, exp)
+        failed = _analyse_differences(differences, nan_count, central_nan_count, fed_nan_count, result_df, exp)
+        if failed:
+            print(f"_________________________FAILED {exp.name}_________________________")
+            continue
     return result_df
 
 def _analyse_differences(differences: List[float], nan_count: int, central_nan_count: int, fed_nan_count: int,
@@ -123,6 +129,9 @@ def _analyse_differences(differences: List[float], nan_count: int, central_nan_c
         plt.xlabel("Element of data")
         plt.ylabel("Difference")
         plt.show()
+    if np.max(differences) > FAILURE_THRESHOLD:
+        return True
+    return False
 
 def _compare_vals(value1, value2, nan_count, central_nan_count, fed_nan_count, differences,
                   feature2diffsum=None, feature=None):

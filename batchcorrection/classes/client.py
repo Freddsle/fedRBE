@@ -233,6 +233,8 @@ class Client:
                 relevant_cols.extend(self.variables)
             self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[relevant_cols]
             if self.batch_col:
+                # ensure batch column is string so label reconstruction via split works
+                self.design[self.batch_col] = self.design[self.batch_col].astype(str)
                 # extract which batches exist
                 self.batch_labels = [f"{self.client_name}|{batchname}" for batchname in self.design[self.batch_col].unique()]
 
@@ -548,8 +550,13 @@ class Client:
                     sample_indices = self.design[self.design[self.batch_col] == cohorts_split[1]].index
                     self.design.loc[sample_indices, design_cohorts[cohort_idx]] = 1
             # now we fix the reference batch
-            reference_batch_indices = self.design[self.design[self.batch_col] == cohorts_splitlist[-1][1]].index
-            self.design.loc[reference_batch_indices, design_cohorts] = -1
+            reference_batch_split = cohorts_splitlist[-1]
+            if len(reference_batch_split) > 1 and reference_batch_split[0] == self.client_name:
+                # Reference batch belongs to this client - mark its samples as -1
+                reference_batch_indices = self.design[self.design[self.batch_col] == reference_batch_split[1]].index
+                self.design.loc[reference_batch_indices, design_cohorts] = -1
+            # else: reference batch is from another client (single-batch),
+            # no local samples to mark as reference
 
         if self.batch_col:
             # we remove the batch column from the design matrix, not needed anymore

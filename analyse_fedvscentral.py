@@ -89,11 +89,28 @@ experiment_results.append(utils.ExperimentResult(
     central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
 ))
 
+# ccRCC PROTEOMICS
+experiment_results.append(utils.ExperimentResult(
+    name="ccRCC Proteomics",
+    federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
+))
+experiment_results.append(utils.ExperimentResult(
+    name="ccRCC Proteomics (SMPC)",
+    federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
+))
+
 
 ### MAIN, just runs compare_experiments on all experiments and prints the results
 result_df = utils.compare_experiments(experiment_results)
 print("Final results:")
+if result_df is None:
+    print("ERROR: No comparison could be made.")
+    exit(1)
 print(result_df)
-if result_df is not None:
-    print("saving results to evaluation_data/fed_vc_cent_results.tsv")
-    result_df.to_csv(os.path.join(base_dir, "fed_vc_cent_results.tsv"), sep="\t", index=False)
+# get the failed experiments
+failed_experiments = result_df[result_df[utils.RESULT_DF_COLUMNS[3]] > utils.FAILURE_THRESHOLD]["Experiment"].tolist()
+print(f"Failed experiments:\n{failed_experiments}")
+print("saving results to evaluation_data/fed_vc_cent_results.tsv")
+result_df.to_csv(os.path.join(base_dir, "fed_vc_cent_results.tsv"), sep="\t", index=False)

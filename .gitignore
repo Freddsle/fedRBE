@@ -27,6 +27,10 @@ share/python-wheels/
 MANIFEST
 .vscode
 
+# R files
+.RData
+.Rhistory
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -162,51 +166,31 @@ cython_debug/
 
 
 # FeatureCloud related files
-batchcorrection/data/tests
-batchcorrection/data/logs
-batchcorrection/data/site_info.json
-batchcorrection/logs
-batchcorrection/tests
-evaluation_data/site_info.json
-evaluation_data/tests/
-evaluation_data/testbed-*
-evaluation_data/workflows
+**/tests/
+**/logs/
+**/workflows/
+**/testbed-*/
+**/site_info.json
 **/individual_results/**
 !**/individual_results/
 !**/individual_results/*/
+
 # to many files
 evaluation/eval_simulation/*/lmvp/*.tsv
 evaluation_data/simulated/*/after/runs/*.tsv
 evaluation_data/simulated/*/before/intermediate/*.tsv
+evaluation_clusterization_after_correction/simulated/outputs/
 evaluation/eval_simulation/lmpv_plots/*.pdf
-evaluation_data/simulated/mild_imbalanced/before/site_info.json
-evaluation_data/simulated/mild_imbalanced/before/tests/
+
 
 # tmp submission folder
 00_submit/*
 figures/*
 
 # rotation simulation
-evaluation_data/simulated_rotation/*/after/runs/*.tsv
-evaluation_data/simulated_rotation/*/before/intermediate/plots/*.png
-evaluation_data/simulated_rotation/*/before/*/*.tsv
-evaluation_data/simulated_rotation/*/after/*.tsv
-evaluation_data/simulated_rotation/*/all_metadata.tsv
-evaluation_data/simulated_rotation/*/after/fc_kmeans_res/*_fed_clustering/*_*_clustering.csv
-evaluation_data/simulated_rotation/*/*/fc_kmeans_res/*_fed_clustering/results_test_*.zip
-evaluation_data/simulated_rotation/*/*/fc_kmeans_res/*_fed_clustering/manifest.json
-evaluation_data/simulated_rotation/*/after/kmeans_res/runs/*_metadata_cntrl_kmeans_res.tsv
-evaluation_data/simulated_rotation/*/after/kmeans_res/runs/*_metadata_*_fedclusters.tsv
-evaluation_data/simulated_rotation/*/before/tests/tests/results_test_*.zip
-evaluation_data/simulated_rotation/*/before_corrected/fc_kmeans_res/*_fed_clustering/*_*_clustering.csv
-evaluation_data/simulated_rotation/*/*/tests/tests/results_test_*.zip
-evaluation_data/simulated_rotation/*/*/site_info.json
+evaluation_data/simulated_rotation/*
 evaluation_clusterization_after_correction/results/plots_*/*balanced_run_*.png
-evaluation_data/simulated_rotation/*/before_corrected/lab*/intensities.tsv
-evaluation_data/simulated_rotation/*/before_corrected/lab*/design.tsv
 evaluation_clusterization_after_correction/old/02_clustering.ipynb
-evaluation_data/simulated_rotation/*/after/kmeans_res/
-evaluation_data/simulated_rotation/*/before/lab*/config_forest.yaml
 
 # Classification evaluation: temporary output folders and generated config files
 **/classification_evaluation_output_*/
@@ -230,3 +214,24 @@ evaluation_data/**/config_forest.yaml
 ## specifically add it here
 !evaluation_data/simulated_rotation/*/before/lab*/design.tsv
 !evaluation_data/simulated_rotation/*/before/lab*/intensities.tsv
+
+
+evaluation_clusterization_after_correction/real_datasets/*/fc_kmeans_res/*
+
+
+# Ignore big files and data files
+evaluation_data/microarray/before/all_expression_UNION.tsv
+
+evaluation_clusterization_after_correction/real_datasets/proteomics/*
+evaluation_clusterization_after_correction/real_datasets/microarray/kmeans_res/*
+evaluation_clusterization_after_correction/real_datasets/microarray/results/pca/*
+evaluation_clusterization_after_correction/real_datasets/proteomics/kmeans_res/*
+evaluation_clusterization_after_correction/real_datasets/proteomics/results/pca/*
+evaluation_clusterization_after_correction/real_datasets/results/*
+
+# ignore the archive and not used data
+evaluation_data/ccRCC_studies/data/*
+evaluation_data/00_archiv/*
+evaluation_data/ccRCC_studies/before/*/report_filtered.zip
+evaluation_data/ccRCC_studies/after/individual_results/*/report.txt
+

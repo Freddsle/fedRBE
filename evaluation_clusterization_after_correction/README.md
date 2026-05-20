@@ -1,102 +1,50 @@
-```
-# cd fedRBE
-cd /home/yuliya-cosybio/repos/cosybio/fedRBE
+# Clustering Evaluation After Batch Correction
 
-featurecloud app build ./evaluation_clusterization_after_correction/federated_kmeans_upd fc_kmeans_upd
-```
+K-means clustering evaluation (central vs. federated) on real datasets
+(proteomics, microarray, proteomics_multibatch, scp_protein_s2). Measures the effect of fedRBE batch correction
+on clustering quality using ARI, MCC, and accuracy.
 
-Rotation BE:
-```
-# balanced
-cd /home/yuliya-cosybio/repos/cosybio/fedRBE && \
-featurecloud controller stop && \
-cd ./evaluation_data/simulated_rotation/balanced/before && \
-featurecloud controller start --data-dir="$PWD" && \
-featurecloud test start --app-image=fc_kmeans_upd --client-dirs=lab1,lab2,lab3
+All data is read directly from `evaluation_data/` — no copies are made.
+The `real_datasets/` directory is a **generated output folder** (not tracked
+in git) that holds intermediate results, federated inputs, and metrics.
 
-# wait 2 minutes until the end of the workflow
-cp -a ./tests/results_test_1* ../after/fc_kmeans_res/
-...
-sudo rm -rf ./tests ./logs ./workflows
-sudo mkdir -p ./tests ./logs ./workflows
+## Notebooks (run in order)
 
-# mild_imbalanced
-cd /home/yuliya-cosybio/repos/cosybio/fedRBE && \
-featurecloud controller stop && \
-cd ./evaluation_data/simulated_rotation/mild_imbalanced/before && \
-featurecloud controller start --data-dir="$PWD" && \
-featurecloud test start --app-image=fc_kmeans_upd --client-dirs=lab1,lab2,lab3
+| Step | Notebook | Purpose |
+|------|----------|---------|
+| 1 | `01_data_preparation.ipynb` | Load data from `evaluation_data/`, filter, align, save prepared matrices |
+| 2 | `02_central_kmeans.ipynb` | Run centralized k-means, compute metrics |
+| 3 | `03_federated_runs.ipynb` | *(Optional)* Run or aggregate federated k-means via FeatureCloud |
+| 4 | `04_analysis_metrics_plots.ipynb` | Combine results, generate ARI bar charts, PCA plots, summary |
 
-# wait 2 minutes until the end of the workflow
-cp -a ./tests/results_test_1* ../after/fc_kmeans_res/
-...
-sudo rm -rf ./tests ./logs ./workflows
-sudo mkdir -p ./tests ./logs ./workflows
+## Quick start
 
-# strong_imbalanced
-cd /home/yuliya-cosybio/repos/cosybio/fedRBE && \
-featurecloud controller stop && \
-cd ./evaluation_data/simulated_rotation/strong_imbalanced/before && \
-featurecloud controller start --data-dir="$PWD" && \
-featurecloud test start --app-image=fc_kmeans_upd --client-dirs=lab1,lab2,lab3
-
-# wait 2 minutes until the end of the workflow
-cp -a ./tests/results_test_1* ../after/fc_kmeans_res/
-...
-sudo rm -rf ./tests ./logs ./workflows
-sudo mkdir -p ./tests ./logs ./workflows
-
-
+```bash
+# Run notebooks 01-02-04 for central-only evaluation (no Docker needed):
+cd evaluation_clusterization_after_correction/
+jupyter execute 01_data_preparation.ipynb
+jupyter execute 02_central_kmeans.ipynb
+jupyter execute 04_analysis_metrics_plots.ipynb
 ```
 
-# After correction evaluation
+## Shared utilities (in `evaluation_utils/`)
 
+| File | Contents |
+|------|----------|
+| `datasets.yaml` | Dataset path configs (single source of truth) |
+| `real_datasets_utils.py` | Data loading, alignment, k-means, metrics, LFS fallback |
+| `featurecloud_kmeans_utils.py` | Docker, FeatureCloud test execution, zip extraction |
 
-```
+## Default dataset set
 
-# balanced
-cd /home/yuliya-cosybio/repos/cosybio/fedRBE && \
-featurecloud controller stop && \
-cd ./evaluation_data/simulated_rotation/balanced/before_corrected/ && \
-featurecloud controller start --data-dir="$PWD" && \
-featurecloud test start --app-image=fc_kmeans_upd --client-dirs=lab1,lab2,lab3
+The notebooks are currently configured to run:
 
-# wait 2 minutes until the end of the workflow
-cp -a ./tests/results_test_1* ../before_corrected/fc_kmeans_res/
-...
-sudo rm -rf ./tests ./logs ./workflows
-sudo mkdir -p ./tests ./logs ./workflows
+- `proteomics`
+- `microarray`
+- `proteomics_multibatch`
+- `scp_protein_s2` (`evaluation_data/scp_protein`, scenario 2)
 
-# mild_imbalanced
-cd /home/yuliya-cosybio/repos/cosybio/fedRBE && \
-featurecloud controller stop && \
-cd ./evaluation_data/simulated_rotation/mild_imbalanced/before_corrected/ && \
-featurecloud controller start --data-dir="$PWD" && \
-featurecloud test start --app-image=fc_kmeans_upd --client-dirs=lab1,lab2,lab3
+## Adding a new dataset
 
-# wait 2 minutes until the end of the workflow
-cp -a ./tests/results_test_1* ../before_corrected/fc_kmeans_res/
-...
-sudo rm -rf ./tests ./logs ./workflows
-sudo mkdir -p ./tests ./logs ./workflows
-
-# strong_imbalanced
-cd /home/yuliya-cosybio/repos/cosybio/fedRBE && \
-featurecloud controller stop && \
-cd ./evaluation_data/simulated_rotation/strong_imbalanced/before_corrected/ && \
-featurecloud controller start --data-dir="$PWD" && \
-featurecloud test start --app-image=fc_kmeans_upd --client-dirs=lab1,lab2,lab3
-
-# wait 2 minutes until the end of the workflow
-cp -a ./tests/results_test_1* ../before_corrected/fc_kmeans_res/
-...
-sudo rm -rf ./tests ./logs ./workflows
-sudo mkdir -p ./tests ./logs ./workflows
-
-
-
-
-
-```
-# run evaluation_clusterization_after_correction/01_clustering.ipynb
-```
+1. Add a new entry to `evaluation_utils/datasets.yaml`.
+2. Add the dataset name to the `DATASETS` list in each notebook's configuration cell.

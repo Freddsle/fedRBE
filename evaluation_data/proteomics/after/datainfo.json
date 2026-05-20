@@ -1,5 +1,5 @@
 {
-  "covariate": "Pyr",
+  "covariates": ["Pyr"],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",

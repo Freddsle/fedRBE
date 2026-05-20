@@ -21,9 +21,11 @@ DATANAME_TO_LABEL = {
 # these datanames will be displayed with the corresponding label in the plots.
 # If a dataname is not in this dict, it will be displayed as is.
 DATANAME_TO_EXCLUDE = [
+    "Balanced Simulated Data",
     "Mildly Imbalanced Simulated Data",
     "Strongly Imbalanced Simulated Data",
     "Microbiome Data",
+    "Balanced Simulated Data (Rotational Batch Effect)",
     "Mildly Imbalanced Simulated Data (Rotational Batch Effect)",
     "Strongly Imbalanced Simulated Data (Rotational Batch Effect)",
 ]
@@ -83,17 +85,25 @@ df['data_name'] = df['data_name'].apply(lambda x: DATANAME_TO_LABEL.get(x, x))
 # metric name x cross validation method plots
 for metric_name in df['metric_name'].unique():
     for cv_method in df['cross_validation_method'].unique():
-        df_subset = df[(df['metric_name'] == metric_name) & (df['cross_validation_method'] == cv_method)]
+        df_subset = df[(df['metric_name'] == metric_name) & \
+                       (df['cross_validation_method'] == cv_method)]
 
         # filter out average rows
         df_subset = df_subset[df_subset['predicted_client_name'] != AVERAGE_CLIENT_NAME]
         print(f"Using {len(df_subset)} rows for metric '{metric_name}' and CV method '{cv_method}'")
 
+        # Create a combined label for data_name and target for x-axis
+        df_subset = df_subset.copy()
+        df_subset['data_target_label'] = df_subset.apply(
+            lambda row: f"{row['data_name']}\n(Target: {row['predicted_target']})",
+            axis=1
+        )
+
         # swarmplot
         plt.figure(figsize=(14, 8))
         axes = sns.swarmplot(
             data=df_subset,
-            x='data_name',
+            x='data_target_label',
             y='metric_value',
             hue='data_preprocessing_name',
         )
@@ -114,7 +124,7 @@ for metric_name in df['metric_name'].unique():
         plt.figure(figsize=(14, 8))
         axes = sns.boxplot(
             data=df_subset,
-            x='data_name',
+            x='data_target_label',
             y='metric_value',
             hue='data_preprocessing_name',
             medianprops=dict(color=colour_schema.get('boxplot_median_marker_color', '#FF0000'), linewidth=2)
