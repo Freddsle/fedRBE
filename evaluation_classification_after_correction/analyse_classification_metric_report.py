@@ -129,6 +129,17 @@ for metric_name in df['metric_name'].unique():
             hue='data_preprocessing_name',
             medianprops=dict(color=colour_schema.get('boxplot_median_marker_color', '#FF0000'), linewidth=2)
         )
+        medians = (
+            df_subset
+            .groupby(['data_target_label', 'data_preprocessing_name'])['metric_value']
+            .median()
+            .reset_index()
+            .sort_values(['data_target_label', 'data_preprocessing_name'])
+        )
+        print("________________________________")
+        print(f"Metric: {metric_name}, CV method: {cv_method}")
+        print("Medians:")
+        print(medians.to_string(index=False))
         axes.set_facecolor(background_color)
         plt.xlabel("")
         plt.ylabel(metric_name)
