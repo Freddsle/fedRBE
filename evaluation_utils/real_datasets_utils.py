@@ -20,6 +20,10 @@ import pandas as pd
 import yaml
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
+<<<<<<< HEAD
+=======
+from sklearn.preprocessing import StandardScaler
+>>>>>>> d2382d2 (feat: add shared utilities for real-dataset evaluation)
 
 
 # ---------------------------------------------------------------------------
@@ -297,11 +301,20 @@ def run_central_kmeans(
     feature_by_sample: pd.DataFrame, k_values: Sequence[int], seed: int
 ) -> Dict[int, pd.Series]:
     """Run k-means for each k and return {k: Series of cluster labels indexed by sample name}."""
+<<<<<<< HEAD
     data = scale_like_federated(feature_by_sample)
     samples = list(feature_by_sample.columns)
     outputs: Dict[int, pd.Series] = {}
     for k in sorted(set(k_values)):
         km = KMeans(n_clusters=k, n_init=50, random_state=seed)
+=======
+    # StandardScaler: center + scale by population std (ddof=0), per feature — sklearn default
+    data = StandardScaler().fit_transform(feature_by_sample.to_numpy(dtype=float).T)
+    samples = list(feature_by_sample.columns)
+    outputs: Dict[int, pd.Series] = {}
+    for k in sorted(set(k_values)):
+        km = KMeans(n_clusters=k, random_state=seed)
+>>>>>>> d2382d2 (feat: add shared utilities for real-dataset evaluation)
         labels = km.fit_predict(data)
         outputs[k] = pd.Series(labels, index=samples)
     return outputs
@@ -395,7 +408,18 @@ def write_design(df: pd.DataFrame, path: Path) -> None:
     out.to_csv(path, sep="\t", index=False, quoting=csv.QUOTE_NONNUMERIC)
 
 
+<<<<<<< HEAD
 def write_kmeans_config(path: Path, k_values: Sequence[int]) -> None:
+=======
+def write_kmeans_config(
+    path: Path,
+    k_values: Sequence[int],
+    n_init_local: int = 50,
+    n_init_global: int = 50,
+    max_global_iter: int = 1,
+    seed: int = 11,
+) -> None:
+>>>>>>> d2382d2 (feat: add shared utilities for real-dataset evaluation)
     """Write a ``config_kmeans.yml`` for the FeatureCloud fc_kmeans app."""
     k_min = min(k_values)
     k_max = max(k_values)
@@ -406,6 +430,13 @@ def write_kmeans_config(path: Path, k_values: Sequence[int]) -> None:
         f"    k_min: {k_min}\n"
         "    k_step: 1\n"
         "    cluster_on: column\n"
+<<<<<<< HEAD
+=======
+        f"    seed: {seed}\n"
+        f"    n_init_local: {n_init_local}\n"
+        f"    n_init_global: {n_init_global}\n"
+        f"    max_global_iter: {max_global_iter}\n"
+>>>>>>> d2382d2 (feat: add shared utilities for real-dataset evaluation)
         "  input:\n"
         "    delimiter: \"\\t\"\n"
         "    dir: \"\"\n"
@@ -562,8 +593,12 @@ def evaluate_metrics(
         for method_name, predicted in method_specs:
             if predicted is None:
                 continue
+<<<<<<< HEAD
             aligned = align_predictions_to_truth(predicted, truth)
             metrics = calculate_metrics(truth, aligned)
+=======
+            metrics = calculate_metrics(truth, predicted)
+>>>>>>> d2382d2 (feat: add shared utilities for real-dataset evaluation)
             records.append(
                 {
                     "Dataset": dataset_name,
