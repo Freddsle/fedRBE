@@ -235,3 +235,4 @@ evaluation_data/00_archiv/*
 evaluation_data/ccRCC_studies/before/*/report_filtered.zip
 evaluation_data/ccRCC_studies/after/individual_results/*/report.txt
 
+evaluation_clusterization_after_correction/simulated/*
