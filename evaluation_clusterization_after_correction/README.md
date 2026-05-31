@@ -1,7 +1,7 @@
 # Clustering Evaluation After Batch Correction
 
 K-means clustering evaluation (central vs. federated) on real datasets
-(proteomics, microarray, proteomics_multibatch, scp_protein_s2). Measures the effect of fedRBE batch correction
+(proteomics, microarray, proteomics_multibatch, ccRCC_proteomics, multiomics). Measures the effect of fedRBE batch correction
 on clustering quality using ARI, MCC, and accuracy.
 
 All data is read directly from `evaluation_data/` — no copies are made.
@@ -42,7 +42,8 @@ The notebooks are currently configured to run:
 - `proteomics`
 - `microarray`
 - `proteomics_multibatch`
-- `scp_protein_s2` (`evaluation_data/scp_protein`, scenario 2)
+- `ccRCC_proteomics`
+- `multiomics`
 
 ## Adding a new dataset
 

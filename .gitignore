@@ -236,3 +236,6 @@ evaluation_data/ccRCC_studies/before/*/report_filtered.zip
 evaluation_data/ccRCC_studies/after/individual_results/*/report.txt
 
 evaluation_clusterization_after_correction/simulated/*
+evaluation_data/multiomics/figshare_data
+evaluation/plots/*
+evaluation_data/multiomics/plots/*
