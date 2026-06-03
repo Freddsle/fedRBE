@@ -377,6 +377,14 @@ def calculate_metrics(true_labels: pd.Series, predicted_labels: pd.Series) -> Di
 # FeatureCloud k-means input generation
 # ---------------------------------------------------------------------------
 
+def write_feature_matrix(df: pd.DataFrame, path: Path) -> None:
+    """Write a feature-by-sample matrix as an unquoted TSV with a ``rowname`` index column."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out = df.copy()
+    out.insert(0, "rowname", out.index)
+    out.to_csv(path, sep="\t", index=False)
+
+
 def write_intensities(df: pd.DataFrame, path: Path) -> None:
     """Write a feature-by-sample matrix as a quoted TSV for the fc_kmeans app.
 

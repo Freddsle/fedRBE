@@ -20,6 +20,5 @@ Main outputs:
 - `prepared/before_matrix.tsv`
 - `prepared/corrected_matrix.tsv`
 - `prepared/corrected_fedrbe_matrix.tsv`
-- `kmeans_res/runs/1_metadata_cntrl_kmeans_res.tsv`
-- `kmeans_res/runs/1_metadata_fedrbe_kmeans_res.tsv`
+- `kmeans_res/runs/1_metadata_cntrl_kmeans_res.tsv` (Before, Cor, and FedRBE cluster labels)
 - `metrics/metrics_ari.tsv`

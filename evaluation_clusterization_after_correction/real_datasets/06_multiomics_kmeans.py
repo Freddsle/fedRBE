@@ -31,6 +31,7 @@ from evaluation_utils.real_datasets_utils import (  # noqa: E402
     calculate_metrics,
     load_feature_matrix,
     write_design,
+    write_feature_matrix,
     write_intensities,
 )
 
@@ -64,14 +65,6 @@ PREPARED_NAMES = {
     "corrected": "corrected_matrix.tsv",
     "corrected_fed": "corrected_fedrbe_matrix.tsv",
 }
-
-
-def write_feature_matrix(df: pd.DataFrame, path: Path) -> None:
-    """Write a feature-by-sample matrix in the real-dataset prepared format."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    out = df.copy()
-    out.insert(0, "rowname", out.index)
-    out.to_csv(path, sep="\t", index=False)
 
 
 def load_metadata() -> pd.DataFrame:
@@ -307,17 +300,9 @@ def main() -> None:
             "lab",
             "Before_CtrlKm_4clusters",
             "Cor_CtrlKm_4clusters",
-        ],
-    ].to_csv(runs_dir / "1_metadata_cntrl_kmeans_res.tsv", sep="\t", index=False)
-    clustered.loc[
-        :,
-        [
-            "file",
-            "condition",
-            "lab",
             "FedRBE_CtrlKm_4clusters",
         ],
-    ].to_csv(runs_dir / "1_metadata_fedrbe_kmeans_res.tsv", sep="\t", index=False)
+    ].to_csv(runs_dir / "1_metadata_cntrl_kmeans_res.tsv", sep="\t", index=False)
 
     metrics = evaluate(clustered)
     metrics_dir = DATASET_ROOT / "metrics"
