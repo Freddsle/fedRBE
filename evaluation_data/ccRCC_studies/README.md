@@ -1,6 +1,6 @@
-# ccRCC Proteomics Dataset — Run Instructions
+# ccRCC Dataset — Run Instructions
 
-Three ccRCC proteomics studies integrated as a single fedRBE evaluation dataset
+Three ccRCC ecoli studies integrated as a single fedRBE evaluation dataset
 (`ccRCC_proteomics`): PDC000127, PXD030344, PXD042844.
 
 ---
@@ -98,7 +98,7 @@ corrected matrices. Must be run **after Steps 2 and 3**.
 **Run:** Open and execute all cells of:
 
 ```
-evaluation/evaluation_ccRCC_proteomics.ipynb
+evaluation/evaluation_ccRCC.ipynb
 ```
 
 Open from the `evaluation/` directory (or set the working directory there).

@@ -56,47 +56,47 @@ experiment_results.append(utils.ExperimentResult(
 
 # PROTEOMICS
 experiment_results.append(utils.ExperimentResult(
-    name="Proteomics",
-    federated_result_file=os.path.join(base_dir, "proteomics", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "proteomics", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    name="E. coli",
+    federated_result_file=os.path.join(base_dir, "ecoli", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ecoli", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Proteomics (SMPC)",
-    federated_result_file=os.path.join(base_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "proteomics", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    name="E. coli (SMPC)",
+    federated_result_file=os.path.join(base_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ecoli", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 
 experiment_results.append(utils.ExperimentResult(
-    name="Proteomics Multi Batch",
-    federated_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    name="Quartet",
+    federated_result_file=os.path.join(base_dir, "quartet", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "quartet", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Proteomics Multi Batch (SMPC)",
-    federated_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    name="Quartet (SMPC)",
+    federated_result_file=os.path.join(base_dir, "quartet", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "quartet", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 
 # MICROARRAY
 experiment_results.append(utils.ExperimentResult(
-    name="Microarray",
-    federated_result_file=os.path.join(base_dir, "microarray", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
+    name="Ovarian cancer",
+    federated_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "central_corrected_UNION.tsv")
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Microarray (SMPC)",
-    federated_result_file=os.path.join(base_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
+    name="Ovarian cancer (SMPC)",
+    federated_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "central_corrected_UNION.tsv")
 ))
 
 # ccRCC PROTEOMICS
 experiment_results.append(utils.ExperimentResult(
-    name="ccRCC Proteomics",
+    name="ccRCC E. coli",
     federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"),
     central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="ccRCC Proteomics (SMPC)",
+    name="ccRCC E. coli (SMPC)",
     federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"),
     central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))

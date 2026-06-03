@@ -1,0 +1,14 @@
+flimmaBatchCorrection:
+  batch_col: null
+  covariates:
+  - HGSC
+  data_filename: expr_for_correction_UNION.tsv
+  design_filename: design.tsv
+  design_separator: "\t"
+  expression_file_flag: true
+  index_col: Gene
+  min_samples: 2
+  normalizationMethod: null
+  position: 2
+  separator: "\t"
+  smpc: true

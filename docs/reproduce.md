@@ -111,7 +111,7 @@ Output:
 - Report files: In `evaluation_data/[dataset]/after/individual_results/`, detailed logs and correction reports can be found.
 
 _Note: The script may take some time to complete, depending on the dataset size and the number of clients. It usually takes a few hours upto a day.
-_Note 2: To process this dataset one need >16GB RAM. To skip the correction on microarray datasets, comment the corresponding lines in the script (generate_fedrbe_corrected_datasets.py, search for `experiments.append(microarray_experiment)` to find the relevant 4 lines of code)._
+_Note 2: To process this dataset one need >16GB RAM. To skip the correction on ovarian_cancer datasets, comment the corresponding lines in the script (generate_fedrbe_corrected_datasets.py, search for `experiments.append(ovarian_cancer_experiment)` to find the relevant 4 lines of code)._
 _Note 3: This was already performed and the fedRBE corrected data is stored in the repository.
 You can skip this if you just want to look at the results._
 
@@ -198,13 +198,13 @@ fedRBE/
 ├── README.md                                   # General repository overview
 ├── batchcorrection/                            # fedRBe FeatureCloud app
 ├── evaluation_data/                            # Data used for evaluation
-│   ├── microarray/                             # Microarray datasets
+│   ├── ovarian_cancer/                             # Ovarian cancer datasets
         ├── before/                             # Uncorrected data with structure needed to run the app
         ├── after/                              # Corrected data
 │   │   └── 01_Preprocessing_and_RBE.ipynb      # Data preparation notebook with centralized removeBatchEffect run
-│   ├── microbiome/                             # Microbiome datasets with similar structure as microarray
-│   ├── proteomics/                             # Proteomics datasets
-│   ├── proteomics_multibatch/                  # Multi-batch proteomics datasets (several ba)
+│   ├── microbiome/                             # Microbiome datasets with similar structure as ovarian_cancer
+│   ├── ecoli/                             # E. coli datasets
+│   ├── quartet/                  # Multi-batch E. coli datasets (several ba)
 │   └── simulated/                              # Simulated datasets
 ├── analyse_fedvscentral.py                     # Compares federated and centralized batch effect corrections.
 ├── generate_fedrbe_corrected_datasets.py       # A script performing fedRBE on all datasets and save the results.
@@ -220,9 +220,9 @@ fedRBE/
 │       └── utils_analyse.py
 ├── evaluation/                                 # Main evaluation scripts to produce results and figures
 │   ├── eval_simulation/                        # Evaluations on simulated data
-│   ├── evaluation_microarray.ipynb             # Evaluation of microarray datasets
+│   ├── evaluation_ovarian_cancer.ipynb             # Evaluation of ovarian_cancer datasets
 │   ├── evaluation_microbiome.ipynb
-│   ├── evaluation_proteomics.ipynb
+│   ├── evaluation_ecoli.ipynb
 └── [other directories/files]
 ```
 

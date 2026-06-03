@@ -66,68 +66,67 @@ for num_run in range(NUM_RUNS):
     #     resultfile=RESULTS_FILE,
     # ).run_experiment(seed=seed)
 
-    # Microarray Data
-    folder_microarray = EVALUATION_DATA_FOLDER / "microarray"
+    # Ovarian cancer Data
+    folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
     ClassificationExperimentTrainTestSplit(
-        data_name="Microarray Data",
+        data_name="Ovarian cancer Data",
         preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_microarray / "before" / "datainfo.json"),
+        datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="Microarray Data",
+        data_name="Ovarian cancer Data",
         preprocessing_name="corrected",
-        datainfo=DataInfo(folder_microarray / "after" / "datainfo.json"),
+        datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
-    # Microarray Data
-    folder_microarray = EVALUATION_DATA_FOLDER / "microarray"
+    # Ovarian cancer Data
+    folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
     ClassificationExperimentTrainTestSplit(
-        data_name="Microarray Data",
+        data_name="Ovarian cancer Data",
         preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_microarray / "before" / "datainfo.json"),
+        datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="Microarray Data",
+        data_name="Ovarian cancer Data",
         preprocessing_name="corrected",
-        datainfo=DataInfo(folder_microarray / "after" / "datainfo.json"),
+        datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
-    # Proteomics Data
-    folder_proteomics = EVALUATION_DATA_FOLDER / "proteomics"
+    # E. coli Data
+    folder_ecoli = EVALUATION_DATA_FOLDER / "ecoli"
     ClassificationExperimentTrainTestSplit(
-        data_name="Proteomics Data",
+        data_name="E. coli Data",
         preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_proteomics / "before" / "datainfo.json"),
+        datainfo=DataInfo(folder_ecoli / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="Proteomics Data",
+        data_name="E. coli Data",
         preprocessing_name="corrected",
-        datainfo=DataInfo(folder_proteomics / "after" / "datainfo.json"),
+        datainfo=DataInfo(folder_ecoli / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
-    # Proteomics Multibatch Data
-    folder_proteomics_multibatch = EVALUATION_DATA_FOLDER / "proteomics_multibatch"
+    # Quartet Data
+    folder_quartet = EVALUATION_DATA_FOLDER / "quartet"
     ClassificationExperimentTrainTestSplit(
-        data_name="Proteomics Multibatch Data",
+        data_name="Quartet Data",
         preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_proteomics_multibatch / "before" / "datainfo.json"),
+        datainfo=DataInfo(folder_quartet / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="Proteomics Multibatch Data",
+        data_name="Quartet Data",
         preprocessing_name="corrected",
-        datainfo=DataInfo(folder_proteomics_multibatch / "after" / "datainfo.json"),
-<<<<<<< HEAD
+        datainfo=DataInfo(folder_quartet / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
@@ -144,7 +143,5 @@ for num_run in range(NUM_RUNS):
         data_name="ccRCC Studies Data",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_ccRCC / "after" / "datainfo.json"),
-=======
->>>>>>> new_proteomics_data
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)

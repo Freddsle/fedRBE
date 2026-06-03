@@ -15,7 +15,7 @@ The federation pipeline (notebooks 02–04) uses only the three full matrices be
 | Omics | Full matrix | Features | Samples | Scale |
 |-------|-------------|----------|---------|-------|
 | Transcriptomics | `Transcriptomics_fulldataset_log2FPKM_r26907c180.csv` | 26,907 genes | 180 | log2(FPKM + 0.01) |
-| Proteomics | `Proteomics_fulldataset_log2FOT_r3489c180.csv` | 3,489 proteins | 180 | log2(FOT + 0.01) |
+| E. coli | `Proteomics_fulldataset_log2FOT_r3489c180.csv` | 3,489 proteins | 180 | log2(FOT + 0.01) |
 | Metabolomics | `Metabolomics_fulldataset_log2expr_r71c180.csv` | 71 metabolites | 180 | log2(expr + 1) |
 
 Each full matrix has **15 batches x 12 libraries** per omics type.
@@ -27,7 +27,7 @@ The balanced/confounded files are kept for reference and used only by the EDA no
 | Omics | Balanced subset | Confounded subset |
 |-------|-----------------|-------------------|
 | Transcriptomics | `Transcriptomics_Balanced_log2FPKM_r26907c45.csv` | `Transcriptomics_Confounded_log2FPKM_r26907c45.csv` |
-| Proteomics | `Proteomics_Balanced_log2FOT_r3489c45.csv` | `Proteomics_Confounded_log2FOT_r3489c45.csv` |
+| E. coli | `Proteomics_Balanced_log2FOT_r3489c45.csv` | `Proteomics_Confounded_log2FOT_r3489c45.csv` |
 | Metabolomics | `Metabolomics_Balanced_log2expr_r71c45.csv` | `Metabolomics_Confounded_log2expr_r71c45.csv` |
 
 - **Balanced:** one D5/F7/M8 replicate from each of 15 batches.
@@ -45,7 +45,7 @@ Notes:
 
 - Use `sample` / `Sample group` as biological condition and `batch` as the batch factor.
 - `lab`, `platform`, and `protocol` are useful EDA covariates or possible site/covariate candidates.
-- Proteomics subset matrix columns use periods in some instrument tokens (`QE.HFX`, `QE.Plus`, `QE.HF`), while metadata uses hyphens. The notebook normalizes this before joining.
+- E. coli subset matrix columns use periods in some instrument tokens (`QE.HFX`, `QE.Plus`, `QE.HF`), while metadata uses hyphens. The notebook normalizes this before joining.
 
 ## Notebooks (run in order)
 
@@ -75,10 +75,10 @@ Lab IDs (`L01`..`L15`) in the figshare metadata are enumerated **independently w
 
 Deterministic selection rules (used to pick which batches to keep when a lab has more than necessary):
 
-- L01 / L02 RNA: keep the poly(A)-mRNA batch (`P_*`) and drop the rRNA-depleted batch (`R_*`); poly(A)-mRNA matches the layer measured by proteomics/metabolomics.
-- L05 Proteomics: keep `FDU_Lumos_1` and `FDU_QE-HFX_4`; drop `FDU_QE-HFX_1`. Among the two QE-HFX runs, `_4` has a much lower fraction of cells at the `−6.644` imputation floor (8.4% vs 16.7%). The value `−6.644 = log2(0.01)` is the most frequent value in the source FOT matrix (~19% of all cells) and corresponds to the `log2(FOT + 0.01)` floor used by the figshare release for non-detected proteins.
+- L01 / L02 RNA: keep the poly(A)-mRNA batch (`P_*`) and drop the rRNA-depleted batch (`R_*`); poly(A)-mRNA matches the layer measured by ecoli/metabolomics.
+- L05 E. coli: keep `FDU_Lumos_1` and `FDU_QE-HFX_4`; drop `FDU_QE-HFX_1`. Among the two QE-HFX runs, `_4` has a much lower fraction of cells at the `−6.644` imputation floor (8.4% vs 16.7%). The value `−6.644 = log2(0.01)` is the most frequent value in the source FOT matrix (~19% of all cells) and corresponds to the `log2(FOT + 0.01)` floor used by the figshare release for non-detected proteins.
 - L05 Metabolomics: add `T_L4_01` (alphabetical-first L04 batch) so the client reaches 24 libraries, matching its RNA / Protein size. The original `lab="L04"` label is preserved in metadata.
-- L03 + L14 (Proteomics): L14 is the unique Protein-only lab with exactly two batches.
+- L03 + L14 (E. coli): L14 is the unique Protein-only lab with exactly two batches.
 
 The selection lives in two mirrored registries that you can edit if the source data changes:
 
@@ -140,14 +140,14 @@ Validation: the FedRBE simulation reports `max_abs_diff_vs_central_limma` per mo
 
 `Metabolomics_fullset_expr_r984c204_randomfloor.csv` is a separate non-log metabolomics export with 984 rows and 204 sample columns. Only 180 columns match `meta_full_dataset_3omics.csv`; 24 extra `T_L1_*_01-03` and `T_L4_*_13-15` columns are not described by the provided metadata. Do not use it as the default batch-correction input unless matching metadata is recovered.
 
-## Relation to `proteomics_multibatch`
+## Relation to `quartet`
 
-`evaluation_data/proteomics_multibatch` is Quartet-related but not a direct subset of this dataset.
+`evaluation_data/quartet` is Quartet-related but not a direct subset of this dataset.
 
 | Folder | Source | Samples | Batches | Quantification |
 |--------|--------|---------|---------|----------------|
-| `multiomics/figshare_data` proteomics | Yu et al. 2023 / Figshare `22188349.v1` | 180 full, or 45 per subset | 15 | log2 FOT/iBAQ-derived abundance |
-| `proteomics_multibatch` | PXD045065 / Chen et al. 2025 processed data | 72 | 6 | log2 MaxLFQ protein intensity |
+| `multiomics/figshare_data` ecoli | Yu et al. 2023 / Figshare `22188349.v1` | 180 full, or 45 per subset | 15 | log2 FOT/iBAQ-derived abundance |
+| `quartet` | PXD045065 / Chen et al. 2025 processed data | 72 | 6 | log2 MaxLFQ protein intensity |
 
 They share donors (**D5**, **D6**, **F7**, **M8**) and some lab/platform concepts, but local checks show different sample and feature identifiers.
 

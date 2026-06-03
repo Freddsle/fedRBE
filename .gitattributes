@@ -5,7 +5,7 @@ evaluation_data/**/after/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs
 evaluation_data/**/after/FedApp_corrected_data_smpc.tsv filter=lfs diff=lfs merge=lfs -text
 
 # Specific data files that are too big
-evaluation_data/microarray/after/central_corrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/ovarian_cancer/after/central_corrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
 
 # Simulated rotation all input data before correction
 evaluation_data/simulated_rotation/*/before/lab*/intensities.tsv filter=lfs diff=lfs merge=lfs -text
@@ -13,12 +13,14 @@ evaluation_data/simulated_rotation/*/before/lab*/intensities.tsv filter=lfs diff
 # Federated correction is caught above
 evaluation_data/simulated_rotation/*/after/intensities_R_corrected.tsv filter=lfs diff=lfs merge=lfs -text
 
-# Microarray before/ input files
-evaluation_data/microarray/before/all_expression_UNION.tsv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/microarray/before/**/expr_for_correction_UNION.tsv filter=lfs diff=lfs merge=lfs -text
+# Ovarian cancer before/ input files
+evaluation_data/ovarian_cancer/before/all_expression_UNION.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/ovarian_cancer/before/all_expression_UNION.zip filter=lfs diff=lfs merge=lfs -text
+evaluation_data/ovarian_cancer/before/**/expr_for_correction_UNION.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/ovarian_cancer/before/**/intermediate/expr_GBacc_MaxVar.tsv filter=lfs diff=lfs merge=lfs -text
 
-# Microarray individual results stored directly (not in subdirectory)
-evaluation_data/microarray/after/individual_results/only_batch_corrected_data_*.csv filter=lfs diff=lfs merge=lfs -text
+# Ovarian cancer individual results stored directly (not in subdirectory)
+evaluation_data/ovarian_cancer/after/individual_results/only_batch_corrected_data_*.csv filter=lfs diff=lfs merge=lfs -text
 
 # ccRCC studies before/ and after/ files
 evaluation_data/ccRCC_studies/before/central_intensities_log_UNION.tsv filter=lfs diff=lfs merge=lfs -text
@@ -27,5 +29,6 @@ evaluation_data/ccRCC_studies/after/intensities_log_Rcorrected_UNION.tsv filter=
 
 # Simulated (balanced/mild_imbalanced/strong_imbalanced) input and corrected files
 evaluation_data/simulated/*/before/lab*/intensities.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/simulated/*/before/intermediate/1_intensities_data_no_batch.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/FedSim_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/intensities_R_corrected.tsv filter=lfs diff=lfs merge=lfs -text

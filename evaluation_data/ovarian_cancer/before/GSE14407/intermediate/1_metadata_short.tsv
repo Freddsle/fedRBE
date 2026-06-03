@@ -1,0 +1,25 @@
+Sample_geo_ID	Status	HistSubtypes	Stage	Grade2	ClinicopathologicSubtypes	platform_id	supplementary_file	Stage2	Stage3
+GSM359972	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359972/suppl/GSM359972.CEL.gz	NA	NA
+GSM359973	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359973/suppl/GSM359973.CEL.gz	NA	NA
+GSM359974	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359974/suppl/GSM359974.CEL.gz	NA	NA
+GSM359975	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359975/suppl/GSM359975.CEL.gz	NA	NA
+GSM359976	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359976/suppl/GSM359976.CEL.gz	NA	NA
+GSM359977	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359977/suppl/GSM359977.CEL.gz	NA	NA
+GSM359978	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359978/suppl/GSM359978.CEL.gz	NA	NA
+GSM359979	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359979/suppl/GSM359979.CEL.gz	NA	NA
+GSM359980	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359980/suppl/GSM359980.CEL.gz	NA	NA
+GSM359981	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359981/suppl/GSM359981.CEL.gz	NA	NA
+GSM359982	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359982/suppl/GSM359982.CEL.gz	NA	NA
+GSM359983	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359983/suppl/GSM359983.CEL.gz	NA	NA
+GSM359984	ovarian tumour	high-grade serous carcinoma	IC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM359nnn/GSM359984/suppl/GSM359984.CEL.gz	I	NA
+GSM360039	ovarian tumour	high-grade serous carcinoma	IC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360039/suppl/GSM360039.CEL.gz	I	NA
+GSM360040	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360040/suppl/GSM360040.CEL.gz	II	NA
+GSM360041	ovarian tumour	high-grade serous carcinoma	IIB	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360041/suppl/GSM360041.CEL.gz	II	NA
+GSM360042	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360042/suppl/GSM360042.CEL.gz	III	NA
+GSM360043	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360043/suppl/GSM360043.CEL.gz	III	NA
+GSM360044	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360044/suppl/GSM360044.CEL.gz	III	NA
+GSM360045	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360045/suppl/GSM360045.CEL.gz	III	NA
+GSM360046	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360046/suppl/GSM360046.CEL.gz	III	NA
+GSM360047	ovarian tumour	high-grade serous carcinoma	IIIC	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360047/suppl/GSM360047.CEL.gz	III	NA
+GSM360048	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360048/suppl/GSM360048.CEL.gz	IV	NA
+GSM360049	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM360nnn/GSM360049/suppl/GSM360049.CEL.gz	IV	NA

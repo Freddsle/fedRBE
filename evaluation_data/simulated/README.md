@@ -2,7 +2,7 @@
 
 Three datasets, 5 labs, from FedProt project (https://doi.org/10.48550/arXiv.2407.15220).
 
-Simulated proteomics data.
+Simulated ecoli data.
 
 Contains NA - for PCA plots - NA were replaced with 0.
 

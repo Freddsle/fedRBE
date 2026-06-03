@@ -2,23 +2,23 @@
 # Single source of truth: both Python and R read from this file.
 # All paths are relative to the repository root.
 
-proteomics:
-  before_matrix: evaluation_data/proteomics/before/central_intensities_log_UNION.tsv
+ecoli:
+  before_matrix: evaluation_data/ecoli/before/central_intensities_log_UNION.tsv
   before_site_matrix_file: intensities_log_UNION.tsv
-  corrected_central: evaluation_data/proteomics/after/intensities_log_Rcorrected_UNION.tsv
-  corrected_federated: evaluation_data/proteomics/after/FedApp_corrected_data_smpc.tsv
-  sites_root: evaluation_data/proteomics/before
+  corrected_central: evaluation_data/ecoli/after/intensities_log_Rcorrected_UNION.tsv
+  corrected_federated: evaluation_data/ecoli/after/FedApp_corrected_data_smpc.tsv
+  sites_root: evaluation_data/ecoli/before
   site_glob: "lab_*"
   design_file: design.tsv
   sample_col: file
   condition_col: Pyr
 
-microarray:
-  before_matrix: evaluation_data/microarray/before/all_expression_UNION.tsv
+ovarian_cancer:
+  before_matrix: evaluation_data/ovarian_cancer/before/all_expression_UNION.tsv
   before_site_matrix_file: expr_for_correction_UNION.tsv
-  corrected_central: evaluation_data/microarray/after/central_corrected_UNION.tsv
-  corrected_federated: evaluation_data/microarray/after/FedApp_corrected_data.tsv
-  sites_root: evaluation_data/microarray/before
+  corrected_central: evaluation_data/ovarian_cancer/after/central_corrected_UNION.tsv
+  corrected_federated: evaluation_data/ovarian_cancer/after/FedApp_corrected_data.tsv
+  sites_root: evaluation_data/ovarian_cancer/before
   site_glob: "GSE*"
   design_file: design.tsv
   sample_col: file
@@ -35,12 +35,12 @@ microbiome:
   sample_col: sample
   condition_col: CRC
 
-proteomics_multibatch:
-  before_matrix: evaluation_data/proteomics_multibatch/before/00_initial_data/central_intensities_log_UNION.tsv
+quartet:
+  before_matrix: evaluation_data/quartet/before/00_initial_data/central_intensities_log_UNION.tsv
   before_site_matrix_file: intensities_log_UNION.tsv
-  corrected_central: evaluation_data/proteomics_multibatch/after/intensities_log_Rcorrected_UNION.tsv
-  corrected_federated: evaluation_data/proteomics_multibatch/after/FedApp_corrected_data_smpc.tsv
-  sites_root: evaluation_data/proteomics_multibatch/before
+  corrected_central: evaluation_data/quartet/after/intensities_log_Rcorrected_UNION.tsv
+  corrected_federated: evaluation_data/quartet/after/FedApp_corrected_data_smpc.tsv
+  sites_root: evaluation_data/quartet/before
   site_glob: "[A-Z]*"
   design_file: design.tsv
   sample_col: file

@@ -2,10 +2,10 @@
 
 K-means clustering evaluation (central vs. federated) on real datasets
 <<<<<<< HEAD
-(proteomics, microarray, proteomics_multibatch, ccRCC_proteomics, multiomics). Measures the effect of fedRBE batch correction
+(ecoli, ovarian_cancer, quartet, ccRCC_proteomics, multiomics). Measures the effect of fedRBE batch correction
 =======
-(proteomics, microarray, proteomics_multibatch, scp_protein_s2). Measures the effect of fedRBE batch correction
->>>>>>> new_proteomics_data
+(ecoli, ovarian_cancer, quartet, scp_protein_s2). Measures the effect of fedRBE batch correction
+>>>>>>> new_ecoli_data
 on clustering quality using ARI, MCC, and accuracy.
 
 All data is read directly from `evaluation_data/` — no copies are made.
@@ -43,9 +43,9 @@ jupyter execute 04_analysis_metrics_plots.ipynb
 
 The notebooks are currently configured to run:
 
-- `proteomics`
-- `microarray`
-- `proteomics_multibatch`
+- `ecoli`
+- `ovarian_cancer`
+- `quartet`
 - `ccRCC_proteomics`
 - `multiomics`
 

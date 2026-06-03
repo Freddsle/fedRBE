@@ -1,0 +1,333 @@
+Sample_geo_ID	Status	HistSubtypes	Stage2	Grade2	ClinicopathologicSubtypes	Dataset
+GSM139435	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139436	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE6008
+GSM139437	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139438	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139439	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139440	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139441	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139444	ovarian tumour	high-grade serous carcinoma	I	High	Type II	GSE6008
+GSM139445	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE6008
+GSM139446	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE6008
+GSM139447	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE6008
+GSM139448	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139451	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139452	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139453	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139454	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139455	ovarian tumour	high-grade serous carcinoma	I	High	Type II	GSE6008
+GSM139456	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139457	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE6008
+GSM139471	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139472	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139473	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139475	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE6008
+GSM139476	normal	NA	NA	NA	NA	GSE6008
+GSM139477	normal	NA	NA	NA	NA	GSE6008
+GSM139478	normal	NA	NA	NA	NA	GSE6008
+GSM139479	normal	NA	NA	NA	NA	GSE6008
+GSM657519	normal	NA	NA	NA	NA	GSE26712
+GSM657520	normal	NA	NA	NA	NA	GSE26712
+GSM657521	normal	NA	NA	NA	NA	GSE26712
+GSM657522	normal	NA	NA	NA	NA	GSE26712
+GSM657523	normal	NA	NA	NA	NA	GSE26712
+GSM657524	normal	NA	NA	NA	NA	GSE26712
+GSM657525	normal	NA	NA	NA	NA	GSE26712
+GSM657526	normal	NA	NA	NA	NA	GSE26712
+GSM657527	normal	NA	NA	NA	NA	GSE26712
+GSM657528	normal	NA	NA	NA	NA	GSE26712
+GSM657529	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657530	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657531	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657532	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657533	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657534	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657535	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657536	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657537	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657538	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657539	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657540	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657541	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657542	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657543	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657544	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657545	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657546	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657547	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657548	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657549	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657550	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657551	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657552	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657553	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657554	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657555	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657556	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657557	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657558	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657559	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657560	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657561	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657562	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657563	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657564	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657565	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657566	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657567	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657568	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657569	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657570	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657571	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657572	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657573	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657574	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657575	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657576	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657577	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657578	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657579	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657580	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657581	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657582	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657583	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657584	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657585	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657586	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657587	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657588	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657589	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657590	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657591	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657592	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657593	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657594	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657595	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657596	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657597	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657598	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657599	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657600	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657601	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657602	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657603	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657604	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657605	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657606	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657607	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657608	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657609	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657610	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657611	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657612	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657613	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657614	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657615	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657616	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657617	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657618	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657619	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657620	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657621	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657622	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657623	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657624	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657625	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657626	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657627	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657628	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657629	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657630	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657631	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657632	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657633	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657634	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657635	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657636	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657637	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657638	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657639	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657640	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657641	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657642	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657643	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657644	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657645	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657646	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657647	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657648	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657649	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657650	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657651	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657652	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657653	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657654	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657655	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657656	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657657	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657658	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657659	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657660	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657661	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657662	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657663	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657664	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657665	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657666	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657667	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657668	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657669	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657670	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657671	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657672	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657673	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657674	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657675	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657676	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657677	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657678	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657679	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657680	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657681	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657682	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657683	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657684	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657685	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657686	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657687	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657688	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657689	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657690	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657691	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657692	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657693	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657694	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657695	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657696	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657697	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657698	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657699	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657700	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657701	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657702	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657703	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657704	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657705	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657706	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657707	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657708	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657709	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657710	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657711	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657712	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM657713	ovarian tumour	high-grade serous carcinoma	Late(IIIB–IV)	High	Type II	GSE26712
+GSM997630	normal	NA	NA	NA	NA	GSE40595
+GSM997631	normal	NA	NA	NA	NA	GSE40595
+GSM997632	normal	NA	NA	NA	NA	GSE40595
+GSM997633	normal	NA	NA	NA	NA	GSE40595
+GSM997634	normal	NA	NA	NA	NA	GSE40595
+GSM997635	normal	NA	NA	NA	NA	GSE40595
+GSM997636	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997637	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997638	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997640	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997641	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997642	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997643	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997644	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997645	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997646	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997647	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997648	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997649	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997650	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997651	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997652	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997653	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997654	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997655	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997656	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997657	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997658	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997659	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997660	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997661	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997662	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997663	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997664	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997665	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997666	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM997667	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE40595
+GSM1701025	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701026	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701027	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701028	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701029	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701030	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701031	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701032	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701033	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701034	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GSE69428
+GSM1701035	normal	NA	NA	NA	NA	GSE69428
+GSM1701036	normal	NA	NA	NA	NA	GSE69428
+GSM1701037	normal	NA	NA	NA	NA	GSE69428
+GSM1701039	normal	NA	NA	NA	NA	GSE69428
+GSM1701040	normal	NA	NA	NA	NA	GSE69428
+GSM1701041	normal	NA	NA	NA	NA	GSE69428
+GSM1701042	normal	NA	NA	NA	NA	GSE69428
+GSM1701043	normal	NA	NA	NA	NA	GSE69428
+GSM1701044	normal	NA	NA	NA	NA	GSE69428
+GSM947277	normal	NA	NA	NA	NA	GSE38666
+GSM947278	normal	NA	NA	NA	NA	GSE38666
+GSM947279	normal	NA	NA	NA	NA	GSE38666
+GSM947280	normal	NA	NA	NA	NA	GSE38666
+GSM947281	normal	NA	NA	NA	NA	GSE38666
+GSM947282	normal	NA	NA	NA	NA	GSE38666
+GSM947283	normal	NA	NA	NA	NA	GSE38666
+GSM947284	normal	NA	NA	NA	NA	GSE38666
+GSM947285	normal	NA	NA	NA	NA	GSE38666
+GSM947286	normal	NA	NA	NA	NA	GSE38666
+GSM947287	normal	NA	NA	NA	NA	GSE38666
+GSM947288	normal	NA	NA	NA	NA	GSE38666
+GSM947296	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM947297	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM947298	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE38666
+GSM947299	ovarian tumour	high-grade serous carcinoma	I	High	Type II	GSE38666
+GSM947300	ovarian tumour	high-grade serous carcinoma	I	High	Type II	GSE38666
+GSM947301	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE38666
+GSM947302	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM947303	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM947304	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE38666
+GSM947305	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM947306	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM947307	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE38666
+GSM947308	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE38666
+GSM947309	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE38666
+GSM947310	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM947311	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM947312	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE38666
+GSM947313	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE38666
+GSM359972	normal	NA	NA	NA	NA	GSE14407
+GSM359973	normal	NA	NA	NA	NA	GSE14407
+GSM359974	normal	NA	NA	NA	NA	GSE14407
+GSM359975	normal	NA	NA	NA	NA	GSE14407
+GSM359976	normal	NA	NA	NA	NA	GSE14407
+GSM359977	normal	NA	NA	NA	NA	GSE14407
+GSM359978	normal	NA	NA	NA	NA	GSE14407
+GSM359979	normal	NA	NA	NA	NA	GSE14407
+GSM359980	normal	NA	NA	NA	NA	GSE14407
+GSM359981	normal	NA	NA	NA	NA	GSE14407
+GSM359982	normal	NA	NA	NA	NA	GSE14407
+GSM359983	normal	NA	NA	NA	NA	GSE14407
+GSM359984	ovarian tumour	high-grade serous carcinoma	I	High	Type II	GSE14407
+GSM360039	ovarian tumour	high-grade serous carcinoma	I	High	Type II	GSE14407
+GSM360040	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE14407
+GSM360041	ovarian tumour	high-grade serous carcinoma	II	High	Type II	GSE14407
+GSM360042	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE14407
+GSM360043	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE14407
+GSM360044	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE14407
+GSM360045	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE14407
+GSM360046	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE14407
+GSM360047	ovarian tumour	high-grade serous carcinoma	III	High	Type II	GSE14407
+GSM360048	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE14407
+GSM360049	ovarian tumour	high-grade serous carcinoma	IV	High	Type II	GSE14407

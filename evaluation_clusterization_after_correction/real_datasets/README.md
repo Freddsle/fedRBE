@@ -3,7 +3,7 @@
 Evaluates k-means clustering quality (ARI) on real omics datasets before and after
 fedRBE batch correction, for both central and federated k-means.
 
-**Datasets:** `proteomics`, `microarray`, `proteomics_multibatch`, `ccRCC_proteomics`
+**Datasets:** `ecoli`, `ovarian_cancer`, `quartet`, `ccRCC_proteomics`
 
 ---
 
