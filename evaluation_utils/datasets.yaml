@@ -1,0 +1,69 @@
+# Dataset configurations for real-dataset evaluation.
+# Single source of truth: both Python and R read from this file.
+# All paths are relative to the repository root.
+
+proteomics:
+  before_matrix: evaluation_data/proteomics/before/central_intensities_log_UNION.tsv
+  before_site_matrix_file: intensities_log_UNION.tsv
+  corrected_central: evaluation_data/proteomics/after/intensities_log_Rcorrected_UNION.tsv
+  corrected_federated: evaluation_data/proteomics/after/FedApp_corrected_data_smpc.tsv
+  sites_root: evaluation_data/proteomics/before
+  site_glob: "lab_*"
+  design_file: design.tsv
+  sample_col: file
+  condition_col: Pyr
+
+microarray:
+  before_matrix: evaluation_data/microarray/before/all_expression_UNION.tsv
+  before_site_matrix_file: expr_for_correction_UNION.tsv
+  corrected_central: evaluation_data/microarray/after/central_corrected_UNION.tsv
+  corrected_federated: evaluation_data/microarray/after/FedApp_corrected_data.tsv
+  sites_root: evaluation_data/microarray/before
+  site_glob: "GSE*"
+  design_file: design.tsv
+  sample_col: file
+  condition_col: HGSC
+
+microbiome:
+  before_matrix: evaluation_data/microbiome/before/logmin_normalized_counts_5C.tsv
+  before_site_matrix_file: UQnorm_log_counts_for_corr.tsv
+  corrected_central: evaluation_data/microbiome/after/normalized_logmin_counts_5centers_Rcorrected.tsv
+  corrected_federated: evaluation_data/microbiome/after/FedApp_corrected_data_smpc.tsv
+  sites_root: evaluation_data/microbiome/before
+  site_glob: "*"
+  design_file: design_5C.tsv
+  sample_col: sample
+  condition_col: CRC
+
+proteomics_multibatch:
+  before_matrix: evaluation_data/proteomics_multibatch/before/00_initial_data/central_intensities_log_UNION.tsv
+  before_site_matrix_file: intensities_log_UNION.tsv
+  corrected_central: evaluation_data/proteomics_multibatch/after/intensities_log_Rcorrected_UNION.tsv
+  corrected_federated: evaluation_data/proteomics_multibatch/after/FedApp_corrected_data_smpc.tsv
+  sites_root: evaluation_data/proteomics_multibatch/before
+  site_glob: "[A-Z]*"
+  design_file: design.tsv
+  sample_col: file
+  condition_col: condition
+
+scp_protein_s2:
+  before_matrix: evaluation_data/scp_protein/before_s2/00_initial_data/central_intensities_log_UNION.tsv
+  before_site_matrix_file: intensities_log_UNION.tsv
+  corrected_central: evaluation_data/scp_protein/after_s2/intensities_log_Rcorrected_UNION.tsv
+  corrected_federated: evaluation_data/scp_protein/after_s2/FedApp_corrected_data_smpc.tsv
+  sites_root: evaluation_data/scp_protein/before_s2
+  site_glob: "*"
+  design_file: design.tsv
+  sample_col: file
+  condition_col: condition
+
+ccRCC_proteomics:
+  before_matrix: evaluation_data/ccRCC_studies/before/central_intensities_log_UNION.tsv
+  before_site_matrix_file: report_filtered.tsv
+  corrected_central: evaluation_data/ccRCC_studies/after/intensities_log_Rcorrected_UNION.tsv
+  corrected_federated: evaluation_data/ccRCC_studies/after/FedApp_corrected_data_smpc.tsv
+  sites_root: evaluation_data/ccRCC_studies/before
+  site_glob: "P*"
+  design_file: design.tsv
+  sample_col: rowname
+  condition_col: Condition

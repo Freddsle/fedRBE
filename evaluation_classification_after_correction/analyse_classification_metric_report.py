@@ -82,16 +82,25 @@ df = df[~df['data_name'].isin(DATANAME_TO_EXCLUDE)]
 # apply dataname labels
 df['data_name'] = df['data_name'].apply(lambda x: DATANAME_TO_LABEL.get(x, x))
 
-# metric name x cross validation method plots
+# metric name x target x cross validation method plots
 for metric_name in df['metric_name'].unique():
+<<<<<<< HEAD
     for cv_method in df['cross_validation_method'].unique():
         df_subset = df[(df['metric_name'] == metric_name) & \
                        (df['cross_validation_method'] == cv_method)]
+=======
+    for target in df['predicted_target'].unique():
+        for cv_method in df['cross_validation_method'].unique():
+            df_subset = df[(df['metric_name'] == metric_name) & \
+                           (df['cross_validation_method'] == cv_method) & \
+                            (df['predicted_target'] == target)]
+>>>>>>> new_proteomics_data
 
-        # filter out average rows
-        df_subset = df_subset[df_subset['predicted_client_name'] != AVERAGE_CLIENT_NAME]
-        print(f"Using {len(df_subset)} rows for metric '{metric_name}' and CV method '{cv_method}'")
+            # filter out average rows
+            df_subset = df_subset[df_subset['predicted_client_name'] != AVERAGE_CLIENT_NAME]
+            print(f"Using {len(df_subset)} rows for metric '{metric_name}' and CV method '{cv_method}'")
 
+<<<<<<< HEAD
         # Create a combined label for data_name and target for x-axis
         df_subset = df_subset.copy()
         df_subset['data_target_label'] = df_subset.apply(
@@ -112,14 +121,26 @@ for metric_name in df['metric_name'].unique():
         plt.ylabel(metric_name)
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
+=======
+            # we add the predicted target to the data name
+            df_subset['data_name'] = df_subset.apply(lambda row: f"{row['data_name']} (Predicted Target: {row['predicted_target']})", axis=1)
+>>>>>>> new_proteomics_data
 
-        output_png = os.path.join(PLOTS_DIR, f"classification_analysis_swarmplot_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.png")
-        figure = axes.get_figure()
-        assert figure is not None
-        figure.savefig(output_png, bbox_inches='tight', dpi=100)
-        plt.close()
-        print(f"Saved plot to {output_png}")
+            # swarmplot
+            plt.figure(figsize=(14, 8))
+            axes = sns.swarmplot(
+                data=df_subset,
+                x='data_name',
+                y='metric_value',
+                hue='data_preprocessing_name',
+            )
+            axes.set_facecolor(background_color)
+            plt.xlabel("")
+            plt.ylabel(metric_name)
+            plt.xticks(rotation=45, ha='right')
+            plt.tight_layout()
 
+<<<<<<< HEAD
         # boxplot
         plt.figure(figsize=(14, 8))
         axes = sns.boxplot(
@@ -145,13 +166,36 @@ for metric_name in df['metric_name'].unique():
         plt.ylabel(metric_name)
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
+=======
+            output_png = os.path.join(PLOTS_DIR, f"classification_analysis_swarmplot_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.png")
+            figure = axes.get_figure()
+            assert figure is not None
+            figure.savefig(output_png, bbox_inches='tight', dpi=100)
+            plt.close()
+            print(f"Saved plot to {output_png}")
+>>>>>>> new_proteomics_data
 
-        output_png = os.path.join(PLOTS_DIR, f"classification_analysis_boxplot_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.png")
-        figure = axes.get_figure()
-        assert figure is not None
-        figure.savefig(output_png, bbox_inches='tight', dpi=100)
-        plt.close()
-        print(f"Saved plot to {output_png}")
+            # boxplot
+            plt.figure(figsize=(14, 8))
+            axes = sns.boxplot(
+                data=df_subset,
+                x='data_name',
+                y='metric_value',
+                hue='data_preprocessing_name',
+                medianprops=dict(color=colour_schema.get('boxplot_median_marker_color', '#FF0000'), linewidth=2)
+            )
+            axes.set_facecolor(background_color)
+            plt.xlabel("")
+            plt.ylabel(metric_name)
+            plt.xticks(rotation=45, ha='right')
+            plt.tight_layout()
+
+            output_png = os.path.join(PLOTS_DIR, f"classification_analysis_boxplot_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.png")
+            figure = axes.get_figure()
+            assert figure is not None
+            figure.savefig(output_png, bbox_inches='tight', dpi=100)
+            plt.close()
+            print(f"Saved plot to {output_png}")
 
 # summary statistics
 summary = df.groupby(['data_preprocessing_name', 'cross_validation_method', 'metric_name', 'data_name', 'predicted_client_name'])['metric_value'].agg(['mean', 'std', 'count'])

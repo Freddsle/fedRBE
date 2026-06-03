@@ -1,6 +1,7 @@
 # Python
 ipykernel
 pandas
+jinja2
 matplotlib
 seaborn
 featurecloud
