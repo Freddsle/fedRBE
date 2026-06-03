@@ -39,8 +39,15 @@ DATASET = "multiomics"
 SEED = 11
 N_INIT = 50
 K_CONDITION = 4
-K_BATCH = 15
+K_BATCH = 4  # one cluster per FedRBE client (the technical structure to be removed)
 K_VALUES = [K_CONDITION, K_BATCH]
+
+CLIENT_NAMES = [
+    "client_01_L01",
+    "client_02_L02",
+    "client_03_L05_L04",
+    "client_04_L03_L14",
+]
 
 DATA_DIR = REPO_ROOT / "evaluation_data" / "multiomics" / "after"
 OUT_ROOT = REPO_ROOT / "evaluation_clusterization_after_correction" / "real_datasets"
@@ -71,23 +78,21 @@ def load_metadata() -> pd.DataFrame:
     """Convert multiomics pseudo-sample metadata to the real-dataset schema."""
     path = DATA_DIR / "all_modalities_metadata.tsv"
     meta = pd.read_csv(path, sep="\t")
-    required = {"pseudo_sample", "condition", "batch_code", "rep"}
+    required = {"pseudo_sample", "condition", "client", "rep"}
     missing = required.difference(meta.columns)
     if missing:
         raise ValueError(f"Missing metadata columns in {path}: {sorted(missing)}")
 
     out = (
-        meta.loc[:, ["pseudo_sample", "condition", "batch_code", "rep"]]
-        .rename(columns={"pseudo_sample": "file", "batch_code": "lab"})
+        meta.loc[:, ["pseudo_sample", "condition", "client", "rep"]]
+        .rename(columns={"pseudo_sample": "file", "client": "lab"})
         .sort_values(["lab", "condition", "rep"])
         .reset_index(drop=True)
     )
     out["condition"] = pd.Categorical(
         out["condition"], categories=["D5", "D6", "F7", "M8"], ordered=True
     )
-    out["lab"] = pd.Categorical(
-        out["lab"], categories=[f"B{i:02d}" for i in range(1, 16)], ordered=True
-    )
+    out["lab"] = pd.Categorical(out["lab"], categories=CLIENT_NAMES, ordered=True)
     out["condition"] = out["condition"].astype(str)
     out["lab"] = out["lab"].astype(str)
     return out
@@ -158,7 +163,7 @@ def evaluate(clustered: pd.DataFrame) -> pd.DataFrame:
     records = []
     tasks = [
         ("condition", K_CONDITION, "condition"),
-        ("batch", K_BATCH, "lab"),
+        ("client", K_BATCH, "lab"),
     ]
     methods = [
         ("BC_Cntrl", "Before_CtrlKm"),
@@ -301,9 +306,7 @@ def main() -> None:
             "condition",
             "lab",
             "Before_CtrlKm_4clusters",
-            "Before_CtrlKm_15clusters",
             "Cor_CtrlKm_4clusters",
-            "Cor_CtrlKm_15clusters",
         ],
     ].to_csv(runs_dir / "1_metadata_cntrl_kmeans_res.tsv", sep="\t", index=False)
     clustered.loc[
@@ -313,7 +316,6 @@ def main() -> None:
             "condition",
             "lab",
             "FedRBE_CtrlKm_4clusters",
-            "FedRBE_CtrlKm_15clusters",
         ],
     ].to_csv(runs_dir / "1_metadata_fedrbe_kmeans_res.tsv", sep="\t", index=False)
 

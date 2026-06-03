@@ -1,11 +1,17 @@
 """Utilities for Quartet multiomics FedRBE-style batch correction.
 
-The FeatureCloud FedRBE app requires every client to have more samples than the
-global design width. For the full Quartet design this is
-1 intercept + 3 donor covariates + 14 non-reference batch columns = 18 columns.
-Single 12-sample source batches therefore cannot be clients. The helpers below
-create deterministic multi-batch clients while keeping the original source
-batch as ``batch_col`` inside each client.
+Lab/client structure (fixed; see ``02_prepare_RBE_inputs.ipynb`` for the
+selection rationale): four clients are used per modality.  Only labs that
+appear in all three modalities of the Quartet figshare release form
+separate clients (L01, L02, L05); a fourth synthetic client combines L03
+(Metab+RNA) with L14 (Protein) to cover all three layers.
+
+Within each (lab, modality) we keep a deterministic subset of batches so
+that every client has 12 or 24 libraries per modality. The selection rule
+is hard-coded in ``SELECTED_BATCHES`` (see notebook README for details).
+
+The biological covariate is the donor (D5/D6/F7/M8) with **D6 as the
+reference level**, as in the Quartet figshare 22188349 design.
 """
 
 from __future__ import annotations
@@ -23,12 +29,72 @@ import pandas as pd
 
 MODALITIES = ["Transcriptomics", "Proteomics", "Metabolomics"]
 DONOR_LEVELS = ["D5", "D6", "F7", "M8"]
-COVARIATES = ["D6", "F7", "M8"]
+DONOR_REFERENCE = "D6"
+COVARIATES = [donor for donor in DONOR_LEVELS if donor != DONOR_REFERENCE]
+
+# Per-modality registry of which lab contributes which batches. The keys
+# of each inner dict are the source ``lab`` IDs from the figshare metadata
+# (L01..L15, enumerated independently within each modality).
+SELECTED_BATCHES: Dict[str, Dict[str, List[str]]] = {
+    "Transcriptomics": {
+        "L01": ["P_ILM_L1_B1"],
+        "L02": ["P_ILM_L2_B1"],
+        "L05": ["P_ILM_L5_B1", "R_ILM_L5_B2"],
+        "L03": ["P_BGI_L3_B1", "R_BGI_L3_B1"],
+    },
+    "Proteomics": {
+        "L01": ["ABS_QTOF6600_1"],
+        "L02": ["APT_QE-HFX_1"],
+        "L05": ["FDU_Lumos_1", "FDU_QE-HFX_4"],
+        "L14": ["TMO_Exploris480_1", "TMO_QE-HFX_1"],
+    },
+    "Metabolomics": {
+        "L01": ["U_L1_01"],
+        "L02": ["U_L2_01"],
+        "L05": ["U_L5_01"],
+        "L04": ["T_L4_01"],
+        "L03": ["U_L3_01", "U_L3_02"],
+    },
+}
+
+# Mapping from (modality, lab) -> client name. Two synthetic clients combine
+# multiple labs:
+#   client_03_L05_L04 = L05 (all modalities) + L04 (only Metabolomics)
+#   client_04_L03_L14 = L03 (Metab+RNA) + L14 (Proteomics)
+CLIENT_LAB_MAPS: Dict[str, Dict[str, str]] = {
+    "Transcriptomics": {
+        "L01": "client_01_L01",
+        "L02": "client_02_L02",
+        "L05": "client_03_L05_L04",
+        "L03": "client_04_L03_L14",
+    },
+    "Proteomics": {
+        "L01": "client_01_L01",
+        "L02": "client_02_L02",
+        "L05": "client_03_L05_L04",
+        "L14": "client_04_L03_L14",
+    },
+    "Metabolomics": {
+        "L01": "client_01_L01",
+        "L02": "client_02_L02",
+        "L05": "client_03_L05_L04",
+        "L04": "client_03_L05_L04",
+        "L03": "client_04_L03_L14",
+    },
+}
+
+CLIENT_NAMES: List[str] = [
+    "client_01_L01",
+    "client_02_L02",
+    "client_03_L05_L04",
+    "client_04_L03_L14",
+]
 
 
 @dataclass(frozen=True)
 class ClientGroup:
     name: str
+    labs: List[str]
     batch_codes: List[str]
     batches: List[str]
     reference_batch: str | bool
@@ -68,56 +134,79 @@ def load_prepared_modality(base_dir: Path, modality: str) -> tuple[pd.DataFrame,
     )
     metadata["batch_code"] = metadata["batch_code"].astype(str)
     metadata["batch"] = metadata["batch"].astype(str)
+    metadata["lab"] = metadata["lab"].astype(str)
     metadata["rep"] = metadata["rep"].astype(int)
 
     missing = [sample for sample in metadata["file"] if sample not in expr.columns]
     if missing:
         raise ValueError(f"{modality}: samples missing from matrix: {missing[:5]}")
 
-    metadata = metadata.sort_values(["batch_code", "condition", "rep"]).reset_index(drop=True)
+    metadata = metadata.sort_values(["lab", "batch_code", "condition", "rep"]).reset_index(drop=True)
     expr = expr.loc[:, metadata["file"]]
     return expr, metadata
 
 
-def make_client_groups(metadata: pd.DataFrame) -> List[ClientGroup]:
-    """Group sorted source batches into privacy-valid 2-batch clients.
+def make_client_groups(metadata: pd.DataFrame, modality: str) -> List[ClientGroup]:
+    """Build the four fixed clients for ``modality`` from its prepared metadata.
 
-    With 15 source batches, this yields six 2-batch clients and one 3-batch
-    reference client. Each client has at least 24 samples.
+    Lab → client mapping is taken from ``CLIENT_LAB_MAPS[modality]``. Each
+    client carries 1 or 2 source batches (depending on the lab) and the
+    original ``batch`` column is preserved as the within-client batch factor.
+    The privacy requirement
+    ``n_samples >= 1 + |covariates| + (n_total_batches - 1) + 1``
+    is checked but never triggers a merge—this layout is designed so the
+    smallest client (12 libraries) already exceeds the threshold.
+
+    The reference batch (used by the FedRBE coordinator and by central limma
+    for exact alignment) is the alphabetically-last batch of the last client.
     """
-    batch_table = (
-        metadata[["batch_code", "batch"]]
-        .drop_duplicates()
-        .sort_values("batch_code")
-        .reset_index(drop=True)
-    )
-    rows = batch_table.to_dict("records")
-    grouped_rows: List[List[dict]] = []
-    i = 0
-    while i < len(rows):
-        remaining = len(rows) - i
-        if remaining == 3:
-            grouped_rows.append(rows[i : i + 3])
-            i += 3
-        elif remaining == 1 and grouped_rows:
-            grouped_rows[-1].append(rows[i])
-            i += 1
-        else:
-            grouped_rows.append(rows[i : i + 2])
-            i += 2
+    lab_to_client = CLIENT_LAB_MAPS[modality]
+    n_total_batches = metadata["batch"].nunique()
+    min_samples_required = 1 + len(COVARIATES) + (n_total_batches - 1) + 1
+
+    # Group rows by client according to the modality-specific lab map.
+    by_client: Dict[str, Dict[str, list]] = {}
+    for _, row in metadata.iterrows():
+        client_name = lab_to_client.get(str(row["lab"]))
+        if client_name is None:
+            raise ValueError(
+                f"{modality}: lab {row['lab']!r} has no client mapping. "
+                f"Update CLIENT_LAB_MAPS or filter the metadata in 02_prepare_RBE_inputs."
+            )
+        bucket = by_client.setdefault(
+            client_name,
+            {"labs": [], "batch_codes": [], "batches": [], "n_samples": 0},
+        )
+        if row["lab"] not in bucket["labs"]:
+            bucket["labs"].append(str(row["lab"]))
+        if row["batch_code"] not in bucket["batch_codes"]:
+            bucket["batch_codes"].append(str(row["batch_code"]))
+        if row["batch"] not in bucket["batches"]:
+            bucket["batches"].append(str(row["batch"]))
+        bucket["n_samples"] += 1
+
+    ordered = [name for name in CLIENT_NAMES if name in by_client]
+    if not ordered:
+        raise ValueError(f"{modality}: no clients produced from CLIENT_LAB_MAPS.")
 
     groups: List[ClientGroup] = []
-    for idx, group_rows in enumerate(grouped_rows):
-        batch_codes = [row["batch_code"] for row in group_rows]
-        batches = [row["batch"] for row in group_rows]
-        name = f"client_{idx + 1:02d}_{batch_codes[0]}_{batch_codes[-1]}"
-        is_last = idx == len(grouped_rows) - 1
-        reference_batch: str | bool = batches[-1] if is_last else False
+    for idx, client_name in enumerate(ordered):
+        bucket = by_client[client_name]
+        if bucket["n_samples"] < min_samples_required:
+            raise ValueError(
+                f"{modality}/{client_name}: {bucket['n_samples']} samples < "
+                f"required {min_samples_required} for FedRBE privacy."
+            )
+        is_last = idx == len(ordered) - 1
+        reference_batch: str | bool = (
+            sorted(bucket["batches"])[-1] if is_last else False
+        )
         groups.append(
             ClientGroup(
-                name=name,
-                batch_codes=batch_codes,
-                batches=batches,
+                name=client_name,
+                labs=sorted(bucket["labs"]),
+                batch_codes=sorted(bucket["batch_codes"]),
+                batches=sorted(bucket["batches"]),
                 reference_batch=reference_batch,
                 position=idx,
             )
@@ -127,14 +216,11 @@ def make_client_groups(metadata: pd.DataFrame) -> List[ClientGroup]:
 
 def design_for_client(metadata: pd.DataFrame) -> pd.DataFrame:
     out = metadata.copy()
-    out["D6"] = (out["condition"].astype(str) == "D6").astype(int)
-    out["F7"] = (out["condition"].astype(str) == "F7").astype(int)
-    out["M8"] = (out["condition"].astype(str) == "M8").astype(int)
+    for covariate in COVARIATES:
+        out[covariate] = (out["condition"].astype(str) == covariate).astype(int)
     columns = [
         "file",
-        "D6",
-        "F7",
-        "M8",
+        *COVARIATES,
         "batch",
         "batch_code",
         "condition",
@@ -156,14 +242,13 @@ def config_text(group: ClientGroup, smpc: bool = True) -> str:
         else str(group.reference_batch).lower()
     )
     smpc_value = str(smpc).lower()
+    cov_lines = [f"  - {cov}" for cov in COVARIATES]
     return "\n".join(
         [
             "flimmaBatchCorrection:",
             "  batch_col: batch",
             "  covariates:",
-            "  - D6",
-            "  - F7",
-            "  - M8",
+            *cov_lines,
             "  data_filename: intensities_log_UNION.tsv",
             "  design_filename: design.tsv",
             '  design_separator: "\\t"',
@@ -180,22 +265,34 @@ def config_text(group: ClientGroup, smpc: bool = True) -> str:
     )
 
 
+def _client_membership(metadata: pd.DataFrame, modality: str) -> pd.Series:
+    """Return the client name (one of CLIENT_NAMES) for each metadata row."""
+    lab_to_client = CLIENT_LAB_MAPS[modality]
+    membership = metadata["lab"].astype(str).map(lab_to_client)
+    if membership.isna().any():
+        bad = metadata.loc[membership.isna(), "lab"].unique().tolist()
+        raise ValueError(
+            f"{modality}: labs {bad} have no client mapping in CLIENT_LAB_MAPS."
+        )
+    return membership
+
+
 def prepare_fedrbe_clients(base_dir: Path, modality: str) -> pd.DataFrame:
     """Create FedRBE client folders for one modality."""
     expr, metadata = load_prepared_modality(base_dir, modality)
-    groups = make_client_groups(metadata)
-    clients_root = base_dir / "before_fedrbe" / modality
+    groups = make_client_groups(metadata, modality)
+    membership = _client_membership(metadata, modality)
+
+    clients_root = base_dir / "before" / modality
     clients_root.mkdir(parents=True, exist_ok=True)
 
     rows = []
     for group in groups:
         client_meta = (
-            metadata[metadata["batch_code"].isin(group.batch_codes)]
-            .sort_values(["batch_code", "condition", "rep"])
+            metadata[membership == group.name]
+            .sort_values(["lab", "batch_code", "condition", "rep"])
             .reset_index(drop=True)
         )
-        if len(client_meta) <= 18:
-            raise ValueError(f"{modality}/{group.name}: not enough samples for FedRBE privacy.")
 
         client_dir = clients_root / group.name
         write_feature_matrix(expr.loc[:, client_meta["file"]], client_dir / "intensities_log_UNION.tsv")
@@ -207,6 +304,8 @@ def prepare_fedrbe_clients(base_dir: Path, modality: str) -> pd.DataFrame:
                 "modality": modality,
                 "client": group.name,
                 "position": group.position,
+                "labs": ",".join(group.labs),
+                "n_labs": len(group.labs),
                 "n_batches": len(group.batches),
                 "batch_codes": ",".join(group.batch_codes),
                 "batches": ",".join(group.batches),
@@ -217,8 +316,6 @@ def prepare_fedrbe_clients(base_dir: Path, modality: str) -> pd.DataFrame:
         )
 
     summary = pd.DataFrame(rows)
-    write_table(summary, clients_root / "fedrbe_client_groups.tsv", quote=False)
-    write_table(summary, base_dir / "after" / modality / "fedrbe_client_groups.tsv", quote=False)
     return summary
 
 
@@ -271,23 +368,19 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
     if expr.isna().to_numpy().any():
         raise ValueError(f"{modality}: FedRBE simulation expects a complete feature matrix.")
 
-    groups = make_client_groups(metadata)
+    groups = make_client_groups(metadata, modality)
+    membership = _client_membership(metadata, modality)
     cohorts = cohorts_order_from_groups(groups)
     design_cohorts = cohorts[:-1]
     n_batches = len(cohorts)
-    min_samples = n_batches + len(COVARIATES) + 1
 
     clients = []
     for group in groups:
         client_meta = (
-            metadata[metadata["batch_code"].isin(group.batch_codes)]
-            .sort_values(["batch_code", "condition", "rep"])
+            metadata[membership == group.name]
+            .sort_values(["lab", "batch_code", "condition", "rep"])
             .reset_index(drop=True)
         )
-        if len(client_meta) < min_samples:
-            raise ValueError(
-                f"{modality}/{group.name}: {len(client_meta)} samples < required {min_samples}."
-            )
         client_expr = expr.loc[:, client_meta["file"]]
         design = build_design_matrix(client_meta, group.name, cohorts)
         if design.shape[0] <= design.shape[1]:
@@ -315,8 +408,7 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
 
     corrected_parts = []
     out_dir = base_dir / "after" / modality
-    individual_dir = out_dir / "individual_results_fedsim"
-    individual_dir.mkdir(parents=True, exist_ok=True)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     batch_beta = beta[:, len(["intercept", *COVARIATES]) :]
     for group, client_meta, client_expr, design in clients:
@@ -325,24 +417,6 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
         corrected = client_expr.to_numpy(dtype=float) - batch_effect
         corrected_df = pd.DataFrame(corrected, index=feature_names, columns=client_expr.columns)
         corrected_parts.append(corrected_df)
-
-        client_dir = individual_dir / group.name
-        write_feature_matrix(corrected_df, client_dir / "only_batch_corrected_data.csv")
-        covariates = design_for_client(client_meta).set_index("file")[COVARIATES].T
-        full_corrected = pd.concat([corrected_df, covariates.loc[:, corrected_df.columns]])
-        write_feature_matrix(full_corrected, client_dir / "full_corrected_data.csv")
-        (client_dir / "report.txt").write_text(
-            "\n".join(
-                [
-                    f"Client {group.name}:",
-                    "Local FedRBE-equivalent XTX/XTY simulation.",
-                    f"Cohorts order: {cohorts}",
-                    f"Design columns: {design.columns.tolist()}",
-                    f"Corrected shape: {corrected_df.shape}",
-                    "",
-                ]
-            )
-        )
 
     corrected_all = pd.concat(corrected_parts, axis=1).loc[:, metadata["file"]]
     write_feature_matrix(corrected_all, out_dir / "FedSim_corrected_data.tsv")
@@ -369,7 +443,6 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
         "clients": int(len(groups)),
         "batches": int(n_batches),
         "design_columns": int(k),
-        "required_min_samples_per_client": int(min_samples),
         "max_abs_diff_vs_central_limma": max_abs_diff,
         "mean_abs_diff_vs_central_limma": mean_abs_diff,
         "max_abs_diff_vs_central_after_row_centering": max_abs_diff_row_centered,
@@ -441,7 +514,7 @@ def run_all_fedsim(base_dir: Path) -> pd.DataFrame:
 
     client_summary = pd.concat(client_summaries, axis=0, ignore_index=True)
     correction_summary = pd.DataFrame(correction_summaries)
-    write_table(client_summary, base_dir / "before_fedrbe" / "fedrbe_client_groups.tsv", quote=False)
+    write_table(client_summary, base_dir / "before" / "fedrbe_client_groups.tsv", quote=False)
     write_table(correction_summary, base_dir / "after" / "fedsim_correction_summary.tsv", quote=False)
     write_fedsim_datainfo(base_dir, correction_summary)
     build_fedsim_combined_kmeans_matrix(base_dir)
