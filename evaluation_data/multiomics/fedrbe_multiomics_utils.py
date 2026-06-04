@@ -114,7 +114,7 @@ def write_feature_matrix(df: pd.DataFrame, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     out = df.copy()
     out.insert(0, "rowname", out.index)
-    out.to_csv(path, sep="\t", index=False, quoting=csv.QUOTE_NONNUMERIC)
+    out.to_csv(path, sep="\t", index=False, quoting=csv.QUOTE_NONNUMERIC, na_rep="NA")
 
 
 def write_table(df: pd.DataFrame, path: Path, quote: bool = True) -> None:
@@ -293,9 +293,13 @@ def prepare_fedrbe_clients(base_dir: Path, modality: str) -> pd.DataFrame:
             .sort_values(["lab", "batch_code", "condition", "rep"])
             .reset_index(drop=True)
         )
+        client_expr = expr.loc[:, client_meta["file"]]
+        all_na_rows = client_expr.isna().all(axis=1)
+        n_all_na_rows = int(all_na_rows.sum())
+        client_expr = client_expr.loc[~all_na_rows]
 
         client_dir = clients_root / group.name
-        write_feature_matrix(expr.loc[:, client_meta["file"]], client_dir / "intensities_log_UNION.tsv")
+        write_feature_matrix(client_expr, client_dir / "intensities_log_UNION.tsv")
         write_table(design_for_client(client_meta), client_dir / "design.tsv", quote=True)
         (client_dir / "config.yml").write_text(config_text(group, smpc=True))
 
@@ -310,8 +314,10 @@ def prepare_fedrbe_clients(base_dir: Path, modality: str) -> pd.DataFrame:
                 "batch_codes": ",".join(group.batch_codes),
                 "batches": ",".join(group.batches),
                 "n_samples": len(client_meta),
+                "n_features": int(client_expr.shape[0]),
+                "all_na_feature_rows_dropped": n_all_na_rows,
                 "reference_batch": group.reference_batch,
-                "path": str(client_dir),
+                "path": str(Path("before") / modality / group.name),
             }
         )
 
@@ -365,8 +371,6 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
     the app.
     """
     expr, metadata = load_prepared_modality(base_dir, modality)
-    if expr.isna().to_numpy().any():
-        raise ValueError(f"{modality}: FedRBE simulation expects a complete feature matrix.")
 
     groups = make_client_groups(metadata, modality)
     membership = _client_membership(metadata, modality)
@@ -391,20 +395,30 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
         clients.append((group, client_meta, client_expr, design))
 
     feature_names = expr.index.astype(str).tolist()
+    n_features = len(feature_names)
     k = clients[0][3].shape[1]
-    xtx_global = np.zeros((k, k), dtype=float)
-    xty_global = np.zeros((len(feature_names), k), dtype=float)
+    xtx_global = np.zeros((n_features, k, k), dtype=float)
+    xty_global = np.zeros((n_features, k), dtype=float)
 
     for _group, _client_meta, client_expr, design in clients:
         x = design.to_numpy(dtype=float)
         y = client_expr.to_numpy(dtype=float)
-        xty_global += y @ x
-        xtx_global += x.T @ x
+        observed = np.isfinite(y)
+        y_filled = np.where(observed, y, 0.0)
+        xty_global += y_filled @ x
+        xtx_global += np.einsum("ni,nj,fn->fij", x, x, observed.astype(float), optimize=True)
 
-    try:
-        beta = np.linalg.solve(xtx_global, xty_global.T).T
-    except np.linalg.LinAlgError:
-        beta = (np.linalg.pinv(xtx_global) @ xty_global.T).T
+    beta = np.zeros((n_features, k), dtype=float)
+    for feature_idx in range(n_features):
+        xtx = xtx_global[feature_idx]
+        xty = xty_global[feature_idx]
+        if not np.any(np.isfinite(xty)) or np.allclose(xtx, 0.0):
+            beta[feature_idx, :] = np.nan
+            continue
+        try:
+            beta[feature_idx, :] = np.linalg.solve(xtx, xty)
+        except np.linalg.LinAlgError:
+            beta[feature_idx, :] = np.linalg.pinv(xtx) @ xty
 
     corrected_parts = []
     out_dir = base_dir / "after" / modality
@@ -414,7 +428,9 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
     for group, client_meta, client_expr, design in clients:
         batch_design = design.loc[:, design_cohorts].to_numpy(dtype=float)
         batch_effect = batch_beta @ batch_design.T
-        corrected = client_expr.to_numpy(dtype=float) - batch_effect
+        raw_values = client_expr.to_numpy(dtype=float)
+        corrected = raw_values - batch_effect
+        corrected[~np.isfinite(raw_values)] = np.nan
         corrected_df = pd.DataFrame(corrected, index=feature_names, columns=client_expr.columns)
         corrected_parts.append(corrected_df)
 
@@ -443,6 +459,8 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
         "clients": int(len(groups)),
         "batches": int(n_batches),
         "design_columns": int(k),
+        "missing_cells": int(corrected_all.isna().to_numpy().sum()),
+        "rows_with_any_missing": int(corrected_all.isna().any(axis=1).sum()),
         "max_abs_diff_vs_central_limma": max_abs_diff,
         "mean_abs_diff_vs_central_limma": mean_abs_diff,
         "max_abs_diff_vs_central_after_row_centering": max_abs_diff_row_centered,
@@ -505,16 +523,21 @@ def write_fedsim_datainfo(base_dir: Path, summaries: pd.DataFrame) -> None:
 
 
 def run_all_fedsim(base_dir: Path) -> pd.DataFrame:
-    """Prepare clients and run local FedRBE-equivalent correction for all modalities."""
-    client_summaries = []
+    """Run local FedRBE-equivalent correction using clients prepared by step 02."""
+    groups_path = base_dir / "before" / "fedrbe_client_groups.tsv"
+    if not groups_path.exists():
+        raise FileNotFoundError(f"Missing {groups_path}. Run 02_prepare_RBE_inputs.ipynb first.")
+    client_summary = pd.read_csv(groups_path, sep="\t")
+    for client_path in client_summary["path"]:
+        expected = base_dir / client_path / "intensities_log_UNION.tsv"
+        if not expected.exists():
+            raise FileNotFoundError(f"Missing prepared client matrix: {expected}")
+
     correction_summaries = []
     for modality in MODALITIES:
-        client_summaries.append(prepare_fedrbe_clients(base_dir, modality))
         correction_summaries.append(fedrbe_simulate_modality(base_dir, modality))
 
-    client_summary = pd.concat(client_summaries, axis=0, ignore_index=True)
     correction_summary = pd.DataFrame(correction_summaries)
-    write_table(client_summary, base_dir / "before" / "fedrbe_client_groups.tsv", quote=False)
     write_table(correction_summary, base_dir / "after" / "fedsim_correction_summary.tsv", quote=False)
     write_fedsim_datainfo(base_dir, correction_summary)
     build_fedsim_combined_kmeans_matrix(base_dir)
