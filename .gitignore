@@ -249,3 +249,4 @@ evaluation_data/multiomics/figshare_data
 evaluation/plots/*
 evaluation_data/multiomics/plots/*
 evaluation_data/ovarian_cancer/before/all_expression_UNION.tsv
+evaluation_data/multiomics/filtered_data/*

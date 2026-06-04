@@ -324,3 +324,4 @@ plots_multiple <- function(intensities, metadata, name, simulated = FALSE, use_n
 
   return(layout)
 }
+
