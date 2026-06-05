@@ -256,10 +256,7 @@ add_position_to_config(ccRCC_ecoli_experiment)
 
 ## MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
 multiomics_modalities = [
-    "Transcriptomics", 
-    "Proteomics", 
-    "Metabolomics"
-]
+    "Transcriptomics",  "Proteomics",  "Metabolomics"]
 multiomics_clients = [
     "client_01_L01",
     "client_02_L02",

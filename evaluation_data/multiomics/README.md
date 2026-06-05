@@ -100,7 +100,7 @@ where `i = 1..k` indexes libraries within a `(client, donor, rep)` cell after so
 
 FedRBE (`flimmaBatchCorrection` FeatureCloud app) is the federated equivalent of `limma::removeBatchEffect`. It corrects **within each modality only**; no data is exchanged between modalities or between clients. Each client sees its own libraries, builds its local design with the original Quartet `batch` as the within-client `batch_col` and `D5/F7/M8` (D6 = reference) as donor covariates, and exchanges only the aggregate `X^T X` / `X^T Y` summary statistics required by federated limma. The reference batch is read from `before/fedrbe_client_groups.tsv`, written by notebook 02.
 
-Proteomics filtering is center/client-based in notebook 02. The minimum raw Proteomics value (`-6.644`) is treated as the zero/missing-equivalent value. For each client separately, features whose third quartile is at that zero-equivalent value are masked to `NA` for that client's samples. The central matrix keeps the feature union with those `NA` cells, while each FedRBE client matrix drops rows that are all `NA` within that client. Both central and FedRBE therefore use the same prepared client-wise feature presence.
+Feature filtering is shared by the central and federated paths in notebook 02. For Proteomics, the minimum raw value (`-6.644`) is treated as the zero/missing-equivalent value; features whose client-local third quartile is at that value are masked to `NA` for that client's samples. The preparation then applies the same usability rule as the FeatureCloud app and retains only features usable in at least three clients. This filtered matrix is written as the central input, and each client input is derived from it, so central limma and FedRBE operate on the same feature universe.
 
 Privacy floor: every client must satisfy `n_samples > 1 + |COVARIATES| + (n_total_batches - 1)`, i.e. ≥ 10 libraries here. The smallest client has 12, so the constraint is met without any client merging.
 
@@ -142,7 +142,7 @@ after/                                      ← written by notebooks 03 + 04 + 0
       report.txt
 ```
 
-Validation (optional FedSim path): `run_all_fedsim` reports central-vs-federated differences per modality. Transcriptomics and Metabolomics match central limma to machine precision directly. Proteomics has client-wise missing features, so raw corrected values can differ by per-feature constants, while row-centered corrected values match central limma to machine precision.
+Validation: the central limma notebook puts the FedRBE reference batch last because `removeBatchEffect()` uses `contr.sum` coding. With that ordering, all modalities, including Proteomics features with client-wise missing blocks, match the FeatureCloud app correction to machine precision. The optional local FedSim path uses a generic pseudoinverse instead of the app's feature-presence coefficient mask, so raw Proteomics values can still differ by per-feature constants; row-centered values match to machine precision.
 
 ## Additional metabolomics file
 
