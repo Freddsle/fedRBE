@@ -254,46 +254,132 @@ set_smpc_true(ccRCC_ecoli_experiment_smpc)
 add_position_to_config(ccRCC_ecoli_experiment_smpc)
 add_position_to_config(ccRCC_ecoli_experiment)
 
+## MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
+multiomics_modalities = [
+    "Transcriptomics", 
+    "Proteomics", 
+    "Metabolomics"
+]
+multiomics_clients = [
+    "client_01_L01",
+    "client_02_L02",
+    "client_03_L05_L04",
+    "client_04_L03_L14",
+]
+multiomics_reference_batches = {
+    "Transcriptomics": "R_BGI_L3_B1",
+    "Proteomics": "TMO_QE-HFX_1",
+    "Metabolomics": "U_L3_02",
+}
+multiomics_config_file_changes_base = {
+    "flimmaBatchCorrection": {
+        "data_filename": "intensities_log_UNION.tsv",
+        "design_filename": "design.tsv",
+        "covariates": ["D5", "F7", "M8"],
+        "index_col": "rowname",
+        "min_samples": 0,
+        "batch_col": "batch",
+        "smpc": False,
+    }
+}
+
+
+def build_multiomics_config_file_changes(modality: str) -> List[dict]:
+    config_file_changes = []
+    for idx, _ in enumerate(multiomics_clients):
+        changes = deepcopy(multiomics_config_file_changes_base)
+        changes["flimmaBatchCorrection"]["position"] = idx
+        changes["flimmaBatchCorrection"]["reference_batch"] = (
+            multiomics_reference_batches[modality]
+            if idx == len(multiomics_clients) - 1
+            else False
+        )
+        config_file_changes.append(changes)
+    return config_file_changes
+
+
+multiomics_experiments = {
+    modality: util.Experiment(
+        name=f"Multiomics {modality}",
+        fc_data_dir=os.path.join(data_dir, "multiomics"),
+        clients=[
+            os.path.join(data_dir, "multiomics", "before", modality, client)
+            for client in multiomics_clients
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config) for _ in multiomics_clients],
+        config_file_changes=build_multiomics_config_file_changes(modality),
+    )
+    for modality in multiomics_modalities
+}
+multiomics_experiments_smpc = deepcopy(multiomics_experiments)
+for multiomics_modality, multiomics_experiment_smpc in multiomics_experiments_smpc.items():
+    multiomics_experiment_smpc.name = f"Multiomics {multiomics_modality} (SMPC)"
+    set_smpc_true(multiomics_experiment_smpc)
+
 ## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
 # # Simulated
-experiments.append(simulated_balanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_balanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
+# experiments.append(simulated_balanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(simulated_balanced_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-experiments.append(simulated_mildly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_mildly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+# experiments.append(simulated_mildly_imbalanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(simulated_mildly_imbalanced_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-experiments.append(simulated_strongly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_strongly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+# experiments.append(simulated_strongly_imbalanced_experiment)
+# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(simulated_strongly_imbalanced_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## E. coli
-experiments.append(ecoli_experiment)
-result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data.tsv"))
-experiments.append(ecoli_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"))
+# ## E. coli
+# experiments.append(ecoli_experiment)
+# result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(ecoli_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Quartet
-experiments.append(quartet_experiment)
-result_file_names.append(os.path.join(data_dir, "quartet", "after", "FedApp_corrected_data.tsv"))
-experiments.append(quartet_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "quartet", "after", "FedApp_corrected_data_smpc.tsv"))
+# ## Quartet
+# experiments.append(quartet_experiment)
+# result_file_names.append(os.path.join(data_dir, "quartet", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(quartet_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "quartet", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Ovarian cancer
-experiments.append(ovarian_cancer_experiment)
-result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"))
-experiments.append(ovarian_cancer_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"))
+# ## Ovarian cancer
+# experiments.append(ovarian_cancer_experiment)
+# result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(ovarian_cancer_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## ccRCC Proteomics
-experiments.append(ccRCC_ecoli_experiment)
-result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"))
-experiments.append(ccRCC_ecoli_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
+# ## ccRCC Proteomics
+# experiments.append(ccRCC_ecoli_experiment)
+# result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"))
+# experiments.append(ccRCC_ecoli_experiment_smpc)
+# result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
+
+## Multiomics
+for multiomics_modality in multiomics_modalities:
+    experiments.append(multiomics_experiments[multiomics_modality])
+    result_file_names.append(
+        os.path.join(
+            data_dir,
+            "multiomics",
+            "after",
+            multiomics_modality,
+            "FedApp_corrected_data.tsv",
+        )
+    )
+    experiments.append(multiomics_experiments_smpc[multiomics_modality])
+    result_file_names.append(
+        os.path.join(
+            data_dir,
+            "multiomics",
+            "after",
+            multiomics_modality,
+            "FedApp_corrected_data_smpc.tsv",
+        )
+    )
 
 ### ACTUAL PROGRAM, NO NEED TO CHANGE IF A DIFFERENT EXPERIMENT WANTS TO BE RUN
 
@@ -307,11 +393,18 @@ if len(experiments) != len(result_file_names):
 # output file name used by the batch correction app (federated limma RBE)
 # of this repo) and concats them.
 
+# The FeatureCloud controller keeps the data directory it was started with.
+# Restart it when an experiment switches to a different data directory.
+active_fc_data_dir = None
+
 # Run the experiments
 for exp, result_filename in zip(experiments, result_file_names):
     ### RUN THE FEATURECLOUD EXPERIMENT AND EXTARCT INDIVIDUAL RESULTS
     print(f"Starting experiment:\n{exp}")
     try:
+        if exp.fc_data_dir != active_fc_data_dir:
+            exp._startup()
+            active_fc_data_dir = exp.fc_data_dir
         result_files_zipped, _, _ = exp.run_test()
     except Exception as e:
         print(f"Experiment could not be started or aborted too many times! Error: \n{e}")
