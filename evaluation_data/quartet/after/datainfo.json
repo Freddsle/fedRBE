@@ -1,6 +1,9 @@
 {
-  "data_name": "Quartet Data",
-  "covariates": ["D6", "F7", "M8"],
+  "covariates": [
+    "D6",
+    "F7",
+    "M8"
+  ],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",

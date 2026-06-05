@@ -1,6 +1,7 @@
 {
-  "data_name": "Ovarian cancer Data",
-  "covariates": ["HGSC"],
+  "covariates": [
+    "HGSC"
+  ],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",

@@ -1,6 +1,7 @@
 {
-  "data_name": "E. coli Data",
-  "covariates": ["Pyr"],
+  "covariates": [
+    "Pyr"
+  ],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",
