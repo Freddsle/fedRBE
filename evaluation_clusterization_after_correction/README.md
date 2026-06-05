@@ -1,16 +1,14 @@
 # Clustering Evaluation After Batch Correction
 
 K-means clustering evaluation (central vs. federated) on real datasets
-<<<<<<< HEAD
-(ecoli, ovarian_cancer, quartet, ccRCC_proteomics, multiomics). Measures the effect of fedRBE batch correction
-=======
-(ecoli, ovarian_cancer, quartet, scp_protein_s2). Measures the effect of fedRBE batch correction
->>>>>>> new_ecoli_data
-on clustering quality using ARI, MCC, and accuracy.
+(`ecoli`, `ovarian_cancer`, `quartet`, `ccRCC_proteomics`, and
+`multiomics`). It measures the effect of fedRBE batch correction on
+clustering quality using ARI, MCC, and accuracy.
 
 All data is read directly from `evaluation_data/` — no copies are made.
-The `real_datasets/` directory is a **generated output folder** (not tracked
-in git) that holds intermediate results, federated inputs, and metrics.
+Generated `prepared/`, `inputs/`, `kmeans_res/`, and `metrics/` directories
+under `real_datasets/` are not tracked. The notebooks, scripts, app source,
+and dataset manifests required to regenerate them are tracked.
 
 ## Notebooks (run in order)
 
@@ -47,7 +45,9 @@ The notebooks are currently configured to run:
 - `ovarian_cancer`
 - `quartet`
 - `ccRCC_proteomics`
-- `multiomics`
+
+Multiomics uses the dedicated `real_datasets/06_multiomics_kmeans.py`
+workflow after its joint matrices have been built.
 
 ## Adding a new dataset
 

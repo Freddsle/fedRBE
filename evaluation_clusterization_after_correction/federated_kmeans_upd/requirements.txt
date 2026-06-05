@@ -1,0 +1,7 @@
+bottle
+featurecloud
+numpy
+pandas
+PyYAML
+scikit-learn
+scipy

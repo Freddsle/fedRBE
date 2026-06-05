@@ -24,17 +24,6 @@ ovarian_cancer:
   sample_col: file
   condition_col: HGSC
 
-microbiome:
-  before_matrix: evaluation_data/microbiome/before/logmin_normalized_counts_5C.tsv
-  before_site_matrix_file: UQnorm_log_counts_for_corr.tsv
-  corrected_central: evaluation_data/microbiome/after/normalized_logmin_counts_5centers_Rcorrected.tsv
-  corrected_federated: evaluation_data/microbiome/after/FedApp_corrected_data_smpc.tsv
-  sites_root: evaluation_data/microbiome/before
-  site_glob: "*"
-  design_file: design_5C.tsv
-  sample_col: sample
-  condition_col: CRC
-
 quartet:
   before_matrix: evaluation_data/quartet/before/00_initial_data/central_intensities_log_UNION.tsv
   before_site_matrix_file: intensities_log_UNION.tsv
@@ -42,17 +31,6 @@ quartet:
   corrected_federated: evaluation_data/quartet/after/FedApp_corrected_data_smpc.tsv
   sites_root: evaluation_data/quartet/before
   site_glob: "[A-Z]*"
-  design_file: design.tsv
-  sample_col: file
-  condition_col: condition
-
-scp_protein_s2:
-  before_matrix: evaluation_data/scp_protein/before_s2/00_initial_data/central_intensities_log_UNION.tsv
-  before_site_matrix_file: intensities_log_UNION.tsv
-  corrected_central: evaluation_data/scp_protein/after_s2/intensities_log_Rcorrected_UNION.tsv
-  corrected_federated: evaluation_data/scp_protein/after_s2/FedApp_corrected_data_smpc.tsv
-  sites_root: evaluation_data/scp_protein/before_s2
-  site_glob: "*"
   design_file: design.tsv
   sample_col: file
   condition_col: condition

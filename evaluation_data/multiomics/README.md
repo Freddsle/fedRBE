@@ -20,9 +20,11 @@ The federation pipeline (notebooks 02–04) uses only the three full matrices be
 
 Each full matrix has **15 batches x 12 libraries** per omics type.
 
-## Benchmark subsets (not used by notebooks 02–04)
+## Optional source exports (not required by the pipeline)
 
-The balanced/confounded files are kept for reference and used only by the EDA notebook (`01_preprocess_eda.ipynb`). They contain 45 study samples each:
+The Figshare release also contains balanced/confounded subsets with 45 study
+samples each. The current notebooks use the full matrices, so these optional
+exports and their scenario metadata are ignored by Git:
 
 | Omics | Balanced subset | Confounded subset |
 |-------|-----------------|-------------------|
@@ -144,7 +146,7 @@ after/                                      ← written by notebooks 03 + 04 + 0
 
 Validation: the central limma notebook puts the FedRBE reference batch last because `removeBatchEffect()` uses `contr.sum` coding. With that ordering, all modalities, including Proteomics features with client-wise missing blocks, match the FeatureCloud app correction to machine precision. The optional local FedSim path uses a generic pseudoinverse instead of the app's feature-presence coefficient mask, so raw Proteomics values can still differ by per-feature constants; row-centered values match to machine precision.
 
-## Additional metabolomics file
+## Additional optional metabolomics file
 
 `Metabolomics_fullset_expr_r984c204_randomfloor.csv` is a separate non-log metabolomics export with 984 rows and 204 sample columns. Only 180 columns match `meta_full_dataset_3omics.csv`; 24 extra `T_L1_*_01-03` and `T_L4_*_13-15` columns are not described by the provided metadata. Do not use it as the default batch-correction input unless matching metadata is recovered.
 
