@@ -1,4 +1,5 @@
 {
+  "data_name": "Strongly Imbalanced Simulated Data",
   "covariates": ["A"],
   "datafile": {
     "filename": "intensities.tsv",

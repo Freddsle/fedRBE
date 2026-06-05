@@ -1,4 +1,5 @@
 {
+  "data_name": "E. coli Data",
   "covariates": ["Pyr"],
   "datafile": {
     "filename": "intensities_log_UNION.tsv",

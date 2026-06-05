@@ -20,16 +20,13 @@ DATANAME_TO_LABEL = {
 }
 # these datanames will be displayed with the corresponding label in the plots.
 # If a dataname is not in this dict, it will be displayed as is.
-DATANAME_TO_EXCLUDE = [
-    "Balanced Simulated Data",
-    "Mildly Imbalanced Simulated Data",
-    "Strongly Imbalanced Simulated Data",
-    "Microbiome Data",
-    "Balanced Simulated Data (Rotational Batch Effect)",
-    "Mildly Imbalanced Simulated Data (Rotational Batch Effect)",
-    "Strongly Imbalanced Simulated Data (Rotational Batch Effect)",
+DATANAME_TO_INCLUDE = [
+    "Ovarian cancer Data",
+    "E. coli Data",
+    "Quartet Data",
+    "ccRCC Data",
 ]
-# These datanames will be excluded from the plots, even if they are in the results file.
+# These datanames will be included in the plots; everything else is filtered out.
 
 # file system management
 if not os.path.exists(PLOTS_DIR):
@@ -46,8 +43,7 @@ df = pd.read_csv(RESULTS_FILE)
 df = df.drop_duplicates()
 
 # Load colour schema
-with open(COLOUR_SCHEMA_FILE, 'r') as f:
-    colour_schema = json.load(f)
+colour_schema = json.loads(Path(COLOUR_SCHEMA_FILE).read_text(encoding='utf-8'))
 palette = colour_schema.get('palette', sns.color_palette())
 background_color = colour_schema.get('background', '#ffffff')
 grid_color = colour_schema.get('grid', '#d3d3d3')
@@ -77,10 +73,8 @@ if len(duplicates) > 0:
     print(duplicates)
     exit(1)
 
-# filter out datanames that should be excluded
-df = df[~df['data_name'].isin(DATANAME_TO_EXCLUDE)]
-# apply dataname labels
-df['data_name'] = df['data_name'].apply(lambda x: DATANAME_TO_LABEL.get(x, x))
+# filter to datanames that should be included
+df = df[df['data_name'].isin(DATANAME_TO_INCLUDE)]
 
 # metric name x target x cross validation method plots
 for metric_name in df['metric_name'].unique():

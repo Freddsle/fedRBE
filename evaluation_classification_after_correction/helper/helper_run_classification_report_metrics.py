@@ -67,6 +67,7 @@ class DataInfo:
     Expected JSON structure::
 
         {
+                    "data_name": "<human readable dataset name>",
           "covariates": ["<column_name>"],
           "datafile": {
             "filename": "...",
@@ -83,6 +84,7 @@ class DataInfo:
         }
     """
 
+    data_name: str
     covariates: Optional[List[str]]
     datafile: FileSpec
     designfile: Optional[FileSpec]
@@ -91,8 +93,9 @@ class DataInfo:
     def __init__(self, datainfo_file: Union[str, Path]) -> None:
         self._path = Path(datainfo_file)
         self._base_folder = self._path.parent
-        with open(self._path, 'r') as f:
-            raw = json.load(f)
+        raw = json.loads(self._path.read_text(encoding='utf-8'))
+
+        self.data_name = raw['data_name']
 
         self.covariates = raw['covariates']
         if not self.covariates or len(self.covariates) == 0:
@@ -259,7 +262,7 @@ def _write_forest_config(client_folder: Path,
     sf['random_state'] = seed
     sf['train_test_ratio'] = train_test_ratio
     config_forest_path = client_folder / 'config_forest.yaml'
-    with open(config_forest_path, 'w') as f:
+    with open(config_forest_path, 'w', encoding='utf-8') as f:
         yaml.safe_dump(config, f)
 
 
@@ -384,10 +387,10 @@ class ClassificationExperimentLeaveOneCohortOut:
     datainfo: DataInfo
     resultfile: ResultFile
 
-    def __init__(self, data_name: str, preprocessing_name: str,
+    def __init__(self, preprocessing_name: str,
                  datainfo: DataInfo,
                  resultfile: ResultFile = DEFAULT_RESULTFILE) -> None:
-        self.data_name = data_name
+        self.data_name = datainfo.data_name
         self.preprocessing_name = preprocessing_name
         self.datainfo = datainfo
         self.resultfile = resultfile
@@ -472,7 +475,7 @@ class ClassificationExperimentLeaveOneCohortOut:
 
                 with open(model_path, 'rb') as f:
                     global_forest: RandomForestClassifier = pickle.load(f)
-                with open(coordinator_output_folder / 'model_info.yaml', 'r') as f:
+                with open(coordinator_output_folder / 'model_info.yaml', 'r', encoding='utf-8') as f:
                     model_info = yaml.safe_load(f)
 
                 # Load test data from the prepared tmp_data.csv
@@ -538,10 +541,10 @@ class ClassificationExperimentLeaveOneCohortOut:
 
         sep = "-" * (62 + len(self.data_name) + len(self.preprocessing_name) + 3)
         print(sep)
-        print(f"Average MCC across all test cohorts:")
+        print("Average MCC across all test cohorts:")
         for predicted_column, avg_mcc in predicted_column2average_mcc.items():
             print(f"  {predicted_column}: {avg_mcc:.4f}")
-        print(f"Average F1 Score across all test cohorts:")
+        print("Average F1 Score across all test cohorts:")
         for predicted_column, avg_f1 in predicted_column2average_f1.items():
             print(f"  {predicted_column}: {avg_f1:.4f}")
         print("=" * (62 + len(self.data_name) + len(self.preprocessing_name) + 3))
@@ -566,11 +569,11 @@ class ClassificationExperimentTrainTestSplit:
     train_test_ratio: float
     resultfile: ResultFile
 
-    def __init__(self, data_name: str, preprocessing_name: str,
+    def __init__(self, preprocessing_name: str,
                  datainfo: DataInfo,
                  train_test_ratio: float = TRAIN_TEST_RATIO,
                  resultfile: ResultFile = DEFAULT_RESULTFILE) -> None:
-        self.data_name = data_name
+        self.data_name = datainfo.data_name
         self.preprocessing_name = preprocessing_name
         self.datainfo = datainfo
         self.train_test_ratio = train_test_ratio

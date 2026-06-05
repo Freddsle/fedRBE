@@ -1,4 +1,5 @@
 {
+  "data_name": "Balanced Simulated Data",
   "covariates": ["A"],
   "datafile": {
     "filename": "full_corrected_data.csv",

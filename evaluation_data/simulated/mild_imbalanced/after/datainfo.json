@@ -1,4 +1,5 @@
 {
+  "data_name": "Mildly Imbalanced Simulated Data",
   "covariates": ["A"],
   "datafile": {
     "filename": "full_corrected_data.csv",

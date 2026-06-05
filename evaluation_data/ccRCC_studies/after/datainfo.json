@@ -1,4 +1,5 @@
 {
+  "data_name": "ccRCC Data",
   "covariates": ["Condition"],
   "datafile": {
     "filename": "full_corrected_data.csv",

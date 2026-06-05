@@ -69,14 +69,12 @@ for num_run in range(NUM_RUNS):
     # Ovarian cancer Data
     folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
     ClassificationExperimentTrainTestSplit(
-        data_name="Ovarian cancer Data",
         preprocessing_name="uncorrected",
         datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="Ovarian cancer Data",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
@@ -85,14 +83,12 @@ for num_run in range(NUM_RUNS):
     # Ovarian cancer Data
     folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
     ClassificationExperimentTrainTestSplit(
-        data_name="Ovarian cancer Data",
         preprocessing_name="uncorrected",
         datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="Ovarian cancer Data",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
@@ -101,14 +97,12 @@ for num_run in range(NUM_RUNS):
     # E. coli Data
     folder_ecoli = EVALUATION_DATA_FOLDER / "ecoli"
     ClassificationExperimentTrainTestSplit(
-        data_name="E. coli Data",
         preprocessing_name="uncorrected",
         datainfo=DataInfo(folder_ecoli / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="E. coli Data",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_ecoli / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
@@ -117,14 +111,12 @@ for num_run in range(NUM_RUNS):
     # Quartet Data
     folder_quartet = EVALUATION_DATA_FOLDER / "quartet"
     ClassificationExperimentTrainTestSplit(
-        data_name="Quartet Data",
         preprocessing_name="uncorrected",
         datainfo=DataInfo(folder_quartet / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="Quartet Data",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_quartet / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
@@ -133,14 +125,12 @@ for num_run in range(NUM_RUNS):
     # ccRCC Studies Data
     folder_ccRCC = EVALUATION_DATA_FOLDER / "ccRCC_studies"
     ClassificationExperimentTrainTestSplit(
-        data_name="ccRCC Studies Data",
         preprocessing_name="uncorrected",
         datainfo=DataInfo(folder_ccRCC / "before" / "datainfo.json"),
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
     ClassificationExperimentTrainTestSplit(
-        data_name="ccRCC Studies Data",
         preprocessing_name="corrected",
         datainfo=DataInfo(folder_ccRCC / "after" / "datainfo.json"),
         resultfile=RESULTS_FILE,
