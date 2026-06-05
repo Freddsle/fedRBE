@@ -77,6 +77,30 @@ experiment_results.append(utils.ExperimentResult(
     central_result_file=os.path.join(base_dir, "quartet", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 
+# MULTIOMICS
+for modality in ["Transcriptomics", "Proteomics", "Metabolomics"]:
+    for name_suffix, result_filename in [
+        ("", "FedApp_corrected_data.tsv"),
+        (" (SMPC)", "FedApp_corrected_data_smpc.tsv"),
+    ]:
+        experiment_results.append(utils.ExperimentResult(
+            name=f"Multiomics {modality}{name_suffix}",
+            federated_result_file=os.path.join(
+                base_dir,
+                "multiomics",
+                "after",
+                modality,
+                result_filename,
+            ),
+            central_result_file=os.path.join(
+                base_dir,
+                "multiomics",
+                "after",
+                modality,
+                "intensities_log_Rcorrected_UNION.tsv",
+            ),
+        ))
+
 # MICROARRAY
 experiment_results.append(utils.ExperimentResult(
     name="Ovarian cancer",
