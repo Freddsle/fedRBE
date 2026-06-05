@@ -99,7 +99,6 @@ for modality in ["Transcriptomics", "Proteomics", "Metabolomics"]:
                 modality,
                 "intensities_log_Rcorrected_UNION.tsv",
             ),
-            row_center=modality == "Proteomics",
         ))
 
 # MICROARRAY
