@@ -14,4 +14,4 @@ flimmaBatchCorrection:
   position: 2
   reference_batch: FDU_QE-HFX_4
   separator: "\t"
-  smpc: false
+  smpc: true

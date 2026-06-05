@@ -14,4 +14,4 @@ flimmaBatchCorrection:
   position: 2
   reference_batch: R_ILM_L5_B2
   separator: "\t"
-  smpc: false
+  smpc: true

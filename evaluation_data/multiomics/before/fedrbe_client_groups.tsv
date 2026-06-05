@@ -5,6 +5,6 @@ Transcriptomics	client_03_L05_L04	2	L05	1	2	B03,B04	P_ILM_L5_B1,R_ILM_L5_B2	24	2
 Proteomics	client_01_L01	0	L01	1	1	B01	ABS_QTOF6600_1	12	2539	0	False	before/Proteomics/client_01_L01
 Proteomics	client_02_L02	1	L02	1	1	B02	APT_QE-HFX_1	12	2539	0	False	before/Proteomics/client_02_L02
 Proteomics	client_03_L05_L04	2	L05	1	2	B03,B04	FDU_Lumos_1,FDU_QE-HFX_4	24	2539	0	FDU_QE-HFX_4	before/Proteomics/client_03_L05_L04
-Metabolomics	client_01_L01	0	L01	1	1	B02	U_L1_01	12	27	0	False	before/Metabolomics/client_01_L01
-Metabolomics	client_02_L02	1	L02	1	1	B03	U_L2_01	12	27	0	False	before/Metabolomics/client_02_L02
-Metabolomics	client_03_L05_L04	2	L04,L05	2	2	B01,B04	T_L4_01,U_L5_01	24	27	0	U_L5_01	before/Metabolomics/client_03_L05_L04
+Metabolomics	client_01_L01	0	L01	1	1	B02	U_L1_01	12	71	0	False	before/Metabolomics/client_01_L01
+Metabolomics	client_02_L02	1	L02	1	1	B03	U_L2_01	12	71	0	False	before/Metabolomics/client_02_L02
+Metabolomics	client_03_L05_L04	2	L04,L05	2	2	B01,B04	T_L4_01,U_L5_01	24	71	0	U_L5_01	before/Metabolomics/client_03_L05_L04
