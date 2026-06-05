@@ -1,17 +1,23 @@
 """Utilities for Quartet multiomics FedRBE-style batch correction.
 
 Lab/client structure (fixed; see ``02_prepare_RBE_inputs.ipynb`` for the
-selection rationale): four clients are used per modality.  Only labs that
-appear in all three modalities of the Quartet figshare release form
-separate clients (L01, L02, L05); a fourth synthetic client combines L03
-(Metab+RNA) with L14 (Protein) to cover all three layers.
+selection rationale): up to four clients are defined per modality.  Only
+labs that appear in all three modalities of the Quartet figshare release
+form separate clients (L01, L02, L05); an optional fourth synthetic client
+combines L03 (Metab+RNA) with L14 (Protein) to cover all three layers.
 
 Within each (lab, modality) we keep a deterministic subset of batches so
 that every client has 12 or 24 libraries per modality. The selection rule
-is hard-coded in ``SELECTED_BATCHES`` (see notebook README for details).
+is hard-coded in ``_ALL_SELECTED_BATCHES`` (see notebook README for details).
 
 The biological covariate is the donor (D5/D6/F7/M8) with **D6 as the
 reference level**, as in the Quartet figshare 22188349 design.
+
+`INCLUDE_CLIENT_04` is the single switch controlling whether the fourth
+synthetic client ``client_04_L03_L14`` is built. Default is ``False`` so
+no folder, file or metadata row is generated for that client. Set to
+``True`` (here and in notebooks 01--03) to restore the full four-client
+federation. Mirrored R toggles live at the top of those notebooks.
 """
 
 from __future__ import annotations
@@ -27,15 +33,33 @@ import numpy as np
 import pandas as pd
 
 
+# ---------------------------------------------------------------------------
+# Toggle: include the synthetic client_04_L03_L14 (L03 + L14 fold-in).
+# Default False -- only the three real cross-modality clients are generated.
+# Set to True (and mirror in notebooks 01--03) to restore the full federation.
+# ---------------------------------------------------------------------------
+INCLUDE_CLIENT_04: bool = False
+
 MODALITIES = ["Transcriptomics", "Proteomics", "Metabolomics"]
 DONOR_LEVELS = ["D5", "D6", "F7", "M8"]
 DONOR_REFERENCE = "D6"
 COVARIATES = [donor for donor in DONOR_LEVELS if donor != DONOR_REFERENCE]
 
+# Full registries (all four clients). These are kept as data so the
+# layout is documented and reversible regardless of INCLUDE_CLIENT_04.
+_ALL_CLIENT_NAMES: List[str] = [
+    "client_01_L01",
+    "client_02_L02",
+    "client_03_L05_L04",
+    "client_04_L03_L14",
+]
+
+_OPTIONAL_CLIENTS: frozenset = frozenset({"client_04_L03_L14"})
+
 # Per-modality registry of which lab contributes which batches. The keys
 # of each inner dict are the source ``lab`` IDs from the figshare metadata
 # (L01..L15, enumerated independently within each modality).
-SELECTED_BATCHES: Dict[str, Dict[str, List[str]]] = {
+_ALL_SELECTED_BATCHES: Dict[str, Dict[str, List[str]]] = {
     "Transcriptomics": {
         "L01": ["P_ILM_L1_B1"],
         "L02": ["P_ILM_L2_B1"],
@@ -61,7 +85,7 @@ SELECTED_BATCHES: Dict[str, Dict[str, List[str]]] = {
 # multiple labs:
 #   client_03_L05_L04 = L05 (all modalities) + L04 (only Metabolomics)
 #   client_04_L03_L14 = L03 (Metab+RNA) + L14 (Proteomics)
-CLIENT_LAB_MAPS: Dict[str, Dict[str, str]] = {
+_ALL_CLIENT_LAB_MAPS: Dict[str, Dict[str, str]] = {
     "Transcriptomics": {
         "L01": "client_01_L01",
         "L02": "client_02_L02",
@@ -83,12 +107,33 @@ CLIENT_LAB_MAPS: Dict[str, Dict[str, str]] = {
     },
 }
 
-CLIENT_NAMES: List[str] = [
-    "client_01_L01",
-    "client_02_L02",
-    "client_03_L05_L04",
-    "client_04_L03_L14",
-]
+
+def _restrict_to_active_clients(
+    include_client_04: bool,
+) -> tuple[Dict[str, Dict[str, List[str]]], Dict[str, Dict[str, str]], List[str]]:
+    """Drop optional clients from the full registries when disabled."""
+    if include_client_04:
+        return (
+            {mod: dict(sel) for mod, sel in _ALL_SELECTED_BATCHES.items()},
+            {mod: dict(lab_map) for mod, lab_map in _ALL_CLIENT_LAB_MAPS.items()},
+            list(_ALL_CLIENT_NAMES),
+        )
+    drop = _OPTIONAL_CLIENTS
+    client_names = [name for name in _ALL_CLIENT_NAMES if name not in drop]
+    lab_maps = {
+        mod: {lab: client for lab, client in lab_map.items() if client not in drop}
+        for mod, lab_map in _ALL_CLIENT_LAB_MAPS.items()
+    }
+    selected_batches = {
+        mod: {lab: list(batches) for lab, batches in mod_sel.items() if lab in lab_maps[mod]}
+        for mod, mod_sel in _ALL_SELECTED_BATCHES.items()
+    }
+    return selected_batches, lab_maps, client_names
+
+
+SELECTED_BATCHES, CLIENT_LAB_MAPS, CLIENT_NAMES = _restrict_to_active_clients(
+    INCLUDE_CLIENT_04
+)
 
 
 @dataclass(frozen=True)

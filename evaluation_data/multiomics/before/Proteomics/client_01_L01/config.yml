@@ -14,4 +14,4 @@ flimmaBatchCorrection:
   position: 0
   reference_batch: false
   separator: "\t"
-  smpc: true
+  smpc: false

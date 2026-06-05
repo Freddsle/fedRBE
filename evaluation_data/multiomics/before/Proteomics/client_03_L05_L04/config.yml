@@ -12,6 +12,6 @@ flimmaBatchCorrection:
   min_samples: 0
   normalizationMethod: null
   position: 2
-  reference_batch: false
+  reference_batch: FDU_QE-HFX_4
   separator: "\t"
-  smpc: true
+  smpc: false

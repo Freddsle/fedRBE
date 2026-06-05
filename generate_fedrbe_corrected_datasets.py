@@ -255,19 +255,43 @@ add_position_to_config(ccRCC_ecoli_experiment_smpc)
 add_position_to_config(ccRCC_ecoli_experiment)
 
 ## MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
+# Toggle for the synthetic client_04_L03_L14 (L03 + L14 fold-in). Driven from
+# the same single source (`fedrbe_multiomics_utils.INCLUDE_CLIENT_04`) used by
+# notebooks 01--04 and 06_multiomics_kmeans.py, so the entire pipeline switches
+# together. Default False -- only the three real cross-modality clients run.
+import sys as _sys
+_sys.path.insert(0, os.path.join(data_dir, "multiomics"))
+from fedrbe_multiomics_utils import (  # noqa: E402
+    CLIENT_NAMES as _MULTIOMICS_ACTIVE_CLIENTS,
+    INCLUDE_CLIENT_04 as _INCLUDE_CLIENT_04,
+)
+
 multiomics_modalities = [
     "Transcriptomics",  "Proteomics",  "Metabolomics"]
-multiomics_clients = [
+# Full federation reference batches (last batch of the last client when each
+# client is the federation tail). Pruned below to whichever client is last.
+_ALL_MULTIOMICS_CLIENTS = [
     "client_01_L01",
     "client_02_L02",
     "client_03_L05_L04",
     "client_04_L03_L14",
 ]
-multiomics_reference_batches = {
-    "Transcriptomics": "R_BGI_L3_B1",
-    "Proteomics": "TMO_QE-HFX_1",
-    "Metabolomics": "U_L3_02",
+_MULTIOMICS_REFERENCE_BATCH_BY_LAST_CLIENT = {
+    "client_03_L05_L04": {
+        "Transcriptomics": "R_ILM_L5_B2",
+        "Proteomics": "FDU_QE-HFX_4",
+        "Metabolomics": "U_L5_01",
+    },
+    "client_04_L03_L14": {
+        "Transcriptomics": "R_BGI_L3_B1",
+        "Proteomics": "TMO_QE-HFX_1",
+        "Metabolomics": "U_L3_02",
+    },
 }
+multiomics_clients = list(_MULTIOMICS_ACTIVE_CLIENTS)
+multiomics_reference_batches = _MULTIOMICS_REFERENCE_BATCH_BY_LAST_CLIENT[
+    multiomics_clients[-1]
+]
 multiomics_config_file_changes_base = {
     "flimmaBatchCorrection": {
         "data_filename": "intensities_log_UNION.tsv",
