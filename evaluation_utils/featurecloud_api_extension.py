@@ -260,8 +260,8 @@ class Experiment():
         if self.controller_host is None:
             self.controller_host = DEFAULT_CONTROLLER_HOST
         if self.generic_dir is None:
-            self.generic_dir = "."
-        elif self.generic_dir != ".":
+            self.generic_dir = ""
+        elif self.generic_dir not in ("", "."):
             if os.path.exists(self.generic_dir) == False:
                 raise RuntimeError(f"Generic directory {self.generic_dir} does not exist!")
             else:
