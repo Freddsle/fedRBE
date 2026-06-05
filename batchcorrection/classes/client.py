@@ -566,7 +566,7 @@ class Client:
         if self.variables:
             # first we ensure that the variables are in the loaded design matrix
             if self.variables_in_data:
-                self.design.join(self.rawdata.T[self.variables])
+                self.design = self.design.join(self.rawdata.T[self.variables])
             else:
                 if not all(column_name in self.design.columns for column_name in self.variables):
                     return f"ERROR: the given variables {self.variables} were not found in the given design matrix file."
