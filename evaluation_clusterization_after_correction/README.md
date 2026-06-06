@@ -63,8 +63,11 @@ jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
 ```
 
 This writes `all_modalities_{before,corrected,fedsim}_kmeans_matrix.tsv`
-under `evaluation_data/multiomics/after/` and per-client
-`design.tsv`/`intensities.tsv` under `evaluation_data/multiomics/before/`.
+under `evaluation_data/multiomics/after/` (shared with
+`evaluation/evaluation_multiomics.ipynb`) and per-client
+`design.tsv`/`intensities.tsv` under
+`evaluation_clusterization_after_correction/real_datasets/multiomics/before/`
+(k-means-only inputs).
 After that, notebooks 01-04 treat multiomics like any other dataset.
 
 The number of clients (3 by default, 4 with `INCLUDE_CLIENT_04 = True`) is

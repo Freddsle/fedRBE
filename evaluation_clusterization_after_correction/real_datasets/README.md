@@ -50,9 +50,12 @@ jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
 **Outputs:**
 - `evaluation_data/multiomics/after/all_modalities_{before,corrected,fedsim}_kmeans_matrix.tsv`
   — joint matrices used as `before_matrix` / `corrected_central` /
-  `corrected_federated` in `evaluation_utils/datasets.yaml`.
-- `evaluation_data/multiomics/before/<client>/{design.tsv, intensities.tsv}`
+  `corrected_federated` in `evaluation_utils/datasets.yaml`. Kept under
+  `evaluation_data/` because `evaluation/evaluation_multiomics.ipynb` also
+  reads them.
+- `evaluation_clusterization_after_correction/real_datasets/multiomics/before/<client>/{design.tsv, intensities.tsv}`
   — per-client splits used when Step 3 builds FeatureCloud k-means inputs.
+  These are k-means-only and live inside this clustering-eval folder.
 
 The three modality matrices are stacked vertically (rows: features prefixed
 by modality name; columns: pseudo-matched samples) and saved as a single

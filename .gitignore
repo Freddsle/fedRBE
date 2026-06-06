@@ -227,6 +227,8 @@ evaluation_clusterization_after_correction/real_datasets/*/kmeans_res/
 evaluation_clusterization_after_correction/real_datasets/*/metrics/
 evaluation_clusterization_after_correction/real_datasets/metrics_ari.tsv
 evaluation_clusterization_after_correction/real_datasets/metrics_ari_multirun.tsv
+# Multiomics per-client splits built by 00_build_kmeans_matrices.ipynb
+evaluation_clusterization_after_correction/real_datasets/multiomics/before/
 evaluation_clusterization_after_correction/federated_kmeans_upd/output.png
 
 
