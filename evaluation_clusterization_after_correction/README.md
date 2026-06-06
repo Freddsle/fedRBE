@@ -39,17 +39,43 @@ jupyter execute 04_analysis_metrics_plots.ipynb
 
 ## Default dataset set
 
-The notebooks are currently configured to run:
+The notebooks 01-04 are configured to run all five real datasets:
 
 - `ecoli`
 - `ovarian_cancer`
 - `quartet`
 - `ccRCC_proteomics`
+- `multiomics` — joint k-means across all three modalities
+  (Transcriptomics + Proteomics + Metabolomics, each block row-zscored and
+  divided by `sqrt(n_features)` so no single modality dominates the
+  Euclidean distance). The joint matrices are already k-means-ready, so the
+  `multiomics` entry in `datasets.yaml` sets `pre_scaled: true` (and
+  `n_init: 50`), which makes both the central k-means and the FeatureCloud
+  per-client config skip a second StandardScaler pass.
 
-Multiomics uses the dedicated `real_datasets/06_multiomics_kmeans.py`
-workflow after its joint matrices have been built.
+### Multiomics-specific prep
+
+Multiomics needs one extra step *before* notebook 01 — building the joint
+matrices and per-client splits from the per-modality matrices:
+
+```bash
+cd evaluation_clusterization_after_correction/real_datasets/multiomics
+jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
+```
+
+This writes `all_modalities_{before,corrected,fedsim}_kmeans_matrix.tsv`
+under `evaluation_data/multiomics/after/` and per-client
+`design.tsv`/`intensities.tsv` under `evaluation_data/multiomics/before/`.
+After that, notebooks 01-04 treat multiomics like any other dataset.
+
+The number of clients (3 by default, 4 with `INCLUDE_CLIENT_04 = True`) is
+controlled by `evaluation_data/multiomics/fedrbe_multiomics_utils.py`; it
+flows through both the per-modality fedRBE pipeline and the joint k-means
+matrices.
 
 ## Adding a new dataset
 
 1. Add a new entry to `evaluation_utils/datasets.yaml`.
+   - Set `pre_scaled: true` (and a higher `n_init`) only for matrices that
+     are already k-means-ready, e.g. row-zscored joint blocks.
 2. Add the dataset name to the `DATASETS` list in each notebook's configuration cell.
