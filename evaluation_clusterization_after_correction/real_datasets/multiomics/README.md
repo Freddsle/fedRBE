@@ -24,12 +24,12 @@ This produces:
 
 ## Why this is k-means-ready
 
-Each per-modality block (Transcriptomics, Proteomics, Metabolomics) is
-row-zscored and divided by `sqrt(n_features)` before vertical concatenation,
-so no single modality dominates the joint Euclidean distance. The
-`evaluation_utils/datasets.yaml` entry for `multiomics` therefore sets
-`pre_scaled: true`, which makes both `run_central_kmeans()` and the
-FeatureCloud per-client `config_kmeans.yml` skip a second scaling pass.
+The three modality matrices are stacked vertically (rows: features prefixed
+by modality name; columns: pseudo-matched samples) and saved as a single
+joint matrix. No manual per-feature scaling is applied here — the standard
+`run_central_kmeans()` and the FeatureCloud `config_kmeans.yml` each apply
+their own per-feature scaling on the joint matrix, the same way they do for
+every other dataset.
 
 K-means runs on the **joint matrix containing all three modalities together**
 (Transcriptomics + Proteomics + Metabolomics rows stacked, samples as columns).

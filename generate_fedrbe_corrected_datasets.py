@@ -257,8 +257,9 @@ add_position_to_config(ccRCC_ecoli_experiment)
 ## MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
 # Toggle for the synthetic client_04_L03_L14 (L03 + L14 fold-in). Driven from
 # the same single source (`fedrbe_multiomics_utils.INCLUDE_CLIENT_04`) used by
-# notebooks 01--04 and 06_multiomics_kmeans.py, so the entire pipeline switches
-# together. Default False -- only the three real cross-modality clients run.
+# notebooks 01--04 of `evaluation_data/multiomics/`, so the entire pipeline
+# switches together. Default False -- only the three real cross-modality
+# clients run.
 import sys as _sys
 _sys.path.insert(0, os.path.join(data_dir, "multiomics"))
 from fedrbe_multiomics_utils import (  # noqa: E402

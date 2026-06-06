@@ -73,7 +73,7 @@ Lab IDs (`L01`..`L15`) in the figshare metadata are enumerated **independently w
 
 The synthetic `client_04_L03_L14` is **optional** and **disabled by default**. The toggle `INCLUDE_CLIENT_04` lives at the top of:
 
-- `fedrbe_multiomics_utils.py` (single Python source consumed by `04_run_fedrbe.ipynb`, `06_multiomics_kmeans.py`, and `generate_fedrbe_corrected_datasets.py`).
+- `fedrbe_multiomics_utils.py` (single Python source consumed by `04_run_fedrbe.ipynb` and `generate_fedrbe_corrected_datasets.py`).
 - `01_preprocess_eda.ipynb`, `02_prepare_RBE_inputs.ipynb`, `03_central_RBE.ipynb` (mirrored R toggles; must agree with the Python source).
 
 Defaults (`INCLUDE_CLIENT_04 = False`):

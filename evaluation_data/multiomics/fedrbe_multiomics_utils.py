@@ -24,7 +24,6 @@ from __future__ import annotations
 
 import csv
 import json
-import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Sequence
@@ -512,47 +511,6 @@ def fedrbe_simulate_modality(base_dir: Path, modality: str) -> Dict[str, float |
     }
 
 
-def row_zscore(df: pd.DataFrame) -> pd.DataFrame:
-    values = df.to_numpy(dtype=float)
-    means = np.nanmean(values, axis=1, keepdims=True)
-    sds = np.nanstd(values, axis=1, ddof=1, keepdims=True)
-    sds[~np.isfinite(sds) | (sds == 0)] = 1.0
-    scaled = (values - means) / sds
-    return pd.DataFrame(scaled, index=df.index, columns=df.columns)
-
-
-def build_fedsim_combined_kmeans_matrix(base_dir: Path) -> pd.DataFrame:
-    """Build equal-weight all-modality matrix from FedSim-corrected outputs."""
-    blocks = []
-    sample_keys: List[str] | None = None
-    combined_metadata = None
-
-    for modality in MODALITIES:
-        corrected = read_feature_matrix(base_dir / "after" / modality / "FedSim_corrected_data.tsv")
-        metadata = pd.read_csv(base_dir / "before" / modality / "metadata.tsv", sep="\t")
-        metadata = metadata.sort_values(["batch_code", "condition", "rep"]).reset_index(drop=True)
-        corrected = corrected.loc[:, metadata["file"]]
-        corrected.columns = metadata["pseudo_sample"]
-
-        if sample_keys is None:
-            sample_keys = sorted(metadata["pseudo_sample"].unique().tolist())
-            combined_metadata = metadata[["pseudo_sample", "batch_code", "condition", "rep"]].drop_duplicates()
-        elif sorted(metadata["pseudo_sample"].unique().tolist()) != sample_keys:
-            raise ValueError(f"{modality}: pseudo-sample keys do not match previous modalities.")
-
-        corrected = corrected.loc[:, sample_keys]
-        block = row_zscore(corrected) / math.sqrt(corrected.shape[0])
-        block.index = [f"{modality}__{feature}" for feature in block.index]
-        blocks.append(block)
-
-    if sample_keys is None or combined_metadata is None:
-        raise ValueError("No modalities were available for combined matrix.")
-
-    combined = pd.concat(blocks, axis=0)
-    write_feature_matrix(combined, base_dir / "after" / "all_modalities_fedsim_kmeans_matrix.tsv")
-    return combined
-
-
 def write_fedsim_datainfo(base_dir: Path, summaries: pd.DataFrame) -> None:
     datainfo = {
         "method": "Local FedRBE-equivalent XTX/XTY simulation",
@@ -585,5 +543,4 @@ def run_all_fedsim(base_dir: Path) -> pd.DataFrame:
     correction_summary = pd.DataFrame(correction_summaries)
     write_table(correction_summary, base_dir / "after" / "fedsim_correction_summary.tsv", quote=False)
     write_fedsim_datainfo(base_dir, correction_summary)
-    build_fedsim_combined_kmeans_matrix(base_dir)
     return correction_summary

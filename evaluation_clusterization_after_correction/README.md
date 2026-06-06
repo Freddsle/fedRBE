@@ -46,12 +46,11 @@ The notebooks 01-04 are configured to run all five real datasets:
 - `quartet`
 - `ccRCC_proteomics`
 - `multiomics` — joint k-means across all three modalities
-  (Transcriptomics + Proteomics + Metabolomics, each block row-zscored and
-  divided by `sqrt(n_features)` so no single modality dominates the
-  Euclidean distance). The joint matrices are already k-means-ready, so the
-  `multiomics` entry in `datasets.yaml` sets `pre_scaled: true` (and
-  `n_init: 50`), which makes both the central k-means and the FeatureCloud
-  per-client config skip a second StandardScaler pass.
+  (Transcriptomics + Proteomics + Metabolomics rows stacked vertically).
+  Both central k-means and the FeatureCloud `fc_kmeans` app apply their
+  standard per-feature scaling on the joint matrix, the same way they do for
+  every other dataset; the only multiomics-specific tweak in `datasets.yaml`
+  is `n_init: 50` (a robustness override for the small 48-sample matrix).
 
 ### Multiomics-specific prep
 
@@ -76,6 +75,6 @@ matrices.
 ## Adding a new dataset
 
 1. Add a new entry to `evaluation_utils/datasets.yaml`.
-   - Set `pre_scaled: true` (and a higher `n_init`) only for matrices that
-     are already k-means-ready, e.g. row-zscored joint blocks.
+   - Override `n_init` only if k-means convergence on that dataset benefits
+     from extra restarts (e.g. small joint matrices).
 2. Add the dataset name to the `DATASETS` list in each notebook's configuration cell.
