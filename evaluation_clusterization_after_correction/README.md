@@ -58,7 +58,7 @@ Multiomics needs one extra step *before* notebook 01 — building the joint
 matrices and per-client splits from the per-modality matrices:
 
 ```bash
-cd evaluation_clusterization_after_correction/real_datasets/multiomics
+cd evaluation_clusterization_after_correction/real_datasets
 jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
 ```
 

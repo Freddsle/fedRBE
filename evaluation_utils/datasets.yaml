@@ -50,7 +50,7 @@ ccRCC_proteomics:
 # modalities together (Transcriptomics + Proteomics + Metabolomics rows
 # stacked vertically; columns are pseudo-matched samples). The joint matrix
 # itself is built by
-#   evaluation_clusterization_after_correction/real_datasets/multiomics/
+#   evaluation_clusterization_after_correction/real_datasets/
 #       00_build_kmeans_matrices.ipynb
 # which also writes per-client splits under evaluation_data/multiomics/before/.
 # `n_init: 50` is a robustness override for the small (48-sample) joint
