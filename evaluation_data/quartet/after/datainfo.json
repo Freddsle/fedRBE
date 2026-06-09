@@ -1,6 +1,7 @@
 {
   "data_name": "Quartet Data",
   "covariates": ["D6", "F7", "M8"],
+  "prediction_targets": ["condition"],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",

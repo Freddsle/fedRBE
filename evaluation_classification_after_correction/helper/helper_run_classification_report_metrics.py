@@ -17,7 +17,7 @@ from sklearn.metrics import matthews_corrcoef, f1_score
 SCRIPT_FOLDER = Path(__file__).parent
 RESULTS_FOLDER = SCRIPT_FOLDER.parent / "results"
 RESULTS_FOLDER.mkdir(exist_ok=True)
-TRAIN_TEST_RATIO = 0.8
+TRAIN_TEST_RATIO = 0.7
 
 BASE_FOREST_CONFIG = {
     'simple_forest': {
@@ -69,6 +69,7 @@ class DataInfo:
         {
                     "data_name": "<human readable dataset name>",
           "covariates": ["<column_name>"],
+          "prediction_targets": [ "<column_name>" ],
           "datafile": {
             "filename": "...",
             "separator": "\\t",
@@ -86,6 +87,7 @@ class DataInfo:
 
     data_name: str
     covariates: Optional[List[str]]
+    prediction_targets: List[str]
     datafile: FileSpec
     designfile: Optional[FileSpec]
     cohorts: List[CohortInfo]
@@ -100,6 +102,10 @@ class DataInfo:
         self.covariates = raw['covariates']
         if not self.covariates or len(self.covariates) == 0:
             self.covariates = None
+
+        self.prediction_targets = raw['prediction_targets']
+        if not self.prediction_targets or len(self.prediction_targets) == 0:
+            raise ValueError("datainfo.json must specify at least one prediction target column in 'prediction_targets'.")
 
         df_raw = raw['datafile']
         self.datafile = FileSpec(
@@ -175,24 +181,32 @@ class DataInfo:
         Load the data file (and optionally the design file) for one cohort.
 
         The returned DataFrame is always in **samples × features** orientation
-        and includes the covariate column (merged from the design file when one
-        is present, or taken directly from the data file otherwise).
+        and includes any prediction target columns (joined from the design
+        file when present). Covariates are NOT used as features: if covariate
+        column names appear in the data file they are removed from ``data_df``
+        before any join. If a design file exists, prediction target columns are
+        taken from it and joined (aligning on sample index); otherwise the
+        prediction targets are expected to already be present in the data file.
         """
         data_df = self._load_file(self.datafile, cohort_folder)
+        # Remove any covariates that accidentally exist inside the data file
+        if self.covariates is not None:
+            covs_in_data = [c for c in self.covariates if c in data_df.columns]
+            if covs_in_data:
+                data_df = data_df.drop(columns=covs_in_data, errors='ignore')
 
+        # If a design file exists, pull prediction targets from it and join
         if self.designfile is not None:
             design_df = self._load_file(self.designfile, cohort_folder)
-            # Merge only the covariate column, aligning on sample index
-            if self.covariates is not None:
-                data_df = data_df.join(design_df[self.covariates], how='inner')
-        # else: covariates is expected to already be columns in data_df
+            if self.prediction_targets is not None:
+                data_df = data_df.join(design_df[self.prediction_targets], how='inner')
 
-        # Ensure the covariate column exists after loading/merging.
-        for cov in self.covariates or []:
-            if cov not in data_df.columns:
+        # Ensure the prediction target columns exist after loading/merging.
+        for target in self.prediction_targets or []:
+            if target not in data_df.columns:
                 raise ValueError(
-                    f"Covariate '{cov}' not found in cohort data at {cohort_folder}. "
-                    "Either provide a designfile with this covariate or include it in the datafile."
+                    f"Prediction target '{target}' not found in cohort data at {cohort_folder}. "
+                    "Either provide a designfile with this target or include it in the datafile."
                 )
 
         return data_df
@@ -204,15 +218,15 @@ class DataInfo:
     def prepare_cohort_data_files(self, predicted_col: str) -> None:
         """
         For every cohort, load data via :meth:`receive_data` and write a
-        ``tmp_data.csv`` (comma-separated, samples × features + covariate) into
+        ``tmp_data.csv`` (comma-separated, samples × features + predicted target) into
         the cohort folder so the federated forest app can consume it.
         """
         for cohort in self.cohorts:
             cohort_folder = self._base_folder / cohort.folder
             df = self.receive_data(cohort_folder)
-            # Ensure only the predicted column and no other covariates are present
-            other_covariates = set(self.covariates or []) - {predicted_col}
-            df = df.drop(columns=other_covariates, errors='ignore')
+            # Ensure only the predicted target column and no other prediction targets are present
+            other_targets = set(self.prediction_targets or []) - {predicted_col}
+            df = df.drop(columns=other_targets, errors='ignore')
             df.to_csv(cohort_folder / 'tmp_data.csv', sep=',')
 
     def cleanup_cohort_data_files(self,
@@ -403,8 +417,8 @@ class ClassificationExperimentLeaveOneCohortOut:
 
         cohort_folders = self.datainfo.cohort_folders
         cohort_names = [c.name for c in self.datainfo.cohorts]
-        if self.datainfo.covariates is None or len(self.datainfo.covariates) == 0:
-            raise ValueError("DataInfo must specify at least one covariate column, no target exists to classify on.")
+        if not self.datainfo.prediction_targets or len(self.datainfo.prediction_targets) == 0:
+            raise ValueError("DataInfo must specify at least one prediction target column in 'prediction_targets'.")
         n_clients = len(cohort_folders)
         cohorts_parent = cohort_folders[0].parent
         # ensure all cohorts share the same parent
@@ -412,7 +426,7 @@ class ClassificationExperimentLeaveOneCohortOut:
         predicted_column2average_mcc = {}
         predicted_column2average_f1 = {}
         all_output_folders: List[Path] = []
-        for predicted_column in self.datainfo.covariates:
+        for predicted_column in self.datainfo.prediction_targets:
             self.datainfo.prepare_cohort_data_files(predicted_col=predicted_column)
             average_mcc = 0.0
             average_f1 = 0.0
@@ -580,7 +594,7 @@ class ClassificationExperimentTrainTestSplit:
         self.resultfile = resultfile
 
     def run_experiment(self, seed: int, force_run: bool = False) -> None:
-        for predicted_column in self.datainfo.covariates or []:
+        for predicted_column in self.datainfo.prediction_targets or []:
             if not force_run:
                 mcc = self.resultfile.check_experiment(
                     data_name=self.data_name,
@@ -622,8 +636,8 @@ class ClassificationExperimentTrainTestSplit:
             ]
             for out_folder in output_folders:
                 Path(out_folder).mkdir(parents=True, exist_ok=True)
-            if not self.datainfo.covariates or len(self.datainfo.covariates) == 0:
-                raise ValueError("DataInfo must specify at least one covariate column, no target exists to classify on.")
+            if not self.datainfo.prediction_targets or len(self.datainfo.prediction_targets) == 0:
+                raise ValueError("DataInfo must specify at least one prediction target column in 'prediction_targets'.")
 
             for client_folder in cohort_folders:
                 _write_forest_config(client_folder, predicted_column, seed,

@@ -2318,4 +2318,20 @@ ccRCC Data,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,
 ccRCC Data,corrected,MCC,0.9484168381883898,PXD030344,Leave-One-Cohort-Out,51,Condition
 ccRCC Data,corrected,F1_score,0.9741360089186176,PXD030344,Leave-One-Cohort-Out,51,Condition
 ccRCC Data,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,51,Condition
-ccRCC Data,corrected,F1_score,0.9868995633187773,PXD042844,Leave-One-Cohort-Out,51,Condition
+ccRCC Data,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,51,Condition
+Quartet Data,uncorrected,MCC,0.7222222222222222,All,Train-Test-Split,42,condition
+Quartet Data,uncorrected,F1_score,0.7916666666666666,All,Train-Test-Split,42,condition
+Quartet Data,uncorrected,MCC,0.6666666666666666,APT,Train-Test-Split,42,condition
+Quartet Data,uncorrected,F1_score,0.75,APT,Train-Test-Split,42,condition
+Quartet Data,uncorrected,MCC,1.0,FDU,Train-Test-Split,42,condition
+Quartet Data,uncorrected,F1_score,1.0,FDU,Train-Test-Split,42,condition
+Quartet Data,uncorrected,MCC,0.0,NVG,Train-Test-Split,42,condition
+Quartet Data,uncorrected,F1_score,0.25,NVG,Train-Test-Split,42,condition
+Quartet Data,uncorrected,MCC,1.0,BGI,Train-Test-Split,42,condition
+Quartet Data,uncorrected,F1_score,1.0,BGI,Train-Test-Split,42,condition
+Balanced Simulated Data,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,A
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,A
+Balanced Simulated Data,uncorrected,MCC,0.7622792201730545,lab2,Leave-One-Cohort-Out,42,A
+Balanced Simulated Data,uncorrected,F1_score,0.8681006493506493,lab2,Leave-One-Cohort-Out,42,A
+Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,A
+Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,A

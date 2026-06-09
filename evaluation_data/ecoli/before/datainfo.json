@@ -1,6 +1,7 @@
 {
   "data_name": "E. coli Data",
   "covariates": ["Pyr"],
+  "prediction_targets": ["Pyr"],
   "datafile": {
     "filename": "intensities_log_UNION.tsv",
     "separator": "\t",

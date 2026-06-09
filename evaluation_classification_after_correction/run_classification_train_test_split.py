@@ -66,49 +66,50 @@ for num_run in range(NUM_RUNS):
     #     resultfile=RESULTS_FILE,
     # ).run_experiment(seed=seed)
 
-    # Ovarian cancer Data
-    folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
-    ClassificationExperimentTrainTestSplit(
-        preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
-        resultfile=RESULTS_FILE,
-    ).run_experiment(seed=seed)
+    # # Ovarian cancer Data
+    # folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
+    # ClassificationExperimentTrainTestSplit(
+    #     preprocessing_name="uncorrected",
+    #     datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
+    #     resultfile=RESULTS_FILE,
+    # ).run_experiment(seed=seed)
 
-    ClassificationExperimentTrainTestSplit(
-        preprocessing_name="corrected",
-        datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
-        resultfile=RESULTS_FILE,
-    ).run_experiment(seed=seed)
+    # ClassificationExperimentTrainTestSplit(
+    #     preprocessing_name="corrected",
+    #     datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
+    #     resultfile=RESULTS_FILE,
+    # ).run_experiment(seed=seed)
 
-    # Ovarian cancer Data
-    folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
-    ClassificationExperimentTrainTestSplit(
-        preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
-        resultfile=RESULTS_FILE,
-    ).run_experiment(seed=seed)
+    # # Ovarian cancer Data
+    # folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
+    # ClassificationExperimentTrainTestSplit(
+    #     preprocessing_name="uncorrected",
+    #     datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
+    #     resultfile=RESULTS_FILE,
+    # ).run_experiment(seed=seed)
 
-    ClassificationExperimentTrainTestSplit(
-        preprocessing_name="corrected",
-        datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
-        resultfile=RESULTS_FILE,
-    ).run_experiment(seed=seed)
+    # ClassificationExperimentTrainTestSplit(
+    #     preprocessing_name="corrected",
+    #     datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
+    #     resultfile=RESULTS_FILE,
+    # ).run_experiment(seed=seed)
 
-    # E. coli Data
-    folder_ecoli = EVALUATION_DATA_FOLDER / "ecoli"
-    ClassificationExperimentTrainTestSplit(
-        preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_ecoli / "before" / "datainfo.json"),
-        resultfile=RESULTS_FILE,
-    ).run_experiment(seed=seed)
+    # # E. coli Data
+    # folder_ecoli = EVALUATION_DATA_FOLDER / "ecoli"
+    # ClassificationExperimentTrainTestSplit(
+    #     preprocessing_name="uncorrected",
+    #     datainfo=DataInfo(folder_ecoli / "before" / "datainfo.json"),
+    #     resultfile=RESULTS_FILE,
+    # ).run_experiment(seed=seed)
 
-    ClassificationExperimentTrainTestSplit(
-        preprocessing_name="corrected",
-        datainfo=DataInfo(folder_ecoli / "after" / "datainfo.json"),
-        resultfile=RESULTS_FILE,
-    ).run_experiment(seed=seed)
+    # ClassificationExperimentTrainTestSplit(
+    #     preprocessing_name="corrected",
+    #     datainfo=DataInfo(folder_ecoli / "after" / "datainfo.json"),
+    #     resultfile=RESULTS_FILE,
+    # ).run_experiment(seed=seed)
 
-    # Quartet Data
+    # # Quartet Data
+    #TODO fix this to use the correct merged data!
     folder_quartet = EVALUATION_DATA_FOLDER / "quartet"
     ClassificationExperimentTrainTestSplit(
         preprocessing_name="uncorrected",
@@ -122,16 +123,16 @@ for num_run in range(NUM_RUNS):
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
-    # ccRCC Studies Data
-    folder_ccRCC = EVALUATION_DATA_FOLDER / "ccRCC_studies"
-    ClassificationExperimentTrainTestSplit(
-        preprocessing_name="uncorrected",
-        datainfo=DataInfo(folder_ccRCC / "before" / "datainfo.json"),
-        resultfile=RESULTS_FILE,
-    ).run_experiment(seed=seed)
+    # # ccRCC Studies Data
+    # folder_ccRCC = EVALUATION_DATA_FOLDER / "ccRCC_studies"
+    # ClassificationExperimentTrainTestSplit(
+    #     preprocessing_name="uncorrected",
+    #     datainfo=DataInfo(folder_ccRCC / "before" / "datainfo.json"),
+    #     resultfile=RESULTS_FILE,
+    # ).run_experiment(seed=seed)
 
-    ClassificationExperimentTrainTestSplit(
-        preprocessing_name="corrected",
-        datainfo=DataInfo(folder_ccRCC / "after" / "datainfo.json"),
-        resultfile=RESULTS_FILE,
-    ).run_experiment(seed=seed)
+    # ClassificationExperimentTrainTestSplit(
+    #     preprocessing_name="corrected",
+    #     datainfo=DataInfo(folder_ccRCC / "after" / "datainfo.json"),
+    #     resultfile=RESULTS_FILE,
+    # ).run_experiment(seed=seed)

@@ -1,6 +1,7 @@
 {
   "data_name": "ccRCC Data",
   "covariates": ["Condition"],
+  "prediction_targets": ["Condition"],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",
