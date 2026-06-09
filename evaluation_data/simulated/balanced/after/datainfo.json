@@ -1,13 +1,7 @@
 {
-<<<<<<< HEAD
   "data_name": "Balanced Simulated Data",
   "covariates": ["A"],
   "prediction_targets": ["A"],
-=======
-  "covariates": [
-    "A"
-  ],
->>>>>>> bc633c4ea006eb0e08d6b50f5f37dff2be6aa0a8
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",
