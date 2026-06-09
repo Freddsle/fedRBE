@@ -12,6 +12,5 @@ flimmaBatchCorrection:
   min_samples: 0
   normalizationMethod: null
   position: 3
-  reference_batch: true
   separator: "\t"
   smpc: true

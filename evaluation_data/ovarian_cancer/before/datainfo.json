@@ -1,5 +1,4 @@
 {
-  "data_name": "Ovarian cancer Data",
   "covariates": ["HGSC"],
   "prediction_targets": ["HGSC"],
   "datafile": {

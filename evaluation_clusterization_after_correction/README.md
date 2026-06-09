@@ -1,16 +1,14 @@
 # Clustering Evaluation After Batch Correction
 
 K-means clustering evaluation (central vs. federated) on real datasets
-<<<<<<< HEAD
-(ecoli, ovarian_cancer, quartet, ccRCC_proteomics, multiomics). Measures the effect of fedRBE batch correction
-=======
-(ecoli, ovarian_cancer, quartet, scp_protein_s2). Measures the effect of fedRBE batch correction
->>>>>>> new_ecoli_data
-on clustering quality using ARI, MCC, and accuracy.
+(`ecoli`, `ovarian_cancer`, `quartet`, `ccRCC_proteomics`, and
+`multiomics`). It measures the effect of fedRBE batch correction on
+clustering quality using ARI, MCC, and accuracy.
 
 All data is read directly from `evaluation_data/` — no copies are made.
-The `real_datasets/` directory is a **generated output folder** (not tracked
-in git) that holds intermediate results, federated inputs, and metrics.
+Generated `prepared/`, `inputs/`, `kmeans_res/`, and `metrics/` directories
+under `real_datasets/` are not tracked. The notebooks, scripts, app source,
+and dataset manifests required to regenerate them are tracked.
 
 ## Notebooks (run in order)
 
@@ -41,15 +39,45 @@ jupyter execute 04_analysis_metrics_plots.ipynb
 
 ## Default dataset set
 
-The notebooks are currently configured to run:
+The notebooks 01-04 are configured to run all five real datasets:
 
 - `ecoli`
 - `ovarian_cancer`
 - `quartet`
 - `ccRCC_proteomics`
-- `multiomics`
+- `multiomics` — joint k-means across all three modalities
+  (Transcriptomics + Proteomics + Metabolomics rows stacked vertically).
+  Both central k-means and the FeatureCloud `fc_kmeans` app apply their
+  standard per-feature scaling on the joint matrix, the same way they do for
+  every other dataset; the only multiomics-specific tweak in `datasets.yaml`
+  is `n_init: 50` (a robustness override for the small 48-sample matrix).
+
+### Multiomics-specific prep
+
+Multiomics needs one extra step *before* notebook 01 — building the joint
+matrices and per-client splits from the per-modality matrices:
+
+```bash
+cd evaluation_clusterization_after_correction/real_datasets
+jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
+```
+
+This writes `all_modalities_{before,corrected,fedsim}_kmeans_matrix.tsv`
+under `evaluation_data/multiomics/after/` (shared with
+`evaluation/evaluation_multiomics.ipynb`) and per-client
+`design.tsv`/`intensities.tsv` under
+`evaluation_clusterization_after_correction/real_datasets/multiomics/before/`
+(k-means-only inputs).
+After that, notebooks 01-04 treat multiomics like any other dataset.
+
+The number of clients (3 by default, 4 with `INCLUDE_CLIENT_04 = True`) is
+controlled by `evaluation_data/multiomics/fedrbe_multiomics_utils.py`; it
+flows through both the per-modality fedRBE pipeline and the joint k-means
+matrices.
 
 ## Adding a new dataset
 
 1. Add a new entry to `evaluation_utils/datasets.yaml`.
+   - Override `n_init` only if k-means convergence on that dataset benefits
+     from extra restarts (e.g. small joint matrices).
 2. Add the dataset name to the `DATASETS` list in each notebook's configuration cell.

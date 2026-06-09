@@ -41,6 +41,8 @@ class DatasetConfig:
     design_file: str
     sample_col: str
     condition_col: str
+    n_init: int = 10
+    extra: Dict[str, str] = None  # type: ignore[assignment]
 
 
 def dataset_configs(repo_root: Path) -> Dict[str, DatasetConfig]:
@@ -61,6 +63,8 @@ def dataset_configs(repo_root: Path) -> Dict[str, DatasetConfig]:
             design_file=d["design_file"],
             sample_col=d["sample_col"],
             condition_col=d["condition_col"],
+            n_init=int(d.get("n_init", 10)),
+            extra={k: str(d[k]) for k in d.get("extra", {})},
         )
     return configs
 
@@ -295,15 +299,28 @@ def scale_like_federated(feature_by_sample: pd.DataFrame) -> np.ndarray:
 
 
 def run_central_kmeans(
-    feature_by_sample: pd.DataFrame, k_values: Sequence[int], seed: int
+    feature_by_sample: pd.DataFrame,
+    k_values: Sequence[int],
+    seed: int,
+    n_init: int = 10,
 ) -> Dict[int, pd.Series]:
-    """Run k-means for each k and return {k: Series of cluster labels indexed by sample name}."""
-    # StandardScaler: center + scale by population std (ddof=0), per feature — sklearn default
-    data = StandardScaler().fit_transform(feature_by_sample.to_numpy(dtype=float).T)
+    """Run k-means for each k and return {k: Series of cluster labels indexed by sample name}.
+
+    Applies a per-feature ``StandardScaler`` pass (centering + scale by population std,
+    ddof=0) before running k-means, matching the federated ``fc_kmeans`` app.
+
+    Parameters
+    ----------
+    n_init
+        Number of k-means random initializations.
+    """
+    array = feature_by_sample.to_numpy(dtype=float).T
+    # StandardScaler: center + scale by population std (ddof=0), per feature.
+    data = StandardScaler().fit_transform(array)
     samples = list(feature_by_sample.columns)
     outputs: Dict[int, pd.Series] = {}
     for k in sorted(set(k_values)):
-        km = KMeans(n_clusters=k, random_state=seed)
+        km = KMeans(n_clusters=k, random_state=seed, n_init=n_init)
         labels = km.fit_predict(data)
         outputs[k] = pd.Series(labels, index=samples)
     return outputs
@@ -413,7 +430,11 @@ def write_kmeans_config(
     max_global_iter: int = 1,
     seed: int = 11,
 ) -> None:
-    """Write a ``config_kmeans.yml`` for the FeatureCloud fc_kmeans app."""
+    """Write a ``config_kmeans.yml`` for the FeatureCloud fc_kmeans app.
+
+    The app applies its own per-feature centering and variance scaling on each
+    client's intensities before running k-means.
+    """
     k_min = min(k_values)
     k_max = max(k_values)
     content = (
@@ -478,7 +499,10 @@ def prepare_variant_inputs(
         lab_dir.mkdir(parents=True, exist_ok=True)
         write_intensities(matrix[lab_meta["file"]], lab_dir / "intensities.tsv")
         write_design(lab_meta, lab_dir / "design.tsv")
-        write_kmeans_config(lab_dir / "config_kmeans.yml", k_values)
+        write_kmeans_config(
+            lab_dir / "config_kmeans.yml",
+            k_values,
+        )
 
     return variant_dir
 

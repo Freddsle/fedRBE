@@ -76,13 +76,13 @@ This guide provides step-by-step instructions to reproduce the analyses and resu
 
 4. **Set up R environment:**
 
-   `limma` and `variancepartition` are Bioconductor packages and must be installed separately from the CRAN packages:
+   `requirements_r.txt` lists CRAN, Bioconductor, and GitHub dependencies in
+   separate sections. Install them with:
 
    ```bash
-   # Install CRAN packages
-   Rscript -e 'pkgs <- readLines("requirements_r.txt"); pkgs <- pkgs[!grepl("^#", pkgs) & nzchar(trimws(pkgs))]; install.packages(pkgs[!pkgs %in% c("limma", "variancepartition")], repos = "http://cran.rstudio.com/")'
-   # Install Bioconductor packages
-   Rscript -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager"); BiocManager::install(c("limma", "variancepartition"))'
+   Rscript -e 'install.packages(c("data.table","devtools","ggpubr","gridExtra","ggsci","ggtext","glue","IRkernel","invgamma","jsonlite","knitr","nipals","patchwork","pheatmap","reshape2","scales","tidyverse","umap","viridis","WGCNA"), repos="https://cloud.r-project.org")'
+   Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("affy","GEOquery","hgu133acdf","hgu133plus2cdf","limma","variancePartition"))'
+   Rscript -e 'if (!requireNamespace("devtools", quietly=TRUE)) install.packages("devtools", repos="https://cloud.r-project.org"); devtools::install_github("mwgrassgreen/RobNorm")'
    ```
 
 ---
@@ -93,7 +93,10 @@ This section guides you through running both federated and centralized batch eff
 
 ### 1. Obtaining federated corrected data
 
-Use the provided utility script to perform federated batch effect correction on your datasets.
+Use the provided utility script to perform the configured federated batch
+effect correction experiments. The checked-in configuration currently runs
+the three multiomics modalities; edit the experiment list in the script to
+enable the other datasets.
 
 ```bash
 python3 ./generate_fedrbe_corrected_datasets.py

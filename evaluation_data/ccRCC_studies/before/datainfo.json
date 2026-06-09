@@ -1,5 +1,4 @@
 {
-  "data_name": "ccRCC Data",
   "covariates": ["Condition"],
   "prediction_targets": ["Condition"],
   "datafile": {

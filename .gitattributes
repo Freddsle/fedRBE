@@ -32,3 +32,8 @@ evaluation_data/simulated/*/before/lab*/intensities.tsv filter=lfs diff=lfs merg
 evaluation_data/simulated/*/before/intermediate/1_intensities_data_no_batch.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/FedSim_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/intensities_R_corrected.tsv filter=lfs diff=lfs merge=lfs -text
+
+# Multiomics source data and retained correction results
+evaluation_data/multiomics/figshare_data/Transcriptomics_fulldataset_log2FPKM_r26907c180.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/multiomics/after/Transcriptomics/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/multiomics/after/Transcriptomics/intensities_log_Rcorrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
