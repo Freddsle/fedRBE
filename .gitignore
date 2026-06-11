@@ -27,6 +27,7 @@ share/python-wheels/
 MANIFEST
 .vscode
 .codex
+.session/
 
 # R files
 .RData
