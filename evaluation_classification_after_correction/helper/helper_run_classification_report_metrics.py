@@ -51,12 +51,25 @@ class FileSpec:
     samplename_column: Optional[str]
     featurename_column: Optional[str]
 
+    @staticmethod
+    def from_dict(d: dict) -> 'FileSpec':
+        return FileSpec(
+            filename=d['filename'],
+            separator=d['separator'],
+            rotation=d['rotation'],
+            samplename_column=d.get('samplename_column'),
+            featurename_column=d.get('featurename_column'),
+        )
+
 
 @dataclass
 class CohortInfo:
     """Describes one cohort entry from datainfo.json."""
     name: str
     folder: str   # path relative to the datainfo.json file's parent directory
+    designfile: Optional[FileSpec] = None
+        # path to the design file for this cohort, relative to this cohort folder
+        # Used to relate the design file from the before correction data to after correction data
 
 
 class DataInfo:
@@ -89,7 +102,6 @@ class DataInfo:
     covariates: Optional[List[str]]
     prediction_targets: List[str]
     datafile: FileSpec
-    designfile: Optional[FileSpec]
     cohorts: List[CohortInfo]
 
     def __init__(self, datainfo_file: Union[str, Path]) -> None:
@@ -107,6 +119,7 @@ class DataInfo:
         if not self.prediction_targets or len(self.prediction_targets) == 0:
             raise ValueError("datainfo.json must specify at least one prediction target column in 'prediction_targets'.")
 
+        # Load data
         df_raw = raw['datafile']
         self.datafile = FileSpec(
             filename=df_raw['filename'],
@@ -116,20 +129,8 @@ class DataInfo:
             featurename_column=df_raw.get('featurename_column'),
         )
 
-        des_raw = raw.get('designfile')
-        if des_raw is not None:
-            self.designfile = FileSpec(
-                filename=des_raw['filename'],
-                separator=des_raw['separator'],
-                rotation=des_raw['rotation'],
-                samplename_column=des_raw.get('samplename_column'),
-                featurename_column=des_raw.get('featurename_column'),
-            )
-        else:
-            self.designfile = None
-
         self.cohorts = [
-            CohortInfo(name=c['name'], folder=c['folder'])
+            CohortInfo(name=c['name'], folder=c['folder'], designfile=FileSpec.from_dict(c['designfile']) if c.get('designfile') else None)
             for c in raw['cohorts']
         ]
 
@@ -176,30 +177,30 @@ class DataInfo:
 
         return df
 
-    def receive_data(self, cohort_folder: Path) -> pd.DataFrame:
+    def receive_data(self, cohort: CohortInfo) -> pd.DataFrame:
         """
-        Load the data file (and optionally the design file) for one cohort.
+        Load the data file (and optionally the design files) for one cohort.
+        The designfile is exclusively used to get the prediction_targets column.
 
         The returned DataFrame is always in **samples × features** orientation
-        and includes any prediction target columns (joined from the design
-        file when present). Covariates are NOT used as features: if covariate
-        column names appear in the data file they are removed from ``data_df``
-        before any join. If a design file exists, prediction target columns are
-        taken from it and joined (aligning on sample index); otherwise the
-        prediction targets are expected to already be present in the data file.
+        and includes any prediction target columns.
+        Covariates are specifically excluded.
+        Throws an error if the final df misses any of the prediction target columns after
+        loading/merging.
         """
+        cohort_folder = self._base_folder / cohort.folder
         data_df = self._load_file(self.datafile, cohort_folder)
-        # Remove any covariates that accidentally exist inside the data file
-        if self.covariates is not None:
-            covs_in_data = [c for c in self.covariates if c in data_df.columns]
-            if covs_in_data:
-                data_df = data_df.drop(columns=covs_in_data, errors='ignore')
 
         # If a design file exists, pull prediction targets from it and join
-        if self.designfile is not None:
-            design_df = self._load_file(self.designfile, cohort_folder)
-            if self.prediction_targets is not None:
-                data_df = data_df.join(design_df[self.prediction_targets], how='inner')
+        if cohort.designfile:
+            design_df = self._load_file(cohort.designfile, cohort_folder)
+            design_df = design_df[self.prediction_targets]
+            if not design_df.empty:
+                data_df = pd.merge(data_df, design_df, left_index=True, right_index=True)
+
+        # Delete any covariates
+        if self.covariates:
+            data_df = data_df.drop(columns=self.covariates, errors='ignore')
 
         # Ensure the prediction target columns exist after loading/merging.
         for target in self.prediction_targets or []:
@@ -223,7 +224,7 @@ class DataInfo:
         """
         for cohort in self.cohorts:
             cohort_folder = self._base_folder / cohort.folder
-            df = self.receive_data(cohort_folder)
+            df = self.receive_data(cohort)
             # Ensure only the predicted target column and no other prediction targets are present
             other_targets = set(self.prediction_targets or []) - {predicted_col}
             df = df.drop(columns=other_targets, errors='ignore')
@@ -257,7 +258,7 @@ class DataInfo:
 # ---------------------------------------------------------------------------
 
 def _write_forest_config(client_folder: Path,
-                          covariate: str,
+                          target: str,
                           seed: int,
                           train_test_ratio: float) -> None:
     """
@@ -269,7 +270,7 @@ def _write_forest_config(client_folder: Path,
     """
     config = copy.deepcopy(BASE_FOREST_CONFIG)
     sf = config['simple_forest']
-    sf['predicted_feature_name'] = covariate
+    sf['predicted_feature_name'] = target
     sf['data_filename'] = 'tmp_data.csv'
     sf['features_as_columns'] = True
     sf['csv_seperator'] = ','

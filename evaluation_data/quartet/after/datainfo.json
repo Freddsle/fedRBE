@@ -9,23 +9,50 @@
     "samplename_column": null,
     "featurename_column": null
   },
-  "designfile": null,
   "cohorts": [
     {
       "name": "APT",
-      "folder": "individual_results/APT"
+      "folder": "individual_results/APT",
+      "designfile": {
+        "filename": "../../../before/APT/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": {}
+      }
     },
     {
       "name": "FDU",
-      "folder": "individual_results/FDU"
+      "folder": "individual_results/FDU",
+      "designfile": {
+        "filename": "../../../before/FDU/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": {}
+      }
     },
     {
       "name": "NVG",
-      "folder": "individual_results/NVG"
+      "folder": "individual_results/NVG",
+      "designfile": {
+        "filename": "../../../before/NVG/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": {}
+      }
     },
     {
       "name": "BGI",
-      "folder": "individual_results/BGI"
+      "folder": "individual_results/BGI",
+      "designfile": {
+        "filename": "../../../before/BGI/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": {}
+      }
     }
   ]
 }

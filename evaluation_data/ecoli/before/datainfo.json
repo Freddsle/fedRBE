@@ -1,6 +1,10 @@
 {
-  "covariates": ["Pyr"],
-  "prediction_targets": ["Pyr"],
+  "covariates": [
+    "Pyr"
+  ],
+  "prediction_targets": [
+    "Pyr"
+  ],
   "datafile": {
     "filename": "intensities_log_UNION.tsv",
     "separator": "\t",
@@ -8,33 +12,61 @@
     "samplename_column": null,
     "featurename_column": "rowname"
   },
-  "designfile": {
-    "filename": "design.tsv",
-    "separator": "\t",
-    "rotation": "samples x features",
-    "samplename_column": "file",
-    "featurename_column": null
-  },
   "cohorts": [
     {
       "name": "lab_A",
-      "folder": "lab_A"
+      "folder": "lab_A",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab_B",
-      "folder": "lab_B"
+      "folder": "lab_B",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab_C",
-      "folder": "lab_C"
+      "folder": "lab_C",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab_D",
-      "folder": "lab_D"
+      "folder": "lab_D",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab_E",
-      "folder": "lab_E"
+      "folder": "lab_E",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     }
   ]
 }

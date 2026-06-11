@@ -1,7 +1,11 @@
 {
   "data_name": "E. coli Data",
-  "covariates": ["Pyr"],
-  "prediction_targets": ["Pyr"],
+  "covariates": [
+    "Pyr"
+  ],
+  "prediction_targets": [
+    "Pyr"
+  ],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",
@@ -9,27 +13,61 @@
     "samplename_column": null,
     "featurename_column": null
   },
-  "designfile": null,
   "cohorts": [
     {
       "name": "lab_A",
-      "folder": "individual_results/lab_A"
+      "folder": "individual_results/lab_A",
+      "designfile": {
+        "filename": "../../../before/lab_A/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab_B",
-      "folder": "individual_results/lab_B"
+      "folder": "individual_results/lab_B",
+      "designfile": {
+        "filename": "../../../before/lab_B/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab_C",
-      "folder": "individual_results/lab_C"
+      "folder": "individual_results/lab_C",
+      "designfile": {
+        "filename": "../../../before/lab_C/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab_D",
-      "folder": "individual_results/lab_D"
+      "folder": "individual_results/lab_D",
+      "designfile": {
+        "filename": "../../../before/lab_D/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab_E",
-      "folder": "individual_results/lab_E"
+      "folder": "individual_results/lab_E",
+      "designfile": {
+        "filename": "../../../before/lab_E/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     }
   ]
 }

@@ -2335,3 +2335,43 @@ Balanced Simulated Data,uncorrected,MCC,0.7622792201730545,lab2,Leave-One-Cohort
 Balanced Simulated Data,uncorrected,F1_score,0.8681006493506493,lab2,Leave-One-Cohort-Out,42,A
 Balanced Simulated Data,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,A
 Balanced Simulated Data,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,A
+Quartet Data,corrected,MCC,1.0,All,Train-Test-Split,42,condition
+Quartet Data,corrected,F1_score,1.0,All,Train-Test-Split,42,condition
+Quartet Data,corrected,MCC,1.0,APT,Train-Test-Split,42,condition
+Quartet Data,corrected,F1_score,1.0,APT,Train-Test-Split,42,condition
+Quartet Data,corrected,MCC,1.0,FDU,Train-Test-Split,42,condition
+Quartet Data,corrected,F1_score,1.0,FDU,Train-Test-Split,42,condition
+Quartet Data,corrected,MCC,1.0,NVG,Train-Test-Split,42,condition
+Quartet Data,corrected,F1_score,1.0,NVG,Train-Test-Split,42,condition
+Quartet Data,corrected,MCC,1.0,BGI,Train-Test-Split,42,condition
+Quartet Data,corrected,F1_score,1.0,BGI,Train-Test-Split,42,condition
+Quartet Data,uncorrected,MCC,0.6666666666666666,All,Train-Test-Split,43,condition
+Quartet Data,uncorrected,F1_score,0.75,All,Train-Test-Split,43,condition
+Quartet Data,uncorrected,MCC,0.5,APT,Train-Test-Split,43,condition
+Quartet Data,uncorrected,F1_score,0.625,APT,Train-Test-Split,43,condition
+Quartet Data,uncorrected,MCC,0.8333333333333334,FDU,Train-Test-Split,43,condition
+Quartet Data,uncorrected,F1_score,0.875,FDU,Train-Test-Split,43,condition
+Quartet Data,uncorrected,MCC,0.3333333333333333,NVG,Train-Test-Split,43,condition
+Quartet Data,uncorrected,F1_score,0.5,NVG,Train-Test-Split,43,condition
+Quartet Data,uncorrected,MCC,1.0,BGI,Train-Test-Split,43,condition
+Quartet Data,uncorrected,F1_score,1.0,BGI,Train-Test-Split,43,condition
+Quartet Data,corrected,MCC,1.0,All,Train-Test-Split,43,condition
+Quartet Data,corrected,F1_score,1.0,All,Train-Test-Split,43,condition
+Quartet Data,corrected,MCC,1.0,APT,Train-Test-Split,43,condition
+Quartet Data,corrected,F1_score,1.0,APT,Train-Test-Split,43,condition
+Quartet Data,corrected,MCC,1.0,FDU,Train-Test-Split,43,condition
+Quartet Data,corrected,F1_score,1.0,FDU,Train-Test-Split,43,condition
+Quartet Data,corrected,MCC,1.0,NVG,Train-Test-Split,43,condition
+Quartet Data,corrected,F1_score,1.0,NVG,Train-Test-Split,43,condition
+Quartet Data,corrected,MCC,1.0,BGI,Train-Test-Split,43,condition
+Quartet Data,corrected,F1_score,1.0,BGI,Train-Test-Split,43,condition
+Quartet Data,uncorrected,MCC,0.7777777777777778,All,Train-Test-Split,44,condition
+Quartet Data,uncorrected,F1_score,0.8333333333333334,All,Train-Test-Split,44,condition
+Quartet Data,uncorrected,MCC,0.8333333333333334,APT,Train-Test-Split,44,condition
+Quartet Data,uncorrected,F1_score,0.875,APT,Train-Test-Split,44,condition
+Quartet Data,uncorrected,MCC,1.0,FDU,Train-Test-Split,44,condition
+Quartet Data,uncorrected,F1_score,1.0,FDU,Train-Test-Split,44,condition
+Quartet Data,uncorrected,MCC,0.0,NVG,Train-Test-Split,44,condition
+Quartet Data,uncorrected,F1_score,0.25,NVG,Train-Test-Split,44,condition
+Quartet Data,uncorrected,MCC,1.0,BGI,Train-Test-Split,44,condition
+Quartet Data,uncorrected,F1_score,1.0,BGI,Train-Test-Split,44,condition

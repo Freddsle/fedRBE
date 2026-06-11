@@ -9,29 +9,50 @@
     "samplename_column": {},
     "featurename_column": "rowname"
   },
-  "designfile": {
-    "filename": "design.tsv",
-    "separator": "\t",
-    "rotation": "samples x features",
-    "samplename_column": "file",
-    "featurename_column": {}
-  },
   "cohorts": [
     {
       "name": "APT",
-      "folder": "APT"
+      "folder": "APT",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": {}
+      }
     },
     {
       "name": "FDU",
-      "folder": "FDU"
+      "folder": "FDU",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": {}
+      }
     },
     {
       "name": "NVG",
-      "folder": "NVG"
+      "folder": "NVG",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": {}
+      }
     },
     {
       "name": "BGI",
-      "folder": "BGI"
+      "folder": "BGI",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": {}
+      }
     }
   ]
 }
