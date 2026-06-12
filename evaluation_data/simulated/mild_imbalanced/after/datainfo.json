@@ -1,10 +1,10 @@
 {
-  "data_name": "Mildly Imbalanced Simulated Data",
+  "data_name": "Mildly Imbalanced Simulated",
   "covariates": [
     "A"
   ],
   "prediction_targets": [
-    "A"
+    "condition"
   ],
   "datafile": {
     "filename": "full_corrected_data.csv",

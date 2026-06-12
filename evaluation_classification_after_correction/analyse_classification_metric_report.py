@@ -39,6 +39,8 @@ if not os.path.exists(RESULTS_FILE):
 
 # Load classification metric report
 df = pd.read_csv(RESULTS_FILE)
+if 'learning_type' not in df.columns:
+    raise ValueError(f"Expected 'learning_type' column in {RESULTS_FILE} not found. Please check the file.")
 # remove duplicates if any
 df = df.drop_duplicates()
 
@@ -82,7 +84,7 @@ for metric_name in df['metric_name'].unique():
         for cv_method in df['cross_validation_method'].unique():
             df_subset = df[(df['metric_name'] == metric_name) & \
                            (df['cross_validation_method'] == cv_method) & \
-                            (df['predicted_target'] == target)]
+                            (df['predicted_target'] == target)].copy()
 
             # filter out average rows
             df_subset = df_subset[df_subset['predicted_client_name'] != AVERAGE_CLIENT_NAME]
@@ -90,6 +92,10 @@ for metric_name in df['metric_name'].unique():
 
             # we add the predicted target to the data name
             df_subset['data_name'] = df_subset.apply(lambda row: f"{row['data_name']} (Predicted Target: {row['predicted_target']})", axis=1)
+            df_subset['plot_hue'] = df_subset.apply(
+                lambda row: f"{row['data_preprocessing_name']} / {row['learning_type']}",
+                axis=1,
+            )
 
             # swarmplot
             plt.figure(figsize=(14, 8))
@@ -97,7 +103,7 @@ for metric_name in df['metric_name'].unique():
                 data=df_subset,
                 x='data_name',
                 y='metric_value',
-                hue='data_preprocessing_name',
+                hue='plot_hue',
             )
             axes.set_facecolor(background_color)
             plt.xlabel("")
@@ -118,7 +124,7 @@ for metric_name in df['metric_name'].unique():
                 data=df_subset,
                 x='data_name',
                 y='metric_value',
-                hue='data_preprocessing_name',
+                hue='plot_hue',
                 medianprops=dict(color=colour_schema.get('boxplot_median_marker_color', '#FF0000'), linewidth=2)
             )
             axes.set_facecolor(background_color)
@@ -135,7 +141,7 @@ for metric_name in df['metric_name'].unique():
             print(f"Saved plot to {output_png}")
 
 # summary statistics
-summary = df.groupby(['data_preprocessing_name', 'cross_validation_method', 'metric_name', 'data_name', 'predicted_client_name'])['metric_value'].agg(['mean', 'std', 'count'])
+summary = df.groupby(['data_preprocessing_name', 'learning_type', 'cross_validation_method', 'metric_name', 'data_name', 'predicted_client_name'])['metric_value'].agg(['mean', 'std', 'count'])
 summary_output_file = os.path.join(SCRIPT_DIR, "classification_metric_report_summary.csv")
 summary.to_csv(summary_output_file)
 print(f"\nSummary statistics saved to {summary_output_file}")

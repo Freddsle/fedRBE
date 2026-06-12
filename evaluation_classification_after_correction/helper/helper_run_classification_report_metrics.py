@@ -18,6 +18,9 @@ SCRIPT_FOLDER = Path(__file__).parent
 RESULTS_FOLDER = SCRIPT_FOLDER.parent / "results"
 RESULTS_FOLDER.mkdir(exist_ok=True)
 TRAIN_TEST_RATIO = 0.7
+LEARNING_TYPE_FEDERATED = "federated"
+LEARNING_TYPE_CENTRALIZED = "centralized"
+LEARNING_TYPES = [LEARNING_TYPE_FEDERATED, LEARNING_TYPE_CENTRALIZED]
 
 BASE_FOREST_CONFIG = {
     'simple_forest': {
@@ -190,18 +193,29 @@ class DataInfo:
         """
         cohort_folder = self._base_folder / cohort.folder
         data_df = self._load_file(self.datafile, cohort_folder)
-
+        # TODO: delete this todo and the print statements in this method
         # If a design file exists, pull prediction targets from it and join
         if cohort.designfile:
+            print(f"Loading design file for cohort '{cohort.name}' to retrieve prediction targets.")
             design_df = self._load_file(cohort.designfile, cohort_folder)
             design_df = design_df[self.prediction_targets]
+            print("Loaded columns from design file:", design_df.columns.tolist())
+            print("Union - intersection of data and design indexes (basically how many samples are in either design or data but not both):")
+            print(set(data_df.index).union(set(design_df.index)) - set(data_df.index).intersection(set(design_df.index)))
+            # take the prediction targets from design even if provided in the data_df
+            data_df = data_df.drop(columns=self.prediction_targets, errors='ignore')
             if not design_df.empty:
+                print("Merging data and design on index...")
                 data_df = pd.merge(data_df, design_df, left_index=True, right_index=True)
 
         # Delete any covariates
         if self.covariates:
-            data_df = data_df.drop(columns=self.covariates, errors='ignore')
+            columns_to_drop = [col for col in self.covariates if col not in self.prediction_targets]
+                # covariates might be prediction targets
+            print(f"Dropping covariate columns from cohort '{cohort.name}': {columns_to_drop}")
+            data_df = data_df.drop(columns=columns_to_drop, errors='ignore')
 
+        print("Prediction target: ", self.prediction_targets)
         # Ensure the prediction target columns exist after loading/merging.
         for target in self.prediction_targets or []:
             if target not in data_df.columns:
@@ -281,6 +295,65 @@ def _write_forest_config(client_folder: Path,
         yaml.safe_dump(config, f)
 
 
+def _write_centralized_data_file(input_folder: Path, source_folders: List[Path]) -> None:
+    """
+    Combine prepared per-cohort ``tmp_data.csv`` files into one centralized
+    client folder that can be consumed by the forest app.
+    """
+    input_folder.mkdir(parents=True, exist_ok=True)
+    dfs = [
+        pd.read_csv(source_folder / 'tmp_data.csv', index_col=0)
+        for source_folder in source_folders
+    ]
+    pd.concat(dfs, axis=0).to_csv(input_folder / 'tmp_data.csv', sep=',')
+
+
+def _read_model_and_info(output_folder: Path) -> tuple[RandomForestClassifier, dict]:
+    """Load the global forest and model metadata from a simulation output folder."""
+    model_path = output_folder / 'global_model.pkl'
+    if not model_path.exists():
+        raise FileNotFoundError(f"Model not found in {model_path}.")
+
+    with open(model_path, 'rb') as f:
+        global_forest: RandomForestClassifier = pickle.load(f)
+    with open(output_folder / 'model_info.yaml', 'r', encoding='utf-8') as f:
+        model_info = yaml.safe_load(f)
+    return global_forest, model_info
+
+
+def _evaluate_model_on_test_data(model: RandomForestClassifier,
+                                 model_info: dict,
+                                 test_data_path: Path,
+                                 predicted_column: str) -> tuple[float, float]:
+    """Evaluate a trained forest against a prepared held-out cohort file."""
+    if not test_data_path.exists():
+        raise FileNotFoundError(f"Test data not found in {test_data_path}.")
+
+    test_data = pd.read_csv(test_data_path)
+    used_features = model_info['used_features']
+
+    # Transpose if features ended up as rows rather than columns
+    if not any(col in test_data.columns for col in used_features):
+        test_data = test_data.transpose()
+
+    required_cols = used_features + [predicted_column]
+    if not all(col in test_data.columns for col in required_cols):
+        print(f"Test data in {test_data_path} does not contain all required features. "
+                f"Adding NaNs for missing features.")
+        missing = set(required_cols) - set(test_data.columns)
+        missing_df = pd.DataFrame(
+            {feat: float('nan') for feat in missing}, index=test_data.index
+        )
+        test_data = pd.concat([test_data, missing_df], axis=1)
+
+    true_labels = test_data[predicted_column].values
+    predictions = model.predict(test_data[used_features])
+
+    mcc = float(matthews_corrcoef(true_labels, predictions))  # type: ignore
+    f1 = float(f1_score(true_labels, predictions, average='weighted'))  # type: ignore
+    return mcc, f1
+
+
 # ---------------------------------------------------------------------------
 # Result file class
 # ---------------------------------------------------------------------------
@@ -292,7 +365,8 @@ class ResultFile:
     The file has these columns::
 
         data_name, data_preprocessing_name, metric_name, metric_value,
-        predicted_client_name, cross_validation_method, seed
+        predicted_client_name, cross_validation_method, seed, predicted_target,
+        learning_type
     """
 
     def __init__(self, path: Union[str, Path]) -> None:
@@ -305,7 +379,8 @@ class ResultFile:
                          predicted_client_name: str,
                          cross_validation_method: str,
                          seed: int,
-                         predicted_target: str) -> float:
+                         predicted_target: str,
+                         learning_type: str) -> float:
         """
         Return the existing metric value if there is already a row whose values match *all*
         provided columns (every column except ``metric_value``).
@@ -316,6 +391,8 @@ class ResultFile:
         if not self.path.exists():
             return False
         df = pd.read_csv(self.path)
+        if 'learning_type' not in df.columns:
+            return False
         mask = (
             (df['data_name'] == data_name)
             & (df['data_preprocessing_name'] == data_preprocessing_name)
@@ -324,6 +401,7 @@ class ResultFile:
             & (df['cross_validation_method'] == cross_validation_method)
             & (df['seed'] == seed)
             & (df['predicted_target'] == predicted_target)
+            & (df['learning_type'] == learning_type)
         )
         if mask.any():
             return df.loc[mask, 'metric_value'].iloc[0]
@@ -337,7 +415,8 @@ class ResultFile:
                           predicted_client_name: str,
                           cross_validation_method: str,
                           seed: int,
-                          predicted_target: str) -> None:
+                          predicted_target: str,
+                          learning_type: str) -> None:
         """
         Write a row to the result file.
 
@@ -352,10 +431,13 @@ class ResultFile:
             'predicted_client_name': predicted_client_name,
             'cross_validation_method': cross_validation_method,
             'seed': seed,
-            'predicted_target': predicted_target
+            'predicted_target': predicted_target,
+            'learning_type': learning_type
         }
         if self.path.exists():
             df = pd.read_csv(self.path)
+            if 'learning_type' not in df.columns:
+                df['learning_type'] = pd.NA
             mask = (
                 (df['data_name'] == data_name)
                 & (df['data_preprocessing_name'] == data_preprocessing_name)
@@ -364,6 +446,7 @@ class ResultFile:
                 & (df['cross_validation_method'] == cross_validation_method)
                 & (df['seed'] == seed)
                 & (df['predicted_target'] == predicted_target)
+                & (df['learning_type'] == learning_type)
             )
             if mask.any():
                 df.loc[mask, 'metric_value'] = metric_value
@@ -424,131 +507,135 @@ class ClassificationExperimentLeaveOneCohortOut:
         cohorts_parent = cohort_folders[0].parent
         # ensure all cohorts share the same parent
         assert all(c.parent == cohorts_parent for c in cohort_folders)
-        predicted_column2average_mcc = {}
-        predicted_column2average_f1 = {}
+        average_metrics = {
+            learning_type: {
+                predicted_column: {'MCC': 0.0, 'F1_score': 0.0}
+                for predicted_column in self.datainfo.prediction_targets
+            }
+            for learning_type in LEARNING_TYPES
+        }
         all_output_folders: List[Path] = []
         for predicted_column in self.datainfo.prediction_targets:
             self.datainfo.prepare_cohort_data_files(predicted_col=predicted_column)
-            average_mcc = 0.0
-            average_f1 = 0.0
-            for i, (test_folder, test_cohort_name) in enumerate(zip(cohort_folders, cohort_names)):
-                if not force_run:
-                    mcc = self.resultfile.check_experiment(
-                            data_name=self.data_name,
-                            data_preprocessing_name=self.preprocessing_name,
-                            metric_name="MCC",
-                            predicted_client_name=test_cohort_name,
-                            cross_validation_method="Leave-One-Cohort-Out",
-                            seed=seed,
-                            predicted_target=predicted_column
-                    )
-                    f1 = self.resultfile.check_experiment(
-                            data_name=self.data_name,
-                            data_preprocessing_name=self.preprocessing_name,
-                            metric_name="F1_score",
-                            predicted_client_name=test_cohort_name,
-                            cross_validation_method="Leave-One-Cohort-Out",
-                            seed=seed,
-                            predicted_target=predicted_column
-                    )
-                    if mcc and f1:
-                        print(f"Skipping test cohort '{test_cohort_name}' — "
-                                f"results for seed={seed} already exist in {self.resultfile.path}.")
-                        average_f1 += f1 / n_clients
-                        average_mcc += mcc / n_clients
+            for learning_type in LEARNING_TYPES:
+                for i, (test_folder, test_cohort_name) in enumerate(zip(cohort_folders, cohort_names)):
+                    if not force_run:
+                        mcc_existing = self.resultfile.check_experiment(
+                                data_name=self.data_name,
+                                data_preprocessing_name=self.preprocessing_name,
+                                metric_name="MCC",
+                                predicted_client_name=test_cohort_name,
+                                cross_validation_method="Leave-One-Cohort-Out",
+                                seed=seed,
+                                predicted_target=predicted_column,
+                                learning_type=learning_type
+                        )
+                        f1_existing = self.resultfile.check_experiment(
+                                data_name=self.data_name,
+                                data_preprocessing_name=self.preprocessing_name,
+                                metric_name="F1_score",
+                                predicted_client_name=test_cohort_name,
+                                cross_validation_method="Leave-One-Cohort-Out",
+                                seed=seed,
+                                predicted_target=predicted_column,
+                                learning_type=learning_type
+                        )
+                        if mcc_existing is not False and f1_existing is not False:
+                            print(f"Skipping {learning_type} test cohort '{test_cohort_name}' — "
+                                    f"results for seed={seed} already exist in {self.resultfile.path}.")
+                            average_metrics[learning_type][predicted_column]['MCC'] += mcc_existing / n_clients
+                            average_metrics[learning_type][predicted_column]['F1_score'] += f1_existing / n_clients
+                            continue
+
+                    train_folders = [f for j, f in enumerate(cohort_folders) if j != i]
+                    train_names = [n for j, n in enumerate(cohort_names) if j != i]
+                    if not train_folders:
+                        raise ValueError("Leave-One-Cohort-Out requires at least two cohorts.")
+
+                    if learning_type == LEARNING_TYPE_FEDERATED:
+                        output_folders = [
+                            cohorts_parent / (
+                                f"tmp_classification_evaluation_output_learningtype|{learning_type}_"
+                                f"testcohort|{test_cohort_name}_predictedcol|{predicted_column}_traincohort|{name}"
+                            )
+                            for name in train_names
+                        ]
+                        all_output_folders.extend(output_folders)
+                        for out_folder in output_folders:
+                            out_folder.mkdir(parents=True, exist_ok=True)
+
+                        # Use all data for training (train_test_ratio=1.0)
+                        for client_folder in train_folders:
+                            _write_forest_config(client_folder, predicted_column, seed, train_test_ratio=1.0)
+
+                        run_simulation_native(clientpaths=[str(f) for f in train_folders],
+                                                outputfolders=[str(f) for f in output_folders],
+                                                generic_dir=None,
+                                                fed_learning_main_function=main)
+                        coordinator_output_folder = output_folders[0]
+                    else:
+                        centralized_input_folder = cohorts_parent / (
+                            f"tmp_classification_evaluation_input_learningtype|{learning_type}_"
+                            f"testcohort|{test_cohort_name}_predictedcol|{predicted_column}"
+                        )
+                        centralized_output_folder = cohorts_parent / (
+                            f"tmp_classification_evaluation_output_learningtype|{learning_type}_"
+                            f"testcohort|{test_cohort_name}_predictedcol|{predicted_column}"
+                        )
+                        all_output_folders.extend([centralized_input_folder, centralized_output_folder])
+                        centralized_output_folder.mkdir(parents=True, exist_ok=True)
+                        _write_centralized_data_file(centralized_input_folder, train_folders)
+                        _write_forest_config(centralized_input_folder, predicted_column, seed, train_test_ratio=1.0)
+
+                        run_simulation_native(clientpaths=[str(centralized_input_folder)],
+                                                outputfolders=[str(centralized_output_folder)],
+                                                generic_dir=None,
+                                                fed_learning_main_function=main)
+                        coordinator_output_folder = centralized_output_folder
+
+                    try:
+                        global_forest, model_info = _read_model_and_info(coordinator_output_folder)
+                        mcc, f1 = _evaluate_model_on_test_data(
+                            global_forest,
+                            model_info,
+                            test_folder / 'tmp_data.csv',
+                            predicted_column,
+                        )
+                    except FileNotFoundError as exc:
+                        print(f"{exc} Skipping evaluation for {test_cohort_name}.")
                         continue
 
-                train_folders = [f for j, f in enumerate(cohort_folders) if j != i]
-                train_names = [n for j, n in enumerate(cohort_names) if j != i]
+                    average_metrics[learning_type][predicted_column]['MCC'] += mcc / n_clients
+                    average_metrics[learning_type][predicted_column]['F1_score'] += f1 / n_clients
 
-                output_folders = []
-                for name in train_names:
-                    output_folders.append(
-                        cohorts_parent / f"tmp_classification_evaluation_output_testcohort|{test_cohort_name}_predictedcol|{predicted_column}_traincohort|{name}"
+                    print(
+                        f"Results for {learning_type} test cohort '{test_cohort_name}' on "
+                        f"{predicted_column} using model trained on all other cohorts:"
                     )
-                # all_output_folders is used for cleanup at the end
-                all_output_folders.extend(output_folders)
-
-                for out_folder in output_folders:
-                    Path(out_folder).mkdir(parents=True, exist_ok=True)
-
-                # Use all data for training (train_test_ratio=1.0)
-                for client_folder in train_folders:
-                    _write_forest_config(client_folder, predicted_column, seed, train_test_ratio=1.0)
-
-                run_simulation_native(clientpaths=[str(f) for f in train_folders],
-                                        outputfolders=output_folders,
-                                        generic_dir=None,
-                                        fed_learning_main_function=main)
-
-                # Collect the resulting model from the coordinator's output folder
-                coordinator_output_folder = Path(output_folders[0])
-                model_path = coordinator_output_folder / 'global_model.pkl'
-                if not model_path.exists():
-                    print(f"Model not found in {model_path}. Skipping evaluation for {test_cohort_name}.")
-                    continue
-
-                with open(model_path, 'rb') as f:
-                    global_forest: RandomForestClassifier = pickle.load(f)
-                with open(coordinator_output_folder / 'model_info.yaml', 'r', encoding='utf-8') as f:
-                    model_info = yaml.safe_load(f)
-
-                # Load test data from the prepared tmp_data.csv
-                test_data_path = test_folder / 'tmp_data.csv'
-                if not test_data_path.exists():
-                    print(f"Test data not found in {test_data_path}. Skipping evaluation for {test_cohort_name}.")
-                    continue
-
-                test_data = pd.read_csv(test_data_path)
-                used_features = model_info['used_features']
-
-                # Transpose if features ended up as rows rather than columns
-                if not any(col in test_data.columns for col in used_features):
-                    test_data = test_data.transpose()
-
-                required_cols = used_features + [predicted_column]
-                if not all(col in test_data.columns for col in required_cols):
-                    print(f"Test data in {test_data_path} does not contain all required features. "
-                            f"Adding NaNs for missing features.")
-                    missing = set(required_cols) - set(test_data.columns)
-                    missing_df = pd.DataFrame(
-                        {feat: float('nan') for feat in missing}, index=test_data.index
+                    print(f"  MCC: {mcc:.4f}")
+                    print(f"  F1 Score: {f1:.4f}")
+                    self.resultfile.upsert_experiment(
+                        data_name=self.data_name,
+                        data_preprocessing_name=self.preprocessing_name,
+                        metric_name="MCC",
+                        metric_value=mcc,
+                        predicted_client_name=test_cohort_name,
+                        cross_validation_method="Leave-One-Cohort-Out",
+                        seed=seed,
+                        predicted_target=predicted_column,
+                        learning_type=learning_type
                     )
-                    test_data = pd.concat([test_data, missing_df], axis=1)
-
-                true_labels = test_data[predicted_column].values
-                predictions = global_forest.predict(test_data[used_features])
-
-                mcc = float(matthews_corrcoef(true_labels, predictions))  # type: ignore
-                f1 = float(f1_score(true_labels, predictions, average='weighted'))  # type: ignore
-                average_mcc += mcc / n_clients
-                average_f1 += f1 / n_clients
-
-                print(f"Results for test cohort '{test_cohort_name}' on {predicted_column} using model trained on all other cohorts:")
-                print(f"  MCC: {mcc:.4f}")
-                print(f"  F1 Score: {f1:.4f}")
-                self.resultfile.upsert_experiment(
-                    data_name=self.data_name,
-                    data_preprocessing_name=self.preprocessing_name,
-                    metric_name="MCC",
-                    metric_value=mcc,
-                    predicted_client_name=test_cohort_name,
-                    cross_validation_method="Leave-One-Cohort-Out",
-                    seed=seed,
-                    predicted_target=predicted_column
-                )
-                self.resultfile.upsert_experiment(
-                    data_name=self.data_name,
-                    data_preprocessing_name=self.preprocessing_name,
-                    metric_name="F1_score",
-                    metric_value=f1,
-                    predicted_client_name=test_cohort_name,
-                    cross_validation_method="Leave-One-Cohort-Out",
-                    seed=seed,
-                    predicted_target=predicted_column
-                )
-            predicted_column2average_mcc[predicted_column] = average_mcc
-            predicted_column2average_f1[predicted_column] = average_f1
+                    self.resultfile.upsert_experiment(
+                        data_name=self.data_name,
+                        data_preprocessing_name=self.preprocessing_name,
+                        metric_name="F1_score",
+                        metric_value=f1,
+                        predicted_client_name=test_cohort_name,
+                        cross_validation_method="Leave-One-Cohort-Out",
+                        seed=seed,
+                        predicted_target=predicted_column,
+                        learning_type=learning_type
+                    )
 
         # Collect all output folders created across all leave-one-out rounds
         self.datainfo.cleanup_cohort_data_files(also_config_forest=True,
@@ -556,12 +643,13 @@ class ClassificationExperimentLeaveOneCohortOut:
 
         sep = "-" * (62 + len(self.data_name) + len(self.preprocessing_name) + 3)
         print(sep)
-        print("Average MCC across all test cohorts:")
-        for predicted_column, avg_mcc in predicted_column2average_mcc.items():
-            print(f"  {predicted_column}: {avg_mcc:.4f}")
-        print("Average F1 Score across all test cohorts:")
-        for predicted_column, avg_f1 in predicted_column2average_f1.items():
-            print(f"  {predicted_column}: {avg_f1:.4f}")
+        for learning_type in LEARNING_TYPES:
+            print(f"Average {learning_type} MCC across all test cohorts:")
+            for predicted_column, metrics in average_metrics[learning_type].items():
+                print(f"  {predicted_column}: {metrics['MCC']:.4f}")
+            print(f"Average {learning_type} F1 Score across all test cohorts:")
+            for predicted_column, metrics in average_metrics[learning_type].items():
+                print(f"  {predicted_column}: {metrics['F1_score']:.4f}")
         print("=" * (62 + len(self.data_name) + len(self.preprocessing_name) + 3))
         print()
 
@@ -596,29 +684,37 @@ class ClassificationExperimentTrainTestSplit:
 
     def run_experiment(self, seed: int, force_run: bool = False) -> None:
         for predicted_column in self.datainfo.prediction_targets or []:
-            if not force_run:
-                mcc = self.resultfile.check_experiment(
-                    data_name=self.data_name,
-                    data_preprocessing_name=self.preprocessing_name,
-                    metric_name="MCC",
-                    predicted_client_name="All",
-                    cross_validation_method="Train-Test-Split",
-                    seed=seed,
-                    predicted_target=predicted_column
-                )
-                f1 = self.resultfile.check_experiment(
-                    data_name=self.data_name,
-                    data_preprocessing_name=self.preprocessing_name,
-                    metric_name="F1_score",
-                    predicted_client_name="All",
-                    cross_validation_method="Train-Test-Split",
-                    seed=seed,
-                    predicted_target=predicted_column
-                )
-                if mcc and f1:
-                    print(f"Skipping '{self.data_name}' ({self.preprocessing_name}) — "
-                        f"results for seed={seed} already exist in {self.resultfile.path}.")
-                    continue
+            learning_types_to_run = []
+            for learning_type in LEARNING_TYPES:
+                if not force_run:
+                    mcc = self.resultfile.check_experiment(
+                        data_name=self.data_name,
+                        data_preprocessing_name=self.preprocessing_name,
+                        metric_name="MCC",
+                        predicted_client_name="All",
+                        cross_validation_method="Train-Test-Split",
+                        seed=seed,
+                        predicted_target=predicted_column,
+                        learning_type=learning_type
+                    )
+                    f1 = self.resultfile.check_experiment(
+                        data_name=self.data_name,
+                        data_preprocessing_name=self.preprocessing_name,
+                        metric_name="F1_score",
+                        predicted_client_name="All",
+                        cross_validation_method="Train-Test-Split",
+                        seed=seed,
+                        predicted_target=predicted_column,
+                        learning_type=learning_type
+                    )
+                    if mcc is not False and f1 is not False:
+                        print(f"Skipping {learning_type} '{self.data_name}' ({self.preprocessing_name}) — "
+                            f"results for seed={seed} already exist in {self.resultfile.path}.")
+                        continue
+                learning_types_to_run.append(learning_type)
+
+            if not learning_types_to_run:
+                continue
 
             num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
             print("=" * num_characters)
@@ -632,7 +728,10 @@ class ClassificationExperimentTrainTestSplit:
             cohorts_parent = cohort_folders[0].parent
 
             output_folders = [
-                str(cohorts_parent / f"tmp_classification_evaluation_output_predictedcol|{predicted_column}_traincohort|{name}")
+                str(cohorts_parent / (
+                    f"tmp_classification_evaluation_output_learningtype|{LEARNING_TYPE_FEDERATED}_"
+                    f"predictedcol|{predicted_column}_traincohort|{name}"
+                ))
                 for name in cohort_names
             ]
             for out_folder in output_folders:
@@ -640,27 +739,74 @@ class ClassificationExperimentTrainTestSplit:
             if not self.datainfo.prediction_targets or len(self.datainfo.prediction_targets) == 0:
                 raise ValueError("DataInfo must specify at least one prediction target column in 'prediction_targets'.")
 
-            for client_folder in cohort_folders:
-                _write_forest_config(client_folder, predicted_column, seed,
-                                        train_test_ratio=self.train_test_ratio)
+            folders_to_cleanup = [Path(f) for f in output_folders]
+            for learning_type in learning_types_to_run:
+                if learning_type == LEARNING_TYPE_FEDERATED:
+                    for client_folder in cohort_folders:
+                        _write_forest_config(client_folder, predicted_column, seed,
+                                                train_test_ratio=self.train_test_ratio)
 
-            run_simulation_native(clientpaths=[str(f) for f in cohort_folders],
-                                    outputfolders=output_folders,
-                                    generic_dir=None,
-                                    fed_learning_main_function=main)
+                    run_simulation_native(clientpaths=[str(f) for f in cohort_folders],
+                                            outputfolders=output_folders,
+                                            generic_dir=None,
+                                            fed_learning_main_function=main)
 
-            for cohort_name, output_folder in zip(cohort_names, output_folders):
-                global_metrics_path = Path(output_folder) / 'global_metrics.csv'
-                local_metrics_path = Path(output_folder) / 'local_metrics.csv'
-                self.read_update_metrics(global_metrics_path, "All", seed, predicted_target=predicted_column)
-                self.read_update_metrics(local_metrics_path, cohort_name, seed, predicted_target=predicted_column)
+                    for cohort_name, output_folder in zip(cohort_names, output_folders):
+                        global_metrics_path = Path(output_folder) / 'global_metrics.csv'
+                        local_metrics_path = Path(output_folder) / 'local_metrics.csv'
+                        self.read_update_metrics(
+                            global_metrics_path,
+                            "All",
+                            seed,
+                            predicted_target=predicted_column,
+                            learning_type=learning_type,
+                        )
+                        self.read_update_metrics(
+                            local_metrics_path,
+                            cohort_name,
+                            seed,
+                            predicted_target=predicted_column,
+                            learning_type=learning_type,
+                        )
+                else:
+                    centralized_input_folder = cohorts_parent / (
+                        f"tmp_classification_evaluation_input_learningtype|{learning_type}_"
+                        f"predictedcol|{predicted_column}"
+                    )
+                    centralized_output_folder = cohorts_parent / (
+                        f"tmp_classification_evaluation_output_learningtype|{learning_type}_"
+                        f"predictedcol|{predicted_column}"
+                    )
+                    folders_to_cleanup.extend([centralized_input_folder, centralized_output_folder])
+                    centralized_output_folder.mkdir(parents=True, exist_ok=True)
+                    _write_centralized_data_file(centralized_input_folder, cohort_folders)
+                    _write_forest_config(centralized_input_folder, predicted_column, seed,
+                                            train_test_ratio=self.train_test_ratio)
+
+                    run_simulation_native(clientpaths=[str(centralized_input_folder)],
+                                            outputfolders=[str(centralized_output_folder)],
+                                            generic_dir=None,
+                                            fed_learning_main_function=main)
+
+                    self.read_update_metrics(
+                        centralized_output_folder / 'global_metrics.csv',
+                        "All",
+                        seed,
+                        predicted_target=predicted_column,
+                        learning_type=learning_type,
+                    )
 
             self.datainfo.cleanup_cohort_data_files(
                 also_config_forest=True,
-                output_folders=[Path(f) for f in output_folders],
+                output_folders=folders_to_cleanup,
             )
 
-    def read_update_metrics(self, metrics_path: Path, client_name: str, seed: int, predicted_target: str) -> None:
+    def read_update_metrics(self,
+                            metrics_path: Path,
+                            client_name: str,
+                            seed: int,
+                            predicted_target: str,
+                            learning_type: str) -> None:
         """Read *metrics_path*, print results, and append them to the result file."""
         if metrics_path.exists():
             metrics_df = pd.read_csv(metrics_path)
@@ -668,7 +814,7 @@ class ClassificationExperimentTrainTestSplit:
                 metric_suffix = row['class']
                 metric_name = row['metric']
                 metric_value = row['score']
-                print(f"{client_name}: {metric_name} ({metric_suffix}): {metric_value:.4f}")
+                print(f"{learning_type} {client_name}: {metric_name} ({metric_suffix}): {metric_value:.4f}")
                 self.resultfile.upsert_experiment(
                     data_name=self.data_name,
                     data_preprocessing_name=self.preprocessing_name,
@@ -677,5 +823,6 @@ class ClassificationExperimentTrainTestSplit:
                     predicted_client_name=client_name,
                     cross_validation_method="Train-Test-Split",
                     seed=seed,
-                    predicted_target=predicted_target
+                    predicted_target=predicted_target,
+                    learning_type=learning_type
                 )

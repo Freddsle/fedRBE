@@ -1,9 +1,10 @@
 {
+  "data_name": "Balanced Simulated",
   "covariates": [
     "A"
   ],
   "prediction_targets": [
-    "A"
+    "condition"
   ],
   "datafile": {
     "filename": "intensities.tsv",

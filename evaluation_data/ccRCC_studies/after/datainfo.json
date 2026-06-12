@@ -5,6 +5,7 @@
   "prediction_targets": [
     "Condition"
   ],
+  "data_name": "ccRCC",
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",

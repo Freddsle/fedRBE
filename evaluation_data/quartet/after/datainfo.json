@@ -1,5 +1,5 @@
 {
-  "data_name": "Quartet Data",
+  "data_name": "Quartet",
   "covariates": ["D6", "F7", "M8"],
   "prediction_targets": ["condition"],
   "datafile": {

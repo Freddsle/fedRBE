@@ -5,6 +5,7 @@
   "prediction_targets": [
     "Pyr"
   ],
+  "data_name": "E. coli",
   "datafile": {
     "filename": "intensities_log_UNION.tsv",
     "separator": "\t",
