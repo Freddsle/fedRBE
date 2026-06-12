@@ -38,3 +38,5 @@ evaluation_data/multiomics/figshare_data/Transcriptomics_fulldataset_log2FPKM_r2
 evaluation_data/multiomics/after/Transcriptomics/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/multiomics/after/Transcriptomics/intensities_log_Rcorrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/multiomics/after/all_modalities_*_kmeans_matrix.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/multiomics/after/*/individual_results/*/only_batch_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/multiomics/after/*/individual_results/*/full_corrected_data.csv filter=lfs diff=lfs merge=lfs -text

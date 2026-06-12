@@ -205,6 +205,8 @@ evaluation_data/**/config_forest.yaml
 ## Allow all federated corrected data
 !evaluation_data/**/after/individual_results/*/full_corrected_data.csv
 !evaluation_data/**/after/individual_results/*/only_batch_corrected_data.csv
+!evaluation_data/multiomics/after/*/individual_results/*/full_corrected_data.csv
+!evaluation_data/multiomics/after/*/individual_results/*/only_batch_corrected_data.csv
 !evaluation_data/**/after/individual_results/*/report.txt
 
 ## Also the centrally corrected data
