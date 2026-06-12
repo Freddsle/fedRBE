@@ -10,7 +10,8 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(Path(os.path.abspath(__file__)).parent)
 COLOUR_SCHEMA_FILE = os.path.join(ROOT_DIR, "evaluation_utils", "colour_schema.json")
 PLOTS_DIR = os.path.join(SCRIPT_DIR, "plots")
-RESULTS_FILE = os.path.join(SCRIPT_DIR, "results", "classification_metric_report.csv")
+RESULTS_DIR = os.path.join(SCRIPT_DIR, "results")
+RESULTS_FILE = os.path.join(RESULTS_DIR, "classification_metric_report.csv")
 AVERAGE_CLIENT_NAME = "All"
 FEDERATED_LEARNING_TYPE = "federated"
     # in the predicted_client_name column, the AVERAGE_CLIENT_NAME for the FEDERATED_LEARNING_TYPE
@@ -100,7 +101,9 @@ for metric_name in df['metric_name'].unique():
                 lambda row: f"{row['data_preprocessing_name']} / {row['learning_type']}",
                 axis=1,
             )
-
+            output_csv = os.path.join(RESULTS_DIR, f"plotting_data_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.csv")
+            df_subset.to_csv(output_csv, index=False)
+            print(f"Saved plotting data to {output_csv}")
             # swarmplot
             plt.figure(figsize=(14, 8))
             axes = sns.swarmplot(
