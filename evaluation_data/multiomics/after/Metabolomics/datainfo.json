@@ -30,7 +30,7 @@
         "filename": "design.tsv",
         "separator": "\t",
         "rotation": "samples x features",
-        "samplename_column": "rowname",
+        "samplename_column": "file",
         "featurename_column": null
       }
     },
@@ -41,7 +41,7 @@
         "filename": "design.tsv",
         "separator": "\t",
         "rotation": "samples x features",
-        "samplename_column": "rowname",
+        "samplename_column": "file",
         "featurename_column": null
       }
     }
