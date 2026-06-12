@@ -193,29 +193,27 @@ class DataInfo:
         """
         cohort_folder = self._base_folder / cohort.folder
         data_df = self._load_file(self.datafile, cohort_folder)
-        # TODO: delete this todo and the print statements in this method
-        # If a design file exists, pull prediction targets from it and join
         if cohort.designfile:
-            print(f"Loading design file for cohort '{cohort.name}' to retrieve prediction targets.")
             design_df = self._load_file(cohort.designfile, cohort_folder)
             design_df = design_df[self.prediction_targets]
-            print("Loaded columns from design file:", design_df.columns.tolist())
-            print("Union - intersection of data and design indexes (basically how many samples are in either design or data but not both):")
-            print(set(data_df.index).union(set(design_df.index)) - set(data_df.index).intersection(set(design_df.index)))
+            unique_samples = set(data_df.index).union(set(design_df.index)) - set(data_df.index).intersection(set(design_df.index))
+            if len(unique_samples) > 0:
+                raise ValueError(
+                    f"Data and design files for cohort '{cohort.name}' have mismatching samples. "
+                    f"Unique samples across both files: {unique_samples}. "
+                    "Please ensure they have the same sample identifiers in their index or samplename_column."
+                )
             # take the prediction targets from design even if provided in the data_df
             data_df = data_df.drop(columns=self.prediction_targets, errors='ignore')
             if not design_df.empty:
-                print("Merging data and design on index...")
                 data_df = pd.merge(data_df, design_df, left_index=True, right_index=True)
 
         # Delete any covariates
         if self.covariates:
             columns_to_drop = [col for col in self.covariates if col not in self.prediction_targets]
                 # covariates might be prediction targets
-            print(f"Dropping covariate columns from cohort '{cohort.name}': {columns_to_drop}")
             data_df = data_df.drop(columns=columns_to_drop, errors='ignore')
 
-        print("Prediction target: ", self.prediction_targets)
         # Ensure the prediction target columns exist after loading/merging.
         for target in self.prediction_targets or []:
             if target not in data_df.columns:
