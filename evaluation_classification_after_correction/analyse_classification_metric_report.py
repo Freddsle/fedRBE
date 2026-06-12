@@ -12,8 +12,11 @@ COLOUR_SCHEMA_FILE = os.path.join(ROOT_DIR, "evaluation_utils", "colour_schema.j
 PLOTS_DIR = os.path.join(SCRIPT_DIR, "plots")
 RESULTS_FILE = os.path.join(SCRIPT_DIR, "results", "classification_metric_report.csv")
 AVERAGE_CLIENT_NAME = "All"
-    # in the predicted_client_name column, this value is treated as being the average
-    # over multiple runs that are otherwise identical
+FEDERATED_LEARNING_TYPE = "federated"
+    # in the predicted_client_name column, the AVERAGE_CLIENT_NAME for the FEDERATED_LEARNING_TYPE
+    # is treated as being the average over multiple runs that are otherwise identical
+    # We therefore ignore it in the plots as it's just an aggregation of the other rows
+    # in centralized results, this is the only results row tho!
 DATANAME_TO_LABEL = {
     "Balanced Simulated Data": "Simulated Additive Batch",
     "Balanced Simulated Data (Rotational Batch Effect)": "Simulated Rotational Batch",
@@ -86,8 +89,9 @@ for metric_name in df['metric_name'].unique():
                            (df['cross_validation_method'] == cv_method) & \
                             (df['predicted_target'] == target)].copy()
 
-            # filter out average rows
-            df_subset = df_subset[df_subset['predicted_client_name'] != AVERAGE_CLIENT_NAME]
+            # filter out average rows of the federated learning type
+            rows_to_exclude = (df_subset['learning_type'] == FEDERATED_LEARNING_TYPE) & (df_subset['predicted_client_name'] == AVERAGE_CLIENT_NAME)
+            df_subset = df_subset[~rows_to_exclude]
             print(f"Using {len(df_subset)} rows for metric '{metric_name}' and CV method '{cv_method}'")
 
             # we add the predicted target to the data name
@@ -140,8 +144,3 @@ for metric_name in df['metric_name'].unique():
             plt.close()
             print(f"Saved plot to {output_png}")
 
-# summary statistics
-summary = df.groupby(['data_preprocessing_name', 'learning_type', 'cross_validation_method', 'metric_name', 'data_name', 'predicted_client_name'])['metric_value'].agg(['mean', 'std', 'count'])
-summary_output_file = os.path.join(SCRIPT_DIR, "classification_metric_report_summary.csv")
-summary.to_csv(summary_output_file)
-print(f"\nSummary statistics saved to {summary_output_file}")
