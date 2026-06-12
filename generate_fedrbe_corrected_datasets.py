@@ -340,45 +340,39 @@ for multiomics_modality, multiomics_experiment_smpc in multiomics_experiments_sm
     set_smpc_true(multiomics_experiment_smpc)
 
 ## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
-# # Simulated
-# experiments.append(simulated_balanced_experiment)
-# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(simulated_balanced_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
+# Simulated
+experiments.append(simulated_balanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_balanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# experiments.append(simulated_mildly_imbalanced_experiment)
-# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(simulated_mildly_imbalanced_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+experiments.append(simulated_mildly_imbalanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_mildly_imbalanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# experiments.append(simulated_strongly_imbalanced_experiment)
-# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(simulated_strongly_imbalanced_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+experiments.append(simulated_strongly_imbalanced_experiment)
+result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
+experiments.append(simulated_strongly_imbalanced_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# ## E. coli
-# experiments.append(ecoli_experiment)
-# result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(ecoli_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"))
+## E. coli
+experiments.append(ecoli_experiment)
+result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data.tsv"))
+experiments.append(ecoli_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# ## Quartet
-# experiments.append(quartet_experiment)
-# result_file_names.append(os.path.join(data_dir, "quartet", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(quartet_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "quartet", "after", "FedApp_corrected_data_smpc.tsv"))
+## Ovarian cancer
+experiments.append(ovarian_cancer_experiment)
+result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"))
+experiments.append(ovarian_cancer_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"))
 
-# ## Ovarian cancer
-# experiments.append(ovarian_cancer_experiment)
-# result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(ovarian_cancer_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"))
-
-# ## ccRCC Proteomics
-# experiments.append(ccRCC_ecoli_experiment)
-# result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"))
-# experiments.append(ccRCC_ecoli_experiment_smpc)
-# result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
+## ccRCC Proteomics
+experiments.append(ccRCC_ecoli_experiment)
+result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"))
+experiments.append(ccRCC_ecoli_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Multiomics
 for multiomics_modality in multiomics_modalities:

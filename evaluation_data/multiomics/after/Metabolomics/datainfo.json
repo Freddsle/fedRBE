@@ -1,0 +1,49 @@
+{
+  "data_name": "Quartet full multiomics - Metabolomics",
+  "covariates": ["D6", "F7", "M8"],
+  "prediction_targets": [
+    "condition"
+  ],
+  "datafile": {
+    "filename": "full_corrected_data.csv",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": "rowname"
+  },
+  "cohorts": [
+    {
+      "name": "client_01_L01",
+      "folder": "individual_results/client_01_L01",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
+    },
+    {
+      "name": "client_02_L02",
+      "folder": "individual_results/client_02_L02",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "rowname",
+        "featurename_column": null
+      }
+    },
+    {
+      "name": "client_03_L05_L04",
+      "folder": "individual_results/client_03_L05_L04",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "rowname",
+        "featurename_column": null
+      }
+    }
+  ]
+}
