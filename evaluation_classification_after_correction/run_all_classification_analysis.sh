@@ -1,7 +1,4 @@
 #!/bin/bash
-
-# Script to run all classification analysis experiments sequentially
-
 set -e  # Exit on any error
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
