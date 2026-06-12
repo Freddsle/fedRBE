@@ -117,7 +117,7 @@ class Experiment():
         try:
             client.images.get(self.app_image_name)
         except:
-            raise RuntimeError(f"App image {self.app_image_name} not found!")
+            raise RuntimeError(f"App image {self.app_image_name} not found! Use docker pull to receive it!")
 
         # Ensure the controller is up
         try:
