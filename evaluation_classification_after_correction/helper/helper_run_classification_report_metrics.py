@@ -199,7 +199,10 @@ class DataInfo:
             sample_intersection = set(data_df.index).intersection(set(design_df.index))
             unique_samples_design = set(design_df.index) - sample_intersection
             unique_samples_data = set(data_df.index) - sample_intersection
-            if len(unique_samples_design) > 0 or len(unique_samples_data) > 0:
+            if len(unique_samples_design) > 0:
+                print(f"WARNING: Design file {cohort.designfile.filename} contains additional samples that are not used in the data file")
+                print("WARNING: This might be intentional so the script will continue")
+            if len(unique_samples_data) > 0:
                 raise ValueError(
                     f"Data and design files for cohort '{cohort.name}' have mismatching samples. "
                     f"Unique samples in design file: {len(unique_samples_design)}:\n"
