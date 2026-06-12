@@ -159,6 +159,7 @@ class DataInfo:
         Read the file described by *spec* from *folder* and return it in
         **samples × features** orientation (rows = samples, columns = features).
         """
+
         read_kwargs: dict = {'sep': spec.separator}
         if spec.rotation == 'features x samples':
             # For features-as-rows files the first column is always the feature identifier.
@@ -168,7 +169,15 @@ class DataInfo:
             read_kwargs['index_col'] = spec.featurename_column if spec.featurename_column else 0
         elif spec.featurename_column:
             read_kwargs['index_col'] = spec.featurename_column
-        df = pd.read_csv(folder / spec.filename, **read_kwargs)
+        filepath = folder / spec.filename
+        with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+            first_line = f.readline()
+            if first_line.startswith('version https://git-lfs'):
+                raise ValueError(
+                    f"File '{filepath.name}' is a Git LFS pointer, not the actual data. "
+                    f"Did you forget to run `git lfs pull`?"
+                )
+        df = pd.read_csv(filepath, **read_kwargs)
 
         if spec.rotation == 'features x samples':
             # rows = features, columns = samples  →  transpose to samples × features
