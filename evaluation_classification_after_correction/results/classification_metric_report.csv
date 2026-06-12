@@ -387,3 +387,17 @@ Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,federat
 Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated
 Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated
 Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated
+Ovarian cancer,uncorrected,MCC,0.9223300970873788,All,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,F1_score,0.9611650485436892,All,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,MCC,0.8983050847457628,GSE26712,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,F1_score,0.9491525423728814,GSE26712,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,MCC,0.7777777777777778,GSE6008,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,F1_score,0.8888888888888888,GSE6008,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,MCC,1.0,GSE69428,Train-Test-Split,43,HGSC,federated
+Ovarian cancer,uncorrected,F1_score,1.0,GSE69428,Train-Test-Split,43,HGSC,federated

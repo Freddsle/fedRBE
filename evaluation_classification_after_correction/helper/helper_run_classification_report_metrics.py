@@ -196,11 +196,14 @@ class DataInfo:
         if cohort.designfile:
             design_df = self._load_file(cohort.designfile, cohort_folder)
             design_df = design_df[self.prediction_targets]
-            unique_samples = set(data_df.index).union(set(design_df.index)) - set(data_df.index).intersection(set(design_df.index))
-            if len(unique_samples) > 0:
+            sample_intersection = set(data_df.index).intersection(set(design_df.index))
+            unique_samples_design = set(design_df.index) - sample_intersection
+            unique_samples_data = set(data_df.index) - sample_intersection
+            if len(unique_samples_design) > 0 or len(unique_samples_data) > 0:
                 raise ValueError(
                     f"Data and design files for cohort '{cohort.name}' have mismatching samples. "
-                    f"Unique samples across both files: {unique_samples}. "
+                    f"Unique samples in design file: {len(unique_samples_design)}:\n"
+                    f"Unique samples in data file: {len(unique_samples_data)}\n"
                     "Please ensure they have the same sample identifiers in their index or samplename_column."
                 )
             # take the prediction targets from design even if provided in the data_df
