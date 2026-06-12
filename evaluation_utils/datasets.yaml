@@ -62,7 +62,7 @@ multiomics:
   before_matrix: evaluation_data/multiomics/after/all_modalities_before_kmeans_matrix.tsv
   before_site_matrix_file: intensities.tsv
   corrected_central: evaluation_data/multiomics/after/all_modalities_corrected_kmeans_matrix.tsv
-  corrected_federated: evaluation_data/multiomics/after/all_modalities_fedsim_kmeans_matrix.tsv
+  corrected_federated: evaluation_data/multiomics/after/all_modalities_fedapp_kmeans_matrix.tsv
   sites_root: evaluation_clusterization_after_correction/real_datasets/multiomics/before
   site_glob: "client_*"
   design_file: design.tsv

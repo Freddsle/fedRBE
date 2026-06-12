@@ -62,8 +62,11 @@ cd evaluation_clusterization_after_correction/real_datasets
 jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
 ```
 
-This writes `all_modalities_{before,corrected,fedsim}_kmeans_matrix.tsv`
-under `evaluation_data/multiomics/after/` (shared with
+This writes `all_modalities_before_kmeans_matrix.tsv`,
+`all_modalities_corrected_kmeans_matrix.tsv`, and either
+`all_modalities_fedapp_kmeans_matrix.tsv` or
+`all_modalities_fedsim_kmeans_matrix.tsv` under
+`evaluation_data/multiomics/after/` (shared with
 `evaluation/evaluation_multiomics.ipynb`) and per-client
 `design.tsv`/`intensities.tsv` under
 `evaluation_clusterization_after_correction/real_datasets/multiomics/before/`

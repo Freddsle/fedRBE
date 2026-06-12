@@ -266,10 +266,8 @@ evaluation_data/multiomics/before/datainfo.json
 evaluation_data/multiomics/before/preparation_summary.tsv
 evaluation_data/multiomics/after/*/FedApp_corrected_data_smpc.tsv
 
-# Multiomics optional simulations and derived joint matrices
+# Multiomics optional simulations and generated summaries
 evaluation_data/multiomics/after/*/FedSim_corrected_data.tsv
-evaluation_data/multiomics/after/all_modalities_*_kmeans_matrix.tsv
-evaluation_data/multiomics/after/all_modalities_metadata.tsv
 evaluation_data/multiomics/after/*_summary.tsv
 evaluation_data/multiomics/after/fedsim_datainfo.json
 

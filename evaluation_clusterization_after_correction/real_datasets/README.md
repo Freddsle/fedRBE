@@ -48,7 +48,10 @@ jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
 ```
 
 **Outputs:**
-- `evaluation_data/multiomics/after/all_modalities_{before,corrected,fedsim}_kmeans_matrix.tsv`
+- `evaluation_data/multiomics/after/all_modalities_{before,corrected}_kmeans_matrix.tsv`
+  plus `all_modalities_fedapp_kmeans_matrix.tsv` for real FeatureCloud
+  FedRBE outputs, or `all_modalities_fedsim_kmeans_matrix.tsv` for local
+  FedSim-only outputs
   — joint matrices used as `before_matrix` / `corrected_central` /
   `corrected_federated` in `evaluation_utils/datasets.yaml`. Kept under
   `evaluation_data/` because `evaluation/evaluation_multiomics.ipynb` also
