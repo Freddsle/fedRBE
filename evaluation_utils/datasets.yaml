@@ -59,7 +59,7 @@ ccRCC_proteomics:
 # `n_init: 50` is a robustness override for the small (48-sample) joint
 # matrix; the standard per-feature StandardScaler / fc_kmeans scaling applies.
 multiomics:
-  before_matrix: evaluation_data/multiomics/after/all_modalities_before_kmeans_matrix.tsv
+  before_matrix: evaluation_data/multiomics/before/all_modalities_before_kmeans_matrix.tsv
   before_site_matrix_file: intensities.tsv
   corrected_central: evaluation_data/multiomics/after/all_modalities_corrected_kmeans_matrix.tsv
   corrected_federated: evaluation_data/multiomics/after/all_modalities_fedapp_kmeans_matrix.tsv
