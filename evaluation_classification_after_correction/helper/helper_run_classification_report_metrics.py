@@ -212,6 +212,7 @@ class DataInfo:
             # take the prediction targets from design even if provided in the data_df
             data_df = data_df.drop(columns=self.prediction_targets, errors='ignore')
             if not design_df.empty:
+                # inner join, will remove any extra samples from design (this is intended)
                 data_df = pd.merge(data_df, design_df, left_index=True, right_index=True)
 
         # Delete any covariates
