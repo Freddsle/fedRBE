@@ -171,6 +171,8 @@ cython_debug/
 **/tests/
 **/logs/
 **/workflows/
+!/workflows/
+!/workflows/**/*.donna.md
 **/testbed-*/
 **/site_info.json
 **/individual_results/**
