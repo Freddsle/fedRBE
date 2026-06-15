@@ -27,7 +27,6 @@ DATANAME_TO_LABEL = {
 DATANAME_TO_INCLUDE = [
     "Ovarian cancer Data",
     "E. coli Data",
-    "Quartet Data",
     "ccRCC Data",
 ]
 # These datanames will be included in the plots; everything else is filtered out.

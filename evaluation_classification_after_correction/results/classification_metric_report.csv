@@ -1,88 +1,4 @@
 data_name,data_preprocessing_name,metric_name,metric_value,predicted_client_name,cross_validation_method,seed,predicted_target,learning_type
-Quartet Data,uncorrected,MCC,0.7222222222222222,All,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,F1_score,0.7916666666666666,All,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,MCC,0.6666666666666666,APT,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,F1_score,0.75,APT,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,MCC,1.0,FDU,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,F1_score,1.0,FDU,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,MCC,0.0,NVG,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,F1_score,0.25,NVG,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,MCC,1.0,BGI,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,F1_score,1.0,BGI,Train-Test-Split,42,condition,federated
-Quartet Data,uncorrected,MCC,0.7575757575757576,All,Train-Test-Split,42,condition,centralized
-Quartet Data,uncorrected,F1_score,0.8181818181818182,All,Train-Test-Split,42,condition,centralized
-Quartet Data,corrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,MCC,1.0,APT,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,F1_score,1.0,APT,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,MCC,1.0,FDU,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,F1_score,1.0,FDU,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,MCC,1.0,NVG,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,F1_score,1.0,NVG,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,MCC,1.0,BGI,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,F1_score,1.0,BGI,Train-Test-Split,42,condition,federated
-Quartet Data,corrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
-Quartet Data,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
-Quartet Data,uncorrected,MCC,0.6666666666666666,All,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,F1_score,0.75,All,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,MCC,0.5,APT,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,F1_score,0.625,APT,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,MCC,0.8333333333333334,FDU,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,F1_score,0.875,FDU,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,MCC,0.3333333333333333,NVG,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,F1_score,0.5,NVG,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,MCC,1.0,BGI,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,F1_score,1.0,BGI,Train-Test-Split,43,condition,federated
-Quartet Data,uncorrected,MCC,0.8787878787878788,All,Train-Test-Split,43,condition,centralized
-Quartet Data,uncorrected,F1_score,0.9090909090909092,All,Train-Test-Split,43,condition,centralized
-Quartet Data,corrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,MCC,1.0,APT,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,F1_score,1.0,APT,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,MCC,1.0,FDU,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,F1_score,1.0,FDU,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,MCC,1.0,NVG,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,F1_score,1.0,NVG,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,MCC,1.0,BGI,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,F1_score,1.0,BGI,Train-Test-Split,43,condition,federated
-Quartet Data,corrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
-Quartet Data,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
-Quartet Data,uncorrected,MCC,0.7777777777777778,All,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,F1_score,0.8333333333333334,All,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,MCC,0.8333333333333334,APT,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,F1_score,0.875,APT,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,MCC,1.0,FDU,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,F1_score,1.0,FDU,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,MCC,0.0,NVG,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,F1_score,0.25,NVG,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,MCC,1.0,BGI,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,F1_score,1.0,BGI,Train-Test-Split,44,condition,federated
-Quartet Data,uncorrected,MCC,0.7575757575757576,All,Train-Test-Split,44,condition,centralized
-Quartet Data,uncorrected,F1_score,0.8181818181818182,All,Train-Test-Split,44,condition,centralized
-Quartet Data,corrected,MCC,1.0,All,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,F1_score,1.0,All,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,MCC,1.0,APT,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,F1_score,1.0,APT,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,MCC,1.0,FDU,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,F1_score,1.0,FDU,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,MCC,1.0,NVG,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,F1_score,1.0,NVG,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,MCC,1.0,BGI,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,F1_score,1.0,BGI,Train-Test-Split,44,condition,federated
-Quartet Data,corrected,MCC,1.0,All,Train-Test-Split,44,condition,centralized
-Quartet Data,corrected,F1_score,1.0,All,Train-Test-Split,44,condition,centralized
-Quartet Data,uncorrected,MCC,0.7222222222222222,All,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,F1_score,0.7916666666666666,All,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,MCC,1.0,APT,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,F1_score,1.0,APT,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,MCC,0.6666666666666666,FDU,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,F1_score,0.75,FDU,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,MCC,0.0,NVG,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,F1_score,0.25,NVG,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,MCC,1.0,BGI,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,F1_score,1.0,BGI,Train-Test-Split,45,condition,federated
-Quartet Data,uncorrected,MCC,0.8787878787878788,All,Train-Test-Split,45,condition,centralized
-Quartet Data,uncorrected,F1_score,0.9090909090909092,All,Train-Test-Split,45,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,42,condition,federated
@@ -203,30 +119,6 @@ E. coli,corrected,MCC,1.0,lab_E,Train-Test-Split,42,Pyr,federated
 E. coli,corrected,F1_score,1.0,lab_E,Train-Test-Split,42,Pyr,federated
 E. coli,corrected,MCC,1.0,All,Train-Test-Split,42,Pyr,centralized
 E. coli,corrected,F1_score,1.0,All,Train-Test-Split,42,Pyr,centralized
-Quartet,uncorrected,MCC,0.7222222222222222,All,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,F1_score,0.7916666666666666,All,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,MCC,0.6666666666666666,APT,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,F1_score,0.75,APT,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,MCC,1.0,FDU,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,F1_score,1.0,FDU,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,MCC,0.0,NVG,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,F1_score,0.25,NVG,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,MCC,1.0,BGI,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,F1_score,1.0,BGI,Train-Test-Split,42,condition,federated
-Quartet,uncorrected,MCC,0.7575757575757576,All,Train-Test-Split,42,condition,centralized
-Quartet,uncorrected,F1_score,0.8181818181818182,All,Train-Test-Split,42,condition,centralized
-Quartet,corrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
-Quartet,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
-Quartet,corrected,MCC,1.0,APT,Train-Test-Split,42,condition,federated
-Quartet,corrected,F1_score,1.0,APT,Train-Test-Split,42,condition,federated
-Quartet,corrected,MCC,1.0,FDU,Train-Test-Split,42,condition,federated
-Quartet,corrected,F1_score,1.0,FDU,Train-Test-Split,42,condition,federated
-Quartet,corrected,MCC,1.0,NVG,Train-Test-Split,42,condition,federated
-Quartet,corrected,F1_score,1.0,NVG,Train-Test-Split,42,condition,federated
-Quartet,corrected,MCC,1.0,BGI,Train-Test-Split,42,condition,federated
-Quartet,corrected,F1_score,1.0,BGI,Train-Test-Split,42,condition,federated
-Quartet,corrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
-Quartet,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
 ccRCC,uncorrected,MCC,0.9776119402985076,All,Train-Test-Split,42,Condition,federated
 ccRCC,uncorrected,F1_score,0.9888059701492538,All,Train-Test-Split,42,Condition,federated
 ccRCC,uncorrected,MCC,0.9661016949152542,PDC000127,Train-Test-Split,42,Condition,federated
