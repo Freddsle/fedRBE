@@ -207,7 +207,6 @@ fedRBE/
 │   │   └── 01_Preprocessing_and_RBE.ipynb      # Data preparation notebook with centralized removeBatchEffect run
 │   ├── microbiome/                             # Microbiome datasets with similar structure as ovarian_cancer
 │   ├── ecoli/                             # E. coli datasets
-│   ├── quartet/                  # Multi-batch E. coli datasets (several ba)
 │   └── simulated/                              # Simulated datasets
 ├── analyse_fedvscentral.py                     # Compares federated and centralized batch effect corrections.
 ├── generate_fedrbe_corrected_datasets.py       # A script performing fedRBE on all datasets and save the results.

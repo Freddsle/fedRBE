@@ -3,7 +3,8 @@
 Evaluates k-means clustering quality (ARI) on real omics datasets before and after
 fedRBE batch correction, for both central and federated k-means.
 
-**Datasets:** `ecoli`, `ovarian_cancer`, `quartet`, `ccRCC_proteomics`
+**Datasets:** `ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and `multiomics` 
+(the latter is a multi-modal dataset with transcriptomics, proteomics, and phosphoproteomics modalities measured on the same samples).
 
 ---
 
@@ -33,7 +34,7 @@ fedRBE batch correction, for both central and federated k-means.
 ### Step 0 — Build joint matrices (multiomics only) (`00_build_kmeans_matrices.ipynb`)
 
 Multiomics-only pre-step. The other datasets (`ecoli`, `ovarian_cancer`,
-`quartet`, `ccRCC_proteomics`) get their `before` / `corrected` matrices
+`ccRCC_proteomics`) get their `before` / `corrected` matrices
 directly from `evaluation_data/<dataset>/...` and skip this step.
 
 The R notebook stacks the three per-modality matrices written by

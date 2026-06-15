@@ -1,7 +1,7 @@
 # Clustering Evaluation After Batch Correction
 
 K-means clustering evaluation (central vs. federated) on real datasets
-(`ecoli`, `ovarian_cancer`, `quartet`, `ccRCC_proteomics`, and
+(`ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and
 `multiomics`). It measures the effect of fedRBE batch correction on
 clustering quality using ARI, MCC, and accuracy.
 
@@ -43,7 +43,6 @@ The notebooks 01-04 are configured to run all five real datasets:
 
 - `ecoli`
 - `ovarian_cancer`
-- `quartet`
 - `ccRCC_proteomics`
 - `multiomics` — joint k-means across all three modalities
   (Transcriptomics + Proteomics + Metabolomics rows stacked vertically).

@@ -24,17 +24,6 @@ ovarian_cancer:
   sample_col: file
   condition_col: HGSC
 
-quartet:
-  before_matrix: evaluation_data/quartet/before/00_initial_data/central_intensities_log_UNION.tsv
-  before_site_matrix_file: intensities_log_UNION.tsv
-  corrected_central: evaluation_data/quartet/after/intensities_log_Rcorrected_UNION.tsv
-  corrected_federated: evaluation_data/quartet/after/FedApp_corrected_data_smpc.tsv
-  sites_root: evaluation_data/quartet/before
-  site_glob: "[A-Z]*"
-  design_file: design.tsv
-  sample_col: file
-  condition_col: condition
-
 ccRCC_proteomics:
   before_matrix: evaluation_data/ccRCC_studies/before/central_intensities_log_UNION.tsv
   before_site_matrix_file: report_filtered.tsv

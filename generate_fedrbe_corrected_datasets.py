@@ -23,8 +23,6 @@ from copy import deepcopy
 
 from evaluation_utils import featurecloud_api_extension as util
 
-
-
 ### SETTINGS
 ## GENERALT SETTINGS
 # The directory that contains ALL data needed in ANY experiment.
@@ -169,32 +167,6 @@ set_smpc_true(ecoli_experiment_smpc)
 add_position_to_config(ecoli_experiment_smpc)
 add_position_to_config(ecoli_experiment)
 
-## PROTEOMICS MULTI_BATCH (Quartet, PXD045065)
-# 4 centers (labs): APT and FDU have 2 internal batches each (DDA + DIA),
-# NVG and BGI have 1 batch each (single batch name for all samples).
-# All centers use batch_col: batch.
-ecoli_config_file_changes_quartet = deepcopy(ecoli_config_file_changes_base)
-ecoli_config_file_changes_quartet["flimmaBatchCorrection"]["covariates"] = ["D6", "F7", "M8"]
-ecoli_config_file_changes_quartet["flimmaBatchCorrection"]["batch_col"] = "batch"
-ecoli_config_file_changes_quartet["flimmaBatchCorrection"]["min_samples"] = 0  # To avoid privacy error
-
-quartet_centers = ["APT", "FDU", "NVG", "BGI"]
-quartet_experiment = util.Experiment(
-    name="Quartet",
-    fc_data_dir=os.path.join(data_dir, "quartet"),
-    clients=[
-        os.path.join(data_dir, "quartet", "before", center)
-        for center in quartet_centers
-    ],
-    app_image_name=app_image_name,
-    config_files=[deepcopy(base_config) for _ in range(4)],
-    config_file_changes=[deepcopy(ecoli_config_file_changes_quartet) for _ in range(4)],
-)
-quartet_experiment_smpc = deepcopy(quartet_experiment)
-set_smpc_true(quartet_experiment_smpc)
-add_position_to_config(quartet_experiment_smpc)
-add_position_to_config(quartet_experiment)
-
 ## MICROARRAY
 ovarian_cancer_config_file_changes = {
     "flimmaBatchCorrection": {
@@ -263,20 +235,11 @@ add_position_to_config(ccRCC_ecoli_experiment)
 import sys as _sys
 _sys.path.insert(0, os.path.join(data_dir, "multiomics"))
 from fedrbe_multiomics_utils import (  # noqa: E402
-    CLIENT_NAMES as _MULTIOMICS_ACTIVE_CLIENTS,
-    INCLUDE_CLIENT_04 as _INCLUDE_CLIENT_04,
+    CLIENT_NAMES as _MULTIOMICS_ACTIVE_CLIENTS
 )
 
 multiomics_modalities = [
     "Transcriptomics",  "Proteomics",  "Metabolomics"]
-# Full federation reference batches (last batch of the last client when each
-# client is the federation tail). Pruned below to whichever client is last.
-_ALL_MULTIOMICS_CLIENTS = [
-    "client_01_L01",
-    "client_02_L02",
-    "client_03_L05_L04",
-    "client_04_L03_L14",
-]
 _MULTIOMICS_REFERENCE_BATCH_BY_LAST_CLIENT = {
     "client_03_L05_L04": {
         "Transcriptomics": "R_ILM_L5_B2",

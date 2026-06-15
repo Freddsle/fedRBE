@@ -272,6 +272,3 @@ evaluation_data/multiomics/before/preparation_summary.tsv
 evaluation_data/multiomics/after/*/FedSim_corrected_data.tsv
 evaluation_data/multiomics/after/*_summary.tsv
 evaluation_data/multiomics/after/fedsim_datainfo.json
-
-# Generated reports that are not consumed by downstream analyses
-evaluation_data/quartet/after/individual_results/*/report.txt

@@ -66,17 +66,6 @@ experiment_results.append(utils.ExperimentResult(
     central_result_file=os.path.join(base_dir, "ecoli", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 
-experiment_results.append(utils.ExperimentResult(
-    name="Quartet",
-    federated_result_file=os.path.join(base_dir, "quartet", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "quartet", "after", "intensities_log_Rcorrected_UNION.tsv"),
-))
-experiment_results.append(utils.ExperimentResult(
-    name="Quartet (SMPC)",
-    federated_result_file=os.path.join(base_dir, "quartet", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "quartet", "after", "intensities_log_Rcorrected_UNION.tsv"),
-))
-
 # MULTIOMICS
 for modality in ["Transcriptomics", "Proteomics", "Metabolomics"]:
     for name_suffix, result_filename in [
