@@ -266,9 +266,7 @@ evaluation_data/multiomics/figshare_data/meta_balancedconfounded_dataset_3omics.
 evaluation_data/multiomics/figshare_data/Metabolomics_fullset_expr_r984c204_randomfloor.csv
 
 # Multiomics generated summaries and duplicate correction exports
-evaluation_data/multiomics/before/datainfo.json
 evaluation_data/multiomics/before/preparation_summary.tsv
-evaluation_data/multiomics/after/*/FedApp_corrected_data_smpc.tsv
 
 # Multiomics optional simulations and generated summaries
 evaluation_data/multiomics/after/*/FedSim_corrected_data.tsv
