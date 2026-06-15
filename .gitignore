@@ -213,6 +213,7 @@ evaluation_data/**/config_forest.yaml
 
 ## Also the centrally corrected data
 !evaluation_data/**/after/intensities_R_corrected.tsv
+!evaluation_data/**/after/*/intensities_R_corrected.tsv
 
 ## Allow the simulated rotation before data
 ## This data is too big but is added to git lfs
