@@ -25,9 +25,9 @@ DATANAME_TO_LABEL = {
 # these datanames will be displayed with the corresponding label in the plots.
 # If a dataname is not in this dict, it will be displayed as is.
 DATANAME_TO_INCLUDE = [
-    "Ovarian cancer Data",
-    "E. coli Data",
-    "ccRCC Data",
+    "Ovarian cancer",
+    "E. coli",
+    "ccRCC",
 ]
 # These datanames will be included in the plots; everything else is filtered out.
 
@@ -46,6 +46,7 @@ if 'learning_type' not in df.columns:
     raise ValueError(f"Expected 'learning_type' column in {RESULTS_FILE} not found. Please check the file.")
 # remove duplicates if any
 df = df.drop_duplicates()
+print(f"Loaded {len(df)} rows from {RESULTS_FILE} after removing duplicates.")
 
 # Load colour schema
 colour_schema = json.loads(Path(COLOUR_SCHEMA_FILE).read_text(encoding='utf-8'))
@@ -80,6 +81,7 @@ if len(duplicates) > 0:
 
 # filter to datanames that should be included
 df = df[df['data_name'].isin(DATANAME_TO_INCLUDE)]
+print(f"Using {len(df)} rows after filtering to included datanames: {DATANAME_TO_INCLUDE}")
 
 # metric name x target x cross validation method plots
 for metric_name in df['metric_name'].unique():
