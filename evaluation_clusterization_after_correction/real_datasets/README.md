@@ -3,7 +3,7 @@
 Evaluates k-means clustering quality (ARI) on real omics datasets before and after
 fedRBE batch correction, for both central and federated k-means.
 
-**Datasets:** `ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and `multiomics` 
+**Datasets:** `ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and `quartet_multiomics` 
 (the latter is a multi-modal dataset with transcriptomics, proteomics, and phosphoproteomics modalities measured on the same samples).
 
 ---
@@ -31,14 +31,14 @@ fedRBE batch correction, for both central and federated k-means.
 
 ## Step-by-Step Instructions
 
-### Step 0 — Build joint matrices (multiomics only) (`00_build_kmeans_matrices.ipynb`)
+### Step 0 — Build joint matrices (quartet multiomics only) (`00_build_kmeans_matrices.ipynb`)
 
-Multiomics-only pre-step. The other datasets (`ecoli`, `ovarian_cancer`,
+Quartet Multiomics-only pre-step. The other datasets (`ecoli`, `ovarian_cancer`,
 `ccRCC_proteomics`) get their `before` / `corrected` matrices
 directly from `evaluation_data/<dataset>/...` and skip this step.
 
 The R notebook stacks the three per-modality matrices written by
-`evaluation_data/multiomics/03_central_RBE.ipynb` and
+`evaluation_data/quartet_multiomics/03_central_RBE.ipynb` and
 `04_run_fedrbe.ipynb` into a single joint matrix per condition
 (before / central-corrected / FedRBE-corrected), and drops per-client
 `design.tsv` / `intensities.tsv` slices the standard flow consumes.
@@ -49,15 +49,15 @@ jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
 ```
 
 **Outputs:**
-- `evaluation_data/multiomics/after/all_modalities_{before,corrected}_kmeans_matrix.tsv`
+- `evaluation_data/quartet_multiomics/after/all_modalities_{before,corrected}_kmeans_matrix.tsv`
   plus `all_modalities_fedapp_kmeans_matrix.tsv` for real FeatureCloud
   FedRBE outputs, or `all_modalities_fedsim_kmeans_matrix.tsv` for local
   FedSim-only outputs
   — joint matrices used as `before_matrix` / `corrected_central` /
   `corrected_federated` in `evaluation_utils/datasets.yaml`. Kept under
-  `evaluation_data/` because `evaluation/evaluation_multiomics.ipynb` also
+  `evaluation_data/` because `evaluation/evaluation_quartet_multiomics.ipynb` also
   reads them.
-- `evaluation_clusterization_after_correction/real_datasets/multiomics/before/<client>/{design.tsv, intensities.tsv}`
+- `evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/<client>/{design.tsv, intensities.tsv}`
   — per-client splits used when Step 3 builds FeatureCloud k-means inputs.
   These are k-means-only and live inside this clustering-eval folder.
 
@@ -68,7 +68,7 @@ each apply their own per-feature scaling on the joint matrix, the same way
 they do for every other dataset.
 
 **Targets** must match the active client list in
-`evaluation_data/multiomics/fedrbe_multiomics_utils.py`, controlled by the
+`evaluation_data/quartet_multiomics/fedrbe_quartet_multiomics_utils.py`, controlled by the
 `INCLUDE_CLIENT_04` toggle — default `False`, i.e. 3 clients / 48 joint samples.
 
 - `condition`: donor labels `D5/D6/F7/M8` (`D6` is the limma reference donor),
@@ -81,7 +81,7 @@ they do for every other dataset.
   the other real-dataset scripts.
 
 Joint samples are matched across modalities via the `pseudo_sample` keys built
-in `evaluation_data/multiomics/02_prepare_RBE_inputs.ipynb`
+in `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`
 (`{client}_{donor}_{rep}_{i}`).
 
 ---

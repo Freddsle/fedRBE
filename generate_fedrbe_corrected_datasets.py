@@ -226,14 +226,14 @@ set_smpc_true(ccRCC_ecoli_experiment_smpc)
 add_position_to_config(ccRCC_ecoli_experiment_smpc)
 add_position_to_config(ccRCC_ecoli_experiment)
 
-## MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
+## Quartet MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
 # Toggle for the synthetic client_04_L03_L14 (L03 + L14 fold-in). Driven from
 # the same single source (`fedrbe_multiomics_utils.INCLUDE_CLIENT_04`) used by
-# notebooks 01--04 of `evaluation_data/multiomics/`, so the entire pipeline
+# notebooks 01--04 of `evaluation_data/quartet_multiomics/`, so the entire pipeline
 # switches together. Default False -- only the three real cross-modality
 # clients run.
 import sys as _sys
-_sys.path.insert(0, os.path.join(data_dir, "multiomics"))
+_sys.path.insert(0, os.path.join(data_dir, "quartet_multiomics"))
 from fedrbe_multiomics_utils import (  # noqa: E402
     CLIENT_NAMES as _MULTIOMICS_ACTIVE_CLIENTS
 )
@@ -285,10 +285,10 @@ def build_multiomics_config_file_changes(modality: str) -> List[dict]:
 
 multiomics_experiments = {
     modality: util.Experiment(
-        name=f"Multiomics {modality}",
-        fc_data_dir=os.path.join(data_dir, "multiomics"),
+        name=f"Quartet Multiomics {modality}",
+        fc_data_dir=os.path.join(data_dir, "quartet_multiomics"),
         clients=[
-            os.path.join(data_dir, "multiomics", "before", modality, client)
+            os.path.join(data_dir, "quartet_multiomics", "before", modality, client)
             for client in multiomics_clients
         ],
         app_image_name=app_image_name,
@@ -299,7 +299,7 @@ multiomics_experiments = {
 }
 multiomics_experiments_smpc = deepcopy(multiomics_experiments)
 for multiomics_modality, multiomics_experiment_smpc in multiomics_experiments_smpc.items():
-    multiomics_experiment_smpc.name = f"Multiomics {multiomics_modality} (SMPC)"
+    multiomics_experiment_smpc.name = f"Quartet Multiomics {multiomics_modality} (SMPC)"
     set_smpc_true(multiomics_experiment_smpc)
 
 ## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
@@ -337,13 +337,13 @@ result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedAp
 experiments.append(ccRCC_ecoli_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Multiomics
+## Quartet Multiomics
 for multiomics_modality in multiomics_modalities:
     experiments.append(multiomics_experiments[multiomics_modality])
     result_file_names.append(
         os.path.join(
             data_dir,
-            "multiomics",
+            "quartet_multiomics",
             "after",
             multiomics_modality,
             "FedApp_corrected_data.tsv",
@@ -353,7 +353,7 @@ for multiomics_modality in multiomics_modalities:
     result_file_names.append(
         os.path.join(
             data_dir,
-            "multiomics",
+            "quartet_multiomics",
             "after",
             multiomics_modality,
             "FedApp_corrected_data_smpc.tsv",

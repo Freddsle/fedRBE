@@ -28,6 +28,7 @@ DATANAME_TO_INCLUDE = [
     "Ovarian cancer",
     "E. coli",
     "ccRCC",
+    "Quartet Multiomics"
 ]
 # These datanames will be included in the plots; everything else is filtered out.
 

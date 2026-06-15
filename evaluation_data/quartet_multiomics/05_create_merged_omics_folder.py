@@ -45,6 +45,7 @@ def create_merged_omics_folder():
         print(f"\n{'='*60}")
         print(f"Processing file: {datafile}")
         print(f"{'='*60}")
+        datafile_folder = datafile.parent.name  # before or after
 
         # read the merged data file
         df = pd.read_csv(datafile, sep="\t", index_col="rowname")
@@ -56,7 +57,7 @@ def create_merged_omics_folder():
             # write the data of the client
             print(f"Processing client: {client}")
             # e.g merged_omics / before / client_01_L01 / merged_data.tsv
-            client_folder = merged_omics_folder / datafile.parent.name / client
+            client_folder = merged_omics_folder / datafile_folder / client
             client_folder.mkdir(parents=True, exist_ok=True)
 
             # use all samples whose index contains the client name
@@ -70,7 +71,7 @@ def create_merged_omics_folder():
 
         # write the datainfo of all clients
         data_info = {
-            "data_name": "Quartet",
+            "data_name": "Quartet Multiomics",
             "covariates": [],
             "prediction_targets": [prediction_target],
             "datafile": {
@@ -85,7 +86,7 @@ def create_merged_omics_folder():
             } for client in clients],
         }
 
-        with open(merged_omics_folder / "datainfo.json", "w") as f:
+        with open(merged_omics_folder / datafile_folder / "datainfo.json", "w") as f:
             json.dump(data_info, f, indent=4)
 
 if __name__ == "__main__":

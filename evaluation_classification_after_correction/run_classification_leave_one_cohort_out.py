@@ -89,16 +89,16 @@ for num_run in range(NUM_RUNS):
         resultfile=RESULTS_FILE,
     ).run_experiment(seed=seed)
 
-    # # Multiomics Data
-    # folder_multiomics = EVALUATION_DATA_FOLDER / "multiomics" / "merged_omics"
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="uncorrected",
-    #     datainfo=DataInfo(folder_multiomics / "before" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    # Multiomics Data
+    folder_multiomics = EVALUATION_DATA_FOLDER / "quartet_multiomics" / "merged_omics"
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="uncorrected",
+        datainfo=DataInfo(folder_multiomics / "before" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="corrected",
-    #     datainfo=DataInfo(folder_multiomics / "after" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="corrected",
+        datainfo=DataInfo(folder_multiomics / "after" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)

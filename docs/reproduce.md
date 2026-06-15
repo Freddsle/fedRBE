@@ -94,9 +94,8 @@ This section guides you through running both federated and centralized batch eff
 ### 1. Obtaining federated corrected data
 
 Use the provided utility script to perform the configured federated batch
-effect correction experiments. The checked-in configuration currently runs
-the three multiomics modalities; edit the experiment list in the script to
-enable the other datasets.
+effect correction experiments. Edit the experiment list in the script to
+enable or disable any of the datasets, currenttly all datasets are enabled by default.
 
 ```bash
 python3 ./generate_fedrbe_corrected_datasets.py
@@ -106,7 +105,7 @@ Steps Performed by the Script:
 
 1. Sets up multiple clients: Simulates clients based on the datasets in `evaluation_data/[dataset]/before/`.
 2. Runs fedRBE on each client: Applies federated batch effect correction using FeatureCloud testing environment.
-3. Aggregates results: Combines corrected data.
+3. Aggregates results: Combines corrected data and writes outputs to `evaluation_data/[dataset]/after/` for each dataset.
 
 Output:
 

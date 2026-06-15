@@ -2,7 +2,7 @@
 
 K-means clustering evaluation (central vs. federated) on real datasets
 (`ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and
-`multiomics`). It measures the effect of fedRBE batch correction on
+`Quartet - Multiomics`). It measures the effect of fedRBE batch correction on
 clustering quality using ARI, MCC, and accuracy.
 
 All data is read directly from `evaluation_data/` — no copies are made.
@@ -44,7 +44,7 @@ The notebooks 01-04 are configured to run all five real datasets:
 - `ecoli`
 - `ovarian_cancer`
 - `ccRCC_proteomics`
-- `multiomics` — joint k-means across all three modalities
+- `Quartet - Multiomics` — joint k-means across all three modalities
   (Transcriptomics + Proteomics + Metabolomics rows stacked vertically).
   Both central k-means and the FeatureCloud `fc_kmeans` app apply their
   standard per-feature scaling on the joint matrix, the same way they do for
@@ -65,15 +65,15 @@ This writes `all_modalities_before_kmeans_matrix.tsv`,
 `all_modalities_corrected_kmeans_matrix.tsv`, and either
 `all_modalities_fedapp_kmeans_matrix.tsv` or
 `all_modalities_fedsim_kmeans_matrix.tsv` under
-`evaluation_data/multiomics/after/` (shared with
-`evaluation/evaluation_multiomics.ipynb`) and per-client
+`evaluation_data/quartet_multiomics/after/` (shared with
+`evaluation/evaluation_quartet_multiomics.ipynb`) and per-client
 `design.tsv`/`intensities.tsv` under
-`evaluation_clusterization_after_correction/real_datasets/multiomics/before/`
+`evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/`
 (k-means-only inputs).
 After that, notebooks 01-04 treat multiomics like any other dataset.
 
 The number of clients (3 by default, 4 with `INCLUDE_CLIENT_04 = True`) is
-controlled by `evaluation_data/multiomics/fedrbe_multiomics_utils.py`; it
+controlled by `evaluation_data/quartet_multiomics/fedrbe_multiomics_utils.py`; it
 flows through both the per-modality fedRBE pipeline and the joint k-means
 matrices.
 

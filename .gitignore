@@ -207,8 +207,8 @@ evaluation_data/**/config_forest.yaml
 ## Allow all federated corrected data
 !evaluation_data/**/after/individual_results/*/full_corrected_data.csv
 !evaluation_data/**/after/individual_results/*/only_batch_corrected_data.csv
-!evaluation_data/multiomics/after/*/individual_results/*/full_corrected_data.csv
-!evaluation_data/multiomics/after/*/individual_results/*/only_batch_corrected_data.csv
+!evaluation_data/quartet_multiomics/after/*/individual_results/*/full_corrected_data.csv
+!evaluation_data/quartet_multiomics/after/*/individual_results/*/only_batch_corrected_data.csv
 !evaluation_data/**/after/individual_results/*/report.txt
 
 ## Also the centrally corrected data
@@ -233,7 +233,7 @@ evaluation_clusterization_after_correction/real_datasets/*/metrics/
 evaluation_clusterization_after_correction/real_datasets/metrics_ari.tsv
 evaluation_clusterization_after_correction/real_datasets/metrics_ari_multirun.tsv
 # Multiomics per-client splits built by 00_build_kmeans_matrices.ipynb
-evaluation_clusterization_after_correction/real_datasets/multiomics/before/
+evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/
 evaluation_clusterization_after_correction/federated_kmeans_upd/output.png
 
 
@@ -255,20 +255,20 @@ evaluation_data/ccRCC_studies/after/individual_results/*/report.txt
 
 evaluation_clusterization_after_correction/simulated/*
 evaluation/plots/*
-evaluation_data/multiomics/plots/*
+evaluation_data/quartet_multiomics/plots/*
 evaluation_data/ovarian_cancer/before/all_expression_UNION.tsv
-evaluation_data/multiomics/filtered_data/*
+evaluation_data/quartet_multiomics/filtered_data/*
 
-# Multiomics optional source exports not used by the reproducible pipeline
-evaluation_data/multiomics/figshare_data/*_Balanced_*
-evaluation_data/multiomics/figshare_data/*_Confounded_*
-evaluation_data/multiomics/figshare_data/meta_balancedconfounded_dataset_3omics.xlsx
-evaluation_data/multiomics/figshare_data/Metabolomics_fullset_expr_r984c204_randomfloor.csv
+# Quartet Multiomics optional source exports not used by the reproducible pipeline
+evaluation_data/quartet_multiomics/figshare_data/*_Balanced_*
+evaluation_data/quartet_multiomics/figshare_data/*_Confounded_*
+evaluation_data/quartet_multiomics/figshare_data/meta_balancedconfounded_dataset_3omics.xlsx
+evaluation_data/quartet_multiomics/figshare_data/Metabolomics_fullset_expr_r984c204_randomfloor.csv
 
-# Multiomics generated summaries and duplicate correction exports
-evaluation_data/multiomics/before/preparation_summary.tsv
+# Quartet Multiomics generated summaries and duplicate correction exports
+evaluation_data/quartet_multiomics/before/preparation_summary.tsv
 
-# Multiomics optional simulations and generated summaries
-evaluation_data/multiomics/after/*/FedSim_corrected_data.tsv
-evaluation_data/multiomics/after/*_summary.tsv
-evaluation_data/multiomics/after/fedsim_datainfo.json
+# Quartet Multiomics optional simulations and generated summaries
+evaluation_data/quartet_multiomics/after/*/FedSim_corrected_data.tsv
+evaluation_data/quartet_multiomics/after/*_summary.tsv
+evaluation_data/quartet_multiomics/after/fedsim_datainfo.json

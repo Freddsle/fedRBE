@@ -33,16 +33,16 @@ evaluation_data/simulated/*/before/intermediate/1_intensities_data_no_batch.tsv 
 evaluation_data/simulated/*/after/FedSim_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/intensities_R_corrected.tsv filter=lfs diff=lfs merge=lfs -text
 
-# Multiomics source data and retained correction results
-evaluation_data/multiomics/figshare_data/Transcriptomics_fulldataset_log2FPKM_r26907c180.csv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/multiomics/after/Transcriptomics/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/multiomics/after/Transcriptomics/intensities_log_Rcorrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/multiomics/after/all_modalities_*_kmeans_matrix.tsv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/multiomics/after/*/individual_results/*/only_batch_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/multiomics/after/*/individual_results/*/full_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/multiomics/after/*/intensities_log_Rcorrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/multiomics/after/*/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/multiomics/after/*/FedApp_corrected_data_smpc.tsv filter=lfs diff=lfs merge=lfs -text
-# Multiomics created merged data files
-evaluation_data/multiomics/merged_omics/*/client_*/merged_data.tsv filter=lfs diff=lfs merge=lfs -text
+# Quartet multiomics source data and retained correction results
+evaluation_data/quartet_multiomics/figshare_data/Transcriptomics_fulldataset_log2FPKM_r26907c180.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/quartet_multiomics/after/Transcriptomics/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/quartet_multiomics/after/Transcriptomics/intensities_log_Rcorrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/quartet_multiomics/after/all_modalities_*_kmeans_matrix.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/quartet_multiomics/after/*/individual_results/*/only_batch_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/quartet_multiomics/after/*/individual_results/*/full_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/quartet_multiomics/after/*/intensities_log_Rcorrected_UNION.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/quartet_multiomics/after/*/FedApp_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/quartet_multiomics/after/*/FedApp_corrected_data_smpc.tsv filter=lfs diff=lfs merge=lfs -text
+# Quartet multiomics created merged data files
+evaluation_data/quartet_multiomics/merged_omics/*/client_*/merged_data.tsv filter=lfs diff=lfs merge=lfs -text
 

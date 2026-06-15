@@ -41,18 +41,18 @@ ccRCC_proteomics:
 # itself is built by
 #   evaluation_clusterization_after_correction/real_datasets/
 #       00_build_kmeans_matrices.ipynb
-# which writes the joint matrices into evaluation_data/multiomics/after/
-# (shared with evaluation/evaluation_multiomics.ipynb) and the k-means-only
+# which writes the joint matrices into evaluation_data/quartet_multiomics/after/
+# (shared with evaluation/evaluation_quartet_multiomics.ipynb) and the k-means-only
 # per-client splits into
-#   evaluation_clusterization_after_correction/real_datasets/multiomics/before/<client>/.
+#   evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/<client>/.
 # `n_init: 50` is a robustness override for the small (48-sample) joint
 # matrix; the standard per-feature StandardScaler / fc_kmeans scaling applies.
-multiomics:
-  before_matrix: evaluation_data/multiomics/before/all_modalities_before_kmeans_matrix.tsv
+quartet_multiomics:
+  before_matrix: evaluation_data/quartet_multiomics/before/all_modalities_before_kmeans_matrix.tsv
   before_site_matrix_file: intensities.tsv
-  corrected_central: evaluation_data/multiomics/after/all_modalities_corrected_kmeans_matrix.tsv
-  corrected_federated: evaluation_data/multiomics/after/all_modalities_fedapp_kmeans_matrix.tsv
-  sites_root: evaluation_clusterization_after_correction/real_datasets/multiomics/before
+  corrected_central: evaluation_data/quartet_multiomics/after/all_modalities_corrected_kmeans_matrix.tsv
+  corrected_federated: evaluation_data/quartet_multiomics/after/all_modalities_fedapp_kmeans_matrix.tsv
+  sites_root: evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before
   site_glob: "client_*"
   design_file: design.tsv
   sample_col: file

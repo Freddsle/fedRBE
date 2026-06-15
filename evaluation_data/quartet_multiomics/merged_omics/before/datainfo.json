@@ -1,0 +1,29 @@
+{
+    "data_name": "Quartet Multiomics",
+    "covariates": [],
+    "prediction_targets": [
+        "condition"
+    ],
+    "datafile": {
+        "filename": "merged_data.tsv",
+        "separator": "\t",
+        "rotation": "samples x features"
+    },
+    "cohorts": [
+        {
+            "name": "client_01_L01",
+            "folder": "client_01_L01",
+            "designfile": null
+        },
+        {
+            "name": "client_02_L02",
+            "folder": "client_02_L02",
+            "designfile": null
+        },
+        {
+            "name": "client_03_L05_L04",
+            "folder": "client_03_L05_L04",
+            "designfile": null
+        }
+    ]
+}
