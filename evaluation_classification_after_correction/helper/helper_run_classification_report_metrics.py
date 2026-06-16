@@ -21,6 +21,7 @@ TRAIN_TEST_RATIO = 0.7
 LEARNING_TYPE_FEDERATED = "federated"
 LEARNING_TYPE_CENTRALIZED = "centralized"
 LEARNING_TYPES = [LEARNING_TYPE_FEDERATED, LEARNING_TYPE_CENTRALIZED]
+DEFAULT_SAMPLE_COL = "sample_col"
 
 BASE_FOREST_CONFIG = {
     'simple_forest': {
@@ -35,7 +36,7 @@ BASE_FOREST_CONFIG = {
         'num_estimators_total': 100,
         'predicted_feature_name': 'label',
         'random_state': 42,
-        'sample_col': 0,
+        'sample_col': DEFAULT_SAMPLE_COL,
         'train_test_ratio': 1.0,
     }
 }
@@ -166,9 +167,13 @@ class DataInfo:
             # Use the named column when provided, otherwise fall back to positional index 0
             # so that after .T the feature names become proper column names rather than
             # an extra data row with integer column indices.
+            # we don't support unnamed features
             read_kwargs['index_col'] = spec.featurename_column if spec.featurename_column else 0
-        elif spec.featurename_column:
-            read_kwargs['index_col'] = spec.featurename_column
+        elif spec.samplename_column is not None:
+            # In samples-as-rows files, the sample identifier column is optional.
+            # If provided, read it in as index_col so that it becomes the DataFrame index.
+            # If not provided, pandas will auto-assign integer indices.
+            read_kwargs['index_col'] = spec.samplename_column
         filepath = folder / spec.filename
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             first_line = f.readline()
@@ -178,14 +183,9 @@ class DataInfo:
                     f"Did you forget to run `git lfs pull`?"
                 )
         df = pd.read_csv(filepath, **read_kwargs)
-
         if spec.rotation == 'features x samples':
             # rows = features, columns = samples  →  transpose to samples × features
             df = df.T
-        else:
-            # rows = samples, columns = features
-            if spec.samplename_column:
-                df = df.set_index(spec.samplename_column)
 
         return df
 
@@ -237,7 +237,6 @@ class DataInfo:
                     f"Prediction target '{target}' not found in cohort data at {cohort_folder}. "
                     "Either provide a designfile with this target or include it in the datafile."
                 )
-
         return data_df
 
     # ------------------------------------------------------------------
@@ -245,18 +244,19 @@ class DataInfo:
     # ------------------------------------------------------------------
 
     def prepare_cohort_data_files(self, predicted_col: str) -> None:
-        """
-        For every cohort, load data via :meth:`receive_data` and write a
-        ``tmp_data.csv`` (comma-separated, samples × features + predicted target) into
-        the cohort folder so the federated forest app can consume it.
-        """
         for cohort in self.cohorts:
             cohort_folder = self._base_folder / cohort.folder
             df = self.receive_data(cohort)
-            # Ensure only the predicted target column and no other prediction targets are present
+
+            # 1. Ensure the Sample IDs are moved from the Index into a column
+            if df.index.name != DEFAULT_SAMPLE_COL:
+                df.index.name = DEFAULT_SAMPLE_COL
+
+            # 2. Ensure only the predicted target column remains
             other_targets = set(self.prediction_targets or []) - {predicted_col}
             df = df.drop(columns=other_targets, errors='ignore')
-            df.to_csv(cohort_folder / 'tmp_data.csv', sep=',')
+
+            df.to_csv(cohort_folder / 'tmp_data.csv', sep=',', index=True, index_label=DEFAULT_SAMPLE_COL)
 
     def cleanup_cohort_data_files(self,
                                     also_config_forest: bool = False,
@@ -288,7 +288,10 @@ class DataInfo:
 def _write_forest_config(client_folder: Path,
                           target: str,
                           seed: int,
-                          train_test_ratio: float) -> None:
+                          train_test_ratio: float,
+                          feature_name_col: Optional[Union[str, int]] = None,
+                          sample_col: Optional[Union[str, int]] = DEFAULT_SAMPLE_COL,
+                          ) -> None:
     """
     Write (or overwrite) ``config_forest.yaml`` in *client_folder*.
 
@@ -304,6 +307,8 @@ def _write_forest_config(client_folder: Path,
     sf['csv_seperator'] = ','
     sf['random_state'] = seed
     sf['train_test_ratio'] = train_test_ratio
+    sf['sample_col'] = sample_col
+    sf['feature_name_col'] = feature_name_col
     config_forest_path = client_folder / 'config_forest.yaml'
     with open(config_forest_path, 'w', encoding='utf-8') as f:
         yaml.safe_dump(config, f)
@@ -316,10 +321,10 @@ def _write_centralized_data_file(input_folder: Path, source_folders: List[Path])
     """
     input_folder.mkdir(parents=True, exist_ok=True)
     dfs = [
-        pd.read_csv(source_folder / 'tmp_data.csv', index_col=0)
+        pd.read_csv(source_folder / 'tmp_data.csv', index_col=DEFAULT_SAMPLE_COL)
         for source_folder in source_folders
     ]
-    pd.concat(dfs, axis=0).to_csv(input_folder / 'tmp_data.csv', sep=',')
+    pd.concat(dfs, axis=0).to_csv(input_folder / 'tmp_data.csv', sep=',', index_label=DEFAULT_SAMPLE_COL)
 
 
 def _read_model_and_info(output_folder: Path) -> tuple[RandomForestClassifier, dict]:
