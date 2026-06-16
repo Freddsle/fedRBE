@@ -36,6 +36,7 @@ def create_merged_omics_folder():
     prediction_target = "condition"
     merged_omics_folder = script_folder / "merged_omics"
     merged_omics_folder.mkdir(parents=True, exist_ok=True)
+    index_name = "sample_id"
 
     # Read the meta file
     df_meta = pd.read_csv(script_folder / "all_modalities_metadata.tsv", sep="\t", index_col="pseudo_sample")
@@ -67,7 +68,8 @@ def create_merged_omics_folder():
 
             # merge in the prediction target column from the meta file
             df_client[prediction_target] = df_meta.loc[client_samples, prediction_target]
-            df_client.to_csv(client_folder / "merged_data.tsv", sep="\t")
+            df_client.index.name = index_name
+            df_client.to_csv(client_folder / "merged_data.tsv", sep="\t", index=True)
 
         # write the datainfo of all clients
         data_info = {
@@ -78,6 +80,7 @@ def create_merged_omics_folder():
                 "filename": "merged_data.tsv",
                 "separator": "\t",
                 "rotation": "samples x features",
+                "samplename_column": index_name,
             },
             "cohorts": [{
                 "name": client,
