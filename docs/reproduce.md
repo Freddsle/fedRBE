@@ -167,6 +167,10 @@ To reproduce the tables and figures from the preprint, run the provided Jupyter 
 
 ### 5. Reproduce the classification analysis comparing fedRBE corrected to non corrected data
 
+#### Prerequisites
+- You need to have the `Python3` environments set up with the required dependencies as described in the [Prerequisites and setup](#prerequisites-and-setup) section.
+
+#### Reproduction steps
 This is split into three python scripts. Make sure the required python packages from `requirements.txt` are installed!
 
 First run the classification experiments. This takes multiple hours, so the repo already contains the relevant results if you want to skip this. 
