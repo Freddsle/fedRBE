@@ -188,6 +188,23 @@ To finally visualize the experiments with plot, simply run the corresponding ana
 python3 evaluation_classification_after_correction/analyse_classification_metric_report.py
 ```
 The resulting plots can be found in `evaluation_classification_after_correction/plots`.
+You can also use the helper shell scripts:
+- `run_all_classification_analysis.sh` Runs all three scripts sequentially. This can take some hours of runtime
+- `run_all_classification_analysis_tmux.sh` Just runs `run_all_classification_analysis.sh` in a tmux session, so you can safely disconnect from the terminal while the script is running. You can reconnect to the tmux session later to check the progress or see the results. Logs of this are stored in classification_analysis_{TIMESTAMP}.log files.
+
+### 6. Reproduce the clusterization analysis comparing fedRBE corrected to non corrected data
+
+To reproduce the clustering results from the preprint, Jupyter notebooks are provided.
+#### Prerequisites
+- You need to have both the `R` and `Python3` environments set up with the required dependencies as described in the [Prerequisites and setup](#prerequisites-and-setup) section.
+- You need to build the docker image for the federated kmeans app. To do this, navigate to `evaluation_clusterization_after_correction/federated_kmeans_upd/` and run the `build.sh` script:
+```bash
+cd evaluation_clusterization_after_correction/federated_kmeans_upd/
+./build.sh
+```
+##### Reproduction steps
+in the `evaluation_clusterization_after_correction/real_datasets/` directory. 
+Run them in the correct order, starting with `00_build_kmeans_matrices.ipynb`.
 
 ---
 
