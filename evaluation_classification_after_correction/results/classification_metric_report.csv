@@ -19,46 +19,6 @@ Balanced Simulated,corrected,MCC,1.0,lab3,Train-Test-Split,42,condition,federate
 Balanced Simulated,corrected,F1_score,1.0,lab3,Train-Test-Split,42,condition,federated
 Balanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
 Balanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab1,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab2,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab2,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab3,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab3,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
-Mildly Imbalanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab1,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab1,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab2,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab2,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab3,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab3,Train-Test-Split,42,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,lab1,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,lab2,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,lab2,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,lab3,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,lab3,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
-Strongly Imbalanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab1,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab1,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab2,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab2,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab3,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab3,Train-Test-Split,42,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
 Ovarian cancer,uncorrected,MCC,0.8640776699029126,All,Train-Test-Split,42,HGSC,federated
 Ovarian cancer,uncorrected,F1_score,0.9320388349514565,All,Train-Test-Split,42,HGSC,federated
 Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,42,HGSC,federated
@@ -139,6 +99,26 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,42,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,42,Condition,federated
 ccRCC,corrected,MCC,0.947565543071161,All,Train-Test-Split,42,Condition,centralized
 ccRCC,corrected,F1_score,0.9737827715355806,All,Train-Test-Split,42,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,42,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,42,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,42,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,42,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,42,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,42,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,42,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,42,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,42,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,42,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,42,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,42,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,43,condition,federated
@@ -159,126 +139,6 @@ Balanced Simulated,corrected,MCC,1.0,lab3,Train-Test-Split,43,condition,federate
 Balanced Simulated,corrected,F1_score,1.0,lab3,Train-Test-Split,43,condition,federated
 Balanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
 Balanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab1,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab2,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab2,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab3,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab3,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
-Mildly Imbalanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab1,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab1,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab2,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab2,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab3,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab3,Train-Test-Split,43,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,lab1,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,lab2,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,lab2,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,lab3,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,lab3,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
-Strongly Imbalanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab1,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab1,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab2,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab2,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab3,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab3,Train-Test-Split,43,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,uncorrected,MCC,0.7622792201730545,lab2,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.8681006493506493,lab2,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.9607689228305228,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9799919967987194,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,uncorrected,MCC,0.9336995618478524,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,F1_score,0.9668571428571427,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Mildly Imbalanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,MCC,0.9279607271383368,lab1,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,0.9755368814192342,lab1,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,0.3525058226889108,lab2,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,0.501797464291446,lab2,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,F1_score,0.45,lab3,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,MCC,0.1175019408963036,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,F1_score,0.2330538085255066,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,MCC,0.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,uncorrected,F1_score,0.2285714285714285,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,federated
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Strongly Imbalanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,42,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated
 Ovarian cancer,uncorrected,MCC,0.9223300970873788,All,Train-Test-Split,43,HGSC,federated
 Ovarian cancer,uncorrected,F1_score,0.9611650485436892,All,Train-Test-Split,43,HGSC,federated
 Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Train-Test-Split,43,HGSC,federated
@@ -359,6 +219,26 @@ ccRCC,corrected,MCC,0.9420289855072465,PXD042844,Train-Test-Split,43,Condition,f
 ccRCC,corrected,F1_score,0.9710144927536232,PXD042844,Train-Test-Split,43,Condition,federated
 ccRCC,corrected,MCC,0.9625468164794008,All,Train-Test-Split,43,Condition,centralized
 ccRCC,corrected,F1_score,0.9812734082397004,All,Train-Test-Split,43,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,43,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,43,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,43,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,43,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,43,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,43,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,43,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,43,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,43,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,43,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,43,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,43,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,44,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,44,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,44,condition,federated
@@ -459,6 +339,26 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,44,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,44,Condition,federated
 ccRCC,corrected,MCC,0.99250936329588,All,Train-Test-Split,44,Condition,centralized
 ccRCC,corrected,F1_score,0.99625468164794,All,Train-Test-Split,44,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,44,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,44,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,44,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,44,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,44,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,44,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,44,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,44,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,44,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,44,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,44,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,44,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,44,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,44,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,44,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,44,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,44,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,44,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,44,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,44,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,45,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,45,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,45,condition,federated
@@ -559,6 +459,26 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,45,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,45,Condition,federated
 ccRCC,corrected,MCC,0.9625468164794008,All,Train-Test-Split,45,Condition,centralized
 ccRCC,corrected,F1_score,0.9812734082397004,All,Train-Test-Split,45,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,45,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,45,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,45,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,45,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,45,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,45,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,45,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,45,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,45,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,45,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,45,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,45,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,45,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,45,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,45,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,45,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,45,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,45,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,45,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,45,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,46,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,46,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,46,condition,federated
@@ -659,6 +579,26 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,46,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,46,Condition,federated
 ccRCC,corrected,MCC,0.9775280898876404,All,Train-Test-Split,46,Condition,centralized
 ccRCC,corrected,F1_score,0.9887640449438202,All,Train-Test-Split,46,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,46,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,46,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,46,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,46,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,46,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,46,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,46,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,46,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,46,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,46,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,46,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,46,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,46,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,46,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,46,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,46,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,46,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,46,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,46,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,46,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,47,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,47,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,47,condition,federated
@@ -759,6 +699,26 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,47,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,47,Condition,federated
 ccRCC,corrected,MCC,0.9250936329588016,All,Train-Test-Split,47,Condition,centralized
 ccRCC,corrected,F1_score,0.9625468164794008,All,Train-Test-Split,47,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,47,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,47,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,47,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,47,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,47,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,47,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,47,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,47,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,47,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,47,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,47,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,47,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,47,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,47,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,47,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,47,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,47,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,47,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,47,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,47,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,48,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,48,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,48,condition,federated
@@ -859,6 +819,26 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,48,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,48,Condition,federated
 ccRCC,corrected,MCC,0.9700374531835206,All,Train-Test-Split,48,Condition,centralized
 ccRCC,corrected,F1_score,0.9850187265917604,All,Train-Test-Split,48,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,48,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,48,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,48,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,48,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,48,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,48,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,48,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,48,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,48,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,48,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,48,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,48,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,48,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,48,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,48,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,48,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,48,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,48,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,48,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,48,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,49,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,49,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,49,condition,federated
@@ -959,6 +939,26 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,49,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,49,Condition,federated
 ccRCC,corrected,MCC,0.9550561797752808,All,Train-Test-Split,49,Condition,centralized
 ccRCC,corrected,F1_score,0.9775280898876404,All,Train-Test-Split,49,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,49,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,49,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,49,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,49,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,49,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,49,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,49,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,49,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,49,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,49,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,49,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,49,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,49,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,49,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,49,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,49,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,49,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,49,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,49,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,49,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,50,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,50,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,50,condition,federated
@@ -1059,6 +1059,26 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,50,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,50,Condition,federated
 ccRCC,corrected,MCC,0.9700374531835206,All,Train-Test-Split,50,Condition,centralized
 ccRCC,corrected,F1_score,0.9850187265917604,All,Train-Test-Split,50,Condition,centralized
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,50,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,50,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,50,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,50,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,50,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,50,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,50,condition,federated
+Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,50,condition,federated
+Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,50,condition,centralized
+Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,50,condition,centralized
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,50,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,50,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,50,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,50,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,50,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,50,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,50,condition,federated
+Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,50,condition,federated
+Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,50,condition,centralized
+Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,50,condition,centralized
 Balanced Simulated,uncorrected,MCC,1.0,All,Train-Test-Split,51,condition,federated
 Balanced Simulated,uncorrected,F1_score,1.0,All,Train-Test-Split,51,condition,federated
 Balanced Simulated,uncorrected,MCC,1.0,lab1,Train-Test-Split,51,condition,federated
@@ -1159,1514 +1179,6 @@ ccRCC,corrected,MCC,1.0,PXD042844,Train-Test-Split,51,Condition,federated
 ccRCC,corrected,F1_score,1.0,PXD042844,Train-Test-Split,51,Condition,federated
 ccRCC,corrected,MCC,0.9775280898876404,All,Train-Test-Split,51,Condition,centralized
 ccRCC,corrected,F1_score,0.9887640449438202,All,Train-Test-Split,51,Condition,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.7071067811865476,GSE14407,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.8285714285714286,GSE14407,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,42,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.9079230828238284,GSE26712,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9901819195297455,GSE26712,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,42,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,42,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,MCC,0.1259881576697424,lab_E,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,F1_score,0.4666666666666666,lab_E,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,42,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,42,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,42,Pyr,centralized
-ccRCC,uncorrected,MCC,0.6681859492105942,PDC000127,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,uncorrected,F1_score,0.8355831237478861,PDC000127,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,uncorrected,MCC,0.939969572725646,PXD030344,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,uncorrected,F1_score,0.9698225401839636,PXD030344,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,uncorrected,MCC,0.1095184387857999,PDC000127,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2946240804173474,PDC000127,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,uncorrected,MCC,0.9313459986639429,PXD030344,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9655114744959584,PXD030344,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,42,Condition,federated
-ccRCC,corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,corrected,MCC,0.9439742863654778,PXD030344,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,corrected,F1_score,0.9719826284864952,PXD030344,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,42,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,42,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,uncorrected,MCC,0.7622792201730545,lab2,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.8681006493506493,lab2,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.9229582069908971,lab2,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9599358974358976,lab2,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,43,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,43,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,43,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.9079230828238284,GSE26712,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9901819195297455,GSE26712,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,43,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,43,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,43,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,43,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,43,Pyr,centralized
-ccRCC,uncorrected,MCC,0.663250066447293,PDC000127,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,uncorrected,F1_score,0.8254139680679077,PDC000127,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,uncorrected,MCC,0.9357708755708916,PXD030344,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,uncorrected,F1_score,0.9676650545652205,PXD030344,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,uncorrected,MCC,0.9313459986639429,PXD030344,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9655114744959584,PXD030344,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,43,Condition,federated
-ccRCC,corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,corrected,MCC,0.9439742863654778,PXD030344,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,corrected,F1_score,0.9719826284864952,PXD030344,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,43,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,43,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,uncorrected,MCC,0.7539407580617106,lab2,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.8628571428571428,lab2,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.9416965821485116,lab2,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9699729756781104,lab2,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,44,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,44,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.7663560447348134,GSE26712,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.977032771150418,GSE26712,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,MCC,0.8017837257372731,GSE38666,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.8967032967032967,GSE38666,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,44,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,44,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,44,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,MCC,0.3077935056255462,lab_E,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,F1_score,0.5901328273244781,lab_E,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,44,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,44,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,44,Pyr,centralized
-ccRCC,uncorrected,MCC,0.5928577036607445,PDC000127,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,uncorrected,F1_score,0.7655247179478725,PDC000127,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,uncorrected,MCC,0.939969572725646,PXD030344,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,uncorrected,F1_score,0.9698225401839636,PXD030344,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,uncorrected,MCC,0.991304347826087,PXD042844,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,uncorrected,F1_score,0.9956331877729258,PXD042844,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,uncorrected,MCC,0.9313459986639429,PXD030344,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9655114744959584,PXD030344,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,44,Condition,federated
-ccRCC,corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,44,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,44,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,uncorrected,MCC,0.7639154141901762,lab2,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.8738616009485608,lab2,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.9229582069908971,lab2,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9599358974358976,lab2,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,45,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,45,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.7663560447348134,GSE26712,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.977032771150418,GSE26712,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,45,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,45,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,45,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,MCC,-0.1259881576697424,lab_E,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,F1_score,0.3696969696969697,lab_E,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,45,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,45,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,45,Pyr,centralized
-ccRCC,uncorrected,MCC,0.5909572153050001,PDC000127,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,uncorrected,F1_score,0.7529899998868235,PDC000127,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,uncorrected,MCC,0.9397948669321318,PXD030344,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,uncorrected,F1_score,0.9698253437383872,PXD030344,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,uncorrected,MCC,0.991304347826087,PXD042844,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,uncorrected,F1_score,0.9956331877729258,PXD042844,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,uncorrected,MCC,0.9357708755708916,PXD030344,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9676650545652205,PXD030344,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,45,Condition,federated
-ccRCC,corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,45,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,45,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,uncorrected,MCC,0.8079571632467768,lab2,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.899507587177168,lab2,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.9045340337332908,lab2,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9498746867167918,lab2,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,46,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,46,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.7663560447348134,GSE26712,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.977032771150418,GSE26712,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,46,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,46,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,46,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,MCC,-0.1259881576697424,lab_E,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,F1_score,0.3696969696969697,lab_E,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,46,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,46,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,46,Pyr,centralized
-ccRCC,uncorrected,MCC,0.6026018441803029,PDC000127,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,uncorrected,F1_score,0.7769883149443806,PDC000127,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,uncorrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,uncorrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,uncorrected,MCC,0.9357708755708916,PXD030344,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9676650545652205,PXD030344,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,uncorrected,MCC,0.9572521873003692,PXD042844,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,uncorrected,F1_score,0.978157609227572,PXD042844,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,46,Condition,federated
-ccRCC,corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,46,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,46,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,uncorrected,MCC,0.8259685381260148,lab2,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.9096748293857888,lab2,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.8954338623269738,lab2,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9448331201885704,lab2,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,47,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,47,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.7663560447348134,GSE26712,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.977032771150418,GSE26712,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6224424109697394,GSE26712,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.962882861819032,GSE26712,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,47,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,47,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,47,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,47,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,47,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,47,Pyr,centralized
-ccRCC,uncorrected,MCC,0.519508832601845,PDC000127,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,uncorrected,F1_score,0.6873585617299471,PDC000127,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,uncorrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,uncorrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,uncorrected,MCC,0.991304347826087,PXD042844,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,uncorrected,F1_score,0.9956331877729258,PXD042844,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,uncorrected,MCC,0.9572521873003692,PXD042844,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,uncorrected,F1_score,0.978157609227572,PXD042844,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,47,Condition,federated
-ccRCC,corrected,MCC,0.9484650343186364,PDC000127,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,corrected,F1_score,0.9741178785515008,PDC000127,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,47,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,47,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,uncorrected,MCC,0.94,lab2,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.97,lab2,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.8954338623269738,lab2,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9448331201885704,lab2,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,48,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,48,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.5376453291901642,GSE26712,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.9547711351424878,GSE26712,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,48,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,48,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,48,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,48,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,48,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,48,Pyr,centralized
-ccRCC,uncorrected,MCC,0.4698407556687418,PDC000127,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,uncorrected,F1_score,0.6434135829368608,PDC000127,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,uncorrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,uncorrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,uncorrected,MCC,0.9572521873003692,PXD042844,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,uncorrected,F1_score,0.978157609227572,PXD042844,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,48,Condition,federated
-ccRCC,corrected,MCC,0.9484650343186364,PDC000127,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,corrected,F1_score,0.9741178785515008,PDC000127,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,48,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,48,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,uncorrected,MCC,0.9504277887790924,lab2,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.9749943737340904,lab2,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.8954338623269738,lab2,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9448331201885704,lab2,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,49,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,49,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.5376453291901642,GSE26712,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.9547711351424878,GSE26712,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,49,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,49,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,49,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,MCC,0.50709255283711,lab_E,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,F1_score,0.7482517482517483,lab_E,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,49,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,49,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,49,Pyr,centralized
-ccRCC,uncorrected,MCC,0.5035248729414648,PDC000127,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,uncorrected,F1_score,0.6826930485568551,PDC000127,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,uncorrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,uncorrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,uncorrected,MCC,0.9656594418845657,PXD042844,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,uncorrected,F1_score,0.982528753399704,PXD042844,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,49,Condition,federated
-ccRCC,corrected,MCC,0.9484650343186364,PDC000127,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,corrected,F1_score,0.9741178785515008,PDC000127,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,49,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,49,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,uncorrected,MCC,0.8864052604279183,lab2,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.939783219590526,lab2,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.8954338623269738,lab2,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9448331201885704,lab2,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,50,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,50,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.5376453291901642,GSE26712,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.9547711351424878,GSE26712,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,50,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,50,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,50,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,MCC,0.7071067811865476,lab_E,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,F1_score,0.8285714285714286,lab_E,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,50,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,50,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,50,Pyr,centralized
-ccRCC,uncorrected,MCC,0.5408256660864538,PDC000127,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,uncorrected,F1_score,0.705502462444612,PDC000127,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,uncorrected,MCC,0.935562126279226,PXD030344,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,uncorrected,F1_score,0.9676686595036024,PXD030344,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,uncorrected,MCC,0.9572521873003692,PXD042844,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,uncorrected,F1_score,0.978157609227572,PXD042844,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,50,Condition,federated
-ccRCC,corrected,MCC,0.958626140296004,PDC000127,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,corrected,F1_score,0.979314091741801,PDC000127,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,50,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,50,Condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,uncorrected,MCC,0.8422598823413766,lab2,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,uncorrected,F1_score,0.9143814056558636,lab2,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,uncorrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,uncorrected,MCC,0.8954338623269738,lab2,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,uncorrected,F1_score,0.9448331201885704,lab2,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,uncorrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,uncorrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51,condition,federated
-Balanced Simulated,corrected,MCC,1.0,lab1,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab1,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab2,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab2,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,corrected,MCC,1.0,lab3,Leave-One-Cohort-Out,51,condition,centralized
-Balanced Simulated,corrected,F1_score,1.0,lab3,Leave-One-Cohort-Out,51,condition,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.5376453291901642,GSE26712,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.9547711351424878,GSE26712,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,51,HGSC,federated
-Ovarian cancer,corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.4702699715629801,GSE6008,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8589569160997733,GSE6008,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,51,HGSC,centralized
-Ovarian cancer,corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,51,HGSC,centralized
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,MCC,0.4392976851069794,lab_C,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,F1_score,0.6115942028985507,lab_C,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,MCC,0.4472135954999579,lab_E,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,F1_score,0.625,lab_E,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,51,Pyr,federated
-E. coli,corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,51,Pyr,centralized
-E. coli,corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,51,Pyr,centralized
-ccRCC,uncorrected,MCC,0.5765879124933042,PDC000127,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,uncorrected,F1_score,0.7349423266469539,PDC000127,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,uncorrected,MCC,0.9357708755708916,PXD030344,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,uncorrected,F1_score,0.9676650545652205,PXD030344,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,uncorrected,MCC,0.9489124209370936,PXD042844,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,uncorrected,F1_score,0.9737841307164452,PXD042844,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,51,Condition,federated
-ccRCC,corrected,MCC,0.958626140296004,PDC000127,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,corrected,F1_score,0.979314091741801,PDC000127,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,51,Condition,centralized
-ccRCC,corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,51,Condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,42,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,42,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,42,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,42,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,42,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,42,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,42,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,42,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,42,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,42,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,42,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,42,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,42,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,42,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,42,condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,43,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,43,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,43,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,43,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,43,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,43,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,43,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,43,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,43,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,43,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,43,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,43,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,43,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,43,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,43,condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,44,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,44,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,44,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,44,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,44,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,44,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,44,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,44,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,44,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,44,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,44,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,44,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,44,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,44,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,44,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,44,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,44,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,44,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,44,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,44,condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,45,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,45,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,45,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,45,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,45,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,45,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,45,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,45,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,45,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,45,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,45,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,45,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,45,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,45,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,45,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,45,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,45,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,45,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,45,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,45,condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,46,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,46,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,46,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,46,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,46,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,46,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,46,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,46,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,46,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,46,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,46,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,46,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,46,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,46,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,46,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,46,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,46,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,46,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,46,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,46,condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,47,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,47,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,47,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,47,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,47,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,47,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,47,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,47,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,47,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,47,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,47,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,47,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,47,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,47,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,47,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,47,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,47,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,47,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,47,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,47,condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,48,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,48,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,48,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,48,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,48,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,48,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,48,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,48,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,48,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,48,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,48,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,48,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,48,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,48,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,48,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,48,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,48,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,48,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,48,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,48,condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,49,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,49,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,49,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,49,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,49,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,49,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,49,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,49,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,49,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,49,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,49,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,49,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,49,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,49,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,49,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,49,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,49,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,49,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,49,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,49,condition,centralized
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,50,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,50,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,50,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_01_L01,Train-Test-Split,50,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_02_L02,Train-Test-Split,50,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_02_L02,Train-Test-Split,50,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,50,condition,federated
-Quartet Multiomics,uncorrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,50,condition,federated
-Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,50,condition,centralized
-Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,50,condition,centralized
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,50,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,50,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_01_L01,Train-Test-Split,50,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_01_L01,Train-Test-Split,50,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_02_L02,Train-Test-Split,50,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_02_L02,Train-Test-Split,50,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,client_03_L05_L04,Train-Test-Split,50,condition,federated
-Quartet Multiomics,corrected,F1_score,1.0,client_03_L05_L04,Train-Test-Split,50,condition,federated
-Quartet Multiomics,corrected,MCC,1.0,All,Train-Test-Split,50,condition,centralized
-Quartet Multiomics,corrected,F1_score,1.0,All,Train-Test-Split,50,condition,centralized
 Quartet Multiomics,uncorrected,MCC,1.0,All,Train-Test-Split,51,condition,federated
 Quartet Multiomics,uncorrected,F1_score,1.0,All,Train-Test-Split,51,condition,federated
 Quartet Multiomics,uncorrected,MCC,1.0,client_01_L01,Train-Test-Split,51,condition,federated
