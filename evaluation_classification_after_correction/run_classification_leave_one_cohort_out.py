@@ -20,74 +20,74 @@ for num_run in range(NUM_RUNS):
 
     # SIMULATED
     # Balanced Simulated Data
-    # folder_balanced = EVALUATION_DATA_FOLDER / "simulated" / "balanced"
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="uncorrected",
-    #     datainfo=DataInfo(folder_balanced / "before" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    folder_balanced = EVALUATION_DATA_FOLDER / "simulated" / "balanced"
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="uncorrected",
+        datainfo=DataInfo(folder_balanced / "before" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="corrected",
-    #     datainfo=DataInfo(folder_balanced / "after" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="corrected",
+        datainfo=DataInfo(folder_balanced / "after" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # # Ovarian cancer Data
-    # folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="uncorrected",
-    #     datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    # Ovarian cancer Data
+    folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="uncorrected",
+        datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="corrected",
-    #     datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="corrected",
+        datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # # Ovarian cancer Data
-    # folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="uncorrected",
-    #     datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    # Ovarian cancer Data
+    folder_ovarian_cancer = EVALUATION_DATA_FOLDER / "ovarian_cancer"
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="uncorrected",
+        datainfo=DataInfo(folder_ovarian_cancer / "before" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="corrected",
-    #     datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="corrected",
+        datainfo=DataInfo(folder_ovarian_cancer / "after" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # # E. coli Data
-    # folder_ecoli = EVALUATION_DATA_FOLDER / "ecoli"
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="uncorrected",
-    #     datainfo=DataInfo(folder_ecoli / "before" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    # E. coli Data
+    folder_ecoli = EVALUATION_DATA_FOLDER / "ecoli"
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="uncorrected",
+        datainfo=DataInfo(folder_ecoli / "before" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="corrected",
-    #     datainfo=DataInfo(folder_ecoli / "after" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="corrected",
+        datainfo=DataInfo(folder_ecoli / "after" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # # ccRCC Data
-    # folder_ccRCC = EVALUATION_DATA_FOLDER / "ccRCC_studies"
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="uncorrected",
-    #     datainfo=DataInfo(folder_ccRCC / "before" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    # ccRCC Data
+    folder_ccRCC = EVALUATION_DATA_FOLDER / "ccRCC_studies"
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="uncorrected",
+        datainfo=DataInfo(folder_ccRCC / "before" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
-    # ClassificationExperimentLeaveOneCohortOut(
-    #     preprocessing_name="corrected",
-    #     datainfo=DataInfo(folder_ccRCC / "after" / "datainfo.json"),
-    #     resultfile=RESULTS_FILE,
-    # ).run_experiment(seed=seed)
+    ClassificationExperimentLeaveOneCohortOut(
+        preprocessing_name="corrected",
+        datainfo=DataInfo(folder_ccRCC / "after" / "datainfo.json"),
+        resultfile=RESULTS_FILE,
+    ).run_experiment(seed=seed)
 
     # Multiomics Data
     folder_multiomics = EVALUATION_DATA_FOLDER / "quartet_multiomics" / "merged_omics"
