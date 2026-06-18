@@ -119,3 +119,563 @@ Quartet Multiomics (Predicted Target: condition),corrected,F1_score,1.0,client_0
 Quartet Multiomics (Predicted Target: condition),corrected,F1_score,1.0,client_01_L01,Leave-One-Cohort-Out,51,condition,centralized,corrected / centralized
 Quartet Multiomics (Predicted Target: condition),corrected,F1_score,1.0,client_02_L02,Leave-One-Cohort-Out,51,condition,centralized,corrected / centralized
 Quartet Multiomics (Predicted Target: condition),corrected,F1_score,1.0,client_03_L05_L04,Leave-One-Cohort-Out,51,condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8285714285714286,GSE14407,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9901819195297455,GSE26712,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.4666666666666666,lab_E,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.8355831237478861,PDC000127,Leave-One-Cohort-Out,42,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9698225401839636,PXD030344,Leave-One-Cohort-Out,42,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,42,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2946240804173474,PDC000127,Leave-One-Cohort-Out,42,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9655114744959584,PXD030344,Leave-One-Cohort-Out,42,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,42,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,42,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,42,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,42,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,42,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719826284864952,PXD030344,Leave-One-Cohort-Out,42,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,42,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9901819195297455,GSE26712,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.8254139680679077,PDC000127,Leave-One-Cohort-Out,43,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9676650545652205,PXD030344,Leave-One-Cohort-Out,43,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,43,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,43,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9655114744959584,PXD030344,Leave-One-Cohort-Out,43,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,43,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,43,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,43,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,43,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,43,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719826284864952,PXD030344,Leave-One-Cohort-Out,43,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,43,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.977032771150418,GSE26712,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8967032967032967,GSE38666,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.5901328273244781,lab_E,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.7655247179478725,PDC000127,Leave-One-Cohort-Out,44,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9698225401839636,PXD030344,Leave-One-Cohort-Out,44,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9956331877729258,PXD042844,Leave-One-Cohort-Out,44,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,44,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9655114744959584,PXD030344,Leave-One-Cohort-Out,44,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,44,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,44,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,44,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,44,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,44,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,44,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,44,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.977032771150418,GSE26712,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3696969696969697,lab_E,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.7529899998868235,PDC000127,Leave-One-Cohort-Out,45,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9698253437383872,PXD030344,Leave-One-Cohort-Out,45,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9956331877729258,PXD042844,Leave-One-Cohort-Out,45,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,45,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9676650545652205,PXD030344,Leave-One-Cohort-Out,45,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,45,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,45,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,45,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,45,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,45,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,45,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,45,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.977032771150418,GSE26712,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3696969696969697,lab_E,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.7769883149443806,PDC000127,Leave-One-Cohort-Out,46,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,46,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,46,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,46,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9676650545652205,PXD030344,Leave-One-Cohort-Out,46,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.978157609227572,PXD042844,Leave-One-Cohort-Out,46,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,46,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,46,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,46,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,46,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,46,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,46,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.977032771150418,GSE26712,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.962882861819032,GSE26712,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.6873585617299471,PDC000127,Leave-One-Cohort-Out,47,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,47,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9956331877729258,PXD042844,Leave-One-Cohort-Out,47,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,47,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,47,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.978157609227572,PXD042844,Leave-One-Cohort-Out,47,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.968909973745299,PDC000127,Leave-One-Cohort-Out,47,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,47,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,47,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741178785515008,PDC000127,Leave-One-Cohort-Out,47,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,47,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,47,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9547711351424878,GSE26712,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.86,GSE38666,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.6434135829368608,PDC000127,Leave-One-Cohort-Out,48,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,48,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,48,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,48,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,48,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.978157609227572,PXD042844,Leave-One-Cohort-Out,48,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,48,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,48,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,48,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741178785515008,PDC000127,Leave-One-Cohort-Out,48,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,48,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,48,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9547711351424878,GSE26712,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.7482517482517483,lab_E,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.6826930485568551,PDC000127,Leave-One-Cohort-Out,49,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,49,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,49,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,49,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,49,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.982528753399704,PXD042844,Leave-One-Cohort-Out,49,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,49,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,49,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,49,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741178785515008,PDC000127,Leave-One-Cohort-Out,49,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,49,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,49,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9547711351424878,GSE26712,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9151234567901236,GSE6008,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_C,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.8285714285714286,lab_E,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.705502462444612,PDC000127,Leave-One-Cohort-Out,50,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9676686595036024,PXD030344,Leave-One-Cohort-Out,50,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.986898064327224,PXD042844,Leave-One-Cohort-Out,50,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,50,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,50,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.978157609227572,PXD042844,Leave-One-Cohort-Out,50,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,50,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,50,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,50,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.979314091741801,PDC000127,Leave-One-Cohort-Out,50,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,50,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,50,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9237516869095818,GSE26712,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3629764065335753,GSE69428,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.9547711351424878,GSE26712,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,F1_score,0.3045112781954888,GSE69428,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7822141560798549,GSE14407,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9702564102564102,GSE26712,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.821566110397946,GSE38666,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.7837037037037037,GSE6008,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.5621123515860358,GSE69428,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.9849608386193752,GSE26712,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8589569160997733,GSE6008,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,F1_score,0.8929425837320574,GSE69428,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.6115942028985507,lab_C,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_D,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.625,lab_E,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_A,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.309462915601023,lab_B,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,F1_score,0.3333333333333333,lab_E,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_A,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_B,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,F1_score,1.0,lab_E,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.7349423266469539,PDC000127,Leave-One-Cohort-Out,51,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9676650545652205,PXD030344,Leave-One-Cohort-Out,51,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,51,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.2838093103669079,PDC000127,Leave-One-Cohort-Out,51,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9655069878085044,PXD030344,Leave-One-Cohort-Out,51,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,F1_score,0.9737841307164452,PXD042844,Leave-One-Cohort-Out,51,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9636894618679126,PDC000127,Leave-One-Cohort-Out,51,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9719815873694184,PXD030344,Leave-One-Cohort-Out,51,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9868995633187772,PXD042844,Leave-One-Cohort-Out,51,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.979314091741801,PDC000127,Leave-One-Cohort-Out,51,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.9741374505323004,PXD030344,Leave-One-Cohort-Out,51,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,F1_score,0.991266042455674,PXD042844,Leave-One-Cohort-Out,51,Condition,centralized,corrected / centralized

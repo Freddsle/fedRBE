@@ -84,68 +84,67 @@ if len(duplicates) > 0:
 df = df[df['data_name'].isin(DATANAME_TO_INCLUDE)]
 print(f"Using {len(df)} rows after filtering to included datanames: {DATANAME_TO_INCLUDE}")
 
-# metric name x target x cross validation method plots
+# metric name x cross validation method plots
 for metric_name in df['metric_name'].unique():
-    for target in df['predicted_target'].unique():
-        for cv_method in df['cross_validation_method'].unique():
-            df_subset = df[(df['metric_name'] == metric_name) & \
-                           (df['cross_validation_method'] == cv_method) & \
-                            (df['predicted_target'] == target)].copy()
+    for cv_method in df['cross_validation_method'].unique():
+        # Removed the target loop and target filter
+        df_subset = df[(df['metric_name'] == metric_name) & \
+                       (df['cross_validation_method'] == cv_method)].copy()
 
-            # filter out average rows of the federated learning type
-            rows_to_exclude = (df_subset['learning_type'] == FEDERATED_LEARNING_TYPE) & (df_subset['predicted_client_name'] == AVERAGE_CLIENT_NAME)
-            df_subset = df_subset[~rows_to_exclude]
-            print(f"Using {len(df_subset)} rows for metric '{metric_name}' and CV method '{cv_method}'")
+        # filter out average rows of the federated learning type
+        rows_to_exclude = (df_subset['learning_type'] == FEDERATED_LEARNING_TYPE) & (df_subset['predicted_client_name'] == AVERAGE_CLIENT_NAME)
+        df_subset = df_subset[~rows_to_exclude]
+        print(f"Using {len(df_subset)} rows for metric '{metric_name}' and CV method '{cv_method}'")
 
-            # we add the predicted target to the data name
-            df_subset['data_name'] = df_subset.apply(lambda row: f"{row['data_name']} (Predicted Target: {row['predicted_target']})", axis=1)
-            df_subset['plot_hue'] = df_subset.apply(
-                lambda row: f"{row['data_preprocessing_name']} / {row['learning_type']}",
-                axis=1,
-            )
-            output_csv = os.path.join(RESULTS_DIR, f"plotting_data_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.csv")
-            df_subset.to_csv(output_csv, index=False)
-            print(f"Saved plotting data to {output_csv}")
-            # swarmplot
-            plt.figure(figsize=(14, 8))
-            axes = sns.swarmplot(
-                data=df_subset,
-                x='data_name',
-                y='metric_value',
-                hue='plot_hue',
-            )
-            axes.set_facecolor(background_color)
-            plt.xlabel("")
-            plt.ylabel(metric_name)
-            plt.xticks(rotation=45, ha='right')
-            plt.tight_layout()
+        # we add the predicted target to the data name
+        # This will still work perfectly because 'predicted_target' is a column in the df
+        df_subset['data_name'] = df_subset.apply(lambda row: f"{row['data_name']} (Predicted Target: {row['predicted_target']})", axis=1)
+        df_subset['plot_hue'] = df_subset.apply(
+            lambda row: f"{row['data_preprocessing_name']} / {row['learning_type']}",
+            axis=1,
+        )
+        output_csv = os.path.join(RESULTS_DIR, f"plotting_data_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.csv")
+        df_subset.to_csv(output_csv, index=False)
+        print(f"Saved plotting data to {output_csv}")
+        # swarmplot
+        plt.figure(figsize=(14, 8))
+        axes = sns.swarmplot(
+            data=df_subset,
+            x='data_name',
+            y='metric_value',
+            hue='plot_hue',
+        )
+        axes.set_facecolor(background_color)
+        plt.xlabel("")
+        plt.ylabel(metric_name)
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
 
-            output_png = os.path.join(PLOTS_DIR, f"classification_analysis_swarmplot_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.png")
-            figure = axes.get_figure()
-            assert figure is not None
-            figure.savefig(output_png, bbox_inches='tight', dpi=100)
-            plt.close()
-            print(f"Saved plot to {output_png}")
+        output_png = os.path.join(PLOTS_DIR, f"classification_analysis_swarmplot_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.png")
+        figure = axes.get_figure()
+        assert figure is not None
+        figure.savefig(output_png, bbox_inches='tight', dpi=100)
+        plt.close()
+        print(f"Saved plot to {output_png}")
 
-            # boxplot
-            plt.figure(figsize=(14, 8))
-            axes = sns.boxplot(
-                data=df_subset,
-                x='data_name',
-                y='metric_value',
-                hue='plot_hue',
-                medianprops=dict(color=colour_schema.get('boxplot_median_marker_color', '#FF0000'), linewidth=2)
-            )
-            axes.set_facecolor(background_color)
-            plt.xlabel("")
-            plt.ylabel(metric_name)
-            plt.xticks(rotation=45, ha='right')
-            plt.tight_layout()
+        # boxplot
+        plt.figure(figsize=(14, 8))
+        axes = sns.boxplot(
+            data=df_subset,
+            x='data_name',
+            y='metric_value',
+            hue='plot_hue',
+            medianprops=dict(color=colour_schema.get('boxplot_median_marker_color', '#FF0000'), linewidth=2)
+        )
+        axes.set_facecolor(background_color)
+        plt.xlabel("")
+        plt.ylabel(metric_name)
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
 
-            output_png = os.path.join(PLOTS_DIR, f"classification_analysis_boxplot_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.png")
-            figure = axes.get_figure()
-            assert figure is not None
-            figure.savefig(output_png, bbox_inches='tight', dpi=100)
-            plt.close()
-            print(f"Saved plot to {output_png}")
-
+        output_png = os.path.join(PLOTS_DIR, f"classification_analysis_boxplot_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.png")
+        figure = axes.get_figure()
+        assert figure is not None
+        figure.savefig(output_png, bbox_inches='tight', dpi=100)
+        plt.close()
+        print(f"Saved plot to {output_png}")

@@ -119,3 +119,563 @@ Quartet Multiomics (Predicted Target: condition),corrected,MCC,1.0,client_03_L05
 Quartet Multiomics (Predicted Target: condition),corrected,MCC,1.0,client_01_L01,Leave-One-Cohort-Out,51,condition,centralized,corrected / centralized
 Quartet Multiomics (Predicted Target: condition),corrected,MCC,1.0,client_02_L02,Leave-One-Cohort-Out,51,condition,centralized,corrected / centralized
 Quartet Multiomics (Predicted Target: condition),corrected,MCC,1.0,client_03_L05_L04,Leave-One-Cohort-Out,51,condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,42,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,42,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.7071067811865476,GSE14407,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,42,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.9079230828238284,GSE26712,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,42,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.1259881576697424,lab_E,Leave-One-Cohort-Out,42,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,42,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,42,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,42,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.6681859492105942,PDC000127,Leave-One-Cohort-Out,42,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.939969572725646,PXD030344,Leave-One-Cohort-Out,42,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,42,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.1095184387857999,PDC000127,Leave-One-Cohort-Out,42,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9313459986639429,PXD030344,Leave-One-Cohort-Out,42,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,42,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,42,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,42,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,42,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,42,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9439742863654778,PXD030344,Leave-One-Cohort-Out,42,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,42,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,43,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,43,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,43,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.9079230828238284,GSE26712,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,43,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,43,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,43,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,43,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,43,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.663250066447293,PDC000127,Leave-One-Cohort-Out,43,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9357708755708916,PXD030344,Leave-One-Cohort-Out,43,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,43,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,43,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9313459986639429,PXD030344,Leave-One-Cohort-Out,43,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,43,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,43,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,43,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,43,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,43,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9439742863654778,PXD030344,Leave-One-Cohort-Out,43,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,43,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,44,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.7663560447348134,GSE26712,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,44,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8017837257372731,GSE38666,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,44,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,44,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.3077935056255462,lab_E,Leave-One-Cohort-Out,44,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,44,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,44,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,44,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.5928577036607445,PDC000127,Leave-One-Cohort-Out,44,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.939969572725646,PXD030344,Leave-One-Cohort-Out,44,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.991304347826087,PXD042844,Leave-One-Cohort-Out,44,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,44,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9313459986639429,PXD030344,Leave-One-Cohort-Out,44,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,44,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,44,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,44,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,44,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,44,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,44,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,44,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,45,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.7663560447348134,GSE26712,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,45,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,45,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,45,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,-0.1259881576697424,lab_E,Leave-One-Cohort-Out,45,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,45,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,45,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,45,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.5909572153050001,PDC000127,Leave-One-Cohort-Out,45,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9397948669321318,PXD030344,Leave-One-Cohort-Out,45,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.991304347826087,PXD042844,Leave-One-Cohort-Out,45,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,45,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9357708755708916,PXD030344,Leave-One-Cohort-Out,45,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,45,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,45,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,45,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,45,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,45,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,45,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,45,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,46,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.7663560447348134,GSE26712,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,46,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,46,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,46,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,-0.1259881576697424,lab_E,Leave-One-Cohort-Out,46,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,46,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,46,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,46,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.6026018441803029,PDC000127,Leave-One-Cohort-Out,46,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,46,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,46,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,46,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9357708755708916,PXD030344,Leave-One-Cohort-Out,46,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9572521873003692,PXD042844,Leave-One-Cohort-Out,46,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,46,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,46,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,46,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,46,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,46,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,46,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,47,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.7663560447348134,GSE26712,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,47,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6224424109697394,GSE26712,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,47,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,47,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,47,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,47,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,47,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,47,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.519508832601845,PDC000127,Leave-One-Cohort-Out,47,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,47,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.991304347826087,PXD042844,Leave-One-Cohort-Out,47,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,47,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,47,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9572521873003692,PXD042844,Leave-One-Cohort-Out,47,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9383719262217848,PDC000127,Leave-One-Cohort-Out,47,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,47,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,47,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9484650343186364,PDC000127,Leave-One-Cohort-Out,47,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,47,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,47,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,48,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.5376453291901642,GSE26712,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,48,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.7385489458759964,GSE38666,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,48,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,48,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,48,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,48,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,48,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,48,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.4698407556687418,PDC000127,Leave-One-Cohort-Out,48,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,48,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,48,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,48,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,48,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9572521873003692,PXD042844,Leave-One-Cohort-Out,48,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,48,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,48,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,48,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9484650343186364,PDC000127,Leave-One-Cohort-Out,48,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,48,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,48,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,49,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.5376453291901642,GSE26712,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,49,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,49,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,49,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.50709255283711,lab_E,Leave-One-Cohort-Out,49,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,49,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,49,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,49,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.5035248729414648,PDC000127,Leave-One-Cohort-Out,49,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,49,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,49,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,49,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,49,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9656594418845657,PXD042844,Leave-One-Cohort-Out,49,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,49,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,49,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,49,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9484650343186364,PDC000127,Leave-One-Cohort-Out,49,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,49,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,49,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,50,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.5376453291901642,GSE26712,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,50,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,50,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6782329983125268,GSE6008,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,50,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_C,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.7071067811865476,lab_E,Leave-One-Cohort-Out,50,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,50,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,50,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,50,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.5408256660864538,PDC000127,Leave-One-Cohort-Out,50,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.935562126279226,PXD030344,Leave-One-Cohort-Out,50,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9741359834018584,PXD042844,Leave-One-Cohort-Out,50,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,50,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,50,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9572521873003692,PXD042844,Leave-One-Cohort-Out,50,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,50,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,50,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,50,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.958626140296004,PDC000127,Leave-One-Cohort-Out,50,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,50,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,50,Condition,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE26712,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,51,HGSC,federated,uncorrected / federated
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.5376453291901642,GSE26712,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),uncorrected,MCC,0.0,GSE69428,Leave-One-Cohort-Out,51,HGSC,centralized,uncorrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.641688947919748,GSE14407,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6977407149243606,GSE26712,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.6756639246921763,GSE38666,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.0,GSE6008,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.3615507630310936,GSE69428,Leave-One-Cohort-Out,51,HGSC,federated,corrected / federated
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE14407,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8501093327197284,GSE26712,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE38666,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,1.0,GSE40595,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.4702699715629801,GSE6008,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+Ovarian cancer (Predicted Target: HGSC),corrected,MCC,0.8050764858994133,GSE69428,Leave-One-Cohort-Out,51,HGSC,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.4392976851069794,lab_C,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_D,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.4472135954999579,lab_E,Leave-One-Cohort-Out,51,Pyr,federated,uncorrected / federated
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_A,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_B,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),uncorrected,MCC,0.0,lab_E,Leave-One-Cohort-Out,51,Pyr,centralized,uncorrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,51,Pyr,federated,corrected / federated
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_A,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_B,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_C,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_D,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+E. coli (Predicted Target: Pyr),corrected,MCC,1.0,lab_E,Leave-One-Cohort-Out,51,Pyr,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.5765879124933042,PDC000127,Leave-One-Cohort-Out,51,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9357708755708916,PXD030344,Leave-One-Cohort-Out,51,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,51,Condition,federated,uncorrected / federated
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.0891882585015844,PDC000127,Leave-One-Cohort-Out,51,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9315885051121782,PXD030344,Leave-One-Cohort-Out,51,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),uncorrected,MCC,0.9489124209370936,PXD042844,Leave-One-Cohort-Out,51,Condition,centralized,uncorrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9283444198266944,PDC000127,Leave-One-Cohort-Out,51,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9440444481573034,PXD030344,Leave-One-Cohort-Out,51,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.9738367658276124,PXD042844,Leave-One-Cohort-Out,51,Condition,federated,corrected / federated
+ccRCC (Predicted Target: Condition),corrected,MCC,0.958626140296004,PDC000127,Leave-One-Cohort-Out,51,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.948311100205098,PXD030344,Leave-One-Cohort-Out,51,Condition,centralized,corrected / centralized
+ccRCC (Predicted Target: Condition),corrected,MCC,0.982683655311714,PXD042844,Leave-One-Cohort-Out,51,Condition,centralized,corrected / centralized
