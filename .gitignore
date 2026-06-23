@@ -197,6 +197,7 @@ figures/*
 !figures/readme1.png
 !figures/readme2.png
 !figures/states.png
+!figures/figure4.png
 
 # rotation simulation
 evaluation_data/simulated_rotation/*
