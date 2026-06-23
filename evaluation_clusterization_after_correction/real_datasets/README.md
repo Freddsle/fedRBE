@@ -68,7 +68,7 @@ each apply their own per-feature scaling on the joint matrix, the same way
 they do for every other dataset.
 
 **Targets** must match the active client list in
-`evaluation_data/quartet_multiomics/fedrbe_quartet_multiomics_utils.py`, controlled by the
+`evaluation_data/quartet_multiomics/fedrbe_multiomics_utils.py`, controlled by the
 `INCLUDE_CLIENT_04` toggle — default `False`, i.e. 3 clients / 48 joint samples.
 
 - `condition`: donor labels `D5/D6/F7/M8` (`D6` is the limma reference donor),

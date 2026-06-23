@@ -183,6 +183,7 @@ cython_debug/
 evaluation/eval_simulation/*/lmvp/*.tsv
 evaluation_data/simulated/*/after/runs/*.tsv
 evaluation_data/simulated/*/before/intermediate/*.tsv
+!evaluation_data/simulated/*/before/intermediate/1_intensities_data_no_batch.tsv
 evaluation_clusterization_after_correction/simulated/outputs/
 evaluation/eval_simulation/lmpv_plots/*.pdf
 
@@ -190,6 +191,12 @@ evaluation/eval_simulation/lmpv_plots/*.pdf
 # tmp submission folder
 00_submit/*
 figures/*
+!figures/how_to1.png
+!figures/how_to2.png
+!figures/how_to3.png
+!figures/readme1.png
+!figures/readme2.png
+!figures/states.png
 
 # rotation simulation
 evaluation_data/simulated_rotation/*

@@ -61,4 +61,11 @@ class TabData:
 
 
 if __name__ == '__main__':
-    tb = TabData.from_file('/home/anne/Documents/featurecloud/test-environment/controller/data/app_test/single/data_split/1/data.tsv')
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Load a tabular data file as TabData.')
+    parser.add_argument('filename', help='Path to the input TSV file.')
+    args = parser.parse_args()
+
+    tb = TabData.from_file(args.filename)
+    print(f'Loaded {tb.row_count} rows and {tb.col_count} columns from {args.filename}')
