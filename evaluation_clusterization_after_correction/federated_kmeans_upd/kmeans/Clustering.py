@@ -12,7 +12,7 @@ from kmeans.params import *
 
 class Clustering:
     def __init__(self, centroids, tabdata, k_min, k_max, k_step, cluster_on='samples',
-                 n_init_local=50, n_init_global=50):
+                 n_init_local=50, n_init_global=50, seed_value=11):
         self.k_min = k_min
         self.k_max = k_max
         self.k_spte = k_step
@@ -21,7 +21,7 @@ class Clustering:
         self.data = self._select_cluster_data(tabdata, cluster_on)
         self.k_list = list(range(k_min, k_max + 1))
         self.centroids = centroids
-        self.rs = RandomState(11)
+        self.rs = RandomState(seed_value)
         self.silhouette_scores = {}
         self.silhouette_coefficient = {}
         self.labels = {}
@@ -45,17 +45,18 @@ class Clustering:
         :param tabdata: TabData object.
         :return:
         """
-        cls.rs = RandomState(seed_value)
+        rs = RandomState(seed_value)
         data = cls._select_cluster_data(tabdata, cluster_on)
         k_list = list(range(k_min, k_max + 1))
         centroids = {}
         for k in k_list:
-            clud = clu.KMeans(n_clusters=k, n_init=n_init_local, random_state=cls.rs)
+            clud = clu.KMeans(n_clusters=k, n_init=n_init_local, random_state=rs)
             clud.fit(data)
             print(clud.cluster_centers_.shape)
             centroids[k] = clud.cluster_centers_
         return cls(centroids, tabdata, k_min, k_max, k_step, cluster_on=cluster_on,
-                   n_init_local=n_init_local, n_init_global=n_init_global)
+                   n_init_local=n_init_local, n_init_global=n_init_global,
+                   seed_value=seed_value)
 
     def aggregate_centroids(self, centroid_dict):
         for k in centroid_dict:

@@ -270,24 +270,44 @@ def run_single_federated_variant(
     timeout: int,
     keep_extracted: bool,
     aggregate_only: bool,
+    run_label: Optional[str] = None,
+    seed: Optional[int] = None,
 ) -> Path:
     """Run or aggregate a federated k-means variant (before or after correction).
 
     When *aggregate_only* is True, existing zip outputs are re-used without
     launching a new FeatureCloud test.
 
+    When *run_label* is provided, extracted clustering files and the aggregated
+    metadata TSV are written to run-specific paths. This is used by repeated
+    seed runs so each seed remains auditable after the loop.
+
     Returns the path to the saved metadata-with-clusters TSV.
     """
-    run_output = dataset_root / "fc_kmeans_res" / variant_label / "1_fed_clustering"
+    if run_label is None:
+        run_dir_name = "1_fed_clustering"
+    else:
+        run_dir_name = re.sub(r"[^A-Za-z0-9_.-]+", "_", run_label).strip("._")
+        if not run_dir_name:
+            raise ValueError("run_label must contain at least one path-safe character")
+
+    run_output = dataset_root / "fc_kmeans_res" / variant_label / run_dir_name
     run_output.mkdir(parents=True, exist_ok=True)
 
     kmeans_run_dir = dataset_root / "kmeans_res" / "runs"
     kmeans_run_dir.mkdir(parents=True, exist_ok=True)
-    output_path = kmeans_run_dir / (
-        "1_metadata_before_fedclusters.tsv"
-        if variant_label == "before"
-        else "1_metadata_after_fedclusters.tsv"
-    )
+    if run_label is None:
+        output_path = kmeans_run_dir / (
+            "1_metadata_before_fedclusters.tsv"
+            if variant_label == "before"
+            else "1_metadata_after_fedclusters.tsv"
+        )
+    else:
+        variant_path_label = re.sub(r"[^A-Za-z0-9_.-]+", "_", variant_label)
+        output_path = (
+            kmeans_run_dir
+            / f"{run_dir_name}_metadata_{variant_path_label}_fedclusters.tsv"
+        )
 
     if aggregate_only:
         aggregate_existing_federated_output(
@@ -404,6 +424,8 @@ def run_single_federated_variant(
     manifest = {
         "dataset": dataset_name,
         "variant": variant_label,
+        "run_label": run_label,
+        "seed": seed,
         "test_id": test_id,
         "k_values": list(k_values),
         "client_names": list(client_names),
