@@ -158,7 +158,7 @@ Output files include:
    ```yaml
    flimmaBatchCorrection:
       data_filename: "expression_data_client1.csv"
-      expression_file_flag: False
+      expression_file_flag: True
       index_col: "GeneIDs"
       covariates: ["Pyr"]
       separator: ","

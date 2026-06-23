@@ -78,8 +78,8 @@ If you want to simulate a federated workflow on a single machine, you can use th
 ```yaml
 flimmaBatchCorrection:
   data_filename: "expression_data_client1.csv"
-  expression_file_flag: False # True if data is in samples x features format
-  index_col: "GeneIDs"  # Column name to use as index
+  expression_file_flag: True # True when features are rows and samples are columns
+  index_col: "GeneIDs"  # Feature identifier column when expression_file_flag is true
   covariates: ["Pyr"]   # Covariates column name to include in the design matrix
   separator: ","  # Separator used in the data file
   design_separator: "," # Separator used in the design file
@@ -87,7 +87,7 @@ flimmaBatchCorrection:
   smpc: True  # Recommended to set to True
   min_samples: 2  # Minimum number of samples to include a feature
   position: 1   # position of the client (first, second, third, etc.)
-  reference_batch: ""  # if True, this client is used as the reference batch
+  reference_batch: ""  # Leave empty to use the last client in positional order as the reference
 ```
 
 For more details on the `config.yml` parameters, see the [app README](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml).
