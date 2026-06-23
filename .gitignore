@@ -273,3 +273,4 @@ evaluation_data/quartet_multiomics/before/preparation_summary.tsv
 evaluation_data/quartet_multiomics/after/*/FedSim_corrected_data.tsv
 evaluation_data/quartet_multiomics/after/*_summary.tsv
 evaluation_data/quartet_multiomics/after/fedsim_datainfo.json
+evaluation_data/multiomics/figshare_data/*
