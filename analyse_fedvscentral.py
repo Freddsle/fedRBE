@@ -104,12 +104,12 @@ experiment_results.append(utils.ExperimentResult(
 
 # ccRCC PROTEOMICS
 experiment_results.append(utils.ExperimentResult(
-    name="ccRCC E. coli",
+    name="ccRCC proteomics",
     federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"),
     central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="ccRCC E. coli (SMPC)",
+    name="ccRCC proteomics (SMPC)",
     federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"),
     central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))

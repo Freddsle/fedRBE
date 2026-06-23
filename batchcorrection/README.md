@@ -10,8 +10,8 @@
 
 # fedRBE - FeatureCloud <!-- omit in toc -->
 
-**A federated implementation of the limma `removeBatchEffect` method.** 
-Supports log scaling and multiple batches per client and secure computation.
+**A federated implementation of the limma `removeBatchEffect` method.**
+Supports log scaling, multiple batches per client, and SMPC.
 
 - **Open Source & Free**: [GitHub Repository](https://github.com/Freddsle/fedRBE/tree/main/batchcorrection)  
 - **Federated Privacy-preserving tool**: Based on [FeatureCloud](https://featurecloud.ai/app/fedrbe) platform  
@@ -24,7 +24,7 @@ Supports log scaling and multiple batches per client and secure computation.
 - [Overview](#overview)
 - [Prerequisites and setup](#prerequisites-and-setup)
 - [Usage](#usage)
-  - [Simulating a federated Workflow Locally (No login required)](#simulating-a-federated-workflow-locally-no-login-required)
+  - [Simulating a federated workflow locally (No login required)](#simulating-a-federated-workflow-locally-no-login-required)
   - [Running a true federated workflow (Login required)](#running-a-true-federated-workflow-login-required)
 - [Input requirements](#input-requirements)
 - [Outputs](#outputs)
@@ -37,15 +37,15 @@ Supports log scaling and multiple batches per client and secure computation.
 ---
 
 ## Overview
-`fedRBE` is a privacy-preserving tool for removing batch effects from omics data distributed across multiple research centers. It leverages the limma's `removeBatchEffect()` method and utilizes **federated learning (FL)** and **secure multi-party computation (SMPC)** to ensure data privacy. Sensitive data remains on each participant's site, and only summary-level information is shared.
+`fedRBE` removes batch effects from omics data distributed across research centers. It uses limma's `removeBatchEffect()` method with **federated learning (FL)** and **secure multi-party computation (SMPC)**. Sensitive data remains on each participant's site; only summary-level information is shared.
 
 fedRBE supports two usage modes:
 
-* [Federated mode](#running-a-true-federated-workflow-login-required): Removes batch effects from decentralized, sensitive data. (Registration required)
+* [Federated mode](#running-a-true-federated-workflow-login-required): Removes batch effects from decentralized, sensitive data. Registration required.
 
-* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Runs fedRBE locally to simulate federated batch effect correction. (No registration or login required)
+* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Runs fedRBE locally to simulate federated batch effect correction. No registration required.
 
- For advanced parameters, see the [Configuration](#configuration-configyml) section.
+For advanced parameters, see [Configuration](#configuration-configyml).
 
 ---
 
@@ -69,27 +69,22 @@ Before using `fedRBE`, ensure:
      ```bash
      docker pull featurecloud.ai/bcorrect:latest
      ```
-   - Alternatively, If you are using a ARM architecture (e.g., Mac M-series), you may need to build the image locally as shown below._
+   - Alternatively, if you are using an ARM architecture (e.g., Mac M-series), build the image locally from the repository checkout:
      ```bash
+     cd batchcorrection
      docker build . -t featurecloud.ai/bcorrect:latest
      ```
 
-     or build the image from GitHub locally:
-     ```bash
-      cd batchcorrection
-      docker build . -t featurecloud.ai/bcorrect:latest
-      ```
-
-The app image which is provided in the docker registry of featurecloud built on the linux/amd64 platform. Especially if you're using a Macbook with any of the M-series chips or any other device not compatible with linux/amd64, please build the image locally.
+The app image provided in the FeatureCloud Docker registry is built for the linux/amd64 platform. If you use a Mac with an M-series chip or another device that is not compatible with linux/amd64, build the image locally.
 
 ---
 
 ## Usage
 
-### Simulating a federated Workflow Locally (No login required)
+### Simulating a federated workflow locally (No login required)
 To test how `fedRBE` behaves with multiple datasets on one machine:
 
-1. **Ensure the full repository including sample data is cloned and the current working directory**:
+1. **Clone the full repository and enter it**:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
@@ -99,10 +94,9 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
    ```bash
    python3 ./run_sample_experiment.py
    ```
-  You can then watch the run in your browser, the script outputs the relevant link.
-  
-This runs an experiment bundled with the app, illustrating how `fedRBE` works.
-The given repository contains the app but furthermore includes all the experiments done with the app.
+  The script prints the browser link for the local run.
+
+This runs the bundled sample experiment.
 
 ### Running a true federated workflow (Login required)
 For an actual multi-party setting:
@@ -111,8 +105,8 @@ For an actual multi-party setting:
 3. **Each Client** uploads their data and `config.yml` to their local FeatureCloud instance.
 4. **Start the Project**: `fedRBE` runs securely, never sharing raw data.
 
-See [HOW TO GUIDE](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for guidance on creating and joining projects.
-Please note that an account and login is required for this to protect the federated workflow from malicious participants.
+See the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for project setup and client onboarding.
+A FeatureCloud account is required to restrict project access to invited participants.
 
 ---
 
@@ -128,7 +122,7 @@ For details, see the [Configuration](#configuration-configyml) section.
 ---
 
 ## Outputs
-Each client after completion receives:
+After completion, each client receives:
 - **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
 - **`report.txt`**: Includes:
@@ -164,8 +158,8 @@ flimmaBatchCorrection:
   index_col: "sample"
     # If expression_file_flag True: index_col is the feature column name.
     # If expression_file_flag False: index_col is the sample column name.
-    # If not given, defaults apply - the index is taken from the 0th column for
-    # expression files and generated automatically for samples x features datafiles
+    # If not given, defaults apply: the index is taken from the 0th column for
+    # expression files and generated automatically for samples x features data files
     # format: str or int, int is interpreted as the column index (starting from 0)
 
   covariates: ["Pyr"]
@@ -187,7 +181,6 @@ flimmaBatchCorrection:
   normalizationMethod: "log2(x+1)"
     # Normalization: "log2(x+1)" or None.
     # If None, no normalization is applied.
-    # More options will be available in future versions.
 
   smpc: True
     # Enable secure multiparty computation for privacy-preserving aggregation.
@@ -197,10 +190,10 @@ flimmaBatchCorrection:
     # Minimum samples per feature required. Adjusted for privacy if needed.
     # If for a feature less than min_samples samples are present,
     # the client will not send any information about that feature
-    # Please note that the actual used min_samples might be different
-    # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
-    # This is to ensure that a sent Xty matrix always has more samples
-    # than features so that neither X not y can be reconstructed from the Xty matrix.
+    # The app may raise min_samples for privacy:
+    # min_samples = max(min_samples, len(design.columns)+1)
+    # This ensures a sent Xty matrix always has more samples than features,
+    # so neither X nor y can be reconstructed from the Xty matrix.
 
   position: 1      # format: int
     # Defines client order. The last client in order is the reference batch.

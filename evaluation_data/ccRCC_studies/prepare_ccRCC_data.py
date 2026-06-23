@@ -1,5 +1,5 @@
 """
-Prepares the ccRCC ecoli dataset for fedRBE evaluation.
+Prepares the ccRCC proteomics dataset for fedRBE evaluation.
 
 Steps performed:
 1. Adds a 'Condition' column ("Tumor" / "Normal") to each site's design.tsv,

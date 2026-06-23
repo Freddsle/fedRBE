@@ -1,29 +1,34 @@
 # Clustering Evaluation After Batch Correction
 
-K-means clustering evaluation (central vs. federated) on real datasets
-(`ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and
-`Quartet - Multiomics`). It measures the effect of fedRBE batch correction on
-clustering quality using ARI, MCC, and accuracy.
+K-means clustering evaluation compares central and federated clustering on the
+real datasets `ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and
+`Quartet - Multiomics`. It measures the effect of fedRBE batch correction using
+ARI, MCC, and accuracy.
 
 All data is read directly from `evaluation_data/` — no copies are made.
 Generated `prepared/`, `inputs/`, `kmeans_res/`, and `metrics/` directories
 under `real_datasets/` are not tracked. The notebooks, scripts, app source,
 and dataset manifests required to regenerate them are tracked.
 
-## Notebooks (run in order)
+## Real-dataset notebooks (run in order)
 
 | Step | Notebook | Purpose |
 |------|----------|---------|
-| 1 | `01_data_preparation.ipynb` | Load data from `evaluation_data/`, filter, align, save prepared matrices |
-| 2 | `02_central_kmeans.ipynb` | Run centralized k-means, compute metrics |
-| 3 | `03_federated_runs.ipynb` | *(Optional)* Run or aggregate federated k-means via FeatureCloud |
-| 4 | `04_analysis_metrics_plots.ipynb` | Combine results, generate ARI bar charts, PCA plots, summary |
+| 0 | `real_datasets/00_build_kmeans_matrices.ipynb` | Build Quartet multiomics joint k-means matrices |
+| 1 | `real_datasets/01_data_preparation.ipynb` | Load data from `evaluation_data/`, filter, align, save prepared matrices |
+| 2 | `real_datasets/02_central_kmeans.ipynb` | Run centralized k-means and compute metrics |
+| 3 | `real_datasets/03_federated_runs.ipynb` | Optional: run or aggregate federated k-means via FeatureCloud |
+| 4 | `real_datasets/04_analysis_metrics_plots.ipynb` | Combine results, generate ARI bar charts, PCA plots, and summary |
+
+Simulated-dataset notebooks live in `simulated/`; see `simulated/README.md`.
 
 ## Quick start
 
+Run the multiomics prep step first if the Quartet joint matrices are not already present; see [Multiomics-specific prep](#multiomics-specific-prep).
+
 ```bash
-# Run notebooks 01-02-04 for central-only evaluation (no Docker needed):
-cd evaluation_clusterization_after_correction/
+# Run real-dataset notebooks 01-02-04 for central-only evaluation (no Docker needed):
+cd evaluation_clusterization_after_correction/real_datasets/
 jupyter execute 01_data_preparation.ipynb
 jupyter execute 02_central_kmeans.ipynb
 jupyter execute 04_analysis_metrics_plots.ipynb
@@ -39,7 +44,7 @@ jupyter execute 04_analysis_metrics_plots.ipynb
 
 ## Default dataset set
 
-The notebooks 01-04 are configured to run all five real datasets:
+The real-dataset notebooks 01-04 are configured to run all four datasets:
 
 - `ecoli`
 - `ovarian_cancer`
@@ -53,8 +58,8 @@ The notebooks 01-04 are configured to run all five real datasets:
 
 ### Multiomics-specific prep
 
-Multiomics needs one extra step *before* notebook 01 — building the joint
-matrices and per-client splits from the per-modality matrices:
+Multiomics needs one extra step before notebook 01: build the joint matrices and
+per-client splits from the per-modality matrices:
 
 ```bash
 cd evaluation_clusterization_after_correction/real_datasets
@@ -70,7 +75,7 @@ This writes `all_modalities_before_kmeans_matrix.tsv`,
 `design.tsv`/`intensities.tsv` under
 `evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/`
 (k-means-only inputs).
-After that, notebooks 01-04 treat multiomics like any other dataset.
+After that, real-dataset notebooks 01-04 treat multiomics like any other dataset.
 
 The number of clients (3 by default, 4 with `INCLUDE_CLIENT_04 = True`) is
 controlled by `evaluation_data/quartet_multiomics/fedrbe_multiomics_utils.py`; it

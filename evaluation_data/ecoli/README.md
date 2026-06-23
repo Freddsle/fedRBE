@@ -1,23 +1,28 @@
 # E. coli dataset
 
-5 labs, from FedProt project [https://doi.org/10.48550/arXiv.2407.15220].
+Five E. coli lab datasets from the FedProt project: <https://doi.org/10.48550/arXiv.2407.15220>.
 
 Preprocessing:
-- raw data from DIA-NN outputs.
-- filtering - keep only rows with 2 not-NA values per center AND 2 per covariate class.
-- log2-transformed.
+- Raw data comes from DIA-NN outputs.
+- Filtering keeps rows with at least two non-NA values per center and two per covariate class.
+- Intensities are log2-transformed.
 
-Contains NA - for PCA plots - omit rows with NA.
+The matrices contain NA values; PCA plots omit rows with NA.
 
 Central run:  
-- union
-- limmaRBE with condition as covariates and lab as batches.
-- with NA.
+- Uses the union matrix.
+- Runs limma RBE with condition as covariate and lab as batch.
+- Keeps NA values.
 
 # Structure
 
-In /before folder there are two versions on the dataset.  
-- one file for all - all labs in one tsv (metadata, and filtered-log2).
-- the save but folder per lab - for App. Contains additionally design file - covariates info in sutable for App format.
+`before/` contains both combined and app-ready inputs:
+- Combined TSV files for all labs (`metadata` and filtered log2 intensities).
+- One folder per lab for the FeatureCloud app. Each folder contains data and a design file with covariates.
 
-For App log2-transformed data should be used - log transform during BEC disabled.
+Use log2-transformed app inputs and disable log transformation during batch effect correction.
+
+Main files:
+- `01_data_prep_and_central_RBE.ipynb`: preprocessing and central correction.
+- `prepare_data.py`: app-ready folder preparation.
+- `../../evaluation/evaluation_ecoli.ipynb`: evaluation plots and metrics.

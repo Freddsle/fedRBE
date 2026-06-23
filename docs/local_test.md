@@ -49,7 +49,7 @@ Run simulations locally to understand `fedRBE`'s behavior:
    featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
    ```
    Alternatively, you can start the experiment from the **[frontend](https://featurecloud.ai/development/test/new)**.  
-   Select 3 clients, add lab1, lab2, lab3 respecitvely for the 3 clients to their path. 
+   Select 3 clients and add lab1, lab2, and lab3 respectively to their paths.
    
    Use `featurecloud.ai/bcorrect:latest` as the app image.
 

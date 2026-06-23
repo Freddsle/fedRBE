@@ -209,8 +209,8 @@ ccRCC_config_file_changes_base = {
         "min_samples": 2
     }
 }
-ccRCC_ecoli_experiment = util.Experiment(
-    name="ccRCC",
+ccRCC_proteomics_experiment = util.Experiment(
+    name="ccRCC proteomics",
     fc_data_dir=os.path.join(data_dir, "ccRCC_studies"),
     clients=[
         os.path.join(data_dir, "ccRCC_studies", "before", "PDC000127"),
@@ -221,10 +221,10 @@ ccRCC_ecoli_experiment = util.Experiment(
     config_files=[deepcopy(base_config) for _ in range(3)],
     config_file_changes=[deepcopy(ccRCC_config_file_changes_base) for _ in range(3)],
 )
-ccRCC_ecoli_experiment_smpc = deepcopy(ccRCC_ecoli_experiment)
-set_smpc_true(ccRCC_ecoli_experiment_smpc)
-add_position_to_config(ccRCC_ecoli_experiment_smpc)
-add_position_to_config(ccRCC_ecoli_experiment)
+ccRCC_proteomics_experiment_smpc = deepcopy(ccRCC_proteomics_experiment)
+set_smpc_true(ccRCC_proteomics_experiment_smpc)
+add_position_to_config(ccRCC_proteomics_experiment_smpc)
+add_position_to_config(ccRCC_proteomics_experiment)
 
 ## Quartet MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
 # Toggle for the synthetic client_04_L03_L14 (L03 + L14 fold-in). Driven from
@@ -332,9 +332,9 @@ experiments.append(ovarian_cancer_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## ccRCC Proteomics
-experiments.append(ccRCC_ecoli_experiment)
+experiments.append(ccRCC_proteomics_experiment)
 result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"))
-experiments.append(ccRCC_ecoli_experiment_smpc)
+experiments.append(ccRCC_proteomics_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## Quartet Multiomics

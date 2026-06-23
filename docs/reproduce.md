@@ -10,18 +10,25 @@
 
 # Reproduce the fedRBE Preprint <!-- omit in toc -->
 
-This guide provides step-by-step instructions to reproduce the analyses and results from the [fedRBE preprint](https://arxiv.org/abs/2412.05894). It leverages the utility scripts and data provided in this repository to demonstrate both centralized and federated batch effect correction using limma and fedRBE, respectively.
+This guide explains how to reproduce the analyses from the [fedRBE preprint](https://arxiv.org/abs/2412.05894), including centralized limma correction, federated fedRBE correction, and downstream evaluation.
 
 ## Table of Contents <!-- omit in toc -->
 
 - [Prerequisites and setup](#prerequisites-and-setup)
-- [Repository structure](#repository-structure)
+  - [Setup steps](#setup-steps)
 - [Running the analysis](#running-the-analysis)
   - [1. Obtaining federated corrected data](#1-obtaining-federated-corrected-data)
   - [2. Obtaining centrally corrected data](#2-obtaining-centrally-corrected-data)
   - [3. Comparing federated and central corrections](#3-comparing-federated-and-central-corrections)
   - [4. Produce tables and figures](#4-produce-tables-and-figures)
-  - [5. Reproduce the classification analysis](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-non-corrected-data)
+  - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
+    - [Prerequisites](#prerequisites)
+    - [Reproduction steps](#reproduction-steps)
+  - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
+    - [Prerequisites](#prerequisites-1)
+    - [Real datasets](#real-datasets)
+    - [Simulated datasets](#simulated-datasets)
+- [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
 - [Additional resources](#additional-resources)
@@ -44,13 +51,12 @@ This guide provides step-by-step instructions to reproduce the analyses and resu
 
    Install git lfs following the [git lfs documentation](https://git-lfs.com/).
    
-   Make sure you setup git lfs:
+   Initialize Git LFS:
    ```bash
    git lfs install
    ```
    
-   If you already cloned the [repository](https://github.com/Freddsle/fedRBE), you need to now
-   download the large files from the large file storage:
+   If the [repository](https://github.com/Freddsle/fedRBE) is already cloned, pull the large files:
    ```bash
    git lfs pull 
    ```
@@ -59,7 +65,7 @@ This guide provides step-by-step instructions to reproduce the analyses and resu
 
 2. **Clone the repository:**
 
-   If you didn't clone the repository yet please do so:
+   If the repository is not cloned yet:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
@@ -91,11 +97,19 @@ This guide provides step-by-step instructions to reproduce the analyses and resu
 
 This section guides you through running both federated and centralized batch effect corrections and comparing their results.
 
+Recommended order:
+
+1. Set up dependencies and fetch LFS data.
+2. Ensure the per-dataset `before/` inputs exist. When regenerating inputs from raw or source data, run the dataset-specific preparation notebooks listed in [2. Obtaining centrally corrected data](#2-obtaining-centrally-corrected-data) before launching the federated correction script.
+3. Run the federated correction script, or use the corrected outputs already committed in `evaluation_data/*/after/`.
+4. Run or reuse the central correction notebooks.
+5. Compare federated vs central corrections, then run the figure/table, classification, and clustering analyses.
+
 ### 1. Obtaining federated corrected data
 
 Use the provided utility script to perform the configured federated batch
 effect correction experiments. Edit the experiment list in the script to
-enable or disable any of the datasets, currenttly all datasets are enabled by default.
+enable or disable any of the datasets; currently all datasets are enabled by default.
 
 ```bash
 python3 ./generate_fedrbe_corrected_datasets.py
@@ -109,37 +123,39 @@ Steps Performed by the Script:
 
 Output:
 
-- Corrected data: saved in `evaluation_data/[dataset]/after/individual_results/`. Furthermore stores the merged corrected data of all clients directly in `evaluation_data/[dataset]/after/` as `FedApp_corrected_data.tsv` or `FedApp_corrected_data_smpc.tsv` if SMPC was used.
+- Corrected data: saved in `evaluation_data/[dataset]/after/individual_results/`. The merged client data is also written directly to `evaluation_data/[dataset]/after/` as `FedApp_corrected_data.tsv`, or `FedApp_corrected_data_smpc.tsv` when SMPC is used.
 - Report files: In `evaluation_data/[dataset]/after/individual_results/`, detailed logs and correction reports can be found.
 
-_Note: The script may take some time to complete, depending on the dataset size and the number of clients. It usually takes a few hours upto a day.
-_Note 2: To process this dataset one need >16GB RAM. To skip the correction on ovarian_cancer datasets, comment the corresponding lines in the script (generate_fedrbe_corrected_datasets.py, search for `experiments.append(ovarian_cancer_experiment)` to find the relevant 4 lines of code)._
-_Note 3: This was already performed and the fedRBE corrected data is stored in the repository.
-You can skip this if you just want to look at the results._
+Notes:
+- Runtime depends on dataset size and client count; the full run can take several hours to a day.
+- Ovarian cancer correction can require at least 16 GB RAM. To skip it, comment the `experiments.append(ovarian_cancer_experiment)` block in `generate_fedrbe_corrected_datasets.py`.
+- FedRBE-corrected outputs are already stored in the repository, so this step can be skipped when only inspecting results.
 
 Customization:
-- If you want to run the correction not on all datasets, comment the corresponding lines in the script (you can just search for the comment `## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS` in `generate_fedrbe_corrected_datasets.py`).
-- To extend to more datasets, add additional [datasets] in `evaluation_data/[dataset]/before/` following the existing structure.
+- To run a subset of datasets, edit the experiment list under `## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS` in `generate_fedrbe_corrected_datasets.py`.
+- To add datasets, create `evaluation_data/[dataset]/before/` entries following the existing structure.
+- Quartet multiomics requires the client folders written by `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`; run that notebook before the federated correction script if those folders were regenerated or removed.
 
 ### 2. Obtaining centrally corrected data
 
 Perform centralized batch effect correction using limma's `removeBatchEffect` for comparison.
 
-1. Navigate to the dataset directory:
+Run the dataset preparation and central-correction notebooks from their own directories, or set the notebook working directory to the listed folder so relative paths resolve correctly.
 
-   ```bash
-   cd evaluation_data/[dataset_name]
-   ```
+| Dataset | Run order |
+|---------|-----------|
+| Simulated | `evaluation_data/simulated/00_data_simulation.ipynb` if regenerating simulation inputs, then `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb` |
+| E. coli | `evaluation_data/ecoli/01_data_prep_and_central_RBE.ipynb` |
+| Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb`, `evaluation_data/ovarian_cancer/01_check_datasets_intersection.ipynb`, then `evaluation_data/ovarian_cancer/02_central_RBE.ipynb` |
+| ccRCC proteomics | `python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py`, then `evaluation_data/ccRCC_studies/01_central_RBE.ipynb` |
+| Quartet multiomics | `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`, then `evaluation_data/quartet_multiomics/03_central_RBE.ipynb`; `evaluation_data/quartet_multiomics/01_preprocess_eda.ipynb` is EDA-only and optional |
 
-2. Run the data preprocessing and centralized correction script inside ipynb. 
+Output:
 
-  The code is located in `*central_RBE.ipynb` Jupyter notebooks in the `evaluation_data/[dataset]/` directory.
+- Corrected data: saved in `evaluation_data/[dataset]/after/` for each dataset.
+- Dataset-specific details and outputs are documented in the corresponding `evaluation_data/<dataset>/README.md` files.
 
-  Output:
-
-  - Corrected data: saved in `evaluation_data/[dataset]/after/` for each dataset.
-
-_Note: The preprocessing steps and centralized correction are already implemented in the provided notebooks. It is possible to skip this step completely and use the provided corrected data._
+_Note: The preprocessing and centralized correction notebooks have already been run for the committed outputs. You can skip this step when using the provided corrected data._
 
 ### 3. Comparing federated and central corrections
 
@@ -149,13 +165,13 @@ Use the provided script to analyze and compare the results of federated and cent
 python3 ./analyse_fedvscentral.py
 ```
 
-What This Does:
+What this does:
 
-- Loads Corrected Datasets: Imports both federated and centralized corrected data.
-- Performs Comparisons:
+- Loads corrected datasets: imports both federated and centralized corrected data.
+- Performs comparisons:
   - Checks for consistency in indices and columns.
   - Calculates mean and maximum element-wise differences.
-- Generates Analysis Reports: Highlights the similarities and differences between the two correction methods.
+- Generates reports: summarizes similarities and differences between the two correction methods.
 
 Output:
 
@@ -163,52 +179,81 @@ Output:
 
 ### 4. Produce tables and figures
 
-To reproduce the tables and figures from the preprint, run the provided Jupyter notebooks in the `evaluation/` directory.
+To reproduce the tables and figures from the preprint, run the provided Jupyter notebooks in the `evaluation/` directory:
 
-### 5. Reproduce the classification analysis comparing fedRBE corrected to non corrected data
+1. `evaluation/evaluation_simulated.ipynb`
+2. `evaluation/evaluation_simulated_30runs.ipynb`
+3. `evaluation/evaluation_ecoli.ipynb`
+4. `evaluation/evaluation_ovarian_cancer.ipynb`
+5. `evaluation/evaluation_ccRCC.ipynb`
+6. `evaluation/evaluation_quartet_multiomics.ipynb`
+
+These notebooks expect the corrected data from Steps 1 and 2. Figures are written under `evaluation/plots/` and related evaluation output folders.
+
+### 5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data
 
 #### Prerequisites
-- You need to have the `Python3` environments set up with the required dependencies as described in the [Prerequisites and setup](#prerequisites-and-setup) section.
+- You need to have the Python 3 environment set up with the required dependencies as described in the [Prerequisites and setup](#prerequisites-and-setup) section.
 
 #### Reproduction steps
-This is split into three python scripts. Make sure the required python packages from `requirements.txt` are installed!
+This part uses three Python scripts. Install the packages from `requirements.txt` first.
 
-First run the classification experiments. This takes multiple hours, so the repo already contains the relevant results if you want to skip this. 
+First run the classification experiments. This can take several hours; the repository already contains the generated results.
 
 The classification experiments are split into the two different experiment types:
-1. **train_test_split**: Each client reserves 20% of the data as test data, trains on the other 80% and reports metrics when predicting on the test data. This takes upto an hour. To run it, simply run
+1. **train_test_split**: Each client reserves 20% of the data as test data, trains on the other 80%, and reports test-set metrics. This takes up to an hour.
 ```bash
 python3 evaluation_classification_after_correction/run_classification_train_test_split.py
 ```
-1. **leave_one_cohort_out**: The classification model is trained on all except one client. Then the model is used to predict on all of the data of the left out client and the client reports the metrics. Therefore, *n_clients* models are trained. For this reason, this takes multiple hours. To run it, simply run:
+1. **leave_one_cohort_out**: The model is trained on all clients except one, then evaluated on the held-out client. This trains *n_clients* models and can take several hours.
 ```bash
 python3 evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py
 ```
 
 The experiment results are saved in `evaluation_classification_after_correction/results`.
 
-To finally visualize the experiments with plot, simply run the corresponding analyze script:
+To visualize the experiments with plots, run the corresponding analysis script:
 ```bash
 python3 evaluation_classification_after_correction/analyse_classification_metric_report.py
 ```
 The resulting plots can be found in `evaluation_classification_after_correction/plots`.
 You can also use the helper shell scripts:
-- `run_all_classification_analysis.sh` Runs all three scripts sequentially. This can take some hours of runtime
-- `run_all_classification_analysis_tmux.sh` Just runs `run_all_classification_analysis.sh` in a tmux session, so you can safely disconnect from the terminal while the script is running. You can reconnect to the tmux session later to check the progress or see the results. Logs of this are stored in classification_analysis_{TIMESTAMP}.log files.
+- `run_all_classification_analysis.sh`: runs all three scripts sequentially; this can take several hours.
+- `run_all_classification_analysis_tmux.sh`: runs the same script in a tmux session so the terminal can disconnect safely. Logs are stored as `classification_analysis_{TIMESTAMP}.log`.
 
-### 6. Reproduce the clusterization analysis comparing fedRBE corrected to non corrected data
+### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
-To reproduce the clustering results from the preprint, Jupyter notebooks are provided.
+To reproduce the clustering results from the preprint, run the real-dataset and simulated-dataset clustering notebooks under `evaluation_clusterization_after_correction/`.
+
 #### Prerequisites
 - You need to have both the `R` and `Python3` environments set up with the required dependencies as described in the [Prerequisites and setup](#prerequisites-and-setup) section.
-- You need to build the docker image for the federated kmeans app. To do this, navigate to `evaluation_clusterization_after_correction/federated_kmeans_upd/` and run the `build.sh` script:
+- To rerun federated k-means, build the Docker image for the federated k-means app. Central-only k-means does not require Docker.
 ```bash
 cd evaluation_clusterization_after_correction/federated_kmeans_upd/
 ./build.sh
 ```
-##### Reproduction steps
-in the `evaluation_clusterization_after_correction/real_datasets/` directory. 
-Run them in the correct order, starting with `00_build_kmeans_matrices.ipynb`.
+
+#### Real datasets
+
+Run the notebooks in `evaluation_clusterization_after_correction/real_datasets/`:
+
+1. `00_build_kmeans_matrices.ipynb` — required only for Quartet multiomics.
+2. `01_data_preparation.ipynb`
+3. `02_central_kmeans.ipynb`
+4. `03_federated_runs.ipynb` — optional; required only when regenerating federated k-means outputs.
+5. `04_analysis_metrics_plots.ipynb`
+6. `05_multiple_runs.ipynb` — optional repeated seeded federated runs.
+
+See `evaluation_clusterization_after_correction/real_datasets/README.md` for detailed options and output paths.
+
+#### Simulated datasets
+
+Run the notebooks in `evaluation_clusterization_after_correction/simulated/`:
+
+1. `01_simulated_kmeans.ipynb`
+2. `02_simulated_analysis.ipynb`
+
+See `evaluation_clusterization_after_correction/simulated/README.md` for expected run files and output paths.
 
 ---
 
@@ -219,18 +264,21 @@ Understanding the repository layout helps in navigating the files and scripts.
 ```
 fedRBE/
 ├── README.md                                   # General repository overview
-├── batchcorrection/                            # fedRBe FeatureCloud app
+├── batchcorrection/                            # fedRBE FeatureCloud app
 ├── evaluation_data/                            # Data used for evaluation
-│   ├── ovarian_cancer/                             # Ovarian cancer datasets
-        ├── before/                             # Uncorrected data with structure needed to run the app
-        ├── after/                              # Corrected data
-│   │   └── 01_Preprocessing_and_RBE.ipynb      # Data preparation notebook with centralized removeBatchEffect run
-│   ├── microbiome/                             # Microbiome datasets with similar structure as ovarian_cancer
-│   ├── ecoli/                             # E. coli datasets
+│   ├── ccRCC_studies/                          # ccRCC proteomics datasets
+│   ├── ecoli/                                  # E. coli dataset
+│   ├── ovarian_cancer/                         # Ovarian cancer datasets
+│   │   ├── before/                             # Uncorrected data with structure needed to run the app
+│   │   ├── after/                              # Corrected data
+│   │   ├── 00_harmonize_meta_load_data.ipynb   # Data harmonization notebook
+│   │   ├── 01_check_datasets_intersection.ipynb
+│   │   └── 02_central_RBE.ipynb                # Centralized removeBatchEffect run
+│   ├── quartet_multiomics/                     # Quartet multiomics datasets
 │   └── simulated/                              # Simulated datasets
 ├── analyse_fedvscentral.py                     # Compares federated and centralized batch effect corrections.
-├── generate_fedrbe_corrected_datasets.py       # A script performing fedRBE on all datasets and save the results.
-├── run_sample_experiment.py                    # A script performing fedRBE on one dataset only
+├── generate_fedrbe_corrected_datasets.py       # Runs fedRBE on all configured datasets and saves results
+├── run_sample_experiment.py                    # Runs fedRBE on the sample dataset
 ├── evaluation_utils/                           # Utility scripts for evaluations
 │       ├── evaluation_funcs.R
 │       ├── featurecloud_api_extension.py
@@ -242,9 +290,14 @@ fedRBE/
 │       └── utils_analyse.py
 ├── evaluation/                                 # Main evaluation scripts to produce results and figures
 │   ├── eval_simulation/                        # Evaluations on simulated data
-│   ├── evaluation_ovarian_cancer.ipynb             # Evaluation of ovarian_cancer datasets
-│   ├── evaluation_microbiome.ipynb
+│   ├── evaluation_ccRCC.ipynb
 │   ├── evaluation_ecoli.ipynb
+│   ├── evaluation_ovarian_cancer.ipynb         # Evaluation of ovarian_cancer datasets
+│   ├── evaluation_quartet_multiomics.ipynb
+│   ├── evaluation_simulated.ipynb
+│   ├── evaluation_simulated_30runs.ipynb
+├── evaluation_classification_after_correction/ # Classification comparison scripts and outputs
+├── evaluation_clusterization_after_correction/ # K-means comparison notebooks and FeatureCloud app
 └── [other directories/files]
 ```
 
@@ -253,83 +306,30 @@ fedRBE/
 
 ## Utility scripts overview
 
-This repository includes several utility scripts to facilitate data processing, analysis, and visualization. All main scripts are located at the repository root; the remaining helpers are placed in `evaluation_utils/`.
+Main scripts live at the repository root; shared helpers live in `evaluation_utils/`.
 
-- `generate_fedrbe_corrected_datasets.py` (repo root): Automates the federated batch effect correction process using fedRBE.
-
-    Functionality:
-
-    - Initializes a federated project with multiple clients.
-    - Assigns datasets to each client.
-    - Executes the fedRBE app to perform batch effect correction.
-    - Collects and stores the corrected data.
-    - This is done for all datasets.
-
-- `analyse_fedvscentral.py` (repo root): Compares the results of federated and centralized batch effect corrections.
-
-    Functionality:
-
-    - Loads federated and centralized corrected datasets.
-    - Validates consistency in data structure.
-    - Computes statistical differences (mean, max) between the two methods.
-    - Generates reports to illustrate findings.
-
-- `featurecloud_api_extension.py`: Extends FeatureCloud API functionalities to support custom workflows and simulations. 
-
-    Functionality:
-    
-    - Helper script used by `generate_fedrbe_corrected_datasets.py`.
-    - Forms an API wrapper around the FeatureCloud testbed, allowing to run simulated federated learning
-    with utility features such as automatic restarts and automatic result extraction.
-
-- `filtering.R`: Includes necessary filters for data preprocessing before centralized batch effect correction using limma's `removeBatchEffect`.
-    
-    Functionality:
-
-    - Filters and preprocesses data to prepare for batch effect correction.
-    - Functions include data normalization and filtering.
-    - Functions from this script is used by other utility scripts to preprocess data before running centralized batch effect correction.
-        
-
-- `plots_eda.R`: Includes necessary functions to generates plots to visualize data distributions and corrections.
-
-    Functionality:
-
-    - Creates plots such as boxplots, PCA plots, UMAPs, and heatmaps.
-    - Visualizes the impact of batch effect corrections.
-    - Functions from this script is used by other utility scripts to generate exploratory data analysis (EDA) plots for evaluation purposes.
-
-- `upset_plot.py`: Generates UpSet plots to visualize intersections and overlaps in datasets or features.
-
-    Functionality:
-
-    - Creates UpSet plots to compare feature overlaps.
-    - Functions from this script is used by other utility scripts to visualize feature overlaps in datasets.
+| File | Purpose |
+|------|---------|
+| `generate_fedrbe_corrected_datasets.py` | Runs configured fedRBE experiments, assigns client inputs, executes the app, and stores corrected outputs. |
+| `analyse_fedvscentral.py` | Loads federated and central corrected datasets, checks shape/index consistency, and writes mean/max difference metrics. |
+| `evaluation_utils/featurecloud_api_extension.py` | Wraps the FeatureCloud testbed with automatic restart and result-extraction helpers used by the fedRBE correction script. |
+| `evaluation_utils/filtering.R` | Provides filtering and preprocessing functions used before centralized limma correction. |
+| `evaluation_utils/plots_eda.R` | Provides boxplot, PCA, UMAP, heatmap, and correction-diagnostic plotting helpers. |
+| `evaluation_utils/upset_plot.py` | Creates UpSet plots for feature-overlap comparisons. |
 
 
 ## Troubleshooting
 
-Encountering issues? Below are common problems and their solutions:
+Common checks:
 
-- **Docker Build Failures**:
-  - **Solution**: Ensure Docker is installed and running.
-  
-- **FeatureCloud Controller Not Starting**:
-  - **Solution**: Verify that no other services are occupying the required ports. Check logs for error messages. Check if you have logged in to FeatureCloud.ai.
-  
-- **Errors with Test runs**: 
-  - **Solution**: Ensure the is no leftover running Docker containers. Restart Docker / System if necessary. 
+- **Docker build failures**: Confirm Docker is installed and running.
+- **FeatureCloud controller not starting**: Check port availability, logs, and FeatureCloud login status.
+- **Test-run errors**: Stop leftover Docker containers, then restart Docker if needed.
+- **Script errors**: Verify prerequisites, file paths, and permissions.
+- **Missing data files**: Confirm required inputs exist under `evaluation_data/[dataset]/before/`.
+- **Inconsistent results**: Use the same configuration parameters and filtering rules for federated and centralized corrections.
 
-- **Script Execution Errors**:
-  - **Solution**: Ensure all prerequisites are installed. Check file paths and permissions.
-  
-- **Missing Data Files**:
-  - **Solution**: Confirm that all required data files are present in the `evaluation_data/[dataset]/before/` directory.
-  
-- **Inconsistent Results**:
-  - **Solution**: Ensure that the same configuration parameters and filtering rules are used for both federated and centralized corrections.
-
-For unresolved issues, consider reaching out via the [GitHub Issues](https://github.com/Freddsle/fedRBE/issues) page.
+For unresolved issues, open a [GitHub issue](https://github.com/Freddsle/fedRBE/issues).
 
 ## Additional resources
 
@@ -341,6 +341,4 @@ For unresolved issues, consider reaching out via the [GitHub Issues](https://git
 
 ## Contact information
 
-For questions, issues, or support, please:
-
-- **Open an Issue**: [GitHub Issues](https://github.com/Freddsle/fedRBE/issues)
+For questions, issues, or support, open a [GitHub issue](https://github.com/Freddsle/fedRBE/issues).

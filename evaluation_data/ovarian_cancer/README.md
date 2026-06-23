@@ -1,25 +1,32 @@
 # Ovarian cancer dataset
 
-6 datasets : "GSE6008", "GSE26712", "GSE40595", "GSE69428", "GSE38666", "GSE14407".
+Six GEO datasets: `GSE6008`, `GSE26712`, `GSE40595`, `GSE69428`, `GSE38666`, and `GSE14407`.
 
 Preprocessing:
-- raw data .CEL files from https://www.ncbi.nlm.nih.gov/geo/ 
-- data were normalized and log-transformed using rma function.
-- rows were collapsed to GenBank accesion using WGCNA::collapseRows(maxRowVariance).
+- Raw `.CEL` files come from <https://www.ncbi.nlm.nih.gov/geo/>.
+- Expression data are normalized and log-transformed with RMA.
+- Rows are collapsed to GenBank accession with `WGCNA::collapseRows(maxRowVariance)`.
 
-Do not contain NA values.
+The data do not contain NA values.
 
 Central run:  
-- limmaRBE with Status (normal / tumor) as covariates and dataset as batches.
-- with NA for the smaller dataset.
+- Runs limma RBE with `Status` (`normal` / `tumor`) as covariate and dataset as batch.
+- Auxiliary metadata fields may contain NA values; the central correction uses `Status` and dataset.
 
 # Structure
 
-In /before folder there are two versions on the dataset.  
-- one file for all - all datasets in one tsv (all_metadata, all_expression).
-- the save but folder per datasets - for App. Contains additionally design file - covariates info in sutable for App format.
+`before/` contains both combined and app-ready inputs:
+- Combined TSV files for all datasets (`all_metadata` and `all_expression`).
+- One folder per dataset for the FeatureCloud app. Each folder contains data and a design file with covariates.
 
-For App log2 transformation must be OFF.
+For app runs, log2 transformation must be disabled.
+
+Main files:
+- `00_harmonize_meta_load_data.ipynb`: metadata harmonization and raw data loading.
+- `01_check_datasets_intersection.ipynb`: feature-intersection checks.
+- `02_central_RBE.ipynb`: central correction.
+- `prepare_data.py`: app-ready folder preparation.
+- `../../evaluation/evaluation_ovarian_cancer.ipynb`: evaluation plots and metrics.
 
 
 Info (rows x cols):

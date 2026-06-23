@@ -1,10 +1,10 @@
-# Real-Dataset Clusterization Evaluation
+# Real-Dataset Clustering Evaluation
 
 Evaluates k-means clustering quality (ARI) on real omics datasets before and after
 fedRBE batch correction, for both central and federated k-means.
 
 **Datasets:** `ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and `quartet_multiomics` 
-(the latter is a multi-modal dataset with transcriptomics, proteomics, and phosphoproteomics modalities measured on the same samples).
+(the latter is a multi-modal dataset with transcriptomics, proteomics, and metabolomics measured on matched samples).
 
 ---
 
@@ -40,8 +40,8 @@ directly from `evaluation_data/<dataset>/...` and skip this step.
 The R notebook stacks the three per-modality matrices written by
 `evaluation_data/quartet_multiomics/03_central_RBE.ipynb` and
 `04_run_fedrbe.ipynb` into a single joint matrix per condition
-(before / central-corrected / FedRBE-corrected), and drops per-client
-`design.tsv` / `intensities.tsv` slices the standard flow consumes.
+(before / central-corrected / FedRBE-corrected), and writes per-client
+`design.tsv` / `intensities.tsv` slices for the standard flow.
 
 ```bash
 cd evaluation_clusterization_after_correction/real_datasets
