@@ -41,7 +41,7 @@ class DatasetConfig:
     design_file: str
     sample_col: str
     condition_col: str
-    n_init: int = 10
+    n_init: int = 1
     extra: Dict[str, str] = None  # type: ignore[assignment]
 
 
@@ -63,7 +63,7 @@ def dataset_configs(repo_root: Path) -> Dict[str, DatasetConfig]:
             design_file=d["design_file"],
             sample_col=d["sample_col"],
             condition_col=d["condition_col"],
-            n_init=int(d.get("n_init", 10)),
+            n_init=int(d.get("n_init", 1)),
             extra={k: str(d[k]) for k in d.get("extra", {})},
         )
     return configs
@@ -302,7 +302,7 @@ def run_central_kmeans(
     feature_by_sample: pd.DataFrame,
     k_values: Sequence[int],
     seed: int,
-    n_init: int = 10,
+    n_init: int = 1,
 ) -> Dict[int, pd.Series]:
     """Run k-means for each k and return {k: Series of cluster labels indexed by sample name}.
 
@@ -425,8 +425,8 @@ def write_design(df: pd.DataFrame, path: Path) -> None:
 def write_kmeans_config(
     path: Path,
     k_values: Sequence[int],
-    n_init_local: int = 50,
-    n_init_global: int = 50,
+    n_init_local: int = 1,
+    n_init_global: int = 1,
     max_global_iter: int = 1,
     seed: int = 11,
 ) -> None:

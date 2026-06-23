@@ -53,8 +53,8 @@ The real-dataset notebooks 01-04 are configured to run all four datasets:
   (Transcriptomics + Proteomics + Metabolomics rows stacked vertically).
   Both central k-means and the FeatureCloud `fc_kmeans` app apply their
   standard per-feature scaling on the joint matrix, the same way they do for
-  every other dataset; the only multiomics-specific tweak in `datasets.yaml`
-  is `n_init: 50` (a robustness override for the small 48-sample matrix).
+  every other dataset. All real datasets use the same default k-means
+  initialization count unless `datasets.yaml` explicitly overrides `n_init`.
 
 ### Multiomics-specific prep
 

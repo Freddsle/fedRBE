@@ -45,8 +45,8 @@ ccRCC_proteomics:
 # (shared with evaluation/evaluation_quartet_multiomics.ipynb) and the k-means-only
 # per-client splits into
 #   evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/<client>/.
-# `n_init: 50` is a robustness override for the small (48-sample) joint
-# matrix; the standard per-feature StandardScaler / fc_kmeans scaling applies.
+# The standard per-feature StandardScaler / fc_kmeans scaling and default
+# single-initialization k-means settings apply to all real datasets.
 quartet_multiomics:
   before_matrix: evaluation_data/quartet_multiomics/before/all_modalities_before_kmeans_matrix.tsv
   before_site_matrix_file: intensities.tsv
@@ -57,4 +57,3 @@ quartet_multiomics:
   design_file: design.tsv
   sample_col: file
   condition_col: condition
-  n_init: 50
