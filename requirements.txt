@@ -11,7 +11,7 @@ matplotlib
 numpy
 pandas
 PyYAML
-scikit-learn
+scikit-learn==1.8.0
 seaborn
 scipy
 upsetplot
