@@ -1,10 +1,13 @@
 import pandas as pd
+import shutil
 from pathlib import Path
+
+DATASET_DIR = Path(__file__).resolve().parent
 
 # Process each lab
 for lab in ['lab1', 'lab2', 'lab3']:
     # Before (uncorrected) data
-    base_path = Path(f'/home/jk/featurecloudALL/apps/fedRBE/evaluation_data/simulated/strong_imbalanced/before/{lab}')
+    base_path = DATASET_DIR / 'before' / lab
 
     # Read intensities (features are rows, samples are columns)
     intensities = pd.read_csv(base_path / 'intensities.tsv', sep='\t', index_col=0)
@@ -23,7 +26,7 @@ for lab in ['lab1', 'lab2', 'lab3']:
     print(f"Created {base_path / 'data.csv'}")
 
 # After (corrected) data - from individual results
-after_path = Path('/home/jk/featurecloudALL/apps/fedRBE/evaluation_data/simulated/strong_imbalanced/after/individual_results')
+after_path = DATASET_DIR / 'after' / 'individual_results'
 
 for idx, lab in enumerate(['lab1', 'lab2', 'lab3']):
     # Read corrected data - it's tab-separated with features as rows
@@ -34,7 +37,7 @@ for idx, lab in enumerate(['lab1', 'lab2', 'lab3']):
     corrected_data = corrected_data.T
 
     # Read original design to get condition labels
-    design_path = Path(f'/home/jk/featurecloudALL/apps/fedRBE/evaluation_data/simulated/strong_imbalanced/before/{lab}')
+    design_path = DATASET_DIR / 'before' / lab
     design = pd.read_csv(design_path / 'design.tsv', sep='\t', index_col=0)
 
     # Add condition column from design - match by index
@@ -48,7 +51,6 @@ for idx, lab in enumerate(['lab1', 'lab2', 'lab3']):
     corrected_data.to_csv(output_dir / 'data.csv', index=True)
 
     # Copy config
-    import shutil
     shutil.copy(design_path / 'config_forest.yaml', output_dir / 'config_forest.yaml')
 
     print(f"Created {output_dir / 'data.csv'}")

@@ -1,5 +1,11 @@
 {
-  "covariates": ["A"],
+  "data_name": "Strongly Imbalanced Simulated",
+  "covariates": [
+    "A"
+  ],
+  "prediction_targets": [
+    "condition"
+  ],
   "datafile": {
     "filename": "full_corrected_data.csv",
     "separator": "\t",
@@ -7,19 +13,39 @@
     "samplename_column": null,
     "featurename_column": null
   },
-  "designfile": null,
   "cohorts": [
     {
       "name": "lab1",
-      "folder": "individual_results/lab1"
+      "folder": "individual_results/lab1",
+      "designfile": {
+        "filename": "../../../before/lab1/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab2",
-      "folder": "individual_results/lab2"
+      "folder": "individual_results/lab2",
+      "designfile": {
+        "filename": "../../../before/lab2/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     },
     {
       "name": "lab3",
-      "folder": "individual_results/lab3"
+      "folder": "individual_results/lab3",
+      "designfile": {
+        "filename": "../../../before/lab3/design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
     }
   ]
 }

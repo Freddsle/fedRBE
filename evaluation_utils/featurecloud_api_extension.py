@@ -27,6 +27,7 @@ import hashlib
 import yaml
 import docker
 import json
+import zipfile
 from copy import deepcopy
 
 from FeatureCloud.api.imp.test import commands as fc
@@ -116,7 +117,7 @@ class Experiment():
         try:
             client.images.get(self.app_image_name)
         except:
-            raise RuntimeError(f"App image {self.app_image_name} not found!")
+            raise RuntimeError(f"App image {self.app_image_name} not found! Use docker pull to receive it!")
 
         # Ensure the controller is up
         try:
@@ -259,8 +260,8 @@ class Experiment():
         if self.controller_host is None:
             self.controller_host = DEFAULT_CONTROLLER_HOST
         if self.generic_dir is None:
-            self.generic_dir = "."
-        elif self.generic_dir != ".":
+            self.generic_dir = ""
+        elif self.generic_dir not in ("", "."):
             if os.path.exists(self.generic_dir) == False:
                 raise RuntimeError(f"Generic directory {self.generic_dir} does not exist!")
             else:
@@ -425,25 +426,37 @@ class Experiment():
 
     def _kill_leftover_container(self):
         """
-        Eliminates any containers left of the app image
+        Eliminates any containers left of the app image.
+        Matches by image tag because FeatureCloud strips underscores from
+        image names when generating container names (e.g. fc_kmeans_upd ->
+        fc_fckmeansupd_*), so matching by container.name is unreliable.
+        Uses remove(force=True) to both stop and remove containers so they
+        are fully disconnected from Docker networks.
         """
         print("Killing leftover containers...")
         dockerclient = docker.from_env()
-        containers = dockerclient.containers.list()
+        # include stopped containers — they stay on networks until removed
+        containers = dockerclient.containers.list(all=True)
 
-        # Iterate through the containers
         image_name = self.app_image_name
         if "/" in image_name:
             image_name = image_name.split("/")[-1]
+        # FC strips underscores when naming containers, so also try without them
+        image_name_no_underscores = image_name.replace("_", "")
+
         for container in containers:
-            if image_name in container.name:
-                # Stop the container
+            tags = container.image.tags if container.image else []
+            name_match = (
+                image_name in container.name
+                or image_name_no_underscores in container.name
+            )
+            image_match = any(image_name in tag for tag in tags)
+            if name_match or image_match:
                 try:
-                    container.stop()
+                    container.remove(force=True)  # stops + removes in one call
+                    print(f"Removed leftover container: {container.id} (image: {self.app_image_name})")
                 except Exception as e:
-                    print(f"WARNING: failed to stop a container, will try to continue the workflow. Error: {e}")
-                print(f"Stopped leftover container: {container.id} running image {self.app_image_name}")
-                time.sleep(5) # just to make sure the container is really removed
+                    print(f"WARNING: failed to remove container {container.id}, will try to continue. Error: {e}")
 
 ### Helper functions
 def hash_file(file_path, exclude=None):
@@ -457,3 +470,100 @@ def hash_file(file_path, exclude=None):
         for chunk in iter(lambda: f.read(4096), b""):
             hasher.update(chunk)
     return hasher.hexdigest()
+
+
+def postprocess_results(exp, result_files_zipped, result_filename):
+    """Extract per-client FedRBE results and concatenate into a single corrected TSV.
+
+    Waits up to ~5 minutes for each client zip to appear on disk, extracts the
+    standard result files (``only_batch_corrected_data.csv``,
+    ``full_corrected_data.csv``, ``report.txt``) into
+    ``<result_folder>/individual_results/<client_name>/``, optionally rewrites a
+    sibling ``datainfo.json`` so that downstream pipelines see per-client
+    ``individual_results/<name>`` folders, and finally concatenates the
+    ``only_batch_corrected_data.csv`` files (column-wise) into a single TSV at
+    ``result_filename``.
+
+    Parameters
+    ----------
+    exp : Experiment
+        The experiment object whose ``clients`` list provides the per-client
+        folder names that will be used as result subdirectories.
+    result_files_zipped : list[str]
+        Absolute paths to per-client result zip files returned by
+        ``Experiment.run_test()``.
+    result_filename : str | os.PathLike
+        Output path for the concatenated corrected TSV. Its parent directory is
+        used as the result folder for ``individual_results/`` and any
+        ``datainfo.json``.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The concatenated corrected expression matrix (features x samples).
+    """
+    import pandas as pd  # local import: keeps module import cheap
+
+    time.sleep(10)
+    result_filename = os.fspath(result_filename)
+    result_folder = os.path.dirname(result_filename) or "."
+    individual_results_dir = os.path.join(result_folder, 'individual_results')
+    os.makedirs(individual_results_dir, exist_ok=True)
+
+    client_names = [os.path.basename(p) for p in exp.clients]
+
+    for zip_path, client_name in zip(result_files_zipped, client_names):
+        # Wait for file to be available (FeatureCloud writes zips asynchronously)
+        for _ in range(60):
+            if os.path.exists(zip_path):
+                break
+            print(f'Waiting for {zip_path}...')
+            time.sleep(5)
+        else:
+            raise RuntimeError(f'Zip file not found after timeout: {zip_path}')
+
+        client_result_dir = os.path.join(individual_results_dir, client_name)
+        os.makedirs(client_result_dir, exist_ok=True)
+        with zipfile.ZipFile(zip_path, 'r') as zf:
+            zip_names = zf.namelist()
+            for fname in ['only_batch_corrected_data.csv', 'full_corrected_data.csv', 'report.txt']:
+                if fname in zip_names:
+                    zf.extract(fname, client_result_dir)
+                elif fname == 'full_corrected_data.csv':
+                    raise RuntimeError(
+                        f"'{fname}' not found in zip for client '{client_name}'. "
+                        f"Files in zip: {zip_names}"
+                    )
+                else:
+                    print(f"WARNING: '{fname}' not in zip for '{client_name}', skipping.")
+
+    # Update datainfo.json if present (used by some downstream pipelines)
+    datainfo_path = os.path.join(result_folder, 'datainfo.json')
+    if os.path.exists(datainfo_path):
+        with open(datainfo_path, 'r') as f:
+            datainfo = json.load(f)
+        for cohort in datainfo.get('cohorts', []):
+            cohort['folder'] = os.path.join('individual_results', cohort['name'])
+        if 'datafile' in datainfo:
+            datainfo['datafile']['filename'] = 'full_corrected_data.csv'
+            datainfo['datafile']['separator'] = '\t'
+        with open(datainfo_path, 'w') as f:
+            json.dump(datainfo, f, indent=2)
+        print(f'Updated datainfo.json at {datainfo_path}')
+
+    # Concatenate per-client corrected data
+    final_df = None
+    for client_name in client_names:
+        result_file = os.path.join(individual_results_dir, client_name, 'only_batch_corrected_data.csv')
+        if not os.path.exists(result_file):
+            print(f'WARNING: Result file not found for {client_name}: {result_file}')
+            continue
+        client_df = pd.read_csv(result_file, sep='\t', index_col=0)
+        final_df = client_df if final_df is None else pd.concat([final_df, client_df], axis=1)
+
+    if final_df is None:
+        raise RuntimeError('No data found in test results!')
+
+    final_df.to_csv(result_filename, sep='\t')
+    print(f'Saved concatenated result ({final_df.shape}) to {result_filename}')
+    return final_df

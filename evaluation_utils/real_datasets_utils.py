@@ -20,6 +20,7 @@ import pandas as pd
 import yaml
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
+from sklearn.preprocessing import StandardScaler
 
 
 # ---------------------------------------------------------------------------
@@ -40,6 +41,8 @@ class DatasetConfig:
     design_file: str
     sample_col: str
     condition_col: str
+    n_init: int = 1
+    extra: Dict[str, str] = None  # type: ignore[assignment]
 
 
 def dataset_configs(repo_root: Path) -> Dict[str, DatasetConfig]:
@@ -60,6 +63,8 @@ def dataset_configs(repo_root: Path) -> Dict[str, DatasetConfig]:
             design_file=d["design_file"],
             sample_col=d["sample_col"],
             condition_col=d["condition_col"],
+            n_init=int(d.get("n_init", 1)),
+            extra={k: str(d[k]) for k in d.get("extra", {})},
         )
     return configs
 
@@ -294,14 +299,28 @@ def scale_like_federated(feature_by_sample: pd.DataFrame) -> np.ndarray:
 
 
 def run_central_kmeans(
-    feature_by_sample: pd.DataFrame, k_values: Sequence[int], seed: int
+    feature_by_sample: pd.DataFrame,
+    k_values: Sequence[int],
+    seed: int,
+    n_init: int = 1,
 ) -> Dict[int, pd.Series]:
-    """Run k-means for each k and return {k: Series of cluster labels indexed by sample name}."""
-    data = scale_like_federated(feature_by_sample)
+    """Run k-means for each k and return {k: Series of cluster labels indexed by sample name}.
+
+    Applies a per-feature ``StandardScaler`` pass (centering + scale by population std,
+    ddof=0) before running k-means, matching the federated ``fc_kmeans`` app.
+
+    Parameters
+    ----------
+    n_init
+        Number of k-means random initializations.
+    """
+    array = feature_by_sample.to_numpy(dtype=float).T
+    # StandardScaler: center + scale by population std (ddof=0), per feature.
+    data = StandardScaler().fit_transform(array)
     samples = list(feature_by_sample.columns)
     outputs: Dict[int, pd.Series] = {}
     for k in sorted(set(k_values)):
-        km = KMeans(n_clusters=k, n_init=50, random_state=seed)
+        km = KMeans(n_clusters=k, random_state=seed, n_init=n_init)
         labels = km.fit_predict(data)
         outputs[k] = pd.Series(labels, index=samples)
     return outputs
@@ -375,6 +394,14 @@ def calculate_metrics(true_labels: pd.Series, predicted_labels: pd.Series) -> Di
 # FeatureCloud k-means input generation
 # ---------------------------------------------------------------------------
 
+def write_feature_matrix(df: pd.DataFrame, path: Path) -> None:
+    """Write a feature-by-sample matrix as an unquoted TSV with a ``rowname`` index column."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out = df.copy()
+    out.insert(0, "rowname", out.index)
+    out.to_csv(path, sep="\t", index=False)
+
+
 def write_intensities(df: pd.DataFrame, path: Path) -> None:
     """Write a feature-by-sample matrix as a quoted TSV for the fc_kmeans app.
 
@@ -395,8 +422,19 @@ def write_design(df: pd.DataFrame, path: Path) -> None:
     out.to_csv(path, sep="\t", index=False, quoting=csv.QUOTE_NONNUMERIC)
 
 
-def write_kmeans_config(path: Path, k_values: Sequence[int]) -> None:
-    """Write a ``config_kmeans.yml`` for the FeatureCloud fc_kmeans app."""
+def write_kmeans_config(
+    path: Path,
+    k_values: Sequence[int],
+    n_init_local: int = 1,
+    n_init_global: int = 1,
+    max_global_iter: int = 1,
+    seed: int = 11,
+) -> None:
+    """Write a ``config_kmeans.yml`` for the FeatureCloud fc_kmeans app.
+
+    The app applies its own per-feature centering and variance scaling on each
+    client's intensities before running k-means.
+    """
     k_min = min(k_values)
     k_max = max(k_values)
     content = (
@@ -406,6 +444,10 @@ def write_kmeans_config(path: Path, k_values: Sequence[int]) -> None:
         f"    k_min: {k_min}\n"
         "    k_step: 1\n"
         "    cluster_on: column\n"
+        f"    seed: {seed}\n"
+        f"    n_init_local: {n_init_local}\n"
+        f"    n_init_global: {n_init_global}\n"
+        f"    max_global_iter: {max_global_iter}\n"
         "  input:\n"
         "    delimiter: \"\\t\"\n"
         "    dir: \"\"\n"
@@ -457,7 +499,10 @@ def prepare_variant_inputs(
         lab_dir.mkdir(parents=True, exist_ok=True)
         write_intensities(matrix[lab_meta["file"]], lab_dir / "intensities.tsv")
         write_design(lab_meta, lab_dir / "design.tsv")
-        write_kmeans_config(lab_dir / "config_kmeans.yml", k_values)
+        write_kmeans_config(
+            lab_dir / "config_kmeans.yml",
+            k_values,
+        )
 
     return variant_dir
 
@@ -562,8 +607,7 @@ def evaluate_metrics(
         for method_name, predicted in method_specs:
             if predicted is None:
                 continue
-            aligned = align_predictions_to_truth(predicted, truth)
-            metrics = calculate_metrics(truth, aligned)
+            metrics = calculate_metrics(truth, predicted)
             records.append(
                 {
                     "Dataset": dataset_name,

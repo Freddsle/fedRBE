@@ -70,25 +70,18 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     data_path = os.path.join(inputfolder, config['data_filename'])
     separator = config.get('csv_seperator', ',')
 
-    df = pd.read_csv(data_path, sep=separator)
+    # read index in as column, later we will set it as index if needed based on config
+    index_col = config.get('sample_col', None) if config.get('features_as_columns', True) else config.get('feature_name_col', 0)
+    df = pd.read_csv(data_path, sep=separator, index_col=index_col)
 
     # Prepare data based on orientation
     if config.get('features_as_columns', True):
-        # Features are columns
-        sample_col = config.get('sample_col', None)
-        if sample_col is not None:
-            df = df.set_index(df.columns[sample_col])
-
         # Separate features and target
         target_col = config['predicted_feature_name']
         y = df[target_col]
         X = df.drop(columns=[target_col])
     else:
-        # Features are rows
-        feature_name_col = config.get('feature_name_col', 0)
-        df = df.set_index(df.columns[feature_name_col])
         df = df.T  # Transpose so samples are rows
-        print(df.head())
         target_col = config['predicted_feature_name']
         y = df[target_col]
         X = df.drop(columns=[target_col])

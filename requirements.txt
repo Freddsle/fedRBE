@@ -1,8 +1,17 @@
 # Python
-ipykernel
-pandas
-matplotlib
-seaborn
+adjustText
+bios
+bottle
+docker
 featurecloud
+ipykernel
+jinja2
+jupyter
+matplotlib
+numpy
+pandas
 PyYAML
-scikit-learn
+scikit-learn==1.8.0
+seaborn
+scipy
+upsetplot

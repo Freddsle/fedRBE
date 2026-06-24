@@ -1,1 +1,1 @@
-docker build . -t bcorrect:latest
+docker build . -t featurecloud.ai/bcorrect:latest

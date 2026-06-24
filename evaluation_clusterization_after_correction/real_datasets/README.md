@@ -1,0 +1,226 @@
+# Real-Dataset Clustering Evaluation
+
+Evaluates k-means clustering quality (ARI) on real omics datasets before and after
+fedRBE batch correction, for both central and federated k-means.
+
+**Datasets:** `ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and `quartet_multiomics` 
+(the latter is a multi-modal dataset with transcriptomics, proteomics, and metabolomics measured on matched samples).
+
+---
+
+## Prerequisites
+
+1. **Python environment** — install repo dependencies:
+   ```bash
+   pip install -r requirements.txt   # from repo root
+   ```
+
+2. **Corrected matrices** — central batch correction must have been run for each dataset.
+   The corrected TSV files are expected at paths defined in `evaluation_utils/datasets.yaml`.
+   If the files are Git LFS pointers, fetch them first:
+   ```bash
+   git lfs pull
+   ```
+
+3. **FeatureCloud (for notebook 03)** — required to generate federated k-means
+   results. Result archives under
+   `<dataset>/inputs/{before,corrected}/tests/tests/` are generated locally
+   and are not committed.
+
+---
+
+## Step-by-Step Instructions
+
+### Step 0 — Build joint matrices (quartet multiomics only) (`00_build_kmeans_matrices.ipynb`)
+
+Quartet Multiomics-only pre-step. The other datasets (`ecoli`, `ovarian_cancer`,
+`ccRCC_proteomics`) get their `before` / `corrected` matrices
+directly from `evaluation_data/<dataset>/...` and skip this step.
+
+The R notebook stacks the three per-modality matrices written by
+`evaluation_data/quartet_multiomics/03_central_RBE.ipynb` and
+`04_run_fedrbe.ipynb` into a single joint matrix per condition
+(before / central-corrected / FedRBE-corrected), and writes per-client
+`design.tsv` / `intensities.tsv` slices for the standard flow.
+
+```bash
+cd evaluation_clusterization_after_correction/real_datasets
+jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
+```
+
+**Outputs:**
+- `evaluation_data/quartet_multiomics/after/all_modalities_{before,corrected}_kmeans_matrix.tsv`
+  plus `all_modalities_fedapp_kmeans_matrix.tsv` for real FeatureCloud
+  FedRBE outputs, or `all_modalities_fedsim_kmeans_matrix.tsv` for local
+  FedSim-only outputs
+  — joint matrices used as `before_matrix` / `corrected_central` /
+  `corrected_federated` in `evaluation_utils/datasets.yaml`. Kept under
+  `evaluation_data/` because `evaluation/evaluation_quartet_multiomics.ipynb` also
+  reads them.
+- `evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/<client>/{design.tsv, intensities.tsv}`
+  — per-client splits used when Step 3 builds FeatureCloud k-means inputs.
+  These are k-means-only and live inside this clustering-eval folder.
+
+The three modality matrices are stacked vertically (rows: features prefixed
+by modality name; columns: pseudo-matched samples) and saved as a single
+joint matrix. No manual per-feature scaling is applied here — Steps 2 and 3
+each apply their own per-feature scaling on the joint matrix, the same way
+they do for every other dataset.
+
+**Targets** must match the active client list in
+`evaluation_data/quartet_multiomics/fedrbe_multiomics_utils.py`, controlled by the
+`INCLUDE_CLIENT_04` toggle — default `False`, i.e. 3 clients / 48 joint samples.
+
+- `condition`: donor labels `D5/D6/F7/M8` (`D6` is the limma reference donor),
+  evaluated with `k = 4`.
+- `client`: client labels (default 3-client config: `client_01_L01`,
+  `client_02_L02`, `client_03_L05_L04`; with `INCLUDE_CLIENT_04 = True` also
+  `client_04_L03_L14`), evaluated with `k = len(CLIENT_NAMES)`. This is the
+  technical structure that batch correction is meant to remove. The metadata
+  column reusing the real-dataset schema is named `lab` for compatibility with
+  the other real-dataset scripts.
+
+Joint samples are matched across modalities via the `pseudo_sample` keys built
+in `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`
+(`{client}_{donor}_{rep}_{i}`).
+
+---
+
+### Step 1 — Data Preparation (`01_data_preparation.ipynb`)
+
+Loads raw and corrected matrices, aligns samples to metadata, drops NaN feature rows,
+and saves prepared matrices to `<dataset>/prepared/`.
+
+1. Open `01_data_preparation.ipynb`.
+2. (Optional) Edit the **Configuration** cell to change the dataset list or `CORRECTED_SOURCE`
+   (`"central"`, `"federated"`, or `"auto"`).
+3. Run all cells (`Run All`).
+
+**Outputs per dataset:**
+```
+<dataset>/prepared/before_matrix.tsv
+<dataset>/prepared/corrected_matrix.tsv
+<dataset>/prepared/metadata.tsv
+```
+
+---
+
+### Step 2 — Central K-Means (`02_central_kmeans.ipynb`)
+
+Runs scikit-learn k-means on the prepared matrices (k = number of conditions and number of
+batches), computes ARI against condition and batch labels.
+
+1. Ensure Step 1 has been run for all datasets.
+2. Open `02_central_kmeans.ipynb`.
+3. Run all cells.
+
+**Outputs per dataset:**
+```
+<dataset>/kmeans_res/runs/1_metadata_cntrl_kmeans_res.tsv
+<dataset>/metrics/metrics_ari.tsv
+metrics_ari.tsv                          # combined across all datasets
+```
+
+---
+
+### Step 3 — Federated K-Means (`03_federated_runs.ipynb`)
+
+Prepares per-site input directories for the FeatureCloud fc_kmeans app, then either
+launches a new federated test or aggregates results generated by an earlier local run.
+
+#### Option A — Re-run federated k-means with FeatureCloud (default)
+
+1. Install the FeatureCloud CLI and ensure Docker is running (see
+   [FeatureCloud docs](https://featurecloud.ai/)).
+
+2. Build the fc_kmeans Docker image. Either of the following methods works:
+
+   **Using the FeatureCloud CLI (recommended — matches the auto-build the notebook uses):**
+   ```bash
+   featurecloud app build evaluation_clusterization_after_correction/federated_kmeans_upd fc_kmeans_upd
+   ```
+   **Or directly with Docker:**
+   ```bash
+   cd evaluation_clusterization_after_correction/federated_kmeans_upd
+   docker build -t fc_kmeans_upd .
+   ```
+
+3. Open `03_federated_runs.ipynb`.
+4. Confirm `RERUN_FEDERATED = True` in the **Configuration** cell.
+5. Adjust `CONTROLLER_HOST`, `TIMEOUT`, and `QUERY_INTERVAL` if needed.
+6. Run all cells.
+
+   The notebook starts and stops the FeatureCloud controller automatically for each
+   dataset variant (via `_startup()`), pointing it at the correct
+   `<dataset>/inputs/{before,corrected}/` directory. Docker must be running;
+   no manual `featurecloud controller start` is needed.
+
+   Result zip files are saved by the FeatureCloud controller to
+   `<dataset>/inputs/{before,corrected}/tests/tests/results_test_<id>_client_<id>_<name>.zip`
+   and are automatically extracted and aggregated by the notebook.
+
+#### Option B — Aggregate results from an earlier local run
+
+1. Ensure Step 1 has been run and the generated result zip files still exist
+   under `<dataset>/inputs/*/tests/`.
+2. Open `03_federated_runs.ipynb`.
+3. Set `RERUN_FEDERATED = False` in the **Configuration** cell.
+4. Run all cells.
+
+**Outputs per dataset:**
+```
+<dataset>/inputs/before/<site>/intensities.tsv        # FC input files
+<dataset>/inputs/before/<site>/design.tsv
+<dataset>/inputs/before/<site>/config_kmeans.yml
+<dataset>/inputs/corrected/<site>/...                 # same for corrected
+<dataset>/fc_kmeans_res/before/1_fed_clustering/      # intermediate per-client clustering CSVs
+<dataset>/fc_kmeans_res/corrected/1_fed_clustering/
+<dataset>/kmeans_res/runs/1_metadata_before_fedclusters.tsv
+<dataset>/kmeans_res/runs/1_metadata_after_fedclusters.tsv
+```
+
+---
+
+### Step 4 — Analysis & Plots (`04_analysis_metrics_plots.ipynb`)
+
+Combines central and federated results, computes ARI for all methods, and produces
+ARI bar charts, PCA plots, and a delta-ARI summary table.
+
+1. Ensure Steps 1–3 have been run (Step 3 is optional; the notebook handles missing
+   federated results gracefully).
+2. Open `04_analysis_metrics_plots.ipynb`.
+3. Run all cells.
+
+**Outputs (written to `real_datasets/`):**
+```
+metrics_ari.tsv          # full metrics table (all datasets, methods, targets)
+```
+Plots are displayed inline in the notebook.
+
+---
+
+## Output Directory Layout
+
+After all four notebooks are run, the directory structure looks like:
+
+```
+real_datasets/
+├── <dataset>/
+│   ├── prepared/
+│   │   ├── before_matrix.tsv
+│   │   ├── corrected_matrix.tsv
+│   │   └── metadata.tsv
+│   ├── inputs/
+│   │   ├── before/<site>/{intensities,design,config_kmeans}.*
+│   │   │   └── tests/tests/results_test_<id>_client_*.zip  # generated FC output
+│   │   └── corrected/<site>/...
+│   ├── fc_kmeans_res/                          # if Step 3 ran
+│   │   ├── before/1_fed_clustering/            # intermediate per-client CSVs
+│   │   └── corrected/1_fed_clustering/
+│   ├── kmeans_res/runs/
+│   │   ├── 1_metadata_cntrl_kmeans_res.tsv
+│   │   ├── 1_metadata_before_fedclusters.tsv   # if Step 3 ran
+│   │   └── 1_metadata_after_fedclusters.tsv    # if Step 3 ran
+│   └── metrics/metrics_ari.tsv
+└── metrics_ari.tsv      # combined
+```

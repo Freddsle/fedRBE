@@ -1,13 +1,32 @@
-# R packages
-tidyverse
-gridExtra
-patchwork
-umap
-ggsci
-viridis
-IRkernel
-reshape2
-limma
-variancepartition
-invgamma
+# CRAN packages
+data.table
 devtools
+ggpubr
+gridExtra
+ggsci
+ggtext
+glue
+IRkernel
+invgamma
+jsonlite
+knitr
+nipals
+patchwork
+pheatmap
+reshape2
+scales
+tidyverse
+umap
+viridis
+WGCNA
+
+# Bioconductor packages
+affy
+GEOquery
+hgu133acdf
+hgu133plus2cdf
+limma
+variancePartition
+
+# GitHub package: mwgrassgreen/RobNorm
+RobNorm

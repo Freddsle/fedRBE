@@ -1,0 +1,195 @@
+# Quartet multiomics batch-effect dataset
+
+Figshare dataset for the Quartet batch-effect correction study:
+
+- **Dataset:** [10.6084/m9.figshare.22188349.v1](https://doi.org/10.6084/m9.figshare.22188349.v1), CC BY 4.0
+- **Batch-effect paper:** Yu et al., Genome Biology 24, 201 (2023), https://doi.org/10.1186/s13059-023-03047-z
+- **Quartet Data Portal paper:** Yang et al., Genome Biology 24, 245 (2023), https://doi.org/10.1186/s13059-023-03091-9
+
+The data use Quartet reference materials from four matched B-lymphoblastoid cell lines: **D5**, **D6**, **F7**, and **M8** (Quartet Data Portal, Yang et al. 2023). Following the convention of the source release, **`D6` is treated as the common reference donor** and `D5/F7/M8` as study groups; the same convention is used as the limma intercept in this pipeline (see notebook 03).
+
+## Main matrices
+
+The federation pipeline (notebooks 02–04) uses only the three full matrices below. Rows are features and columns are libraries; every batch contains all four donors with three replicates each.
+
+| Omics | Full matrix | Features | Samples | Scale |
+|-------|-------------|----------|---------|-------|
+| Transcriptomics | `Transcriptomics_fulldataset_log2FPKM_r26907c180.csv` | 26,907 genes | 180 | log2(FPKM + 0.01) |
+| Proteomics | `Proteomics_fulldataset_log2FOT_r3489c180.csv` | 3,489 proteins | 180 | log2(FOT + 0.01) |
+| Metabolomics | `Metabolomics_fulldataset_log2expr_r71c180.csv` | 71 metabolites | 180 | log2(expr + 1) |
+
+Each full matrix has **15 batches x 12 libraries** per omics type.
+
+## Optional source exports (not required by the pipeline)
+
+The Figshare release also contains balanced/confounded subsets with 45 study
+samples each. The current notebooks use the full matrices, so these optional
+exports and their scenario metadata are ignored by Git:
+
+| Omics | Balanced subset | Confounded subset |
+|-------|-----------------|-------------------|
+| Transcriptomics | `Transcriptomics_Balanced_log2FPKM_r26907c45.csv` | `Transcriptomics_Confounded_log2FPKM_r26907c45.csv` |
+| Proteomics | `Proteomics_Balanced_log2FOT_r3489c45.csv` | `Proteomics_Confounded_log2FOT_r3489c45.csv` |
+| Metabolomics | `Metabolomics_Balanced_log2expr_r71c45.csv` | `Metabolomics_Confounded_log2expr_r71c45.csv` |
+
+- **Balanced:** one D5/F7/M8 replicate from each of 15 batches.
+- **Confounded:** five batches assigned to each D5/F7/M8 group, with all three replicates retained.
+- Scenario metadata also lists 45 D6 reference samples per omics/scenario, but D6 columns are not present in the subset matrices.
+
+## Metadata
+
+| File | Purpose |
+|------|---------|
+| `meta_full_dataset_3omics.csv` | Full metadata: 540 rows, 180 libraries per omics type. Key columns: `library`, `sample`, `batch`, `lab`, `platform`, `protocol`, `datatype`, `rep`, `date`. |
+| `meta_balancedconfounded_dataset_3omics.xlsx` | Scenario metadata: 540 rows, with study/reference role and scenario labels. |
+
+Notes:
+
+- Use `sample` / `Sample group` as biological condition and `batch` as the batch factor.
+- `lab`, `platform`, and `protocol` are useful EDA covariates or possible site/covariate candidates.
+- Proteomics subset matrix columns use periods in instrument tokens such as `QE.HFX`, `QE.Plus`, and `QE.HF`, while metadata uses hyphens. The notebook normalizes this before joining.
+
+## Notebooks (run in order)
+
+All notebooks read from `figshare_data/` and write into `before/` (inputs) and `after/` (corrected outputs).
+
+1. `01_preprocess_eda.ipynb` — EDA only. Loads any single Figshare matrix, aligns it to metadata, and saves before-correction PCA / boxplot / density plots to `plots/`. Selected via `DATASET_ID` and `DATASET_IDS`.
+2. `02_prepare_RBE_inputs.ipynb` — builds the configurable three- or four-client federation described below and writes per-modality central matrices, metadata, FedRBE client folders, and `before/fedrbe_client_groups.tsv`.
+3. `03_central_RBE.ipynb` — runs per-modality central `limma::removeBatchEffect` with `~ condition + batch` and `D6` as the reference donor, writes corrected matrices to `after/<Modality>/intensities_log_Rcorrected_UNION.tsv` and `after/<Modality>/metadata.tsv`.
+4. `04_run_fedrbe.ipynb` — **main path:** reads the FeatureCloud-style client folders prepared by notebook 02, runs the real FeatureCloud app (`featurecloud.ai/bcorrect:latest`), and writes `after/<Modality>/FedApp_corrected_data.tsv`. **Optional:** set `RUN_FEDSIM = True` in the last cell to run an in-process FedRBE simulation (`run_all_fedsim`) and write `after/<Modality>/FedSim_corrected_data.tsv`.
+5. `05_create_merged_omics_folder.py` — creates `merged_omics/<before|after>/<client>/` folders with all modalities merged per client. It requires outputs from notebooks 02-04.
+6. `evaluation_clusterization_after_correction/real_datasets/00_build_kmeans_matrices.ipynb` — stacks the three per-modality corrected matrices into the joint k-means-ready matrices `after/all_modalities_{before,corrected}_kmeans_matrix.tsv` and writes the federated joint matrix as `after/all_modalities_fedapp_kmeans_matrix.tsv` when real FeatureCloud `FedApp_corrected_data.tsv` files are present for all modalities, or `after/all_modalities_fedsim_kmeans_matrix.tsv` when only local `FedSim_corrected_data.tsv` files are present. Writes `all_modalities_metadata.tsv`.
+
+Multiomics diagnostic plots are generated by `evaluation/evaluation_quartet_multiomics.ipynb` and saved under `evaluation/plots/quartet_multiomics/`.
+
+## Four-client federation (built by notebook 02)
+
+Lab IDs (`L01`..`L15`) in the figshare metadata are enumerated **independently within each modality**, so a given `Lxx` can refer to different institutions across modalities. To build a federation where every client has data in all three modalities:
+
+- Only labs that appear in all three modalities can host a real client. Three labs satisfy this: `L01`, `L02`, `L05`.
+- An optional fourth synthetic client merges `L03` (Metab+RNA) with `L14` (Protein), since L14 is the unique Protein-only lab with two batches that pair cleanly with L03.
+- Within each (lab, modality), batches are pruned to a fixed total of 12 or 24 libraries per client per modality.
+
+### `INCLUDE_CLIENT_04` toggle
+
+The synthetic `client_04_L03_L14` is **optional** and **disabled by default**. The toggle `INCLUDE_CLIENT_04` lives at the top of:
+
+- `fedrbe_multiomics_utils.py` (single Python source consumed by `04_run_fedrbe.ipynb` and `generate_fedrbe_corrected_datasets.py`).
+- `01_preprocess_eda.ipynb`, `02_prepare_RBE_inputs.ipynb`, `03_central_RBE.ipynb` (mirrored R toggles; must agree with the Python source).
+
+Defaults (`INCLUDE_CLIENT_04 = False`):
+
+- **3 clients per modality, 48 libraries × 4 batches per modality.**
+- No `client_04_L03_L14/` folder is generated. No metadata row, design, config, or corrected data is written for it. Its batch list (`P_BGI_L3_B1`, `R_BGI_L3_B1`, `TMO_Exploris480_1`, `TMO_QE-HFX_1`, `U_L3_01`, `U_L3_02`) is still kept in the full registries (`_ALL_*` / `ALL_*`) for documentation and reversibility.
+- The federation tail (used as the central-limma and FedRBE reference batch) becomes the alphabetically-last batch of `client_03_L05_L04`: `R_ILM_L5_B2` (RNA), `FDU_QE-HFX_4` (Protein), `U_L5_01` (Metab).
+
+Set `INCLUDE_CLIENT_04 = True` (Python) and `INCLUDE_CLIENT_04 <- TRUE` (in all three R notebooks) to restore the full **4-client / 72-library / 6-batch** federation. The reference batch then becomes the last batch of `client_04_L03_L14` (`R_BGI_L3_B1` / `TMO_QE-HFX_1` / `U_L3_02`).
+
+### Per-client batch contributions (full federation)
+
+| client | RNA batches | Protein batches | Metabolomics batches |
+|---|---|---|---|
+| `client_01_L01` | `P_ILM_L1_B1` | `ABS_QTOF6600_1` | `U_L1_01` |
+| `client_02_L02` | `P_ILM_L2_B1` | `APT_QE-HFX_1` | `U_L2_01` |
+| `client_03_L05_L04` | `P_ILM_L5_B1`, `R_ILM_L5_B2` | `FDU_Lumos_1`, `FDU_QE-HFX_4` | `U_L5_01`, `T_L4_01` |
+| `client_04_L03_L14` *(optional)* | `P_BGI_L3_B1`, `R_BGI_L3_B1` | `TMO_Exploris480_1`, `TMO_QE-HFX_1` | `U_L3_01`, `U_L3_02` |
+
+Deterministic selection rules (used to pick which batches to keep when a lab has more than necessary):
+
+- L01 / L02 RNA: keep the poly(A)-mRNA batch (`P_*`) and drop the rRNA-depleted batch (`R_*`); poly(A)-mRNA matches the layer measured by proteomics/metabolomics.
+- L05 Proteomics: keep `FDU_Lumos_1` and `FDU_QE-HFX_4`; drop `FDU_QE-HFX_1`. Among the two QE-HFX runs, `_4` has a much lower fraction of cells at the `−6.644` imputation floor (8.4% vs 16.7%). The value `−6.644 = log2(0.01)` is the most frequent value in the source FOT matrix (~19% of all cells) and corresponds to the `log2(FOT + 0.01)` floor used by the figshare release for non-detected proteins.
+- L05 Metabolomics: add `T_L4_01` (alphabetical-first L04 batch) so the client reaches 24 libraries, matching its RNA / Protein size. The original `lab="L04"` label is preserved in metadata.
+- L03 + L14 (Proteomics): L14 is the unique Protein-only lab with exactly two batches.
+
+The selection lives in two mirrored registries that you can edit if the source data changes:
+
+- Python: `_ALL_SELECTED_BATCHES`, `_ALL_CLIENT_LAB_MAPS`, `_ALL_CLIENT_NAMES` in `fedrbe_multiomics_utils.py`. The active `SELECTED_BATCHES`, `CLIENT_LAB_MAPS`, and `CLIENT_NAMES` are derived from those at import time according to `INCLUDE_CLIENT_04`.
+- R: identical `ALL_SELECTED_BATCHES`, `ALL_CLIENT_LAB_MAPS`, `ALL_CLIENT_NAMES` lists declared at the top of `01_preprocess_eda.ipynb`, with the matching `INCLUDE_CLIENT_04` toggle. `02_prepare_RBE_inputs.ipynb` and `03_central_RBE.ipynb` carry the same toggle so the validation constants (`N_LIBS_PER_MODALITY`, `N_BATCHES_PER_MODALITY`, `CLIENT_NAMES`) stay in sync.
+
+## Joint sample identifiers
+
+There is no shared library ID across the three Quartet modalities, so the all-modality k-means matrices are built from synthetic joint samples produced in notebook 02:
+
+```
+pseudo_sample = "{client}_{donor}_{rep}_{i}"
+```
+
+where `i = 1..k` indexes libraries within a `(client, donor, rep)` cell after sorting the libraries alphabetically by source `batch`. Because every (client, donor, rep) cell has the same number of libraries in every modality (1 for the 12-library clients, 2 for the 24-library clients), this index-wise pairing yields exactly **48 matched joint samples per modality** in the default 3-client federation, or **72** with `INCLUDE_CLIENT_04 = True`.
+
+## Federated batch correction
+
+FedRBE (`flimmaBatchCorrection` FeatureCloud app) is the federated equivalent of `limma::removeBatchEffect`. It corrects **within each modality only**; no data is exchanged between modalities or between clients. Each client sees its own libraries, builds its local design with the original Quartet `batch` as the within-client `batch_col` and `D5/F7/M8` (D6 = reference) as donor covariates, and exchanges only the aggregate `X^T X` / `X^T Y` summary statistics required by federated limma. The reference batch is read from `before/fedrbe_client_groups.tsv`, written by notebook 02.
+
+Feature filtering is shared by the central and federated paths in notebook 02. For Proteomics, the minimum raw value (`-6.644`) is treated as the zero/missing-equivalent value; features whose client-local third quartile is at that value are masked to `NA` for that client's samples. The preparation then applies the same usability rule as the FeatureCloud app and retains only features usable in at least three clients. This filtered matrix is written as the central input, and each client input is derived from it, so central limma and FedRBE operate on the same feature universe.
+
+For Metabolomics, the Figshare matrix is already `log2(expr + 1)` and **no feature-based filter** is applied in notebook 02: every metabolite from `filtered_data/Metabolomics_filtered.tsv` (71 features by default) is passed through unchanged, including original zeros, so central limma and FedRBE both see the full metabolite set. The L04 fold-in (`T_L4_01` added to `client_03_L05_L04` to balance modality sample counts) is independent from `INCLUDE_CLIENT_04` and is preserved in metadata via `lab="L04"`.
+
+Privacy floor: every client must satisfy `n_samples > 1 + |COVARIATES| + (n_total_batches - 1)`. With the default 3-client federation that is `≥ 8` libraries (4 batches), and with the optional 4-client federation `≥ 10` libraries (6 batches). The smallest client has 12, so the constraint is met in either layout without any client merging.
+
+**Main path (notebook 04):** runs the real FeatureCloud app via the `featurecloud.ai/bcorrect:latest` Docker image. Requires the FeatureCloud Python package, Docker Python SDK, and a running Docker daemon with the local image. Output: `after/<Modality>/FedApp_corrected_data.tsv`.
+
+**Optional local simulation:** set `RUN_FEDSIM = True` in the last cell of notebook 04 to run `run_all_fedsim` from `fedrbe_multiomics_utils.py`, which performs the same XTX/XTY aggregation as the app. This path does not require Docker and writes `after/<Modality>/FedSim_corrected_data.tsv`.
+
+## Outputs after a clean run
+
+Steps 2–6 from the run order above produce:
+
+```
+all_modalities_metadata.tsv               ← 00_build_kmeans_matrices.ipynb
+before/                                     ← written by notebook 02
+  datainfo.json
+  fedrbe_client_groups.tsv
+  preparation_summary.tsv
+  <Modality>/
+    central_intensities_log_UNION.tsv
+    metadata.tsv
+    <client_xx_LXX[_LXX]>/
+      intensities_log_UNION.tsv
+      design.tsv
+      config.yml
+  all_modalities_before_kmeans_matrix.tsv   ← 00_build_kmeans_matrices.ipynb
+after/                                      ← written by notebooks 03 + 04 + 00_build
+  central_correction_summary.tsv            ← notebook 03
+  diagnostic_plot_summary.tsv               ← notebook 03
+  all_modalities_corrected_kmeans_matrix.tsv← 00_build_kmeans_matrices.ipynb
+  all_modalities_fedapp_kmeans_matrix.tsv   ← 00_build_kmeans_matrices.ipynb (real FC app outputs)
+  all_modalities_fedsim_kmeans_matrix.tsv   ← 00_build_kmeans_matrices.ipynb (optional local FedSim outputs)
+  <Modality>/
+    intensities_log_Rcorrected_UNION.tsv    ← notebook 03
+    metadata.tsv                            ← notebook 03
+    FedApp_corrected_data.tsv              ← notebook 04 (main path, FC app)
+    FedSim_corrected_data.tsv              ← notebook 04 (optional, RUN_FEDSIM=True)
+    individual_results/<client>/            ← notebook 04 (main path)
+      only_batch_corrected_data.csv
+      full_corrected_data.csv
+      report.txt
+merged_omics/                               ← written by 05_create_merged_omics_folder.py
+  before/
+    <client_xx_LXX[_LXX]>/
+      merged_data.tsv
+  after/
+    <client_xx_LXX[_LXX]>/
+      merged_data.tsv
+```
+
+Validation: the central limma notebook puts the FedRBE reference batch last because `removeBatchEffect()` uses `contr.sum` coding. With that ordering, all modalities, including Proteomics features with client-wise missing blocks, match the FeatureCloud app correction to machine precision. The optional local FedSim path uses a generic pseudoinverse instead of the app's feature-presence coefficient mask, so raw Proteomics values can still differ by per-feature constants; row-centered values match to machine precision.
+
+## Additional optional metabolomics file
+
+`Metabolomics_fullset_expr_r984c204_randomfloor.csv` is a separate non-log metabolomics export with 984 rows and 204 sample columns. Only 180 columns match `meta_full_dataset_3omics.csv`; 24 extra `T_L1_*_01-03` and `T_L4_*_13-15` columns are not described by the provided metadata. Do not use it as the default batch-correction input unless matching metadata is recovered.
+
+## Files
+
+```
+quartet_multiomics/
+├── figshare_data/                # Downloaded Figshare matrices and metadata (do not modify)
+├── plots/                        # EDA plots (notebook 01) and correction diagnostics (notebook 03)
+├── fedrbe_multiomics_utils.py    # Shared Python utilities (registries + FedRBE simulation)
+├── 01_preprocess_eda.ipynb       # EDA only
+├── 02_prepare_RBE_inputs.ipynb   # Build configurable federation, write central + FedRBE before inputs
+├── 03_central_RBE.ipynb          # Central limma correction, write after/<Modality>/
+├── 04_run_fedrbe.ipynb           # FC app run from prepared client folders (FedSim optional)
+├── before/                       # Generated by notebook 02
+├── after/                        # Generated by notebooks 03 + 04 + 00_build_kmeans_matrices
+└── README.md
+```

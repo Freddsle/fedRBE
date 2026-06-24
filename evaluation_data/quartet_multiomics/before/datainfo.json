@@ -1,0 +1,43 @@
+{
+  "source": "Quartet full multiomics Figshare 10.6084/m9.figshare.22188349.v1",
+  "sample_set": "four-client federation, 72 libraries per modality",
+  "correction_batch": "batch",
+  "reference_donor": "D6",
+  "preserved_biology": ["D6", "D5", "F7", "M8"],
+  "client_names": ["client_01_L01", "client_02_L02", "client_03_L05_L04", "client_04_L03_L14"],
+  "modalities": [
+    {
+      "omics": "Transcriptomics",
+      "features": 26907,
+      "samples": 72,
+      "batches": 6,
+      "clients": 4,
+      "donors": 4,
+      "missing_cells": 0,
+      "rows_with_any_na": 0,
+      "zero_or_na_variance_rows": 0
+    },
+    {
+      "omics": "E. coli",
+      "features": 3489,
+      "samples": 72,
+      "batches": 6,
+      "clients": 4,
+      "donors": 4,
+      "missing_cells": 0,
+      "rows_with_any_na": 0,
+      "zero_or_na_variance_rows": 0
+    },
+    {
+      "omics": "Metabolomics",
+      "features": 71,
+      "samples": 72,
+      "batches": 6,
+      "clients": 4,
+      "donors": 4,
+      "missing_cells": 0,
+      "rows_with_any_na": 0,
+      "zero_or_na_variance_rows": 0
+    }
+  ]
+}

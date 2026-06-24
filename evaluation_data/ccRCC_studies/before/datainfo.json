@@ -1,5 +1,11 @@
 {
-  "covariates": ["Condition"],
+  "covariates": [
+    "Condition"
+  ],
+  "prediction_targets": [
+    "Condition"
+  ],
+  "data_name": "ccRCC",
   "datafile": {
     "filename": "report_filtered.tsv",
     "separator": "\t",
@@ -7,25 +13,39 @@
     "samplename_column": null,
     "featurename_column": "Gene"
   },
-  "designfile": {
-    "filename": "design.tsv",
-    "separator": "\t",
-    "rotation": "samples x features",
-    "samplename_column": "rowname",
-    "featurename_column": null
-  },
   "cohorts": [
     {
       "name": "PDC000127",
-      "folder": "PDC000127"
+      "folder": "PDC000127",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "rowname",
+        "featurename_column": null
+      }
     },
     {
       "name": "PXD030344",
-      "folder": "PXD030344"
+      "folder": "PXD030344",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "rowname",
+        "featurename_column": null
+      }
     },
     {
       "name": "PXD042844",
-      "folder": "PXD042844"
+      "folder": "PXD042844",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "rowname",
+        "featurename_column": null
+      }
     }
   ]
 }

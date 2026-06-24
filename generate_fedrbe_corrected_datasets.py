@@ -23,8 +23,6 @@ from copy import deepcopy
 
 from evaluation_utils import featurecloud_api_extension as util
 
-
-
 ### SETTINGS
 ## GENERALT SETTINGS
 # The directory that contains ALL data needed in ANY experiment.
@@ -141,7 +139,7 @@ add_position_to_config(simulated_strongly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_strongly_imbalanced_experiment)
 
 ## PROTEOMICS
-proteomics_config_file_changes_base = {
+ecoli_config_file_changes_base = {
     "flimmaBatchCorrection": {
         "data_filename": "intensities_log_UNION.tsv",
         "design_filename": "design.tsv",
@@ -150,53 +148,27 @@ proteomics_config_file_changes_base = {
         "min_samples": 2
     }
 }
-proteomics_experiment = util.Experiment(
-    name="Proteomics",
-    fc_data_dir=os.path.join(data_dir, "proteomics"),
+ecoli_experiment = util.Experiment(
+    name="E. coli",
+    fc_data_dir=os.path.join(data_dir, "ecoli"),
     clients=[
-        os.path.join(data_dir, "proteomics", "before", "lab_A"),
-        os.path.join(data_dir, "proteomics", "before", "lab_B"),
-        os.path.join(data_dir, "proteomics", "before", "lab_C"),
-        os.path.join(data_dir, "proteomics", "before", "lab_D"),
-        os.path.join(data_dir, "proteomics", "before", "lab_E"),
+        os.path.join(data_dir, "ecoli", "before", "lab_A"),
+        os.path.join(data_dir, "ecoli", "before", "lab_B"),
+        os.path.join(data_dir, "ecoli", "before", "lab_C"),
+        os.path.join(data_dir, "ecoli", "before", "lab_D"),
+        os.path.join(data_dir, "ecoli", "before", "lab_E"),
     ],
     app_image_name=app_image_name,
     config_files=[deepcopy(base_config) for _ in range(5)],
-    config_file_changes=[deepcopy(proteomics_config_file_changes_base) for _ in range(5)],
+    config_file_changes=[deepcopy(ecoli_config_file_changes_base) for _ in range(5)],
 )
-proteomics_experiment_smpc = deepcopy(proteomics_experiment)
-set_smpc_true(proteomics_experiment_smpc)
-add_position_to_config(proteomics_experiment_smpc)
-add_position_to_config(proteomics_experiment)
-
-## PROTEOMICS MULTI_BATCH (Quartet, PXD045065)
-# 4 centers (labs): APT and FDU have 2 internal batches each (DDA + DIA),
-# NVG and BGI have 1 batch each (single batch name for all samples).
-# All centers use batch_col: batch.
-proteomics_config_file_changes_multibatch = deepcopy(proteomics_config_file_changes_base)
-proteomics_config_file_changes_multibatch["flimmaBatchCorrection"]["covariates"] = ["D6", "F7", "M8"]
-proteomics_config_file_changes_multibatch["flimmaBatchCorrection"]["batch_col"] = "batch"
-proteomics_config_file_changes_multibatch["flimmaBatchCorrection"]["min_samples"] = 0  # To avoid privacy error
-
-quartet_centers = ["APT", "FDU", "NVG", "BGI"]
-proteomics_multibatch_experiment = util.Experiment(
-    name="Proteomics Multi Batch",
-    fc_data_dir=os.path.join(data_dir, "proteomics_multibatch"),
-    clients=[
-        os.path.join(data_dir, "proteomics_multibatch", "before", center)
-        for center in quartet_centers
-    ],
-    app_image_name=app_image_name,
-    config_files=[deepcopy(base_config) for _ in range(4)],
-    config_file_changes=[deepcopy(proteomics_config_file_changes_multibatch) for _ in range(4)],
-)
-proteomics_multibatch_experiment_smpc = deepcopy(proteomics_multibatch_experiment)
-set_smpc_true(proteomics_multibatch_experiment_smpc)
-add_position_to_config(proteomics_multibatch_experiment_smpc)
-add_position_to_config(proteomics_multibatch_experiment)
+ecoli_experiment_smpc = deepcopy(ecoli_experiment)
+set_smpc_true(ecoli_experiment_smpc)
+add_position_to_config(ecoli_experiment_smpc)
+add_position_to_config(ecoli_experiment)
 
 ## MICROARRAY
-base_microarray_config_file_changes = {
+ovarian_cancer_config_file_changes = {
     "flimmaBatchCorrection": {
         "data_filename": "expr_for_correction_UNION.tsv",
         "design_filename": "design.tsv",
@@ -205,25 +177,25 @@ base_microarray_config_file_changes = {
         "min_samples": 2
     }
 }
-microarray_experiment = util.Experiment(
-    name="Microarray",
-    fc_data_dir=os.path.join(data_dir, "microarray"),
+ovarian_cancer_experiment = util.Experiment(
+    name="Ovarian cancer",
+    fc_data_dir=os.path.join(data_dir, "ovarian_cancer"),
     clients=[
-        os.path.join(data_dir, "microarray", "before", "GSE6008"),
-        os.path.join(data_dir, "microarray", "before", "GSE14407"),
-        os.path.join(data_dir, "microarray", "before", "GSE26712"),
-        os.path.join(data_dir, "microarray", "before", "GSE38666"),
-        os.path.join(data_dir, "microarray", "before", "GSE40595"),
-        os.path.join(data_dir, "microarray", "before", "GSE69428"),
+        os.path.join(data_dir, "ovarian_cancer", "before", "GSE6008"),
+        os.path.join(data_dir, "ovarian_cancer", "before", "GSE14407"),
+        os.path.join(data_dir, "ovarian_cancer", "before", "GSE26712"),
+        os.path.join(data_dir, "ovarian_cancer", "before", "GSE38666"),
+        os.path.join(data_dir, "ovarian_cancer", "before", "GSE40595"),
+        os.path.join(data_dir, "ovarian_cancer", "before", "GSE69428"),
     ],
     app_image_name=app_image_name,
     config_files=[deepcopy(base_config) for _ in range(6)],
-    config_file_changes=[deepcopy(base_microarray_config_file_changes) for _ in range(6)],
+    config_file_changes=[deepcopy(ovarian_cancer_config_file_changes) for _ in range(6)],
 )
-microarray_experiment_smpc = deepcopy(microarray_experiment)
-set_smpc_true(microarray_experiment_smpc)
-add_position_to_config(microarray_experiment_smpc)
-add_position_to_config(microarray_experiment)
+ovarian_cancer_experiment_smpc = deepcopy(ovarian_cancer_experiment)
+set_smpc_true(ovarian_cancer_experiment_smpc)
+add_position_to_config(ovarian_cancer_experiment_smpc)
+add_position_to_config(ovarian_cancer_experiment)
 
 ## ccRCC PROTEOMICS (3 studies: PDC000127, PXD030344, PXD042844)
 # Condition column derived from binary Normal/Tumor columns (see prepare_ccRCC_data.py).
@@ -238,7 +210,7 @@ ccRCC_config_file_changes_base = {
     }
 }
 ccRCC_proteomics_experiment = util.Experiment(
-    name="ccRCC Proteomics",
+    name="ccRCC proteomics",
     fc_data_dir=os.path.join(data_dir, "ccRCC_studies"),
     clients=[
         os.path.join(data_dir, "ccRCC_studies", "before", "PDC000127"),
@@ -254,8 +226,84 @@ set_smpc_true(ccRCC_proteomics_experiment_smpc)
 add_position_to_config(ccRCC_proteomics_experiment_smpc)
 add_position_to_config(ccRCC_proteomics_experiment)
 
+## Quartet MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
+# Toggle for the synthetic client_04_L03_L14 (L03 + L14 fold-in). Driven from
+# the same single source (`fedrbe_multiomics_utils.INCLUDE_CLIENT_04`) used by
+# notebooks 01--04 of `evaluation_data/quartet_multiomics/`, so the entire pipeline
+# switches together. Default False -- only the three real cross-modality
+# clients run.
+import sys as _sys
+_sys.path.insert(0, os.path.join(data_dir, "quartet_multiomics"))
+from fedrbe_multiomics_utils import (  # noqa: E402
+    CLIENT_NAMES as _MULTIOMICS_ACTIVE_CLIENTS
+)
+
+multiomics_modalities = [
+    "Transcriptomics",  "Proteomics",  "Metabolomics"]
+_MULTIOMICS_REFERENCE_BATCH_BY_LAST_CLIENT = {
+    "client_03_L05_L04": {
+        "Transcriptomics": "R_ILM_L5_B2",
+        "Proteomics": "FDU_QE-HFX_4",
+        "Metabolomics": "U_L5_01",
+    },
+    "client_04_L03_L14": {
+        "Transcriptomics": "R_BGI_L3_B1",
+        "Proteomics": "TMO_QE-HFX_1",
+        "Metabolomics": "U_L3_02",
+    },
+}
+multiomics_clients = list(_MULTIOMICS_ACTIVE_CLIENTS)
+multiomics_reference_batches = _MULTIOMICS_REFERENCE_BATCH_BY_LAST_CLIENT[
+    multiomics_clients[-1]
+]
+multiomics_config_file_changes_base = {
+    "flimmaBatchCorrection": {
+        "data_filename": "intensities_log_UNION.tsv",
+        "design_filename": "design.tsv",
+        "covariates": ["D5", "F7", "M8"],
+        "index_col": "rowname",
+        "min_samples": 0,
+        "batch_col": "batch",
+        "smpc": False,
+    }
+}
+
+
+def build_multiomics_config_file_changes(modality: str) -> List[dict]:
+    config_file_changes = []
+    for idx, _ in enumerate(multiomics_clients):
+        changes = deepcopy(multiomics_config_file_changes_base)
+        changes["flimmaBatchCorrection"]["position"] = idx
+        changes["flimmaBatchCorrection"]["reference_batch"] = (
+            multiomics_reference_batches[modality]
+            if idx == len(multiomics_clients) - 1
+            else False
+        )
+        config_file_changes.append(changes)
+    return config_file_changes
+
+
+multiomics_experiments = {
+    modality: util.Experiment(
+        name=f"Quartet Multiomics {modality}",
+        fc_data_dir=os.path.join(data_dir, "quartet_multiomics"),
+        clients=[
+            os.path.join(data_dir, "quartet_multiomics", "before", modality, client)
+            for client in multiomics_clients
+        ],
+        app_image_name=app_image_name,
+        config_files=[deepcopy(base_config) for _ in multiomics_clients],
+        config_file_changes=build_multiomics_config_file_changes(modality),
+    )
+    for modality in multiomics_modalities
+}
+multiomics_experiments_smpc = deepcopy(multiomics_experiments)
+for multiomics_modality, multiomics_experiment_smpc in multiomics_experiments_smpc.items():
+    multiomics_experiment_smpc.name = f"Quartet Multiomics {multiomics_modality} (SMPC)"
+    set_smpc_true(multiomics_experiment_smpc)
+
 ## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
-# # Simulated
+# Simulated
 experiments.append(simulated_balanced_experiment)
 result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
 experiments.append(simulated_balanced_experiment_smpc)
@@ -271,29 +319,46 @@ result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced"
 experiments.append(simulated_strongly_imbalanced_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Proteomics
-experiments.append(proteomics_experiment)
-result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data.tsv"))
-experiments.append(proteomics_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"))
+## E. coli
+experiments.append(ecoli_experiment)
+result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data.tsv"))
+experiments.append(ecoli_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Proteomics Multi Batch
-experiments.append(proteomics_multibatch_experiment)
-result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"))
-experiments.append(proteomics_multibatch_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"))
-
-## Microarray
-experiments.append(microarray_experiment)
-result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data.tsv"))
-experiments.append(microarray_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"))
+## Ovarian cancer
+experiments.append(ovarian_cancer_experiment)
+result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"))
+experiments.append(ovarian_cancer_experiment_smpc)
+result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"))
 
 ## ccRCC Proteomics
 experiments.append(ccRCC_proteomics_experiment)
 result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"))
 experiments.append(ccRCC_proteomics_experiment_smpc)
 result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
+
+## Quartet Multiomics
+for multiomics_modality in multiomics_modalities:
+    experiments.append(multiomics_experiments[multiomics_modality])
+    result_file_names.append(
+        os.path.join(
+            data_dir,
+            "quartet_multiomics",
+            "after",
+            multiomics_modality,
+            "FedApp_corrected_data.tsv",
+        )
+    )
+    experiments.append(multiomics_experiments_smpc[multiomics_modality])
+    result_file_names.append(
+        os.path.join(
+            data_dir,
+            "quartet_multiomics",
+            "after",
+            multiomics_modality,
+            "FedApp_corrected_data_smpc.tsv",
+        )
+    )
 
 ### ACTUAL PROGRAM, NO NEED TO CHANGE IF A DIFFERENT EXPERIMENT WANTS TO BE RUN
 
@@ -307,11 +372,18 @@ if len(experiments) != len(result_file_names):
 # output file name used by the batch correction app (federated limma RBE)
 # of this repo) and concats them.
 
+# The FeatureCloud controller keeps the data directory it was started with.
+# Restart it when an experiment switches to a different data directory.
+active_fc_data_dir = None
+
 # Run the experiments
 for exp, result_filename in zip(experiments, result_file_names):
     ### RUN THE FEATURECLOUD EXPERIMENT AND EXTARCT INDIVIDUAL RESULTS
     print(f"Starting experiment:\n{exp}")
     try:
+        if exp.fc_data_dir != active_fc_data_dir:
+            exp._startup()
+            active_fc_data_dir = exp.fc_data_dir
         result_files_zipped, _, _ = exp.run_test()
     except Exception as e:
         print(f"Experiment could not be started or aborted too many times! Error: \n{e}")

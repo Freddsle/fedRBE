@@ -10,26 +10,27 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(Path(os.path.abspath(__file__)).parent)
 COLOUR_SCHEMA_FILE = os.path.join(ROOT_DIR, "evaluation_utils", "colour_schema.json")
 PLOTS_DIR = os.path.join(SCRIPT_DIR, "plots")
-RESULTS_FILE = os.path.join(SCRIPT_DIR, "results", "classification_metric_report.csv")
+RESULTS_DIR = os.path.join(SCRIPT_DIR, "results")
+RESULTS_FILE = os.path.join(RESULTS_DIR, "classification_metric_report.csv")
 AVERAGE_CLIENT_NAME = "All"
-    # in the predicted_client_name column, this value is treated as being the average
-    # over multiple runs that are otherwise identical
+FEDERATED_LEARNING_TYPE = "federated"
+    # in the predicted_client_name column, the AVERAGE_CLIENT_NAME for the FEDERATED_LEARNING_TYPE
+    # is treated as being the average over multiple runs that are otherwise identical
+    # We therefore ignore it in the plots as it's just an aggregation of the other rows
+    # in centralized results, this is the only results row tho!
 DATANAME_TO_LABEL = {
     "Balanced Simulated Data": "Simulated Additive Batch",
     "Balanced Simulated Data (Rotational Batch Effect)": "Simulated Rotational Batch",
 }
 # these datanames will be displayed with the corresponding label in the plots.
 # If a dataname is not in this dict, it will be displayed as is.
-DATANAME_TO_EXCLUDE = [
-    "Balanced Simulated Data",
-    "Mildly Imbalanced Simulated Data",
-    "Strongly Imbalanced Simulated Data",
-    "Microbiome Data",
-    "Balanced Simulated Data (Rotational Batch Effect)",
-    "Mildly Imbalanced Simulated Data (Rotational Batch Effect)",
-    "Strongly Imbalanced Simulated Data (Rotational Batch Effect)",
+DATANAME_TO_INCLUDE = [
+    "Ovarian cancer",
+    "E. coli",
+    "ccRCC",
+    "Quartet Multiomics"
 ]
-# These datanames will be excluded from the plots, even if they are in the results file.
+# These datanames will be included in the plots; everything else is filtered out.
 
 # file system management
 if not os.path.exists(PLOTS_DIR):
@@ -42,12 +43,14 @@ if not os.path.exists(RESULTS_FILE):
 
 # Load classification metric report
 df = pd.read_csv(RESULTS_FILE)
+if 'learning_type' not in df.columns:
+    raise ValueError(f"Expected 'learning_type' column in {RESULTS_FILE} not found. Please check the file.")
 # remove duplicates if any
 df = df.drop_duplicates()
+print(f"Loaded {len(df)} rows from {RESULTS_FILE} after removing duplicates.")
 
 # Load colour schema
-with open(COLOUR_SCHEMA_FILE, 'r') as f:
-    colour_schema = json.load(f)
+colour_schema = json.loads(Path(COLOUR_SCHEMA_FILE).read_text(encoding='utf-8'))
 palette = colour_schema.get('palette', sns.color_palette())
 background_color = colour_schema.get('background', '#ffffff')
 grid_color = colour_schema.get('grid', '#d3d3d3')
@@ -77,35 +80,39 @@ if len(duplicates) > 0:
     print(duplicates)
     exit(1)
 
-# filter out datanames that should be excluded
-df = df[~df['data_name'].isin(DATANAME_TO_EXCLUDE)]
-# apply dataname labels
-df['data_name'] = df['data_name'].apply(lambda x: DATANAME_TO_LABEL.get(x, x))
+# filter to datanames that should be included
+df = df[df['data_name'].isin(DATANAME_TO_INCLUDE)]
+print(f"Using {len(df)} rows after filtering to included datanames: {DATANAME_TO_INCLUDE}")
 
 # metric name x cross validation method plots
 for metric_name in df['metric_name'].unique():
     for cv_method in df['cross_validation_method'].unique():
+        # Removed the target loop and target filter
         df_subset = df[(df['metric_name'] == metric_name) & \
-                       (df['cross_validation_method'] == cv_method)]
+                       (df['cross_validation_method'] == cv_method)].copy()
 
-        # filter out average rows
-        df_subset = df_subset[df_subset['predicted_client_name'] != AVERAGE_CLIENT_NAME]
+        # filter out average rows of the federated learning type
+        rows_to_exclude = (df_subset['learning_type'] == FEDERATED_LEARNING_TYPE) & (df_subset['predicted_client_name'] == AVERAGE_CLIENT_NAME)
+        df_subset = df_subset[~rows_to_exclude]
         print(f"Using {len(df_subset)} rows for metric '{metric_name}' and CV method '{cv_method}'")
 
-        # Create a combined label for data_name and target for x-axis
-        df_subset = df_subset.copy()
-        df_subset['data_target_label'] = df_subset.apply(
-            lambda row: f"{row['data_name']}\n(Target: {row['predicted_target']})",
-            axis=1
+        # we add the predicted target to the data name
+        # This will still work perfectly because 'predicted_target' is a column in the df
+        df_subset['data_name'] = df_subset.apply(lambda row: f"{row['data_name']} (Predicted Target: {row['predicted_target']})", axis=1)
+        df_subset['plot_hue'] = df_subset.apply(
+            lambda row: f"{row['data_preprocessing_name']} / {row['learning_type']}",
+            axis=1,
         )
-
+        output_csv = os.path.join(RESULTS_DIR, f"plotting_data_{metric_name.replace(' ', '_').lower()}_{cv_method.replace(' ', '_').lower()}.csv")
+        df_subset.to_csv(output_csv, index=False)
+        print(f"Saved plotting data to {output_csv}")
         # swarmplot
         plt.figure(figsize=(14, 8))
         axes = sns.swarmplot(
             data=df_subset,
-            x='data_target_label',
+            x='data_name',
             y='metric_value',
-            hue='data_preprocessing_name',
+            hue='plot_hue',
         )
         axes.set_facecolor(background_color)
         plt.xlabel("")
@@ -124,22 +131,11 @@ for metric_name in df['metric_name'].unique():
         plt.figure(figsize=(14, 8))
         axes = sns.boxplot(
             data=df_subset,
-            x='data_target_label',
+            x='data_name',
             y='metric_value',
-            hue='data_preprocessing_name',
+            hue='plot_hue',
             medianprops=dict(color=colour_schema.get('boxplot_median_marker_color', '#FF0000'), linewidth=2)
         )
-        medians = (
-            df_subset
-            .groupby(['data_target_label', 'data_preprocessing_name'])['metric_value']
-            .median()
-            .reset_index()
-            .sort_values(['data_target_label', 'data_preprocessing_name'])
-        )
-        print("________________________________")
-        print(f"Metric: {metric_name}, CV method: {cv_method}")
-        print("Medians:")
-        print(medians.to_string(index=False))
         axes.set_facecolor(background_color)
         plt.xlabel("")
         plt.ylabel(metric_name)
@@ -152,9 +148,3 @@ for metric_name in df['metric_name'].unique():
         figure.savefig(output_png, bbox_inches='tight', dpi=100)
         plt.close()
         print(f"Saved plot to {output_png}")
-
-# summary statistics
-summary = df.groupby(['data_preprocessing_name', 'cross_validation_method', 'metric_name', 'data_name', 'predicted_client_name'])['metric_value'].agg(['mean', 'std', 'count'])
-summary_output_file = os.path.join(SCRIPT_DIR, "classification_metric_report_summary.csv")
-summary.to_csv(summary_output_file)
-print(f"\nSummary statistics saved to {summary_output_file}")

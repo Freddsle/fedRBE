@@ -56,47 +56,60 @@ experiment_results.append(utils.ExperimentResult(
 
 # PROTEOMICS
 experiment_results.append(utils.ExperimentResult(
-    name="Proteomics",
-    federated_result_file=os.path.join(base_dir, "proteomics", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "proteomics", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    name="E. coli",
+    federated_result_file=os.path.join(base_dir, "ecoli", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ecoli", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Proteomics (SMPC)",
-    federated_result_file=os.path.join(base_dir, "proteomics", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "proteomics", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    name="E. coli (SMPC)",
+    federated_result_file=os.path.join(base_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ecoli", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 
-experiment_results.append(utils.ExperimentResult(
-    name="Proteomics Multi Batch",
-    federated_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "intensities_log_Rcorrected_UNION.tsv"),
-))
-experiment_results.append(utils.ExperimentResult(
-    name="Proteomics Multi Batch (SMPC)",
-    federated_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "proteomics_multibatch", "after", "intensities_log_Rcorrected_UNION.tsv"),
-))
+# QUARTET MULTIOMICS
+for modality in ["Transcriptomics", "Proteomics", "Metabolomics"]:
+    for name_suffix, result_filename in [
+        ("", "FedApp_corrected_data.tsv"),
+        (" (SMPC)", "FedApp_corrected_data_smpc.tsv"),
+    ]:
+        experiment_results.append(utils.ExperimentResult(
+            name=f"Quartet Multiomics {modality}{name_suffix}",
+            federated_result_file=os.path.join(
+                base_dir,
+                "quartet_multiomics",
+                "after",
+                modality,
+                result_filename,
+            ),
+            central_result_file=os.path.join(
+                base_dir,
+                "quartet_multiomics",
+                "after",
+                modality,
+                "intensities_log_Rcorrected_UNION.tsv",
+            ),
+        ))
 
 # MICROARRAY
 experiment_results.append(utils.ExperimentResult(
-    name="Microarray",
-    federated_result_file=os.path.join(base_dir, "microarray", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
+    name="Ovarian cancer",
+    federated_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "central_corrected_UNION.tsv")
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="Microarray (SMPC)",
-    federated_result_file=os.path.join(base_dir, "microarray", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "microarray", "after", "central_corrected_UNION.tsv")
+    name="Ovarian cancer (SMPC)",
+    federated_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "central_corrected_UNION.tsv")
 ))
 
 # ccRCC PROTEOMICS
 experiment_results.append(utils.ExperimentResult(
-    name="ccRCC Proteomics",
+    name="ccRCC proteomics",
     federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"),
     central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
-    name="ccRCC Proteomics (SMPC)",
+    name="ccRCC proteomics (SMPC)",
     federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"),
     central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
 ))
@@ -109,6 +122,18 @@ if result_df is None:
     print("ERROR: No comparison could be made.")
     exit(1)
 print(result_df)
+mean_difference_column = "Mean difference"
+max_difference_column = "Max difference"
+simulated_rows = result_df[result_df["Experiment"].str.contains("Simulated")]
+other_rows = result_df[~result_df["Experiment"].str.contains("Simulated")]
+print("\nSimulated experiments:")
+print(simulated_rows)
+print("Mean absolute element wise difference (Simulated):", simulated_rows[mean_difference_column].mean())
+print("Max absolute element wise difference (Simulated):", simulated_rows[max_difference_column].max())
+print("\nOther experiments:")
+print(other_rows)
+print("Mean absolute element wise difference (Other):", other_rows[mean_difference_column].mean())
+print("Max absolute element wise difference (Other):", other_rows[max_difference_column].max())
 # get the failed experiments
 failed_experiments = result_df[result_df[utils.RESULT_DF_COLUMNS[3]] > utils.FAILURE_THRESHOLD]["Experiment"].tolist()
 print(f"Failed experiments:\n{failed_experiments}")

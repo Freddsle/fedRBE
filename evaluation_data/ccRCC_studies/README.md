@@ -1,4 +1,4 @@
-# ccRCC Proteomics Dataset — Run Instructions
+# ccRCC Dataset — Run Instructions
 
 Three ccRCC proteomics studies integrated as a single fedRBE evaluation dataset
 (`ccRCC_proteomics`): PDC000127, PXD030344, PXD042844.
@@ -98,26 +98,26 @@ corrected matrices. Must be run **after Steps 2 and 3**.
 **Run:** Open and execute all cells of:
 
 ```
-evaluation/evaluation_ccRCC_proteomics.ipynb
+evaluation/evaluation_ccRCC.ipynb
 ```
 
 Open from the `evaluation/` directory (or set the working directory there).
 
 ---
 
-## Step 5 — Clusterization evaluation (k-means)
+## Step 5 — Clustering evaluation (k-means)
 
 **What:** Evaluates how well k-means clustering recovers biological signal
 (Condition) vs batch signal (Dataset) before and after correction.
 Must be run **after Steps 1, 2, and 3** in order.
 
-**Run the notebooks in sequence from `evaluation_clusterization_after_correction/`:**
+**Run the notebooks in sequence from `evaluation_clusterization_after_correction/real_datasets/`:**
 
-1. `01_data_preparation.ipynb` — loads and aligns matrices, writes to
+1. `evaluation_clusterization_after_correction/real_datasets/01_data_preparation.ipynb` — loads and aligns matrices, writes to
    `real_datasets/ccRCC_proteomics/prepared/`
-2. `02_central_kmeans.ipynb` — runs centralised k-means on prepared data
-3. `03_federated_runs.ipynb` — runs federated k-means via FeatureCloud
-4. `04_analysis_metrics_plots.ipynb` — computes ARI, MCC, F1 and generates plots
+2. `evaluation_clusterization_after_correction/real_datasets/02_central_kmeans.ipynb` — runs centralized k-means on prepared data
+3. `evaluation_clusterization_after_correction/real_datasets/03_federated_runs.ipynb` — runs federated k-means via FeatureCloud
+4. `evaluation_clusterization_after_correction/real_datasets/04_analysis_metrics_plots.ipynb` — computes ARI, MCC, F1, and plots
 
 ---
 

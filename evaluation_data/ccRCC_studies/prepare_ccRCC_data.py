@@ -35,7 +35,7 @@ for site in SITES:
         )
     # Encode Condition as 0/1 integer (Tumor=1, Normal=0) so that the
     # fedRBE app can use it directly as a numeric covariate in the design
-    # matrix (same encoding as other datasets, e.g. proteomics Pyr column).
+    # matrix (same encoding as other datasets, e.g. ecoli Pyr column).
     df["Condition"] = df["Tumor"].astype(int)
 
     # Reorder design rows to match the column order in report_filtered.tsv.

@@ -235,8 +235,8 @@ class LocalFedLearningSimulationWrapper:
                 The first clientfolder is used as the coordinator.
         """
         # checks
-        if len(clientfolders) < 2:
-            raise ValueError("At least two client folders are required")
+        if len(clientfolders) < 1:
+            raise ValueError("At least one client folder is required")
         if len(clientfolders) != len(outputfolders):
             raise ValueError("The number of client folders and output folders must be the same")
         # basic variables
