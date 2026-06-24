@@ -20,8 +20,6 @@ and dataset manifests required to regenerate them are tracked.
 | 3 | `real_datasets/03_federated_runs.ipynb` | Optional: run or aggregate federated k-means via FeatureCloud |
 | 4 | `real_datasets/04_analysis_metrics_plots.ipynb` | Combine results, generate ARI bar charts, PCA plots, and summary |
 
-Simulated-dataset notebooks live in `simulated/`; see `simulated/README.md`.
-
 ## Quick start
 
 Run the multiomics prep step first if the Quartet joint matrices are not already present; see [Multiomics-specific prep](#multiomics-specific-prep).

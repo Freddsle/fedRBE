@@ -183,8 +183,7 @@ cython_debug/
 evaluation/eval_simulation/*/lmvp/*.tsv
 evaluation_data/simulated/*/after/runs/*.tsv
 evaluation_data/simulated/*/before/intermediate/*.tsv
-!evaluation_data/simulated/*/before/intermediate/1_intensities_data_no_batch.tsv
-evaluation_clusterization_after_correction/simulated/outputs/
+!evaluation_data/simulated/*/before/intermediate/1_intensities_data.tsv
 evaluation/eval_simulation/lmpv_plots/*.pdf
 
 
@@ -262,7 +261,6 @@ evaluation_data/00_archiv/*
 evaluation_data/ccRCC_studies/before/*/report_filtered.zip
 evaluation_data/ccRCC_studies/after/individual_results/*/report.txt
 
-evaluation_clusterization_after_correction/simulated/outputs/
 evaluation/plots/*
 evaluation_data/quartet_multiomics/plots/*
 evaluation_data/ovarian_cancer/before/all_expression_UNION.tsv

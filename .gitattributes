@@ -29,7 +29,7 @@ evaluation_data/ccRCC_studies/after/intensities_log_Rcorrected_UNION.tsv filter=
 
 # Simulated (balanced/mild_imbalanced/strong_imbalanced) input and corrected files
 evaluation_data/simulated/*/before/lab*/intensities.tsv filter=lfs diff=lfs merge=lfs -text
-evaluation_data/simulated/*/before/intermediate/1_intensities_data_no_batch.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/simulated/*/before/intermediate/1_intensities_data.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/FedSim_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/intensities_R_corrected.tsv filter=lfs diff=lfs merge=lfs -text
 

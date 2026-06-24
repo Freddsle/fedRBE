@@ -27,7 +27,6 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
     - [Prerequisites](#prerequisites-1)
     - [Real datasets](#real-datasets)
-    - [Simulated datasets](#simulated-datasets)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
@@ -144,7 +143,7 @@ Run the dataset preparation and central-correction notebooks from their own dire
 
 | Dataset | Run order |
 |---------|-----------|
-| Simulated | `evaluation_data/simulated/00_data_simulation.ipynb` if regenerating simulation inputs, then `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb` |
+| Simulated | `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb`; run `evaluation_data/simulated/00_data_simulation.ipynb` first only to regenerate all simulation runs |
 | E. coli | `evaluation_data/ecoli/01_data_prep_and_central_RBE.ipynb` |
 | Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb`, `evaluation_data/ovarian_cancer/01_check_datasets_intersection.ipynb`, then `evaluation_data/ovarian_cancer/02_central_RBE.ipynb` |
 | ccRCC proteomics | `python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py`, then `evaluation_data/ccRCC_studies/01_central_RBE.ipynb` |
@@ -156,6 +155,8 @@ Output:
 - Dataset-specific details and outputs are documented in the corresponding `evaluation_data/<dataset>/README.md` files.
 
 _Note: The preprocessing and centralized correction notebooks have already been run for the committed outputs. You can skip this step when using the provided corrected data._
+
+For simulated data, committed run-1 inputs support a quick check. The full 30-run evaluation requires generated `before/intermediate/` and `after/runs/` files.
 
 ### 3. Comparing federated and central corrections
 
@@ -188,7 +189,7 @@ To reproduce the tables and figures from the preprint, run the provided Jupyter 
 5. `evaluation/evaluation_ccRCC.ipynb`
 6. `evaluation/evaluation_quartet_multiomics.ipynb`
 
-These notebooks expect the corrected data from Steps 1 and 2. Figures are written under `evaluation/plots/` and related evaluation output folders.
+These notebooks expect the corrected data from Steps 1 and 2. `evaluation_simulated_30runs.ipynb` requires the full generated simulated `after/runs/` files. Figures are written under `evaluation/plots/` and related evaluation output folders.
 
 ### 5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data
 
@@ -223,7 +224,7 @@ You can also use the helper shell scripts:
 
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
-To reproduce the clustering results from the preprint, run the real-dataset and simulated-dataset clustering notebooks under `evaluation_clusterization_after_correction/`.
+To reproduce the clustering results from the preprint, run the real-dataset clustering notebooks under `evaluation_clusterization_after_correction/`.
 
 #### Prerequisites
 - You need to have both the `R` and `Python3` environments set up with the required dependencies as described in the [Prerequisites and setup](#prerequisites-and-setup) section.
@@ -245,15 +246,6 @@ Run the notebooks in `evaluation_clusterization_after_correction/real_datasets/`
 6. `05_multiple_runs.ipynb` — optional repeated seeded federated runs.
 
 See `evaluation_clusterization_after_correction/real_datasets/README.md` for detailed options and output paths.
-
-#### Simulated datasets
-
-Run the notebooks in `evaluation_clusterization_after_correction/simulated/`:
-
-1. `01_simulated_kmeans.ipynb`
-2. `02_simulated_analysis.ipynb`
-
-See `evaluation_clusterization_after_correction/simulated/README.md` for expected run files and output paths.
 
 ---
 
