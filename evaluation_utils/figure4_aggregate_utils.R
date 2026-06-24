@@ -454,7 +454,7 @@ make_figure4_plot <- function(
   scenario_order,
   scenario_colors,
   point_size = 1.05,
-  panel_heights = c(3.1, 2.7, 2.7, 0.55)
+  panel_heights = c(2.7, 2.7, 2.7, 0.55)
 ) {
   null_device_path <- open_figure4_null_device_if_needed()
   if (!is.na(null_device_path)) {
@@ -548,14 +548,33 @@ draw_figure4 <- function(figure_plot) {
 }
 
 
-save_figure4_png <- function(figure_plot, output_path, width, height, dpi) {
-  dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
-  png_args <- list(filename = output_path, width = width, height = height, units = "in", res = dpi)
-  if (isTRUE(capabilities("cairo"))) {
-    png_args$type <- "cairo"
+save_figure4_png <- function(figure_plot, output_path, width, height, dpi = 600, output_format = NULL) {
+  if (is.null(output_format)) {
+    output_format <- tools::file_ext(output_path)
+  }
+  output_format <- tolower(output_format)
+  if (!nzchar(output_format)) {
+    output_format <- "png"
+  }
+  output_format <- match.arg(output_format, c("png", "svg"))
+
+  current_ext <- tolower(tools::file_ext(output_path))
+  if (!identical(current_ext, output_format)) {
+    output_path <- paste0(tools::file_path_sans_ext(output_path), ".", output_format)
   }
 
-  do.call(grDevices::png, png_args)
+  dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
+
+  if (identical(output_format, "png")) {
+    png_args <- list(filename = output_path, width = width, height = height, units = "in", res = dpi)
+    if (isTRUE(capabilities("cairo"))) {
+      png_args$type <- "cairo"
+    }
+    do.call(grDevices::png, png_args)
+  } else {
+    grDevices::svg(filename = output_path, width = width, height = height)
+  }
+
   on.exit(grDevices::dev.off(), add = TRUE)
   draw_figure4(figure_plot)
 
