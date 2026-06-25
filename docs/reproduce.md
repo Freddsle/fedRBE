@@ -38,15 +38,14 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
 ## Prerequisites and setup
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
 1. **Git LFS** (required for large files used in this workflow)
-1. **Python 3.8+**: [Installation Instructions](https://www.python.org/) with dependencies from `requirements.txt`.
-1. **R 4.0+** with dependencies from `requirements_r.txt`
+1. **Either** Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
 1. **System resources**:
   - ≥ 16 GB RAM (The script uses very close to 16 GB, so be careful with other programs running!)
   - ≥ 20 GB free disk space
 
 ### Setup steps
 
-1. **Set up Git LFS:**
+1. **Set up Git LFS locally:**
 
    Install git lfs following the [git lfs documentation](https://git-lfs.com/).
    
@@ -54,32 +53,50 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
    ```bash
    git lfs install
    ```
-   
-   If the [repository](https://github.com/Freddsle/fedRBE) is already cloned, pull the large files:
-   ```bash
-   git lfs pull 
-   ```
 
-   If you have not yet cloned the repository, `git clone` will automatically download LFS files if `git lfs install` has been run before.
+2. **Get the repository and large files:**
 
-2. **Clone the repository:**
-
-   If the repository is not cloned yet:
+   For a fresh clone:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
+   git lfs pull
    ```
 
-3. **Set up Python environment:**
+   For an existing clone:
+   ```bash
+   cd fedRBE
+   git pull
+   git lfs pull
+   ```
 
-   We recommend using a virtual environment:
+3. **Set up Python and R dependencies:**
+
+   Choose one of the following setup paths.
+
+   **Option A: Conda or Mamba environment**
+
+   The Conda environment installs Python 3.11, R, the CRAN and Bioconductor
+   packages used by the notebooks, and the FeatureCloud Python package:
+   ```bash
+   conda env create -f environment.yml
+   conda activate fedRBE
+   ```
+
+   Install the GitHub-only R dependency:
+
+   ```bash
+   Rscript -e 'devtools::install_github("mwgrassgreen/RobNorm")'
+   ```
+
+   **Option B: Separate Python and R installations**
+
+   Set up Python dependencies:
    ```bash
    python3 -m venv fedrbe_env
    source fedrbe_env/bin/activate  # on Windows: fedrbe_env\Scripts\activate
    pip install -r requirements.txt
    ```
-
-4. **Set up R environment:**
 
    `requirements_r.txt` lists CRAN, Bioconductor, and GitHub dependencies in
    separate sections. Install them with:

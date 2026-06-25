@@ -71,15 +71,11 @@ The app is available on [FeatureCloud](https://featurecloud.ai/app/fedrbe). For 
 
 Before installing `fedRBE`, ensure you have the following installed:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
-2. **Python 3.8+**: [Installation Instructions](https://www.python.org/doc/)
-3. **Python dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+2. **Either** Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
 
 Additional requirements depend on the use case:
 - **Running fedRBE in a federated manner via the FeatureCloud platform**: FeatureCloud account
-- **Reproducing the paper**: R + dependencies from `requirements_r.txt`, Git LFS
+- **Reproducing the paper**: Git LFS and R dependencies from `requirements_r.txt`
 
 For Windows users, we recommend using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
@@ -91,6 +87,27 @@ Clone the repository to run local simulations or reproduce the analysis:
 git clone https://github.com/Freddsle/fedRBE.git
 cd fedRBE
 ```
+
+Then choose one dependency setup.
+
+Using Conda or Mamba:
+
+```bash
+conda env create -f environment.yml
+conda activate fedRBE
+```
+
+Using separate Python and R installations:
+
+```bash
+python3 -m venv fedrbe_env
+source fedrbe_env/bin/activate   # on Windows: fedrbe_env\Scripts\activate
+pip install -r requirements.txt
+```
+
+For full paper reproduction, install the R packages from `requirements_r.txt`; see
+[Reproduce the fedRBE Preprint](./docs/reproduce.md#setup-steps) for the exact
+CRAN, Bioconductor, and GitHub installation commands.
 
 The checkout includes example files, simulation scripts, and evaluation workflows.
 

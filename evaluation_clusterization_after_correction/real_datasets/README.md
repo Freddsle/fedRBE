@@ -10,9 +10,17 @@ fedRBE batch correction, for both central and federated k-means.
 
 ## Prerequisites
 
-1. **Python environment** — install repo dependencies:
+1. **Python environment** — install repo dependencies from the root with either
+   the repository environment:
    ```bash
-   pip install -r requirements.txt   # from repo root
+   conda env create -f environment.yml
+   conda activate fedRBE
+   ```
+   or a separate Python environment:
+   ```bash
+   python3 -m venv fedrbe_env
+   source fedrbe_env/bin/activate
+   pip install -r requirements.txt
    ```
 
 2. **Corrected matrices** — central batch correction must have been run for each dataset.
@@ -22,8 +30,9 @@ fedRBE batch correction, for both central and federated k-means.
    git lfs pull
    ```
 
-3. **FeatureCloud (for notebook 03)** — required to generate federated k-means
-   results. Result archives under
+3. **FeatureCloud (for notebook 03)** — the repository environment or the
+   separate Python setup provides the FeatureCloud CLI required to generate
+   federated k-means results. Result archives under
    `<dataset>/inputs/{before,corrected}/tests/tests/` are generated locally
    and are not committed.
 

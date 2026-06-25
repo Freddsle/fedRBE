@@ -125,8 +125,8 @@ Must be run **after Steps 1, 2, and 3** in order.
 
 | Step | Language / Tool |
 |------|----------------|
-| 1    | Python ≥ 3.8, pandas |
-| 2    | R ≥ 4.0, limma, tidyverse |
-| 3    | Python, FeatureCloud controller, Docker |
-| 4    | R ≥ 4.0, limma, tidyverse, patchwork, variancePartition |
-| 5    | Python, scikit-learn (see `requirements.txt`) |
+| 1    | Repository environment from `environment.yml` or separate Python install from `requirements.txt`, pandas |
+| 2    | Repository environment from `environment.yml` or separate R install from `requirements_r.txt`, limma, tidyverse |
+| 3    | Repository environment from `environment.yml` or separate Python install from `requirements.txt`, FeatureCloud controller, Docker |
+| 4    | Repository environment from `environment.yml` or separate R install from `requirements_r.txt`, limma, tidyverse, patchwork, variancePartition |
+| 5    | Repository environment from `environment.yml` or separate Python install from `requirements.txt`, scikit-learn |
