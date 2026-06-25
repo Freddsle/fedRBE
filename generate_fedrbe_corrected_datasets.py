@@ -82,6 +82,71 @@ def set_smpc_true(exp: util.Experiment):
         exp.config_file_changes[idx] = deepcopy(tmp)
 
 
+SIMULATED_SINGLE_RUN = 1
+
+
+def _path_is_under(path: str, parent: str) -> bool:
+    path_abs = os.path.abspath(path)
+    parent_abs = os.path.abspath(parent)
+    return os.path.commonpath([path_abs, parent_abs]) == parent_abs
+
+
+def ensure_simulated_before_inputs_are_single_run(run_number: int = SIMULATED_SINGLE_RUN):
+    """Abort if simulated single-run fedRBE inputs no longer point to run 1."""
+    simulated_dir = os.path.join(data_dir, "simulated")
+    checked_modes = set()
+    for exp in experiments:
+        if not _path_is_under(exp.fc_data_dir, simulated_dir):
+            continue
+
+        mode = os.path.basename(exp.fc_data_dir)
+        if mode in checked_modes:
+            continue
+        checked_modes.add(mode)
+
+        mode_dir = exp.fc_data_dir
+        metadata_path = os.path.join(mode_dir, "all_metadata.tsv")
+        intensities_path = os.path.join(
+            mode_dir,
+            "before",
+            "intermediate",
+            f"{run_number}_intensities_data.tsv",
+        )
+        if not os.path.exists(metadata_path):
+            raise RuntimeError(f"Missing simulated metadata file: {metadata_path}")
+        if not os.path.exists(intensities_path):
+            raise RuntimeError(
+                f"Missing simulated run-{run_number} input file: {intensities_path}. "
+                "Run evaluation_data/simulated/00_data_simulation.ipynb or restore the committed data."
+            )
+
+        metadata = pd.read_csv(metadata_path, sep="\t", index_col=0)
+        intensities = pd.read_csv(intensities_path, sep="\t", index_col="rowname")
+
+        for client_dir in exp.clients:
+            lab_name = os.path.basename(client_dir)
+            metadata_lab = metadata.loc[metadata["lab"] == lab_name]
+            sample_columns = metadata_lab["file"].tolist()
+            missing_columns = sorted(set(sample_columns).difference(intensities.columns))
+            if missing_columns:
+                raise RuntimeError(
+                    f"Missing samples in {intensities_path} for {mode}/{lab_name}: {missing_columns}"
+                )
+
+            client_intensities_path = os.path.join(client_dir, "intensities.tsv")
+            if not os.path.exists(client_intensities_path):
+                raise RuntimeError(f"Missing simulated client input file: {client_intensities_path}")
+
+            current_intensities = pd.read_csv(client_intensities_path, sep="\t", index_col="rowname")
+            if not current_intensities.equals(intensities.loc[:, sample_columns]):
+                raise RuntimeError(
+                    f"Simulated input {client_intensities_path} is not run {run_number}. "
+                    "Run the final 'Run test central correction' cell in "
+                    "evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb "
+                    "or restore the committed simulated before/ files before running this script."
+                )
+
+
 ## SIMULATED
 base_simulated_config_file_changes = {
     "flimmaBatchCorrection": {
@@ -364,6 +429,8 @@ for multiomics_modality in multiomics_modalities:
 
 if len(experiments) != len(result_file_names):
     raise RuntimeError("Number of experiments and result file names do not match, please fix this!")
+
+ensure_simulated_before_inputs_are_single_run()
 
 ### MAIN
 # Starts the FeatureCloud controler and runs the experiments

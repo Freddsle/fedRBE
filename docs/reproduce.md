@@ -136,6 +136,8 @@ Customization:
 - To add datasets, create `evaluation_data/[dataset]/before/` entries following the existing structure.
 - Quartet multiomics requires the client folders written by `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`; run that notebook before the federated correction script if those folders were regenerated or removed.
 
+For simulated data, the script checks that `before/lab*/` inputs still match run 1 before writing the single-run `FedApp_corrected_data*.tsv` files used by `analyse_fedvscentral.py`.
+
 ### 2. Obtaining centrally corrected data
 
 Perform centralized batch effect correction using limma's `removeBatchEffect` for comparison.
