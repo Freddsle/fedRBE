@@ -216,6 +216,8 @@ You can also use the helper shell scripts:
 - `run_all_classification_analysis.sh`: runs all three scripts sequentially; this can take several hours.
 - `run_all_classification_analysis_tmux.sh`: runs the same script in a tmux session so the terminal can disconnect safely. Logs are stored as `classification_analysis_{TIMESTAMP}.log`.
 
+_Note: If you want to inspect the RandomForest logic, this is located in `evaluation_classification_after_correction/fc_fed_forest_simple_app`._
+
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
 To reproduce the clustering results from the preprint, run the real-dataset clustering notebooks under `evaluation_clusterization_after_correction/`.
@@ -240,6 +242,8 @@ Run the notebooks in `evaluation_clusterization_after_correction/real_datasets/`
 6. `05_multiple_runs.ipynb` — optional repeated seeded federated runs.
 
 See `evaluation_clusterization_after_correction/real_datasets/README.md` for detailed options and output paths.
+
+_Note: If you want to inspect the FedKMeans logic, this is located in `evaluation_clusterization_after_correction/federated_kmeans_upd`._
 
 ---
 
