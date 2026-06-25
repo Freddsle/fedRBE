@@ -1,12 +1,11 @@
 
 library(tidyverse)
-library(gridExtra)
-library(patchwork)
 library(grid)
-library(umap)
-library(ggsci)
-
-library(viridis)
+for (package in c("gridExtra", "patchwork", "umap", "ggsci", "viridis")) {
+  if (requireNamespace(package, quietly = TRUE)) {
+    suppressPackageStartupMessages(library(package, character.only = TRUE))
+  }
+}
 
 build_scatter_mapping <- function(x, y, color_col, shape_col = NULL) {
   mapping <- list(x = rlang::sym(x), y = rlang::sym(y), color = rlang::sym(color_col))
@@ -37,6 +36,31 @@ save_plot_if_requested <- function(plot_obj, path, width = NULL, height = NULL) 
 }
 
 
+gram_pca_scores <- function(df, pc_x = "PC1", pc_y = "PC2") {
+  complete_data <- df[stats::complete.cases(df), , drop = FALSE]
+  if (nrow(complete_data) == 0) {
+    stop("PCA requires at least one complete feature row.", call. = FALSE)
+  }
+
+  ncomp <- max(as.integer(sub("PC", "", c(pc_x, pc_y))))
+  response_matrix <- t(as.matrix(complete_data))
+  storage.mode(response_matrix) <- "double"
+  centered <- scale(response_matrix, center = TRUE, scale = FALSE)
+  gram <- tcrossprod(centered)
+  eig <- eigen(gram, symmetric = TRUE)
+  eigen_values <- pmax(eig$values, 0)
+  keep <- seq_len(min(ncomp, length(eigen_values)))
+  scores <- eig$vectors[, keep, drop = FALSE] %*%
+    diag(sqrt(eigen_values[keep]), nrow = length(keep))
+  rownames(scores) <- colnames(complete_data)
+  colnames(scores) <- paste0("PC", keep)
+  var_expl <- eigen_values / sum(eigen_values)
+  names(var_expl) <- paste0("PC", seq_along(var_expl))
+
+  list(scores = scores, var_expl = var_expl)
+}
+
+
 pca_plot <- function(
     df, 
     batch_info, 
@@ -50,8 +74,15 @@ pca_plot <- function(
     show_legend = TRUE,
     cbPalette = NULL,
     point_size = 2,
-    use_nipals = FALSE
+    use_nipals = FALSE,
+    use_gram = FALSE,
+    color_title = NULL,
+    shape_title = NULL
     ){
+  if (isTRUE(use_nipals) && isTRUE(use_gram)) {
+    stop("Choose either NIPALS PCA or Gram PCA, not both.", call. = FALSE)
+  }
+
   if (use_nipals) {
     if (!requireNamespace("nipals", quietly = TRUE)) stop("Package 'nipals' is required for NIPALS PCA. Install it with install.packages('nipals').")
     ncomp <- max(as.integer(sub("PC", "", c(pc_x, pc_y))))
@@ -71,6 +102,13 @@ pca_plot <- function(
       left_join(batch_info, by = quantitative_col_name)
     var_expl <- res$eig^2 / sum(res$eig^2)
     names(var_expl) <- paste0("PC", seq_along(var_expl))
+  } else if (use_gram) {
+    pca <- gram_pca_scores(df, pc_x = pc_x, pc_y = pc_y)
+    pca_df <- pca$scores %>%
+      as.data.frame() %>%
+      rownames_to_column(quantitative_col_name) %>%
+      left_join(batch_info, by = quantitative_col_name)
+    var_expl <- pca$var_expl
   } else {
     pca <- prcomp(t(na.omit(df)))
     pca_df <- pca$x %>%
@@ -96,12 +134,22 @@ pca_plot <- function(
     pca_plotting <- pca_plotting + scale_shape_manual(values = shapes_codes)
   }
 
+  label_args <- list(
+    title = title,
+    x = glue::glue("{pc_x} [{round(var_expl[pc_x]*100, 2)}%]"),
+    y = glue::glue("{pc_y} [{round(var_expl[pc_y]*100, 2)}%]")
+  )
+  if (!is.null(color_title)) {
+    label_args$color <- color_title
+  }
+  if (!is.null(shape_title)) {
+    label_args$shape <- shape_title
+  }
+
   pca_plotting <- pca_plotting + 
     geom_point(size=point_size) +
     theme_classic() +
-    labs(title = title,
-         x = glue::glue("{pc_x} [{round(var_expl[pc_x]*100, 2)}%]"),
-         y = glue::glue("{pc_y} [{round(var_expl[pc_y]*100, 2)}%]"))
+    do.call(ggplot2::labs, label_args)
 
   if(!show_legend){
     pca_plotting <- pca_plotting + 
@@ -324,4 +372,3 @@ plots_multiple <- function(intensities, metadata, name, simulated = FALSE, use_n
 
   return(layout)
 }
-

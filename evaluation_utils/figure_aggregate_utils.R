@@ -1,8 +1,410 @@
-require_figure4_packages <- function(required = c("ggplot2", "grid", "gtable", "rlang")) {
+require_figure_packages <- function(required = c("tidyverse", "ggplot2", "grid", "gtable", "rlang", "dplyr", "tidyr", "tibble", "glue")) {
   missing <- required[!vapply(required, requireNamespace, logical(1), quietly = TRUE)]
   if (length(missing) > 0) {
     stop("Missing required R packages: ", paste(missing, collapse = ", "), call. = FALSE)
   }
+}
+
+
+require_figure4_packages <- function(required = c("ggplot2", "grid", "gtable", "rlang")) {
+  require_figure_packages(required)
+}
+
+
+find_repo_root <- function(helper_path = file.path("evaluation_utils", "figure_aggregate_utils.R")) {
+  candidates <- c(
+    getwd(),
+    file.path(getwd(), "..")
+  )
+  for (candidate in candidates) {
+    normalized <- normalizePath(candidate, mustWork = FALSE)
+    if (file.exists(file.path(normalized, helper_path))) {
+      return(normalizePath(normalized, mustWork = TRUE))
+    }
+  }
+  stop("Run this notebook from the repository root or from the evaluation/ directory.", call. = FALSE)
+}
+
+
+source_plotting_utils <- function(repo_root) {
+  source(file.path(repo_root, "evaluation_utils", "plots_eda.R"))
+  source(file.path(repo_root, "evaluation_utils", "evaluation_funcs.R"))
+}
+
+
+read_matrix_table <- function(path, zip_inner_file = NULL, use_fread = TRUE) {
+  read_with_base <- function(table_path, inner_file = NULL) {
+    if (file.exists(table_path)) {
+      return(utils::read.delim(table_path, header = TRUE, row.names = 1, check.names = FALSE))
+    }
+
+    zip_candidates <- unique(c(
+      paste0(table_path, ".zip"),
+      sub("\\.[^.]+$", ".zip", table_path)
+    ))
+    zip_path <- zip_candidates[file.exists(zip_candidates)][1]
+    if (!is.null(inner_file) && !is.na(zip_path)) {
+      connection <- unz(zip_path, inner_file)
+      return(utils::read.delim(connection, header = TRUE, row.names = 1, check.names = FALSE))
+    }
+
+    stop("Matrix file not found: ", table_path, call. = FALSE)
+  }
+
+  if (!isTRUE(use_fread) || !requireNamespace("data.table", quietly = TRUE)) {
+    return(read_with_base(path, zip_inner_file))
+  }
+
+  if (file.exists(path)) {
+    table <- data.table::fread(path, data.table = FALSE, check.names = FALSE)
+  } else {
+    zip_candidates <- unique(c(
+      paste0(path, ".zip"),
+      sub("\\.[^.]+$", ".zip", path)
+    ))
+    zip_path <- zip_candidates[file.exists(zip_candidates)][1]
+    if (is.null(zip_inner_file) || is.na(zip_path) || !nzchar(Sys.which("unzip"))) {
+      return(read_with_base(path, zip_inner_file))
+    }
+    table <- data.table::fread(
+      cmd = paste("unzip -p", shQuote(zip_path), shQuote(zip_inner_file)),
+      data.table = FALSE,
+      check.names = FALSE
+    )
+  }
+
+  if (ncol(table) < 2) {
+    stop("Matrix table must contain row ids and at least one sample column: ", path, call. = FALSE)
+  }
+  row_ids <- table[[1]]
+  table[[1]] <- NULL
+  rownames(table) <- row_ids
+  table
+}
+
+
+align_matrices_to_metadata <- function(uncorrected, central_corrected = NULL, fed_corrected, metadata, sample_col = "file") {
+  if (!sample_col %in% names(metadata)) {
+    metadata[[sample_col]] <- rownames(metadata)
+  }
+  sample_order <- rownames(metadata)
+  matrices <- list(uncorrected = uncorrected)
+  if (!is.null(central_corrected)) {
+    matrices$central_corrected <- central_corrected
+  }
+  matrices$fed_corrected <- fed_corrected
+
+  for (matrix_name in names(matrices)) {
+    missing_samples <- setdiff(sample_order, colnames(matrices[[matrix_name]]))
+    if (length(missing_samples) > 0) {
+      stop(
+        matrix_name,
+        " matrix is missing metadata samples: ",
+        paste(head(missing_samples), collapse = ", "),
+        call. = FALSE
+      )
+    }
+  }
+
+  shared_features <- Reduce(intersect, lapply(matrices, rownames))
+  if (length(shared_features) == 0) {
+    stop("No shared features across Figure 3 matrices.", call. = FALSE)
+  }
+
+  aligned <- lapply(matrices, function(matrix_data) {
+    matrix_data[shared_features, sample_order, drop = FALSE]
+  })
+  aligned$metadata <- metadata
+  aligned
+}
+
+
+prepare_plot_matrices <- function(data, matrix_names = c("uncorrected", "fed_corrected")) {
+  missing_matrices <- setdiff(matrix_names, names(data))
+  if (length(missing_matrices) > 0) {
+    stop("Missing matrix/matrices for plotting: ", paste(missing_matrices, collapse = ", "), call. = FALSE)
+  }
+
+  complete_features <- lapply(matrix_names, function(matrix_name) {
+    rownames(data[[matrix_name]])[stats::complete.cases(data[[matrix_name]])]
+  })
+  names(complete_features) <- matrix_names
+  reference_features <- complete_features[[1]]
+  for (matrix_name in names(complete_features)[-1]) {
+    if (!identical(reference_features, complete_features[[matrix_name]])) {
+      stop(
+        "Complete plotted feature sets differ between matrices; refusing to silently drop data for ",
+        matrix_name,
+        ".",
+        call. = FALSE
+      )
+    }
+  }
+  if (length(reference_features) == 0) {
+    stop("No complete features available for plotting.", call. = FALSE)
+  }
+
+  data$plot_matrices <- lapply(matrix_names, function(matrix_name) {
+    data[[matrix_name]][reference_features, , drop = FALSE]
+  })
+  names(data$plot_matrices) <- matrix_names
+  data
+}
+
+
+make_dataset_diagnostic_panel <- function(title, pca_before, pca_after, variance_before, variance_after) {
+  list(
+    title = title,
+    plots = list(
+      pca_before = pca_before,
+      pca_after = pca_after,
+      variance_before = variance_before,
+      variance_after = variance_after
+    )
+  )
+}
+
+
+extract_plot_legend <- function(plot) {
+  plot_grob <- ggplot2::ggplotGrob(plot)
+  legend_indices <- which(vapply(plot_grob$grobs, function(grob) {
+    grepl("^guide-box", grob$name) && !inherits(grob, "zeroGrob")
+  }, logical(1)))
+
+  if (length(legend_indices) == 0) {
+    return(grid::zeroGrob())
+  }
+
+  plot_grob$grobs[[legend_indices[1]]]
+}
+
+
+legend_is_present <- function(legend) {
+  !inherits(legend, "zeroGrob")
+}
+
+
+plot_legend_width <- function(legend) {
+  if (!legend_is_present(legend)) {
+    return(grid::unit(0, "cm"))
+  }
+  if (!is.null(legend$widths)) {
+    return(sum(legend$widths))
+  }
+  grid::grobWidth(legend)
+}
+
+
+max_plot_legend_width <- function(legends, padding = grid::unit(0.12, "cm")) {
+  present <- legends[vapply(legends, legend_is_present, logical(1))]
+  if (length(present) == 0) {
+    return(grid::unit(0, "cm"))
+  }
+
+  Reduce(grid::unit.pmax, lapply(present, plot_legend_width)) + padding
+}
+
+
+draw_dataset_diagnostic_panel <- function(
+  panel,
+  title_fontsize = 12,
+  subplot_row_gap = grid::unit(0, "cm"),
+  subplot_column_gap = grid::unit(0, "cm"),
+  legend_gap = grid::unit(0, "cm")
+) {
+  legends <- list(
+    pca = extract_plot_legend(panel$plots$pca_after),
+    variance = extract_plot_legend(panel$plots$variance_after)
+  )
+  legend_width <- max_plot_legend_width(legends)
+
+  layout <- grid::grid.layout(
+    nrow = 4,
+    ncol = 5,
+    heights = grid::unit.c(
+      grid::unit(0.58, "cm"),
+      grid::unit(1, "null"),
+      subplot_row_gap,
+      grid::unit(1, "null")
+    ),
+    widths = grid::unit.c(
+      grid::unit(1, "null"),
+      subplot_column_gap,
+      grid::unit(1, "null"),
+      legend_gap,
+      legend_width
+    )
+  )
+  grid::pushViewport(grid::viewport(layout = layout))
+  grid::pushViewport(grid::viewport(layout.pos.row = 1, layout.pos.col = 1:5))
+  grid::grid.text(
+    panel$title,
+    x = grid::unit(0, "npc"),
+    y = grid::unit(0.48, "npc"),
+    just = c("left", "center"),
+    gp = grid::gpar(fontface = "bold", fontsize = title_fontsize)
+  )
+  grid::popViewport()
+
+  plot_positions <- list(
+    pca_before = c(2, 1),
+    pca_after = c(2, 3),
+    variance_before = c(4, 1),
+    variance_after = c(4, 3)
+  )
+  for (plot_name in names(plot_positions)) {
+    position <- plot_positions[[plot_name]]
+    grid::pushViewport(grid::viewport(layout.pos.row = position[[1]], layout.pos.col = position[[2]]))
+    grid::grid.draw(ggplot2::ggplotGrob(panel$plots[[plot_name]] + ggplot2::theme(legend.position = "none")))
+    grid::popViewport()
+  }
+
+  legend_positions <- list(
+    pca = c(2, 5),
+    variance = c(4, 5)
+  )
+  for (legend_name in names(legend_positions)) {
+    if (legend_is_present(legends[[legend_name]])) {
+      position <- legend_positions[[legend_name]]
+      grid::pushViewport(grid::viewport(layout.pos.row = position[[1]], layout.pos.col = position[[2]]))
+      grid::grid.draw(legends[[legend_name]])
+      grid::popViewport()
+    }
+  }
+
+  grid::popViewport()
+  invisible(panel)
+}
+
+
+interleave_null_units <- function(values, gap) {
+  values <- as.numeric(values)
+  if (length(values) == 0) {
+    return(grid::unit(0, "null"))
+  }
+
+  units <- grid::unit(values[[1]], "null")
+  if (length(values) == 1) {
+    return(units)
+  }
+
+  for (index in seq(2, length(values))) {
+    units <- grid::unit.c(units, gap, grid::unit(values[[index]], "null"))
+  }
+  units
+}
+
+
+draw_stacked_panels <- function(panels, panel_heights = rep(1, length(panels))) {
+  grid::grid.newpage()
+  layout <- grid::grid.layout(
+    nrow = length(panels),
+    ncol = 1,
+    heights = grid::unit(panel_heights, "null")
+  )
+  grid::pushViewport(grid::viewport(layout = layout))
+  for (index in seq_along(panels)) {
+    grid::pushViewport(grid::viewport(layout.pos.row = index, layout.pos.col = 1))
+    draw_dataset_diagnostic_panel(panels[[index]])
+    grid::popViewport()
+  }
+  grid::popViewport()
+  invisible(panels)
+}
+
+
+arrange_dataset_panels <- function(
+  panels,
+  ncol = 2,
+  panel_heights = NULL,
+  panel_widths = NULL,
+  title_fontsize = 8,
+  dataset_row_gap = grid::unit(0, "cm"),
+  dataset_column_gap = grid::unit(0, "cm"),
+  subplot_row_gap = grid::unit(0, "cm"),
+  subplot_column_gap = grid::unit(0, "cm"),
+  legend_gap = grid::unit(0, "cm")
+) {
+  nrow <- ceiling(length(panels) / ncol)
+  if (is.null(panel_heights)) {
+    panel_heights <- rep(1, nrow)
+  }
+  if (is.null(panel_widths)) {
+    panel_widths <- rep(1, ncol)
+  }
+  list(
+    panels = panels,
+    nrow = nrow,
+    ncol = ncol,
+    panel_heights = panel_heights,
+    panel_widths = panel_widths,
+    title_fontsize = title_fontsize,
+    dataset_row_gap = dataset_row_gap,
+    dataset_column_gap = dataset_column_gap,
+    subplot_row_gap = subplot_row_gap,
+    subplot_column_gap = subplot_column_gap,
+    legend_gap = legend_gap
+  )
+}
+
+
+draw_dataset_panel_layout <- function(layout) {
+  grid::grid.newpage()
+  row_heights <- interleave_null_units(layout$panel_heights, layout$dataset_row_gap)
+  col_widths <- interleave_null_units(layout$panel_widths, layout$dataset_column_gap)
+  grid_layout <- grid::grid.layout(
+    nrow = layout$nrow * 2 - 1,
+    ncol = layout$ncol * 2 - 1,
+    heights = row_heights,
+    widths = col_widths
+  )
+  grid::pushViewport(grid::viewport(layout = grid_layout))
+  for (index in seq_along(layout$panels)) {
+    row_index <- ((index - 1) %/% layout$ncol) + 1
+    col_index <- ((index - 1) %% layout$ncol) + 1
+    grid::pushViewport(grid::viewport(layout.pos.row = row_index * 2 - 1, layout.pos.col = col_index * 2 - 1))
+    draw_dataset_diagnostic_panel(
+      layout$panels[[index]],
+      title_fontsize = layout$title_fontsize,
+      subplot_row_gap = layout$subplot_row_gap,
+      subplot_column_gap = layout$subplot_column_gap,
+      legend_gap = layout$legend_gap
+    )
+    grid::popViewport()
+  }
+  grid::popViewport()
+  invisible(layout)
+}
+
+
+save_dataset_panel_layout <- function(layout, output_path, width, height, dpi = 600) {
+  dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
+  png_args <- list(filename = output_path, width = width, height = height, units = "in", res = dpi)
+  if (isTRUE(capabilities("cairo"))) {
+    png_args$type <- "cairo"
+  }
+  do.call(grDevices::png, png_args)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  draw_dataset_panel_layout(layout)
+  normalizePath(output_path, mustWork = TRUE)
+}
+
+
+save_stacked_panels <- function(panels, output_path, width, height, dpi = 600, panel_heights = rep(1, length(panels))) {
+  dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
+  png_args <- list(filename = output_path, width = width, height = height, units = "in", res = dpi)
+  if (isTRUE(capabilities("cairo"))) {
+    png_args$type <- "cairo"
+  }
+  do.call(grDevices::png, png_args)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  draw_stacked_panels(panels, panel_heights = panel_heights)
+  normalizePath(output_path, mustWork = TRUE)
+}
+
+
+figure_should_display_inline <- function() {
+  interactive() || "IRkernel" %in% loadedNamespaces() || nzchar(Sys.getenv("JPY_PARENT_PID"))
 }
 
 
@@ -264,16 +666,6 @@ observed_levels <- function(values, full_order) {
 }
 
 
-open_figure4_null_device_if_needed <- function() {
-  if (grDevices::dev.cur() == 1) {
-    device_path <- tempfile("figure4-device-", fileext = ".pdf")
-    grDevices::pdf(device_path)
-    return(device_path)
-  }
-  NA_character_
-}
-
-
 figure4_panel_theme <- function(base_size = 8.5) {
   ggplot2::theme_bw(base_size = base_size) +
     ggplot2::theme(
@@ -287,7 +679,8 @@ figure4_panel_theme <- function(base_size = 8.5) {
       axis.title.y = ggplot2::element_text(color = "#222222", margin = ggplot2::margin(r = 4)),
       axis.ticks.x = ggplot2::element_blank(),
       plot.margin = ggplot2::margin(4, 4, 4, 4),
-      plot.tag = ggplot2::element_text(face = "bold", size = 11),
+      plot.title = ggplot2::element_text(face = "bold", size = 11, hjust = 0),
+      plot.title.position = "plot",
       legend.position = "bottom",
       legend.title = ggplot2::element_blank(),
       legend.key.width = grid::unit(0.72, "cm"),
@@ -395,23 +788,6 @@ plot_figure4_box_panel <- function(
       color = "white",
       show.legend = FALSE
     ) +
-    ggplot2::stat_summary(
-      fun = stats::median,
-      geom = "point",
-      shape = 4,
-      size = 2.2,
-      stroke = 1.05,
-      color = "white",
-      show.legend = FALSE
-    ) +
-    ggplot2::stat_summary(
-      fun = stats::median,
-      geom = "point",
-      shape = 4,
-      size = 1.95,
-      stroke = 0.62,
-      show.legend = FALSE
-    ) +
     ggplot2::scale_x_continuous(
       breaks = seq_along(x_levels),
       labels = x_levels,
@@ -424,25 +800,13 @@ plot_figure4_box_panel <- function(
       limits = scenario_order,
       drop = FALSE,
       guide = ggplot2::guide_legend(
-        keywidth = grid::unit(0.72, "cm"),
-        keyheight = grid::unit(0.28, "cm"),
         override.aes = list(alpha = 1, color = "#333333", linewidth = 0.28)
       )
     ) +
     ggplot2::scale_color_manual(values = scenario_colors, limits = scenario_order, guide = "none") +
     ggplot2::coord_cartesian(ylim = y_limits) +
-    ggplot2::labs(y = y_label, tag = panel_tag) +
+    ggplot2::labs(y = y_label, title = panel_tag) +
     figure4_panel_theme()
-}
-
-
-extract_figure4_legend <- function(plot) {
-  grob <- ggplot2::ggplotGrob(plot + ggplot2::theme(legend.position = "bottom"))
-  legend_index <- which(vapply(grob$grobs, function(x) x$name, character(1)) == "guide-box")
-  if (length(legend_index) == 0) {
-    return(NULL)
-  }
-  grob$grobs[[legend_index[1]]]
 }
 
 
@@ -454,16 +818,10 @@ make_figure4_plot <- function(
   scenario_order,
   scenario_colors,
   point_size = 1.05,
-  panel_heights = c(2.7, 2.7, 2.7, 0.55)
+  panel_heights = c(2.7, 2.7, 2.7, 0.55),
+  panel_gap = grid::unit(0.18, "cm"),
+  legend_gap = grid::unit(0.08, "cm")
 ) {
-  null_device_path <- open_figure4_null_device_if_needed()
-  if (!is.na(null_device_path)) {
-    on.exit({
-      grDevices::dev.off()
-      unlink(null_device_path)
-    }, add = TRUE)
-  }
-
   ari_levels <- observed_levels(
     figure4_data$ari$DatasetLabel,
     unname(dataset_labels[dataset_order])
@@ -477,7 +835,7 @@ make_figure4_plot <- function(
     y_col = "ARI",
     x_levels = ari_levels,
     y_label = "ARI",
-    panel_tag = "a",
+    panel_tag = "a) k-means clustering",
     y_limits = c(-0.1, 1.05),
     y_breaks = c(-0.1, 0, 0.25, 0.5, 0.75, 1),
     scenario_order = scenario_order,
@@ -490,7 +848,7 @@ make_figure4_plot <- function(
     y_col = "metric_value",
     x_levels = loo_levels,
     y_label = "MCC",
-    panel_tag = "b",
+    panel_tag = "b) RF leave-one-cohort-out",
     y_limits = c(-0.25, 1.05),
     y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
     scenario_order = scenario_order,
@@ -503,7 +861,7 @@ make_figure4_plot <- function(
     y_col = "metric_value",
     x_levels = split_levels,
     y_label = "MCC",
-    panel_tag = "c",
+    panel_tag = "c) RF 70:30 train-test split",
     y_limits = c(-0.25, 1.05),
     y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
     scenario_order = scenario_order,
@@ -511,36 +869,66 @@ make_figure4_plot <- function(
     point_size = point_size
   )
 
-  legend <- extract_figure4_legend(panel_a)
-  panels <- lapply(
-    list(panel_a, panel_b, panel_c),
-    function(plot) ggplot2::ggplotGrob(plot + ggplot2::theme(legend.position = "none"))
-  )
-
   list(
-    panels = panels,
-    legend = legend,
-    panel_heights = panel_heights
+    panels = list(panel_a, panel_b, panel_c),
+    panel_heights = panel_heights,
+    panel_gap = panel_gap,
+    legend_gap = legend_gap
   )
 }
 
 
 draw_figure4 <- function(figure_plot) {
   grid::grid.newpage()
+  panels <- figure_plot$panels
+  panel_heights <- figure_plot$panel_heights
+  legend_height <- if (length(panel_heights) > length(panels)) {
+    panel_heights[[length(panels) + 1]]
+  } else {
+    0.55
+  }
+  panel_heights <- panel_heights[seq_along(panels)]
+  panel_gap <- if (is.null(figure_plot$panel_gap)) grid::unit(0.18, "cm") else figure_plot$panel_gap
+  legend_gap <- if (is.null(figure_plot$legend_gap)) grid::unit(0.08, "cm") else figure_plot$legend_gap
+  legend <- if (inherits(panels[[1]], "ggplot")) {
+    extract_plot_legend(panels[[1]])
+  } else if (!is.null(figure_plot$legend)) {
+    figure_plot$legend
+  } else {
+    grid::zeroGrob()
+  }
+  has_legend <- legend_is_present(legend)
+
+  panel_grobs <- lapply(panels, function(plot) {
+    if (inherits(plot, "ggplot")) {
+      ggplot2::ggplotGrob(plot + ggplot2::theme(legend.position = "none"))
+    } else {
+      plot
+    }
+  })
+  layout_heights <- interleave_null_units(panel_heights, panel_gap)
+  if (has_legend) {
+    layout_heights <- grid::unit.c(
+      layout_heights,
+      legend_gap,
+      grid::unit(legend_height, "null")
+    )
+  }
+  layout_rows <- length(panels) * 2 - 1 + ifelse(has_legend, 2, 0)
   layout <- grid::grid.layout(
-    nrow = 4,
+    nrow = layout_rows,
     ncol = 1,
-    heights = grid::unit(figure_plot$panel_heights, "null")
+    heights = layout_heights
   )
   grid::pushViewport(grid::viewport(layout = layout))
-  for (i in seq_along(figure_plot$panels)) {
-    grid::pushViewport(grid::viewport(layout.pos.row = i, layout.pos.col = 1))
-    grid::grid.draw(figure_plot$panels[[i]])
+  for (i in seq_along(panel_grobs)) {
+    grid::pushViewport(grid::viewport(layout.pos.row = i * 2 - 1, layout.pos.col = 1))
+    grid::grid.draw(panel_grobs[[i]])
     grid::popViewport()
   }
-  if (!is.null(figure_plot$legend)) {
-    grid::pushViewport(grid::viewport(layout.pos.row = 4, layout.pos.col = 1))
-    grid::grid.draw(figure_plot$legend)
+  if (has_legend) {
+    grid::pushViewport(grid::viewport(layout.pos.row = layout_rows, layout.pos.col = 1))
+    grid::grid.draw(legend)
     grid::popViewport()
   }
   grid::popViewport()
@@ -583,5 +971,5 @@ save_figure4_png <- function(figure_plot, output_path, width, height, dpi = 600,
 
 
 figure4_should_display_inline <- function() {
-  interactive() || "IRkernel" %in% loadedNamespaces() || nzchar(Sys.getenv("JPY_PARENT_PID"))
+  figure_should_display_inline()
 }
