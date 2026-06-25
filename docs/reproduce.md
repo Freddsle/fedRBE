@@ -95,13 +95,14 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
 ## Running the analysis
 
 This section guides you through running both federated and centralized batch effect corrections and comparing their results.
+Any step can be skipped as each steps outputs are already committed in the repository. 
 
 Recommended order:
 
-1. Set up dependencies and fetch LFS data.
+1. Set up dependencies and fetch LFS data, see [Prerequisites and setup](#prerequisites-and-setup).
 2. Ensure the per-dataset `before/` inputs exist. When regenerating inputs from raw or source data, run the dataset-specific preparation notebooks listed in [2. Obtaining centrally corrected data](#2-obtaining-centrally-corrected-data) before launching the federated correction script.
-3. Run the federated correction script, or use the corrected outputs already committed in `evaluation_data/*/after/`.
-4. Run or reuse the central correction notebooks.
+3. Run the federated correction script, or use the corrected outputs already committed in `evaluation_data/*/after/`, see [1. Obtaining federated corrected data](#1-obtaining-federated-corrected-data).
+4. Run or reuse the central correction notebooks, see [2. Obtaining centrally corrected data](#2-obtaining-centrally-corrected-data).
 5. Compare federated vs central corrections, then run the figure/table, classification, and clustering analyses.
 
 ### 1. Obtaining federated corrected data
@@ -156,7 +157,7 @@ Output:
 
 _Note: The preprocessing and centralized correction notebooks have already been run for the committed outputs. You can skip this step when using the provided corrected data._
 
-For simulated data, committed run-1 inputs support a quick check. The full 30-run evaluation requires generated `before/intermediate/` and `after/runs/` files.
+For simulated data, committed run-1 inputs support a quick check. The full 30-run evaluation requires generated `before/intermediate/` and `after/runs/` files via `evaluation_data/simulated/00_data_simulation.ipynb`.
 
 ### 3. Comparing federated and central corrections
 
@@ -192,13 +193,6 @@ To reproduce the tables and figures from the preprint, run the provided Jupyter 
 These notebooks expect the corrected data from Steps 1 and 2. `evaluation_simulated_30runs.ipynb` requires the full generated simulated `after/runs/` files. Figures are written under `evaluation/plots/` and related evaluation output folders.
 
 ### 5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data
-
-#### Prerequisites
-- You need to have the Python 3 environment set up with the required dependencies as described in the [Prerequisites and setup](#prerequisites-and-setup) section.
-
-#### Reproduction steps
-This part uses three Python scripts. Install the packages from `requirements.txt` first.
-
 First run the classification experiments. This can take several hours; the repository already contains the generated results.
 
 The classification experiments are split into the two different experiment types:
@@ -234,7 +228,7 @@ cd evaluation_clusterization_after_correction/federated_kmeans_upd/
 ./build.sh
 ```
 
-#### Real datasets
+#### Reproducing the clustering analysis
 
 Run the notebooks in `evaluation_clusterization_after_correction/real_datasets/`:
 
