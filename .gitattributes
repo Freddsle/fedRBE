@@ -32,6 +32,7 @@ evaluation_data/simulated/*/before/lab*/intensities.tsv filter=lfs diff=lfs merg
 evaluation_data/simulated/*/before/intermediate/1_intensities_data.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/FedSim_corrected_data.tsv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/simulated/*/after/intensities_R_corrected.tsv filter=lfs diff=lfs merge=lfs -text
+evaluation/eval_simulation/precomputed/simulated_30runs_lmpv_summary.tsv.gz filter=lfs diff=lfs merge=lfs -text
 
 # Quartet multiomics source data and retained correction results
 evaluation_data/quartet_multiomics/figshare_data/Transcriptomics_fulldataset_log2FPKM_r26907c180.csv filter=lfs diff=lfs merge=lfs -text
@@ -45,4 +46,3 @@ evaluation_data/quartet_multiomics/after/*/FedApp_corrected_data.tsv filter=lfs 
 evaluation_data/quartet_multiomics/after/*/FedApp_corrected_data_smpc.tsv filter=lfs diff=lfs merge=lfs -text
 # Quartet multiomics created merged data files
 evaluation_data/quartet_multiomics/merged_omics/*/client_*/merged_data.tsv filter=lfs diff=lfs merge=lfs -text
-
