@@ -139,7 +139,7 @@ Run the dataset preparation and central-correction notebooks from their own dire
 |---------|-----------|
 | Simulated | `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb`|
 | E. coli | `evaluation_data/ecoli/01_data_prep_and_central_RBE.ipynb` |
-| Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb`, `evaluation_data/ovarian_cancer/01_check_datasets_intersection.ipynb`, then `evaluation_data/ovarian_cancer/02_central_RBE.ipynb` |
+| Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb` (run time ~30 minutes), then `evaluation_data/ovarian_cancer/02_central_RBE.ipynb` |
 | ccRCC proteomics | `python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py`, then `evaluation_data/ccRCC_studies/01_central_RBE.ipynb` |
 | Quartet multiomics | `evaluation_data/quartet_multiomics/01_preprocess_eda.ipynb`, `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`, then `evaluation_data/quartet_multiomics/03_central_RBE.ipynb` |
 
