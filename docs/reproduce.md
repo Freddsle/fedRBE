@@ -214,7 +214,7 @@ Output:
 To reproduce the tables and figures from the preprint, run the provided Jupyter notebooks in the `evaluation/` directory:
 
 1. `evaluation/evaluation_simulated.ipynb`
-2. `evaluation/evaluation_simulated_30runs.ipynb`
+2. `evaluation/evaluation_simulated_30runs.ipynb` (may take several hours to run if all 30 runs are generated)
 3. `evaluation/evaluation_ecoli.ipynb`
 4. `evaluation/evaluation_ovarian_cancer.ipynb`
 5. `evaluation/evaluation_ccRCC.ipynb`
