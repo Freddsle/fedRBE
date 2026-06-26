@@ -97,6 +97,12 @@ conda env create -f environment.yml
 conda activate fedRBE
 ```
 
+Mamba can use the same `environment.yml`. The file pins
+`conda-forge::openblas=0.3.3` to avoid `pthread_create()` failures in
+`affy::rma()` for conda environments. If that older build cannot be resolved
+for your platform, use the `preprocessCore` source-install command in the
+reproduction guide.
+
 Using separate Python and R installations:
 
 ```bash
@@ -107,7 +113,7 @@ pip install -r requirements.txt
 
 For full paper reproduction, install the R packages from `requirements_r.txt`; see
 [Reproduce the fedRBE Preprint](./docs/reproduce.md#setup-steps) for the exact
-CRAN, Bioconductor, and GitHub installation commands.
+CRAN, Bioconductor, `preprocessCore`, and GitHub installation commands.
 
 The checkout includes example files, simulation scripts, and evaluation workflows.
 

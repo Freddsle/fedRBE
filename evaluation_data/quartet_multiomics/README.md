@@ -51,9 +51,9 @@ Notes:
 
 ## Notebooks (run in order)
 
-All notebooks read from `figshare_data/` and write into `before/` (inputs) and `after/` (corrected outputs).
+Notebook 01 downloads missing required Figshare files into `figshare_data/`, writes `filtered_data/`, and saves optional EDA plots. Later notebooks read those local inputs and write into `before/` (inputs) and `after/` (corrected outputs).
 
-1. `01_preprocess_eda.ipynb` — EDA only. Loads any single Figshare matrix, aligns it to metadata, and saves before-correction PCA / boxplot / density plots to `plots/`. Selected via `DATASET_ID` and `DATASET_IDS`.
+1. `01_preprocess_eda.ipynb` — downloads the required Figshare files when missing, loads the full matrices, applies lab/client selection, writes `filtered_data/`, and saves before-correction PCA / boxplot / density plots to `plots/`. Selected via `DATASET_ID` and `DATASET_IDS`.
 2. `02_prepare_RBE_inputs.ipynb` — builds the configurable three- or four-client federation described below and writes per-modality central matrices, metadata, FedRBE client folders, and `before/fedrbe_client_groups.tsv`.
 3. `03_central_RBE.ipynb` — runs per-modality central `limma::removeBatchEffect` with `~ condition + batch` and `D6` as the reference donor, writes corrected matrices to `after/<Modality>/intensities_log_Rcorrected_UNION.tsv` and `after/<Modality>/metadata.tsv`.
 4. `04_run_fedrbe.ipynb` — **main path:** reads the FeatureCloud-style client folders prepared by notebook 02, runs the real FeatureCloud app (`featurecloud.ai/bcorrect:latest`), and writes `after/<Modality>/FedApp_corrected_data.tsv`. **Optional:** set `RUN_FEDSIM = True` in the last cell to run an in-process FedRBE simulation (`run_all_fedsim`) and write `after/<Modality>/FedSim_corrected_data.tsv`.
@@ -185,7 +185,7 @@ quartet_multiomics/
 ├── figshare_data/                # Downloaded Figshare matrices and metadata (do not modify)
 ├── plots/                        # EDA plots (notebook 01) and correction diagnostics (notebook 03)
 ├── fedrbe_multiomics_utils.py    # Shared Python utilities (registries + FedRBE simulation)
-├── 01_preprocess_eda.ipynb       # EDA only
+├── 01_preprocess_eda.ipynb       # Download Figshare inputs, write filtered data, run EDA
 ├── 02_prepare_RBE_inputs.ipynb   # Build configurable federation, write central + FedRBE before inputs
 ├── 03_central_RBE.ipynb          # Central limma correction, write after/<Modality>/
 ├── 04_run_fedrbe.ipynb           # FC app run from prepared client folders (FedSim optional)

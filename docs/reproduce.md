@@ -81,6 +81,14 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
    conda activate fedRBE
    ```
 
+   Mamba can use the same `environment.yml`. The file pins
+   `conda-forge::openblas=0.3.3` to avoid `pthread_create()` failures in
+   `affy::rma()` on conda environments.
+
+   If the older OpenBLAS build cannot be resolved for your platform or channel
+   setup, use the `preprocessCore` source-install command from Option B after
+   activating this conda environment.
+
    Install the GitHub-only R dependency:
 
    ```bash
@@ -101,7 +109,8 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
 
    ```bash
    Rscript -e 'install.packages(c("data.table","ggpubr","gridExtra","ggsci","ggtext","glue","IRkernel","invgamma","jsonlite","knitr","nipals","patchwork","pheatmap","remotes","reshape2","scales","tidyverse","umap","viridis"), repos="https://cloud.r-project.org")'
-   Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("AnnotationDbi","affy","GEOquery","GO.db","hgu133acdf","hgu133plus2cdf","impute","limma","preprocessCore","variancePartition"))'
+   Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("AnnotationDbi","affy","GEOquery","GO.db","hgu133acdf","hgu133plus2cdf","impute","limma","variancePartition"), ask=FALSE, update=FALSE)'
+   Rscript -e 'BiocManager::install("preprocessCore", configure.args=c(preprocessCore="--disable-threading"), type="source", force=TRUE, ask=FALSE, update=FALSE)'
    Rscript -e 'install.packages("WGCNA", repos="https://cloud.r-project.org")'
    Rscript -e 'if (!requireNamespace("remotes", quietly=TRUE)) install.packages("remotes", repos="https://cloud.r-project.org"); remotes::install_github("mwgrassgreen/RobNorm")'
    ```
@@ -128,11 +137,13 @@ Run the dataset preparation and central-correction notebooks from their own dire
 
 | Dataset | Run order |
 |---------|-----------|
-| Simulated | `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb`; run `evaluation_data/simulated/00_data_simulation.ipynb` first only to regenerate all simulation runs |
+| Simulated | `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb`|
 | E. coli | `evaluation_data/ecoli/01_data_prep_and_central_RBE.ipynb` |
 | Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb`, `evaluation_data/ovarian_cancer/01_check_datasets_intersection.ipynb`, then `evaluation_data/ovarian_cancer/02_central_RBE.ipynb` |
 | ccRCC proteomics | `python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py`, then `evaluation_data/ccRCC_studies/01_central_RBE.ipynb` |
-| Quartet multiomics | `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`, then `evaluation_data/quartet_multiomics/03_central_RBE.ipynb`; `evaluation_data/quartet_multiomics/01_preprocess_eda.ipynb` is EDA-only and optional |
+| Quartet multiomics | `evaluation_data/quartet_multiomics/01_preprocess_eda.ipynb`, `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`, then `evaluation_data/quartet_multiomics/03_central_RBE.ipynb` |
+
+> For simulated datasets, if all 30 runs were not re-generated, the `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb` notebook will only run the single-run central correction for the committed inputs. If you want to run the full 30-run evaluation, first generate the `before/intermediate/` and `after/runs/` files via `evaluation_data/simulated/00_data_simulation.ipynb`, which will take 1-2 hours, then re-run the notebook.
 
 Output:
 

@@ -8,6 +8,7 @@ dependencies:
   - ca-certificates
   - certifi
   - openssl
+  - conda-forge::openblas=0.3.3
   - conda-forge::adjusttext
   - conda-forge::bottle
   - conda-forge::docker-py
