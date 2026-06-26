@@ -22,11 +22,9 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
   - [3. Comparing federated and central corrections](#3-comparing-federated-and-central-corrections)
   - [4. Produce tables and figures](#4-produce-tables-and-figures)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-    - [Prerequisites](#prerequisites)
-    - [Reproduction steps](#reproduction-steps)
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-    - [Prerequisites](#prerequisites-1)
-    - [Real datasets](#real-datasets)
+    - [Prerequisites](#prerequisites)
+    - [Reproducing the clustering analysis](#reproducing-the-clustering-analysis)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
@@ -86,7 +84,7 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
    Install the GitHub-only R dependency:
 
    ```bash
-   Rscript -e 'devtools::install_github("mwgrassgreen/RobNorm")'
+   Rscript -e 'remotes::install_github("mwgrassgreen/RobNorm")'
    ```
 
    **Option B: Separate Python and R installations**
@@ -102,9 +100,10 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
    separate sections. Install them with:
 
    ```bash
-   Rscript -e 'install.packages(c("data.table","devtools","ggpubr","gridExtra","ggsci","ggtext","glue","IRkernel","invgamma","jsonlite","knitr","nipals","patchwork","pheatmap","reshape2","scales","tidyverse","umap","viridis","WGCNA"), repos="https://cloud.r-project.org")'
-   Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("affy","GEOquery","hgu133acdf","hgu133plus2cdf","limma","variancePartition"))'
-   Rscript -e 'if (!requireNamespace("devtools", quietly=TRUE)) install.packages("devtools", repos="https://cloud.r-project.org"); devtools::install_github("mwgrassgreen/RobNorm")'
+   Rscript -e 'install.packages(c("data.table","ggpubr","gridExtra","ggsci","ggtext","glue","IRkernel","invgamma","jsonlite","knitr","nipals","patchwork","pheatmap","remotes","reshape2","scales","tidyverse","umap","viridis"), repos="https://cloud.r-project.org")'
+   Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("AnnotationDbi","affy","GEOquery","GO.db","hgu133acdf","hgu133plus2cdf","impute","limma","preprocessCore","variancePartition"))'
+   Rscript -e 'install.packages("WGCNA", repos="https://cloud.r-project.org")'
+   Rscript -e 'if (!requireNamespace("remotes", quietly=TRUE)) install.packages("remotes", repos="https://cloud.r-project.org"); remotes::install_github("mwgrassgreen/RobNorm")'
    ```
 
 ---

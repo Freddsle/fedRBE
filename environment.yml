@@ -25,7 +25,6 @@ dependencies:
   - conda-forge::umap-learn
   - conda-forge::upsetplot
   - conda-forge::r-data.table
-  - conda-forge::r-devtools
   - conda-forge::r-ggpubr
   - conda-forge::r-ggsci
   - conda-forge::r-ggtext
@@ -38,12 +37,13 @@ dependencies:
   - conda-forge::r-nipals
   - conda-forge::r-patchwork
   - conda-forge::r-pheatmap
+  - conda-forge::r-remotes
   - conda-forge::r-reshape2
   - conda-forge::r-scales
   - conda-forge::r-tidyverse
   - conda-forge::r-umap
   - conda-forge::r-viridis
-  - conda-forge::r-wgcna
+  - bioconda::r-wgcna
   - bioconda::bioconductor-affy
   - bioconda::bioconductor-geoquery
   - bioconda::bioconductor-hgu133acdf

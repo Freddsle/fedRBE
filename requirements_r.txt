@@ -1,6 +1,5 @@
 # CRAN packages
 data.table
-devtools
 ggpubr
 gridExtra
 ggsci
@@ -13,6 +12,7 @@ knitr
 nipals
 patchwork
 pheatmap
+remotes
 reshape2
 scales
 tidyverse
@@ -21,11 +21,15 @@ viridis
 WGCNA
 
 # Bioconductor packages
+AnnotationDbi
 affy
 GEOquery
+GO.db
 hgu133acdf
 hgu133plus2cdf
+impute
 limma
+preprocessCore
 variancePartition
 
 # GitHub package: mwgrassgreen/RobNorm
