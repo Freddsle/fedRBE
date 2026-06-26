@@ -17,8 +17,8 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
 - [Prerequisites and setup](#prerequisites-and-setup)
   - [Setup steps](#setup-steps)
 - [Running the analysis](#running-the-analysis)
-  - [1. Obtaining federated corrected data](#1-obtaining-federated-corrected-data)
-  - [2. Obtaining centrally corrected data](#2-obtaining-centrally-corrected-data)
+  - [1. Preparing inputs and obtaining centrally corrected data](#1-preparing-inputs-and-obtaining-centrally-corrected-data)
+  - [2. Obtaining federated corrected data](#2-obtaining-federated-corrected-data)
   - [3. Comparing federated and central corrections](#3-comparing-federated-and-central-corrections)
   - [4. Produce tables and figures](#4-produce-tables-and-figures)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
@@ -111,21 +111,45 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
 ## Running the analysis
 
 This section guides you through running both federated and centralized batch effect corrections and comparing their results.
-Any step can be skipped as each steps outputs are already committed in the repository. 
+Any step can be skipped because the corresponding outputs are already committed in the repository.
 
 Recommended order:
 
 1. Set up dependencies and fetch LFS data, see [Prerequisites and setup](#prerequisites-and-setup).
-2. Ensure the per-dataset `before/` inputs exist. When regenerating inputs from raw or source data, run the dataset-specific preparation notebooks listed in [2. Obtaining centrally corrected data](#2-obtaining-centrally-corrected-data) before launching the federated correction script.
-3. Run the federated correction script, or use the corrected outputs already committed in `evaluation_data/*/after/`, see [1. Obtaining federated corrected data](#1-obtaining-federated-corrected-data).
-4. Run or reuse the central correction notebooks, see [2. Obtaining centrally corrected data](#2-obtaining-centrally-corrected-data).
-5. Compare federated vs central corrections, then run the figure/table, classification, and clustering analyses.
+2. Prepare or reuse the per-dataset `before/` inputs and central limma outputs, see [1. Preparing inputs and obtaining centrally corrected data](#1-preparing-inputs-and-obtaining-centrally-corrected-data).
+3. Run the federated correction script from the prepared `before/` inputs, or use the fedRBE outputs already committed in `evaluation_data/*/after/`, see [2. Obtaining federated corrected data](#2-obtaining-federated-corrected-data).
+4. Compare federated vs central corrections, then run the figure/table, classification, and clustering analyses.
 
-### 1. Obtaining federated corrected data
+### 1. Preparing inputs and obtaining centrally corrected data
+
+Prepare the per-dataset `before/` inputs and perform centralized batch effect correction using limma's `removeBatchEffect` for comparison.
+
+Run the dataset preparation and central-correction notebooks from their own directories, or set the notebook working directory to the listed folder so relative paths resolve correctly.
+
+| Dataset | Run order |
+|---------|-----------|
+| Simulated | `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb`; run `evaluation_data/simulated/00_data_simulation.ipynb` first only to regenerate all simulation runs |
+| E. coli | `evaluation_data/ecoli/01_data_prep_and_central_RBE.ipynb` |
+| Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb`, `evaluation_data/ovarian_cancer/01_check_datasets_intersection.ipynb`, then `evaluation_data/ovarian_cancer/02_central_RBE.ipynb` |
+| ccRCC proteomics | `python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py`, then `evaluation_data/ccRCC_studies/01_central_RBE.ipynb` |
+| Quartet multiomics | `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`, then `evaluation_data/quartet_multiomics/03_central_RBE.ipynb`; `evaluation_data/quartet_multiomics/01_preprocess_eda.ipynb` is EDA-only and optional |
+
+Output:
+
+- Prepared inputs: saved in `evaluation_data/[dataset]/before/` for each dataset.
+- Centrally corrected data: saved in `evaluation_data/[dataset]/after/` for each dataset.
+- Dataset-specific details and outputs are documented in the corresponding `evaluation_data/<dataset>/README.md` files.
+
+_Note: The preprocessing and centralized correction notebooks have already been run for the committed outputs. You can skip this step when using the provided inputs and corrected data._
+
+For simulated data, committed run-1 inputs support a quick check. The full 30-run evaluation requires generated `before/intermediate/` and `after/runs/` files via `evaluation_data/simulated/00_data_simulation.ipynb`.
+
+### 2. Obtaining federated corrected data
 
 Use the provided utility script to perform the configured federated batch
-effect correction experiments. Edit the experiment list in the script to
-enable or disable any of the datasets; currently all datasets are enabled by default.
+effect correction experiments from the prepared `evaluation_data/[dataset]/before/`
+inputs. Edit the experiment list in the script to enable or disable any of the
+datasets; currently all datasets are enabled by default.
 
 ```bash
 python3 ./generate_fedrbe_corrected_datasets.py
@@ -153,29 +177,6 @@ Customization:
 - Quartet multiomics requires the client folders written by `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`; run that notebook before the federated correction script if those folders were regenerated or removed.
 
 For simulated data, the script checks that `before/lab*/` inputs still match run 1 before writing the single-run `FedApp_corrected_data*.tsv` files used by `analyse_fedvscentral.py`.
-
-### 2. Obtaining centrally corrected data
-
-Perform centralized batch effect correction using limma's `removeBatchEffect` for comparison.
-
-Run the dataset preparation and central-correction notebooks from their own directories, or set the notebook working directory to the listed folder so relative paths resolve correctly.
-
-| Dataset | Run order |
-|---------|-----------|
-| Simulated | `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb`; run `evaluation_data/simulated/00_data_simulation.ipynb` first only to regenerate all simulation runs |
-| E. coli | `evaluation_data/ecoli/01_data_prep_and_central_RBE.ipynb` |
-| Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb`, `evaluation_data/ovarian_cancer/01_check_datasets_intersection.ipynb`, then `evaluation_data/ovarian_cancer/02_central_RBE.ipynb` |
-| ccRCC proteomics | `python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py`, then `evaluation_data/ccRCC_studies/01_central_RBE.ipynb` |
-| Quartet multiomics | `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`, then `evaluation_data/quartet_multiomics/03_central_RBE.ipynb`; `evaluation_data/quartet_multiomics/01_preprocess_eda.ipynb` is EDA-only and optional |
-
-Output:
-
-- Corrected data: saved in `evaluation_data/[dataset]/after/` for each dataset.
-- Dataset-specific details and outputs are documented in the corresponding `evaluation_data/<dataset>/README.md` files.
-
-_Note: The preprocessing and centralized correction notebooks have already been run for the committed outputs. You can skip this step when using the provided corrected data._
-
-For simulated data, committed run-1 inputs support a quick check. The full 30-run evaluation requires generated `before/intermediate/` and `after/runs/` files via `evaluation_data/simulated/00_data_simulation.ipynb`.
 
 ### 3. Comparing federated and central corrections
 
