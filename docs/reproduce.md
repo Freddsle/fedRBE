@@ -220,7 +220,7 @@ To reproduce the tables and figures from the preprint, run the provided Jupyter 
 5. `evaluation/evaluation_ccRCC.ipynb`
 6. `evaluation/evaluation_quartet_multiomics.ipynb`
 
-These notebooks expect the corrected data from Steps 1 and 2. `evaluation_simulated_30runs.ipynb` requires the full generated simulated `after/runs/` files. Figures are written under `evaluation/plots/` and related evaluation output folders.
+These notebooks expect the corrected data from Steps 1 and 2. `evaluation_simulated_30runs.ipynb` can use the committed precomputed 30-run LMPV summary cache for the final variance-partitioning plots; full recalculation still requires the generated simulated `before/intermediate/` and `after/runs/` files. Figures are written under `evaluation/plots/` and related evaluation output folders.
 
 ### 5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data
 First run the classification experiments. This can take several hours; the repository already contains the generated results.

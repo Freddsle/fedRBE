@@ -18,9 +18,7 @@ evaluation_data/ccRCC_studies/
 │   ├── intensities_log_Rcorrected_UNION.tsv  # created by Step 2
 │   ├── FedApp_corrected_data.tsv             # created by Step 3
 │   └── FedApp_corrected_data_smpc.tsv        # created by Step 3
-├── data/
-│   ├── ccRCC_metadata.csv  # combined sample metadata (Sample, Condition, Dataset)
-│   └── ...
+├── data/                   # ignored raw/intermediate source files
 ├── prepare_ccRCC_data.py   # Step 1 script
 └── 01_central_RBE.ipynb    # Step 2 notebook
 ```
@@ -49,7 +47,8 @@ python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py
 ## Step 2 — Central (R-based) batch effect correction
 
 **What:** Runs `limma::removeBatchEffect` centrally on the union matrix,
-treating `Dataset` as batch and `Condition` (Tumor/Normal) as covariate.
+treating the site folder as batch and the `Condition`/`Tumor` design columns
+as covariates.
 Must be run **after Step 1**.
 
 **Run:** Open and execute all cells of:
@@ -93,7 +92,8 @@ To run **only** the ccRCC experiments (skip others), temporarily comment out all
 ## Step 4 — Visual / statistical evaluation
 
 **What:** PCA, violin plots, and variance partitioning comparing uncorrected vs
-corrected matrices. Must be run **after Steps 2 and 3**.
+corrected matrices. Metadata is loaded from the tracked
+`before/<site>/design.tsv` files. Must be run **after Steps 2 and 3**.
 
 **Run:** Open and execute all cells of:
 
