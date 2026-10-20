@@ -43,13 +43,27 @@ class DatasetConfig:
     condition_col: str
     n_init: int = 1
     extra: Dict[str, str] = None  # type: ignore[assignment]
+    correction_arm: Optional[str] = None
 
 
-def dataset_configs(repo_root: Path) -> Dict[str, DatasetConfig]:
-    """Return a dict of dataset name -> DatasetConfig, loaded from datasets.yaml."""
-    yaml_path = Path(__file__).resolve().parent / "datasets.yaml"
+def dataset_configs(
+    repo_root: Path, yaml_path: Optional[Path] = None,
+    correction_arm: str = "label_aware",
+) -> Dict[str, DatasetConfig]:
+    """Load canonical paths for an arm, or use a custom registry's explicit paths."""
+    if correction_arm not in ("label_aware", "no_label"):
+        raise ValueError("correction_arm must be 'label_aware' or 'no_label'")
+    if yaml_path is not None and correction_arm != "label_aware":
+        raise ValueError("Set correction paths in the custom registry instead of correction_arm")
+    canonical = yaml_path is None
+    yaml_path = (Path(__file__).resolve().parent / "datasets.yaml"
+                 if yaml_path is None else repo_root / yaml_path)
     with open(yaml_path) as f:
         raw = yaml.safe_load(f)
+    if canonical:
+        for d in raw.values():
+            for key in ("corrected_central", "corrected_federated"):
+                d[key] = d[key].replace("/after/label_aware/", f"/after/{correction_arm}/")
     configs = {}
     for name, d in raw.items():
         configs[name] = DatasetConfig(
@@ -64,7 +78,8 @@ def dataset_configs(repo_root: Path) -> Dict[str, DatasetConfig]:
             sample_col=d["sample_col"],
             condition_col=d["condition_col"],
             n_init=int(d.get("n_init", 1)),
-            extra={k: str(d[k]) for k in d.get("extra", {})},
+            extra={k: str(value) for k, value in d.get("extra", {}).items()},
+            correction_arm=correction_arm if canonical else None,
         )
     return configs
 
@@ -162,6 +177,44 @@ def load_metadata(cfg: DatasetConfig, clients: Sequence[Path]) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Matrix loading
 # ---------------------------------------------------------------------------
+
+def read_correction_matrix(path: Path) -> pd.DataFrame:
+    """Read numeric correction inputs without dropping all-missing feature rows."""
+    matrix = pd.read_csv(path, sep="\t", index_col=0)
+    matrix.index = matrix.index.map(normalize_token)
+    matrix.index.name = "rowname"
+    matrix.columns = matrix.columns.map(normalize_token)
+    matrix = matrix.apply(pd.to_numeric)
+    if not matrix.index.is_unique or not matrix.columns.is_unique:
+        raise ValueError(f"Duplicate feature or sample identifiers: {path}")
+    if np.isinf(matrix.to_numpy(dtype=float)).any():
+        raise ValueError(f"Non-finite observed values: {path}")
+    return matrix
+
+
+def validate_corrected_matrix(matrix: pd.DataFrame, expected: pd.DataFrame) -> pd.DataFrame:
+    """Require unchanged coverage and missingness; return the expected identity order."""
+    if set(matrix.index) != set(expected.index) or set(matrix.columns) != set(expected.columns):
+        raise ValueError("Correction changed sample or feature coverage")
+    matrix = matrix.loc[expected.index, expected.columns]
+    if not matrix.isna().equals(expected.isna()):
+        raise ValueError("Correction changed the missing-value mask")
+    return matrix
+
+
+def validate_experiment_dir(repo_root: Path, path: Path) -> Path:
+    """Keep isolated experiment outputs outside canonical source and data directories."""
+    root = path.expanduser().resolve()
+    repo_root = repo_root.resolve()
+    canonical = ("evaluation_data", "evaluation", "evaluation_utils", "batchcorrection",
+                 "evaluation_classification_after_correction",
+                 "evaluation_clusterization_after_correction", ".git")
+    if root == repo_root or root in repo_root.parents:
+        raise ValueError("Use a separate experiment output directory")
+    if any(root == repo_root / name or repo_root / name in root.parents for name in canonical):
+        raise ValueError("Output would modify canonical artifacts")
+    return root
+
 
 def load_feature_matrix(path: Path) -> pd.DataFrame:
     """Load a TSV expression matrix (features x samples) with the first column as row index."""
@@ -402,6 +455,101 @@ def write_feature_matrix(df: pd.DataFrame, path: Path) -> None:
     out.to_csv(path, sep="\t", index=False)
 
 
+def build_quartet_matrices(
+    quartet_root: Path,
+    correction_arm: str = "label_aware",
+    corrected_source: str = "auto",
+) -> Dict[str, Path]:
+    """Stack matched Quartet modalities for the existing downstream evaluators.
+
+    Explicit sources require only that correction backend. ``auto`` builds each
+    correction backend available for all modalities.
+    Current outputs are reused until a per-modality input changes.
+    """
+    if correction_arm not in ("label_aware", "no_label"):
+        raise ValueError("correction_arm must be 'label_aware' or 'no_label'")
+    if corrected_source not in ("central", "federated", "auto"):
+        raise ValueError("corrected_source must be 'central', 'federated', or 'auto'")
+    quartet_root = Path(quartet_root)
+    before_dir = quartet_root / "before"
+    after_dir = quartet_root / "after" / correction_arm
+    modalities = ("Transcriptomics", "Proteomics", "Metabolomics")
+    source_files = {"central": "intensities_log_Rcorrected_UNION.tsv",
+                    "federated": "FedApp_corrected_data_smpc.tsv"}
+    sources = [corrected_source] if corrected_source != "auto" else [
+        source for source, filename in source_files.items()
+        if all((after_dir / modality / filename).exists() for modality in modalities)
+    ]
+    if not sources:
+        raise FileNotFoundError(f"No complete Quartet correction backend in {after_dir}")
+    outputs = {
+        "before": before_dir / "all_modalities_before_kmeans_matrix.tsv",
+        "metadata": quartet_root / "all_modalities_metadata.tsv",
+    }
+    filenames = {"central": "all_modalities_corrected_kmeans_matrix.tsv",
+                 "federated": "all_modalities_fedapp_kmeans_matrix.tsv"}
+    if corrected_source == "auto":
+        for source, filename in filenames.items():
+            if source not in sources and (after_dir / filename).exists():
+                raise FileNotFoundError(
+                    f"Cannot refresh Quartet {source} joint matrix: modality inputs are "
+                    f"incomplete in {after_dir}; restore them or select an available corrected_source"
+                )
+    outputs.update({source: after_dir / filenames[source] for source in sources})
+    inputs = [before_dir / modality / filename for modality in modalities
+              for filename in ("central_intensities_log_UNION.tsv", "metadata.tsv")]
+    inputs += [after_dir / modality / source_files[source]
+               for modality in modalities for source in sources]
+    newest_input = max(path.stat().st_mtime_ns for path in [*inputs, Path(__file__)])
+    if all(path.exists() and path.stat().st_mtime_ns >= newest_input
+           for path in outputs.values()):
+        return outputs
+
+    common_columns = ["pseudo_sample", "client", "condition", "rep"]
+    modality_columns = ["file", "batch", "lab", "platform", "protocol", "date"]
+    blocks = {source: [] for source in ("before", *sources)}
+    combined_metadata = None
+    for modality in modalities:
+        metadata_path = before_dir / modality / "metadata.tsv"
+        metadata = pd.read_csv(metadata_path, sep="\t")
+        required = common_columns + ["file"]
+        missing = set(required).difference(metadata.columns)
+        if missing or metadata[required].isna().any().any():
+            raise ValueError(f"Missing Quartet sample metadata in {metadata_path}: {sorted(missing)}")
+        metadata["rep"] = pd.to_numeric(metadata["rep"], errors="raise").astype(int)
+        for column in ("file", "pseudo_sample", "client", "condition"):
+            metadata[column] = metadata[column].map(normalize_token)
+        if not metadata.pseudo_sample.is_unique or not metadata.file.is_unique:
+            raise ValueError(f"Duplicate Quartet sample identifiers in {metadata_path}")
+        metadata = metadata.sort_values("pseudo_sample").set_index("pseudo_sample", drop=False)
+        shared = metadata[common_columns]
+        if combined_metadata is None:
+            combined_metadata = shared.copy()
+        elif not combined_metadata[common_columns].equals(shared):
+            raise ValueError(f"Quartet pseudo-samples or labels differ across modalities: {modality}")
+        combined_metadata = combined_metadata.join(
+            metadata[[column for column in modality_columns if column in metadata]]
+            .add_prefix(f"{modality}_")
+        )
+        before = read_correction_matrix(
+            before_dir / modality / "central_intensities_log_UNION.tsv"
+        )
+        matrices = {"before": before}
+        for source in sources:
+            matrices[source] = validate_corrected_matrix(
+                read_correction_matrix(after_dir / modality / source_files[source]), before
+            )
+        for source, matrix in matrices.items():
+            block = matrix.loc[:, metadata.file].copy()
+            block.columns = metadata.pseudo_sample
+            block.index = f"{modality}__" + block.index
+            blocks[source].append(block)
+    for source, parts in blocks.items():
+        write_feature_matrix(pd.concat(parts, axis=0), outputs[source])
+    combined_metadata.to_csv(outputs["metadata"], sep="\t", index=False)
+    return outputs
+
+
 def write_intensities(df: pd.DataFrame, path: Path) -> None:
     """Write a feature-by-sample matrix as a quoted TSV for the fc_kmeans app.
 
@@ -465,6 +613,82 @@ def write_kmeans_config(
         "    variance: true\n"
     )
     path.write_text(content)
+
+
+def load_dataset_metadata(cfg: DatasetConfig):
+    """Read site labels or the joint Quartet sample mapping."""
+    base_dataset = (cfg.extra or {}).get("base_dataset", cfg.name)
+    if base_dataset != "quartet_multiomics":
+        clients = discover_clients(cfg)
+        return load_metadata(cfg, clients), clients
+
+    mapping = cfg.before_matrix.parent.parent / "all_modalities_metadata.tsv"
+    if not mapping.exists():
+        raise FileNotFoundError(
+            f"Missing Quartet joint metadata: {mapping}. "
+            "Canonical evaluators prepare this automatically; custom inputs must supply the joint mapping."
+        )
+    metadata = pd.read_csv(mapping, sep="\t", dtype=str)[
+        ["pseudo_sample", "condition", "client"]
+    ].rename(columns={"pseudo_sample": "file", "client": "lab"})
+    if metadata.isna().any().any():
+        raise ValueError(f"Missing Quartet evaluation labels: {mapping}")
+    metadata = metadata.apply(lambda column: column.map(normalize_token))
+    if not metadata.file.is_unique:
+        raise ValueError(f"Duplicate Quartet pseudo-samples: {mapping}")
+    names = sorted(metadata.lab.unique())
+    metadata = pd.concat(
+        [metadata.loc[metadata.lab.eq(name)] for name in names], ignore_index=True
+    )
+    return metadata, [cfg.sites_root / name for name in names]
+
+
+
+def prepare_dataset(
+    cfg: DatasetConfig,
+    prepared_dir: Path,
+    *,
+    corrected_source: str = "central",
+    remove_na: bool = True,
+) -> dict:
+    """Prepare current matrices and refresh the intermediate files used by plots.
+
+    Central and federated evaluation entrypoints share the same loading,
+    alignment, and optional complete-case filtering.
+    """
+    if cfg.name == "quartet_multiomics" and cfg.correction_arm is not None:
+        build_quartet_matrices(
+            cfg.before_matrix.parent.parent, cfg.correction_arm, corrected_source
+        )
+    metadata, clients = load_dataset_metadata(cfg)
+    before_raw = load_matrix_with_lfs_fallback(cfg.before_matrix, f"{cfg.name} before", cfg)
+    corrected_path, corrected_kind = choose_corrected_path(cfg, corrected_source)
+    corrected_raw = load_matrix_with_lfs_fallback(
+        corrected_path, f"{cfg.name} corrected"
+    )
+    before = align_matrix_to_metadata(before_raw, metadata, f"{cfg.name} before")
+    corrected = align_matrix_to_metadata(corrected_raw, metadata, f"{cfg.name} corrected")
+    if remove_na:
+        before = drop_rows_with_any_na(before, f"{cfg.name} before")
+        corrected = drop_rows_with_any_na(corrected, f"{cfg.name} corrected")
+
+    prepared_dir.mkdir(parents=True, exist_ok=True)
+    before.to_csv(prepared_dir / "before_matrix.tsv", sep="\t")
+    corrected.to_csv(prepared_dir / "corrected_matrix.tsv", sep="\t")
+    metadata.to_csv(prepared_dir / "metadata.tsv", sep="\t", index=False)
+    k_condition = int(metadata.condition.nunique())
+    k_batch = int(metadata.lab.nunique())
+    return {
+        "before": before,
+        "corrected": corrected,
+        "metadata": metadata,
+        "clients": clients,
+        "corrected_source": corrected_kind,
+        "k_condition": k_condition,
+        "k_batch": k_batch,
+        "k_values": sorted({k_condition, k_batch}),
+    }
+
 
 
 def prepare_variant_inputs(
