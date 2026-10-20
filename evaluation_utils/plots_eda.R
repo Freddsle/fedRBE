@@ -372,3 +372,33 @@ plots_multiple <- function(intensities, metadata, name, simulated = FALSE, use_n
 
   return(layout)
 }
+
+# Saves a diagnostic panel per (modality, state): PCA by batch, PCA by donor,
+# sample boxplot coloured by batch, density by batch. Metadata needs file,
+# batch_code and condition columns (Quartet multiomics layout).
+plot_diagnostics <- function(expr, metadata, modality, state_label, plots_dir) {
+  pca_batch <- pca_plot(expr, metadata,
+    title = paste(modality, state_label, "by batch"),
+    quantitative_col_name = "file", col_col = "batch_code", shape_col = "condition",
+    point_size = 2.5)
+
+  pca_condition <- pca_plot(expr, metadata,
+    title = paste(modality, state_label, "by donor"),
+    quantitative_col_name = "file", col_col = "condition", shape_col = "batch_code",
+    point_size = 2.5)
+
+  box_by_batch <- boxplot_plot(expr, metadata,
+    quantitativeColumnName = "file", color_col = "batch_code",
+    title = paste(modality, state_label, "batch distributions"),
+    remove_xnames = TRUE)
+
+  density_by_batch <- plotIntensityDensity(expr, metadata,
+    quantitativeColumnName = "file", colorColumnName = "batch_code",
+    title = paste(modality, state_label))
+
+  layout <- (pca_batch | pca_condition) / box_by_batch / density_by_batch
+  out_path <- file.path(plots_dir, paste0(modality, "_limma_", state_label, "_diagnostics.png"))
+  ggsave(out_path, layout, width = 14, height = 16, bg = "white")
+
+  tibble(modality = modality, state = state_label, pca_features = nrow(na.omit(expr)))
+}
