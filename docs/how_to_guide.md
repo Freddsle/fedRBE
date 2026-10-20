@@ -9,12 +9,10 @@
 
 # Getting started with federated limma remove batch effect (fedRBE) <!-- omit in toc -->
 
-This guide is designed for beginners who want a quick and easy way to start using `fedRBE` and test its functionality. 
-For more technical details and advanced usage and specific implementation details, please refer to the [app README](https://freddsle.github.io/fedRBE/batchcorrection/).
-
-`fedRBE` allows you to remove batch effects from data in a federated manner, ensuring data privacy.
-
-For a more formal description and details, see the fedRBE's preprint on [ArXiv](https://doi.org/10.48550/arXiv.2412.05894).
+Use `fedRBE` to correct batch effects across sites without sharing raw data.
+This guide covers setup and collaboration; see the
+[app README](https://freddsle.github.io/fedRBE/batchcorrection/) for technical
+details and the [preprint](https://doi.org/10.48550/arXiv.2412.05894) for the method.
 
 
 ## List of contents <!-- omit in toc -->
@@ -33,7 +31,7 @@ For a more formal description and details, see the fedRBE's preprint on [ArXiv](
 
 ## Minimal requirements and setup
 
-Ensure you have the following installed before starting:
+Install Docker, Python, and the CLI, then register:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
 1. **Python 3.8+**: [Installation Instructions](https://www.python.org/)
 1. **FeatureCloud CLI**:
@@ -46,19 +44,18 @@ For Windows users, we recommend using [WSL](https://docs.docker.com/desktop/feat
 
 ## Understanding the workflow
 
-Below is a simplified workflow of how to use `fedRBE`:
 1. **Coordinator creates a FeatureCloud project and distributes tokens** to at least 3 participants.
 2. **Each Participant (Client)** prepares their data and a `config.yml` file.
 3. **All Clients join the project** using FeatureCloud and run the app locally.
 4. **fedRBE aligns and corrects batch effects** without sharing raw data.
-5. **Results are produced locally at each client**, ensuring privacy.
+5. **Each client receives its corrected data locally**.
 
 ## File preparation
 
-You need two main inputs:
+Each client needs:
 1. **Expression Data File** (CSV/TSV)
 2. **`config.yml`** for custom settings
-3. and **Optional Design File** with covariates (if needed).
+3. **Optional Design File** with covariates.
 
 <p align="center">
    <img src="../figures/how_to1.png" alt="Required files figure" width="70%">
@@ -72,7 +69,8 @@ client_folder/
 ├─ design.csv
 ```
 
-If you want to simulate a federated workflow on a single machine, you can use the provided sample data and test script. In this case, you need to create at least three folders, each with the sample data and a `config.yml` file (for example, `clientA`, `clientB`, `clientC` folders).
+For single-machine simulation, use at least three client folders (e.g., `clientA`,
+`clientB`, `clientC`), each containing sample data and `config.yml`.
 
 **Example `config.yml` snippet**:
 ```yaml
@@ -90,29 +88,31 @@ flimmaBatchCorrection:
   reference_batch: ""  # Leave empty to use the last client in positional order as the reference
 ```
 
-For more details on the `config.yml` parameters, see the [app README](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml).
+See the [full configuration reference](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml).
 
 ## Step-by-step scenario
 
 **Scenario**: Three clients (A, B, and C) collaborate on a federated analysis. Video tutorial: [FeatureCloud tutorial](https://featurecloud.ai/researchers).
 
 1. **Coordinator Actions**:  
-   - The coordinator logs into the FeatureCloud platform and **creates a new project**.
-   - Add the fedRBE app into the workflow and *finalize the project*.
-   - The coordinator **creates tokens** and sends them to Clients A, B, and C.
+   - Log into FeatureCloud, create a project, add fedRBE, and finalize the workflow.
+   - Create tokens and send them to Clients A, B, and C.
 
    <p align="center">
    <img src="../figures/how_to2.png" alt="Coordinator step 1" width="70%">
    </p>
    
 2. **Client Setup**:
-   - **Client A, B, C**: Place `expression_data_client.csv` and `config.yml` in a local folder.
-   - Adjust `config.yml` parameters as needed (e.g., change `data_filename` to match the correct file name).
-   - In case of multiple batches in one client, the client should provide a `design.csv` file with batch information and specify this column name in the `config.yml` parameter `batch_col`.
+   - Each client places `expression_data_client.csv` and `config.yml` in a local folder;
+     set `data_filename` to the actual filename and adjust other settings as needed.
+   - For multiple batches within a client, provide batch labels in `design.csv` and
+     set `batch_col` to that column's name.
    
 3. **Joining the Project**:
-   - Each client uses the FeatureCloud to login and join the project using the provided token.
-   - After joining, each client uploads their data and config file to the FeatureCloud GUI client as a one .zip file (without any folder structure inside). It will not be sent to the coordinator or other clients, but makes it available for the Docker container with the app.
+   - Each client logs into FeatureCloud and joins with its token.
+   - Upload data and configuration to the local GUI as one ZIP with no nested
+     folders. The files become available to the app's Docker container and stay
+     local; they are not sent to the coordinator or other clients.
 
    <p align="center">
    <img src="../figures/how_to3.png" alt="Required files figure" width="70%">
@@ -132,9 +132,8 @@ After completion, each client finds:
 
 ## Single-machine simulations using the provided sample data
 
-If you’d like to test everything on one machine, you can run the provided sample data and test script. This simulates multiple clients locally, so you can see the federated workflow in action without needing multiple machines.
-
-For instructions, see the [Local Test Simulation](https://freddsle.github.io/fedRBE/docs/local_test.html) guide.
+Run the bundled sample experiment with multiple local clients using the
+[Local Test Simulation](https://freddsle.github.io/fedRBE/docs/local_test.html) guide.
 
 
 ## Troubleshooting tips
@@ -146,7 +145,7 @@ For instructions, see the [Local Test Simulation](https://freddsle.github.io/fed
 
 ### Choosing the correct data orientation
 
-Depending on how your data is structured, you must correctly set `expression_file_flag` in your `config.yml`:
+Set `expression_file_flag` and `index_col` in `config.yml` to match the data:
 
 - **If your file is features (rows) x samples (columns)**:  
   `expression_file_flag: True` and `index_col: <feature_id_column>`
@@ -157,7 +156,9 @@ Depending on how your data is structured, you must correctly set `expression_fil
 
 ### Incorporating covariates
 
-If you have additional covariates (e.g., age, treatment type) that might influence your data, you can include them either directly in the `design_filename` file or list them in your `config.yml` under `covariates`. If no separate design file is provided, these covariates must exist as features in the main data file.
+List model covariates (e.g., age or treatment) under `covariates`. Supply their
+values in `design_filename`, or as features in the main data file if no separate
+design file is provided.
 
 **Example:**
 ```yaml
@@ -166,7 +167,8 @@ covariates: ["Age", "Treatment"]
 
 ### Selecting a reference batch
 
-`fedRBE` needs a reference batch to align the other batches against. By default, if no `reference_batch` is set, it uses the last client in the positional order defined by the `position` parameter. If all parameters are unset, it may choose a batch at random, resulting in non-deterministic runs.
+Without `reference_batch`, fedRBE uses the last client in `position` order as the
+reference. If both are unset, random ordering can make runs non-deterministic.
 
 **Example:**
 ```yaml

@@ -69,9 +69,9 @@ The app is available on [FeatureCloud](https://featurecloud.ai/app/fedrbe). For 
 
 ### Prerequisites
 
-Before installing `fedRBE`, ensure you have the following installed:
+Install:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
-2. **Either** Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
+2. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
 
 Additional requirements depend on the use case:
 - **Running fedRBE in a federated manner via the FeatureCloud platform**: FeatureCloud account
@@ -81,16 +81,27 @@ For Windows users, we recommend using [WSL](https://docs.docker.com/desktop/feat
 
 ### Clone the repository
 
-Clone the repository to run local simulations or reproduce the analysis:
+For local simulations or reproduction:
 
 ```bash
 git clone https://github.com/Freddsle/fedRBE.git
 cd fedRBE
 ```
 
-Then choose one dependency setup.
+Recommended: pixi installs one locked Python and R environment (`pixi.toml`,
+`pixi.lock`) for all evaluation code and notebooks:
 
-Using Conda or Mamba:
+```bash
+pixi install --locked
+pixi run setup-affymetrix   # once, only for raw Affymetrix CEL preprocessing
+pixi run jupyter lab        # notebooks use the `python3` and `ir` kernels
+```
+
+Run scripts with `pixi run python ...` or `pixi run Rscript ...`, or activate the
+environment with `pixi shell`. `setup-affymetrix` downloads the Affymetrix CDF packages
+and rebuilds `preprocessCore` without threading for `affy::rma()`.
+
+Or choose Conda/Mamba:
 
 ```bash
 conda env create -f environment.yml
@@ -103,7 +114,7 @@ Mamba can use the same `environment.yml`. The file pins
 for your platform, use the `preprocessCore` source-install command in the
 reproduction guide.
 
-Using separate Python and R installations:
+Or separate Python and R installations:
 
 ```bash
 python3 -m venv fedrbe_env
@@ -111,25 +122,19 @@ source fedrbe_env/bin/activate   # on Windows: fedrbe_env\Scripts\activate
 pip install -r requirements.txt
 ```
 
-For full paper reproduction, install the R packages from `requirements_r.txt`; see
-[Reproduce the fedRBE Preprint](./docs/reproduce.md#setup-steps) for the exact
-CRAN, Bioconductor, `preprocessCore`, and GitHub installation commands.
-
-The checkout includes example files, simulation scripts, and evaluation workflows.
+Without pixi, install the R packages from `requirements_r.txt` for full paper
+reproduction; see [Reproduce the fedRBE Preprint](./docs/reproduce.md#setup-steps) for
+the exact CRAN, Bioconductor, and `preprocessCore` installation commands.
 
 ---
 
 ## Usage
 
 ### Quick start
-To run fedRBE with sample data:
-1. Install the [prerequisites](#prerequisites).
-2. Run the sample experiment script:
+After [installation](#installation), run the bundled simulated experiment:
 ```bash
 python3 run_sample_experiment.py
 ```
-This runs fedRBE on a simulated example dataset.
-
 For other usage modes:
 1. Multi-machine collaboration: [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)
 2. Local FeatureCloud test environment: [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html)
@@ -139,7 +144,7 @@ For other usage modes:
 ### Glossary & further resources
 
 - **FeatureCloud**: A platform enabling federated analyses. [FeatureCloud docs](https://featurecloud.ai/)
-- **limma**: A popular R package for differential expression analysis. `removeBatchEffect` is a function from limma.
+- **limma**: R package providing `removeBatchEffect` and differential expression analysis.
 
 For advanced configuration details, see the
 [app README](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml) and the [ArXiv preprint](https://doi.org/10.48550/arXiv.2412.05894).
@@ -154,9 +159,8 @@ If you encounter errors:
 
 ### Input and Output
 
-For file preparation, format, configuration, and output details, see the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#file-preparation).
-
-In summary, you need two main inputs and one optional file:
+Provide a data file, `config.yml`, and an optional design file with covariates;
+see [file preparation](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#file-preparation).
 
 <p align="center">
    <img src="./figures/how_to1.png" alt="Required files figure" width="50%">
@@ -193,15 +197,14 @@ Output files include:
       reference_batch: ""
    ```
 
-_For a comprehensive list of configuration options, refer to the [Configuration Section](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml) in the batchcorrection README._
+See the [full configuration reference](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml).
 
 ---
 
 ## Reproducing the paper
 
-This repository includes the code and data needed to reproduce the analyses in the [ArXiv preprint](https://arxiv.org/abs/2412.05894).
-
-For detailed instructions on reproducing the paper, refer to the [Reproducibility Guide](https://freddsle.github.io/fedRBE/docs/reproduce.html).
+Use the [Reproducibility Guide](https://freddsle.github.io/fedRBE/docs/reproduce.html)
+to run the code and data analyses from the [ArXiv preprint](https://arxiv.org/abs/2412.05894).
 
 
 ---
@@ -219,8 +222,6 @@ Use the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.htm
 ---
 
 ## Troubleshooting
-
-Common checks:
 
 - **Missing Files**: Ensure `config.yml` and data files are in the correct directory.
 - **Incorrect Format**: Verify `expression_file_flag` and `index_col` settings in `config.yml`.
