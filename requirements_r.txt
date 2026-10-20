@@ -6,13 +6,11 @@ ggsci
 ggtext
 glue
 IRkernel
-invgamma
 jsonlite
 knitr
 nipals
 patchwork
 pheatmap
-remotes
 reshape2
 scales
 tidyverse
@@ -31,6 +29,3 @@ impute
 limma
 preprocessCore
 variancePartition
-
-# GitHub package: mwgrassgreen/RobNorm
-RobNorm

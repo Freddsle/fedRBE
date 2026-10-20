@@ -1,5 +1,3 @@
-library(invgamma)
-library(RobNorm)
 library(tidyverse)
 
 normalize_count <- function(n, max_n = NULL) {
@@ -95,7 +93,7 @@ expand_effects_by_sample <- function(effect_values, batch_vec, n_rows, col_names
 # Adapted from RobNorm sim.dat.fn with modified IG parameters
 sim.dat.fn = function(row.frac, col.frac, mu.up, mu.down, n, m, nu.fix=TRUE) {
     mu.00 = rnorm(n, 0, 1)
-    var.00 = rinvgamma(n, 2, 3)
+    var.00 = 1 / rgamma(n, 2, 3) # InvGamma(shape 2, scale 3); same draws as invgamma::rinvgamma
 
     X.0 = matrix(rnorm(n*m, 
 					outer(mu.00, rep(1, m)),
@@ -333,7 +331,8 @@ add_batch_effect <- function(
         mult_batch_effects <- sample_effects_with_min_spacing(
             multiplicative_params$shape,
             multiplicative_params$scale,
-            function(shape, scale) rinvgamma(1, shape, scale)
+            # Rate `scale` gives InvGamma(shape, scale), as invgamma::rinvgamma did.
+            function(shape, scale) 1 / rgamma(1, shape, scale)
         )
         names(mult_batch_effects) <- batch_levels
         print(mult_batch_effects)
