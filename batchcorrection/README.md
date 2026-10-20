@@ -37,13 +37,13 @@ Supports log scaling, multiple batches per client, and SMPC.
 ---
 
 ## Overview
-`fedRBE` removes batch effects from omics data distributed across research centers. It uses limma's `removeBatchEffect()` method with **federated learning (FL)** and **secure multi-party computation (SMPC)**. Sensitive data remains on each participant's site; only summary-level information is shared.
+fedRBE corrects distributed omics data using limma's `removeBatchEffect()` method.
+Raw data stays at each site; only summary statistics are shared, with optional
+secure multi-party computation (SMPC). Two modes are available:
 
-fedRBE supports two usage modes:
+* [Federated mode](#running-a-true-federated-workflow-login-required): Collaborate across sites; registration required.
 
-* [Federated mode](#running-a-true-federated-workflow-login-required): Removes batch effects from decentralized, sensitive data. Registration required.
-
-* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Runs fedRBE locally to simulate federated batch effect correction. No registration required.
+* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Simulate clients locally; no registration required.
 
 For advanced parameters, see [Configuration](#configuration-configyml).
 
@@ -51,7 +51,7 @@ For advanced parameters, see [Configuration](#configuration-configyml).
 
 ## Prerequisites and setup
 
-Before using `fedRBE`, ensure:
+Install:
 1. **Docker** is installed ([FeatureCloud prerequisites](https://featurecloud.ai/developers)).
 1. **Python3** is installed. [Installation Instructions](https://www.python.org/doc/).
 1. **FeatureCloud CLI**:
@@ -69,21 +69,18 @@ Before using `fedRBE`, ensure:
      ```bash
      docker pull featurecloud.ai/bcorrect:latest
      ```
-   - Alternatively, if you are using an ARM architecture (e.g., Mac M-series), build the image locally from the repository checkout:
+   - For ARM (e.g., Mac M-series) or other platforms incompatible with linux/amd64,
+     build locally from the checkout:
      ```bash
      cd batchcorrection
      docker build . -t featurecloud.ai/bcorrect:latest
      ```
-
-The app image provided in the FeatureCloud Docker registry is built for the linux/amd64 platform. If you use a Mac with an M-series chip or another device that is not compatible with linux/amd64, build the image locally.
 
 ---
 
 ## Usage
 
 ### Simulating a federated workflow locally (No login required)
-To test how `fedRBE` behaves with multiple datasets on one machine:
-
 1. **Clone the full repository and enter it**:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
@@ -96,24 +93,19 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
    ```
   The script prints the browser link for the local run.
 
-This runs the bundled sample experiment.
-
 ### Running a true federated workflow (Login required)
-For an actual multi-party setting:
 1. **Create a Project** in [FeatureCloud](https://featurecloud.ai/projects) and invite at least 3 clients.
 2. **Clients Join with Tokens** provided by the coordinator.
 3. **Each Client** uploads their data and `config.yml` to their local FeatureCloud instance.
 4. **Start the Project**: `fedRBE` runs securely, never sharing raw data.
 
-See the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for project setup and client onboarding.
-A FeatureCloud account is required to restrict project access to invited participants.
+A FeatureCloud account restricts access to invited participants. See the
+[How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for setup.
 
 ---
 
 ## Input requirements
-- **Data File**: CSV or TSV with either:
-  - Samples x Features, or
-  - Features x Samples
+- **Data File**: CSV/TSV, samples × features or features × samples.
 - **`config.yml`**: Configuration file controlling formats, normalization, and additional parameters.
 - **Optional Design Matrix**: CSV/TSV with covariates (samples x covariates).
 
@@ -125,10 +117,7 @@ For details, see the [Configuration](#configuration-configyml) section.
 After completion, each client receives:
 - **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
-- **`report.txt`**: Includes:
-  - Excluded features (and why)
-  - Calculated beta values
-  - Internally used design matrix
+- **`report.txt`**: Excluded features and reasons, beta values, and internal design matrix.
 
 **Note**: Output files use the same `separator` defined in `config.yml`.
 
@@ -164,6 +153,7 @@ flimmaBatchCorrection:
 
   covariates: ["Pyr"]
     # Covariates included in the linear model.
+    # Use [] to correct batch effects without biological covariates.
     # If no design file, covariates must be present as features in the data file.
 
   separator: "\t"
@@ -210,8 +200,6 @@ flimmaBatchCorrection:
 
 ## FeatureCloud App states
 
-The app has the following states:
-
 <p align="center">
    <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE app states" width="60%">
 </p>
@@ -224,24 +212,11 @@ The app has the following states:
 
 ## License
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+This project is licensed under the [Apache License 2.0](../LICENSE).
 
 
 
 ## How to cite
 
-If you use `fedRBE` in your research, please cite our [ArXiv preprint](https://arxiv.org/abs/2412.05894):
-
- > Burankova, Y., Klemm, J., Lohmann, J.J., Taheri, A., Probul, N., Baumbach, J. and Zolotareva, O., 2024. FedRBE--a decentralized privacy-preserving federated batch effect correction tool for omics data based on limma. arXiv preprint arXiv:2412.05894.
-
-   ```bibtex
-   @misc{burankova2024fedrbedecentralizedprivacypreserving,
-         title={FedRBE -- a decentralized privacy-preserving federated batch effect correction tool for omics data based on limma}, 
-         author={Yuliya Burankova and Julian Klemm and Jens J. G. Lohmann and Ahmad Taheri and Niklas Probul and Jan Baumbach and Olga Zolotareva},
-         year={2024},
-         eprint={2412.05894},
-         archivePrefix={arXiv},
-         primaryClass={q-bio.QM},
-         url={https://arxiv.org/abs/2412.05894}, 
-   }
-   ```
+Please cite the [ArXiv preprint](https://arxiv.org/abs/2412.05894);
+the [repository citation](../README.md#how-to-cite) includes BibTeX.

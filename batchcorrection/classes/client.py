@@ -183,7 +183,7 @@ class Client:
             # that this client has but other clients do not have
             if not self.feature_names:
                 raise ValueError(f"Client {self.client_name}: Error loading feature names.")
-            if not self.variables:
+            if not self.variables and self.variables != []:
                 raise ValueError(f"Client {self.client_name}: Error loading variables.")
 
             self.feature2hash, self.hash2feature = self.hash_names(self.feature_names)
@@ -191,8 +191,7 @@ class Client:
 
             self.feature_names = [self.feature2hash[feature] for feature in self.feature_names]
 
-            if covariates:
-                self.hash2variable = self.hash_covariates(covariates)
+            self.hash2variable = self.hash_covariates(covariates)
         else:
             self.hash2feature = {name: name for name in self.feature_names}
             self.feature2hash = {name: name for name in self.feature_names}
