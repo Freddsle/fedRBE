@@ -3,7 +3,11 @@
 Three ccRCC proteomics studies integrated as a single fedRBE evaluation dataset
 (`ccRCC_proteomics`): PDC000127, PXD030344, PXD042844.
 
----
+Each study is a batch; tumor versus normal tissue is the biological condition
+to preserve. The workflow prepares a common input matrix, runs central and
+federated correction, then compares their results. Steps 2 and 3 both depend on
+Step 1, but neither correction depends on the other. Step 4 compares the
+corrections; Step 5 evaluates a selected correction result through clustering.
 
 ## Directory layout after setup
 
@@ -13,120 +17,141 @@ evaluation_data/ccRCC_studies/
 │   ├── PDC000127/          # site data (design.tsv, report_filtered.tsv, config.yml)
 │   ├── PXD030344/          # site data
 │   ├── PXD042844/          # site data
-│   └── central_intensities_log_UNION.tsv  # created by Step 1
+│   ├── central_intensities_log_UNION.tsv  # uncorrected union from Step 1
+│   └── central_input.tsv                 # filtered, uncorrected central input from Step 1
 ├── after/
-│   ├── intensities_log_Rcorrected_UNION.tsv  # created by Step 2
-│   ├── FedApp_corrected_data.tsv             # created by Step 3
-│   └── FedApp_corrected_data_smpc.tsv        # created by Step 3
-├── data/                   # ignored raw/intermediate source files
+│   ├── label_aware/       # correction preserving Condition
+│   │   ├── intensities_log_Rcorrected_UNION.tsv  # created by Step 2
+│   │   ├── FedApp_corrected_data.tsv             # created by Step 3
+│   │   └── FedApp_corrected_data_smpc.tsv        # created by Step 3
+│   └── no_label/          # same filenames without biological correction covariates
+├── archive/                # source-input provenance
+├── data/                   # local raw inputs and intermediate reports; ignored
+├── plots/                  # before- and after-correction diagnostic plots
 ├── prepare_ccRCC_data.py   # Step 1 script
-└── 01_central_RBE.ipynb    # Step 2 notebook
+└── 01_central_RBE.ipynb    # Step 1 filtering and central-input preparation
 ```
 
----
+## Prepared inputs
+
+The workflow starts from tracked `before/<site>/report_filtered.tsv`
+and `design.tsv` files for the three studies above. The
+[preparation archive](archive/README.md) documents source-input provenance. Its
+notebooks require unavailable helper APIs and a source workbook, and do not
+specify every export step, so they are not a runnable preparation pipeline in this
+checkout. Raw inputs and intermediate reports are local under `data/`.
+
+To reproduce correction from the prepared inputs, start at Step 1. To inspect
+existing correction results, start at Step 4 or 5 after checking that the files
+listed under Steps 1–3 exist. Rerunning preparation or correction overwrites its
+outputs; it is not necessary just to view existing results.
 
 ## Step 1 — Data preparation
 
-**What:** Adds a `Condition` column (`"Tumor"` / `"Normal"`) to each site's
-`design.tsv` and builds the outer-join union matrix across all three studies.
+**What:** Add numeric `Condition` (`Tumor=1`, `Normal=0`) to each site's design
+and align its rows to the corresponding report columns. Join the three
+`report_filtered.tsv` matrices by feature using an outer join: features absent
+from one study remain as missing values rather than being discarded everywhere.
 
-**Run from the repository root:**
+**Run from `evaluation_data/ccRCC_studies/`:**
 
 ```bash
-python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py
+python prepare_ccRCC_data.py
 ```
 
 **Outputs:**
-- `before/PDC000127/design.tsv` — updated with `Condition` column
-- `before/PXD030344/design.tsv` — updated with `Condition` column
-- `before/PXD042844/design.tsv` — updated with `Condition` column
-- `before/central_intensities_log_UNION.tsv` — outer-joined union matrix
 
----
+- `before/PDC000127/design.tsv`, `before/PXD030344/design.tsv`, and
+  `before/PXD042844/design.tsv` — updated in place with the aligned, encoded design.
+- `before/central_intensities_log_UNION.tsv` — combined uncorrected matrix,
+  overwritten if it already exists.
+
+Then execute [01_central_RBE.ipynb](01_central_RBE.ipynb) with an R kernel from
+`evaluation_data/ccRCC_studies/`. It writes `before/central_input.tsv` and the
+diagnostic plot `plots/data_plot.png`.
 
 ## Step 2 — Central (R-based) batch effect correction
 
-**What:** Runs `limma::removeBatchEffect` centrally on the union matrix,
-treating the site folder as batch and the `Condition`/`Tumor` design columns
-as covariates.
-Must be run **after Step 1**.
+**Run after Step 1, from the repository root:**
 
-**Run:** Open and execute all cells of:
-
-```
-evaluation_data/ccRCC_studies/01_central_RBE.ipynb
+```bash
+pixi run python -m evaluation_utils.run_correction_experiments correct --datasets ccRCC_proteomics
 ```
 
-Open the notebook from its own directory (or set the working directory to
-`evaluation_data/ccRCC_studies/`) so that relative paths resolve correctly.
+**Output:** `after/label_aware/intensities_log_Rcorrected_UNION.tsv`.
+[evaluation_ccRCC.ipynb](../../evaluation/evaluation_ccRCC.ipynb) then writes the
+after-correction diagnostic plot `plots/data_plot_Rcorrected.png`.
 
-**Output:**
-- `after/intensities_log_Rcorrected_UNION.tsv`
-
----
+Other correction modes: [reproduction guide](../../docs/reproduce.md).
 
 ## Step 3 — Federated batch effect correction (FeatureCloud)
 
-**What:** Runs the federated limma RBE app via FeatureCloud for the
-`ccRCC_proteomics` experiment (and SMPC variant).
-Must be run **after Step 1**. Requires the FeatureCloud controller to be
-running and the Docker image `featurecloud.ai/bcorrect:latest` to be available.
+**What:** Run fedRBE with one client per study and `Condition` as the biological
+covariate. The driver includes runs with and without secure multiparty
+computation (SMPC).
 
-**Run from the repository root:**
+**Prerequisites:** Step 1, Docker, a working FeatureCloud controller setup, and
+the image `featurecloud.ai/bcorrect:latest`.
+
+**Run from the repository root:** The driver runs every enabled experiment. To
+select only ccRCC, retain its `(Experiment, output path)` entries in
+`generate_fedrbe_corrected_datasets.py` and comment out the other rows. The four
+ccRCC rows cover both correction arms with and without SMPC.
 
 ```bash
 python generate_fedrbe_corrected_datasets.py
 ```
 
-To run **only** the ccRCC experiments (skip others), temporarily comment out all
-`experiments.append(...)` lines except the two ccRCC lines in
-`generate_fedrbe_corrected_datasets.py`.
-
 **Outputs:**
-- `after/FedApp_corrected_data.tsv`
-- `after/FedApp_corrected_data_smpc.tsv`
-- `after/individual_results/PDC000127/`, `.../PXD030344/`, `.../PXD042844/`
 
----
+- `after/label_aware/FedApp_corrected_data.tsv`
+- `after/label_aware/FedApp_corrected_data_smpc.tsv`
+- `after/no_label/FedApp_corrected_data.tsv` and `after/no_label/FedApp_corrected_data_smpc.tsv` for the no-covariate variants
+- `after/label_aware/individual_results/PDC000127/`, `.../PXD030344/`, `.../PXD042844/`
+- `after/label_aware/datainfo.json` and `after/no_label/datainfo.json`:
+  classification descriptions of each arm's per-client results
 
 ## Step 4 — Visual / statistical evaluation
 
-**What:** PCA, violin plots, and variance partitioning comparing uncorrected vs
-corrected matrices. Metadata is loaded from the tracked
-`before/<site>/design.tsv` files. Must be run **after Steps 2 and 3**.
+**What:** Compare uncorrected, centrally corrected, and federated matrices using
+PCA, violin plots, and variance partitioning. Metadata comes from the tracked
+`before/<site>/design.tsv` files.
 
-**Run:** Open and execute all cells of:
+**Run after Steps 2 and 3:** Open with an R kernel and execute all cells of:
 
 ```
 evaluation/evaluation_ccRCC.ipynb
 ```
 
-Open from the `evaluation/` directory (or set the working directory there).
-
----
+Use `evaluation/` as the working directory. The notebook contains the comparison
+plots and statistical summaries; these assess remaining study effects alongside
+the biological condition signal.
 
 ## Step 5 — Clustering evaluation (k-means)
 
-**What:** Evaluates how well k-means clustering recovers biological signal
-(Condition) vs batch signal (Dataset) before and after correction.
-Must be run **after Steps 1, 2, and 3** in order.
+**What:** Evaluate whether k-means clusters recover biological (`Condition`) or
+batch (`Dataset`) labels before and after correction. Adjusted Rand index (ARI)
+measures agreement with each label set, so the comparison distinguishes retained
+condition structure from remaining study structure.
 
-**Run the notebooks in sequence from `evaluation_clusterization_after_correction/real_datasets/`:**
+**Run:** The clustering workflow defaults to central correction from Steps 1–2.
+To evaluate federated correction, also complete Step 3 and select that result
+using `CORRECTED_SOURCE` in notebooks 02 and 03. They prepare inputs automatically. Use
+`evaluation_clusterization_after_correction/real_datasets/` as the working
+directory and execute these Python notebooks in order:
 
-1. `evaluation_clusterization_after_correction/real_datasets/01_data_preparation.ipynb` — loads and aligns matrices, writes to
-   `real_datasets/ccRCC_proteomics/prepared/`
-2. `evaluation_clusterization_after_correction/real_datasets/02_central_kmeans.ipynb` — runs centralized k-means on prepared data
-3. `evaluation_clusterization_after_correction/real_datasets/03_federated_runs.ipynb` — runs federated k-means via FeatureCloud
-4. `evaluation_clusterization_after_correction/real_datasets/04_analysis_metrics_plots.ipynb` — computes ARI, MCC, F1, and plots
-
----
+1. `02_central_kmeans.ipynb` — prepare inputs and run centralized k-means.
+2. `03_federated_runs.ipynb` — run federated k-means via FeatureCloud; this also
+   requires Docker and the clustering app setup described in that notebook.
+   Skip this notebook for central-only k-means.
+3. `04_analysis_metrics_plots.ipynb` — compute ARI and produce comparison/PCA plots.
 
 ## Dependencies
 
 | Step | Language / Tool |
 |------|----------------|
-| 1    | Repository environment from `environment.yml` or separate Python install from `requirements.txt`, pandas |
-| 2    | Repository environment from `environment.yml` or separate R install from `requirements_r.txt`, limma, tidyverse |
+| 1    | Repository environment from `environment.yml` or separate Python/R setup, pandas, tidyverse |
+| 2    | Repository evaluation environment, Python launcher and R limma |
 | 3    | Repository environment from `environment.yml` or separate Python install from `requirements.txt`, FeatureCloud controller, Docker |
 | 4    | Repository environment from `environment.yml` or separate R install from `requirements_r.txt`, limma, tidyverse, patchwork, variancePartition |
 | 5    | Repository environment from `environment.yml` or separate Python install from `requirements.txt`, scikit-learn |
