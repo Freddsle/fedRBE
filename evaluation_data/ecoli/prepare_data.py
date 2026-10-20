@@ -26,7 +26,7 @@ for lab in ['lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E']:
     print(f"Created {base_path / 'data.csv'}")
 
 # After (corrected) data - from individual results
-after_path = DATASET_DIR / 'after' / 'individual_results'
+after_path = DATASET_DIR / 'after' / 'label_aware' / 'individual_results'
 
 for idx, lab in enumerate(['lab_A', 'lab_B', 'lab_C', 'lab_D', 'lab_E']):
     # Read corrected data - it's tab-separated with features as rows
