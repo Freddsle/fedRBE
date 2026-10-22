@@ -7,9 +7,8 @@ Contains helper classes to use to simulate a federated learning run of a single 
     multiple instances of LocalFedLearningSingleClientSimulation and prepares the folder for running them together.
     The use of the sharedDictionary allows the different instances to send data between each other.
 """
-from threading import Lock
+from threading import Event, Lock
 import os
-import time
 import shutil
 from typing import Any, Optional, List
 from .protocolfedlearning import ProtocolFedLearning
@@ -24,7 +23,12 @@ class SharedDictionary:
     def __init__(self, num_clients: int):
         self._shared_dict = {}
         self._lock = Lock()
+        self.abort_event = Event()
         self.num_clients = num_clients
+
+    def raise_if_aborted(self):
+        if self.abort_event.is_set():
+            raise RuntimeError("Native simulation aborted after a client failed")
 
     def get(self, key):
         """
@@ -147,13 +151,14 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
                                  memo=None):
         #print(f"Client {self.client_id} sending data to coordinator")
         while True:
+            self.shared_dict.raise_if_aborted()
             # we can only send if what we send before was gather already
             # the gathering deletes the data from the shared dictionary
             # we therefore only need to make sure that get returns None
             if self.shared_dict.get(self.client_id) is None:
                 self.shared_dict.set(self.client_id, data)
                 break
-            time.sleep(WAITING_TIME)
+            self.shared_dict.abort_event.wait(WAITING_TIME)
 
     def gather_data(self,
                     is_json: bool=False,
@@ -164,13 +169,14 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
             raise ValueError("Only the coordinator can gather data")
         # wait for enough data to arrive in a loop
         while True:
+            self.shared_dict.raise_if_aborted()
             data_packets = self.shared_dict.get_all_non_global_values()
             #print(f"gathering data, got {len(data_packets)} of {self.num_clients} data packets")
             if len(data_packets) == self.num_clients:
                 # reset the shared dictionary
                 self.shared_dict.delete_all_but_global()
                 return data_packets
-            time.sleep(WAITING_TIME)
+            self.shared_dict.abort_event.wait(WAITING_TIME)
 
     def broadcast_data(self,
                        data: Any,
@@ -181,12 +187,13 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
             raise ValueError("Only the coordinator can broadcast data")
         #print(f"Broadcasting data to all clients")
         while True:
+            self.shared_dict.raise_if_aborted()
             if not self.shared_dict.get('times_accesed_global'):
                 # only happens after all clients have accessed the global data
                 # or at the start when no client has accessed the global data
                 self.shared_dict.update_global(data)
                 break
-            time.sleep(WAITING_TIME)
+            self.shared_dict.abort_event.wait(WAITING_TIME)
 
     def await_data(self,
                      n: int = 1,
@@ -199,6 +206,7 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
         if n != 1:
             raise ValueError("This method only supports n=1 right now")
         while True:
+            self.shared_dict.raise_if_aborted()
             data = self.shared_dict.get('global')
 
             if data is not None and data != self.previously_awaited_data:
@@ -209,7 +217,7 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
                 self.shared_dict.increment_times_accesed_global()
                 self.previously_awaited_data = data
                 break
-            time.sleep(WAITING_TIME)
+            self.shared_dict.abort_event.wait(WAITING_TIME)
 
         # unwrap is not needed as we never wrap the data in the first place
         return data

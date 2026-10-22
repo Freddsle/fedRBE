@@ -85,16 +85,32 @@ def run_simulation_native(clientpaths: List[str], outputfolders: List[str], gene
                                                 outputfolders=outputfolders,
                                                 generic_dir=generic_dir)
 
-    # run the simulation
-    # start all clients as threads
-    threads = []
-    for idx, local_client in enumerate(wrapper.clients):
-        threads.append(threading.Thread(
-            target=fed_learning_main_function,
-            args=(local_client, clientpaths[idx], outputfolders[idx])))
-        threads[-1].start()
+    # Preserve the first failure before waking peers blocked on an exchange.
+    failures = []
+    failure_lock = threading.Lock()
 
-    # done, perform cleanup
-    for thread in threads:
-        thread.join()
-    wrapper.cleanup_created_files()
+    def run_client(local_client, inputfolder, outputfolder):
+        try:
+            fed_learning_main_function(local_client, inputfolder, outputfolder)
+        except BaseException as error:
+            with failure_lock:
+                failures.append(error)
+                wrapper.shared_dict.abort_event.set()
+
+    threads = []
+    try:
+        for idx, local_client in enumerate(wrapper.clients):
+            thread = threading.Thread(
+                target=run_client,
+                args=(local_client, clientpaths[idx], outputfolders[idx]))
+            thread.start()
+            threads.append(thread)
+        for thread in threads:
+            thread.join()
+    finally:
+        wrapper.shared_dict.abort_event.set()
+        for thread in threads:
+            thread.join()
+        wrapper.cleanup_created_files()
+    if failures:
+        raise failures[0]
