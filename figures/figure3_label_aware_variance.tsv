@@ -1,0 +1,17 @@
+dataset	state	term	features	median_fraction
+ecoli	before	condition	2057	0.00246820712844693
+ecoli	before	lab	2057	0.991349231710829
+ecoli	after	condition	2057	0.342120235400514
+ecoli	after	lab	2057	1.02483218946877e-28
+ovarian	before	Status	21128	0.0101029875610972
+ovarian	before	Dataset	21128	0.794201367468352
+ovarian	after	Status	21128	0.0590520846377448
+ovarian	after	Dataset	21128	1.41185456983516e-29
+ccrcc	before	condition	2074	0.0131709024806434
+ccrcc	before	lab	2074	0.761376270972801
+ccrcc	after	condition	2074	0.0639727133137455
+ccrcc	after	lab	2074	1.16147618070857e-30
+quartet	before	condition	29517	0.115594907638271
+quartet	before	batch	29517	0.362863822256882
+quartet	after	condition	29517	0.240706340192694
+quartet	after	batch	29517	1.2264462162524e-27
