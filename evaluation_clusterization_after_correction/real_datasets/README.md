@@ -19,7 +19,7 @@ as described below).
 | Evaluate central k-means | 02 → 04 | No |
 | Compare central and newly run federated k-means | 02 → 03 → 04 | Yes, for 03 |
 | Reuse existing local federated results | 02 → 03 → 04, with `RERUN_FEDERATED = False` | No; matching result files must exist |
-| Compare both correction sources across seeds | 05 | Yes, for federated runs |
+| Compare both correction sources across seeds | 05 | Only for new federated runs |
 
 Notebooks 02, 03, and 05 prepare inputs for all four datasets automatically from
 correction outputs and original metadata, including Quartet joint matrices.
@@ -247,6 +247,34 @@ number of samples with valid labels used for each ARI calculation.
 metrics_ari.tsv          # full metrics table (all datasets, methods, targets)
 ```
 Plots are displayed inline in the notebook.
+
+---
+
+### Step 5 — Repeated Seeds (`05_multiple_runs.ipynb`)
+
+Run 05 directly to compare central and federated k-means on uncorrected data and
+on their respective corrected matrices. It evaluates condition labels with ten
+seeds (1, 11, …, 91) and one initialization per seed.
+
+`RERUN_FEDERATED = False` reuses the saved assignment tables under
+`<dataset>/kmeans_res/runs/seed_NNN_metadata_before_multi_fedclusters.tsv` and
+`seed_NNN_metadata_corrected_fed_fedclusters.tsv`. The notebook checks sample
+alignment and recomputes ARI from these labels; central k-means is recomputed from
+the current matrices. Reuse assignments only with matching inputs and settings.
+Missing assignments raise an error. Set `RERUN_FEDERATED = True` to regenerate
+them with FeatureCloud and Docker.
+
+Select `CORRECTION_ARM` as described above; 05 also reads the `CORRECTION_ARM`
+environment variable, defaulting to `label_aware`. Outputs are relative to
+`OUTPUT_ROOT`:
+
+- `metrics_ari_multirun.tsv`: individual condition-target scores for every seed.
+- `ari_boxplots.png`: Figure 4-style boxplots and seed dots, saved by the shared
+  R plotting helper and displayed inline.
+
+Plotting requires the R environment from the
+[reproduction guide](../../docs/reproduce.md). FeatureCloud archives and extracted
+client CSVs are unnecessary when reusing assignment TSVs.
 
 ---
 
