@@ -247,6 +247,7 @@ class ClusteringPreparationTests(unittest.TestCase):
             source = "".join(notebook["cells"][4]["source"])
             for arm in ("label_aware", "no_label"):
                 namespace = {"NOTEBOOK_DIR": self.root,
+                             "os": SimpleNamespace(environ={"CORRECTION_ARM": arm}),
                              "sns": SimpleNamespace(set_theme=lambda **kwargs: None),
                              "plt": SimpleNamespace(rcParams={})}
                 with self.subTest(notebook=filename, arm=arm), contextlib.redirect_stdout(io.StringIO()):
