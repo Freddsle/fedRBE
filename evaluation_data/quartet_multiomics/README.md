@@ -93,12 +93,12 @@ diagnostics inline, including central and federated correction comparisons, and
 saves the after-correction counterparts of notebook 03's diagnostics to `plots/`. The
 separate notebook below exports the combined per-modality diagnostic figure.
 
-The [per-modality diagnostic notebook](../../evaluation/quartet_separated_modality_pca_fixed_effect_variance.ipynb)
-requires an R kernel, prepared per-modality inputs/metadata, and `FedApp_corrected_data.tsv`
-for the default three-client layout (48 samples per modality). It compares PCA and
-sequential fixed-effect variance: condition first, then additional lab variance.
-Embedded outputs have not been verified against current inputs.
-Generated figures stay local in `evaluation/tmp_quartet_multiomics_modality_diagnostics/`.
+The [S5 notebook](../../evaluation/quartet_separated_modality_pca_fixed_effect_variance.ipynb)
+runs after federated correction, using the default layout of 48 profiles and four
+batches across three clients per modality. Set `CORRECTION_ARM=label_aware`
+(default) or `no_label`. Its sequential model is `~ condition + batch` (donor first);
+PCA batch codes are modality-specific. See the
+[run command and outputs](../../docs/reproduce.md#7-generate-figures-3-4-and-s5-for-each-correction-arm).
 
 ## Directory orientation
 

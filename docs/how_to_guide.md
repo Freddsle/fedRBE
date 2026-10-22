@@ -156,9 +156,17 @@ Set `expression_file_flag` and `index_col` in `config.yml` to match the data:
 
 ### Incorporating covariates
 
+Values must be numeric, complete and finite; encode categorical variables as
+numeric indicator columns. See the app's
+[input requirements](../batchcorrection/README.md#input-requirements) for design
+rank, batch-label, finite-observation and SMPC configuration checks.
+
 List model covariates (e.g., age or treatment) under `covariates`. Supply their
-values in `design_filename`, or as features in the main data file if no separate
-design file is provided.
+values in `design_filename`, or in the main data file if no separate design file
+is provided: covariate rows for `expression_file_flag: True`, columns for `False`.
+Without a design file, each client contains one batch; use `covariates: []` for
+batch-only correction. Embedded covariates are excluded from corrected features
+and retained unchanged in the output with covariates.
 
 **Example:**
 ```yaml
@@ -167,8 +175,11 @@ covariates: ["Age", "Treatment"]
 
 ### Selecting a reference batch
 
-Without `reference_batch`, fedRBE uses the last client in `position` order as the
-reference. If both are unset, random ordering can make runs non-deterministic.
+Positions determine client order only when every client supplies an integer.
+Otherwise fedRBE uses the coordinator's client order, which may vary between runs.
+Without `reference_batch`, the last client's alphabetically last batch is the
+reference. In coordinator order, an explicit reference moves its client to the end;
+with integer positions, the reference client must already be last.
 
 **Example:**
 ```yaml
