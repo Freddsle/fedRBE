@@ -139,6 +139,36 @@ select_proportions <- function(mode_version){
 }
 
 
+generate_metadata <- function(batch_info, mode){
+
+    if (mode == "balanced"){
+        batches <- rep(c("batch1", "batch2", "batch3"), each = 100)
+        batch_info$condition <- as.factor(c(rep("A", 300), rep("B", 300)))
+        batch_info$batch <- as.factor(c(batches[sample(1:300)], batches[sample(1:300)]))
+
+    } else if (mode == "strong_imbalanced") {
+        batches_A <- c(rep("batch1", 32), rep("batch2", 28), rep("batch3", 288))
+        batches_B <- c(rep("batch1", 8), rep("batch2", 52), rep("batch3", 192))
+        batch_info$condition <- as.factor(c(rep("A", length(batches_A)), rep("B", length(batches_B))))
+        batch_info$batch <- as.factor(c(
+            batches_A[sample(1:length(batches_A))],
+            batches_B[sample(1:length(batches_B))]))
+
+    } else if(mode == "mild_imbalanced") {
+        batches_A <- c(rep("batch1", 36), rep("batch2", 91), rep("batch3", 185))
+        batches_B <- c(rep("batch1", 54), rep("batch2", 49), rep("batch3", 185))
+        batch_info$condition <- as.factor(c(rep("A", length(batches_A)), rep("B", length(batches_B))))
+        batch_info$batch <- as.factor(c(
+            batches_A[sample(1:length(batches_A))],
+            batches_B[sample(1:length(batches_B))]))
+    } else {
+        stop("Unknown mode: ", mode, call. = FALSE)
+    }
+    return(batch_info)
+
+}
+
+
 generate_data <- function(
     col_frac_A, col_frac_B,
     frac_1, frac_7,
@@ -202,6 +232,13 @@ generate_data <- function(
         drop_last_rows(data_mu2$dat, mu1_signal_rows),
         drop_last_rows(data_mu7$dat, mu7_signal_rows)
         )
+    # Ground truth for evaluation: row blocks follow the rbind order above.
+    attr(data_allmu, "feature_role") <- rep(
+        c("A_DE", "B_DE", "latent", "null"),
+        c(mu1_signal_rows, mu1_signal_rows, mu7_signal_rows,
+          nrow(data_allmu) - 2 * mu1_signal_rows - mu7_signal_rows)
+    )
+    attr(data_allmu, "latent_samples") <- new_names
 
     return(data_allmu)
 }

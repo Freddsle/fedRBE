@@ -92,7 +92,8 @@ filter_fedrbe_client <- function(
   num_batches,
   covariates = character(),
   min_samples = 0,
-  client_column_name = "lab"
+  client_column_name = "lab",
+  min_clients = 3L
 ) {
   effective_min_samples <- fedrbe_min_samples(
     num_batches = num_batches,
@@ -103,16 +104,6 @@ filter_fedrbe_client <- function(
 
   filtered_intensities <- filter_per_center(
     intensities = intensities,
-    metadata = metadata,
-    quantitative_column_name = quantitative_column_name,
-    centers = unique(metadata[[client_column_name]]),
-    center_column_name = client_column_name,
-    min_samples = 1,
-    drop_row = TRUE
-  )
-
-  filtered_intensities <- filter_per_center(
-    intensities = filtered_intensities,
     metadata = metadata,
     quantitative_column_name = quantitative_column_name,
     centers = unique(metadata[[batch_column_name]]),
@@ -130,6 +121,16 @@ filter_fedrbe_client <- function(
     min_samples = effective_min_samples,
     drop_row = FALSE
   )
+
+  # As the coordinator: keep features still observed in at least min_clients clients.
+  clients <- unique(metadata[[client_column_name]])
+  observed_clients <- Reduce(`+`, lapply(clients, function(client) {
+    samples <- metadata[[quantitative_column_name]][metadata[[client_column_name]] == client]
+    rowSums(!is.na(filtered_intensities[, samples, drop = FALSE])) > 0
+  }))
+  filtered_intensities <- filtered_intensities[observed_clients >= min_clients, , drop = FALSE]
+  message('\tAfter min_clients = ', min_clients, ' filtering: ',
+          paste(dim(filtered_intensities), collapse = " "))
 
   return(filtered_intensities)
 }
