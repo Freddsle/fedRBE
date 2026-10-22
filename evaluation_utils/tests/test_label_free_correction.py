@@ -212,6 +212,12 @@ class ArchiveCoverageTests(unittest.TestCase):
         self.assertEqual(self.sources, {p: p.read_bytes() for p in self.sources})
         self.assertFalse((self.clients[-1] / "config.yml").exists())
 
+    def assert_unpublished(self, folder, no_label=False, modality=None):
+        output = self.output(folder, no_label=no_label, modality=modality)
+        self.assertFalse(output.exists())
+        self.assertFalse((output.parent / "individual_results").exists())
+        self.assertFalse((output.parent / "datainfo.json").exists())
+
     def test_no_covariate_variant_retains_label_aware_filtering_and_settings(self):
         for smpc in (False, True):
             for changes in self.experiment.config_file_changes:
@@ -281,22 +287,47 @@ class ArchiveCoverageTests(unittest.TestCase):
             folder = f"invalid_{i}"
             with self.subTest(names=[p.name for p in paths]), self.assertRaises(ValueError):
                 self.run_campaign(folder, paired=False)
-            self.assertFalse(self.output(folder).exists())
+            self.assert_unpublished(folder)
+            self.assert_sources_preserved()
+
+    def test_rejected_full_correction_preserves_existing_outputs(self):
+        folder = "invalid_full"
+        self.run_campaign(folder, paired=False)
+        parent = self.output(folder).parent
+        existing = {p: p.read_bytes() for p in parent.rglob("*") if p.is_file()}
+        batch = self.inputs[1] + .25
+        changed_first = self.make_archive(0, self.inputs[0] + 99, "changed_first")
+        for i, full in enumerate((None, batch.iloc[:, :-1])):
+            path = self.root / f"invalid_full_{i}.zip"
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("only_batch_corrected_data.csv", batch.to_csv(sep="\t"))
+                if full is not None:
+                    archive.writestr("full_corrected_data.csv", full.to_csv(sep="\t"))
+            self.archive_override = [changed_first, path, self.paths[2]]
+            with self.subTest(case=i), self.assertRaises((RuntimeError, ValueError)):
+                self.run_campaign(folder, paired=False)
+            self.assertEqual(existing, {p: p.read_bytes() for p in parent.rglob("*")
+                                        if p.is_file()})
             self.assert_sources_preserved()
 
     def test_transport_and_paired_mask_failures_restore_existing_and_absent_configs(self):
         self.failure = "transport"
-        self.run_campaign("failed_transport")
+        with self.assertRaisesRegex(SystemExit, "Failed experiments: fixture"):
+            self.run_campaign("failed_transport")
         self.assertEqual(len(self.calls), 2)
-        self.assertFalse(self.output("failed_transport").exists())
-        self.assertFalse(self.output("failed_transport", no_label=True).exists())
+        self.assert_unpublished("failed_transport")
+        self.assert_unpublished("failed_transport", no_label=True)
         self.assert_sources_preserved()
         self.calls.clear()
+        self.failure = None
+        self.run_campaign("failed_mask")
+        parent = self.output("failed_mask", no_label=True).parent
+        existing = {p: p.read_bytes() for p in parent.rglob("*") if p.is_file()}
         self.failure = "mask"
         with self.assertRaisesRegex(ValueError, "missing-value"):
             self.run_campaign("failed_mask")
         self.assertTrue(self.output("failed_mask").exists())
-        self.assertFalse(self.output("failed_mask", no_label=True).exists())
+        self.assertEqual(existing, {p: p.read_bytes() for p in parent.rglob("*") if p.is_file()})
         self.assert_sources_preserved()
 
     def test_quartet_arm_first_outputs_keep_paired_missing_value_validation(self):
@@ -304,8 +335,7 @@ class ArchiveCoverageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "missing-value"):
             self.run_campaign("quartet/after", modality="Proteomics")
         self.assertTrue(self.output("quartet/after", modality="Proteomics").exists())
-        self.assertFalse(self.output("quartet/after", no_label=True,
-                                     modality="Proteomics").exists())
+        self.assert_unpublished("quartet/after", no_label=True, modality="Proteomics")
         self.assert_sources_preserved()
 
 

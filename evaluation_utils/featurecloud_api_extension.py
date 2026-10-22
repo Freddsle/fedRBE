@@ -27,7 +27,6 @@ import hashlib
 import yaml
 import docker
 import json
-import zipfile
 from copy import deepcopy
 
 from FeatureCloud.api.imp.test import commands as fc
@@ -35,6 +34,12 @@ from FeatureCloud.api.imp.controller import commands as fc_controller
 
 DEFAULT_CONTROLLER_HOST = "http://localhost:8000"
 TESTS_DIR = 'tests'
+MAX_RETRIES = 5
+
+
+class _RetryableTestError(RuntimeError):
+    """A failed attempt that requires a new controller test."""
+
 
 ### Classes
 @dataclass
@@ -92,13 +97,12 @@ class Experiment():
                         # longer than this, it is stopped and retried
                         # default is 15 minutes
 
-    def run_test(self, retry: int = 0) -> Tuple[List[str], int, ExperimentResult]:
+    def run_test(self) -> Tuple[List[str], int, ExperimentResult]:
         """
         Runs the experiment. Requires `_startup` to be called beforehand with the same `data_dir`.
-        Raises a `RuntimeError` on failure. Retries up to 5 times if the controller fails.
-
-        Args:
-            retry: Current retry attempt (int)
+        Retries up to five times after test launch failures, unavailable test status,
+        timeouts, or no reported coordinator. Each retry launches a fresh test.
+        A missing coordinator field is a metadata error and is not retried.
 
         Returns:
             Tuple:
@@ -109,8 +113,9 @@ class Experiment():
         Raises:
             RuntimeError: If the experiment fails after 5 retries
         """
-        if retry == 0:
-            print("_______________EXPERIMENT_______________")
+        if self.query_interval is not None and self.query_interval <= 0:
+            raise ValueError("query_interval must be positive")
+        print("_______________EXPERIMENT_______________")
 
         ### Check prerequisites
         client = docker.from_env()
@@ -130,40 +135,48 @@ class Experiment():
             print("Controller not running, starting it now!")
             self._startup()
 
-        ### Run the test
-        exp_id, experiment_meta_info = self._start_test(retry=retry)
-        # check_test will retry itself if needed, plus will only return a value once it's finished
-        instances, dirs = self._check_test(exp_id=exp_id, retry=retry)
-        print(f"instances: {instances}")
-        print("TEST DONE:")
-        ### Get the result file names
-        result_files = list()
-        instances.sort(key=lambda x: x['id']) # sort by id so that the order
-                                              # is always the client order (client 0 at index 0)
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                exp_id, experiment_meta_info = self._start_test()
+                instances = self._check_test(exp_id=exp_id)
+                # Client IDs determine the order of the returned archive paths.
+                instances.sort(key=lambda info: info['id'])
+                coord_idx = self._coordinator_index(instances)
+                result_files = [
+                    os.path.join(
+                        self.fc_data_dir, 'tests', TESTS_DIR,
+                        f"results_test_{exp_id}_client_{info['id']}_{info['name']}.zip",
+                    )
+                    for info in instances
+                ]
+            except _RetryableTestError as exc:
+                if attempt == MAX_RETRIES:
+                    raise RuntimeError(
+                        f"Experiment failed after {MAX_RETRIES} retries: {exc}"
+                    ) from exc
+                print(f"{exc}\nRetrying ({attempt + 1}/{MAX_RETRIES}) with a new test.")
+                time.sleep(5)
+                self._startup()
+                continue
+
+            print(f"instances: {instances}")
+            print("_______________EXPERIMENT FINISHED SUCCESSFULLY_______________")
+            return result_files, coord_idx, experiment_meta_info
+
+    def _coordinator_index(self, instances: List[dict]) -> int:
+        """Find the coordinator in client order, requiring complete metadata."""
         coord_idx = None
         for idx, info in enumerate(instances):
-            try:
-                if bool(info['coordinator']):
-                    coord_idx = idx
-            except:
-                raise RuntimeError("Instance does not have a coordinator key! " +\
-                                   "fc_controller API might have changed!")
-            file_path = os.path.join(self.fc_data_dir,
-                                     'tests',
-                                     TESTS_DIR,
-                                     f"results_test_{exp_id}_client_{info['id']}_{info['name']}.zip")
-            result_files.append(file_path)
-
+            if 'coordinator' not in info:
+                raise RuntimeError(
+                    "Instance does not have a coordinator key! "
+                    "fc_controller API might have changed!"
+                )
+            if bool(info['coordinator']):
+                coord_idx = idx
         if coord_idx is None:
-            print("No coordinator found in the instances!")
-            print("Restarting the test now!")
-            self._startup()
-            self.run_test(retry=retry+1)
-
-        print("_______________EXPERIMENT FINISHED SUCCESSFULLY_______________")
-        if coord_idx is None:
-            raise RuntimeError("No coordinator found in the instances!")
-        return result_files, coord_idx, experiment_meta_info
+            raise _RetryableTestError("No coordinator found in the instances!")
+        return coord_idx
 
     ### Helpers
     def _startup(self) -> None:
@@ -203,7 +216,7 @@ class Experiment():
         print("Controller started successfully, waiting 5s to ensure the controller is properly running!")
         time.sleep(5)
 
-    def _start_test(self, retry: int = 0) -> Tuple[int, ExperimentResult]:
+    def _start_test(self) -> Tuple[int, ExperimentResult]:
         """
         Starts a test with the given experiment configuration.
         Applies the experiment.config_file_changes given to experiment.config_files,
@@ -236,13 +249,7 @@ class Experiment():
         try:
             input_hashes = self._get_input_hashes()
         except Exception as e:
-            print(f"{e}")
-            retry += 1
-            if retry > 5:
-                raise RuntimeError(f"Test could not be started more than 5 times! Error: \n{e}")
-            time.sleep(5)
-            self._startup()
-            return self._start_test(retry=retry)
+            raise _RetryableTestError(f"Could not hash the test inputs: {e}") from e
 
 
         # finally fill the ExperimentResult instance
@@ -259,13 +266,12 @@ class Experiment():
             raise RuntimeError("The app image name should be given!")
         if self.controller_host is None:
             self.controller_host = DEFAULT_CONTROLLER_HOST
-        if self.generic_dir is None:
-            self.generic_dir = ""
-        elif self.generic_dir not in ("", "."):
+        generic_dir = self.generic_dir or ""
+        if generic_dir not in ("", "."):
             if os.path.exists(self.generic_dir) == False:
                 raise RuntimeError(f"Generic directory {self.generic_dir} does not exist!")
             else:
-                self.generic_dir = os.path.relpath(self.generic_dir, self.fc_data_dir)
+                generic_dir = os.path.relpath(self.generic_dir, self.fc_data_dir)
         if self.channel is None:
             self.channel = "local"
         if self.query_interval is None:
@@ -276,77 +282,50 @@ class Experiment():
             exp_id = fc.start(controller_host=self.controller_host,
                     app_image=self.app_image_name,
                     client_dirs=client_dirs,
-                    generic_dir=self.generic_dir,
+                    generic_dir=generic_dir,
                     channel=self.channel,
                     query_interval=self.query_interval,
                     download_results=TESTS_DIR)
         except Exception as e:
-            retry += 1
-            if retry > 5:
-                raise RuntimeError(f"Test could not be started more than 5 times! Error: \n{e}")
-            print(f"Could not start the test! Error: \n{e}")
-            print(f"retrying for the {retry}nth time")
-            time.sleep(5)
-            self._startup()
-            return self._start_test(retry=retry)
+            raise _RetryableTestError(f"Could not start the test: {e}") from e
 
 
         print("Test started successfully!")
         return int(exp_id), experiment_meta_info
 
-    def _check_test(self, exp_id: int, retry: int = 0) -> Tuple[List[dict], List[str]]:
+    def _check_test(self, exp_id: int) -> List[dict]:
         """
         Given a test id, checks the status of the test until it is finished.
-        If any errors occure, raises a RuntimeError.
-        Retries automatically upto 5 times in case e.g. the controller dies.
-        Retriying is done using the run_test function with incremented retry variable.
-        Timeouts if self.timeout is exceeded. Retries again then.
+        Polls one started attempt. Status failures and timeouts request a retry from
+        run_test, which owns the retry budget and the replacement test metadata.
         Args:
             exp_id (int): The number of the test to be checked
-            retry (int): The number of current retries, if the test could not be started, the function calls the _startup
-                        function and then itself with increased retry count.
-                        If retry exceeds 5, the function raises a RuntimeError.
         Returns:
-            Tuple of the following entries:
-            instances (List[dict]): A list of dictionaries containing the instances (clients) of the test
-                This information can be used to e.g. gather the result filenames
-                in a further step.
-
+            Client instance metadata used to locate result archives.
         """
         ### Get the status of the experiment
-        if self.controller_host is None:
-            self.controller_host = DEFAULT_CONTROLLER_HOST
-        time_run = int(time.time())
+        time_run = time.monotonic()
         while True:
             try:
                 test_info = fc.info(controller_host=self.controller_host, test_id=exp_id)
             except Exception as e:
-                print(f"Could not get the test info! Error: \n{e}")
-                retry += 1
-                print(f"retrying for the {retry}nth time")
-                if retry > 5:
-                    raise RuntimeError(f"Test could not be checked more than 5 times! Error: \n{e}")
-                time.sleep(5)
-                self._kill_leftover_container()
-                self.run_test(retry=retry)
+                raise _RetryableTestError(
+                    f"Could not get info for test {exp_id}: {e}"
+                ) from e
 
             status = test_info.iloc[0]['status']
-            instances = test_info.iloc[0]['instances']
-            dirs = test_info.iloc[0]['dirs']
             if status == "finished":
                 print("Test finished successfully!")
-                return instances, dirs
+                return test_info.iloc[0]['instances']
             if status == "error" or status == "stopped":
                 raise RuntimeError(f"Test finished with an error or was stopped! Status: {status}")
             # timeout handling
-            if int(time.time()) - time_run > self.timeout:
-                print("Test timed out! Restarting it now!")
+            if time.monotonic() - time_run > self.timeout:
                 fc.stop(controller_host=self.controller_host, test_id=exp_id)
                 time.sleep(30) # wait for the controller to stop the test
-                retry += 1
-                self.run_test(retry=retry)
-            # in any other case we just continue until the test exists with an
-            # error or is finished
+                raise _RetryableTestError(f"Test {exp_id} timed out after {self.timeout}s")
+            time.sleep(self.query_interval)
+
     def _get_input_hashes(self):
         input_hashes: Dict[str, Dict[str, Union[str, None]]] = dict()
             # see ExperimentResult class for more details
@@ -470,100 +449,3 @@ def hash_file(file_path, exclude=None):
         for chunk in iter(lambda: f.read(4096), b""):
             hasher.update(chunk)
     return hasher.hexdigest()
-
-
-def postprocess_results(exp, result_files_zipped, result_filename):
-    """Extract per-client FedRBE results and concatenate into a single corrected TSV.
-
-    Waits up to ~5 minutes for each client zip to appear on disk, extracts the
-    standard result files (``only_batch_corrected_data.csv``,
-    ``full_corrected_data.csv``, ``report.txt``) into
-    ``<result_folder>/individual_results/<client_name>/``, optionally rewrites a
-    sibling ``datainfo.json`` so that downstream pipelines see per-client
-    ``individual_results/<name>`` folders, and finally concatenates the
-    ``only_batch_corrected_data.csv`` files (column-wise) into a single TSV at
-    ``result_filename``.
-
-    Parameters
-    ----------
-    exp : Experiment
-        The experiment object whose ``clients`` list provides the per-client
-        folder names that will be used as result subdirectories.
-    result_files_zipped : list[str]
-        Absolute paths to per-client result zip files returned by
-        ``Experiment.run_test()``.
-    result_filename : str | os.PathLike
-        Output path for the concatenated corrected TSV. Its parent directory is
-        used as the result folder for ``individual_results/`` and any
-        ``datainfo.json``.
-
-    Returns
-    -------
-    pandas.DataFrame
-        The concatenated corrected expression matrix (features x samples).
-    """
-    import pandas as pd  # local import: keeps module import cheap
-
-    time.sleep(10)
-    result_filename = os.fspath(result_filename)
-    result_folder = os.path.dirname(result_filename) or "."
-    individual_results_dir = os.path.join(result_folder, 'individual_results')
-    os.makedirs(individual_results_dir, exist_ok=True)
-
-    client_names = [os.path.basename(p) for p in exp.clients]
-
-    for zip_path, client_name in zip(result_files_zipped, client_names):
-        # Wait for file to be available (FeatureCloud writes zips asynchronously)
-        for _ in range(60):
-            if os.path.exists(zip_path):
-                break
-            print(f'Waiting for {zip_path}...')
-            time.sleep(5)
-        else:
-            raise RuntimeError(f'Zip file not found after timeout: {zip_path}')
-
-        client_result_dir = os.path.join(individual_results_dir, client_name)
-        os.makedirs(client_result_dir, exist_ok=True)
-        with zipfile.ZipFile(zip_path, 'r') as zf:
-            zip_names = zf.namelist()
-            for fname in ['only_batch_corrected_data.csv', 'full_corrected_data.csv', 'report.txt']:
-                if fname in zip_names:
-                    zf.extract(fname, client_result_dir)
-                elif fname == 'full_corrected_data.csv':
-                    raise RuntimeError(
-                        f"'{fname}' not found in zip for client '{client_name}'. "
-                        f"Files in zip: {zip_names}"
-                    )
-                else:
-                    print(f"WARNING: '{fname}' not in zip for '{client_name}', skipping.")
-
-    # Update datainfo.json if present (used by some downstream pipelines)
-    datainfo_path = os.path.join(result_folder, 'datainfo.json')
-    if os.path.exists(datainfo_path):
-        with open(datainfo_path, 'r') as f:
-            datainfo = json.load(f)
-        for cohort in datainfo.get('cohorts', []):
-            cohort['folder'] = os.path.join('individual_results', cohort['name'])
-        if 'datafile' in datainfo:
-            datainfo['datafile']['filename'] = 'full_corrected_data.csv'
-            datainfo['datafile']['separator'] = '\t'
-        with open(datainfo_path, 'w') as f:
-            json.dump(datainfo, f, indent=2)
-        print(f'Updated datainfo.json at {datainfo_path}')
-
-    # Concatenate per-client corrected data
-    final_df = None
-    for client_name in client_names:
-        result_file = os.path.join(individual_results_dir, client_name, 'only_batch_corrected_data.csv')
-        if not os.path.exists(result_file):
-            print(f'WARNING: Result file not found for {client_name}: {result_file}')
-            continue
-        client_df = pd.read_csv(result_file, sep='\t', index_col=0)
-        final_df = client_df if final_df is None else pd.concat([final_df, client_df], axis=1)
-
-    if final_df is None:
-        raise RuntimeError('No data found in test results!')
-
-    final_df.to_csv(result_filename, sep='\t')
-    print(f'Saved concatenated result ({final_df.shape}) to {result_filename}')
-    return final_df

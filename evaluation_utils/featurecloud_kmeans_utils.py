@@ -338,40 +338,18 @@ def run_single_federated_variant(
         def _set_config_files(self) -> None:
             return
 
-        def run_test(self, retry: int = 0):
-            if retry == 0:
-                print("_______________EXPERIMENT_______________")
-
-            exp_id, exp_meta = self._start_test(retry=retry)
-            instances, _dirs = self._check_test(exp_id=exp_id, retry=retry)
-            print(f"instances: {instances}")
-            print("TEST DONE:")
-
-            instances.sort(key=lambda item: item["id"])
-            result_files: List[str] = []
+        def _coordinator_index(self, instances: List[dict]) -> int:
             coord_idx: Optional[int] = None
-            tests_subdir = getattr(fc_utils, "TESTS_DIR", "tests")
-
             for idx, info in enumerate(instances):
                 if bool(info.get("coordinator", False)):
                     coord_idx = idx
-                file_path = (
-                    Path(self.fc_data_dir)
-                    / "tests"
-                    / tests_subdir
-                    / f"results_test_{exp_id}_client_{info['id']}_{info['name']}.zip"
-                )
-                result_files.append(str(file_path))
-
             if coord_idx is None:
                 print(
                     "[WARN] No coordinator reported by controller metadata. "
                     "Continuing with fallback coordinator index 0."
                 )
-                coord_idx = 0 if result_files else -1
-
-            print("_______________EXPERIMENT FINISHED SUCCESSFULLY_______________")
-            return result_files, coord_idx, exp_meta
+                coord_idx = 0 if instances else -1
+            return coord_idx
 
     client_dirs = [variant_input_dir / client for client in client_names]
     for cd in client_dirs:
