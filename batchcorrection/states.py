@@ -36,7 +36,7 @@ class InitialState(AppState):
 
         # exchange the batch_labels and covariates
         self.send_data_to_coordinator((client.batch_labels,
-                                       list(client.hash2variable.keys())),
+                                       list(client.hash2variable.keys()), client.smpc),
                                     send_to_self=True,
                                     use_smpc=False)
         if self.is_coordinator:
@@ -44,7 +44,9 @@ class InitialState(AppState):
             list_labels_variables = self.gather_data(is_json=False)
             global_variables_hashed = None  # will become a list, not a set
             global_batch_labels = list()
-            for labels, variables in list_labels_variables:
+            for labels, variables, smpc in list_labels_variables:
+                if smpc != client.smpc:
+                    self.log("All clients must use the same boolean 'smpc' setting", LogLevel.FATAL)
                 # intersect the variables while preserving deterministic order
                 # (the order of the first client's list, which comes from the
                 # config file). Using a set here would cause non-deterministic
@@ -196,10 +198,14 @@ class ComputeCorrectionState(AppState):
         self.log("[compute_beta] gathering data")
         XtX_XtY_list = self.gather_data(use_smpc=self.load("smpc"))
         self.log("[compute_beta] Got XtX_XtY_list from gather_data")
+        xtx_error = 0.0
+        if self.load("smpc"):
+            xtx_error = len(self._app.clients) * 10.0 ** -self._app.default_smpc["exponent"]
         beta = compute_beta(XtX_XtY_list,
                             n=n,
                             k=k,
-                            global_mask=global_mask)
+                            global_mask=global_mask,
+                            xtx_error=xtx_error)
 
         # send beta to clients so they can correct their data
         self.log("[compute_beta] broadcasting betas")

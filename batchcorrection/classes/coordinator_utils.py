@@ -76,12 +76,13 @@ def create_feature_presence_matrix(
     if any([not isinstance(position, int) for _, position, _, _ in feature_batch_info]):
         # if any position is None, we use the default order
         print(f"INFO: Using the default client order: {default_order}")
-        client_order = default_order
-        if reference_client not in client_order:
-            raise ValueError(f"Reference client {reference_client} not found in the default order")
-        # switch reference_client to the last position
-        client_order.remove(reference_client)
-        client_order.append(reference_client)
+        client_order = list(default_order)
+        if reference_client is not None:
+            if reference_client not in client_order:
+                raise ValueError(f"Reference client {reference_client} not found in the default order")
+            # switch reference_client to the last position
+            client_order.remove(reference_client)
+            client_order.append(reference_client)
     else:
         # if all positions are integers, we use the order of the positions
         client_order = [cohort_name for cohort_name, _, _, _ in sorted(feature_batch_info, key=lambda x: x[1])] # type: ignore
@@ -119,7 +120,7 @@ def create_feature_presence_matrix(
     # we populate the matrix and the dictionary
     for cohort_idx, batch_name in enumerate(cohorts_order):
         # batch_name is a string like "<client_label>|<batch_label>"
-        if len(batch_name.split()) > 2:
+        if len(batch_name.split("|")) > 2:
             # sanity check of the input
             raise ValueError(f"Batch name incorrectly formatted: {batch_name}")
 
@@ -281,7 +282,7 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
 
 def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
                  n: int, k: int,
-                 global_mask: np.ndarray
+                 global_mask: np.ndarray, xtx_error: float = 0.0
                  ) -> np.ndarray:
     """
     Gets a list of a List containing the XtX and XtY matrices from each client
@@ -291,8 +292,8 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
             each client. The first element of the tuple is the XtX matrix and the
             second element is the XtY matrix.
             XtX should be of shape n x k x k and XtY should be of shape n x k.
-        smpc: A boolean indicating if then computation was done using SMPC
-            if yes, the data is already aggregated
+        xtx_error: Maximum absolute encoding error per aggregated XtX entry;
+            zero for plaintext.
         n: The expected number of features.
         k: The expected number of columns of the design matrix. Generally, is
             len(['intercept'] + [covariates] + [len(clients)-1])
@@ -320,9 +321,7 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         XtX_glob += XtX
         XtY_glob += XtY
 
-    # calculate the betas
-    # formula is beta = (XtX)^-1 * XtY
-    # if XtX is singular, we need to use the pseudo inverse
+    # Solve XtX * beta = XtY only when the coefficients are numerically identifiable.
     for i in range(0, n):
         # using the mask to remove the columns and rows that are not present
         mask = global_mask[i, :]
@@ -331,17 +330,16 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
             # we only take the rows and columns where the mask is set to
             # False (~ -> not mask)
 
-        if linalg.det(submatrix) == 0:
-            invXtX = linalg.pinv(submatrix)
-            print(f"INFO: Error at feature {i}")
-            print(f"Mask: {mask}")
-            print(f"submatrix: {submatrix}")
-            print(f"full XTX: {XtX_glob[i, :, :]}")
-            # raise ValueError(
-            #     "ERROR: Cannot calculate the linear models as the design matrix containing batch information " +\
-            #     "and covariates is singular, please check for colinearity between covariates/covariates and batches")
-        else:
-            invXtX = linalg.inv(submatrix)
-        beta[i, ~mask] = invXtX @ XtY_glob[i, ~mask]
+        if not np.isfinite(submatrix).all() or not np.isfinite(XtY_glob[i, ~mask]).all():
+            raise ValueError(f"Non-finite regression statistics for feature index {i}; check data and covariates.")
+        singular_values = linalg.svd(submatrix, compute_uv=False)
+        # Convert the per-entry error bound to a matrix error bound.
+        tolerance = len(submatrix) * max(singular_values[0] * np.finfo(float).eps, xtx_error)
+        if singular_values[-1] <= tolerance:
+            raise ValueError(
+                f"Cannot reliably fit feature index {i}: rank-deficient design or insufficient "
+                "numerical precision; check collinearity, missing observations and covariate scaling."
+            )
+        beta[i, ~mask] = linalg.solve(submatrix, XtY_glob[i, ~mask])
 
     return beta

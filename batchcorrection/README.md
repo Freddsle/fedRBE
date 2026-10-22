@@ -154,7 +154,9 @@ flimmaBatchCorrection:
   covariates: ["Pyr"]
     # Covariates included in the linear model.
     # Use [] to correct batch effects without biological covariates.
-    # If no design file, covariates must be present as features in the data file.
+    # A design file is optional for single-batch clients.
+    # Without one, covariates are rows when expression_file_flag is True,
+    # or columns when False; their values are retained unchanged in the output.
 
   separator: "\t"
     # Separator for main data file.
@@ -189,7 +191,9 @@ flimmaBatchCorrection:
     # Defines client order. The last client in order is the reference batch.
     # Example:
     #  C1(position=0), C2(position=2), C3(position=1) -> Order: C1, C3, C2 (C2 is reference).
-    # If empty/None, the order is random, making the batch correction run non deterministic
+    # Positions apply only when every client supplies an integer.
+    # Otherwise the coordinator's client order is used and may vary between runs.
+    # Without an explicit reference, the last client's alphabetically last batch is used.
 
   reference_batch: ""
     # Explicitly set a reference batch (string) or leave empty.
@@ -197,6 +201,15 @@ flimmaBatchCorrection:
 ```
 
 ---
+
+## Input requirements
+
+- Covariates must be numeric and finite; encode categories as numeric indicators.
+- Batch labels must be complete and contain no `|`; spaces are allowed.
+- All clients must use the same boolean `smpc` setting (default: `true`).
+- Only finite measurements count for privacy thresholds, batch presence and regression.
+- Each feature's design must be identifiable at the available numerical precision,
+  after masking missing batches. Rescale very small covariates if needed.
 
 ## FeatureCloud App states
 

@@ -105,9 +105,9 @@ class Client:
         else:
             covariates = config["covariates"]
         # read smpc
-        smpc = True
-        if "smpc" in config:
-            smpc = config["smpc"]
+        smpc = config.get("smpc", True)
+        if not isinstance(smpc, bool):
+            raise ValueError("smpc must be a boolean (true or false)")
 
         # read design file and design_seperator
         design_file_path = None
@@ -171,8 +171,8 @@ class Client:
         # load the data
         try:
             self.open_dataset(datafile_path, expr_file_flag, design_file_path, separator, design_separator, index_col)
-        except:
-            raise ValueError(f"Client {self.client_name}: Error loading dataset.")
+        except Exception as error:
+            raise ValueError(f"Client {self.client_name}: Error loading dataset: {error}") from error
         self.normalize(normalizationMethod)
         assert isinstance(self.data, pd.DataFrame)
         assert self.feature_names is not None
@@ -232,8 +232,12 @@ class Client:
                 relevant_cols.extend(self.variables)
             self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[relevant_cols]
             if self.batch_col:
+                if self.design[self.batch_col].isna().any():
+                    raise ValueError(f"Batch column '{self.batch_col}' must not contain missing labels")
                 # ensure batch column is string so label reconstruction via split works
                 self.design[self.batch_col] = self.design[self.batch_col].astype(str)
+                if self.design[self.batch_col].str.contains("|", regex=False).any():
+                    raise ValueError(f"Batch column '{self.batch_col}' must not contain '|' in labels")
                 # extract which batches exist
                 self.batch_labels = [f"{self.client_name}|{batchname}" for batchname in self.design[self.batch_col].unique()]
 
@@ -327,7 +331,7 @@ class Client:
         assert isinstance(self.data, pd.DataFrame)
         assert isinstance(self.feature_names, list)
         assert isinstance(self.hash2feature, dict)
-        assert isinstance(self.design, pd.DataFrame)
+        assert not self.batch_col or isinstance(self.design, pd.DataFrame)
 
         print(f"INFO: Each feature must at least have {min_samples} samples in a batch to be considered for batch effect correction. Otherwise, privacy cannot be guaranteed.")
 
@@ -347,7 +351,7 @@ class Client:
                 pure_batch_name = batch_label.split("|")[1]
                 batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index.tolist()
                 batch_data = self.data.loc[:, batch_indices]
-                non_nan_samples = batch_data.notnull().sum(axis=1)
+                non_nan_samples = np.isfinite(batch_data).sum(axis=1)
                 # find all features that have less than 2 samples
                 ignore_index = non_nan_samples[non_nan_samples == 1].index
                 if len(ignore_index) > 0:
@@ -357,9 +361,8 @@ class Client:
                 self.data.loc[ignore_index, batch_indices] = np.nan
 
 
-        # Second we check how many samples (non nan!) are available for each feature
-        # for the whole client
-        non_nan_samples = self.data.notnull().sum(axis=1)
+        # Second we count finite observations for each feature on the whole client.
+        non_nan_samples = np.isfinite(self.data).sum(axis=1)
         ignore_index = non_nan_samples[non_nan_samples < min_samples].index
         if len(ignore_index) > 0:
             print(f"INFO: Ignoring the following {len(ignore_index)} features for client {self.client_name} due to privacy reasons: {[self.hash2feature.get(hashed, hashed) for hashed in ignore_index]}")
@@ -381,8 +384,8 @@ class Client:
                 batch_data = self.data
 
             for feature in self.feature_names:
-                if feature in batch_data.index and not batch_data.loc[feature, :].isnull().all():
-                    # feature is available in this batch and not all samples are NaN
+                if feature in batch_data.index and np.isfinite(batch_data.loc[feature, :]).any():
+                    # At least one observation can contribute to the regression.
                     batch_feature_presence_info[batch_label].append(feature)
         return batch_feature_presence_info
 
@@ -427,11 +430,6 @@ class Client:
             for var in self.variables:
                 if var not in self.design.columns:
                     raise Exception(f"Variable {var} was not found in the design matrix")
-        else:
-            for var in self.variables:
-                assert self.data is not None
-                if var not in self.data.index.tolist():
-                    raise Exception(f"Variable {var} was not found in the data")
 
 
     def set_data(self, global_hashed_features: List[str]):
@@ -565,10 +563,16 @@ class Client:
         if self.variables:
             # first we ensure that the variables are in the loaded design matrix
             if self.variables_in_data:
-                self.design = self.design.join(self.rawdata.T[self.variables])
+                self.design = self.design.join(self._data_covariates())
             else:
                 if not all(column_name in self.design.columns for column_name in self.variables):
                     return f"ERROR: the given variables {self.variables} were not found in the given design matrix file."
+            for variable in self.variables:
+                values = self.design[variable]
+                if not pd.api.types.is_numeric_dtype(values):
+                    return f"Covariate '{variable}' must be numeric; encode categories as indicator columns."
+                if not np.isfinite(values.to_numpy()).all():
+                    return f"Covariate '{variable}' must contain only finite values (no missing values or infinities)."
             self.design = self.design.loc[:, ['intercept'] + self.variables + design_cohorts]
                 # IMPORTANT: this order of intercept, variables, cohorts is
                 # relevant for the batch correction later as well as for the
@@ -693,13 +697,7 @@ class Client:
         # so that downstream tasks (e.g. classification) retain covariate information.
         if self.variables:
             if self.variables_in_data:
-                # Covariates were embedded in the original data file (no separate design file).
-                if self.expr_file_flag:
-                    # rawdata is features × samples; covariate rows are still present.
-                    cov_data = self.rawdata.loc[self.variables]
-                else:
-                    # rawdata is samples × (features + covariates); covariates are columns.
-                    cov_data = self.rawdata[self.variables].T
+                cov_data = self._data_covariates().T
             else:
                 # Covariates were provided via a design file and are still in self.design.
                 cov_data = self.design[self.variables].T
@@ -712,6 +710,12 @@ class Client:
         print(f"INFO: Shape of full corrected data (features + covariates): {self.full_corrected_data.shape}")
 
     ### Helpers ###
+    def _data_covariates(self) -> pd.DataFrame:
+        """Return embedded covariates as samples x covariates in either layout."""
+        if self.expr_file_flag:
+            return self.rawdata.loc[self.variables].T
+        return self.rawdata[self.variables]
+
     def _check_consistency_designfile(self) -> None:
         """
         Used to checks whether the design files row names (samples) are consistent

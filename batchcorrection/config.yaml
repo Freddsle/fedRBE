@@ -4,6 +4,7 @@ flimmaBatchCorrection:
   design_filename: lab_A_design.tsv  # the file containing covariates
                                      # it is read in the following way:
                                      # pd.read_csv(design_file_path, sep=seperator, index_col=0)
+                                     # optional for single-batch clients
                                      # should therefore be in the format samples x covariates
                                      # with the first column being the sample indices
                                      # the order of the samples should be the same than in the data file
@@ -26,7 +27,7 @@ flimmaBatchCorrection:
                       # format: str or int, int is interpreted as the column index (starting from 0)
   covariates: ['Pyr'] # covariates in linear model. In case a design matrix is given
                       # they are expected in the design matrix, otherwise they are expected
-                      # to be features in the given data (in the data_filename file).
+                      # to be rows when expression_file_flag is True, columns otherwise.
                       # format: list of strings
   separator: "\t" # the separator used in the annotation or data file
   design_separator: "\t" # the separator used in the design file
@@ -62,8 +63,10 @@ flimmaBatchCorrection:
                  # Order -> Client1, Client3, Client2
                  # The last client in that order is always used as the reference
                  # batch, so in this case Client2
-                 # if empty/None, the order is random, making the batch correction
-                 # run non deterministic
+                 # positions apply only when every client supplies an integer
+                 # otherwise the coordinator's client order is used and may vary
+                 # between runs; without an explicit reference, the last client's
+                 # alphabetically last batch is used
   reference_batch: "" # if a string is given, the specified batch is used as
                       # the reference batch for the batch correction
                       # if True, this client is used as the reference batch
