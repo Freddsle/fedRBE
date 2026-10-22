@@ -53,6 +53,16 @@ class ClusteringPreparationTests(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             return prepare_dataset(self.cfg, self.prepared, **kwargs)
 
+    def test_canonical_ovarian_metadata_contains_only_five_retained_studies(self):
+        root = Path(__file__).resolve().parents[2]
+        cfg = shared.dataset_configs(root)["ovarian_cancer"]
+        clients = shared.discover_clients(cfg)
+        self.assertEqual([client.name for client in clients],
+                         ["GSE26712", "GSE38666", "GSE40595", "GSE6008", "GSE69428"])
+        metadata = shared.load_metadata(cfg, clients)
+        self.assertEqual(len(metadata), 308)
+        self.assertEqual(metadata.condition.value_counts().to_dict(), {"1": 267, "0": 41})
+
     def test_prepares_current_central_inputs_and_plot_intermediates(self):
         data = self.prepare()
         samples = ["s2", "s1", "s4", "s3"]
