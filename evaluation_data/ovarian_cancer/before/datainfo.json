@@ -15,6 +15,17 @@
   },
   "cohorts": [
     {
+      "name": "GSE10971",
+      "folder": "GSE10971",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
+    },
+    {
       "name": "GSE26712",
       "folder": "GSE26712",
       "designfile": {

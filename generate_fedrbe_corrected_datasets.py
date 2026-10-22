@@ -244,14 +244,15 @@ ovarian_cancer_experiment = util.Experiment(
     fc_data_dir=os.path.join(data_dir, "ovarian_cancer"),
     clients=[
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE6008"),
+        os.path.join(data_dir, "ovarian_cancer", "before", "GSE10971"),
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE26712"),
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE38666"),
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE40595"),
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE69428"),
     ],
     app_image_name=app_image_name,
-    config_files=[deepcopy(base_config) for _ in range(5)],
-    config_file_changes=[deepcopy(ovarian_cancer_config_file_changes) for _ in range(5)],
+    config_files=[deepcopy(base_config) for _ in range(6)],
+    config_file_changes=[deepcopy(ovarian_cancer_config_file_changes) for _ in range(6)],
 )
 ovarian_cancer_experiment_smpc = deepcopy(ovarian_cancer_experiment)
 set_smpc_true(ovarian_cancer_experiment_smpc)
