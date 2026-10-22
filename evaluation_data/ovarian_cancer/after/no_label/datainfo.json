@@ -1,8 +1,6 @@
 {
   "data_name": "Ovarian cancer",
-  "covariates": [
-    "HGSC"
-  ],
+  "covariates": [],
   "prediction_targets": [
     "HGSC"
   ],
@@ -14,17 +12,6 @@
     "featurename_column": null
   },
   "cohorts": [
-    {
-      "name": "GSE14407",
-      "folder": "individual_results/GSE14407",
-      "designfile": {
-        "filename": "../../../../before/GSE14407/design.tsv",
-        "separator": "\t",
-        "rotation": "samples x features",
-        "samplename_column": "file",
-        "featurename_column": null
-      }
-    },
     {
       "name": "GSE26712",
       "folder": "individual_results/GSE26712",
