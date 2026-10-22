@@ -117,7 +117,7 @@ lmpv_plot <- function(
   res_plots <- ggplot2::ggplot(df_long, ggplot2::aes(x = variable, y = value, fill = variable)) +
     ggplot2::geom_boxplot() +
     ggplot2::labs(title = title,
-                  y = "Variance explained, %",
+                  y = "Variance explained",
                   fill = fill_title) +
     ggplot2::scale_x_discrete(labels = term_labels) +
     ggplot2::scale_fill_discrete(name = fill_title, labels = term_labels) +

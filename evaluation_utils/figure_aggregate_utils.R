@@ -430,6 +430,10 @@ prepare_figure4a_plot_data <- function(
   seeds_per_group
 ) {
   assert_columns(ari, c("Dataset", "Target", "Method", "Seed", "ARI"), "ARI source")
+  identity_columns <- c("Dataset", "Target", "Method", "Seed")
+  if (anyNA(ari[identity_columns])) {
+    stop("Missing ARI experiment keys", call. = FALSE)
+  }
 
   missing_dataset_labels <- setdiff(dataset_order, names(dataset_labels))
   if (length(missing_dataset_labels) > 0) {
@@ -444,6 +448,13 @@ prepare_figure4a_plot_data <- function(
   if (nrow(plot_data) == 0) {
     stop("No condition-target rows found for Figure 4a", call. = FALSE)
   }
+  if (anyDuplicated(plot_data[identity_columns])) {
+    stop("Duplicate ARI experiment keys", call. = FALSE)
+  }
+  plot_data$ARI <- suppressWarnings(as.numeric(plot_data$ARI))
+  if (any(!is.finite(plot_data$ARI) | plot_data$ARI < -1 | plot_data$ARI > 1)) {
+    stop("ARI scores must be finite and between -1 and 1", call. = FALSE)
+  }
 
   missing_datasets <- setdiff(dataset_order, unique(plot_data$Dataset))
   if (length(missing_datasets) > 0) {
@@ -455,18 +466,13 @@ prepare_figure4a_plot_data <- function(
     stop("Unexpected ARI methods: ", paste(unexpected_methods, collapse = ", "), call. = FALSE)
   }
 
-  seed_counts <- stats::aggregate(
-    Seed ~ Dataset + Method,
-    data = plot_data,
-    FUN = function(x) length(unique(x))
+  seed_counts <- table(
+    factor(plot_data$Dataset, levels = dataset_order),
+    factor(plot_data$Method, levels = names(method_labels))
   )
-  incomplete <- seed_counts[seed_counts$Seed != seeds_per_group, , drop = FALSE]
-  if (nrow(incomplete) > 0) {
+  if (any(seed_counts != seeds_per_group)) {
     stop(
-      "Expected ",
-      seeds_per_group,
-      " seeds per Figure 4a dataset/method group; incomplete groups: ",
-      paste(apply(incomplete, 1, paste, collapse = "/"), collapse = ", "),
+      "Expected ", seeds_per_group, " seeds in every Figure 4a dataset/method group",
       call. = FALSE
     )
   }
@@ -511,7 +517,8 @@ prepare_figure4_classification_data <- function(
   scenario_order,
   simulated_datasets,
   excluded_datasets,
-  average_client_name
+  average_client_name,
+  metric_name = "MCC"
 ) {
   assert_columns(
     report,
@@ -529,8 +536,19 @@ prepare_figure4_classification_data <- function(
     "classification source"
   )
 
+  if (!metric_name %in% c("MCC", "F1_score") ||
+      !cv_method %in% c("Train-Test-Split", "Leave-One-Cohort-Out")) {
+    stop("Unexpected classification metric or validation method", call. = FALSE)
+  }
+  identity_columns <- c(
+    "data_name", "data_preprocessing_name", "metric_name", "predicted_client_name",
+    "cross_validation_method", "seed", "predicted_target", "learning_type"
+  )
+  if (anyNA(report[identity_columns])) {
+    stop("Missing classification experiment keys", call. = FALSE)
+  }
   subset <- report[
-    report$metric_name == "MCC" & report$cross_validation_method == cv_method,
+    report$metric_name == metric_name & report$cross_validation_method == cv_method,
     ,
     drop = FALSE
   ]
@@ -563,21 +581,20 @@ prepare_figure4_classification_data <- function(
   }
 
   subset <- subset[!is.na(subset$Task) & !is.na(subset$Scenario), , drop = FALSE]
-  federated_average <- tolower(subset$learning_type) == "federated" &
-    subset$predicted_client_name == average_client_name
-  subset <- subset[!federated_average, , drop = FALSE]
-
-  dedup_columns <- c(
-    "Task",
-    "Scenario",
-    "metric_name",
-    "metric_value",
-    "predicted_client_name",
-    "cross_validation_method",
-    "seed",
-    "predicted_target"
-  )
-  subset <- subset[!duplicated(subset[dedup_columns]), , drop = FALSE]
+  if (anyDuplicated(subset[identity_columns])) {
+    stop("Duplicate classification experiment keys", call. = FALSE)
+  }
+  subset$metric_value <- suppressWarnings(as.numeric(subset$metric_value))
+  lower_bound <- if (metric_name == "MCC") -1 else 0
+  if (any(!is.finite(subset$metric_value) |
+          subset$metric_value < lower_bound | subset$metric_value > 1)) {
+    stop("Classification scores must be finite and within the metric's range",
+         call. = FALSE)
+  }
+  # Both learning methods contribute one pooled score per seed for train/test.
+  # Their sample splits still differ. LOCO contributes individual held-out cohorts.
+  pooled <- subset$predicted_client_name == average_client_name
+  subset <- subset[if (cv_method == "Train-Test-Split") pooled else !pooled, , drop = FALSE]
 
   subset$Task <- factor(subset$Task, levels = task_order, ordered = TRUE)
   subset$Scenario <- factor(subset$Scenario, levels = scenario_order, ordered = TRUE)
@@ -810,6 +827,200 @@ plot_figure4_box_panel <- function(
 }
 
 
+figure4_scenarios <- function() {
+  colors <- c(
+    "Central before BEC" = "#9E9E9E", "Federated before BEC" = "#D55E00",
+    "Central after BEC" = "#0072B2", "Federated after BEC" = "#009E73"
+  )
+  list(order = names(colors), colors = colors)
+}
+
+
+export_classification_plots <- function(results_file, plots_dir) {
+  require_figure4_packages()
+  report <- utils::read.csv(results_file, stringsAsFactors = FALSE, check.names = FALSE)
+  task_labels <- c(
+    "E. coli|Pyr" = "E. coli\n(Pyr)",
+    "Ovarian cancer|HGSC" = "Ovarian cancer\n(HGSC)",
+    "ccRCC|Condition" = "ccRCC\n(condition)",
+    "Quartet Multiomics|condition" = "Quartet multiomics\n(condition)"
+  )
+  required_columns <- c(
+    "data_name", "data_preprocessing_name", "metric_name", "metric_value",
+    "predicted_client_name", "cross_validation_method", "seed", "predicted_target",
+    "learning_type"
+  )
+  assert_columns(report, required_columns, "RF metric report")
+  report <- report[report$data_name %in% sub("\\|.*$", "", names(task_labels)), , drop = FALSE]
+  if (!nrow(report)) stop("No canonical real-data RF tasks in the report", call. = FALSE)
+  task_labels <- task_labels[sub("\\|.*$", "", names(task_labels)) %in% report$data_name]
+  task_order <- unname(task_labels)
+  arms <- c(label_aware = "corrected", no_label = "no_label")
+  arm_titles <- c(label_aware = "Label-aware correction", no_label = "Label-free correction")
+  cv_titles <- c(
+    "Leave-One-Cohort-Out" = "RF leave-one-cohort-out",
+    "Train-Test-Split" = "RF 70:30 train/test split"
+  )
+  metric_labels <- c(MCC = "MCC", F1_score = "Weighted F1 score")
+  if (anyNA(report[required_columns]) ||
+      any(!report$data_preprocessing_name %in% c("uncorrected", unname(arms))) ||
+      any(!report$learning_type %in% c("centralized", "federated")) ||
+      any(!report$metric_name %in% names(metric_labels)) ||
+      any(!report$cross_validation_method %in% names(cv_titles))) {
+    stop("Missing or unexpected RF values in the report", call. = FALSE)
+  }
+  report$seed <- suppressWarnings(as.numeric(report$seed))
+  if (any(!is.finite(report$seed) | report$seed != floor(report$seed))) {
+    stop("RF seeds must contain finite integers", call. = FALSE)
+  }
+  seeds <- sort(unique(report$seed))
+  arms <- arms[arms %in% report$data_preprocessing_name]
+  if (!length(arms)) stop("No corrected RF arm found in the report", call. = FALSE)
+  style <- figure4_scenarios()
+  panels <- list()
+  for (arm in names(arms)) {
+    arm_data <- report[report$data_preprocessing_name %in% c("uncorrected", arms[[arm]]),
+                       , drop = FALSE]
+    scenario_keys <- paste(
+      rep(c("centralized", "federated"), 2),
+      rep(c("uncorrected", arms[[arm]]), each = 2), sep = "|"
+    )
+    scenario_labels <- stats::setNames(style$order, scenario_keys)
+    for (metric in names(metric_labels)) {
+      for (cv in names(cv_titles)) {
+        data <- prepare_figure4_classification_data(
+          arm_data, cv, task_labels, task_order, scenario_labels, style$order,
+          simulated_datasets = character(), excluded_datasets = character(),
+          average_client_name = "All", metric_name = metric
+        )
+        if (any(table(data$Task, data$Scenario) == 0L)) {
+          stop("Missing RF task/scenario results for ", arm, "/", metric, "/", cv,
+               call. = FALSE)
+        }
+        # Every recorded test cohort must have the same seeds in all scenarios.
+        for (task in task_order) {
+          task_data <- data[data$Task == task, , drop = FALSE]
+          expected <- expand.grid(
+            Scenario = style$order, predicted_client_name = unique(task_data$predicted_client_name),
+            seed = seeds, stringsAsFactors = FALSE
+          )
+          key_columns <- c("Scenario", "predicted_client_name", "seed")
+          keys <- function(frame) do.call(paste, c(frame[key_columns], sep = "|"))
+          if (!setequal(keys(task_data), keys(expected))) {
+            stop("Incomplete RF cohort/seed coverage for ", arm, "/", metric, "/", cv,
+                 "/", task, "; expected every recorded seed in every scenario", call. = FALSE)
+          }
+        }
+        path <- file.path(plots_dir, arm, paste0(
+          "classification_", tolower(metric), "_", tolower(cv), "_boxplot.png"
+        ))
+        panels[[path]] <- list(data = data, arm = arm, metric = metric, cv = cv)
+      }
+    }
+  }
+  # Validate every panel before replacing any existing plots.
+  for (path in names(panels)) {
+    item <- panels[[path]]
+    metric_min <- min(vapply(
+      Filter(function(panel) panel$metric == item$metric, panels),
+      function(panel) min(panel$data$metric_value), numeric(1)
+    ))
+    y_min <- if (item$metric == "MCC") min(-0.25, floor(metric_min * 4) / 4) else -0.02
+    y_breaks <- if (item$metric == "MCC") {
+      sort(unique(c(-0.2, seq(0, 1, 0.25), if (y_min < -0.25) y_min)))
+    } else seq(0, 1, 0.25)
+    panel <- plot_figure4_box_panel(
+      data = item$data, x_col = "Task", y_col = "metric_value", x_levels = task_order,
+      y_label = metric_labels[[item$metric]],
+      panel_tag = paste(arm_titles[[item$arm]], cv_titles[[item$cv]], sep = " · "),
+      y_limits = c(y_min, 1.05), y_breaks = y_breaks,
+      scenario_order = style$order, scenario_colors = style$colors, point_size = 1.05
+    ) + ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
+    dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+    ggplot2::ggsave(path, plot = panel, width = 7.5, height = 3.2,
+                    units = "in", dpi = 600, bg = "white")
+    message("Saved ", path, " (", nrow(item$data), " seed scores)")
+  }
+  invisible(names(panels))
+}
+
+
+export_clustering_plot <- function(ari_path, output_path, correction_arm) {
+  require_figure4_packages()
+  arm_titles <- c(label_aware = "Label-aware correction", no_label = "Label-free correction")
+  if (length(correction_arm) != 1L || !correction_arm %in% names(arm_titles)) {
+    stop("correction_arm must be label_aware or no_label", call. = FALSE)
+  }
+  dataset_labels <- c(
+    ecoli = "E. coli", ovarian_cancer = "Ovarian\ncancer",
+    ccRCC_proteomics = "ccRCC\nproteomics", quartet_multiomics = "Quartet\nmultiomics"
+  )
+  method_labels <- c(
+    BC_Cntrl = "Central before BEC", BC_Fed = "Federated before BEC",
+    AC_Cntrl = "Central after BEC", AC_Fed = "Federated after BEC"
+  )
+  ari <- utils::read.delim(ari_path, stringsAsFactors = FALSE, check.names = FALSE)
+  key_columns <- c("Dataset", "Target", "K", "Method", "Seed")
+  assert_columns(ari, c(key_columns, "ARI"), "ARI report")
+  if (anyNA(ari[key_columns])) stop("Missing ARI experiment keys", call. = FALSE)
+  ari <- ari[ari$Target == "condition", , drop = FALSE]
+  if (!nrow(ari)) stop("No condition-target ARI scores", call. = FALSE)
+  for (column in c("K", "Seed")) {
+    ari[[column]] <- suppressWarnings(as.numeric(ari[[column]]))
+    if (any(!is.finite(ari[[column]]) | ari[[column]] != floor(ari[[column]]))) {
+      stop("ARI ", column, " must contain finite integers", call. = FALSE)
+    }
+  }
+  if (any(ari$K < 1)) stop("ARI K must be positive", call. = FALSE)
+  dataset_order <- c(
+    names(dataset_labels)[names(dataset_labels) %in% ari$Dataset],
+    setdiff(unique(ari$Dataset), names(dataset_labels))
+  )
+  dataset_labels <- c(
+    dataset_labels,
+    stats::setNames(setdiff(dataset_order, names(dataset_labels)),
+                    setdiff(dataset_order, names(dataset_labels)))
+  )[dataset_order]
+  k_by_dataset <- vapply(dataset_order, function(dataset) {
+    values <- unique(ari$K[ari$Dataset == dataset])
+    if (length(values) != 1L) {
+      stop("ARI K differs between runs for ", dataset, call. = FALSE)
+    }
+    values
+  }, numeric(1))
+  seeds <- sort(unique(ari$Seed))
+  expected <- expand.grid(
+    Dataset = dataset_order, Method = names(method_labels), Seed = seeds,
+    stringsAsFactors = FALSE
+  )
+  expected$Target <- "condition"
+  expected$K <- unname(k_by_dataset[expected$Dataset])
+  keys <- function(frame) do.call(paste, c(frame[key_columns], sep = "|"))
+  if (anyNA(ari[key_columns]) || anyDuplicated(ari[key_columns]) ||
+      !setequal(keys(ari), keys(expected))) {
+    stop("Expected every dataset/seed for all four ARI methods, with consistent K ",
+         "and no duplicate experiment keys", call. = FALSE)
+  }
+  style <- figure4_scenarios()
+  data <- prepare_figure4a_plot_data(
+    ari, dataset_order, dataset_labels, method_labels, style$order, seeds_per_group = length(seeds)
+  )
+  y_min <- min(-0.25, floor(min(data$ARI) * 4) / 4)
+  y_breaks <- sort(unique(c(-0.2, seq(0, 1, 0.25), if (y_min < -0.25) y_min)))
+  panel <- plot_figure4_box_panel(
+    data = data, x_col = "DatasetLabel", y_col = "ARI", x_levels = unname(dataset_labels),
+    y_label = "ARI", panel_tag = paste(arm_titles[[correction_arm]], "k-means clustering", sep = " · "),
+    y_limits = c(y_min, 1.05), y_breaks = y_breaks,
+    scenario_order = style$order, scenario_colors = style$colors, point_size = 1.05
+  ) + ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
+  dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
+  ggplot2::ggsave(output_path, plot = panel, width = 7.5, height = 3.2,
+                  units = "in", dpi = 600, bg = "white")
+  message("Saved ", output_path, " (", nrow(data), " unchanged seed scores)")
+  invisible(normalizePath(output_path, mustWork = TRUE))
+}
+
+
 make_figure4_plot <- function(
   figure4_data,
   dataset_labels,
@@ -836,8 +1047,8 @@ make_figure4_plot <- function(
     x_levels = ari_levels,
     y_label = "ARI",
     panel_tag = "a) k-means clustering",
-    y_limits = c(-0.1, 1.05),
-    y_breaks = c(-0.1, 0, 0.25, 0.5, 0.75, 1),
+    y_limits = c(min(-0.25, floor(min(figure4_data$ari$ARI) * 4) / 4), 1.05),
+    y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
     point_size = point_size
