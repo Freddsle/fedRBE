@@ -23,7 +23,7 @@ def _confusion_matrix_scores(matrix) -> Tuple[float, float]:
     counts = np.asarray(matrix)
     true_classes, predicted_classes = np.nonzero(counts)
     weights = counts[true_classes, predicted_classes]
-    mcc = matthews_corrcoef(true_classes, predicted_classes)
+    mcc = matthews_corrcoef(true_classes, predicted_classes, sample_weight=weights)
     f1 = f1_score(true_classes, predicted_classes, sample_weight=weights,
                   average='weighted', zero_division=0)
     return float(mcc), float(f1)
