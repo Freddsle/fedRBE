@@ -3,10 +3,12 @@
 import contextlib
 import io
 import json
+import os
 from pathlib import Path
 import tempfile
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 import pandas as pd
 
@@ -53,15 +55,16 @@ class ClusteringPreparationTests(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             return prepare_dataset(self.cfg, self.prepared, **kwargs)
 
-    def test_canonical_ovarian_metadata_contains_only_five_retained_studies(self):
+    def test_canonical_ovarian_metadata_contains_six_distinct_studies(self):
         root = Path(__file__).resolve().parents[2]
         cfg = shared.dataset_configs(root)["ovarian_cancer"]
         clients = shared.discover_clients(cfg)
         self.assertEqual([client.name for client in clients],
-                         ["GSE26712", "GSE38666", "GSE40595", "GSE6008", "GSE69428"])
+                         ["GSE10971", "GSE26712", "GSE38666", "GSE40595", "GSE6008", "GSE69428"])
         metadata = shared.load_metadata(cfg, clients)
-        self.assertEqual(len(metadata), 308)
-        self.assertEqual(metadata.condition.value_counts().to_dict(), {"1": 267, "0": 41})
+        self.assertEqual(len(metadata), 331)
+        self.assertEqual(metadata.condition.value_counts().to_dict(), {"1": 278, "0": 53})
+        self.assertTrue(metadata.file.is_unique)
 
     def test_prepares_current_central_inputs_and_plot_intermediates(self):
         data = self.prepare()
@@ -195,7 +198,7 @@ class ClusteringPreparationTests(unittest.TestCase):
                 # Start multirun from modality inputs too, rather than files made by 02.
                 cfg.before_matrix.unlink()
                 cfg.corrected_central.unlink()
-                namespace = {**vars(shared), "pd": pd, "REPO_ROOT": self.root,
+                namespace = {**vars(shared), "pd": pd, "os": os, "REPO_ROOT": self.root,
                              "DATASET_CONFIG": None, "DATASETS": None,
                              "CORRECTION_ARM": arm,
                              "dataset_configs": lambda *args, **kwargs: {cfg.name: cfg}}
@@ -247,10 +250,12 @@ class ClusteringPreparationTests(unittest.TestCase):
             source = "".join(notebook["cells"][4]["source"])
             for arm in ("label_aware", "no_label"):
                 namespace = {"NOTEBOOK_DIR": self.root,
-                             "os": SimpleNamespace(environ={"CORRECTION_ARM": arm}),
+                             "os": os,
                              "sns": SimpleNamespace(set_theme=lambda **kwargs: None),
                              "plt": SimpleNamespace(rcParams={})}
-                with self.subTest(notebook=filename, arm=arm), contextlib.redirect_stdout(io.StringIO()):
+                with self.subTest(notebook=filename, arm=arm), \
+                        patch.dict(os.environ, {"CORRECTION_ARM": arm}), \
+                        contextlib.redirect_stdout(io.StringIO()):
                     exec(source.replace('CORRECTION_ARM = "label_aware"',
                                         f'CORRECTION_ARM = "{arm}"'), namespace)
                     expected = self.root if arm == "label_aware" else self.root / arm

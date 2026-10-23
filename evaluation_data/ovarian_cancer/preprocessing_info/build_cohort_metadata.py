@@ -12,7 +12,55 @@ import matplotlib.pyplot as plt
 
 
 ROOT = Path(__file__).resolve().parent
-STUDIES = ("GSE6008", "GSE26712", "GSE40595", "GSE69428", "GSE38666")
+STUDIES = ("GSE6008", "GSE26712", "GSE40595", "GSE69428", "GSE38666", "GSE10971")
+# Tissue sampled per study and class, from the GEO source descriptions.
+TISSUE = {
+    ("GSE6008", "Control"): "Normal ovary, bulk tissue",
+    ("GSE6008", "HGSC"): "Ovarian tumour, bulk tissue",
+    ("GSE26712", "Control"): "Ovarian surface epithelium, brushing",
+    ("GSE26712", "HGSC"): "Ovarian tumour, bulk tissue",
+    ("GSE40595", "Control"): "Ovarian surface epithelium, microdissected",
+    ("GSE40595", "HGSC"): "Tumour epithelium, microdissected",
+    ("GSE69428", "Control"): "Normal oviduct epithelium, LCM",
+    ("GSE69428", "HGSC"): "HGSOC, LCM",
+    ("GSE38666", "Control"): "Ovarian surface epithelium, brushing (LCM-derived)",
+    ("GSE38666", "HGSC"): "Cancer epithelium, LCM",
+    ("GSE10971", "Control"): "Fallopian tube epithelium, LCM",
+}
+
+
+def gse10971_rows(fields):
+    """Rows for the sixth study from its harmonized GEO metadata (notebook 00)."""
+    path = ROOT.parent / "before" / "GSE10971" / "intermediate" / "1_metadata_short.tsv"
+    with path.open() as handle:
+        short = list(csv.DictReader(handle, delimiter="\t"))
+    rows = []
+    for item in short:
+        if item["Status"] not in {"normal", "ovarian tumour"}:
+            raise ValueError("GSE10971 has an unrecognized clinical condition.")
+        tumour = item["Status"] == "ovarian tumour"
+        age = item["age"]
+        row = {name: "NA" for name in fields}
+        row.update(sample_id=item["Sample_geo_ID"], study="GSE10971", HGSC="1" if tumour else "0",
+                   condition="HGSC" if tumour else "Control", age_years=age,
+                   age_source="Original GEO age",
+                   age_group_60=">=60" if float(age) >= 60 else "<60",
+                   stage_group="Missing" if tumour else "Control: N/A",
+                   stage_source_discrepancy="no",
+                   grade_numeric="Missing" if tumour else "Control: N/A",
+                   grade_raw="high grade" if tumour else "NA",
+                   grade_source=("GEO sample title (high grade serous carcinoma)"
+                                 if tumour else "Control: N/A"),
+                   surgery_outcome="Missing" if tumour else "Control: N/A",
+                   survival_status="Missing" if tumour else "Control: N/A",
+                   donor_id=item["donor_id"], tissue=item["tissue"] + ", LCM",
+                   brca_status=item["brca_status"])
+        rows.append(row)
+    if (len(rows) != 23 or sum(row["HGSC"] == "1" for row in rows) != 11
+            or len({row["sample_id"] for row in rows}) != 23
+            or len({row["donor_id"] for row in rows}) != 23):
+        raise ValueError("GSE10971 harmonized metadata does not contain the 23 selected arrays.")
+    return rows
 
 
 def build():
@@ -36,11 +84,14 @@ def build():
                 or right["study"] != pair["retained_study"]):
             raise ValueError("Inconsistent raw CEL duplicate mapping.")
     counterparts = {pair["retained_sample"]: pair["excluded_sample"] for pair in pairs}
+    fields += ["tissue", "brca_status"]
     selected = []
     for row in source:
         if row["study"] in STUDIES and row["sample_id"] not in excluded:
-            selected.append({**{name: row[name] for name in fields},
+            selected.append({**{name: row[name] for name in fields if name in row},
+                             "tissue": TISSUE[(row["study"], row["condition"])], "brca_status": "NA",
                              "excluded_duplicate_sample": counterparts.get(row["sample_id"], "NA")})
+    selected += [{**row, "excluded_duplicate_sample": "NA"} for row in gse10971_rows(fields)]
     before = ROOT.parent / "before"
     descriptor = json.loads((before / "datainfo.json").read_text())
     if {cohort["name"] for cohort in descriptor["cohorts"]} != set(STUDIES):
@@ -86,7 +137,7 @@ def plot(groups):
         ("surgery_outcome", "surgery outcome", [("Optimal", orange), ("Suboptimal", blue),
                                                 ("Missing", missing), ("Control: N/A", undefined)]),
     ]
-    fig, axes = plt.subplots(1, 5, figsize=(18, 5.5), sharey=True)
+    fig, axes = plt.subplots(1, 5, figsize=(18, 6.2), sharey=True)
     for axis, (field, title, categories) in zip(axes, panels):
         left = [0.0] * len(groups)
         for category, color in categories:
@@ -117,12 +168,13 @@ def plot(groups):
         axis.tick_params(labelsize=8)
         axis.title.set_fontsize(10)
     total = sum(map(len, groups))
-    fig.suptitle(f"Ovarian microarray evaluation: metadata for {total} arrays from five studies",
-                 fontsize=13, y=0.98)
+    fig.suptitle(f"Ovarian microarray evaluation: metadata for {total} arrays from "
+                 f"{len(groups)} studies", fontsize=13, y=0.98)
     fig.text(0.5, 0.025,
              "Bars: fraction of arrays. Light grey = undefined in controls; grey = unavailable. "
              "No imputation.\nCounts are arrays, not unique patients. "
-             "GSE14407 is excluded using exact raw CEL duplication.",
+             "GSE14407 is excluded using exact raw CEL duplication; GSE10971 uses one array per "
+             "patient and FTEn fallopian tube epithelium controls.",
              ha="center", fontsize=8)
     fig.subplots_adjust(left=0.10, right=0.99, top=0.80, bottom=0.27, wspace=0.14)
     fig.savefig(ROOT / "cohort_metadata.png", dpi=150)

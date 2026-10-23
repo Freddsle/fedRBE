@@ -24,6 +24,8 @@ from batchcorrection.classes.coordinator_utils import (
 )
 from evaluation_utils import run_correction_experiments as correction
 from evaluation_utils.real_datasets_utils import (
+    dataset_configs,
+    discover_clients,
     read_correction_matrix as read_matrix,
     validate_corrected_matrix as validate_corrected,
     validate_experiment_dir,
@@ -88,6 +90,40 @@ class FrozenCorrectionTests(unittest.TestCase):
         for matrix in (frozen.iloc[:-1], frozen.iloc[:, :-1], frozen.fillna(0.)):
             with self.subTest(shape=matrix.shape), self.assertRaises(ValueError):
                 validate_corrected(matrix, frozen)
+
+
+class CanonicalExperimentTests(unittest.TestCase):
+    def test_ovarian_variants_keep_six_configs_and_recorded_client_positions(self):
+        from evaluation_utils import featurecloud_api_extension as api
+        with patch.object(api.Experiment, "_startup", side_effect=AssertionError(
+            "Inspecting canonical experiments must not start the controller"
+        )):
+            import generate_fedrbe_corrected_datasets as federated
+        expected = ["GSE6008", "GSE10971", "GSE26712", "GSE38666", "GSE40595", "GSE69428"]
+        clients = discover_clients(dataset_configs(REPO)["ovarian_cancer"])
+        self.assertEqual([client.name for client in clients], sorted(expected))
+        variants = [(experiment, path) for experiment, path in federated.experiments
+                    if path.startswith("ovarian_cancer/")]
+        self.assertEqual(len(variants), 4)
+        for experiment, path in variants:
+            with self.subTest(output=path):
+                self.assertEqual([Path(client).name for client in experiment.clients], expected)
+                self.assertEqual(len(experiment.config_files), len(expected))
+                changes = experiment.config_file_changes
+                if "/no_label/" in path:
+                    self.assertIsNone(changes)
+                    changes = [{} for _ in expected]
+                else:
+                    self.assertEqual(len(changes), len(expected))
+                for position, (config, change) in enumerate(zip(experiment.config_files, changes)):
+                    settings = {**config["flimmaBatchCorrection"],
+                                **change.get("flimmaBatchCorrection", {})}
+                    self.assertEqual(settings["position"], position)
+                    self.assertEqual(settings["smpc"], path.endswith("_smpc.tsv"))
+                    self.assertEqual(settings["covariates"],
+                                     [] if "/no_label/" in path else ["HGSC"])
+                    if "/no_label/" in path:
+                        self.assertEqual(settings["min_samples"], 8)
 
 
 class ArchiveCoverageTests(unittest.TestCase):
