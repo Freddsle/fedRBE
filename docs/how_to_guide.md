@@ -83,7 +83,7 @@ flimmaBatchCorrection:
   design_separator: "," # Separator used in the design file
   normalizationMethod: "log2(x+1)"  # Normalization method or log transformation
   smpc: True  # Recommended to set to True
-  min_samples: 2  # Minimum number of samples to include a feature
+  min_samples: 5  # Minimum number of samples per batch to include a feature
   position: 1   # position of the client (first, second, third, etc.)
   reference_batch: ""  # Leave empty to use the last client in positional order as the reference
 ```

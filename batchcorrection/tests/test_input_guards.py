@@ -79,10 +79,15 @@ class InputGuardTests(unittest.TestCase):
     def test_spaces_in_batch_names_are_preserved(self):
         self.design["batch"] = ["Lab A  run"] * 4 + ["second"] * 4
         client = self.initialize()
-        presence = client.get_batch_feature_presence_info(min_samples=5)
+        # each batch has 4 samples, the threshold applies per batch
+        presence = client.get_batch_feature_presence_info(min_samples=4)
         create_feature_presence_matrix(
             [("local", 0, False, presence)], client.feature_names, ["local"]
         )
+
+    def test_min_samples_default_and_explicit_zero_are_preserved(self):
+        self.assertEqual(self.initialize().min_samples, 5)
+        self.assertEqual(self.initialize(min_samples=0).min_samples, 0)
 
     def test_smpc_default_and_explicit_false_are_preserved(self):
         self.assertIs(self.initialize().smpc, True)
@@ -123,6 +128,16 @@ class FiniteObservationTests(unittest.TestCase):
         presence = client.get_batch_feature_presence_info(min_samples=5)
         self.assertEqual(presence, {"local|first": [], "local|second": ["feature"]})
         self.assertTrue(client.data.iloc[0, :4].isna().all())
+
+    def test_batch_threshold_applies_per_batch(self):
+        client = self.client(
+            {"feature": [1, 2, np.nan, np.nan] + list(range(3, 23))},
+            batches=["small"] * 4 + ["large"] * 20,
+        )
+        presence = client.get_batch_feature_presence_info(min_samples=5)
+        self.assertEqual(presence, {"local|small": [], "local|large": ["feature"]})
+        self.assertTrue(client.data.iloc[0, :4].isna().all())
+        self.assertTrue(client.data.iloc[0, 4:].notna().all())
 
     def test_all_infinite_batch_is_absent(self):
         client = self.client(

@@ -48,10 +48,11 @@ flimmaBatchCorrection:
                  # aggregate information sent from clients to the coordinator
                  # for more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
   min_samples: 5 # The minimum number of samples per feature that are required
-                 # to be present and non-missing on the whole client.
-                 # if for a feature less than min_samples samples are present,
-                 # the client will not send any information about that feature
-                 # format: int
+                 # to be present and non-missing in each batch of the client.
+                 # if for a feature less than min_samples samples are present
+                 # in a batch, the client will not send any information about
+                 # that feature for that batch
+                 # format: int, default: 5
                  # Please note that the actual used min_samples might be different
                  # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
                  # This is to ensure that a sent Xty matrix always has more samples

@@ -178,10 +178,10 @@ flimmaBatchCorrection:
     # Enable secure multiparty computation for privacy-preserving aggregation.
     # For more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
 
-  min_samples: 5      # format: int
-    # Minimum samples per feature required. Adjusted for privacy if needed.
-    # If for a feature less than min_samples samples are present,
-    # the client will not send any information about that feature
+  min_samples: 5      # format: int, default: 5
+    # Minimum samples per feature required in each batch. Adjusted for privacy if needed.
+    # If for a feature less than min_samples samples are present in a batch,
+    # the client will not send any information about that feature for that batch
     # The app may raise min_samples for privacy:
     # min_samples = max(min_samples, len(design.columns)+1)
     # This ensures a sent Xty matrix always has more samples than features,
