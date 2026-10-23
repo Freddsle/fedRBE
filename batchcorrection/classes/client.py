@@ -91,8 +91,8 @@ class Client:
         config = config["flimmaBatchCorrection"]
         # read min_samples
         if "min_samples" not in config:
-            min_samples = 0
-            print("min_samples was not given so it was set to 0")
+            min_samples = 5
+            print("min_samples was not given so it was set to 5")
         else:
             min_samples = config["min_samples"]
             try:
@@ -320,7 +320,7 @@ class Client:
 
         Args:
             min_samples: Minimum number of samples that a feature must
-                have per client to be considered for the batch effect correction
+                have per batch to be considered for the batch effect correction
 
         Returns:
             batch_feature_presence_info: Dict with the batch names as keys and
@@ -340,20 +340,21 @@ class Client:
         for batch in self.batch_labels:
             batch_feature_presence_info[batch] = list()
 
-        # first we need to ensure for each batch that at least 2 samples
-        # are available, otherwise the specific entry of XtY from the
-        # combination of the batch column and y leaks the specific non nan value
-        # of the feature
+        # first we need to ensure for each batch that at least min_samples
+        # samples are available. The batch columns of the design matrix
+        # separate the batches in XtX and XtY, so each batch's entries are
+        # aggregates of only that batch's samples (e.g. a single sample would
+        # leak the specific non nan value of the feature).
         # we only need to do this if we have multiple batches, otherwise the
-        # next step does a more strict check anyways
+        # next step does the same check for the whole client
         if self.batch_col:
             for batch_label in self.batch_labels:
                 pure_batch_name = batch_label.split("|")[1]
                 batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index.tolist()
                 batch_data = self.data.loc[:, batch_indices]
                 non_nan_samples = np.isfinite(batch_data).sum(axis=1)
-                # find all features that have less than 2 samples
-                ignore_index = non_nan_samples[non_nan_samples == 1].index
+                # find all features that have less than min_samples samples
+                ignore_index = non_nan_samples[(non_nan_samples > 0) & (non_nan_samples < min_samples)].index
                 if len(ignore_index) > 0:
                     print(f"INFO: Ignoring the following {len(ignore_index)} features for batch {batch_label} due to privacy reasons: {[self.hash2feature.get(hashed, hashed) for hashed in ignore_index]}")
 

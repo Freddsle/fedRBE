@@ -108,7 +108,7 @@ filter_fedrbe_client <- function(
     quantitative_column_name = quantitative_column_name,
     centers = unique(metadata[[batch_column_name]]),
     center_column_name = batch_column_name,
-    min_samples = 2,
+    min_samples = effective_min_samples,
     drop_row = FALSE
   )
 

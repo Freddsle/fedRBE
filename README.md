@@ -192,7 +192,7 @@ Output files include:
       design_separator: ","
       normalizationMethod: "log2(x+1)"
       smpc: True
-      min_samples: 2
+      min_samples: 5
       position: 1
       reference_batch: ""
    ```
