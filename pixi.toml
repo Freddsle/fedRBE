@@ -1,0 +1,72 @@
+[workspace]
+name = "fedRBE"
+description = "Python and R environment for the fedRBE evaluation, simulations, notebooks and FeatureCloud runs"
+channels = ["conda-forge", "bioconda"]
+platforms = ["linux-64"]
+requires-pixi = ">=0.76"
+
+[dependencies]
+python = "3.12.*"
+numpy = "*"
+# The analysis and production client code were written for pandas 2.
+pandas = "2.*"
+scipy = "*"
+matplotlib = "*"
+seaborn = "*"
+scikit-learn = "1.8.*"
+pyyaml = "*"
+adjusttext = "*"
+upsetplot = "*"
+jinja2 = "*"
+openpyxl = "*"
+jupyter = "*"
+ipykernel = "*"
+# FeatureCloud 0.1 requires urllib3 ~= 1.26.6.
+urllib3 = "1.26.*"
+# Download and archive tools used by GEOquery and figure helpers.
+wget = "*"
+unzip = "*"
+r-base = "4.5.*"
+r-irkernel = "*"
+r-tidyverse = "*"
+"r-data.table" = "*"
+r-ggpubr = "*"
+r-ggsci = "*"
+r-ggtext = "*"
+r-glue = "*"
+r-gridextra = "*"
+r-gtable = "*"
+r-jsonlite = "*"
+r-knitr = "*"
+r-nipals = "*"
+r-patchwork = "*"
+r-pheatmap = "*"
+r-reshape2 = "*"
+r-scales = "*"
+r-umap = "*"
+r-viridis = "*"
+r-wgcna = "*"
+bioconductor-limma = "*"
+bioconductor-variancepartition = "*"
+bioconductor-affy = "*"
+bioconductor-geoquery = "*"
+bioconductor-hgu133acdf = "*"
+bioconductor-hgu133plus2cdf = "*"
+r-biocmanager = "*"
+
+[tasks.setup-affymetrix]
+description = "One-time setup for affy::rma on raw CEL files (ovarian preprocessing)"
+# pixi skips conda post-link scripts, which download the CDF data packages. The
+# threaded preprocessCore build fails with pthread_create() error 22, so it is
+# rebuilt from source without threading, as for the conda/pip setup.
+cmd = """
+PREFIX="$CONDA_PREFIX" bash "$CONDA_PREFIX/bin/.bioconductor-hgu133acdf-post-link.sh" &&
+PREFIX="$CONDA_PREFIX" bash "$CONDA_PREFIX/bin/.bioconductor-hgu133plus2cdf-post-link.sh" &&
+Rscript -e 'BiocManager::install("preprocessCore", type = "source", force = TRUE,
+  configure.args = c(preprocessCore = "--disable-threading"), update = FALSE, ask = FALSE)'
+"""
+
+[pypi-dependencies]
+# Not on conda channels; FeatureCloud also provides the Docker client.
+featurecloud = ">=0.1.0"
+bios = ">=0.1.2, <0.2"

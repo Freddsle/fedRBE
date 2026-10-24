@@ -57,13 +57,13 @@ experiment_results.append(utils.ExperimentResult(
 # PROTEOMICS
 experiment_results.append(utils.ExperimentResult(
     name="E. coli",
-    federated_result_file=os.path.join(base_dir, "ecoli", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "ecoli", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    federated_result_file=os.path.join(base_dir, "ecoli", "after", "label_aware", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ecoli", "after", "label_aware", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
     name="E. coli (SMPC)",
-    federated_result_file=os.path.join(base_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "ecoli", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    federated_result_file=os.path.join(base_dir, "ecoli", "after", "label_aware", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ecoli", "after", "label_aware", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 
 # QUARTET MULTIOMICS
@@ -78,6 +78,7 @@ for modality in ["Transcriptomics", "Proteomics", "Metabolomics"]:
                 base_dir,
                 "quartet_multiomics",
                 "after",
+                "label_aware",
                 modality,
                 result_filename,
             ),
@@ -85,6 +86,7 @@ for modality in ["Transcriptomics", "Proteomics", "Metabolomics"]:
                 base_dir,
                 "quartet_multiomics",
                 "after",
+                "label_aware",
                 modality,
                 "intensities_log_Rcorrected_UNION.tsv",
             ),
@@ -93,26 +95,44 @@ for modality in ["Transcriptomics", "Proteomics", "Metabolomics"]:
 # MICROARRAY
 experiment_results.append(utils.ExperimentResult(
     name="Ovarian cancer",
-    federated_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "central_corrected_UNION.tsv")
+    federated_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "label_aware", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "label_aware", "central_corrected_UNION.tsv")
 ))
 experiment_results.append(utils.ExperimentResult(
     name="Ovarian cancer (SMPC)",
-    federated_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "central_corrected_UNION.tsv")
+    federated_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "label_aware", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ovarian_cancer", "after", "label_aware", "central_corrected_UNION.tsv")
 ))
 
 # ccRCC PROTEOMICS
 experiment_results.append(utils.ExperimentResult(
     name="ccRCC proteomics",
-    federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"),
-    central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "label_aware", "FedApp_corrected_data.tsv"),
+    central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "label_aware", "intensities_log_Rcorrected_UNION.tsv"),
 ))
 experiment_results.append(utils.ExperimentResult(
     name="ccRCC proteomics (SMPC)",
-    federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"),
-    central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "intensities_log_Rcorrected_UNION.tsv"),
+    federated_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "label_aware", "FedApp_corrected_data_smpc.tsv"),
+    central_result_file=os.path.join(base_dir, "ccRCC_studies", "after", "label_aware", "intensities_log_Rcorrected_UNION.tsv"),
 ))
+
+
+# Existing real and simulated comparisons preserve biological labels.
+arm_by_experiment = {experiment.name: "label_aware" for experiment in experiment_results}
+label_aware_path = os.path.join("after", "label_aware", "")
+no_label_path = os.path.join("after", "no_label", "")
+for experiment in experiment_results.copy():
+    if label_aware_path not in experiment.central_result_file:
+        continue  # Simulated outputs have no label-free counterpart.
+    no_label = utils.ExperimentResult(
+        name=experiment.name + " (no_label)",
+        federated_result_file=experiment.federated_result_file.replace(
+            label_aware_path, no_label_path),
+        central_result_file=experiment.central_result_file.replace(
+            label_aware_path, no_label_path),
+    )
+    experiment_results.append(no_label)
+    arm_by_experiment[no_label.name] = "no_label"
 
 
 ### MAIN, just runs compare_experiments on all experiments and prints the results
@@ -121,6 +141,7 @@ print("Final results:")
 if result_df is None:
     print("ERROR: No comparison could be made.")
     exit(1)
+result_df.insert(1, "correction_arm", result_df["Experiment"].map(arm_by_experiment))
 print(result_df)
 mean_difference_column = "Mean difference"
 max_difference_column = "Max difference"

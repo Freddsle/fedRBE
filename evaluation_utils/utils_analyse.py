@@ -40,6 +40,10 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
         print(f"shape of FEDERATED: {federated_df.shape}")
         central_df = central_df.sort_index(axis=0).sort_index(axis=1)
         federated_df = federated_df.sort_index(axis=0).sort_index(axis=1)
+        if not all(axis.is_unique for axis in (
+            central_df.index, central_df.columns, federated_df.index, federated_df.columns
+        )):
+            raise ValueError(f"{exp.name}: correction row and column keys must be unique")
         ### compare columns and index ###
         failed = False
         if not central_df.columns.equals(federated_df.columns):
@@ -55,8 +59,7 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
             print(f"Union-Intercept of rows: {union_rows.difference(intercept_rows)}")
             failed = True
         if failed:
-            print(f"_________________________FAILED {exp.name}_________________________")
-            continue
+            raise ValueError(f"{exp.name}: central and federated correction keys do not align")
 
 
         ### Compare value by value ###
@@ -92,15 +95,24 @@ def compare_experiments(experiment_results: List[ExperimentResult]) -> Union[pd.
             _analyse_differences(differences, nan_count, central_nan_count, fed_nan_count, tmp_df, exp, row2diffsum)
 
         # total comparison
-        differences = list()
-        nan_count = 0
-        fed_nan_count = 0
-        central_nan_count = 0
-        for value1, value2 in zip(central_df.values.flatten(), federated_df.values.flatten()):
-            nan_count, central_nan_count, fed_nan_count = \
-                _compare_vals(value1, value2, nan_count, central_nan_count, fed_nan_count, differences)
+        central_values = central_df.to_numpy(dtype=float, copy=False)
+        federated_values = federated_df.to_numpy(dtype=float, copy=False)
+        central_missing = np.isnan(central_values)
+        federated_missing = np.isnan(federated_values)
+        if not np.array_equal(central_missing, federated_missing):
+            raise ValueError(f"{exp.name}: central and federated missing-value masks differ")
+        if np.isinf(central_values).any() or np.isinf(federated_values).any():
+            raise ValueError(f"{exp.name}: correction values must be finite or shared NaNs")
+        observed = ~central_missing
+        if not observed.any():
+            raise ValueError(f"{exp.name}: no observed correction values to compare")
+        # Shared missing positions are excluded, so they do not dilute the mean.
+        differences = np.abs(central_values[observed] - federated_values[observed])
+        if not np.isfinite(differences).all():
+            raise ValueError(f"{exp.name}: correction differences must be finite")
+        nan_count = int(central_missing.sum())
         print("Total comparison")
-        failed = _analyse_differences(differences, nan_count, central_nan_count, fed_nan_count, result_df, exp)
+        failed = _analyse_differences(differences, nan_count, 0, 0, result_df, exp)
         if failed:
             print(f"_________________________FAILED {exp.name}_________________________")
             continue

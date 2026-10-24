@@ -1,9 +1,13 @@
 from typing import List, Optional, Union
 from pathlib import Path
 from dataclasses import dataclass
+import argparse
 import copy
+from importlib import import_module
 import json
+import math
 import shutil
+import sys
 
 from fc_fed_forest_simple_app.fedForestSimple import main
 from fc_fed_forest_simple_app.fc_fedlearnsim_helper.run_app_simulation import run_simulation_native
@@ -15,6 +19,12 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import matthews_corrcoef, f1_score
 
 SCRIPT_FOLDER = Path(__file__).parent
+REPO_ROOT = SCRIPT_FOLDER.parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from evaluation_utils.real_datasets_utils import build_quartet_matrices
+
+quartet_exporter = import_module("evaluation_data.quartet_multiomics.05_create_merged_omics_folder")
 RESULTS_FOLDER = SCRIPT_FOLDER.parent / "results"
 RESULTS_FOLDER.mkdir(exist_ok=True)
 TRAIN_TEST_RATIO = 0.7
@@ -423,7 +433,9 @@ class ResultFile:
             & (df['learning_type'] == learning_type)
         )
         if mask.any():
-            return df.loc[mask, 'metric_value'].iloc[0]
+            value = pd.to_numeric(df.loc[mask, 'metric_value'].iloc[0], errors='coerce')
+            if math.isfinite(value):
+                return value
         return False
 
     def upsert_experiment(self,
@@ -483,7 +495,19 @@ DEFAULT_RESULTFILE = ResultFile(RESULTS_FOLDER / "classification_metric_report.c
 # Experiment classes
 # ---------------------------------------------------------------------------
 
-class ClassificationExperimentLeaveOneCohortOut:
+class _ClassificationExperiment:
+    def run_experiment(self, seed: int, force_run: bool = False) -> None:
+        output_folders: List[Path] = []
+        try:
+            self._run_experiment(seed, force_run, output_folders)
+        finally:
+            self.datainfo.cleanup_cohort_data_files(
+                also_config_forest=True,
+                output_folders=output_folders,
+            )
+
+
+class ClassificationExperimentLeaveOneCohortOut(_ClassificationExperiment):
     """
     Leave-one-cohort-out cross-validation using a federated random forest.
 
@@ -512,7 +536,8 @@ class ClassificationExperimentLeaveOneCohortOut:
         self.datainfo = datainfo
         self.resultfile = resultfile
 
-    def run_experiment(self, seed: int, force_run: bool = False) -> None:
+    def _run_experiment(self, seed: int, force_run: bool,
+                        all_output_folders: List[Path]) -> None:
         num_characters = 60 + len(self.data_name) + len(self.preprocessing_name) + 5
         print("=" * num_characters)
         print("=" * 30 + f" {self.data_name} ({self.preprocessing_name}) " + "=" * 30)
@@ -533,7 +558,6 @@ class ClassificationExperimentLeaveOneCohortOut:
             }
             for learning_type in LEARNING_TYPES
         }
-        all_output_folders: List[Path] = []
         for predicted_column in self.datainfo.prediction_targets:
             self.datainfo.prepare_cohort_data_files(predicted_col=predicted_column)
             for learning_type in LEARNING_TYPES:
@@ -581,6 +605,8 @@ class ClassificationExperimentLeaveOneCohortOut:
                         ]
                         all_output_folders.extend(output_folders)
                         for out_folder in output_folders:
+                            if out_folder.exists():
+                                shutil.rmtree(out_folder)
                             out_folder.mkdir(parents=True, exist_ok=True)
 
                         # Use all data for training (train_test_ratio=1.0)
@@ -602,6 +628,8 @@ class ClassificationExperimentLeaveOneCohortOut:
                             f"testcohort|{test_cohort_name}_predictedcol|{predicted_column}"
                         )
                         all_output_folders.extend([centralized_input_folder, centralized_output_folder])
+                        if centralized_output_folder.exists():
+                            shutil.rmtree(centralized_output_folder)
                         centralized_output_folder.mkdir(parents=True, exist_ok=True)
                         _write_centralized_data_file(centralized_input_folder, train_folders)
                         _write_forest_config(centralized_input_folder, predicted_column, seed, train_test_ratio=1.0)
@@ -612,17 +640,13 @@ class ClassificationExperimentLeaveOneCohortOut:
                                                 fed_learning_main_function=main)
                         coordinator_output_folder = centralized_output_folder
 
-                    try:
-                        global_forest, model_info = _read_model_and_info(coordinator_output_folder)
-                        mcc, f1 = _evaluate_model_on_test_data(
-                            global_forest,
-                            model_info,
-                            test_folder / 'tmp_data.csv',
-                            predicted_column,
-                        )
-                    except FileNotFoundError as exc:
-                        print(f"{exc} Skipping evaluation for {test_cohort_name}.")
-                        continue
+                    global_forest, model_info = _read_model_and_info(coordinator_output_folder)
+                    mcc, f1 = _evaluate_model_on_test_data(
+                        global_forest,
+                        model_info,
+                        test_folder / 'tmp_data.csv',
+                        predicted_column,
+                    )
 
                     average_metrics[learning_type][predicted_column]['MCC'] += mcc / n_clients
                     average_metrics[learning_type][predicted_column]['F1_score'] += f1 / n_clients
@@ -656,10 +680,6 @@ class ClassificationExperimentLeaveOneCohortOut:
                         learning_type=learning_type
                     )
 
-        # Collect all output folders created across all leave-one-out rounds
-        self.datainfo.cleanup_cohort_data_files(also_config_forest=True,
-                                                output_folders=all_output_folders)
-
         sep = "-" * (62 + len(self.data_name) + len(self.preprocessing_name) + 3)
         print(sep)
         for learning_type in LEARNING_TYPES:
@@ -673,16 +693,14 @@ class ClassificationExperimentLeaveOneCohortOut:
         print()
 
 
-class ClassificationExperimentTrainTestSplit:
+class ClassificationExperimentTrainTestSplit(_ClassificationExperiment):
     """
-    Per-cohort train/test-split evaluation using a federated random forest.
+    Train/test evaluation with centralized and federated forest ensembles.
 
-    Within each cohort, *train_test_ratio* of the data is used for training
-    and the remainder for testing.  MCC and F1 are reported for each cohort.
-
-    Per-cohort output folders are placed next to the cohort folders::
-
-        <cohorts_parent>/tmp_classification_evaluation_output_<cohort_name>/
+    Centralized learning splits the pooled samples; federated learning splits
+    within each cohort. Both use *train_test_ratio* for training and report
+    pooled ("All") MCC and support-weighted F1. Federated runs also retain
+    per-cohort scores. Temporary input/output folders sit beside the cohorts.
     """
 
     data_name: str
@@ -701,32 +719,30 @@ class ClassificationExperimentTrainTestSplit:
         self.train_test_ratio = train_test_ratio
         self.resultfile = resultfile
 
-    def run_experiment(self, seed: int, force_run: bool = False) -> None:
+    def _run_experiment(self, seed: int, force_run: bool,
+                        folders_to_cleanup: List[Path]) -> None:
         for predicted_column in self.datainfo.prediction_targets or []:
             learning_types_to_run = []
             for learning_type in LEARNING_TYPES:
                 if not force_run:
-                    mcc = self.resultfile.check_experiment(
-                        data_name=self.data_name,
-                        data_preprocessing_name=self.preprocessing_name,
-                        metric_name="MCC",
-                        predicted_client_name="All",
-                        cross_validation_method="Train-Test-Split",
-                        seed=seed,
-                        predicted_target=predicted_column,
-                        learning_type=learning_type
-                    )
-                    f1 = self.resultfile.check_experiment(
-                        data_name=self.data_name,
-                        data_preprocessing_name=self.preprocessing_name,
-                        metric_name="F1_score",
-                        predicted_client_name="All",
-                        cross_validation_method="Train-Test-Split",
-                        seed=seed,
-                        predicted_target=predicted_column,
-                        learning_type=learning_type
-                    )
-                    if mcc is not False and f1 is not False:
+                    client_names = ["All"]
+                    if learning_type == LEARNING_TYPE_FEDERATED:
+                        client_names.extend(c.name for c in self.datainfo.cohorts)
+                    cached_metrics = [
+                        self.resultfile.check_experiment(
+                            data_name=self.data_name,
+                            data_preprocessing_name=self.preprocessing_name,
+                            metric_name=metric_name,
+                            predicted_client_name=client_name,
+                            cross_validation_method="Train-Test-Split",
+                            seed=seed,
+                            predicted_target=predicted_column,
+                            learning_type=learning_type,
+                        )
+                        for client_name in client_names
+                        for metric_name in ("MCC", "F1_score")
+                    ]
+                    if all(value is not False for value in cached_metrics):
                         print(f"Skipping {learning_type} '{self.data_name}' ({self.preprocessing_name}) — "
                             f"results for seed={seed} already exist in {self.resultfile.path}.")
                         continue
@@ -753,12 +769,15 @@ class ClassificationExperimentTrainTestSplit:
                 ))
                 for name in cohort_names
             ]
+            folders_to_cleanup.extend(Path(f) for f in output_folders)
             for out_folder in output_folders:
-                Path(out_folder).mkdir(parents=True, exist_ok=True)
+                folder = Path(out_folder)
+                if folder.exists():
+                    shutil.rmtree(folder)
+                folder.mkdir(parents=True, exist_ok=True)
             if not self.datainfo.prediction_targets or len(self.datainfo.prediction_targets) == 0:
                 raise ValueError("DataInfo must specify at least one prediction target column in 'prediction_targets'.")
 
-            folders_to_cleanup = [Path(f) for f in output_folders]
             for learning_type in learning_types_to_run:
                 if learning_type == LEARNING_TYPE_FEDERATED:
                     for client_folder in cohort_folders:
@@ -770,23 +789,17 @@ class ClassificationExperimentTrainTestSplit:
                                             generic_dir=None,
                                             fed_learning_main_function=main)
 
-                    for cohort_name, output_folder in zip(cohort_names, output_folders):
-                        global_metrics_path = Path(output_folder) / 'global_metrics.csv'
-                        local_metrics_path = Path(output_folder) / 'local_metrics.csv'
-                        self.read_update_metrics(
-                            global_metrics_path,
-                            "All",
-                            seed,
-                            predicted_target=predicted_column,
-                            learning_type=learning_type,
-                        )
-                        self.read_update_metrics(
-                            local_metrics_path,
-                            cohort_name,
-                            seed,
-                            predicted_target=predicted_column,
-                            learning_type=learning_type,
-                        )
+                    metrics_files = [
+                        (Path(output_folders[0]) / 'global_metrics.csv', "All"),
+                        *[(Path(folder) / 'local_metrics.csv', name)
+                          for name, folder in zip(cohort_names, output_folders)],
+                    ]
+                    self.read_update_metrics(
+                        metrics_files,
+                        seed,
+                        predicted_target=predicted_column,
+                        learning_type=learning_type,
+                    )
                 else:
                     centralized_input_folder = cohorts_parent / (
                         f"tmp_classification_evaluation_input_learningtype|{learning_type}_"
@@ -797,6 +810,8 @@ class ClassificationExperimentTrainTestSplit:
                         f"predictedcol|{predicted_column}"
                     )
                     folders_to_cleanup.extend([centralized_input_folder, centralized_output_folder])
+                    if centralized_output_folder.exists():
+                        shutil.rmtree(centralized_output_folder)
                     centralized_output_folder.mkdir(parents=True, exist_ok=True)
                     _write_centralized_data_file(centralized_input_folder, cohort_folders)
                     _write_forest_config(centralized_input_folder, predicted_column, seed,
@@ -808,27 +823,34 @@ class ClassificationExperimentTrainTestSplit:
                                             fed_learning_main_function=main)
 
                     self.read_update_metrics(
-                        centralized_output_folder / 'global_metrics.csv',
-                        "All",
+                        [(centralized_output_folder / 'global_metrics.csv', "All")],
                         seed,
                         predicted_target=predicted_column,
                         learning_type=learning_type,
                     )
 
-            self.datainfo.cleanup_cohort_data_files(
-                also_config_forest=True,
-                output_folders=folders_to_cleanup,
-            )
-
     def read_update_metrics(self,
-                            metrics_path: Path,
-                            client_name: str,
+                            metrics_files: List[tuple[Path, str]],
                             seed: int,
                             predicted_target: str,
                             learning_type: str) -> None:
-        """Read *metrics_path*, print results, and append them to the result file."""
-        if metrics_path.exists():
+        """Validate every required metrics file before updating the result file."""
+        metrics_by_client = []
+        required_columns = {'class', 'metric', 'score'}
+        for metrics_path, client_name in metrics_files:
             metrics_df = pd.read_csv(metrics_path)
+            if not required_columns.issubset(metrics_df.columns):
+                missing = required_columns - set(metrics_df.columns)
+                raise ValueError(f"Missing metric columns in {metrics_path}: {missing}.")
+            if len(metrics_df) != 2 or set(metrics_df['metric']) != {'MCC', 'F1_score'}:
+                raise ValueError(f"Expected one MCC and one F1_score in {metrics_path}.")
+            scores = pd.to_numeric(metrics_df['score'], errors='coerce')
+            if not scores.map(math.isfinite).all():
+                raise ValueError(f"Expected finite metric scores in {metrics_path}.")
+            metrics_df['score'] = scores
+            metrics_by_client.append((client_name, metrics_df))
+
+        for client_name, metrics_df in metrics_by_client:
             for _, row in metrics_df.iterrows():
                 metric_suffix = row['class']
                 metric_name = row['metric']
@@ -845,3 +867,78 @@ class ClassificationExperimentTrainTestSplit:
                     predicted_target=predicted_target,
                     learning_type=learning_type
                 )
+
+
+def run_classification_experiments(experiment_type, argv=None) -> None:
+    """Run existing RF experiments from canonical defaults or a dataset registry.
+
+    Registry entries use classification.before, classification.corrected and an
+    optional classification.preprocessing_name. Paths are absolute or relative
+    to the repository root, as in the k-means registry. The correction arm selects
+    canonical real-data folders; simulated data retain their existing inputs.
+    """
+    parser = argparse.ArgumentParser(description=experiment_type.__doc__)
+    inputs = parser.add_mutually_exclusive_group()
+    inputs.add_argument("--config", type=Path, help="Dataset YAML with classification paths")
+    inputs.add_argument("--correction-arm", choices=("label_aware", "no_label"),
+                        help="Canonical real-data correction folder (default: label_aware)")
+    parser.add_argument("--datasets", nargs="+", help="Dataset IDs from the selected registry")
+    parser.add_argument("--results-file", type=Path, default=DEFAULT_RESULTFILE.path)
+    parser.add_argument("--seeds", nargs="+", type=int, default=list(range(42, 52)))
+    parser.add_argument("--force-run", action="store_true")
+    args = parser.parse_args(argv)
+    if args.config:
+        entries = yaml.safe_load(args.config.read_text())
+        base = SCRIPT_FOLDER.parent.parent
+    else:
+        correction_arm = args.correction_arm or "label_aware"
+        base = SCRIPT_FOLDER.parent.parent / "evaluation_data"
+        folders = {"balanced": "simulated/balanced", "ovarian_cancer": "ovarian_cancer",
+                   "ecoli": "ecoli", "ccRCC_proteomics": "ccRCC_studies",
+                   "quartet_multiomics": "quartet_multiomics/merged_omics"}
+        entries = {}
+        for name, folder in folders.items():
+            after = "after" if name == "balanced" else f"after/{correction_arm}"
+            entries[name] = {"classification": {
+                "before": f"{folder}/before/datainfo.json",
+                "corrected": f"{folder}/{after}/datainfo.json",
+                "preprocessing_name": ("no_label" if name != "balanced"
+                                       and correction_arm == "no_label" else "corrected"),
+            }}
+    if not isinstance(entries, dict):
+        parser.error("The dataset registry must be a mapping")
+    selected = args.datasets or list(entries)
+    unknown = set(selected) - set(entries)
+    if unknown:
+        parser.error(f"Unknown datasets: {', '.join(sorted(unknown))}")
+    experiments, seen = [], set()
+    resultfile = ResultFile(args.results_file)
+    for name in selected:
+        if args.config is None and name == "quartet_multiomics":
+            quartet_root = base / "quartet_multiomics"
+            matrices = build_quartet_matrices(quartet_root, correction_arm,
+                                             corrected_source="federated")
+            quartet_exporter.create_merged_omics_folder(
+                datafiles={"before": matrices["before"],
+                           f"after/{correction_arm}": matrices["federated"]},
+                metadata_file=matrices["metadata"], output_folder=quartet_root / "merged_omics",
+            )
+        classification = entries[name].get("classification")
+        if not isinstance(classification, dict):
+            parser.error(f"Dataset {name} has no classification paths")
+        for key, preprocessing in (("before", "uncorrected"),
+                                   ("corrected", classification.get("preprocessing_name", "corrected"))):
+            if not classification.get(key):
+                continue
+            descriptor = (base / classification[key]).resolve()
+            identity = (descriptor, preprocessing)
+            if identity not in seen:
+                experiments.append(experiment_type(preprocessing, DataInfo(descriptor),
+                                                   resultfile=resultfile))
+                seen.add(identity)
+    if not experiments:
+        parser.error("No classification descriptors selected")
+    args.results_file.parent.mkdir(parents=True, exist_ok=True)
+    for seed in args.seeds:
+        for experiment in experiments:
+            experiment.run_experiment(seed=seed, force_run=args.force_run)

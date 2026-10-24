@@ -3,7 +3,8 @@
 ### Imports ###
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+# Repository root, for the production batchcorrection package.
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import argparse
 from typing import List, Tuple, Union, Dict
 from batchcorrection.classes.client import Client
@@ -48,52 +49,6 @@ def _check_consistency_clientwrappers(clientWrappers: List[ClientWrapper]) -> No
     if not coord:
         raise ValueError("No client instance is a coordinator, please designate "+\
                         "any client as a coordinator")
-
-def _compare_central_federated_dfs(name:str,
-                                   central_df: pd.DataFrame,
-                                   federated_df: pd.DataFrame,
-                                   intersection_features: List[str]) -> None:
-    """
-    Compares two dataframes for equality. First checks that index and columns
-    are the same, then analyses the element wise differences.
-    See the analyse_diff_df function for more details on the difference analysis.
-    If both dataframes contain a NaN value at the same position, this is considered
-    as equal (0 as difference).
-    Args:
-        name: Name used for printing
-        central_df: The central dataframe
-        federated_df: The federated dataframe
-        intersection_features: The features that are common to both dataframes
-    """
-    central_df = central_df.sort_index(axis=0).sort_index(axis=1)
-    federated_df = federated_df.sort_index(axis=0).sort_index(axis=1)
-    print(f"_________________________Analysing: {name}_________________________")
-    ### compare columns and index ###
-    failed = False
-    if not central_df.columns.equals(federated_df.columns):
-        print(f"Columns do not match for central_df and federated_df")
-        union_cols = central_df.columns.union(federated_df.columns)
-        intercept_cols = central_df.columns.intersection(federated_df.columns)
-        print(f"Union-Intercept of columns: {union_cols.difference(intercept_cols)}")
-        failed = True
-    if not central_df.index.equals(federated_df.index):
-        print(f"Rows do not match for central_df and federated_df")
-        union_rows = central_df.index.union(federated_df.index)
-        intercept_rows = central_df.index.intersection(federated_df.index)
-        print(f"Union-Intercept of rows: {union_rows.difference(intercept_rows)}")
-        failed = True
-    if failed:
-        print(f"_________________________FAILED: {name}_________________________")
-
-    df_diff = (central_df - federated_df).abs()
-    print(f"Max difference: {df_diff.max().max()}")
-    print(f"Mean difference: {df_diff.mean().mean()}")
-    print(f"Max diff at position: {df_diff.idxmax().idxmax()}")
-
-    df_diff_intersect = df_diff.loc[intersection_features]
-    print(f"Max difference in intersect: {df_diff_intersect.max().max()}")
-    print(f"Mean difference in intersect: {df_diff_intersect.mean().mean()}")
-    print(f"Max diff at position in intersect: {df_diff_intersect.idxmax().idxmax()}")
 
 def _concat_federated_results(clientWrappers: List[ClientWrapper],
                               samples_in_columns=True) -> Tuple[pd.DataFrame, List[str]]:
@@ -154,35 +109,21 @@ def _concat_federated_results(clientWrappers: List[ClientWrapper],
 ################### Simulation Data ###################
 
 def main():
-    parser = argparse.ArgumentParser(description='Run simulation with specified mode.')
-    parser.add_argument('mode', type=str, help='Mode to use in simulation (e.g., "balanced", "strong_imbalanced")')
-    parser.add_argument('rotation', type=int, help='Whether rotation was applied during simulation', default=False)
+    parser = argparse.ArgumentParser(
+        description='Run fedRBE locally on client folders and save the merged corrected data.')
+    parser.add_argument('input_dir', help='Folder with one subfolder (config.yml, data, design) per client')
+    parser.add_argument('output_file', help='TSV file for the merged corrected data')
     args = parser.parse_args()
 
-    mode = args.mode
-    rotation = bool(args.rotation)
-
-    if rotation:
-        folder_name = "simulated_rotation"
-    else:
-        folder_name = "simulated"
-
-
-    # First define the basefolder where all files are located
-    base_dir = os.path.join("..", "..")
-    # Go back to the git repo's root dir
-    base_dir = os.path.join(base_dir, "evaluation_data", folder_name, mode, "before")
-
-
-    print("Starting simulation")
-    print(f"Mode: {mode}")
+    base_dir = args.input_dir
+    # Clients are the sorted subfolders with a config; the first is the coordinator
+    # and the last is the reference batch.
+    cohort_names = sorted(name for name in os.listdir(base_dir)
+                          if os.path.isfile(os.path.join(base_dir, name, "config.yml")))
+    if len(cohort_names) < 3:
+        raise ValueError(f"Expected at least three client folders with config.yml in {base_dir}")
     print("Base directory: ", base_dir)
-    # List of cohort names
-    cohort_names = [
-        'lab1',  # Client 1 (Coordinator)
-        'lab2',  # Client 2
-        'lab3',  # Client 3 # reference client
-    ]
+    print("Clients: ", cohort_names)
 
     # Initialize clientWrappers list
     clientWrappers: List[ClientWrapper] = []
@@ -272,7 +213,6 @@ def main():
             global_feature_names, feature_presence_matrix, cohorts_order = \
                 select_common_features_variables(
                     feature_information,
-                    min_clients=1,
                     default_order=cohort_names
                 )
 
@@ -429,10 +369,9 @@ def main():
 
     federated_df, intersect_features = _concat_federated_results(clientWrappers, samples_in_columns=True)
 
-    # Simulation data
-    federated_df.to_csv(os.path.join("..", "..", "evaluation_data", folder_name, mode, "after", "FedSim_corrected_data_v2.tsv"), sep="\t")
+    federated_df.to_csv(args.output_file, sep="\t")
     print(f"DEBUG: Shape of federated data: {federated_df.shape}")
-    print(f"Results saved to: {os.path.join('..', '..', 'evaluation_data', folder_name, mode, 'after', 'FedSim_corrected_data_v2.tsv')}")
+    print(f"Results saved to: {args.output_file}")
 
 
 if __name__ == "__main__":
