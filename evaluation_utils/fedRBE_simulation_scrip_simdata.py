@@ -9,7 +9,7 @@ import argparse
 from typing import List, Tuple, Union, Dict
 from batchcorrection.classes.client import Client
 from batchcorrection.classes.coordinator_utils import select_common_features_variables, \
-    compute_beta, create_beta_mask
+    compute_beta, create_beta_mask, batch_coefficients
 
 import numpy as np
 import pandas as pd
@@ -309,7 +309,7 @@ def main():
 
     ### SIMULATION: Coordinator: compute_beta
     ### Compute the beta values and broadcast them to the others
-    broadcast_betas = None # np.ndarray of shape num_features x design_columns
+    broadcast_betas = None # np.ndarray of shape num_features x batch_columns
 
     for clientWrapper in clientWrappers:
         if clientWrapper.is_coordinator:
@@ -322,8 +322,8 @@ def main():
                                 k=client.design.shape[1],
                                 global_mask=global_mask)
 
-            # send beta to clients so they can correct their data
-            broadcast_betas = beta
+            # send only the batch coefficients to clients so they can correct their data
+            broadcast_betas = batch_coefficients(beta, feature_presence_matrix.shape[1] - 1)
 
             end_time = time.time()
             time_tracker["Coordinator"] += end_time - start_time

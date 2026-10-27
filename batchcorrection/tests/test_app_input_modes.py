@@ -12,6 +12,7 @@ import yaml
 
 from batchcorrection.classes.client import Client
 from batchcorrection.classes.coordinator_utils import (
+    batch_coefficients,
     compute_beta,
     create_beta_mask,
     create_feature_presence_matrix,
@@ -101,7 +102,10 @@ class AppInputModeTests(unittest.TestCase):
                         statistics.append((xtx, xty))
                     width = clients[0].design.shape[1]
                     mask = create_beta_mask(presence, len(features), width)
-                    betas = compute_beta(statistics, len(features), width, mask)
+                    betas = batch_coefficients(
+                        compute_beta(statistics, len(features), width, mask),
+                        presence.shape[1] - 1,
+                    )
                     expected = self.pooled_expected(covariates)
                     for client, expression in zip(clients, self.expression):
                         client.remove_batch_effects(betas)

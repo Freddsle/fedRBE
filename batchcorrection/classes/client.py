@@ -636,12 +636,15 @@ class Client:
     def remove_batch_effects(self, betas: np.ndarray) -> None:
         """
         The algorithm is from limma::removeBatchEffect()
-        Uses the linear model represented by the betas to predict the batch
-        effect on the features given the covariates/batch information of the
-        samples. That prediction is than substracted from the real data,
-        effectively removing the batch effect
+        Uses the batch coefficients of the linear models to predict the batch
+        effect on the features given the batch information of the samples.
+        That prediction is than substracted from the real data, effectively
+        removing the batch effect. The effects of the intercept and the
+        covariates are wanted and are therefore not removed, the coordinator
+        only shares the batch coefficients.
         Args:
-            betas: an np.array of shape (#features x (1+#covariates+#batches-1))
+            betas: an np.array of shape (#features x (#batches-1)), the
+                coefficients of the batch columns of the design matrix
         Returns:
             None, sets self.data_corrected and adds to self.report
         """
@@ -649,29 +652,14 @@ class Client:
         assert self.design is not None
         print("INFO: Removing the batch effects with the trained betas")
         self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
-        # Create a mask to only consider the betas concerning batches
-        mask = np.ones(betas.shape[1], dtype=bool)
-            # Used to reduce beta to just the beta coefficients representing batches
-            # mask is set to be true for betas concerning clients and
-            # false for betas concerning variables and intercept
-            # this is done so that we predict only the batch effect and then
-            # remove that batch effect, the covariates effect and the intercept
-            # is wanted and should therefore not be removed
-        if self.variables:
-            mask[[self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]] = False
-        else:
-            mask[[self.design.columns.get_loc(col) for col in ['intercept']]] = False
-        betas_reduced = betas[:, mask]
-            # only keep the betas concerning the batches
-            # shape of betas is #features x [intercept + #variables + #cohorts-1]
-            # shape of betas_reduces is #features x #cohorts-1
+        batch_design = self.design.drop(columns=['intercept', *(self.variables or [])])
+        if betas.shape[1] != batch_design.shape[1]:
+            raise ValueError(f"Expected coefficients for {batch_design.shape[1]} batch columns, "
+                             f"got {betas.shape[1]}")
 
         # Calculate the prediction of the data only based on the betas concerning
         # batches (calculate the batch effect)
-        if self.variables:
-            batch_effect = betas_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
-        else:
-            batch_effect = betas_reduced @ self.design.drop(columns=['intercept']).T
+        batch_effect = betas @ batch_design.T
 
         # Substract the calculated batch effect (for NaN values we don't need to substract, we keep them as NaN)
         assert isinstance(self.data, pd.DataFrame)
@@ -689,7 +677,7 @@ class Client:
             # so we just use the maximum int size which should hopefully be enough
         self.report = ""
         self.report += f"Client {self.client_name}:\n"
-        self.report += f"The following betas were used for batch correction:\n{betas}\n"
+        self.report += f"The following batch coefficients were used for batch correction:\n{betas}\n"
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
         np.set_printoptions(threshold=1000)
         print(f"INFO: Shape of corrected data after correction: {self.data_corrected.shape}")

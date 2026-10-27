@@ -20,7 +20,7 @@ import yaml
 
 from batchcorrection.classes.client import Client
 from batchcorrection.classes.coordinator_utils import (
-    compute_beta, create_beta_mask, select_common_features_variables,
+    batch_coefficients, compute_beta, create_beta_mask, select_common_features_variables,
 )
 from evaluation_utils import run_correction_experiments as correction
 from evaluation_utils.real_datasets_utils import (
@@ -65,7 +65,9 @@ def client_correction(clients, threshold):
             raise AssertionError(error)
         statistics.append((xtx, xty))
     n, k = len(features), clients[0].design.shape[1]
-    beta = compute_beta(statistics, n, k, create_beta_mask(presence, n, k))
+    beta = batch_coefficients(
+        compute_beta(statistics, n, k, create_beta_mask(presence, n, k)), presence.shape[1] - 1
+    )
     for client in clients:
         client.remove_batch_effects(beta)
     return pd.concat([c.data_corrected for c in clients], axis=1)
