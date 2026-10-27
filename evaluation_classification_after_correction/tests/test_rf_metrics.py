@@ -7,28 +7,31 @@ import numpy as np
 from sklearn.metrics import confusion_matrix, f1_score, matthews_corrcoef
 
 from evaluation_classification_after_correction.fc_fed_forest_simple_app.fedForestSimple import (
-    _confusion_matrix_scores,
     _pool_confusion_matrices,
 )
+from evaluation_utils.metrics import classification_scores_from_confusion
 
 
 class RandomForestMetricTests(unittest.TestCase):
     def assert_scores_match(self, true, predicted, labels):
-        actual = _confusion_matrix_scores(confusion_matrix(true, predicted, labels=labels))
-        expected = (
-            matthews_corrcoef(true, predicted),
-            f1_score(true, predicted, average='weighted', zero_division=0),
-        )
-        np.testing.assert_allclose(actual, expected, rtol=0, atol=1e-12)
+        actual = classification_scores_from_confusion(
+            confusion_matrix(true, predicted, labels=labels))
+        expected = {
+            'MCC': matthews_corrcoef(true, predicted),
+            'F1_score': f1_score(true, predicted, average='weighted', zero_division=0),
+        }
+        self.assertEqual(actual.keys(), expected.keys())
+        np.testing.assert_allclose(list(actual.values()), list(expected.values()),
+                                   rtol=0, atol=1e-12)
         return actual
 
     def test_imbalanced_majority_prediction(self):
         true = [0] * 90 + [1] * 10
         scores = self.assert_scores_match(true, [0] * 100, [0, 1])
-        self.assertEqual(scores[0], 0)
-        self.assertAlmostEqual(scores[1], 0.9 * (180 / 190))
-        self.assertNotAlmostEqual(scores[0], 0.8)
-        self.assertNotAlmostEqual(scores[1], 0.9)
+        self.assertEqual(scores['MCC'], 0)
+        self.assertAlmostEqual(scores['F1_score'], 0.9 * (180 / 190))
+        self.assertNotAlmostEqual(scores['MCC'], 0.8)
+        self.assertNotAlmostEqual(scores['F1_score'], 0.9)
 
     def test_binary_perfect_constant_and_wrong_predictions(self):
         examples = [
@@ -75,13 +78,15 @@ class RandomForestMetricTests(unittest.TestCase):
         np.testing.assert_array_equal(
             pooled, confusion_matrix(true, predicted, labels=classes),
         )
-        actual = _confusion_matrix_scores(pooled)
+        actual = classification_scores_from_confusion(pooled)
         expected = self.assert_scores_match(true, predicted, classes)
-        np.testing.assert_allclose(actual, expected, rtol=0, atol=1e-12)
+        np.testing.assert_allclose(list(actual.values()), list(expected.values()),
+                                   rtol=0, atol=1e-12)
         local_average = np.mean([
-            _confusion_matrix_scores(payload['matrix']) for payload in payloads
+            list(classification_scores_from_confusion(payload['matrix']).values())
+            for payload in payloads
         ], axis=0)
-        self.assertFalse(np.allclose(actual, local_average))
+        self.assertFalse(np.allclose(list(actual.values()), local_average))
 
 
 if __name__ == '__main__':

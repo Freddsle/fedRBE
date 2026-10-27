@@ -8,25 +8,12 @@ from math import ceil
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, f1_score, matthews_corrcoef
+from sklearn.metrics import confusion_matrix
 import pickle
 import sklearn
 
 from .fc_fedlearnsim_helper.protocolfedlearning import ProtocolFedLearning
-
-
-def _confusion_matrix_scores(matrix) -> Tuple[float, float]:
-    """MCC and support-weighted F1 of a confusion matrix.
-
-    Equals scikit-learn scoring of the expanded labels, as the LOCO helper does.
-    """
-    counts = np.asarray(matrix)
-    true_classes, predicted_classes = np.nonzero(counts)
-    weights = counts[true_classes, predicted_classes]
-    mcc = matthews_corrcoef(true_classes, predicted_classes, sample_weight=weights)
-    f1 = f1_score(true_classes, predicted_classes, sample_weight=weights,
-                  average='weighted', zero_division=0)
-    return float(mcc), float(f1)
+from evaluation_utils.metrics import classification_scores_from_confusion
 
 
 def _pool_confusion_matrices(client_matrices: List[dict]) -> Tuple[list, np.ndarray]:
@@ -119,7 +106,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     random_state = config.get('random_state', 42)
 
     if train_ratio >= 1.0:
-        #print("Using all data for training (no test split).")
         X_train = X
         y_train = y
         X_test = X
@@ -131,10 +117,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         random_state=random_state,
         stratify=y
         )
-
-    # Get number of clients (this would come from the protocol)
-    # For now, we'll get it after gathering data
-    num_clients = None
 
     # Extract forest parameters
     num_estimators_total = config.get('num_estimators_total', 100)
@@ -161,7 +143,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         # Convert to sorted list for consistent ordering
         common_features = sorted(list(common_features))
 
-        #print(f"Coordinator: Found {len(common_features)} common features across {len(all_feature_names)} clients")
 
         # Broadcast common features
         protocol_fed_learning.broadcast_data(common_features, send_to_self=True)
@@ -203,7 +184,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         for trees_data in all_trees_data:
             all_trees.extend(trees_data)
 
-        #print(f"Coordinator: Received {len(all_trees)} trees total from {len(all_trees_data)} clients")
 
         # Create global random forest with proper attributes
         global_forest = RandomForestClassifier(n_estimators=len(all_trees))
@@ -235,7 +215,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         'classes': classes.tolist(),
         'matrix': local_matrix.tolist(),
     }
-    local_mcc, local_f1 = _confusion_matrix_scores(local_matrix)
+    local_scores = classification_scores_from_confusion(local_matrix)
 
     local_metrics_data = [
         {
@@ -244,7 +224,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
             'num_classes': num_classes,
             'class': 'local_client',
             'metric': 'MCC',
-            'score': local_mcc,
+            'score': local_scores['MCC'],
         },
         {
             'num_samples_training': len(X_train),
@@ -252,7 +232,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
             'num_classes': num_classes,
             'class': 'local_client',
             'metric': 'F1_score',
-            'score': local_f1,
+            'score': local_scores['F1_score'],
         }
     ]
 
@@ -273,7 +253,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         global_num_samples_test = sum(m['num_samples_test'] for m in all_local_metrics)
         classes, pooled_matrix = _pool_confusion_matrices(all_local_metrics)
         num_classes = len(classes)
-        mcc, f1 = _confusion_matrix_scores(pooled_matrix)
+        pooled_scores = classification_scores_from_confusion(pooled_matrix)
 
         # Create metrics data
         global_metrics_data = [
@@ -283,7 +263,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
                 'num_classes': num_classes,
                 'class': 'overall',
                 'metric': 'MCC',
-                'score': mcc,
+                'score': pooled_scores['MCC'],
             },
             {
                 'num_samples_training': global_num_samples_training,
@@ -291,7 +271,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
                 'num_classes': num_classes,
                 'class': 'overall',
                 'metric': 'F1_score',
-                'score': f1,
+                'score': pooled_scores['F1_score'],
             }
         ]
 
