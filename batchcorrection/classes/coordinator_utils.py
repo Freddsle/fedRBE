@@ -343,3 +343,21 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         beta[i, ~mask] = linalg.solve(submatrix, XtY_glob[i, ~mask])
 
     return beta
+
+
+def batch_coefficients(beta: np.ndarray, n_batch_columns: int) -> np.ndarray:
+    """
+    Reduces the coefficients of the linear models to the coefficients of the
+    batch columns. Only these are needed by the clients to remove the batch
+    effects. The intercept and covariate coefficients are not shared, as they
+    can reproduce single samples, e.g. if only one sample has a specific
+    covariate value.
+    Args:
+        beta: The coefficients of shape n x k, the design columns are ordered
+            as intercept, covariates, batches.
+        n_batch_columns: The number of batch columns in the design matrix,
+            the number of batches - 1.
+    Returns:
+        The batch coefficients of shape n x n_batch_columns.
+    """
+    return beta[:, beta.shape[1] - n_batch_columns:]

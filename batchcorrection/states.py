@@ -7,7 +7,7 @@ from FeatureCloud.app.engine.app import AppState, app_state, Role, LogLevel
 
 from classes.client import Client
 from classes.coordinator_utils import select_common_features_variables, \
-    compute_beta, create_beta_mask
+    compute_beta, create_beta_mask, batch_coefficients
 
 # FeatureCloud requires that apps define the at least the 'initial' state.
 # This state is executed after the app instance is started.
@@ -207,9 +207,12 @@ class ComputeCorrectionState(AppState):
                             global_mask=global_mask,
                             xtx_error=xtx_error)
 
-        # send beta to clients so they can correct their data
-        self.log("[compute_beta] broadcasting betas")
-        self.broadcast_data(beta,
+        # send only the batch coefficients to the clients so they can correct
+        # their data, the intercept and covariate coefficients stay with the
+        # coordinator
+        n_batch_columns = feauture_presence_matrix.shape[1] - 1
+        self.log("[compute_beta] broadcasting batch coefficients")
+        self.broadcast_data(batch_coefficients(beta, n_batch_columns),
                             send_to_self=True,
                             memo="beta")
         return 'include_correction'
