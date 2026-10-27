@@ -1,8 +1,6 @@
-import json
 import os
 
 import pandas as pd
-import copy
 import sklearn.cluster as clu
 from numpy.random import RandomState
 import numpy as np
@@ -11,11 +9,8 @@ import os.path as op
 from kmeans.params import *
 
 class Clustering:
-    def __init__(self, centroids, tabdata, k_min, k_max, k_step, cluster_on='samples',
-                 n_init_local=50, n_init_global=50, seed_value=11):
-        self.k_min = k_min
-        self.k_max = k_max
-        self.k_spte = k_step
+    def __init__(self, centroids, tabdata, k_min, k_max, cluster_on='samples',
+                 n_init_global=50, seed_value=11):
         self.tabdata = tabdata
         self.cluster_on = cluster_on
         self.data = self._select_cluster_data(tabdata, cluster_on)
@@ -23,9 +18,7 @@ class Clustering:
         self.centroids = centroids
         self.rs = RandomState(seed_value)
         self.silhouette_scores = {}
-        self.silhouette_coefficient = {}
         self.labels = {}
-        self.n_init_local = n_init_local
         self.n_init_global = n_init_global
 
     @staticmethod
@@ -37,7 +30,7 @@ class Clustering:
 
 
     @classmethod
-    def init_local_clustering(cls, tabdata, k_min, k_max, k_step, seed_value, cluster_on='samples',
+    def init_local_clustering(cls, tabdata, k_min, k_max, seed_value, cluster_on='samples',
                               n_init_local=50, n_init_global=50) -> 'Clustering':
         """
         Initialise an SVD object with random matrices
@@ -54,8 +47,8 @@ class Clustering:
             clud.fit(data)
             print(clud.cluster_centers_.shape)
             centroids[k] = clud.cluster_centers_
-        return cls(centroids, tabdata, k_min, k_max, k_step, cluster_on=cluster_on,
-                   n_init_local=n_init_local, n_init_global=n_init_global,
+        return cls(centroids, tabdata, k_min, k_max, cluster_on=cluster_on,
+                   n_init_global=n_init_global,
                    seed_value=seed_value)
 
     def aggregate_centroids(self, centroid_dict):
@@ -83,7 +76,6 @@ class Clustering:
             self.labels[k] = clu_all.labels_
             if converged:
                 self.silhouette_scores[k] = self.simplified_silhouette_scores(clu_all.labels_, clu_all.cluster_centers_)
-                self.silhouette_coefficient[k] = np.nanmean(self.silhouette_scores[k])
 
         return clu_all.cluster_centers_
 
@@ -103,7 +95,6 @@ class Clustering:
         nearest_centroid = []
         nearest_distance = []
 
-        second_best_centroid = []
         second_distance = []
 
         for i in range(self.data.shape[0]):
@@ -111,7 +102,6 @@ class Clustering:
             current_nearest = 0
             current_nearest_distance = np.inf
 
-            current_second = 1
             current_second_distance = np.inf
 
             for c in range(centroids.shape[0]):
@@ -120,16 +110,13 @@ class Clustering:
                 if cd < current_nearest_distance:
                     if current_nearest_distance < current_second_distance:
                         current_second_distance = current_nearest_distance
-                        current_second = current_nearest
                     current_nearest_distance = cd
                     current_nearest = c
                 elif cd < current_second_distance:
                     current_second_distance = cd
-                    current_second = c
 
             nearest_centroid.append(current_nearest)
             nearest_distance.append(current_nearest_distance)
-            second_best_centroid.append(current_second)
             second_distance.append(current_second_distance)
 
         silhouette_value = []

@@ -9,18 +9,18 @@ and loaded by ``dataset_configs()``.
 from __future__ import annotations
 
 import csv
-import itertools
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence
 
 import numpy as np
 import pandas as pd
 import yaml
 from sklearn.cluster import KMeans
-from sklearn.metrics import adjusted_rand_score
 from sklearn.preprocessing import StandardScaler
+
+QUARTET_LAYERS = ("Transcriptomics", "Proteomics", "Metabolomics")
 
 
 # ---------------------------------------------------------------------------
@@ -41,7 +41,6 @@ class DatasetConfig:
     design_file: str
     sample_col: str
     condition_col: str
-    n_init: int = 1
     extra: Dict[str, str] = None  # type: ignore[assignment]
     correction_arm: Optional[str] = None
 
@@ -77,7 +76,6 @@ def dataset_configs(
             design_file=d["design_file"],
             sample_col=d["sample_col"],
             condition_col=d["condition_col"],
-            n_init=int(d.get("n_init", 1)),
             extra={k: str(value) for k, value in d.get("extra", {}).items()},
             correction_arm=correction_arm if canonical else None,
         )
@@ -91,36 +89,6 @@ def dataset_configs(
 def normalize_token(value: object) -> str:
     """Strip whitespace and surrounding quotes from a value."""
     return str(value).strip().strip('"').strip("'")
-
-
-# ---------------------------------------------------------------------------
-# Path resolution
-# ---------------------------------------------------------------------------
-
-def choose_corrected_path(cfg: DatasetConfig, source: str) -> Tuple[Path, str]:
-    """Resolve the path to the corrected matrix (central, federated, or auto).
-
-    Returns (path, kind) where kind is "central" or "federated".
-    """
-    if source == "central":
-        if not cfg.corrected_central.exists():
-            raise FileNotFoundError(f"Missing central corrected matrix: {cfg.corrected_central}")
-        return cfg.corrected_central, "central"
-
-    if source == "federated":
-        if not cfg.corrected_federated.exists():
-            raise FileNotFoundError(f"Missing federated corrected matrix: {cfg.corrected_federated}")
-        return cfg.corrected_federated, "federated"
-
-    # auto: prefer federated, fall back to central
-    if cfg.corrected_federated.exists():
-        return cfg.corrected_federated, "federated"
-    if cfg.corrected_central.exists():
-        return cfg.corrected_central, "central"
-    raise FileNotFoundError(
-        f"No corrected matrix found for {cfg.name} "
-        f"(checked {cfg.corrected_central} and {cfg.corrected_federated})"
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -257,47 +225,6 @@ def load_before_matrix_from_sites(cfg: DatasetConfig, clients: Sequence[Path]) -
     return merged
 
 
-def load_before_matrix_from_dir(before_dir: Path, filename: str = "intensities.tsv") -> pd.DataFrame:
-    """Merge per-subdirectory matrices into a single features x samples DataFrame.
-
-    Iterates direct subdirectories of *before_dir* in sorted order, loads *filename*
-    from each, and concatenates column-wise.  Suitable for simulated data where labs are
-    plain sub-folders (no DatasetConfig required).
-    """
-    parts: List[pd.DataFrame] = []
-    for sub in sorted(before_dir.iterdir()):
-        matrix_path = sub / filename
-        if sub.is_dir() and matrix_path.exists():
-            parts.append(load_feature_matrix(matrix_path))
-
-    if not parts:
-        raise FileNotFoundError(f"No {filename!r} files found in subdirectories of {before_dir}")
-
-    merged = pd.concat(parts, axis=1, join="outer")
-    dup_cols = merged.columns[merged.columns.duplicated()].unique().tolist()
-    if dup_cols:
-        raise ValueError(
-            f"Duplicate sample columns while merging matrices under {before_dir}. "
-            f"Examples: {dup_cols[:5]}"
-        )
-    if merged.empty:
-        raise ValueError(f"Merged matrix is empty for {before_dir}")
-    return merged
-
-
-def filter_matrix_to_available(
-    matrix: pd.DataFrame, metadata: pd.DataFrame, label: str
-) -> pd.DataFrame:
-    """Restrict matrix columns to samples listed in metadata, then drop any-NA feature rows.
-
-    Unlike :func:`align_matrix_to_metadata`, this does NOT raise when samples are absent
-    from the matrix — it silently keeps only the intersection.  Use this when the matrix
-    may contain a subset of all samples (e.g. per-run simulated data).
-    """
-    available = [s for s in metadata["file"] if s in matrix.columns]
-    return drop_rows_with_any_na(matrix.loc[:, available], label)
-
-
 # ---------------------------------------------------------------------------
 # Matrix alignment and filtering
 # ---------------------------------------------------------------------------
@@ -351,16 +278,27 @@ def scale_like_federated(feature_by_sample: pd.DataFrame) -> np.ndarray:
     return scaled.T
 
 
+def pooled_inertia(data: np.ndarray, labels: np.ndarray) -> float:
+    """Return the within-cluster sum of squares of samples x features ``data``."""
+    return sum(
+        float(np.square(data[labels == value] - data[labels == value].mean(axis=0)).sum())
+        for value in pd.unique(labels)
+    )
+
+
 def run_central_kmeans(
     feature_by_sample: pd.DataFrame,
     k_values: Sequence[int],
     seed: int,
     n_init: int = 1,
-) -> Dict[int, pd.Series]:
-    """Run k-means for each k and return {k: Series of cluster labels indexed by sample name}.
+    *,
+    scaling: str = "zscore",
+) -> Dict[int, dict]:
+    """Run k-means for each k; return {k: labels indexed by sample name, inertia, iterations}.
 
-    Applies a per-feature ``StandardScaler`` pass (centering + scale by population std,
-    ddof=0) before running k-means, matching the federated ``fc_kmeans`` app.
+    ``zscore`` uses population standard deviations (ddof=0); ``centered`` only
+    subtracts feature means. The app uses sample standard deviations (ddof=1),
+    giving a common scale factor on complete-case inputs and different inertia units.
 
     Parameters
     ----------
@@ -368,79 +306,15 @@ def run_central_kmeans(
         Number of k-means random initializations.
     """
     array = feature_by_sample.to_numpy(dtype=float).T
-    # StandardScaler: center + scale by population std (ddof=0), per feature.
-    data = StandardScaler().fit_transform(array)
+    data = StandardScaler(with_std=scaling == "zscore").fit_transform(array)
     samples = list(feature_by_sample.columns)
-    outputs: Dict[int, pd.Series] = {}
+    outputs = {}
     for k in sorted(set(k_values)):
         km = KMeans(n_clusters=k, random_state=seed, n_init=n_init)
         labels = km.fit_predict(data)
-        outputs[k] = pd.Series(labels, index=samples)
+        labels = pd.Series(labels, index=samples)
+        outputs[k] = {"labels": labels, "inertia": float(km.inertia_), "n_iter": int(km.n_iter_)}
     return outputs
-
-
-def merge_central_clusters(
-    metadata: pd.DataFrame,
-    before_clusters: Dict[int, pd.Series],
-    corrected_clusters: Dict[int, pd.Series],
-) -> pd.DataFrame:
-    """Join before/after cluster assignments onto metadata as new columns."""
-    out = metadata.copy()
-    for k, labels in before_clusters.items():
-        out[f"Before_CtrlKm_{k}clusters"] = out["file"].map(labels)
-    for k, labels in corrected_clusters.items():
-        out[f"Cor_CtrlKm_{k}clusters"] = out["file"].map(labels)
-    return out
-
-
-# ---------------------------------------------------------------------------
-# Prediction alignment and metrics
-# ---------------------------------------------------------------------------
-
-def align_predictions_to_truth(predicted: pd.Series, truth: pd.Series) -> pd.Series:
-    """Map cluster labels to truth labels via best-match permutation (<=7 classes) or majority vote."""
-    mask = predicted.notna() & truth.notna()
-    aligned = pd.Series(index=predicted.index, dtype=object)
-    if not mask.any():
-        return aligned
-
-    pred_values = predicted[mask].astype(str)
-    truth_values = truth[mask].astype(str)
-
-    pred_levels = sorted(pred_values.unique())
-    truth_levels = sorted(truth_values.unique())
-    mapping: Dict[str, str] = {}
-
-    if len(pred_levels) == len(truth_levels) and len(pred_levels) <= 7:
-        best_acc = -1.0
-        for perm in itertools.permutations(truth_levels):
-            candidate = dict(zip(pred_levels, perm))
-            mapped = pred_values.map(candidate)
-            acc = float((mapped == truth_values).mean())
-            if acc > best_acc:
-                best_acc = acc
-                mapping = candidate
-    else:
-        for level in pred_levels:
-            votes = truth_values[pred_values == level]
-            if votes.empty:
-                continue
-            mapping[level] = votes.mode().iloc[0]
-
-    aligned.loc[mask] = pred_values.map(mapping)
-    return aligned
-
-
-def calculate_metrics(true_labels: pd.Series, predicted_labels: pd.Series) -> Dict[str, float]:
-    """Compute ARI from aligned labels."""
-    mask = true_labels.notna() & predicted_labels.notna()
-    if not mask.any():
-        return {"ARI": np.nan, "N": 0}
-
-    y_true = true_labels[mask].astype(str)
-    y_pred = predicted_labels[mask].astype(str)
-    ari = float(adjusted_rand_score(y_true, y_pred))
-    return {"ARI": ari, "N": int(mask.sum())}
 
 
 # ---------------------------------------------------------------------------
@@ -473,7 +347,7 @@ def build_quartet_matrices(
     quartet_root = Path(quartet_root)
     before_dir = quartet_root / "before"
     after_dir = quartet_root / "after" / correction_arm
-    modalities = ("Transcriptomics", "Proteomics", "Metabolomics")
+    modalities = QUARTET_LAYERS
     source_files = {"central": "intensities_log_Rcorrected_UNION.tsv",
                     "federated": "FedApp_corrected_data_smpc.tsv"}
     sources = [corrected_source] if corrected_source != "auto" else [
@@ -590,7 +464,6 @@ def write_kmeans_config(
         "  algorithm:\n"
         f"    k_max: {k_max}\n"
         f"    k_min: {k_min}\n"
-        "    k_step: 1\n"
         "    cluster_on: column\n"
         f"    seed: {seed}\n"
         f"    n_init_local: {n_init_local}\n"
@@ -641,53 +514,6 @@ def load_dataset_metadata(cfg: DatasetConfig):
         [metadata.loc[metadata.lab.eq(name)] for name in names], ignore_index=True
     )
     return metadata, [cfg.sites_root / name for name in names]
-
-
-
-def prepare_dataset(
-    cfg: DatasetConfig,
-    prepared_dir: Path,
-    *,
-    corrected_source: str = "central",
-    remove_na: bool = True,
-) -> dict:
-    """Prepare current matrices and refresh the intermediate files used by plots.
-
-    Central and federated evaluation entrypoints share the same loading,
-    alignment, and optional complete-case filtering.
-    """
-    if cfg.name == "quartet_multiomics" and cfg.correction_arm is not None:
-        build_quartet_matrices(
-            cfg.before_matrix.parent.parent, cfg.correction_arm, corrected_source
-        )
-    metadata, clients = load_dataset_metadata(cfg)
-    before_raw = load_matrix_with_lfs_fallback(cfg.before_matrix, f"{cfg.name} before", cfg)
-    corrected_path, corrected_kind = choose_corrected_path(cfg, corrected_source)
-    corrected_raw = load_matrix_with_lfs_fallback(
-        corrected_path, f"{cfg.name} corrected"
-    )
-    before = align_matrix_to_metadata(before_raw, metadata, f"{cfg.name} before")
-    corrected = align_matrix_to_metadata(corrected_raw, metadata, f"{cfg.name} corrected")
-    if remove_na:
-        before = drop_rows_with_any_na(before, f"{cfg.name} before")
-        corrected = drop_rows_with_any_na(corrected, f"{cfg.name} corrected")
-
-    prepared_dir.mkdir(parents=True, exist_ok=True)
-    before.to_csv(prepared_dir / "before_matrix.tsv", sep="\t")
-    corrected.to_csv(prepared_dir / "corrected_matrix.tsv", sep="\t")
-    metadata.to_csv(prepared_dir / "metadata.tsv", sep="\t", index=False)
-    k_condition = int(metadata.condition.nunique())
-    k_batch = int(metadata.lab.nunique())
-    return {
-        "before": before,
-        "corrected": corrected,
-        "metadata": metadata,
-        "clients": clients,
-        "corrected_source": corrected_kind,
-        "k_condition": k_condition,
-        "k_batch": k_batch,
-        "k_values": sorted({k_condition, k_batch}),
-    }
 
 
 
@@ -761,94 +587,65 @@ def aggregate_fed_clusters(
         frames.append(pd.concat(lab_frames, axis=0))
 
     merged = metadata.set_index("file").join(pd.concat(frames, axis=1), how="left")
+    if merged.filter(like="Fed_").isna().any().any():
+        raise ValueError(f"FeatureCloud clustering is missing samples in {run_output}")
     return merged.reset_index()
 
 
 # ---------------------------------------------------------------------------
-# Metrics evaluation, I/O and saving
+# Assignment tables
 # ---------------------------------------------------------------------------
 
-def load_fed_metadata(path: Optional[Path]) -> Optional[pd.DataFrame]:
-    """Load a federated metadata TSV, or return None if path is missing."""
-    if path is None or not path.exists():
-        return None
-    return pd.read_csv(path, sep="\t")
+ASSIGNMENT_METADATA = ["file", "condition", "lab"]
 
 
-def evaluate_metrics(
-    dataset_name: str,
-    central_res: pd.DataFrame,
-    before_fed_res: Optional[pd.DataFrame],
-    after_fed_res: Optional[pd.DataFrame],
-    k_condition: int,
-    k_batch: int,
-) -> pd.DataFrame:
-    """Compute ARI for central and federated k-means results.
-
-    Returns a DataFrame with one row per (target, method) combination,
-    containing ARI and sample count.
-    """
-    records: List[Dict] = []
-    by_file_before_fed = (
-        before_fed_res.set_index("file") if before_fed_res is not None else None
-    )
-    by_file_after_fed = (
-        after_fed_res.set_index("file") if after_fed_res is not None else None
-    )
-
-    def fed_prediction(
-        fed_df: Optional[pd.DataFrame], column: str, file_order: Sequence[str]
-    ) -> Optional[pd.Series]:
-        if fed_df is None or column not in fed_df.columns:
-            return None
-        return fed_df[column].reindex(file_order).reset_index(drop=True)
-
-    tasks = [("condition", k_condition), ("batch", k_batch)]
-    for target, k in tasks:
-        truth_col = "condition" if target == "condition" else "lab"
-        file_order = central_res["file"].tolist()
-        truth = central_res[truth_col]
-
-        method_specs: List[Tuple[str, Optional[pd.Series]]] = [
-            (
-                f"{dataset_name}_{target}_BC_Cntrl_{k}cls",
-                central_res.get(f"Before_CtrlKm_{k}clusters"),
-            ),
-            (
-                f"{dataset_name}_{target}_AC_Cntrl_{k}cls",
-                central_res.get(f"Cor_CtrlKm_{k}clusters"),
-            ),
-            (
-                f"{dataset_name}_{target}_BC_Fed_{k}cls",
-                fed_prediction(by_file_before_fed, f"Fed_{k}clusters", file_order),
-            ),
-            (
-                f"{dataset_name}_{target}_AC_Fed_{k}cls",
-                fed_prediction(by_file_after_fed, f"Fed_{k}clusters", file_order),
-            ),
-        ]
-
-        for method_name, predicted in method_specs:
-            if predicted is None:
-                continue
-            metrics = calculate_metrics(truth, predicted)
-            records.append(
-                {
-                    "Dataset": dataset_name,
-                    "Target": target,
-                    "K": int(k),
-                    "Method": method_name,
-                    **metrics,
-                }
-            )
-
-    return pd.DataFrame(records)
+def assignment_path(root: Path, dataset: str) -> Path:
+    """Return a dataset's table of sample metadata and ``<method>_seed_NNN_kK`` labels."""
+    return Path(root) / dataset / "assignments.tsv"
 
 
-def save_metrics_tables(metrics_df: pd.DataFrame, output_dir: Path) -> None:
-    """Save ARI metrics table as a TSV file."""
-    output_dir.mkdir(parents=True, exist_ok=True)
-    metrics_df.to_csv(output_dir / "metrics_ari.tsv", sep="\t", index=False)
+def arm_root(base: Path, arm: str) -> Path:
+    """Return the output root for a correction arm: ``base``, or ``base/no_label``."""
+    return Path(base) / "no_label" if arm == "no_label" else Path(base)
+
+
+def read_metadata(root: Path, dataset: str) -> pd.DataFrame:
+    """Read the sample metadata stored once in a dataset's assignment table."""
+    return pd.read_csv(assignment_path(root, dataset), sep="\t", dtype=str,
+                       keep_default_na=False, usecols=ASSIGNMENT_METADATA)
+
+
+def _assignment_table(path: Path, metadata: pd.DataFrame) -> pd.DataFrame:
+    """Read a table, or start one, after checking it holds the same ordered metadata."""
+    expected = metadata[ASSIGNMENT_METADATA].astype(str).reset_index(drop=True)
+    table = (pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False)
+             if path.exists() else expected)
+    if not table[ASSIGNMENT_METADATA].equals(expected):
+        raise ValueError(f"{path} holds other samples or metadata; use a separate OUTPUT_ROOT")
+    return table
+
+
+def write_assignments(
+    root: Path, dataset: str, metadata: pd.DataFrame, method: str, seed: int,
+    labels_by_k: Dict[int, pd.Series],
+) -> Path:
+    """Add or replace one method/seed's labels, given as Series indexed by sample."""
+    path = assignment_path(root, dataset)
+    table = _assignment_table(path, metadata)
+    for k, labels in labels_by_k.items():
+        table[f"{method}_seed_{seed:03d}_k{k}"] = labels.loc[table.file].to_numpy()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    table.to_csv(path, sep="\t", index=False)
+    return path
+
+
+def read_assignments(
+    root: Path, dataset: str, method: str, seed: int, k_values: Sequence[int],
+    metadata: pd.DataFrame,
+) -> Dict[int, pd.Series]:
+    """Return {k: integer labels indexed by sample} for one method and seed."""
+    table = _assignment_table(assignment_path(root, dataset), metadata).set_index("file")
+    return {k: table[f"{method}_seed_{seed:03d}_k{k}"].astype(int) for k in k_values}
 
 
 # ---------------------------------------------------------------------------

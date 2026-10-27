@@ -162,10 +162,10 @@ class FeatureCloudRetryTests(unittest.TestCase):
                 variant_input_dir=self.root, dataset_root=self.root / "output",
                 metadata=pd.DataFrame(), client_names=["first", "second"], k_values=[2],
                 app_image="fixture:latest", controller_host=api.DEFAULT_CONTROLLER_HOST,
-                query_interval=5, timeout=900, keep_extracted=False, aggregate_only=False,
+                query_interval=5, timeout=900, seed=1,
             )
         manifest = json.loads((
-            self.root / "output/fc_kmeans_res/before/1_fed_clustering/manifest.json"
+            self.root / "output/fc_kmeans_res/before/seed_001/manifest.json"
         ).read_text())
         self.assertEqual(manifest["test_id"], 202)
         self.assertEqual(manifest["zip_files"], [
