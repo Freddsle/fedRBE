@@ -1,0 +1,40 @@
+ecoli_label_aware:
+  classification:
+    before: evaluation_data/ecoli/panel5000/before/datainfo.json
+    corrected: evaluation_data/ecoli/panel5000/after/label_aware/datainfo.json
+    preprocessing_name: corrected
+ecoli_no_label:
+  classification:
+    before: evaluation_data/ecoli/panel5000/before/datainfo.json
+    corrected: evaluation_data/ecoli/panel5000/after/no_label/datainfo.json
+    preprocessing_name: no_label
+ovarian_cancer_label_aware:
+  classification:
+    before: evaluation_data/ovarian_cancer/panel5000/before/datainfo.json
+    corrected: evaluation_data/ovarian_cancer/panel5000/after/label_aware/datainfo.json
+    preprocessing_name: corrected
+ovarian_cancer_no_label:
+  classification:
+    before: evaluation_data/ovarian_cancer/panel5000/before/datainfo.json
+    corrected: evaluation_data/ovarian_cancer/panel5000/after/no_label/datainfo.json
+    preprocessing_name: no_label
+ccRCC_proteomics_label_aware:
+  classification:
+    before: evaluation_data/ccRCC_studies/panel5000/before/datainfo.json
+    corrected: evaluation_data/ccRCC_studies/panel5000/after/label_aware/datainfo.json
+    preprocessing_name: corrected
+ccRCC_proteomics_no_label:
+  classification:
+    before: evaluation_data/ccRCC_studies/panel5000/before/datainfo.json
+    corrected: evaluation_data/ccRCC_studies/panel5000/after/no_label/datainfo.json
+    preprocessing_name: no_label
+quartet_multiomics_label_aware:
+  classification:
+    before: evaluation_data/quartet_multiomics/panel5000/before/datainfo.json
+    corrected: evaluation_data/quartet_multiomics/panel5000/after/label_aware/datainfo.json
+    preprocessing_name: corrected
+quartet_multiomics_no_label:
+  classification:
+    before: evaluation_data/quartet_multiomics/panel5000/before/datainfo.json
+    corrected: evaluation_data/quartet_multiomics/panel5000/after/no_label/datainfo.json
+    preprocessing_name: no_label
