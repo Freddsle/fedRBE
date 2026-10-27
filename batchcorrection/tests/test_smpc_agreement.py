@@ -1,4 +1,4 @@
-"""Bounded state checks for SMPC agreement before regression statistics."""
+"""Bounded state checks for SMPC agreement and the coordinator's coefficient broadcast."""
 
 import importlib
 import importlib.util
@@ -102,6 +102,22 @@ class SmpcAgreementTests(unittest.TestCase):
                 with patch.object(self.states, "compute_beta") as solve:
                     state.run()
                 self.assertEqual(solve.call_args.kwargs["xtx_error"], expected)
+
+    def test_only_batch_coefficients_are_broadcast(self):
+        state = self.make_state(self.states.ComputeCorrectionState)
+        state.configure_smpc(exponent=12)
+        state.log = Mock()
+        state.store("smpc", False)
+        # Design columns: intercept, one covariate, one batch column (two batches).
+        state.store("client", SimpleNamespace(
+            feature_names=["feature"], design=np.ones((4, 3))
+        ))
+        state.store("feature_presence_matrix", np.ones((1, 2)))
+        state.gather_data = Mock(return_value=[])
+        with patch.object(self.states, "compute_beta", return_value=np.array([[1., 2., 3.]])):
+            self.assertEqual(state.run(), "include_correction")
+        np.testing.assert_array_equal(state.broadcast_data.call_args.args[0], [[3.]])
+        self.assertEqual(state.broadcast_data.call_args.kwargs["memo"], "beta")
 
 
 if __name__ == "__main__":

@@ -126,7 +126,7 @@ See the [full configuration reference](https://freddsle.github.io/fedRBE/batchco
 
 After completion, each client finds:
    - `only_batch_corrected_data.csv`: The batch-corrected expression data.
-   - `report.txt`: Details on excluded features, beta values, and the used design matrix.
+   - `report.txt`: Details on excluded features, the batch coefficients used for the correction, and the used design matrix.
    - logs: Detailed logs of the process.
    
 

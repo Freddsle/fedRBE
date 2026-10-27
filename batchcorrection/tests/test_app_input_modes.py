@@ -102,10 +102,10 @@ class AppInputModeTests(unittest.TestCase):
                         statistics.append((xtx, xty))
                     width = clients[0].design.shape[1]
                     mask = create_beta_mask(presence, len(features), width)
-                    betas = batch_coefficients(
-                        compute_beta(statistics, len(features), width, mask),
-                        presence.shape[1] - 1,
-                    )
+                    full = compute_beta(statistics, len(features), width, mask)
+                    betas = batch_coefficients(full, presence.shape[1] - 1)
+                    with self.assertRaisesRegex(ValueError, "Expected coefficients for 2 batch columns"):
+                        clients[0].remove_batch_effects(full)
                     expected = self.pooled_expected(covariates)
                     for client, expression in zip(clients, self.expression):
                         client.remove_batch_effects(betas)

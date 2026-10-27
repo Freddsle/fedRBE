@@ -117,7 +117,7 @@ For details, see the [Configuration](#configuration-configyml) section.
 After completion, each client receives:
 - **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
-- **`report.txt`**: Excluded features and reasons, beta values, and internal design matrix.
+- **`report.txt`**: Excluded features and reasons, the batch coefficients used for the correction, and internal design matrix.
 
 **Note**: Output files use the same `separator` defined in `config.yml`.
 
