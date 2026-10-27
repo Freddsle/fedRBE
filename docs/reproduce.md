@@ -26,8 +26,6 @@ or regenerate the analysis stages you need.
   - [4. Optional dataset diagnostics](#4-optional-dataset-diagnostics)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-    - [Prerequisites](#prerequisites)
-    - [Reproducing the clustering analysis](#reproducing-the-clustering-analysis)
   - [7. Generate Figures 3, 4 and S5 for each correction arm](#7-generate-figures-3-4-and-s5-for-each-correction-arm)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
@@ -119,7 +117,7 @@ or regenerate the analysis stages you need.
    sections. Install them with:
 
    ```bash
-   Rscript -e 'install.packages(c("data.table","ggpubr","gridExtra","ggsci","ggtext","glue","IRkernel","jsonlite","knitr","nipals","patchwork","pheatmap","reshape2","scales","tidyverse","umap","viridis"), repos="https://cloud.r-project.org")'
+   Rscript -e 'install.packages(c("data.table","gridExtra","ggtext","glue","IRkernel","jsonlite","knitr","patchwork","reshape2","scales","tidyverse"), repos="https://cloud.r-project.org")'
    Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("AnnotationDbi","affy","GEOquery","GO.db","hgu133acdf","hgu133plus2cdf","impute","limma","variancePartition"), ask=FALSE, update=FALSE)'
    Rscript -e 'BiocManager::install("preprocessCore", configure.args=c(preprocessCore="--disable-threading"), type="source", force=TRUE, ask=FALSE, update=FALSE)'
    Rscript -e 'install.packages("WGCNA", repos="https://cloud.r-project.org")'
@@ -182,8 +180,8 @@ Use `--datasets` for a subset and `--arms label_aware no_label` for both variant
 (`after/<arm>/<Modality>/` for Quartet). Simulation correction runs in its notebook.
 For isolated central experiments, add `--output-dir <run-directory>`. Both
 correction arms are then written under that directory without changing canonical
-results. The dataset evaluation notebooks in `evaluation/` write the
-after-correction diagnostic plots.
+results. `evaluation/dataset_diagnostics.R` writes the after-correction
+diagnostic plots.
 
 `--arms no_label` needs cohort/batch metadata but no biological or evaluation
 labels. Biological design columns are required only for `label_aware`.
@@ -198,7 +196,8 @@ prepared study inputs. Source acquisition and QC provenance are documented in th
 For simulated data, committed run-1 inputs support single-run correction. For all
 30 runs, first run `evaluation_data/simulated/00_data_simulation.ipynb` (1–2 hours)
 to generate `before/intermediate/` and `after/runs/`, then rerun
-`01_data_prep_and_central_RBE.ipynb`.
+`01_data_prep_and_central_RBE.ipynb`. For the separate 90-dataset robustness campaign,
+see the [simulation README](../evaluation_data/simulated/README.md#robustness-simulations).
 
 Output:
 
@@ -256,8 +255,8 @@ In each result folder, the SMPC run follows the non-SMPC run, so
 `individual_results/` and `datainfo.json` hold the SMPC client results.
 Classification uses these per-client results, and k-means uses the SMPC matrices.
 
-Rejected experiments retain their previous outputs; successful earlier experiments
-remain published.
+Each experiment publishes outputs only on success. Rejection leaves its output
+directory unchanged.
 
 Notes:
 
@@ -285,20 +284,47 @@ A/B biological condition; no label-free simulated counterpart is included.
 
 ### 4. Optional dataset diagnostics
 
-These notebooks produce the dataset-specific evaluation figures and tables.
-Generate Figures 3 and 4 in Step 7. If Quartet correction outputs changed, run
-Step 5 or 6 first to refresh its joint matrices.
-Open the repository-relative paths below, then run each notebook with `evaluation/`
-as its working directory:
+These commands write the dataset-specific diagnostics of the label-aware correction.
+Generate Figures 3 and 4 in Step 7. Run from the repository root after the
+correction outputs from Steps 1 and 2 are available:
 
-1. `evaluation/evaluation_simulated.ipynb`
-2. `evaluation/evaluation_simulated_30runs.ipynb` (may take several hours to run if all 30 runs are generated)
-3. `evaluation/evaluation_ecoli.ipynb`
-4. `evaluation/evaluation_ovarian_cancer.ipynb`
-5. `evaluation/evaluation_ccRCC.ipynb`
-6. `evaluation/evaluation_quartet_multiomics.ipynb`
+```bash
+for dataset in simulated ecoli ovarian_cancer ccRCC_studies quartet_multiomics; do
+  pixi run Rscript evaluation/dataset_diagnostics.R "$dataset"
+done
+```
 
-These notebooks expect the corrected data from Steps 1 and 2. `evaluation_simulated_30runs.ipynb` can use the committed precomputed 30-run LMPV summary cache for the final variance-partitioning plots; full recalculation still requires the generated simulated `before/intermediate/` and `after/runs/` files. Figures are written under `evaluation/plots/` and related evaluation output folders.
+The real datasets write their central-correction panels:
+`evaluation_data/{ecoli,ccRCC_studies}/plots/data_plot_Rcorrected.png`,
+`evaluation_data/ovarian_cancer/before/plots/norm_vs_tumor_plot_Rcorrected_UNION.png`
+and `evaluation_data/quartet_multiomics/plots/<Modality>_limma_after_diagnostics.png`.
+`simulated` writes the single-run PCA plots to `evaluation/eval_simulation/pca_plots/`
+and prints the federated-versus-R differences.
+
+For the optional 30-run analysis, run from the repository root:
+
+```bash
+pixi run Rscript evaluation/evaluation_simulated_30runs.R
+```
+
+Cached plotting uses the committed
+`evaluation/eval_simulation/precomputed/simulated_30runs_lmpv_summary.tsv.gz`
+and reads the saved `evaluation/eval_simulation/<mode>/differences_fedRBE_R.tsv`
+tables. Variance-partitioning plots are written to
+`evaluation/eval_simulation/lmpv_plots/`.
+
+For each scenario with all 30 `<run>_FedSim_corrected.tsv` and
+`<run>_R_corrected.tsv` files under
+`evaluation_data/simulated/<mode>/after/runs/`, the script automatically
+recalculates its difference table before plotting, using that scenario's
+`all_metadata.tsv`. Full recalculation can take several hours.
+
+Without the summary cache, missing before-correction LMPV tables are computed
+from `evaluation_data/simulated/<mode>/before/intermediate/<run>_intensities_data.tsv`
+and `all_metadata.tsv`. Building the cache then requires both before- and
+after-correction per-run LMPV tables under
+`evaluation/eval_simulation/<mode>/lmvp/` for all 30 runs of all three scenarios;
+the script does not generate the after-correction LMPV tables.
 
 ### 5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data
 
@@ -348,7 +374,8 @@ ecoli:
 ```
 
 Paths are absolute or repository-relative. Optional `preprocessing_name` labels
-corrected results (default: `corrected`). Each correction result folder has its own
+corrected results (default: `no_label` for descriptors under a `no_label/` folder,
+otherwise `corrected`). Each correction result folder has its own
 descriptor, such as `evaluation_data/ecoli/after/no_label/datainfo.json`. For example:
 
 ```bash
@@ -377,68 +404,88 @@ RandomForest implementation: `evaluation_classification_after_correction/fc_fed_
 
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
-Compare central and federated k-means before and after batch correction using
-the real-dataset notebooks under `evaluation_clusterization_after_correction/`.
+Use `evaluation_clusterization_after_correction/real_datasets/multiple_runs.py`
+for the canonical ten-seed, ten-start comparison. It prepares all four datasets,
+including Quartet joint matrices, recomputes central fits and reuses saved
+federated assignments unless `--rerun-federated` is given. Both central
+and federated correction outputs and their original metadata must be available.
 
-#### Prerequisites
-
-- Complete the [R and Python setup](#prerequisites-and-setup).
-- Have uncorrected matrices, matching metadata, and the central or federated
-  correction outputs selected for analysis available, either regenerated or
-  fetched from the repository.
-- To rerun federated k-means, build its Docker image. Start this command block
-  from the repository root. Central-only k-means does not require Docker.
+From the repository root, reuse saved results for both arms and feature spaces:
 
 ```bash
-cd evaluation_clusterization_after_correction/federated_kmeans_upd/
-./build.sh
+pixi run python evaluation_clusterization_after_correction/real_datasets/multiple_runs.py
 ```
 
-#### Reproducing the clustering analysis
+`--arms` and `--spaces` select correction arms (`label_aware`, `no_label`) and
+feature spaces (`all`, `panel`). Cached reuse reads the requested seed/k columns
+without checking inputs or settings. Contingency and fixed-partition analyses
+need only assignment TSVs. For new federated fits, build the app with
+`evaluation_clusterization_after_correction/federated_kmeans_upd/build.sh` from
+its directory, then add `--rerun-federated`. For changed cohorts or experiments,
+set a separate `--root`. Individual FeatureCloud tests time out after 1,800
+seconds; cached reuse needs no Docker.
 
-Run notebook kernels from `evaluation_clusterization_after_correction/real_datasets/`.
-For Figure 4, run `05_multiple_runs.ipynb` directly. It prepares all four datasets
-automatically, including Quartet, and recomputes central k-means and ARIs.
+The [clustering instructions](../evaluation_clusterization_after_correction/real_datasets/README.md)
+are the canonical reference for shared-panel preparation and RF exports, compact
+assignment/metric tables, saved assignment reuse, local output retention and
+sensitivity analyses. Figure 4 uses the panel and all-feature results for each
+correction arm; select matching inputs when rendering below.
 
-Set `CORRECTION_ARM` to `label_aware` or `no_label` through the environment (default
-`label_aware`). The notebook defaults to `RERUN_FEDERATED = False`, reading the
-retained per-seed assignment TSVs. Set it to `True` to regenerate federated results
-when inputs or settings change. To reuse saved assignments from the command line:
+#### Shared evaluation metrics
 
-```bash
-for arm in label_aware no_label; do
-  CORRECTION_ARM="$arm" pixi run jupyter nbconvert --to notebook --execute \
-    --ExecutePreprocessor.timeout=1800 --output-dir=/tmp \
-    evaluation_clusterization_after_correction/real_datasets/05_multiple_runs.ipynb
-done
-```
-
-Each arm writes `metrics_ari_multirun.tsv` and `ari_boxplots.png`: in the notebook
-directory for `label_aware` and its `no_label/` subdirectory for `no_label`.
-Notebook 05 defaults to ten seeds (1, 11, …, 91) and `n_init=1`.
-
-See the [clustering instructions](../evaluation_clusterization_after_correction/real_datasets/README.md)
-for optional notebooks 00 and 02–04, custom datasets, and output paths.
-
-FedKMeans implementation: `evaluation_clusterization_after_correction/federated_kmeans_upd`.
+[`evaluation_utils/metrics.py`](../evaluation_utils/metrics.py) provides
+`classification_scores(truth, labels)` for MCC and support-weighted F1, and
+`clustering_scores(truth, labels)` for ARI and arithmetic AMI/NMI. Inputs must share
+sample order. F1/MCC require matching class meanings; partition scores allow
+arbitrary cluster names. `classification_scores_from_confusion(matrix)` scores
+counts whose true rows and predicted columns share class order.
+Add metrics to the appropriate helper; experiment writers select which to save.
 
 ### 7. Generate Figures 3, 4 and S5 for each correction arm
 
 After batch correction, run from the repository root. Figure 4 also requires the
-classification and clustering results from Steps 5 and 6:
+classification and clustering results from Steps 5 and 6, including the shared-panel
+branches described in the
+[clustering instructions](../evaluation_clusterization_after_correction/real_datasets/README.md).
 
 ```bash
 for arm in label_aware no_label; do
-  CORRECTION_ARM="$arm" pixi run jupyter nbconvert --to notebook --execute \
-    --ExecutePreprocessor.timeout=1800 --output-dir=/tmp \
-    evaluation/aggregate_figure3.ipynb evaluation/aggregate_figure4.ipynb \
-    evaluation/quartet_separated_modality_pca_fixed_effect_variance.ipynb
+  for script in aggregate_figure3 aggregate_figure4 \
+      quartet_separated_modality_pca_fixed_effect_variance; do
+    CORRECTION_ARM="$arm" pixi run Rscript "evaluation/$script.R"
+  done
 done
 ```
 
 Outputs: `figures/figure3_<arm>.png`, `figures/figure4_<arm>.png` and
 `figures/figureS5_<arm>.png`. Figures 3 and S5 also write matching `_variance.tsv`
 files containing median variance fractions and feature counts.
+
+Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
+shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
+The corresponding RF report is `classification_metric_report_panel5000.csv`.
+Generate the supplementary all-feature version for each arm with:
+
+```bash
+for arm in label_aware no_label; do
+  CORRECTION_ARM="$arm" FIGURE4_FEATURE_SPACE=all pixi run Rscript evaluation/aggregate_figure4.R
+done
+```
+
+These figures use all complete-case k-means features and all union RF features,
+and write `figures/figure4_all_features_<arm>.png`. Figure subtitles identify the
+feature space. Input and output path overrides remain available through
+`FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`; keep overrides
+consistent with the selected feature space.
+
+Set `FIGURE4_OUTPUT` to a path ending in `.svg` to export Figure 4 as SVG.
+PNG is the default; a path without an extension gets `.png`. For example:
+
+```bash
+CORRECTION_ARM=label_aware FIGURE4_FEATURE_SPACE=panel \
+  FIGURE4_OUTPUT=figures/figure4_label_aware.svg \
+  pixi run Rscript evaluation/aggregate_figure4.R
+```
 
 ---
 
@@ -474,14 +521,13 @@ fedRBE/
 │       └── utils_analyse.py
 ├── evaluation/                                 # Main evaluation scripts to produce results and figures
 │   ├── eval_simulation/                        # Evaluations on simulated data
-│   ├── evaluation_ccRCC.ipynb
-│   ├── evaluation_ecoli.ipynb
-│   ├── evaluation_ovarian_cancer.ipynb         # Evaluation of ovarian_cancer datasets
-│   ├── evaluation_quartet_multiomics.ipynb
-│   ├── evaluation_simulated.ipynb
-│   ├── evaluation_simulated_30runs.ipynb
+│   ├── aggregate_figure3.R                     # Figure 3
+│   ├── aggregate_figure4.R                     # Figure 4
+│   ├── dataset_diagnostics.R                   # Central-correction panels and simulated PCA
+│   ├── evaluation_simulated_30runs.R           # Simulated 30-run differences and variance partitioning
+│   ├── quartet_separated_modality_pca_fixed_effect_variance.R  # Figure S5
 ├── evaluation_classification_after_correction/ # Classification comparison scripts and outputs
-├── evaluation_clusterization_after_correction/ # K-means comparison notebooks and FeatureCloud app
+├── evaluation_clusterization_after_correction/ # K-means comparison scripts and FeatureCloud app
 └── [other directories/files]
 ```
 
@@ -500,7 +546,7 @@ Main scripts live at the repository root; shared helpers live in `evaluation_uti
 | `evaluation_utils/filtering.R` | Provides filtering and preprocessing functions used before centralized limma correction. |
 | `evaluation_utils/run_correction_experiments.py` | Runs central limma correction with selected covariates into canonical or isolated experiment outputs. |
 | `evaluation_utils/central_correction.R` | Provides the shared central limma correction step for real datasets. |
-| `evaluation_utils/plots_eda.R` | Provides boxplot, PCA, UMAP, heatmap, and correction-diagnostic plotting helpers. |
+| `evaluation_utils/plots_eda.R` | Provides PCA, boxplots, density plots, and correction diagnostics. |
 | `evaluation_utils/upset_plot.py` | Creates UpSet plots for feature-overlap comparisons. |
 
 

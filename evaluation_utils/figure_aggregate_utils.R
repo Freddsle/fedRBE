@@ -11,28 +11,24 @@ require_figure4_packages <- function(required = c("ggplot2", "grid", "gtable", "
 }
 
 
-find_repo_root <- function(helper_path = file.path("evaluation_utils", "figure_aggregate_utils.R")) {
-  candidates <- c(
-    getwd(),
-    file.path(getwd(), "..")
-  )
-  for (candidate in candidates) {
-    normalized <- normalizePath(candidate, mustWork = FALSE)
-    if (file.exists(file.path(normalized, helper_path))) {
-      return(normalizePath(normalized, mustWork = TRUE))
-    }
-  }
-  stop("Run this notebook from the repository root or from the evaluation/ directory.", call. = FALSE)
+# Paths in this file are relative to the repository root, the working directory
+# of the evaluation scripts.
+source_plotting_utils <- function() {
+  source(file.path("evaluation_utils", "plots_eda.R"))
+  source(file.path("evaluation_utils", "evaluation_funcs.R"))
 }
 
 
-source_plotting_utils <- function(repo_root) {
-  source(file.path(repo_root, "evaluation_utils", "plots_eda.R"))
-  source(file.path(repo_root, "evaluation_utils", "evaluation_funcs.R"))
+correction_arm_titles <- c(label_aware = "Label-aware correction", no_label = "Label-free correction")
+
+
+# CORRECTION_ARM selects the corrected outputs under after/<arm>/.
+correction_arm <- function() {
+  match.arg(Sys.getenv("CORRECTION_ARM", "label_aware"), names(correction_arm_titles))
 }
 
 
-read_matrix_table <- function(path, zip_inner_file = NULL, use_fread = TRUE) {
+read_matrix_table <- function(path, zip_inner_file = NULL) {
   read_with_base <- function(table_path, inner_file = NULL) {
     if (file.exists(table_path)) {
       return(utils::read.delim(table_path, header = TRUE, row.names = 1, check.names = FALSE))
@@ -51,7 +47,7 @@ read_matrix_table <- function(path, zip_inner_file = NULL, use_fread = TRUE) {
     stop("Matrix file not found: ", table_path, call. = FALSE)
   }
 
-  if (!isTRUE(use_fread) || !requireNamespace("data.table", quietly = TRUE)) {
+  if (!requireNamespace("data.table", quietly = TRUE)) {
     return(read_with_base(path, zip_inner_file))
   }
 
@@ -83,16 +79,9 @@ read_matrix_table <- function(path, zip_inner_file = NULL, use_fread = TRUE) {
 }
 
 
-align_matrices_to_metadata <- function(uncorrected, central_corrected = NULL, fed_corrected, metadata, sample_col = "file") {
-  if (!sample_col %in% names(metadata)) {
-    metadata[[sample_col]] <- rownames(metadata)
-  }
+align_matrices_to_metadata <- function(uncorrected, fed_corrected, metadata) {
   sample_order <- rownames(metadata)
-  matrices <- list(uncorrected = uncorrected)
-  if (!is.null(central_corrected)) {
-    matrices$central_corrected <- central_corrected
-  }
-  matrices$fed_corrected <- fed_corrected
+  matrices <- list(uncorrected = uncorrected, fed_corrected = fed_corrected)
 
   for (matrix_name in names(matrices)) {
     missing_samples <- setdiff(sample_order, colnames(matrices[[matrix_name]]))
@@ -120,11 +109,6 @@ align_matrices_to_metadata <- function(uncorrected, central_corrected = NULL, fe
 
 
 prepare_plot_matrices <- function(data, matrix_names = c("uncorrected", "fed_corrected")) {
-  missing_matrices <- setdiff(matrix_names, names(data))
-  if (length(missing_matrices) > 0) {
-    stop("Missing matrix/matrices for plotting: ", paste(missing_matrices, collapse = ", "), call. = FALSE)
-  }
-
   complete_features <- lapply(matrix_names, function(matrix_name) {
     rownames(data[[matrix_name]])[stats::complete.cases(data[[matrix_name]])]
   })
@@ -149,6 +133,135 @@ prepare_plot_matrices <- function(data, matrix_names = c("uncorrected", "fed_cor
   })
   names(data$plot_matrices) <- matrix_names
   data
+}
+
+
+# Dataset loaders return the aligned uncorrected and fedRBE matrices of one
+# correction arm, with sample metadata.
+load_ecoli_data <- function(correction_arm) {
+  data_path <- file.path("evaluation_data", "ecoli")
+  after_path <- file.path(data_path, "after", correction_arm)
+  metadata <- utils::read.delim(
+    file.path(data_path, "before", "initial_data", "central_batch_info.tsv"),
+    header = TRUE, row.names = 1, check.names = FALSE
+  )
+  metadata$file <- rownames(metadata)
+
+  align_matrices_to_metadata(
+    uncorrected = read_matrix_table(file.path(data_path, "before", "central_intensities_log_UNION.tsv")),
+    fed_corrected = read_matrix_table(file.path(after_path, "FedApp_corrected_data.tsv")),
+    metadata = metadata
+  )
+}
+
+
+load_ovarian_data <- function(correction_arm) {
+  data_path <- file.path("evaluation_data", "ovarian_cancer")
+  after_path <- file.path(data_path, "after", correction_arm)
+  metadata <- utils::read.delim(
+    file.path(data_path, "before", "all_metadata.tsv"),
+    header = TRUE, row.names = 1, check.names = FALSE
+  )
+  rownames(metadata) <- gsub("^X", "", rownames(metadata))
+  metadata$file <- rownames(metadata)
+
+  align_matrices_to_metadata(
+    uncorrected = read_matrix_table(
+      file.path(data_path, "before", "central_input.tsv"),
+      zip_inner_file = "central_input.tsv"
+    ),
+    fed_corrected = read_matrix_table(file.path(after_path, "FedApp_corrected_data.tsv")),
+    metadata = metadata
+  )
+}
+
+
+load_ccrcc_data <- function(correction_arm) {
+  data_path <- file.path("evaluation_data", "ccRCC_studies")
+  after_path <- file.path(data_path, "after", correction_arm)
+  metadata <- do.call(rbind, lapply(c("PDC000127", "PXD030344", "PXD042844"), function(site) {
+    design <- utils::read.delim(
+      file.path(data_path, "before", site, "design.tsv"), check.names = FALSE
+    )
+    data.frame(
+      file = design$Sample,
+      condition = ifelse(design$Tumor == 1, "Tumor", "Normal"),
+      lab = site,
+      stringsAsFactors = FALSE
+    )
+  }))
+  rownames(metadata) <- metadata$file
+
+  align_matrices_to_metadata(
+    uncorrected = read_matrix_table(file.path(data_path, "before", "central_intensities_log_UNION.tsv")),
+    fed_corrected = read_matrix_table(file.path(after_path, "FedApp_corrected_data.tsv")),
+    metadata = metadata
+  )
+}
+
+
+quartet_donor_levels <- c("D5", "D6", "F7", "M8")
+quartet_batch_levels <- c("B01", "B02", "B03", "B04")
+
+quartet_condition_palette <- c(D5 = "#44abe7", D6 = "#c55702", F7 = "#009E73", M8 = "#F0E442")
+
+
+# Joint all-modality k-means matrices of the Quartet evaluation.
+load_quartet_data <- function(correction_arm) {
+  data_path <- file.path("evaluation_data", "quartet_multiomics")
+  after_path <- file.path(data_path, "after", correction_arm)
+  metadata <- utils::read.delim(
+    file.path(data_path, "all_modalities_metadata.tsv"),
+    header = TRUE, check.names = FALSE
+  )
+  metadata$file <- metadata$pseudo_sample
+  metadata$lab <- metadata$client
+  # The final pseudo-sample component identifies the batch within each client.
+  metadata$batch <- factor(paste0(metadata$client, "_B", sub(".*_", "", metadata$pseudo_sample)))
+  metadata$batch_code <- factor(metadata$batch, labels = paste0("B", seq_len(nlevels(metadata$batch))))
+  metadata$condition <- factor(metadata$condition, levels = quartet_donor_levels)
+  metadata$lab <- factor(metadata$lab)
+  rownames(metadata) <- metadata$file
+
+  align_matrices_to_metadata(
+    uncorrected = read_matrix_table(file.path(data_path, "before", "all_modalities_before_kmeans_matrix.tsv")),
+    fed_corrected = read_matrix_table(file.path(after_path, "all_modalities_fedapp_kmeans_matrix.tsv")),
+    metadata = metadata
+  )
+}
+
+
+load_quartet_modality_data <- function(modality, correction_arm) {
+  modality_before <- file.path("evaluation_data", "quartet_multiomics", "before", modality)
+  modality_after <- file.path("evaluation_data", "quartet_multiomics", "after", correction_arm, modality)
+
+  metadata <- utils::read.delim(
+    file.path(modality_before, "metadata.tsv"),
+    header = TRUE,
+    check.names = FALSE
+  )
+  required_columns <- c("file", "condition", "batch", "batch_code")
+  assert_columns(metadata, required_columns, paste(modality, "metadata"))
+  if (anyNA(metadata[required_columns]) || anyDuplicated(metadata$file) ||
+      any(!metadata$condition %in% quartet_donor_levels) ||
+      any(!metadata$batch_code %in% quartet_batch_levels)) {
+    stop("Missing, duplicated or unexpected Quartet metadata for ", modality, call. = FALSE)
+  }
+  batch_codes <- unique(metadata[c("batch", "batch_code")])
+  if (anyDuplicated(batch_codes$batch) || anyDuplicated(batch_codes$batch_code)) {
+    stop("Each batch must have exactly one short batch code for ", modality, call. = FALSE)
+  }
+  metadata$file <- as.character(metadata$file)
+  metadata$condition <- factor(metadata$condition, levels = quartet_donor_levels)
+  metadata$batch <- factor(metadata$batch)
+  metadata$batch_code <- factor(metadata$batch_code, levels = quartet_batch_levels)
+  rownames(metadata) <- metadata$file
+
+  align_matrices_to_metadata(
+    uncorrected = read_matrix_table(file.path(modality_before, "central_intensities_log_UNION.tsv")),
+    fed_corrected = read_matrix_table(file.path(modality_after, "FedApp_corrected_data.tsv")),
+    metadata = metadata
+  )
 }
 
 
@@ -295,24 +408,6 @@ interleave_null_units <- function(values, gap) {
 }
 
 
-draw_stacked_panels <- function(panels, panel_heights = rep(1, length(panels))) {
-  grid::grid.newpage()
-  layout <- grid::grid.layout(
-    nrow = length(panels),
-    ncol = 1,
-    heights = grid::unit(panel_heights, "null")
-  )
-  grid::pushViewport(grid::viewport(layout = layout))
-  for (index in seq_along(panels)) {
-    grid::pushViewport(grid::viewport(layout.pos.row = index, layout.pos.col = 1))
-    draw_dataset_diagnostic_panel(panels[[index]])
-    grid::popViewport()
-  }
-  grid::popViewport()
-  invisible(panels)
-}
-
-
 arrange_dataset_panels <- function(
   panels,
   ncol = 2,
@@ -377,34 +472,31 @@ draw_dataset_panel_layout <- function(layout) {
 }
 
 
-save_dataset_panel_layout <- function(layout, output_path, width, height, dpi = 600) {
-  dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
-  png_args <- list(filename = output_path, width = width, height = height, units = "in", res = dpi)
-  if (isTRUE(capabilities("cairo"))) {
-    png_args$type <- "cairo"
+# Writes the grid drawing of draw() to a PNG, or an SVG for a .svg path; width and
+# height are in inches. A path without extension is written as .png.
+save_grid_png <- function(draw, output_path, width, height, dpi = 600) {
+  output_format <- tolower(tools::file_ext(output_path))
+  if (!nzchar(output_format)) {
+    output_format <- "png"
+    output_path <- paste0(output_path, ".png")
   }
-  do.call(grDevices::png, png_args)
-  on.exit(grDevices::dev.off(), add = TRUE)
-  draw_dataset_panel_layout(layout)
-  normalizePath(output_path, mustWork = TRUE)
-}
+  output_format <- match.arg(output_format, c("png", "svg"))
 
-
-save_stacked_panels <- function(panels, output_path, width, height, dpi = 600, panel_heights = rep(1, length(panels))) {
   dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
-  png_args <- list(filename = output_path, width = width, height = height, units = "in", res = dpi)
-  if (isTRUE(capabilities("cairo"))) {
-    png_args$type <- "cairo"
+
+  if (identical(output_format, "png")) {
+    png_args <- list(filename = output_path, width = width, height = height, units = "in", res = dpi)
+    if (isTRUE(capabilities("cairo"))) {
+      png_args$type <- "cairo"
+    }
+    do.call(grDevices::png, png_args)
+  } else {
+    grDevices::svg(filename = output_path, width = width, height = height)
   }
-  do.call(grDevices::png, png_args)
+
   on.exit(grDevices::dev.off(), add = TRUE)
-  draw_stacked_panels(panels, panel_heights = panel_heights)
+  draw()
   normalizePath(output_path, mustWork = TRUE)
-}
-
-
-figure_should_display_inline <- function() {
-  interactive() || "IRkernel" %in% loadedNamespaces() || nzchar(Sys.getenv("JPY_PARENT_PID"))
 }
 
 
@@ -433,15 +525,6 @@ prepare_figure4a_plot_data <- function(
   identity_columns <- c("Dataset", "Target", "Method", "Seed")
   if (anyNA(ari[identity_columns])) {
     stop("Missing ARI experiment keys", call. = FALSE)
-  }
-
-  missing_dataset_labels <- setdiff(dataset_order, names(dataset_labels))
-  if (length(missing_dataset_labels) > 0) {
-    stop(
-      "Missing Figure 4a dataset labels for: ",
-      paste(missing_dataset_labels, collapse = ", "),
-      call. = FALSE
-    )
   }
 
   plot_data <- ari[ari$Target == "condition" & ari$Dataset %in% dataset_order, , drop = FALSE]
@@ -536,10 +619,6 @@ prepare_figure4_classification_data <- function(
     "classification source"
   )
 
-  if (!metric_name %in% c("MCC", "F1_score") ||
-      !cv_method %in% c("Train-Test-Split", "Leave-One-Cohort-Out")) {
-    stop("Unexpected classification metric or validation method", call. = FALSE)
-  }
   identity_columns <- c(
     "data_name", "data_preprocessing_name", "metric_name", "predicted_client_name",
     "cross_validation_method", "seed", "predicted_target", "learning_type"
@@ -664,20 +743,6 @@ prepare_figure4_plot_data <- function(
 }
 
 
-summarize_figure4_data <- function(ari, classification_report, figure4_data, ari_dataset_order) {
-  list(
-    ari_source_rows = nrow(ari),
-    figure4a_rows = nrow(figure4_data$ari),
-    figure4a_datasets = levels(droplevels(figure4_data$ari$DatasetLabel)),
-    ari_datasets_outside_main_figure = setdiff(unique(ari$Dataset), ari_dataset_order),
-    classification_source_rows = nrow(classification_report),
-    figure4b_rows = nrow(figure4_data$leave_one_cohort_out),
-    figure4c_rows = nrow(figure4_data$train_test_split),
-    figure4_classification_tasks = levels(droplevels(figure4_data$train_test_split$Task))
-  )
-}
-
-
 observed_levels <- function(values, full_order) {
   full_order[full_order %in% as.character(stats::na.omit(values))]
 }
@@ -697,6 +762,8 @@ figure4_panel_theme <- function(base_size = 8.5) {
       axis.ticks.x = ggplot2::element_blank(),
       plot.margin = ggplot2::margin(4, 4, 4, 4),
       plot.title = ggplot2::element_text(face = "bold", size = 11, hjust = 0),
+      plot.subtitle = ggplot2::element_text(size = 8.5, color = "#444444",
+                                           margin = ggplot2::margin(b = 3)),
       plot.title.position = "plot",
       legend.position = "bottom",
       legend.title = ggplot2::element_blank(),
@@ -726,10 +793,6 @@ plot_figure4_box_panel <- function(
   before_after_gap <- 0.06
   point_jitter_width <- 0.03
 
-  if (length(scenario_order) != 4) {
-    stop("Figure 4 box layout expects four scenarios", call. = FALSE)
-  }
-
   box_width <- (box_cluster_width - (2 * within_pair_gap + before_after_gap)) / length(scenario_order)
   scenario_centers <- c(
     0,
@@ -745,10 +808,6 @@ plot_figure4_box_panel <- function(
 
   plot_data <- data
   plot_data$Figure4XIndex <- match(as.character(plot_data[[x_col]]), x_levels)
-  if (anyNA(plot_data$Figure4XIndex)) {
-    unexpected_x <- unique(as.character(plot_data[[x_col]][is.na(plot_data$Figure4XIndex)]))
-    stop("Figure 4 x values outside configured order: ", paste(unexpected_x, collapse = ", "), call. = FALSE)
-  }
 
   plot_data$Figure4Scenario <- factor(
     as.character(plot_data[[scenario_col]]),
@@ -756,10 +815,6 @@ plot_figure4_box_panel <- function(
     ordered = TRUE
   )
   plot_data$Figure4XOffset <- unname(scenario_offsets[as.character(plot_data$Figure4Scenario)])
-  if (anyNA(plot_data$Figure4XOffset)) {
-    unexpected_scenarios <- unique(as.character(plot_data[[scenario_col]][is.na(plot_data$Figure4XOffset)]))
-    stop("Figure 4 scenarios outside configured order: ", paste(unexpected_scenarios, collapse = ", "), call. = FALSE)
-  }
 
   plot_data$Figure4XPosition <- plot_data$Figure4XIndex + plot_data$Figure4XOffset
   plot_data$Figure4Group <- interaction(plot_data$Figure4XIndex, plot_data$Figure4Scenario, drop = TRUE)
@@ -836,15 +891,29 @@ figure4_scenarios <- function() {
 }
 
 
+# RF tasks as data_name|predicted_target, in the dataset order of Figure 4a.
+classification_task_labels <- c(
+  "E. coli|Pyr" = "E. coli\n(Pyr)",
+  "Ovarian cancer|HGSC" = "Ovarian cancer\n(HGSC)",
+  "ccRCC|Condition" = "ccRCC\n(condition)",
+  "Quartet Multiomics|condition" = "Quartet multiomics\n(condition)"
+)
+
+
+# Maps learning_type|data_preprocessing_name to the four Figure 4 scenarios.
+classification_scenario_labels <- function(corrected_name = "corrected") {
+  keys <- paste(
+    rep(c("centralized", "federated"), 2),
+    rep(c("uncorrected", corrected_name), each = 2), sep = "|"
+  )
+  stats::setNames(figure4_scenarios()$order, keys)
+}
+
+
 export_classification_plots <- function(results_file, plots_dir) {
   require_figure4_packages()
   report <- utils::read.csv(results_file, stringsAsFactors = FALSE, check.names = FALSE)
-  task_labels <- c(
-    "E. coli|Pyr" = "E. coli\n(Pyr)",
-    "Ovarian cancer|HGSC" = "Ovarian cancer\n(HGSC)",
-    "ccRCC|Condition" = "ccRCC\n(condition)",
-    "Quartet Multiomics|condition" = "Quartet multiomics\n(condition)"
-  )
+  task_labels <- classification_task_labels
   required_columns <- c(
     "data_name", "data_preprocessing_name", "metric_name", "metric_value",
     "predicted_client_name", "cross_validation_method", "seed", "predicted_target",
@@ -856,7 +925,6 @@ export_classification_plots <- function(results_file, plots_dir) {
   task_labels <- task_labels[sub("\\|.*$", "", names(task_labels)) %in% report$data_name]
   task_order <- unname(task_labels)
   arms <- c(label_aware = "corrected", no_label = "no_label")
-  arm_titles <- c(label_aware = "Label-aware correction", no_label = "Label-free correction")
   cv_titles <- c(
     "Leave-One-Cohort-Out" = "RF leave-one-cohort-out",
     "Train-Test-Split" = "RF 70:30 train/test split"
@@ -881,11 +949,7 @@ export_classification_plots <- function(results_file, plots_dir) {
   for (arm in names(arms)) {
     arm_data <- report[report$data_preprocessing_name %in% c("uncorrected", arms[[arm]]),
                        , drop = FALSE]
-    scenario_keys <- paste(
-      rep(c("centralized", "federated"), 2),
-      rep(c("uncorrected", arms[[arm]]), each = 2), sep = "|"
-    )
-    scenario_labels <- stats::setNames(style$order, scenario_keys)
+    scenario_labels <- classification_scenario_labels(arms[[arm]])
     for (metric in names(metric_labels)) {
       for (cv in names(cv_titles)) {
         data <- prepare_figure4_classification_data(
@@ -932,7 +996,7 @@ export_classification_plots <- function(results_file, plots_dir) {
     panel <- plot_figure4_box_panel(
       data = item$data, x_col = "Task", y_col = "metric_value", x_levels = task_order,
       y_label = metric_labels[[item$metric]],
-      panel_tag = paste(arm_titles[[item$arm]], cv_titles[[item$cv]], sep = " · "),
+      panel_tag = paste(correction_arm_titles[[item$arm]], cv_titles[[item$cv]], sep = " · "),
       y_limits = c(y_min, 1.05), y_breaks = y_breaks,
       scenario_order = style$order, scenario_colors = style$colors, point_size = 1.05
     ) + ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
@@ -942,82 +1006,6 @@ export_classification_plots <- function(results_file, plots_dir) {
     message("Saved ", path, " (", nrow(item$data), " seed scores)")
   }
   invisible(names(panels))
-}
-
-
-export_clustering_plot <- function(ari_path, output_path, correction_arm) {
-  require_figure4_packages()
-  arm_titles <- c(label_aware = "Label-aware correction", no_label = "Label-free correction")
-  if (length(correction_arm) != 1L || !correction_arm %in% names(arm_titles)) {
-    stop("correction_arm must be label_aware or no_label", call. = FALSE)
-  }
-  dataset_labels <- c(
-    ecoli = "E. coli", ovarian_cancer = "Ovarian\ncancer",
-    ccRCC_proteomics = "ccRCC\nproteomics", quartet_multiomics = "Quartet\nmultiomics"
-  )
-  method_labels <- c(
-    BC_Cntrl = "Central before BEC", BC_Fed = "Federated before BEC",
-    AC_Cntrl = "Central after BEC", AC_Fed = "Federated after BEC"
-  )
-  ari <- utils::read.delim(ari_path, stringsAsFactors = FALSE, check.names = FALSE)
-  key_columns <- c("Dataset", "Target", "K", "Method", "Seed")
-  assert_columns(ari, c(key_columns, "ARI"), "ARI report")
-  if (anyNA(ari[key_columns])) stop("Missing ARI experiment keys", call. = FALSE)
-  ari <- ari[ari$Target == "condition", , drop = FALSE]
-  if (!nrow(ari)) stop("No condition-target ARI scores", call. = FALSE)
-  for (column in c("K", "Seed")) {
-    ari[[column]] <- suppressWarnings(as.numeric(ari[[column]]))
-    if (any(!is.finite(ari[[column]]) | ari[[column]] != floor(ari[[column]]))) {
-      stop("ARI ", column, " must contain finite integers", call. = FALSE)
-    }
-  }
-  if (any(ari$K < 1)) stop("ARI K must be positive", call. = FALSE)
-  dataset_order <- c(
-    names(dataset_labels)[names(dataset_labels) %in% ari$Dataset],
-    setdiff(unique(ari$Dataset), names(dataset_labels))
-  )
-  dataset_labels <- c(
-    dataset_labels,
-    stats::setNames(setdiff(dataset_order, names(dataset_labels)),
-                    setdiff(dataset_order, names(dataset_labels)))
-  )[dataset_order]
-  k_by_dataset <- vapply(dataset_order, function(dataset) {
-    values <- unique(ari$K[ari$Dataset == dataset])
-    if (length(values) != 1L) {
-      stop("ARI K differs between runs for ", dataset, call. = FALSE)
-    }
-    values
-  }, numeric(1))
-  seeds <- sort(unique(ari$Seed))
-  expected <- expand.grid(
-    Dataset = dataset_order, Method = names(method_labels), Seed = seeds,
-    stringsAsFactors = FALSE
-  )
-  expected$Target <- "condition"
-  expected$K <- unname(k_by_dataset[expected$Dataset])
-  keys <- function(frame) do.call(paste, c(frame[key_columns], sep = "|"))
-  if (anyNA(ari[key_columns]) || anyDuplicated(ari[key_columns]) ||
-      !setequal(keys(ari), keys(expected))) {
-    stop("Expected every dataset/seed for all four ARI methods, with consistent K ",
-         "and no duplicate experiment keys", call. = FALSE)
-  }
-  style <- figure4_scenarios()
-  data <- prepare_figure4a_plot_data(
-    ari, dataset_order, dataset_labels, method_labels, style$order, seeds_per_group = length(seeds)
-  )
-  y_min <- min(-0.25, floor(min(data$ARI) * 4) / 4)
-  y_breaks <- sort(unique(c(-0.2, seq(0, 1, 0.25), if (y_min < -0.25) y_min)))
-  panel <- plot_figure4_box_panel(
-    data = data, x_col = "DatasetLabel", y_col = "ARI", x_levels = unname(dataset_labels),
-    y_label = "ARI", panel_tag = paste(arm_titles[[correction_arm]], "k-means clustering", sep = " · "),
-    y_limits = c(y_min, 1.05), y_breaks = y_breaks,
-    scenario_order = style$order, scenario_colors = style$colors, point_size = 1.05
-  ) + ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
-  dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
-  ggplot2::ggsave(output_path, plot = panel, width = 7.5, height = 3.2,
-                  units = "in", dpi = 600, bg = "white")
-  message("Saved ", output_path, " (", nrow(data), " unchanged seed scores)")
-  invisible(normalizePath(output_path, mustWork = TRUE))
 }
 
 
@@ -1031,7 +1019,9 @@ make_figure4_plot <- function(
   point_size = 1.05,
   panel_heights = c(2.7, 2.7, 2.7, 0.55),
   panel_gap = grid::unit(0.18, "cm"),
-  legend_gap = grid::unit(0.08, "cm")
+  legend_gap = grid::unit(0.08, "cm"),
+  clustering_feature_label = NULL,
+  classification_feature_label = NULL
 ) {
   ari_levels <- observed_levels(
     figure4_data$ari$DatasetLabel,
@@ -1052,7 +1042,7 @@ make_figure4_plot <- function(
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
     point_size = point_size
-  )
+  ) + ggplot2::labs(subtitle = clustering_feature_label)
   panel_b <- plot_figure4_box_panel(
     data = figure4_data$leave_one_cohort_out,
     x_col = "Task",
@@ -1065,7 +1055,7 @@ make_figure4_plot <- function(
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
     point_size = point_size
-  )
+  ) + ggplot2::labs(subtitle = classification_feature_label)
   panel_c <- plot_figure4_box_panel(
     data = figure4_data$train_test_split,
     x_col = "Task",
@@ -1078,7 +1068,7 @@ make_figure4_plot <- function(
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
     point_size = point_size
-  )
+  ) + ggplot2::labs(subtitle = classification_feature_label)
 
   list(
     panels = list(panel_a, panel_b, panel_c),
@@ -1092,36 +1082,20 @@ make_figure4_plot <- function(
 draw_figure4 <- function(figure_plot) {
   grid::grid.newpage()
   panels <- figure_plot$panels
-  panel_heights <- figure_plot$panel_heights
-  legend_height <- if (length(panel_heights) > length(panels)) {
-    panel_heights[[length(panels) + 1]]
-  } else {
-    0.55
-  }
-  panel_heights <- panel_heights[seq_along(panels)]
-  panel_gap <- if (is.null(figure_plot$panel_gap)) grid::unit(0.18, "cm") else figure_plot$panel_gap
-  legend_gap <- if (is.null(figure_plot$legend_gap)) grid::unit(0.08, "cm") else figure_plot$legend_gap
-  legend <- if (inherits(panels[[1]], "ggplot")) {
-    extract_plot_legend(panels[[1]])
-  } else if (!is.null(figure_plot$legend)) {
-    figure_plot$legend
-  } else {
-    grid::zeroGrob()
-  }
+  # The height after the panel heights is the legend row.
+  legend_height <- figure_plot$panel_heights[[length(panels) + 1]]
+  panel_heights <- figure_plot$panel_heights[seq_along(panels)]
+  legend <- extract_plot_legend(panels[[1]])
   has_legend <- legend_is_present(legend)
 
   panel_grobs <- lapply(panels, function(plot) {
-    if (inherits(plot, "ggplot")) {
-      ggplot2::ggplotGrob(plot + ggplot2::theme(legend.position = "none"))
-    } else {
-      plot
-    }
+    ggplot2::ggplotGrob(plot + ggplot2::theme(legend.position = "none"))
   })
-  layout_heights <- interleave_null_units(panel_heights, panel_gap)
+  layout_heights <- interleave_null_units(panel_heights, figure_plot$panel_gap)
   if (has_legend) {
     layout_heights <- grid::unit.c(
       layout_heights,
-      legend_gap,
+      figure_plot$legend_gap,
       grid::unit(legend_height, "null")
     )
   }
@@ -1144,43 +1118,4 @@ draw_figure4 <- function(figure_plot) {
   }
   grid::popViewport()
   invisible(figure_plot)
-}
-
-
-save_figure4_png <- function(figure_plot, output_path, width, height, dpi = 600, output_format = NULL) {
-  if (is.null(output_format)) {
-    output_format <- tools::file_ext(output_path)
-  }
-  output_format <- tolower(output_format)
-  if (!nzchar(output_format)) {
-    output_format <- "png"
-  }
-  output_format <- match.arg(output_format, c("png", "svg"))
-
-  current_ext <- tolower(tools::file_ext(output_path))
-  if (!identical(current_ext, output_format)) {
-    output_path <- paste0(tools::file_path_sans_ext(output_path), ".", output_format)
-  }
-
-  dir.create(dirname(output_path), recursive = TRUE, showWarnings = FALSE)
-
-  if (identical(output_format, "png")) {
-    png_args <- list(filename = output_path, width = width, height = height, units = "in", res = dpi)
-    if (isTRUE(capabilities("cairo"))) {
-      png_args$type <- "cairo"
-    }
-    do.call(grDevices::png, png_args)
-  } else {
-    grDevices::svg(filename = output_path, width = width, height = height)
-  }
-
-  on.exit(grDevices::dev.off(), add = TRUE)
-  draw_figure4(figure_plot)
-
-  normalizePath(output_path, mustWork = TRUE)
-}
-
-
-figure4_should_display_inline <- function() {
-  figure_should_display_inline()
 }
