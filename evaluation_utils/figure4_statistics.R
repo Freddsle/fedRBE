@@ -11,6 +11,17 @@
 # Values closer than this count as equal, so floating-point noise is no difference.
 figure4_statistics_tolerance <- 1e-10
 
+# Smallest ARI/MCC mean difference counted as relevant. Seeds only vary algorithmic
+# randomness, so constant groups make even negligible differences significant.
+figure4_min_difference <- 0.05
+
+
+# Bracket marker: `*` for a significant and relevant difference, `n.s.` otherwise.
+figure4_marker <- function(p, diff) {
+  relevant <- abs(diff) >= figure4_min_difference - figure4_statistics_tolerance
+  ifelse(p < 0.05 & relevant, "*", "n.s.")
+}
+
 
 # C1/C2: correction effect per learning setup. C3/C4: federated vs central.
 # `level` is the bracket height in the plots (1 is lowest).
@@ -124,13 +135,16 @@ unit_statistics <- function(data, value_col, seed_col) {
     } else {
       perm_test_unpaired(values_a, values_b)
     }
+    diff <- mean(values_b) - mean(values_a)
     data.frame(
       contrast = contrast$contrast, role = contrast$role,
       group_a = contrast$group_a, group_b = contrast$group_b, paired = contrast$paired,
       n_a = length(values_a), n_b = length(values_b),
       mean_a = mean(values_a), mean_b = mean(values_b),
-      diff = mean(values_b) - mean(values_a), ci95_low = ci[[1]], ci95_high = ci[[2]],
-      p_raw = p, note = contrast_note(values_a, values_b, contrast$paired),
+      diff = diff, ci95_low = ci[[1]], ci95_high = ci[[2]], p_raw = p,
+      relevant = abs(diff) >= figure4_min_difference - figure4_statistics_tolerance,
+      marker = figure4_marker(p, diff),
+      note = contrast_note(values_a, values_b, contrast$paired),
       stringsAsFactors = FALSE
     )
   })
@@ -205,7 +219,7 @@ write_figure4_statistics <- function(stats, output_path) {
 }
 
 
-# Brackets for one panel (and, for S7, one dataset): `*` marks p < 0.05, else n.s.
+# Brackets for one panel (and, for S7, one dataset), labelled by figure4_marker().
 figure4_annotation_data <- function(stats, panel, dataset = NULL, p_column = "p_raw") {
   rows <- stats[stats$panel == panel, , drop = FALSE]
   if (!is.null(dataset)) rows <- rows[rows$dataset == dataset, , drop = FALSE]
@@ -214,12 +228,13 @@ figure4_annotation_data <- function(stats, panel, dataset = NULL, p_column = "p_
   data.frame(
     x_level = rows$x_level, contrast = rows$contrast, level = levels,
     group_a = rows$group_a, group_b = rows$group_b,
-    label = ifelse(rows[[p_column]] < 0.05, "*", "n.s."),
+    label = figure4_marker(rows[[p_column]], rows$diff),
     stringsAsFactors = FALSE
   )
 }
 
 
 figure4_statistics_caption <- function() {
-  "Brackets: * p < 0.05, n.s. otherwise; exact permutation tests over seeds (uncorrected)"
+  paste0("Brackets: * p < 0.05 and |difference| ≥ ", figure4_min_difference,
+         ", n.s. otherwise; exact permutation tests over seeds (uncorrected)")
 }

@@ -489,8 +489,11 @@ tests are in Figure S7.
 - Central vs federated, before and after correction: exact two-sided two-sample
   permutation test on the difference in means.
 
-`*` marks p < 0.05; p-values are not corrected for multiple testing. The table also
-lists each mean difference with its 95% bootstrap confidence interval.
+`*` marks p < 0.05 with an absolute mean difference of at least 0.05; smaller
+differences are not considered relevant, because seeds only vary algorithmic randomness
+and constant groups make even negligible differences significant. p-values are not
+corrected for multiple testing. The table also lists each mean difference with its 95%
+bootstrap confidence interval.
 
 Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
 shared complete-case panel, up to 5,000 features per dataset or Quartet layer.

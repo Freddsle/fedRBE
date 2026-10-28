@@ -50,6 +50,10 @@ invisible(bootstrap_ci(a, b, paired = FALSE))
 stopifnot(same(stats::runif(1), expected_draw))
 cat("Permutation tests match brute-force references; bootstrap CIs behave\n")
 
+# A bracket needs a significant and a relevant (|diff| >= 0.05) difference.
+stopifnot(identical(figure4_marker(c(0.002, 0.002, 0.002, 0.3), c(0.004, 0.05, -0.2, 0.2)),
+                    c("n.s.", "*", "*", "n.s.")))
+
 # Canonical label-aware panel results, written to a temporary Figure 4 output.
 output <- file.path(tempdir(), "figure4_test.png")
 Sys.setenv(CORRECTION_ARM = "label_aware", FIGURE4_FEATURE_SPACE = "panel", FIGURE4_OUTPUT = output)
@@ -93,7 +97,24 @@ stopifnot(nrow(ari_primary) == 8L, all(ari_primary$p_raw == 2 / 2^10),
           all(split_c1$note == "all pairs identical"),
           nrow(quartet_loo) == 12L, all(quartet_loo$p_raw == 1))
 
+# Negligible differences between constant groups stay significant but get no `*`.
+marker <- function(panel, dataset, contrast, cohort = NA_character_) {
+  row <- stats[stats$panel == panel & startsWith(stats$dataset, dataset) &
+                 stats$contrast == contrast & identical_cohort(stats$cohort, cohort), ]
+  stopifnot(nrow(row) == 1L)
+  row
+}
+identical_cohort <- function(values, cohort) {
+  if (is.na(cohort)) is.na(values) else !is.na(values) & values == cohort
+}
+ccrcc_c4 <- marker("4a ARI", "ccRCC", "C4")
+lab_d_c3 <- marker("S7 LOCO", "E. coli", "C3", "lab_D")
+stopifnot(ccrcc_c4$p_raw < 0.05, ccrcc_c4$marker == "n.s.", !ccrcc_c4$relevant,
+          lab_d_c3$marker == "*", lab_d_c3$diff < -0.05,
+          all(ari_primary$marker == "*"))
+
 annotations <- figure4_annotation_data(stats, "4a ARI")
+ari_rows <- stats[stats$panel == "4a ARI", ]
 stopifnot(nrow(annotations) == 16L, setequal(annotations$level, 1:3),
-          all(annotations$label %in% c("*", "n.s.")))
+          identical(annotations$label, ari_rows$marker))
 cat("Label-aware panel statistics: 100 contrasts, effect sizes and canonical outcomes match\n")
