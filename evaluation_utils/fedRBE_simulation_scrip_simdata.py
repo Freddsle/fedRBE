@@ -1,379 +1,230 @@
 #!/usr/bin/env python3
+"""
+Runs fedRBE locally without docker or the FeatureCloud controller.
+Each client runs the app's actual protocol (batchcorrection/fedrbe.py run_fedrbe)
+in its own thread, data is exchanged via run_simulation_native of the
+fc_fedlearnsim_helper. SMPC is not emulated, values are aggregated in plain.
 
-### Imports ###
-import sys
-import os
-# Repository root, for the production batchcorrection package.
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+Two modes:
+1. Folder mode, used by evaluation_data/simulated/robustness_simulation.R and
+   evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb:
+       python3 evaluation_utils/fedRBE_simulation_scrip_simdata.py <input_dir> <output_file>
+   input_dir contains one subfolder per client (config.yml, data, design).
+   The clients are the sorted subfolders, the first is the coordinator.
+   The merged corrected data of all clients is saved as output_file.
+2. Experiment mode, to quickly check that a change did not break anything:
+       python3 evaluation_utils/fedRBE_simulation_scrip_simdata.py --experiments [--only <text>] [--write]
+   Runs the experiments of generate_fedrbe_corrected_datasets.py (experiments
+   using SMPC are skipped) and compares the merged federated result to the
+   central limma result used by analyse_fedvscentral.py. With --write, the
+   results are additionally saved into evaluation_data exactly like
+   generate_fedrbe_corrected_datasets.py does.
+--verbose shows the output of the clients in both modes.
+"""
 import argparse
-from typing import List, Tuple, Union, Dict
-from batchcorrection.classes.client import Client
-from batchcorrection.classes.coordinator_utils import select_common_features_variables, \
-    compute_beta, create_beta_mask, batch_coefficients
+import contextlib
+from copy import deepcopy
+import io
+import os
+from pathlib import Path
+import sys
+import tempfile
+import traceback
+from typing import List
 
-import numpy as np
 import pandas as pd
-import time
+import yaml
 
-### Helper Functions ###
-### Just run this, these functions are needed in various places ###
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(ROOT)
+sys.path.append(os.path.join(ROOT, "evaluation_classification_after_correction"))
 
-### Define the client class ###
-class ClientWrapper:
-    """
-    Holds all information necessary for the simulation run to work.
-    Defines the input data of the client, it's name and if it should be
-    considered as the coordinator
-    """
-    def __init__(self, id: str, input_folder: str, coordinator: bool = False):
-        self.id = id
-        self.input_folder = input_folder
-        self.is_coordinator = coordinator
-        self.client_class: Client # initiated later
-        self.data_corrected: pd.DataFrame # initiated later
+from batchcorrection.fedrbe import run_fedrbe  # noqa: E402
+from fc_fed_forest_simple_app.fc_fedlearnsim_helper.run_app_simulation import run_simulation_native  # noqa: E402
 
-def _check_consistency_clientwrappers(clientWrappers: List[ClientWrapper]) -> None:
-    """
-    Checks for a list of clients if they were created correctly
-    Raises a ValueError in case of inconsistencies
-    Checks:
-        1. If exactly one coordinator exists
-    """
-    coord = False
-    for clientWrapper in clientWrappers:
-        if coord and clientWrapper.is_coordinator:
-            raise ValueError("More than one coordinator was defined, please check "+\
-                            "the code defining the clients")
-        if clientWrapper.is_coordinator:
-            coord = True
-    if not coord:
-        raise ValueError("No client instance is a coordinator, please designate "+\
-                        "any client as a coordinator")
+OUTPUT_FILES = ["only_batch_corrected_data.csv", "full_corrected_data.csv", "report.txt"]
 
-def _concat_federated_results(clientWrappers: List[ClientWrapper],
-                              samples_in_columns=True) -> Tuple[pd.DataFrame, List[str]]:
+
+def run_clients(client_dirs: List[str], verbose: bool, log: io.StringIO) -> List[dict]:
     """
-    Concatenates the results of the federated clients into one dataframe
-    Also checks which features are common to all clients
-    and returns them
-    Args:
-        clientWrappers: List of ClientWrapper instances, containing the data
-            in the data_corrected attribute
-        samples_in_columns: If True, the samples are in the columns, if False
-            they are in the rows. For expression files this is true.
-            This decides how to aggregate the dataframes
+    Runs run_fedrbe for all clients, the first client is the coordinator.
+    The client IDs are the folder names.
     Returns:
-        merged_df: The merged dataframe containing the data of all clients
-        intersection_features: The features that are common to all clients
+        Per client, a dict mapping the output file names of the app to their content as bytes
     """
-    merged_df = None
-    intersection_features = set()
-    for clientWrapper in clientWrappers:
-        # get the data in the correct format
-        if not hasattr(clientWrapper, "data_corrected") or \
-            clientWrapper.data_corrected is None:
-            raise ValueError("No data was found in the clientWrappers")
-        corrected_data = clientWrapper.data_corrected
-        if not samples_in_columns:
-            corrected_data = corrected_data.T
+    client_names = [os.path.basename(os.path.normpath(client)) for client in client_dirs]
+    with tempfile.TemporaryDirectory() as tmp:
+        output_dirs = [os.path.join(tmp, name) for name in client_names]
+        for output_dir in output_dirs:
+            os.makedirs(output_dir)
+        with contextlib.redirect_stdout(sys.stdout if verbose else log):
+            run_simulation_native(client_dirs, output_dirs, None, run_fedrbe,
+                                  client_ids=client_names)
+        return [{fname: Path(output_dir, fname).read_bytes()
+                 for fname in OUTPUT_FILES if Path(output_dir, fname).exists()}
+                for output_dir in output_dirs]
 
-        cleaned_corrected_features = set(corrected_data.dropna().index)
-        # initialize the merged_df
-        if merged_df is None:
-            merged_df = corrected_data
-            intersection_features = cleaned_corrected_features
-            continue
 
-        # merge the data
-        merged_df = pd.concat([merged_df, corrected_data], axis=1)
-        intersection_features = intersection_features.intersection(cleaned_corrected_features)
+def merge_corrected_data(client_files: List[dict], separators: List[str]) -> pd.DataFrame:
+    """Concatenates the clients' corrected data (features x samples) along the samples."""
+    return pd.concat([pd.read_csv(io.BytesIO(files["only_batch_corrected_data.csv"]),
+                                  sep=separator, index_col=0)
+                      for files, separator in zip(client_files, separators)], axis=1)
 
-    # final check
-    if merged_df is None:
-        raise ValueError("No data was found in the clientWrappers")
-    # reverse the Transpose if necessary
-    if not samples_in_columns:
-        merged_df = merged_df.T
-    return merged_df, list(intersection_features)
 
-# ====================================================================================================
-# ====================================================================================================
+### FOLDER MODE
+def run_folder(input_dir: str, output_file: str, verbose: bool) -> None:
+    """Runs fedRBE on the client subfolders of input_dir and saves the merged result."""
+    client_dirs = sorted(os.path.join(input_dir, name) for name in os.listdir(input_dir)
+                         if os.path.isfile(os.path.join(input_dir, name, "config.yml")))
+    if len(client_dirs) < 3:
+        raise ValueError(f"Expected at least three client folders with config.yml in {input_dir}")
+    print("Clients: ", [os.path.basename(client) for client in client_dirs])
+    separators = []
+    for client in client_dirs:
+        with open(os.path.join(client, "config.yml"), "r") as f:
+            config = yaml.safe_load(f)["flimmaBatchCorrection"]
+        separators.append(config.get("separator", "\t"))
+    log = io.StringIO()
+    try:
+        client_files = run_clients(client_dirs, verbose, log)
+    except Exception:
+        print("\n".join(log.getvalue().splitlines()[-20:]))
+        raise
+    # rows sorted by feature name, the app's own order follows the hashed names
+    federated_df = merge_corrected_data(client_files, separators).sort_index()
+    federated_df.to_csv(output_file, sep="\t")
+    print(f"Shape of federated data: {federated_df.shape}")
+    print(f"Results saved to: {output_file}")
 
-### This part defines the data used. A ClientWrapper class is used to      ###
-### describe all cohorts. If other data should be tested, this part should ###
-### be changed                                                             ###
-### Define the different clients ###
-    # we use a helper class for each client, see the helper function
-    # code block or the later definitions here for more info
 
-################### Simulation Data ###################
+### EXPERIMENT MODE
+def central_result_file(result_filename: str) -> str:
+    """Finds the central result file belonging to a federated result file."""
+    import analyse_fedvscentral  # pylint: disable=import-outside-toplevel
+    for experiment in analyse_fedvscentral.experiment_results:
+        if os.path.abspath(experiment.federated_result_file) == os.path.abspath(result_filename):
+            return experiment.central_result_file
+    raise ValueError(f"No central result registered in analyse_fedvscentral.py for {result_filename}")
+
+
+def run_experiment(exp, result_filename: str, write: bool, verbose: bool) -> dict:
+    """
+    Runs one experiment of generate_fedrbe_corrected_datasets.py locally and
+    compares it to the central result. Returns a summary row.
+    """
+    # pylint: disable=import-outside-toplevel
+    from evaluation_utils import utils_analyse
+    import generate_fedrbe_corrected_datasets as generate
+
+    exp = deepcopy(exp)
+    row = {"Experiment": exp.name, "Result": os.path.relpath(result_filename, generate.data_dir)}
+    config_paths = [Path(client) / "config.yml" for client in exp.clients]
+    original_configs = {path: path.read_bytes() if path.exists() else None for path in config_paths}
+    log = io.StringIO()
+    try:
+        # merges the config changes and writes config.yml into the client folders
+        with contextlib.redirect_stdout(log):
+            exp._set_config_files()  # pylint: disable=protected-access
+        if any(config["flimmaBatchCorrection"].get("smpc") for config in exp.config_files):
+            row["Status"] = "skipped (SMPC)"
+            return row
+        # the first client is the coordinator, as in the docker runs
+        client_files = run_clients(exp.clients, verbose, log)
+        if write:
+            with contextlib.redirect_stdout(sys.stdout if verbose else log):
+                generate.save_experiment_results(exp, result_filename, client_files)
+
+        # compare the merged corrected data to the central result
+        separators = [config["flimmaBatchCorrection"].get("separator", "\t")
+                      for config in exp.config_files]
+        with tempfile.TemporaryDirectory() as tmp:
+            federated_file = os.path.join(tmp, "FedApp_corrected_data.tsv")
+            merge_corrected_data(client_files, separators).to_csv(federated_file, sep="\t")
+            comparison = utils_analyse.ExperimentResult(
+                name=exp.name,
+                federated_result_file=federated_file,
+                central_result_file=central_result_file(result_filename),
+            )
+            with contextlib.redirect_stdout(sys.stdout if verbose else log):
+                result_df = utils_analyse.compare_experiments([comparison])
+        if result_df is None or result_df.empty:
+            row["Status"] = "FAILED (no comparison)"
+            return row
+        result = result_df.iloc[0]
+        row["Mean difference"] = result["Mean difference"]
+        row["Max difference"] = result["Max difference"]
+        failed = result["Max difference"] > utils_analyse.FAILURE_THRESHOLD
+        row["Status"] = "FAILED (difference)" if failed else ("ok, written" if write else "ok")
+    except Exception as error:  # pylint: disable=broad-except
+        row["Status"] = f"FAILED: {error}"
+        if not verbose:
+            print(f"--- log of {exp.name} ({row['Result']}) ---")
+            print("\n".join(log.getvalue().splitlines()[-20:]))
+        traceback.print_exc()
+    finally:
+        for path, content in original_configs.items():
+            if content is None:
+                path.unlink(missing_ok=True)
+            else:
+                path.write_bytes(content)
+    return row
+
+
+def run_experiments(only: str, write: bool, verbose: bool) -> None:
+    """Runs the selected experiments and prints a summary, exits with 1 on failures."""
+    import generate_fedrbe_corrected_datasets as generate  # pylint: disable=import-outside-toplevel
+
+    # result paths are given relative to evaluation_data, as in the generate script
+    selected = [(exp, os.path.join(generate.data_dir, result_filename))
+                for exp, result_filename in generate.experiments
+                if only is None or only in exp.name or only in result_filename]
+    if not selected:
+        raise SystemExit(f"No experiment matches {only!r}")
+
+    rows = []
+    for exp, result_filename in selected:
+        print(f"Running {exp.name} ({os.path.relpath(result_filename, generate.data_dir)})")
+        rows.append(run_experiment(exp, result_filename, write, verbose))
+        print(f"  -> {rows[-1]['Status']}")
+
+    summary = pd.DataFrame(rows)
+    with pd.option_context("display.width", 200, "display.max_colwidth", 80):
+        print(summary.to_string(index=False))
+    if summary["Status"].str.startswith("FAILED").any():
+        raise SystemExit(1)
+
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Run fedRBE locally on client folders and save the merged corrected data.')
-    parser.add_argument('input_dir', help='Folder with one subfolder (config.yml, data, design) per client')
-    parser.add_argument('output_file', help='TSV file for the merged corrected data')
+        description="Run fedRBE locally (no docker, no SMPC), either on the client folders "
+                    "of input_dir or on the experiments of generate_fedrbe_corrected_datasets.py.")
+    parser.add_argument("input_dir", nargs="?",
+                        help="Folder with one subfolder (config.yml, data, design) per client")
+    parser.add_argument("output_file", nargs="?", help="TSV file for the merged corrected data")
+    parser.add_argument("--experiments", action="store_true",
+                        help="Run the experiments of generate_fedrbe_corrected_datasets.py and "
+                             "compare them to the central results")
+    parser.add_argument("--only", default=None,
+                        help="With --experiments: only run experiments whose name or result path "
+                             "contains this text")
+    parser.add_argument("--write", action="store_true",
+                        help="With --experiments: also save the results into evaluation_data like "
+                             "generate_fedrbe_corrected_datasets.py")
+    parser.add_argument("--verbose", action="store_true", help="Show the output of the clients")
     args = parser.parse_args()
 
-    base_dir = args.input_dir
-    # Clients are the sorted subfolders with a config; the first is the coordinator
-    # and the last is the reference batch.
-    cohort_names = sorted(name for name in os.listdir(base_dir)
-                          if os.path.isfile(os.path.join(base_dir, name, "config.yml")))
-    if len(cohort_names) < 3:
-        raise ValueError(f"Expected at least three client folders with config.yml in {base_dir}")
-    print("Base directory: ", base_dir)
-    print("Clients: ", cohort_names)
-
-    # Initialize clientWrappers list
-    clientWrappers: List[ClientWrapper] = []
-
-    # Iterate over cohort names and create ClientWrapper instances
-    for i, cohortname in enumerate(cohort_names):
-        clientWrappers.append(ClientWrapper(
-            id=cohortname,
-            input_folder=os.path.join(base_dir, cohortname),
-            coordinator=(i == 0)  # Set the first client as coordinator
-        ))
-
-    # Double check that we only have one coordinator
-        _check_consistency_clientwrappers(clientWrappers)
-
-    # ====================================================================================================
-    # ====================================================================================================
-    # ====================================================================================================
-    # Analysis of the data
-    # ====================================================================================================
-
-    # measure time for all clients
-    time_tracker = {}
-
-    ###                                  INFO                                  ###
-    ### The following code blocks run the simulation. They are divided into    ###
-    ### multiple logical blocks to ease the use                                ###
-
-    ### SIMULATION: all: initial ###
-    ### Initial reading of the input folder
-    list_labels_variables = list()
-    for clientWrapper in clientWrappers:
-        # define the client class
-        cohort_name = clientWrapper.id
-        client = Client()
-        client.config_based_init(clientname = cohort_name,
-                                input_folder = clientWrapper.input_folder,
-                                use_hashing = False)
-        clientWrapper.client_class = client
-        assert isinstance(client.hash2feature, dict)
-        assert isinstance(client.hash2variable, dict)
-        list_labels_variables.append((client.batch_labels, list(client.hash2variable.keys())))
-    
-    ### SIMULATION: Coordinator: global_feature_selection ###
-    ### Aggregate the features and variables
-
-    for clientWrapper in clientWrappers:
-        if clientWrapper.is_coordinator:
-            time_tracker["Coordinator"] = time.time()
-            client = clientWrapper.client_class
-            # get the batch labels and variables
-            global_variables_hashed = set()
-            global_batch_labels = list()
-            for labels, variables in list_labels_variables:
-                # intersect the variables
-                if len(global_variables_hashed) == 0:
-                    global_variables_hashed = set(variables)
-                else:
-                    global_variables_hashed = global_variables_hashed.intersection(set(variables))
-                # extend the batch_labels
-                global_batch_labels.extend(labels)
-            # ensure the batch_labels are unique
-            if len(global_batch_labels) != len(set(global_batch_labels)):
-                print("Batch labels are not unique, please check the input data")
-    
-    ### SIMULATION: All: send_feature_variable_batch_info ###
-    # obtain and safe common genes and indices of design matrix
-    # wait for each client to send the list of genes they have
-    # also memo the feature presence matrix and feature_to_cohorts
-
-    feature_information = list()
-    for clientWrapper in clientWrappers:
-        # define the client class
-        cohort_name = clientWrapper.id
-        client = clientWrapper.client_class
-        num_batches = len(global_batch_labels)
-        # now we can calculate the min_samples_per_feature
-        min_samples = max(num_batches+len(global_variables_hashed)+1, client.min_samples)
-        batch_feature_presence: Dict[str, List[str]] = client.get_batch_feature_presence_info(min_samples=min_samples)
-        feature_information.append((cohort_name,
-                                    client.position,
-                                    client.reference_batch,
-                                    batch_feature_presence))
-
-    for clientWrapper in clientWrappers:
-        if clientWrapper.is_coordinator:
-            global_feature_names, feature_presence_matrix, cohorts_order = \
-                select_common_features_variables(
-                    feature_information,
-                    default_order=cohort_names
-                )
-
-            # memo the feature presence matrix and feature_to_cohorts
-            broadcast_features_variables = global_feature_names, cohorts_order
-            print(f"Got this final cohort order: {cohorts_order}")
-            end_time = time.time()
-            time_tracker["Coordinator"] = end_time - time_tracker["Coordinator"]
-
-            
-    ### SIMULATION: All: validate ###
-    ### Expand data to fullfill the global format. Also performs consistency checks
-    cols = []
-    for clientWrapper in clientWrappers:
-
-        time_tracker[clientWrapper.id] = time.time()
-
-        global_feauture_names_hashed, cohorts_order = \
-            broadcast_features_variables
-        client = clientWrapper.client_class
-        client.validate_inputs(global_variables_hashed)
-        client.set_data(global_feauture_names_hashed)
-
-        err = client.create_design(cohorts_order)
-        cols.append(client.design.columns)
-            # we choose the last batch of the last cohort as reference batch
-        if err:
-            raise ValueError(err)
-
-        end_time = time.time()
-        time_tracker[clientWrapper.id] = end_time - time_tracker[clientWrapper.id]
-    for col in cols:
-        print(col)
-        assert cols[0].equals(col)
-
-
-    ### Simulatuion: Coordinator: create design mask based on feature presence matrix ###
-    ### Create the mask for the design matrix based on the feature presence matrix
-    ### that will be used for the beta computation
-    for clientWrapper in clientWrappers:
-        if clientWrapper.is_coordinator:
-            start_time = time.time()
-            client = clientWrapper.client_class
-
-            n=len(client.feature_names)
-            k=client.design.shape[1]
-
-            global_mask = create_beta_mask(feature_presence_matrix, n, k)
-            # memo the global mask
-
-            end_time = time.time()
-            time_tracker["Coordinator"] += end_time - start_time
-
-
-    ### SIMULATION: All: prepare for compute_XtX_XtY ###
-
-    for clientWrapper in clientWrappers:
-        start_time = time.time()
-
-        client = clientWrapper.client_class
-        client.sample_names = client.design.index.values
-
-        # Error check if the design index and the data index are the same
-        # we check by comparing the sorted indexes
-        client._check_consistency_designfile()
-
-        # Extract only relevant (the global) features and samples
-        client.data = client.data.loc[client.feature_names, client.sample_names]
-        client.n_samples = len(client.sample_names)
-
-        end_time = time.time()
-        time_tracker[clientWrapper.id] += end_time - start_time
-
-
-    ### SIMULATION: All: compute_XtX_XtY ###
-    ### Compute XtX and XtY and share it
-    send_XtX_XtY_list: List[List[np.ndarray]] = list()
-    for clientWrapper in clientWrappers:
-        start_time = time.time()
-
-        client = clientWrapper.client_class
-
-        # compute XtX and XtY
-        XtX, XtY, err = client.compute_XtX_XtY()
-        if err != "":
-            raise ValueError(err)
-
-        # send XtX and XtY
-        send_XtX_XtY_list.append([XtX, XtY])
-
-        end_time = time.time()
-        time_tracker[clientWrapper.id] += end_time - start_time
-
-
-    ### SIMULATION: Coordinator: compute_beta
-    ### Compute the beta values and broadcast them to the others
-    broadcast_betas = None # np.ndarray of shape num_features x batch_columns
-
-    for clientWrapper in clientWrappers:
-        if clientWrapper.is_coordinator:
-
-            start_time = time.time()
-
-            client = clientWrapper.client_class
-            beta = compute_beta(XtX_XtY_list=send_XtX_XtY_list,
-                                n=len(client.feature_names),
-                                k=client.design.shape[1],
-                                global_mask=global_mask)
-
-            # send only the batch coefficients to clients so they can correct their data
-            broadcast_betas = batch_coefficients(beta, feature_presence_matrix.shape[1] - 1)
-
-            end_time = time.time()
-            time_tracker["Coordinator"] += end_time - start_time
-
-    ### SIMULATION: All: include_correction
-    ### Corrects the individual data
-    for clientWrapper in clientWrappers:
-
-        start_time = time.time()
-
-        client = clientWrapper.client_class
-
-        assert broadcast_betas is not None
-        # remove the batch effects in own data and safe the results
-        client.remove_batch_effects(broadcast_betas)
-        print(f"DEBUG: Shape of corrected data: {client.data_corrected.shape}")
-
-        end_time = time.time()
-        time_tracker[clientWrapper.id] += end_time - start_time
-
-        # As this is a simulation we don't save the corrected data to csv, instead
-        # we save it as a variable to the clientwrapper
-        clientWrapper.data_corrected = client.data_corrected
-        # client.data_corrected.to_csv(os.path.join(os.getcwd(), "mnt", "output", "only_batch_corrected_data.csv"),
-        #                                 sep=self.load("separator"))
-        # client.data_corrected_and_raw.to_csv(os.path.join(os.getcwd(), "mnt", "output", "all_data.csv"),
-        #                              sep=self.load("separator"))
-        # with open(os.path.join(os.getcwd(), "mnt", "output", "report.txt"), "w") as f:
-        #     f.write(client.report)
-
-    # print the time tracker for the coordinator
-    print(f"Time tracker for coordinator, ms: {round(time_tracker['Coordinator']*1000, 2)}")
-
-    # print the time tracker for the clients
-    for clientWrapper in clientWrappers:
-        print(f"Time tracker for {clientWrapper.id}, ms: {round(time_tracker[clientWrapper.id]*1000, 2)}")
-
-    ###                                  INFO                                  ###
-    ###                            SIMULATION IS DONE                          ###
-    ### The simulation is done. The corrected data is saved in the             ###
-    ### clientWrapper instances. Now we analyse the data by comparing to the   ###
-    ### calculated centralized corrected data.                                 ###
-
-    federated_df, intersect_features = _concat_federated_results(clientWrappers, samples_in_columns=True)
-
-    federated_df.to_csv(args.output_file, sep="\t")
-    print(f"DEBUG: Shape of federated data: {federated_df.shape}")
-    print(f"Results saved to: {args.output_file}")
+    if args.experiments:
+        if args.input_dir or args.output_file:
+            parser.error("--experiments does not take input_dir or output_file")
+        run_experiments(args.only, args.write, args.verbose)
+    else:
+        if not (args.input_dir and args.output_file):
+            parser.error("input_dir and output_file are required unless --experiments is given")
+        if args.only or args.write:
+            parser.error("--only and --write require --experiments")
+        run_folder(args.input_dir, args.output_file, args.verbose)
 
 
 if __name__ == "__main__":
-    print("Starting simulation")
     main()

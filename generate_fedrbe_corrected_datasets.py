@@ -428,6 +428,95 @@ for modality in multiomics_modalities:
     ])
 
 
+### POSTPROCESSING
+def save_experiment_results(exp: util.Experiment, result_filename: str,
+                            client_files: List[dict]) -> None:
+    """
+    Validates the outputs of all clients of an experiment and saves them in the
+    folder of result_filename: individual_results/<clientname>/, datainfo.json
+    and the merged corrected data as result_filename.
+    Args:
+        exp: The experiment, its config_files must contain the used configs
+        result_filename: The path of the merged corrected data
+        client_files: Per client (in the order of exp.clients), a dict mapping
+            the output file names of the app to their content as bytes
+    """
+    result_folder = os.path.dirname(result_filename)
+    print("Results will be saved in: ", result_folder)
+    individual_results_dir = os.path.join(result_folder, "individual_results")
+    client_names = [os.path.basename(client_path) for client_path in exp.clients]
+    if len(client_files) != len(exp.clients):
+        raise ValueError("Correction requires the outputs of every client")
+
+    # Validate every client's fresh outputs before replacing any published files.
+    client_outputs, corrected_frames = [], []
+    for idx, (outputs, client_name) in enumerate(zip(client_files, client_names)):
+        details = exp.config_files[idx]["flimmaBatchCorrection"]
+        separator = details.get("separator", "\t")
+        expected = pd.read_csv(Path(exp.clients[idx]) / details["data_filename"],
+                               sep=separator, index_col=0, nrows=0).columns
+        for fname in ("only_batch_corrected_data.csv", "full_corrected_data.csv"):
+            matrix = pd.read_csv(io.BytesIO(outputs[fname]), sep=separator, index_col=0,
+                                 nrows=None if fname == "only_batch_corrected_data.csv" else 0)
+            if not matrix.columns.equals(expected):
+                raise ValueError(f"Incomplete correction samples for {client_name}: {fname}")
+            if fname == "only_batch_corrected_data.csv":
+                corrected_frames.append(matrix)
+        client_outputs.append(outputs)
+
+    # Write datainfo.json in the result folder from the clients' input descriptor,
+    # so each cohort points to individual_results/<clientname>/full_corrected_data.csv
+    # and keeps its original design file in every correction arm.
+    source_path = Path(exp.clients[0]).parent / "datainfo.json"
+    with open(source_path, "r") as f:
+        datainfo = json.load(f)
+    for cohort in datainfo["cohorts"]:
+        design = source_path.parent / cohort["folder"] / cohort["designfile"]["filename"]
+        cohort["folder"] = os.path.join("individual_results", cohort["name"])
+        cohort["designfile"]["filename"] = os.path.relpath(
+            design, os.path.join(result_folder, cohort["folder"]))
+    # full_corrected_data.csv is written by the app using client.separator,
+    # which comes from the experiment's config. Derive it from the first client's
+    # merged config (base + changes) so it is never hardcoded here.
+    client0_config = deepcopy(exp.config_files[0])
+    if exp.config_file_changes:
+        for key, val in exp.config_file_changes[0].get("flimmaBatchCorrection", {}).items():
+            client0_config["flimmaBatchCorrection"][key] = val
+    output_separator = client0_config["flimmaBatchCorrection"].get("separator", "\t")
+    datainfo["covariates"] = client0_config["flimmaBatchCorrection"]["covariates"]
+    datainfo["datafile"] = {
+        "filename": "full_corrected_data.csv", "separator": output_separator,
+        "rotation": "features x samples", "samplename_column": None,
+        "featurename_column": None,
+    }
+    datainfo_path = os.path.join(result_folder, "datainfo.json")
+
+    final_df = pd.concat(corrected_frames, axis=1) if corrected_frames else None
+    if final_df is not None:
+        output = Path(result_filename)
+        arm_folder = next((parent for parent in output.parents if parent.name == "no_label"), None)
+        reference = (arm_folder.with_name("label_aware") / output.relative_to(arm_folder)
+                     if arm_folder is not None else None)
+        if reference is not None and reference.exists():
+            final_df.index = final_df.index.astype(str)
+            final_df.columns = final_df.columns.astype(str)
+            final_df = validate_corrected_matrix(final_df, read_correction_matrix(reference))
+
+        # Publish only the outputs and descriptor that passed all checks above.
+        for client_name, outputs in zip(client_names, client_outputs):
+            client_result_dir = Path(individual_results_dir) / client_name
+            client_result_dir.mkdir(parents=True, exist_ok=True)
+            for fname, content in outputs.items():
+                (client_result_dir / fname).write_bytes(content)
+        with open(datainfo_path, "w") as f:
+            json.dump(datainfo, f, indent=2)
+        print(f"Wrote datainfo.json at {datainfo_path}")
+
+        final_df.to_csv(os.path.join(result_filename), sep="\t")
+    else:
+        raise RuntimeError("No data found in the test results!")
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         raise SystemExit("Select experiments in the experiment list; this script takes no arguments.")
@@ -476,19 +565,15 @@ if __name__ == "__main__":
         ### Postprocessing
         time.sleep(10)
         print("Starting postprocessing...")
-        result_folder = os.path.dirname(result_filename)
-        print("Results will be saved in: ", result_folder)
-        individual_results_dir = os.path.join(result_folder, "individual_results")
-
         # Derive client names from the experiment's client paths
         client_names = [os.path.basename(client_path) for client_path in exp.clients]
 
         if len(result_files_zipped) != len(exp.clients):
             raise ValueError("Correction requires one result ZIP per client")
 
-        # Validate every client's fresh outputs before replacing any published files.
-        client_outputs, corrected_frames = [], []
-        for idx, (zip_path, client_name) in enumerate(zip(result_files_zipped, client_names)):
+        # Read every client's outputs from its result zip.
+        client_files = []
+        for zip_path, client_name in zip(result_files_zipped, client_names):
             for _ in range(60):
                 if os.path.exists(zip_path):
                     break
@@ -497,10 +582,6 @@ if __name__ == "__main__":
             else:
                 raise RuntimeError(f"Zip file not found after timeout: {zip_path}")
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                details = exp.config_files[idx]["flimmaBatchCorrection"]
-                separator = details.get("separator", "\t")
-                expected = pd.read_csv(Path(exp.clients[idx]) / details["data_filename"],
-                                       sep=separator, index_col=0, nrows=0).columns
                 zip_names = zip_ref.namelist()
                 outputs = {}
                 for fname in ["only_batch_corrected_data.csv", "full_corrected_data.csv", "report.txt"]:
@@ -514,66 +595,9 @@ if __name__ == "__main__":
                         )
                     else:
                         print(f"WARNING: '{fname}' not found in zip for client '{client_name}', skipping.")
-                for fname in ("only_batch_corrected_data.csv", "full_corrected_data.csv"):
-                    matrix = pd.read_csv(io.BytesIO(outputs[fname]), sep=separator, index_col=0,
-                                         nrows=None if fname == "only_batch_corrected_data.csv" else 0)
-                    if not matrix.columns.equals(expected):
-                        raise ValueError(f"Incomplete correction samples for {client_name}: {fname}")
-                    if fname == "only_batch_corrected_data.csv":
-                        corrected_frames.append(matrix)
-                client_outputs.append(outputs)
+                client_files.append(outputs)
 
-        # Write datainfo.json in the result folder from the clients' input descriptor,
-        # so each cohort points to individual_results/<clientname>/full_corrected_data.csv
-        # and keeps its original design file in every correction arm.
-        source_path = Path(exp.clients[0]).parent / "datainfo.json"
-        with open(source_path, "r") as f:
-            datainfo = json.load(f)
-        for cohort in datainfo["cohorts"]:
-            design = source_path.parent / cohort["folder"] / cohort["designfile"]["filename"]
-            cohort["folder"] = os.path.join("individual_results", cohort["name"])
-            cohort["designfile"]["filename"] = os.path.relpath(
-                design, os.path.join(result_folder, cohort["folder"]))
-        # full_corrected_data.csv is written by the app using client.separator,
-        # which comes from the experiment's config. Derive it from the first client's
-        # merged config (base + changes) so it is never hardcoded here.
-        client0_config = deepcopy(exp.config_files[0])
-        if exp.config_file_changes:
-            for key, val in exp.config_file_changes[0].get("flimmaBatchCorrection", {}).items():
-                client0_config["flimmaBatchCorrection"][key] = val
-        output_separator = client0_config["flimmaBatchCorrection"].get("separator", "\t")
-        datainfo["covariates"] = client0_config["flimmaBatchCorrection"]["covariates"]
-        datainfo["datafile"] = {
-            "filename": "full_corrected_data.csv", "separator": output_separator,
-            "rotation": "features x samples", "samplename_column": None,
-            "featurename_column": None,
-        }
-        datainfo_path = os.path.join(result_folder, "datainfo.json")
-
-        final_df = pd.concat(corrected_frames, axis=1) if corrected_frames else None
-        if final_df is not None:
-            output = Path(result_filename)
-            arm_folder = next((parent for parent in output.parents if parent.name == "no_label"), None)
-            reference = (arm_folder.with_name("label_aware") / output.relative_to(arm_folder)
-                         if arm_folder is not None else None)
-            if reference is not None and reference.exists():
-                final_df.index = final_df.index.astype(str)
-                final_df.columns = final_df.columns.astype(str)
-                final_df = validate_corrected_matrix(final_df, read_correction_matrix(reference))
-
-            # Publish only the outputs and descriptor that passed all checks above.
-            for client_name, outputs in zip(client_names, client_outputs):
-                client_result_dir = Path(individual_results_dir) / client_name
-                client_result_dir.mkdir(parents=True, exist_ok=True)
-                for fname, content in outputs.items():
-                    (client_result_dir / fname).write_bytes(content)
-            with open(datainfo_path, "w") as f:
-                json.dump(datainfo, f, indent=2)
-            print(f"Wrote datainfo.json at {datainfo_path}")
-
-            final_df.to_csv(os.path.join(result_filename), sep="\t")
-        else:
-            raise RuntimeError("No data found in the test results!")
+        save_experiment_results(exp, result_filename, client_files)
 
         print("_______________¡SUCCESSFUL_EXPERIMENT!_______________")
 

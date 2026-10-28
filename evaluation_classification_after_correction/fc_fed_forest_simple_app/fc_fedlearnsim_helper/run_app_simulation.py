@@ -66,7 +66,8 @@ def run_simulation_featurecloud(data_path: str, clientnames: List[str], generic_
     print('You can follow the test along at https://featurecloud.ai/development/test')
 
 def run_simulation_native(clientpaths: List[str], outputfolders: List[str], generic_dir: Optional[str],
-                          fed_learning_main_function: Callable[[ProtocolFedLearning, Optional[str], Optional[str]], None]):
+                          fed_learning_main_function: Callable[[ProtocolFedLearning, Optional[str], Optional[str]], None],
+                          client_ids: Optional[List] = None):
     """
     Using the helpers from src.helper.localfedlearningsimulator.py, run the simulation natively.
 
@@ -79,11 +80,14 @@ def run_simulation_native(clientpaths: List[str], outputfolders: List[str], gene
             each client folder. If the file in the generic folder already exists in the
             client folder, it is not copied. Folders in the generic folder are not copied.
             The first clientfolder is used as the coordinator.
+        client_ids: The IDs of the clients in the order of clientpaths, available
+            via the protocol's id and clients. Defaults to 0, ..., number of clients-1.
     """
     # create the wrapper
     wrapper = LocalFedLearningSimulationWrapper(clientfolders=clientpaths,
                                                 outputfolders=outputfolders,
-                                                generic_dir=generic_dir)
+                                                generic_dir=generic_dir,
+                                                client_ids=client_ids)
 
     # Preserve the first failure before waking peers blocked on an exchange.
     failures = []

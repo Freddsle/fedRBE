@@ -136,27 +136,28 @@ for experiment in experiment_results.copy():
 
 
 ### MAIN, just runs compare_experiments on all experiments and prints the results
-result_df = utils.compare_experiments(experiment_results)
-print("Final results:")
-if result_df is None:
-    print("ERROR: No comparison could be made.")
-    exit(1)
-result_df.insert(1, "correction_arm", result_df["Experiment"].map(arm_by_experiment))
-print(result_df)
-mean_difference_column = "Mean difference"
-max_difference_column = "Max difference"
-simulated_rows = result_df[result_df["Experiment"].str.contains("Simulated")]
-other_rows = result_df[~result_df["Experiment"].str.contains("Simulated")]
-print("\nSimulated experiments:")
-print(simulated_rows)
-print("Mean absolute element wise difference (Simulated):", simulated_rows[mean_difference_column].mean())
-print("Max absolute element wise difference (Simulated):", simulated_rows[max_difference_column].max())
-print("\nOther experiments:")
-print(other_rows)
-print("Mean absolute element wise difference (Other):", other_rows[mean_difference_column].mean())
-print("Max absolute element wise difference (Other):", other_rows[max_difference_column].max())
-# get the failed experiments
-failed_experiments = result_df[result_df[utils.RESULT_DF_COLUMNS[3]] > utils.FAILURE_THRESHOLD]["Experiment"].tolist()
-print(f"Failed experiments:\n{failed_experiments}")
-print("saving results to evaluation_data/fed_vc_cent_results.tsv")
-result_df.to_csv(os.path.join(base_dir, "fed_vc_cent_results.tsv"), sep="\t", index=False)
+if __name__ == "__main__":
+    result_df = utils.compare_experiments(experiment_results)
+    print("Final results:")
+    if result_df is None:
+        print("ERROR: No comparison could be made.")
+        raise SystemExit(1)
+    result_df.insert(1, "correction_arm", result_df["Experiment"].map(arm_by_experiment))
+    print(result_df)
+    mean_difference_column = "Mean difference"
+    max_difference_column = "Max difference"
+    simulated_rows = result_df[result_df["Experiment"].str.contains("Simulated")]
+    other_rows = result_df[~result_df["Experiment"].str.contains("Simulated")]
+    print("\nSimulated experiments:")
+    print(simulated_rows)
+    print("Mean absolute element wise difference (Simulated):", simulated_rows[mean_difference_column].mean())
+    print("Max absolute element wise difference (Simulated):", simulated_rows[max_difference_column].max())
+    print("\nOther experiments:")
+    print(other_rows)
+    print("Mean absolute element wise difference (Other):", other_rows[mean_difference_column].mean())
+    print("Max absolute element wise difference (Other):", other_rows[max_difference_column].max())
+    # get the failed experiments
+    failed_experiments = result_df[result_df[utils.RESULT_DF_COLUMNS[3]] > utils.FAILURE_THRESHOLD]["Experiment"].tolist()
+    print(f"Failed experiments:\n{failed_experiments}")
+    print("saving results to evaluation_data/fed_vc_cent_results.tsv")
+    result_df.to_csv(os.path.join(base_dir, "fed_vc_cent_results.tsv"), sep="\t", index=False)
