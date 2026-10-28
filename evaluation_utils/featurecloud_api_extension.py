@@ -318,7 +318,10 @@ class Experiment():
                 print("Test finished successfully!")
                 return test_info.iloc[0]['instances']
             if status == "error" or status == "stopped":
-                raise RuntimeError(f"Test finished with an error or was stopped! Status: {status}")
+                raise RuntimeError(
+                    f"Test {exp_id} finished with an error or was stopped! Status: {status}. "
+                    f"Inspect app/controller logs in {os.path.join(self.fc_data_dir, 'logs')}."
+                )
             # timeout handling
             if time.monotonic() - time_run > self.timeout:
                 fc.stop(controller_host=self.controller_host, test_id=exp_id)

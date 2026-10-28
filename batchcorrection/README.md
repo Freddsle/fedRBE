@@ -117,9 +117,14 @@ For details, see the [Configuration](#configuration-configyml) section.
 After completion, each client receives:
 - **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
-- **`report.txt`**: Excluded features and reasons, the batch coefficients used for the correction, and internal design matrix.
+- **`report.txt`**: The client name, the batch coefficients used for the correction and the
+  design matrix. Features masked for privacy are listed in the app log.
 
-**Note**: Output files use the same `separator` defined in `config.yml`.
+**Note**: Output files use the same `separator` defined in `config.yml`. Both CSV files are
+features (rows) x samples (columns) whatever the input orientation; `full_corrected_data.csv`
+appends the covariates as rows. Values masked for privacy (fewer finite values than the
+effective `min_samples` in a batch or on the client) are exported as empty cells.
+Features available in fewer than three clients are omitted.
 
 ---
 
@@ -171,8 +176,8 @@ flimmaBatchCorrection:
     # format: str
 
   normalizationMethod: "log2(x+1)"
-    # Normalization: "log2(x+1)" or None.
-    # If None, no normalization is applied.
+    # "log2(x+1)" for raw non-negative values (all values must be > -1), or
+    # null (or omit the key) for already log-transformed data; other values stop the run.
 
   smpc: True
     # Enable secure multiparty computation for privacy-preserving aggregation.
@@ -184,14 +189,13 @@ flimmaBatchCorrection:
     # the client will not send any information about that feature for that batch
     # The app may raise min_samples for privacy:
     # min_samples = max(min_samples, len(design.columns)+1)
-    # This ensures a sent Xty matrix always has more samples than features,
-    # so neither X nor y can be reconstructed from the Xty matrix.
+    # This keeps more samples than design columns in every sent Xty matrix.
 
   position: 1      # format: int
     # Defines client order. The last client in order is the reference batch.
     # Example:
     #  C1(position=0), C2(position=2), C3(position=1) -> Order: C1, C3, C2 (C2 is reference).
-    # Positions apply only when every client supplies an integer.
+    # Positions apply only when every client supplies an integer; duplicates stop the run.
     # Otherwise the coordinator's client order is used and may vary between runs.
     # Without an explicit reference, the last client's alphabetically last batch is used.
 
@@ -206,15 +210,19 @@ flimmaBatchCorrection:
 
 - Covariates must be numeric and finite; encode categories as numeric indicators.
 - Batch labels must be complete and contain no `|`; spaces are allowed.
+- Feature identifiers must be unique, and every measurement cell must be numeric
+  (`NA` or empty for missing values).
 - All clients must use the same boolean `smpc` setting (default: `true`).
 - Only finite measurements count for privacy thresholds, batch presence and regression.
-- Each feature's design must be identifiable at the available numerical precision,
-  after masking missing batches. Rescale very small covariates if needed.
+- For each feature, a covariate that is constant (all 0 or all 1) among the samples
+  with observed measurements is omitted from that feature's fit, as in limma. Other
+  collinear or numerically unreliable fits stop the run. Rescale very small covariates.
 
 ## Protocol phases
 
 The app registers a single FeatureCloud state (`states.py`) that runs the whole
-protocol implemented in `fedrbe.py`. The figure shows the phases of that protocol.
+protocol implemented in `fedrbe.py`. The local simulator uses the same protocol.
+The figure shows the phases of that protocol.
 
 <p align="center">
    <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE protocol phases" width="60%">

@@ -169,8 +169,8 @@ see [file preparation](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#
 </p>
 
 Output files include:
-- **Corrected Data**: The batch-corrected data in the same format as the input.
-- **Corrected Data with covariates**: Corrected data with unchanged covariate columns.
+- **Corrected Data**: Batch-corrected features (rows) x samples (columns), whatever the input orientation.
+- **Corrected Data with covariates**: The same, with the covariates appended unchanged as rows.
 - **Report**: A summary of the correction process and results.
 
 ---
@@ -225,7 +225,7 @@ Use the [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.htm
 
 - **Missing Files**: Ensure `config.yml` and data files are in the correct directory.
 - **Incorrect Format**: Verify `expression_file_flag` and `index_col` settings in `config.yml`.
-- **No Output Produced**: Check `report.txt` and logs for error messages.
+- **No Output Produced**: Check the logs for error messages.
 - **Errors with Test runs**: Ensure there are no leftover running Docker containers. Restart Docker or the system if necessary.
 
 _For detailed troubleshooting tips, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#troubleshooting-tips)._

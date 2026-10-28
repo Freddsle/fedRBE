@@ -267,7 +267,9 @@ In each result folder, the SMPC run follows the non-SMPC run, so
 Classification uses these per-client results, and k-means uses the SMPC matrices.
 
 Each experiment publishes outputs only on success. Rejection leaves its output
-directory unchanged.
+directory unchanged. A failed campaign exits nonzero and can leave a mixture of
+fresh and retained files. Check failed output paths and
+`evaluation_data/<dataset>/logs/` before comparison, learning or plotting.
 
 Notes:
 
@@ -365,6 +367,7 @@ Both launchers run ten seeds (42–51) and reuse complete result rows, including
 per-cohort scores for federated 70:30 runs. Use
 `--datasets` and `--seeds` to select runs, `--results-file` to choose the CSV, and
 `--force-run` to recompute. 70:30 scores include MCC and support-weighted F1.
+After code or correction-input changes, use a fresh `--results-file` or `--force-run`.
 
 Both launchers accept `--correction-arm label_aware` (default) or
 `--correction-arm no_label` to select the real-data `after/<arm>/datainfo.json`.

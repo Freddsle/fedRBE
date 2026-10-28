@@ -126,7 +126,8 @@ See the [full configuration reference](https://freddsle.github.io/fedRBE/batchco
 
 After completion, each client finds:
    - `only_batch_corrected_data.csv`: The batch-corrected expression data.
-   - `report.txt`: Details on excluded features, the batch coefficients used for the correction, and the used design matrix.
+   - `full_corrected_data.csv`: The batch-corrected data with the covariates appended as rows.
+   - `report.txt`: The client name, the batch coefficients used for the correction and the design matrix.
    - logs: Detailed logs of the process.
    
 
@@ -140,7 +141,7 @@ Run the bundled sample experiment with multiple local clients using the
 
 - **Missing Files**: If you see "file not found," ensure that `config.yml` and data files are in the same directory.
 - **Incorrect Format**: Check if `expression_file_flag` and `index_col` are set correctly based on your data orientation.
-- **No Output Produced**: Review `report.txt` and logs. 
+- **No Output Produced**: Review the logs.
 - **Errors with Test runs**: Ensure there are no leftover running Docker containers. Restart Docker or the system if necessary.
 
 ### Choosing the correct data orientation
@@ -175,7 +176,8 @@ covariates: ["Age", "Treatment"]
 
 ### Selecting a reference batch
 
-Positions determine client order only when every client supplies an integer.
+Positions determine client order only when every client supplies an integer;
+duplicate positions stop the run.
 Otherwise fedRBE uses the coordinator's client order, which may vary between runs.
 Without `reference_batch`, the last client's alphabetically last batch is the
 reference. In coordinator order, an explicit reference moves its client to the end;

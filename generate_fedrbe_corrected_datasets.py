@@ -552,7 +552,7 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Experiment could not be started or aborted too many times! Error: \n{e}")
             print("_______________¡FAILED_EXPERIMENT!_______________")
-            failed.append(exp.name)
+            failed.append(f"{exp.name} [{os.path.relpath(result_filename, data_dir)}]")
             continue
         finally:
             for path, content in original_configs.items():
