@@ -1,6 +1,7 @@
 """Check invalid-input rejection and finite-observation privacy filtering."""
 
 import contextlib
+import hashlib
 import io
 from pathlib import Path
 import tempfile
@@ -11,7 +12,10 @@ import pandas as pd
 import yaml
 
 from batchcorrection.classes.client import Client
-from batchcorrection.classes.coordinator_utils import create_feature_presence_matrix
+from batchcorrection.classes.coordinator_utils import (
+    create_feature_presence_matrix,
+    select_common_features_variables,
+)
 
 
 class InputGuardTests(unittest.TestCase):
@@ -66,6 +70,16 @@ class InputGuardTests(unittest.TestCase):
                 error = client.create_design(["local|first", "local|second"])
                 self.assertRegex(error, "Covariate 'cov'.*finite")
 
+    def test_covariate_variation_below_smpc_precision_is_rejected(self):
+        # SMPC rounding would make these covariates look constant 0 or 1 to the coordinator.
+        for values in ([0, 1e-16] * 4, [1, 1 + 1e-15] * 4):
+            with self.subTest(values=values):
+                self.design["cov"] = values
+                client = self.initialize()
+                self.assertIsNone(client.create_design(["local|first", "local|second"]))
+                self.assertFalse(client.compute_XtX_XtY()[2])
+                self.assertRegex(client.compute_XtX_XtY(3e-12)[2], "below the SMPC precision")
+
     def test_missing_batch_names_are_rejected(self):
         self.design.loc["s7", "batch"] = None
         with self.assertRaisesRegex(ValueError, "Batch.*missing"):
@@ -98,6 +112,35 @@ class InputGuardTests(unittest.TestCase):
             with self.subTest(flag=flag):
                 with self.assertRaisesRegex(ValueError, "smpc.*boolean"):
                     self.initialize(smpc=flag)
+
+    def test_non_numeric_cell_names_its_sample_column(self):
+        self.expression = self.expression.astype(object)
+        self.expression.loc["feature_b", "s3"] = "n.d."
+        with self.assertRaisesRegex(ValueError, r"1 non-numeric values in samples \['s3'\] and features \['feature_b'\]"):
+            self.initialize()
+
+    def test_numeric_identifiers_hash_and_duplicates_are_rejected(self):
+        self.expression.index = [7892501, 7892502]
+        client = self.initialize()
+        self.assertEqual(client.hash_names(client.feature_names)[0][7892501],
+                         hashlib.sha3_256(b"7892501").hexdigest())
+        self.expression.index = ["feature_a", "feature_a"]
+        with self.assertRaisesRegex(ValueError, r"missing or duplicated, e.g. \['feature_a'\]"):
+            self.initialize()
+
+    def test_unsupported_normalization_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "unsupported normalizationMethod 'log2'"):
+            self.initialize(normalizationMethod="log2")
+
+    def test_log_transform_rejects_values_at_or_below_minus_one(self):
+        self.expression.iloc[0, 0] = -1
+        with self.assertRaisesRegex(ValueError, "1 values are <= -1.*null"):
+            self.initialize(normalizationMethod="log2(x+1)")
+
+    def test_no_feature_kept_by_three_clients_is_rejected(self):
+        information = [(name, None, None, {name: ["feature_a"]}) for name in ("a", "b")]
+        with self.assertRaisesRegex(ValueError, r"at least 3 clients \(2 joined\)"):
+            select_common_features_variables(information, default_order=["a", "b"])
 
 
 class FiniteObservationTests(unittest.TestCase):

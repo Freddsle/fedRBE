@@ -2,20 +2,16 @@
 
 import contextlib
 import io
-import json
-import os
 from pathlib import Path
 import tempfile
-from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
 
 import pandas as pd
 
+from evaluation_utils.feature_panel import load_panel_matrices
 from evaluation_utils.real_datasets_utils import (
     DatasetConfig,
     load_dataset_metadata,
-    prepare_dataset,
 )
 from evaluation_utils import real_datasets_utils as shared
 
@@ -49,11 +45,10 @@ class ClusteringPreparationTests(unittest.TestCase):
             site_glob="[AB]", design_file="design.tsv", sample_col="file",
             condition_col="condition",
         )
-        self.prepared = self.root / "outputs/prepared"
 
-    def prepare(self, **kwargs):
+    def load(self, cfg=None):
         with contextlib.redirect_stdout(io.StringIO()):
-            return prepare_dataset(self.cfg, self.prepared, **kwargs)
+            return load_panel_matrices(cfg or self.cfg, canonical_before=True)
 
     def test_canonical_ovarian_metadata_contains_six_distinct_studies(self):
         root = Path(__file__).resolve().parents[2]
@@ -66,37 +61,20 @@ class ClusteringPreparationTests(unittest.TestCase):
         self.assertEqual(metadata.condition.value_counts().to_dict(), {"1": 278, "0": 53})
         self.assertTrue(metadata.file.is_unique)
 
-    def test_prepares_current_central_inputs_and_plot_intermediates(self):
-        data = self.prepare()
+    def test_loads_complete_case_matrices_in_metadata_order(self):
+        metadata, clients, matrices = self.load()
         samples = ["s2", "s1", "s4", "s3"]
         expected = self.matrix.loc[["complete"], samples].rename_axis("rowname")
-        pd.testing.assert_frame_equal(data["before"], expected)
-        pd.testing.assert_frame_equal(data["corrected"], expected + 5)
-        self.assertEqual(data["metadata"].file.tolist(), samples)
-        self.assertEqual([path.name for path in data["clients"]], ["A", "B"])
-        self.assertEqual(data["k_values"], [2])
-        saved = pd.read_csv(self.prepared / "corrected_matrix.tsv", sep="\t", index_col=0)
-        pd.testing.assert_frame_equal(saved, expected + 5)
-        self.assertEqual(sorted(path.name for path in self.prepared.iterdir()),
-                         ["before_matrix.tsv", "corrected_matrix.tsv", "metadata.tsv"])
-        self.assertFalse((self.prepared.parent / "inputs").exists())
+        pd.testing.assert_frame_equal(matrices["before"], expected)
+        pd.testing.assert_frame_equal(matrices["central_corr"], expected + 5)
+        pd.testing.assert_frame_equal(matrices["fed_corr"], expected + 10)
+        self.assertEqual(metadata.file.tolist(), samples)
+        self.assertEqual([path.name for path in clients], ["A", "B"])
 
-    def test_preserves_source_and_missing_value_options_and_refreshes_outputs(self):
-        first = self.prepare(corrected_source="auto", remove_na=False)
-        self.assertEqual(first["corrected_source"], "federated")
-        self.assertEqual(first["corrected"].index.tolist(), ["complete", "partial"])
-        self.assertTrue(pd.isna(first["corrected"].loc["partial", "s1"]))
-        (self.matrix + 20).to_csv(self.federated, sep="\t")
-        second = self.prepare(corrected_source="federated", remove_na=False)
-        pd.testing.assert_frame_equal(second["corrected"], first["corrected"] + 10)
-        saved = pd.read_csv(self.prepared / "corrected_matrix.tsv", sep="\t", index_col=0)
-        pd.testing.assert_frame_equal(saved, second["corrected"])
-
-    def test_missing_sample_stops_before_writing_intermediates(self):
+    def test_missing_sample_stops_loading(self):
         self.matrix.drop(columns="s1").to_csv(self.central, sep="\t")
         with self.assertRaisesRegex(ValueError, "samples are missing"):
-            self.prepare()
-        self.assertFalse(self.prepared.exists())
+            self.load()
 
     def test_unavailable_corrected_matrix_never_uses_uncorrected_client_values(self):
         for name, samples in (("A", ["s2", "s1"]), ("B", ["s4", "s3"])):
@@ -105,13 +83,14 @@ class ClusteringPreparationTests(unittest.TestCase):
         for source, path in (("central", self.central), ("federated", self.federated)):
             for state in ("LFS pointer", "missing"):
                 with self.subTest(source=source, state=state):
+                    (self.matrix + 5).to_csv(self.central, sep="\t")
+                    (self.matrix + 10).to_csv(self.federated, sep="\t")
                     if state == "LFS pointer":
                         path.write_text(pointer)
                     else:
                         path.unlink()
                     with self.assertRaises(FileNotFoundError):
-                        self.prepare(corrected_source=source)
-                    self.assertFalse(self.prepared.exists())
+                        self.load()
 
     def test_quartet_uses_joint_metadata_without_generated_client_folders(self):
         mapping = self.before.parent / "all_modalities_metadata.tsv"
@@ -130,43 +109,9 @@ class ClusteringPreparationTests(unittest.TestCase):
         self.assertEqual(metadata.condition.tolist(), ["D6", "D5", "D5", "D6"])
         self.assertEqual([path.name for path in clients], ["A", "B"])
         self.assertTrue(all(not path.exists() for path in clients))
-        with contextlib.redirect_stdout(io.StringIO()):
-            data = prepare_dataset(cfg, self.prepared)
-        self.assertEqual(data["before"].columns.tolist(), metadata.file.tolist())
+        self.assertEqual(self.load(cfg)[2]["before"].columns.tolist(), metadata.file.tolist())
 
-    def test_evaluation_notebooks_start_without_prepared_outputs(self):
-        component = Path(__file__).resolve().parents[1] / "real_datasets"
-        for filename, index in (("02_central_kmeans.ipynb", 6),
-                                ("03_federated_runs.ipynb", 6),
-                                ("05_multiple_runs.ipynb", 8)):
-            output = self.root / filename
-            self.assertFalse(output.exists())
-            notebook = json.loads((component / filename).read_text())
-            source = "".join(notebook["cells"][index]["source"])
-            namespace = {
-                **vars(shared), "pd": pd, "prepare_dataset": prepare_dataset,
-                "dataset_configs": lambda *args, **kwargs: {"fixture": self.cfg},
-                "DATASET_CONFIG": None, "DATASETS": None, "REPO_ROOT": self.root,
-                "CORRECTION_ARM": "no_label",
-                "OUTPUT_ROOT": output, "CORRECTED_SOURCE": "central",
-                "REMOVE_NA": True, "SEED": 11, "display": lambda frame: None,
-            }
-            with self.subTest(notebook=filename), contextlib.redirect_stdout(io.StringIO()):
-                exec(compile(source, filename, "exec"), namespace)
-                if filename.startswith("02"):
-                    self.assertTrue((output / "fixture/kmeans_res/runs/"
-                                     "1_metadata_cntrl_kmeans_res.tsv").exists())
-                    self.assertFalse((output / "fixture/inputs").exists())
-                elif filename.startswith("03"):
-                    self.assertTrue((output / "fixture/inputs/corrected/A/intensities.tsv").exists())
-                else:
-                    data = namespace["dataset_data"]["fixture"]
-                    self.assertEqual(data["before"].columns.tolist(), ["s2", "s1", "s4", "s3"])
-                    self.assertEqual(data["central_corr"].shape, (1, 4))
-                    self.assertEqual(data["fed_corr"].shape, (1, 4))
-                    self.assertEqual([path.name for path in data["clients"]], ["A", "B"])
-
-    def test_canonical_quartet_prepares_inputs_before_single_and_multirun_evaluation(self):
+    def test_canonical_quartet_loads_from_modality_inputs(self):
         quartet = self.root / "quartet"
         pseudo = ["s4", "s1", "s3", "s2"]
         for modality in ("Transcriptomics", "Proteomics", "Metabolomics"):
@@ -183,31 +128,25 @@ class ClusteringPreparationTests(unittest.TestCase):
                 (self.matrix + offset).to_csv(after / "intensities_log_Rcorrected_UNION.tsv", sep="\t")
                 (self.matrix + offset + 20).to_csv(after / "FedApp_corrected_data_smpc.tsv", sep="\t")
         self.assertFalse((quartet / "all_modalities_metadata.tsv").exists())
-        notebook = Path(__file__).resolve().parents[1] / "real_datasets/05_multiple_runs.ipynb"
-        source = "".join(json.loads(notebook.read_text())["cells"][8]["source"])
         for arm, offset in (("label_aware", 5.), ("no_label", 10.)):
             cfg = DatasetConfig(**{**self.cfg.__dict__, "name": "quartet_multiomics",
                 "before_matrix": quartet / "before/all_modalities_before_kmeans_matrix.tsv",
                 "corrected_central": quartet / f"after/{arm}/all_modalities_corrected_kmeans_matrix.tsv",
                 "corrected_federated": quartet / f"after/{arm}/all_modalities_fedapp_kmeans_matrix.tsv",
                 "sites_root": self.root / "unused_client_exports", "correction_arm": arm})
-            with self.subTest(arm=arm), contextlib.redirect_stdout(io.StringIO()):
-                data = prepare_dataset(cfg, self.prepared)
-                self.assertEqual(data["before"].shape, (3, 4))
-                pd.testing.assert_frame_equal(data["corrected"], data["before"] + offset)
-                # Start multirun from modality inputs too, rather than files made by 02.
+            with self.subTest(arm=arm):
+                shared.build_quartet_matrices(quartet, arm)
+                metadata, _, matrices = self.load(cfg)
+                self.assertEqual(matrices["before"].shape, (3, 4))
+                pd.testing.assert_frame_equal(matrices["central_corr"], matrices["before"] + offset)
+                pd.testing.assert_frame_equal(matrices["fed_corr"], matrices["before"] + offset + 20)
+                self.assertEqual(metadata.condition.tolist(), ["D5", "D6", "D6", "D5"])
+                # Missing joint files are rebuilt from the modality inputs.
                 cfg.before_matrix.unlink()
                 cfg.corrected_central.unlink()
-                namespace = {**vars(shared), "pd": pd, "os": os, "REPO_ROOT": self.root,
-                             "DATASET_CONFIG": None, "DATASETS": None,
-                             "CORRECTION_ARM": arm,
-                             "dataset_configs": lambda *args, **kwargs: {cfg.name: cfg}}
-                exec(compile(source, str(notebook), "exec"), namespace)
-                multirun = namespace["dataset_data"][cfg.name]
-                pd.testing.assert_frame_equal(multirun["before"], data["before"])
-                pd.testing.assert_frame_equal(multirun["central_corr"], data["corrected"])
-                pd.testing.assert_frame_equal(multirun["fed_corr"], data["corrected"] + 20)
-                self.assertEqual(multirun["metadata"].condition.tolist(), ["D5", "D6", "D6", "D5"])
+                shared.build_quartet_matrices(quartet, arm)
+                for state, matrix in self.load(cfg)[2].items():
+                    pd.testing.assert_frame_equal(matrix, matrices[state])
         (quartet / "after/no_label/Proteomics/FedApp_corrected_data_smpc.tsv").unlink()
         with self.assertRaisesRegex(FileNotFoundError, "federated.*incomplete"):
             shared.build_quartet_matrices(quartet, "no_label")
@@ -241,25 +180,6 @@ class ClusteringPreparationTests(unittest.TestCase):
         self.assertIsNone(cfg.correction_arm)
         with self.assertRaisesRegex(ValueError, "custom registry"):
             shared.dataset_configs(self.root, registry, correction_arm="no_label")
-
-    def test_notebook_defaults_keep_correction_arms_in_separate_output_folders(self):
-        component = Path(__file__).resolve().parents[1] / "real_datasets"
-        for filename in ("02_central_kmeans.ipynb", "03_federated_runs.ipynb",
-                         "04_analysis_metrics_plots.ipynb", "05_multiple_runs.ipynb"):
-            notebook = json.loads((component / filename).read_text())
-            source = "".join(notebook["cells"][4]["source"])
-            for arm in ("label_aware", "no_label"):
-                namespace = {"NOTEBOOK_DIR": self.root,
-                             "os": os,
-                             "sns": SimpleNamespace(set_theme=lambda **kwargs: None),
-                             "plt": SimpleNamespace(rcParams={})}
-                with self.subTest(notebook=filename, arm=arm), \
-                        patch.dict(os.environ, {"CORRECTION_ARM": arm}), \
-                        contextlib.redirect_stdout(io.StringIO()):
-                    exec(source.replace('CORRECTION_ARM = "label_aware"',
-                                        f'CORRECTION_ARM = "{arm}"'), namespace)
-                    expected = self.root if arm == "label_aware" else self.root / arm
-                    self.assertEqual(namespace["OUTPUT_ROOT"], expected)
 
 
 if __name__ == "__main__":

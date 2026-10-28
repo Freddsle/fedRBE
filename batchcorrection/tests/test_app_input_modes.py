@@ -102,7 +102,8 @@ class AppInputModeTests(unittest.TestCase):
                         statistics.append((xtx, xty))
                     width = clients[0].design.shape[1]
                     mask = create_beta_mask(presence, len(features), width)
-                    full = compute_beta(statistics, len(features), width, mask)
+                    full = compute_beta(statistics, len(features), width, mask,
+                                        n_batch_columns=presence.shape[1] - 1)
                     betas = batch_coefficients(full, presence.shape[1] - 1)
                     with self.assertRaisesRegex(ValueError, "Expected coefficients for 2 batch columns"):
                         clients[0].remove_batch_effects(full)
@@ -163,6 +164,8 @@ class ClientOrderingTests(unittest.TestCase):
                 ), ["b", "c", "a"])
         with self.assertRaisesRegex(ValueError, "Reference client is not the last"):
             self.ordered(self.information((0, 1, 2), (True, None, None)), ["a", "b", "c"])
+        with self.assertRaisesRegex(ValueError, r"distinct integer position, got \[1, 1, 2\]"):
+            self.ordered(self.information((1, 1, 2)), ["a", "b", "c"])
 
     def test_reference_client_missing_from_default_order_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "Reference client a not found"):

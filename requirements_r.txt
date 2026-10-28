@@ -1,21 +1,15 @@
 # CRAN packages
 data.table
-ggpubr
 gridExtra
-ggsci
 ggtext
 glue
 IRkernel
 jsonlite
 knitr
-nipals
 patchwork
-pheatmap
 reshape2
 scales
 tidyverse
-umap
-viridis
 WGCNA
 
 # Bioconductor packages

@@ -4,4 +4,3 @@ numpy
 pandas
 PyYAML
 scikit-learn
-scipy

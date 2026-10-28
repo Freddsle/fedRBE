@@ -74,8 +74,8 @@ pixi run python -m evaluation_utils.run_correction_experiments correct --dataset
 ```
 
 **Output:** `after/label_aware/intensities_log_Rcorrected_UNION.tsv`.
-[evaluation_ecoli.ipynb](../../evaluation/evaluation_ecoli.ipynb) then writes the
-after-correction diagnostic plot `plots/data_plot_Rcorrected.png`.
+`pixi run Rscript evaluation/dataset_diagnostics.R ecoli`, run from the repository
+root, then writes the after-correction diagnostic plot `plots/data_plot_Rcorrected.png`.
 Other correction modes: [reproduction guide](../../docs/reproduce.md).
 
 ## Federated correction and downstream evaluation
@@ -84,8 +84,10 @@ Follow the [reproduction guide](../../docs/reproduce.md) to run FeatureCloud
 correction from the per-lab inputs, or to reuse existing corrected data. The
 following files support the downstream analyses:
 
-- [evaluation_ecoli.ipynb](../../evaluation/evaluation_ecoli.ipynb): evaluation plots and metrics.
-- [before/datainfo.json](before/datainfo.json) and `after/<arm>/datainfo.json`: current classification input definitions.
-- `prepare_data.py`: classification CSV exporter, not app-input preparation.
-  It requires numbered corrected files and `config_forest.yaml` files absent from
-  this checkout; it is not required by the current classification loaders.
+- [before/datainfo.json](before/datainfo.json) and `after/<arm>/datainfo.json`:
+  classification input definitions for the uncorrected and corrected data.
+
+The RF launchers read these descriptors, align each lab's matrix and design by
+sample ID, and create sample-by-feature `tmp_data.csv` inputs automatically.
+`Pyr` is the prediction target. Corrected descriptors select each lab's
+`full_corrected_data.csv` and reuse its `before/lab_*/design.tsv` labels.

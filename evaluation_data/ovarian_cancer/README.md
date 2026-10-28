@@ -67,13 +67,14 @@ pixi run python -m evaluation_utils.run_correction_experiments correct \
 Outputs are `after/<arm>/central_corrected_UNION.tsv`. Follow the
 [reproduction guide](../../docs/reproduce.md) for federated correction,
 classification and k-means. Both RF methods use fedRBE outputs; central k-means
-uses the limma reference. The
-[evaluation notebook](../../evaluation/evaluation_ovarian_cancer.ipynb) displays
-plots and metrics and reads the combined expression ZIP directly.
+uses the limma reference. From the repository root,
+`pixi run Rscript evaluation/dataset_diagnostics.R ovarian_cancer` writes the
+after-correction diagnostic plot `before/plots/norm_vs_tumor_plot_Rcorrected_UNION.png`
+and reads the combined expression ZIP directly.
 
 Changing inputs requires regenerating both correction arms and the uncorrected
-and corrected learning results. Use fresh RF outputs and enable
-`RERUN_FEDERATED = True` in clustering notebook 05 to regenerate assignments.
+and corrected learning results. Use fresh RF outputs and add
+`--rerun-federated` to `multiple_runs.py` to regenerate clustering assignments.
 Keep each correction arm's outputs separate.
 
 ## Metadata

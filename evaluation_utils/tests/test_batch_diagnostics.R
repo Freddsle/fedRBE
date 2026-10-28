@@ -1,11 +1,7 @@
 # Run from the repository root: pixi run Rscript evaluation_utils/tests/test_batch_diagnostics.R
-# Check notebook loaders and diagnostic models against the prepared correction inputs.
-read_cells <- function(path, indices, environment) {
-  cells <- jsonlite::fromJSON(path, simplifyVector = FALSE)$cells
-  for (index in indices) {
-    eval(parse(text = paste(cells[[index + 1L]]$source, collapse = "")), environment)
-  }
-}
+# Check the dataset loaders and diagnostic models against the prepared correction inputs.
+source("evaluation_utils/figure_aggregate_utils.R")
+source("evaluation_utils/evaluation_funcs.R")
 
 same_partition <- function(left, right) {
   identical(outer(as.character(left), as.character(left), "=="),
@@ -24,23 +20,13 @@ median_term <- function(data, metadata, form, term) {
 
 for (arm in c("label_aware", "no_label")) {
   Sys.setenv(CORRECTION_ARM = arm)
-  s5 <- new.env()
-  read_cells("evaluation/quartet_separated_modality_pca_fixed_effect_variance.ipynb",
-             c(1, 2, 3), s5)
-  stopifnot(identical(attr(terms(s5$form), "term.labels"), c("condition", "batch")),
-            s5$CORRECTION_ARM == arm,
-            s5$correction_label == if (arm == "label_aware") "Label-aware" else "Label-free")
-  figure3 <- new.env()
-  read_cells("evaluation/aggregate_figure3.ipynb", c(2, 4, 6, 8, 13), figure3)
-  quartet_spec <- figure3$dataset_plot_specs$quartet
-  stopifnot(identical(attr(terms(quartet_spec$form), "term.labels"),
-                      c("condition", "batch")), quartet_spec$shape_col == "batch_code")
-  joint <- figure3$load_quartet_data()
+  stopifnot(correction_arm() == arm)
+  joint <- load_quartet_data(arm)
   stopifnot(nrow(joint$metadata) == 48L, nlevels(joint$metadata$batch) == 4L,
             same_partition(joint$metadata$batch, joint$metadata$batch_code))
 
-  for (modality in s5$modalities) {
-    item <- s5$quartet_modality_data[[modality]]
+  for (modality in c("Transcriptomics", "Proteomics", "Metabolomics")) {
+    item <- prepare_plot_matrices(load_quartet_modality_data(modality, arm))
     metadata <- item$metadata
     design <- do.call(rbind, lapply(unique(metadata$client), function(client) {
       read_design(file.path("evaluation_data/quartet_multiomics/before",
@@ -61,9 +47,9 @@ for (arm in c("label_aware", "no_label")) {
     old_median <- median_term(item$plot_matrices$uncorrected, metadata,
                               ~ condition + lab, "lab")
     batch_median <- median_term(item$plot_matrices$uncorrected, metadata,
-                                s5$form, "batch")
+                                ~ condition + batch, "batch")
     corrected <- median_term(item$plot_matrices$fed_corrected, metadata,
-                             s5$form, "batch")
+                             ~ condition + batch, "batch")
     if (modality == "Metabolomics") {
       stopifnot(abs(batch_median - old_median) < 1e-10)
     } else {
@@ -74,7 +60,7 @@ for (arm in c("label_aware", "no_label")) {
         "; after batch median", corrected, "\n")
   }
 
-  ccrcc <- figure3$load_ccrcc_data()
+  ccrcc <- load_ccrcc_data(arm)
   expected <- do.call(rbind, lapply(c("PDC000127", "PXD030344", "PXD042844"),
                                     function(site) {
     design <- read_design(file.path("evaluation_data/ccRCC_studies/before",
@@ -90,7 +76,7 @@ for (arm in c("label_aware", "no_label")) {
             identical(colnames(ccrcc$uncorrected), expected$file),
             identical(colnames(ccrcc$fed_corrected), expected$file))
   cat(arm, "ccRCC sample/condition/study alignment matches tracked input designs\n")
-  rm(s5, figure3, joint, ccrcc)
+  rm(joint, ccrcc)
   invisible(gc())
 }
 cat("Batch diagnostic regression checks passed for both correction arms.\n")

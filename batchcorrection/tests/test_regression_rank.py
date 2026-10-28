@@ -30,21 +30,34 @@ class RegressionRankTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "rank-deficient design"):
                     compute_beta(
                         [[gram[None], target[None]]], 1, 4, np.zeros((1, 4), bool),
-                        xtx_error=xtx_error,
+                        xtx_error=xtx_error, n_batch_columns=2,
                     )
 
-    def test_missing_observations_can_make_only_one_feature_aliased(self):
+    def test_featurewise_zero_and_one_covariates_preserve_batch_coefficients(self):
         membership = np.repeat(np.eye(3), 6, axis=0)
         batches = membership[:, :2] - membership[:, -1:]
         covariate = np.tile([0., 0., 0., 1., 1., 1.], 3)
         design = np.column_stack([np.ones(18), covariate, batches])
         response = design @ np.array([30., 2., 5., 7.])
-        observed = [np.ones(18, bool), covariate == 0]
-        gram = np.array([design[keep].T @ design[keep] for keep in observed])
-        target = np.array([design[keep].T @ response[keep] for keep in observed])
-        mask = create_beta_mask(np.ones((2, 3), int), 2, 4)
-        with self.assertRaisesRegex(ValueError, "Cannot reliably fit feature index 1"):
-            compute_beta([[gram, target]], 2, 4, mask)
+        observed = [np.ones(18, bool), covariate == 0, covariate == 1]
+        mask = create_beta_mask(np.ones((3, 3), int), 3, 4)
+        expected = [[30., 2., 5., 7.], [30., 0., 5., 7.], [32., 0., 5., 7.]]
+        for xtx_error in (0.0, 3e-12):
+            with self.subTest(xtx_error=xtx_error):
+                statistics = []
+                for indices in np.split(np.arange(18), 3):
+                    rows = [indices[keep[indices]] for keep in observed]
+                    gram = np.array([design[row].T @ design[row] for row in rows])
+                    target = np.array([design[row].T @ response[row] for row in rows])
+                    if xtx_error:
+                        gram = np.trunc(gram * 1e12) / 1e12
+                        target = np.trunc(target * 1e12) / 1e12
+                    statistics.append([gram, target])
+                if xtx_error:
+                    statistics = [[sum(values) for values in zip(*statistics)]]
+                result = compute_beta(statistics, 3, 4, mask, xtx_error=xtx_error,
+                                      n_batch_columns=2)
+                np.testing.assert_allclose(result, expected, atol=1e-9)
 
     def test_missing_batch_is_masked_before_rank_check(self):
         membership = np.repeat(np.eye(3), 6, axis=0)
@@ -57,7 +70,8 @@ class RegressionRankTests(unittest.TestCase):
         target = design[observed].T @ response[observed]
         mask = create_beta_mask(np.array([[1, 1, 0]]), 1, 4)
 
-        result = compute_beta([[gram[None], target[None]]], 1, 4, mask, xtx_error=3e-12)
+        result = compute_beta([[gram[None], target[None]]], 1, 4, mask,
+                              xtx_error=3e-12, n_batch_columns=2)
         np.testing.assert_allclose(result, [[37., 2., -2., 0.]], atol=1e-12)
 
 

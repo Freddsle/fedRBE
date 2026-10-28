@@ -13,12 +13,12 @@ Two modes:
    The clients are the sorted subfolders, the first is the coordinator.
    The merged corrected data of all clients is saved as output_file.
 2. Experiment mode, to quickly check that a change did not break anything:
-       python3 evaluation_utils/fedRBE_simulation_scrip_simdata.py --experiments [--only <text>] [--write]
+       python3 evaluation_utils/fedRBE_simulation_scrip_simdata.py --experiments [--only <text>]
    Runs the experiments of generate_fedrbe_corrected_datasets.py (experiments
    using SMPC are skipped) and compares the merged federated result to the
-   central limma result used by analyse_fedvscentral.py. With --write, the
-   results are additionally saved into evaluation_data exactly like
-   generate_fedrbe_corrected_datasets.py does.
+   central limma result used by analyse_fedvscentral.py. The experiment's
+   config.yml is written into the client folders for the run and restored
+   afterwards; no results are written, published results come from the app.
 --verbose shows the output of the clients in both modes.
 """
 import argparse
@@ -108,7 +108,7 @@ def central_result_file(result_filename: str) -> str:
     raise ValueError(f"No central result registered in analyse_fedvscentral.py for {result_filename}")
 
 
-def run_experiment(exp, result_filename: str, write: bool, verbose: bool) -> dict:
+def run_experiment(exp, result_filename: str, verbose: bool) -> dict:
     """
     Runs one experiment of generate_fedrbe_corrected_datasets.py locally and
     compares it to the central result. Returns a summary row.
@@ -131,9 +131,6 @@ def run_experiment(exp, result_filename: str, write: bool, verbose: bool) -> dic
             return row
         # the first client is the coordinator, as in the docker runs
         client_files = run_clients(exp.clients, verbose, log)
-        if write:
-            with contextlib.redirect_stdout(sys.stdout if verbose else log):
-                generate.save_experiment_results(exp, result_filename, client_files)
 
         # compare the merged corrected data to the central result
         separators = [config["flimmaBatchCorrection"].get("separator", "\t")
@@ -155,7 +152,7 @@ def run_experiment(exp, result_filename: str, write: bool, verbose: bool) -> dic
         row["Mean difference"] = result["Mean difference"]
         row["Max difference"] = result["Max difference"]
         failed = result["Max difference"] > utils_analyse.FAILURE_THRESHOLD
-        row["Status"] = "FAILED (difference)" if failed else ("ok, written" if write else "ok")
+        row["Status"] = "FAILED (difference)" if failed else "ok"
     except Exception as error:  # pylint: disable=broad-except
         row["Status"] = f"FAILED: {error}"
         if not verbose:
@@ -171,7 +168,7 @@ def run_experiment(exp, result_filename: str, write: bool, verbose: bool) -> dic
     return row
 
 
-def run_experiments(only: str, write: bool, verbose: bool) -> None:
+def run_experiments(only: str, verbose: bool) -> None:
     """Runs the selected experiments and prints a summary, exits with 1 on failures."""
     import generate_fedrbe_corrected_datasets as generate  # pylint: disable=import-outside-toplevel
 
@@ -185,7 +182,7 @@ def run_experiments(only: str, write: bool, verbose: bool) -> None:
     rows = []
     for exp, result_filename in selected:
         print(f"Running {exp.name} ({os.path.relpath(result_filename, generate.data_dir)})")
-        rows.append(run_experiment(exp, result_filename, write, verbose))
+        rows.append(run_experiment(exp, result_filename, verbose))
         print(f"  -> {rows[-1]['Status']}")
 
     summary = pd.DataFrame(rows)
@@ -208,21 +205,18 @@ def main():
     parser.add_argument("--only", default=None,
                         help="With --experiments: only run experiments whose name or result path "
                              "contains this text")
-    parser.add_argument("--write", action="store_true",
-                        help="With --experiments: also save the results into evaluation_data like "
-                             "generate_fedrbe_corrected_datasets.py")
     parser.add_argument("--verbose", action="store_true", help="Show the output of the clients")
     args = parser.parse_args()
 
     if args.experiments:
         if args.input_dir or args.output_file:
             parser.error("--experiments does not take input_dir or output_file")
-        run_experiments(args.only, args.write, args.verbose)
+        run_experiments(args.only, args.verbose)
     else:
         if not (args.input_dir and args.output_file):
             parser.error("input_dir and output_file are required unless --experiments is given")
-        if args.only or args.write:
-            parser.error("--only and --write require --experiments")
+        if args.only:
+            parser.error("--only requires --experiments")
         run_folder(args.input_dir, args.output_file, args.verbose)
 
 

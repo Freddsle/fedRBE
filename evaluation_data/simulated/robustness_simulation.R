@@ -23,13 +23,18 @@ params <- list(
   missing_alpha = c(batch1 = 0.1, batch2 = 0.2, batch3 = 0.3), missing_beta = 0.8,
   panel_fraction = c(0.1, 0.2, 0.7), # features observed in one, two, three labs
   verify_runs = c(1L, 5L, 10L),
+  q_value = 0.05,
   tolerance = 1e-8
 )
+# Scenario order determines seed offsets; graded-confounding compositions come last.
 scenarios <- c("balanced", "mild_imbalanced", "strong_imbalanced",
-               "intensity_dependent", "missingness")
+               "intensity_dependent", "missingness", names(confounded_b_fraction))
 # Scenarios generated from each base composition; derived ones reuse the balanced run.
-derived <- list(balanced = c("balanced", "intensity_dependent", "missingness"),
-                mild_imbalanced = "mild_imbalanced", strong_imbalanced = "strong_imbalanced")
+derived <- c(list(balanced = c("balanced", "intensity_dependent", "missingness"),
+                  mild_imbalanced = "mild_imbalanced", strong_imbalanced = "strong_imbalanced"),
+             setNames(as.list(names(confounded_b_fraction)), names(confounded_b_fraction)))
+# Run the variancePartition diagnostic for the first five scenarios.
+variance_scenarios <- scenarios[1:5]
 arms <- c("with_condition", "without_condition")
 
 parse_options <- function(args) {
@@ -112,6 +117,10 @@ add_missingness <- function(d, run) {
   present <- t(apply(matrix(runif(3 * n), n), 1, rank)) <= d$n_labs
   for (i in seq_along(labs)) d$observed[!present[, i], d$meta$lab == labs[i]] <- NA
   d$missing_fraction <- sapply(labs, function(lab) mean(is.na(d$observed[, d$meta$lab == lab])))
+  # Among features present in the lab, as missingness is reported for the real data.
+  d$missing_fraction_present <- setNames(sapply(seq_along(labs), function(i) {
+    mean(is.na(d$observed[present[, i], d$meta$lab == labs[i]]))
+  }), labs)
   d
 }
 
@@ -165,16 +174,27 @@ contrast_recovery <- function(x, reference, meta, role) {
     rowMeans(m[, group, drop = FALSE], na.rm = TRUE) -
       rowMeans(m[, control, drop = FALSE], na.rm = TRUE)
   }
-  attenuation <- function(group, control, rows) {
+  # Slopes through the origin over signal features (1 = unit gain) and the mean shift over
+  # null features, which the slopes cannot see when every feature shares it.
+  recovery <- function(group, control, signal, shift) {
     estimate <- contrast(x, group, control)
     target <- contrast(reference, group, control)
-    ok <- rows & is.finite(estimate) & is.finite(target)
-    denominator <- sum(target[ok]^2)
-    if (denominator == 0) NA_real_ else sum(estimate[ok] * target[ok]) / denominator
+    ok <- is.finite(estimate) & is.finite(target)
+    slope <- function(rows) {
+      rows <- rows & ok
+      denominator <- sum(target[rows]^2)
+      if (denominator == 0) NA_real_ else sum(estimate[rows] * target[rows]) / denominator
+    }
+    null <- ok & role == "null"
+    setNames(c(sapply(signal, slope), mean(estimate[null] - target[null])), c(names(signal), shift))
   }
   in_b <- meta$condition == "B"
-  c(attenuation_condition = attenuation(in_b, !in_b, role %in% c("A_DE", "B_DE")),
-    attenuation_latent = attenuation(in_b & meta$latent, in_b & !meta$latent, role == "latent"))
+  c(recovery(in_b, !in_b,
+             list(attenuation_condition = role %in% c("A_DE", "B_DE"),
+                  attenuation_condition_a_de = role == "A_DE",
+                  attenuation_condition_b_de = role == "B_DE"), "shift_condition"),
+    recovery(in_b & meta$latent, in_b & !meta$latent,
+             list(attenuation_latent = role == "latent"), "shift_latent"))
 }
 
 # Score every stage on the retained features and the same observed cells.
@@ -183,32 +203,75 @@ recovery_metrics <- function(x, truth, meta, role) {
   truth[is.na(x)] <- NA
   residual <- x - truth
   residual <- residual - rowMeans(residual, na.rm = TRUE)
+  # Feature-by-lab means of the residual are the lab structure a location correction can
+  # remove; the remainder is within-lab error that no location correction lowers.
+  block <- residual
+  for (lab in unique(meta$lab)) {
+    cols <- meta$lab == lab
+    block[, cols] <- rowMeans(residual[, cols, drop = FALSE], na.rm = TRUE)
+  }
+  block[is.na(residual)] <- NA
   c(rmse_to_truth = sqrt(mean(residual^2, na.rm = TRUE)),
+    residual_lab_rms = sqrt(mean(block^2, na.rm = TRUE)),
+    within_lab_rmse = sqrt(mean((residual - block)^2, na.rm = TRUE)),
     contrast_recovery(x, truth, meta, role))
 }
 
-evaluate_stage <- function(x, truth, meta, role) {
+# DE recovery diagnostic; the joint reference fits ~condition + lab on uncorrected data.
+de_condition <- function(x, meta, role, design) {
+  rows <- role %in% c("A_DE", "B_DE", "null")
+  q <- p.adjust(eBayes(lmFit(x[rows, , drop = FALSE], design))$p.value[, 2], "BH")
+  called <- !is.na(q) & q < params$q_value
+  positive <- role[rows] != "null"
+  tp <- sum(called & positive)
+  fp <- sum(called & !positive)
+  fn <- sum(!called & positive)
+  c(de_condition_precision = tp / (tp + fp), de_condition_recall = tp / (tp + fn),
+    de_condition_fp = fp, de_condition_fn = fn)
+}
+
+# Fraction of an indicator's variance explained by lab: the confounding index.
+eta_squared <- function(indicator, lab) {
+  x <- as.numeric(indicator)
+  sum((ave(x, lab) - mean(x))^2) / sum((x - mean(x))^2)
+}
+
+evaluate_stage <- function(x, truth, meta, role, partition) {
   # Sequential sums of squares would depend on term order under confounding.
-  variance <- if (anyNA(x)) NULL else variance_partition_long(x, meta, ~condition + lab)
+  variance <- if (partition && !anyNA(x)) variance_partition_long(x, meta, ~condition + lab) else NULL
   medians <- numeric()
   if (!is.null(variance)) {
     medians <- tapply(variance$value, variance$variable, median, na.rm = TRUE)
     medians <- setNames(as.vector(medians), paste0("median_variance_", names(medians)))
   }
-  list(metrics = c(recovery_metrics(x, truth, meta, role), medians), variance = variance)
+  list(metrics = c(recovery_metrics(x, truth, meta, role),
+                   de_condition(x, meta, role, model.matrix(~condition, meta)), medians),
+       variance = variance)
 }
 
 evaluate_dataset <- function(scenario, run, d, baseline = NULL) {
   tidy <- function(arm, stage, metric, value, feature = NA_character_) {
     data.frame(scenario, run, arm, stage, metric, feature, value)
   }
-  metrics <- variance <- list()
+  labs <- sort(unique(d$meta$lab))
+  batch <- attr(d$observed, "batch_params")
+  in_b <- d$meta$condition == "B"
+  metrics <- list(tidy("none", "input",
+                       c(paste0("offset_", labs), paste0("noise_sd_", labs),
+                         "eta2_condition", "eta2_latent_in_b"),
+                       c(batch$additive[labs], batch$noise_sd[labs],
+                         eta_squared(in_b, d$meta$lab),
+                         eta_squared(d$meta$latent[in_b], d$meta$lab[in_b]))))
+  variance <- list()
   if (!is.null(d$n_labs)) {
-    metrics[[1]] <- tidy("none", "input",
-                         c(paste0("missing_fraction_", names(d$missing_fraction)),
+    metrics[[2]] <- tidy("none", "input",
+                         c(paste0("missing_fraction_", labs),
+                           paste0("missing_fraction_present_", labs),
                            paste0("features_in_", 1:3, "_labs")),
-                         c(d$missing_fraction, tabulate(d$n_labs, 3)))
+                         c(d$missing_fraction[labs], d$missing_fraction_present[labs],
+                           tabulate(d$n_labs, 3)))
   }
+  partition <- scenario %in% variance_scenarios
   shared <- NULL
   for (arm in arms) {
     central <- if (scenario == "balanced" && !is.null(baseline)) baseline[[arm]] else {
@@ -218,17 +281,29 @@ evaluate_dataset <- function(scenario, run, d, baseline = NULL) {
     stopifnot(is.null(d$n_labs) || all(d$n_labs[kept] == 3L))
     truth <- d$truth[kept, , drop = FALSE]
     role <- d$role[kept]
-    # Before-correction and truth stages are shared when both arms retain the same cells.
+    # Before, truth and joint stages are shared when both arms retain the same cells.
     if (is.null(shared) || !identical(is.na(shared$input), is.na(central$input))) {
       masked_truth <- truth
       masked_truth[is.na(central$input)] <- NA
+      before <- evaluate_stage(central$input, truth, d$meta, role, partition)
+      # Per-lab gains: lab-specific signal distortion that no location correction changes.
+      before$metrics <- c(before$metrics, unlist(lapply(labs, function(lab) {
+        cols <- d$meta$lab == lab
+        gain <- contrast_recovery(central$input[, cols, drop = FALSE],
+                                  masked_truth[, cols, drop = FALSE], d$meta[cols, ], role)
+        setNames(gain[c("attenuation_condition", "attenuation_latent")],
+                 paste0(c("gain_condition_", "gain_latent_"), lab))
+      })))
       shared <- list(input = central$input, stages = list(
-        before = evaluate_stage(central$input, truth, d$meta, role),
-        truth = evaluate_stage(masked_truth, truth, d$meta, role)),
-        selection = contrast_recovery(masked_truth, truth, d$meta, role))
+        before = before,
+        truth = evaluate_stage(masked_truth, truth, d$meta, role, partition),
+        joint = list(metrics = de_condition(central$input, d$meta, role,
+                                            model.matrix(~condition + lab, d$meta)),
+                     variance = NULL)),
+        observed_truth = contrast_recovery(masked_truth, truth, d$meta, role))
     }
     stages <- c(shared$stages,
-                list(after = evaluate_stage(central$corrected, truth, d$meta, role)))
+                list(after = evaluate_stage(central$corrected, truth, d$meta, role, partition)))
     for (stage in names(stages)) {
       m <- stages[[stage]]$metrics
       v <- stages[[stage]]$variance
@@ -238,8 +313,11 @@ evaluate_dataset <- function(scenario, run, d, baseline = NULL) {
                                                  signif(v$value, 6), v$feature)
       }
     }
-    metrics[[length(metrics) + 1L]] <- tidy(arm, "selection", names(shared$selection),
-                                            shared$selection)
+    metrics[[length(metrics) + 1L]] <- tidy(arm, "observed_truth", names(shared$observed_truth),
+                                            shared$observed_truth)
+    # Total recovery against the complete truth, including the observation selection.
+    complete <- contrast_recovery(central$corrected, truth, d$meta, role)
+    metrics[[length(metrics) + 1L]] <- tidy(arm, "after_vs_complete", names(complete), complete)
     if (scenario %in% c("intensity_dependent", "missingness")) {
       stopifnot(!is.null(baseline))
       # Fit the complete baseline first; apply the scenario's mask only for scoring.
@@ -278,7 +356,11 @@ fingerprint <- function() {
              file.path("evaluation_utils", c("simulation_func.R", "filtering.R",
                                              "evaluation_funcs.R",
                                              "fedRBE_simulation_scrip_simdata.py")),
-             file.path("batchcorrection", "classes", c("client.py", "coordinator_utils.py")),
+             file.path("batchcorrection", c("fedrbe.py", "classes/client.py",
+                                            "classes/coordinator_utils.py")),
+             file.path("evaluation_classification_after_correction", "fc_fed_forest_simple_app",
+                       "fc_fedlearnsim_helper",
+                       c("localfedlearningsimulator.py", "run_app_simulation.py")),
              "pixi.lock")
   files <- files[file.exists(file.path(repo, files))]
   c(paste("params:", paste(deparse(params), collapse = "")),
@@ -301,14 +383,17 @@ write_run <- function(result, out, scenario, run) {
   }
 }
 
-summarise_values <- function(v) {
+summarise_values <- function(v, deviation = FALSE) {
   finite <- v[is.finite(v)]
   n <- length(finite)
   average <- if (n) mean(finite) else NA_real_
   mcse <- if (n > 1L) sd(finite) / sqrt(n) else NA_real_
   half_width <- if (n > 1L) qt(0.975, df = n - 1L) * mcse else NA_real_
-  data.frame(n_runs = n, n_missing = length(v) - n, mean = average, mcse = mcse,
-             ci_low = average - half_width, ci_high = average + half_width)
+  data.frame(n_runs = n, n_missing = length(v) - n, mean = average,
+             median = if (n) median(finite) else NA_real_,
+             # Signed gain distortions cancel in the mean; report the deviation from unit gain.
+             mean_abs_dev_1 = if (n && deviation) mean(abs(finite - 1)) else NA_real_,
+             mcse = mcse, ci_low = average - half_width, ci_high = average + half_width)
 }
 
 summarise <- function(out) {
@@ -320,32 +405,59 @@ summarise <- function(out) {
   results <- results[results$stage != "fedrbe_vs_central", ]
   summary <- results %>%
     dplyr::group_by(scenario, arm, stage, metric) %>%
-    dplyr::group_modify(~summarise_values(.x$value)) %>%
+    dplyr::group_modify(~summarise_values(.x$value, .y$stage != "paired_after" &&
+                                           grepl("^(attenuation|gain)_", .y$metric))) %>%
     dplyr::ungroup()
   write.table(summary, file.path(out, "summary.tsv"), sep = "\t", row.names = FALSE, quote = FALSE)
   write.table(equivalence, file.path(out, "equivalence.tsv"), sep = "\t", row.names = FALSE,
               quote = FALSE)
   grDevices::pdf(file.path(out, "summary.pdf"), width = 12, height = 8)
   on.exit(grDevices::dev.off())
-  pages <- list(recovery = c("before", "after", "truth"),
-                paired_change = "paired_after", selection = "selection")
+  dodge <- ggplot2::position_dodge(width = 0.6)
+  pages <- list(recovery = c("before", "after", "truth", "joint"),
+                paired_change = "paired_after",
+                observed_truth = c("observed_truth", "after_vs_complete"))
   for (page in names(pages)) {
     shown <- summary[summary$stage %in% pages[[page]] & summary$n_runs > 0, ]
     if (!nrow(shown)) next
-    plot <- ggplot2::ggplot(shown, ggplot2::aes(scenario, mean, ymin = ci_low, ymax = ci_high,
-                                              colour = stage, shape = arm)) +
-      ggplot2::geom_point(position = ggplot2::position_dodge(width = 0.6)) +
-      ggplot2::geom_errorbar(position = ggplot2::position_dodge(width = 0.6),
+    plot <- ggplot2::ggplot(shown, ggplot2::aes(scenario, mean, colour = stage, shape = arm)) +
+      ggplot2::geom_point(data = results[results$stage %in% pages[[page]], ],
+                          ggplot2::aes(y = value), position = dodge, alpha = 0.3, size = 0.6) +
+      ggplot2::geom_point(position = dodge) +
+      ggplot2::geom_errorbar(ggplot2::aes(ymin = ci_low, ymax = ci_high), position = dodge,
                             width = 0.2, na.rm = TRUE) +
       ggplot2::facet_wrap(~metric, scales = "free_y") +
       ggplot2::labs(title = page) + ggplot2::theme_bw(base_size = 8) +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
     if (page != "recovery") {
-      plot <- plot + ggplot2::geom_hline(yintercept = if (page == "selection") 1 else 0,
+      reference <- unique(shown["metric"])
+      reference$value <- if (page == "paired_change") 0 else {
+        as.integer(startsWith(reference$metric, "attenuation_"))
+      }
+      plot <- plot + ggplot2::geom_hline(data = reference, ggplot2::aes(yintercept = value),
                                         linetype = "dashed", colour = "grey50")
     }
     print(plot)
   }
+  # Recovery against the confounding index, with the expectation 1 - eta2 for an omitted
+  # covariate under a per-lab offset.
+  eta <- summary[summary$metric == "eta2_condition", c("scenario", "mean")]
+  names(eta)[2] <- "eta2"
+  shown <- merge(summary[summary$stage %in% c("before", "after", "joint") &
+                           summary$metric %in% c("attenuation_condition", "shift_condition",
+                                                 "de_condition_fp"), ], eta)
+  expected <- data.frame(eta2 = seq(0, 1, 0.01), metric = "attenuation_condition")
+  expected$mean <- 1 - expected$eta2
+  plot <- ggplot2::ggplot(shown, ggplot2::aes(eta2, mean, colour = stage, shape = arm)) +
+    ggplot2::geom_point() +
+    ggplot2::geom_errorbar(ggplot2::aes(ymin = ci_low, ymax = ci_high), width = 0.02,
+                          na.rm = TRUE) +
+    ggplot2::geom_line(data = expected, ggplot2::aes(eta2, mean), inherit.aes = FALSE,
+                       linetype = "dashed", colour = "grey50") +
+    ggplot2::facet_wrap(~metric, scales = "free_y") +
+    ggplot2::labs(title = "confounding", x = "lab-explained condition variance") +
+    ggplot2::theme_bw(base_size = 8)
+  print(plot)
   cat("Completed runs per scenario:\n")
   print(table(unique(results[c("scenario", "run")])$scenario))
   cat("Passed equivalence checks:", nrow(unique(equivalence[c("scenario", "run", "arm")])), "\n")

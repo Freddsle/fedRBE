@@ -79,8 +79,9 @@ pixi run python -m evaluation_utils.run_correction_experiments correct --dataset
 ```
 
 **Output:** `after/label_aware/intensities_log_Rcorrected_UNION.tsv`.
-[evaluation_ccRCC.ipynb](../../evaluation/evaluation_ccRCC.ipynb) then writes the
-after-correction diagnostic plot `plots/data_plot_Rcorrected.png`.
+`pixi run Rscript evaluation/dataset_diagnostics.R ccRCC_studies`, run from the
+repository root, then writes the after-correction diagnostic plot
+`plots/data_plot_Rcorrected.png`.
 
 Other correction modes: [reproduction guide](../../docs/reproduce.md).
 
@@ -113,38 +114,39 @@ python generate_fedrbe_corrected_datasets.py
 
 ## Step 4 — Visual / statistical evaluation
 
-**What:** Compare uncorrected, centrally corrected, and federated matrices using
-PCA, violin plots, and variance partitioning. Metadata comes from the tracked
-`before/<site>/design.tsv` files.
+**What:** Inspect the centrally corrected matrix with PCA, sample boxplots and
+densities, and compare uncorrected and federated matrices with PCA and variance
+partitioning (Figure 3c). Metadata comes from the tracked `before/<site>/design.tsv`
+files.
 
-**Run after Steps 2 and 3:** Open with an R kernel and execute all cells of:
+**Run after Steps 2 and 3,** from the repository root:
 
+```bash
+pixi run Rscript evaluation/dataset_diagnostics.R ccRCC_studies
 ```
-evaluation/evaluation_ccRCC.ipynb
-```
 
-Use `evaluation/` as the working directory. The notebook contains the comparison
-plots and statistical summaries; these assess remaining study effects alongside
-the biological condition signal.
+This writes `plots/data_plot_Rcorrected.png`. Figure 3c, which assesses remaining
+study effects alongside the biological condition signal, is rendered with the
+[figure commands](../../docs/reproduce.md#7-generate-figures-3-4-and-s5-for-each-correction-arm).
 
 ## Step 5 — Clustering evaluation (k-means)
 
-**What:** Evaluate whether k-means clusters recover biological (`Condition`) or
-batch (`Dataset`) labels before and after correction. Adjusted Rand index (ARI)
-measures agreement with each label set, so the comparison distinguishes retained
-condition structure from remaining study structure.
+**What:** Evaluate whether central and federated k-means recover the biological
+condition (tumor or normal) before and after central and federated correction.
+Adjusted Rand index (ARI) and adjusted mutual information (AMI) measure agreement
+with the condition labels over ten seeds.
 
-**Run:** The clustering workflow defaults to central correction from Steps 1–2.
-To evaluate federated correction, also complete Step 3 and select that result
-using `CORRECTED_SOURCE` in notebooks 02 and 03. They prepare inputs automatically. Use
-`evaluation_clusterization_after_correction/real_datasets/` as the working
-directory and execute these Python notebooks in order:
+**Run:** After Steps 1–3, from the repository root:
 
-1. `02_central_kmeans.ipynb` — prepare inputs and run centralized k-means.
-2. `03_federated_runs.ipynb` — run federated k-means via FeatureCloud; this also
-   requires Docker and the clustering app setup described in that notebook.
-   Skip this notebook for central-only k-means.
-3. `04_analysis_metrics_plots.ipynb` — compute ARI and produce comparison/PCA plots.
+```bash
+pixi run python evaluation_clusterization_after_correction/real_datasets/multiple_runs.py \
+  --datasets ccRCC_proteomics
+```
+
+Inputs are prepared automatically. Central fits are recomputed and saved federated
+assignments are reused; new federated fits (`--rerun-federated`) require Docker
+and the clustering app described in the
+[clustering instructions](../../evaluation_clusterization_after_correction/real_datasets/README.md).
 
 ## Dependencies
 

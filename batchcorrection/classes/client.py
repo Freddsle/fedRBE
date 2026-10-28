@@ -43,7 +43,7 @@ class Client:
         hash2name = {}
         name2hash = {}
         for name in names:
-            name_hash = hashlib.sha3_256(name.encode()).hexdigest()
+            name_hash = hashlib.sha3_256(str(name).encode()).hexdigest()
             hash2name[name_hash] = name
             name2hash[name] = name_hash
         return name2hash, hash2name
@@ -100,10 +100,10 @@ class Client:
             except:
                 raise ValueError("min_samples must be an integer")
         # read covariates
-        if "covariates" not in config:
-            covariates = None
-        else:
-            covariates = config["covariates"]
+        covariates = config.get("covariates")
+        if not isinstance(covariates, list) or not all(isinstance(name, str) for name in covariates):
+            raise ValueError(f"Client {clientname}: covariates must be a list of covariate names, "
+                             "e.g. ['Pyr'], or [] for batch-only correction")
         # read smpc
         smpc = config.get("smpc", True)
         if not isinstance(smpc, bool):
@@ -176,15 +176,12 @@ class Client:
         self.normalize(normalizationMethod)
         assert isinstance(self.data, pd.DataFrame)
         assert self.feature_names is not None
-        assert self.variables is not None
         # Hashing logic
         if use_hashing:
             # we hash the feature names and variables to hide covariates and features
             # that this client has but other clients do not have
             if not self.feature_names:
                 raise ValueError(f"Client {self.client_name}: Error loading feature names.")
-            if not self.variables and self.variables != []:
-                raise ValueError(f"Client {self.client_name}: Error loading variables.")
 
             self.feature2hash, self.hash2feature = self.hash_names(self.feature_names)
             self.data.rename(index=self.feature2hash, inplace=True)
@@ -204,8 +201,8 @@ class Client:
         """
         Opens the dataset and loads the data and design matrix.
         The data is converted in the format features x samples.
-        Furthermore, we only consider numerical values.
-        All other data is removed from batch correction and added later.
+        Non-numeric columns of samples x features files are left out of the
+        correction; expression files must be numeric apart from covariate rows.
         Furthermore, variables are extracted and added to the design matrix.
         A report of which features were batch corrected is given in the end.
         Args:
@@ -281,16 +278,27 @@ class Client:
 
         # handling of expression files
         else:
-            # for expression files we just have to remove the rows that have non-numeric values
+            # for expression files every cell must be numeric: one text cell types its
+            # whole sample column, so single features cannot be separated by dtype
             # we also need to potentially extract covariates
             tmp = self.data.T
             if self.variables and not design_file_path:
                 self.variables_in_data = True
                 tmp = tmp.drop(columns=self.variables)
-            tmp = tmp.select_dtypes(include=np.number)
+            numeric = tmp.apply(pd.to_numeric, errors="coerce", axis=1)
+            non_numeric = numeric.isna() & tmp.notna()
+            if non_numeric.to_numpy().any():
+                raise ValueError(f"{int(non_numeric.to_numpy().sum())} non-numeric values in samples "
+                                 f"{list(non_numeric.index[non_numeric.any(axis=1)][:10])} and features "
+                                 f"{list(non_numeric.columns[non_numeric.any(axis=0)][:10])}; use NA for "
+                                 "missing values and remove annotation rows or columns")
+            tmp = numeric
             self.num_excluded_numeric = len(self.data.columns) - len(tmp.columns)
             self.data = tmp.T
 
+        invalid = self.data.index[self.data.index.isna() | self.data.index.duplicated()].unique().tolist()
+        if invalid:
+            raise ValueError(f"{len(invalid)} feature identifiers are missing or duplicated, e.g. {invalid[:10]}")
         self.feature_names = list(self.data.index.values)
         self.sample_names = list(self.data.columns.values)
         # we need to ensure that the sample_names are the same as the design matrix index
@@ -306,10 +314,15 @@ class Client:
             # do nothing
             return
         if normalizationMethod == "log2(x+1)":
+            invalid = int((self.data <= -1).sum().sum())
+            if invalid:
+                raise ValueError(f"Client {self.client_name}: normalizationMethod log2(x+1) needs values > -1, "
+                                 f"but {invalid} values are <= -1; use null for already log-transformed "
+                                 "data, or remove or recode these values")
             self.data = np.log2(self.data + 1)
         else:
-            print(f"Normalization method {normalizationMethod} not recognized, no normalization applied")
-            return
+            raise ValueError(f"Client {self.client_name}: unsupported normalizationMethod "
+                             f"{normalizationMethod!r}; use \"log2(x+1)\" or null (or omit the key)")
 
     def get_batch_feature_presence_info(self, min_samples: int) -> Dict[str, List[str]]:
         """
@@ -593,9 +606,12 @@ class Client:
         return None
 
     ####### limma: linear regression #########
-    def compute_XtX_XtY(self) -> Tuple[np.ndarray, np.ndarray, str]:
+    def compute_XtX_XtY(self, xtx_error: float = 0.0) -> Tuple[np.ndarray, np.ndarray, str]:
         """
         Computes the XtX and XtY matrices for the linear regression.
+        Args:
+            xtx_error: SMPC encoding error bound per aggregated XtX entry, zero
+                without SMPC.
         Returns:
             Returns a tuple of (XtX, XtY, Error) where
             - XtX is the XtX matrix of shape k x k
@@ -630,6 +646,15 @@ class Client:
                 y = y[non_nan_idxs]
                 XtX[feature_idx, :, :] = x.T @ x
                 XtY[feature_idx, :] = x.T @ y
+
+        # Stop if SMPC rounding could turn a varying covariate into the constant
+        # 0 or 1 column compute_beta omits; sum((x-1)^2) spans 4 XtX entries.
+        covariates = X[:, 1:1 + len(self.variables or [])]
+        present = np.isfinite(Y).astype(float)
+        for distance in (present @ covariates ** 2, present @ (covariates - 1) ** 2):
+            if ((distance > 0) & (distance <= 4 * xtx_error)).any():
+                return XtX, XtY, ("Covariate variation is below the SMPC precision; "
+                                  "rescale covariates or set smpc: false.")
 
         return XtX, XtY, ""
 

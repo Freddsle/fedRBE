@@ -79,21 +79,19 @@ downloads; the FeatureCloud requirements are listed below.
    Output: `after/label_aware/<Modality>/intensities_log_Rcorrected_UNION.tsv`.
    Sample metadata is read from `before/<Modality>/metadata.tsv`.
 4. Federated correction — run `generate_fedrbe_corrected_datasets.py` from the repository root as described in the [reproduction guide](../../docs/reproduce.md#2-obtaining-federated-corrected-data). It reads the client folders prepared by notebook 02 and writes `after/label_aware/<Modality>/FedApp_corrected_data.tsv` and `FedApp_corrected_data_smpc.tsv`.
-5. Downstream evaluation — use the ordinary RF launchers and k-means notebooks
+5. Downstream evaluation — use the ordinary RF launchers and k-means script
    described in the [reproduction guide](../../docs/reproduce.md#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data).
    They prepare joint matrices and RF client files automatically for the selected
    correction arm from the modality outputs and original metadata.
-   `evaluation_clusterization_after_correction/real_datasets/00_build_kmeans_matrices.ipynb`
-   optionally inspects the shared joint-matrix builder.
    `05_create_merged_omics_folder.py --correction-arm <arm>` exposes the same RF
    exporter independently when joint matrices already exist.
 
-`evaluation/evaluation_quartet_multiomics.ipynb` displays the broader multiomics
-diagnostics inline, including central and federated correction comparisons, and
-saves the after-correction counterparts of notebook 03's diagnostics to `plots/`. The
-separate notebook below exports the combined per-modality diagnostic figure.
+`pixi run Rscript evaluation/dataset_diagnostics.R quartet_multiomics`, run from the
+repository root, saves the after-correction counterparts of notebook 03's diagnostics
+to `plots/`. The separate script below exports the combined per-modality diagnostic
+figure.
 
-The [S5 notebook](../../evaluation/quartet_separated_modality_pca_fixed_effect_variance.ipynb)
+The [S5 script](../../evaluation/quartet_separated_modality_pca_fixed_effect_variance.R)
 runs after federated correction, using the default layout of 48 profiles and four
 batches across three clients per modality. Set `CORRECTION_ARM=label_aware`
 (default) or `no_label`. Its sequential model is `~ condition + batch` (donor first);
@@ -151,7 +149,7 @@ Defaults (`INCLUDE_CLIENT_04 = False`):
 - Central limma and FedRBE use the alphabetically last batch of `client_03_L05_L04`
   as reference: `R_ILM_L5_B2` (RNA), `FDU_QE-HFX_4` (Protein), `U_L5_01` (Metab).
 
-Set `INCLUDE_MULTIOMICS_CLIENT_04 = True` in the launcher and `INCLUDE_CLIENT_04 <- TRUE` in all three R notebooks to restore the full **4-client / 72-library / 6-batch** federation. The reference batch then becomes the last batch of `client_04_L03_L14` (`R_BGI_L3_B1` / `TMO_QE-HFX_1` / `U_L3_02`).
+Set `INCLUDE_MULTIOMICS_CLIENT_04 = True` in the launcher and `INCLUDE_CLIENT_04 <- TRUE` in all three R notebooks to enable the full **4-client / 72-library / 6-batch** federation. The reference batch then becomes the last batch of `client_04_L03_L14` (`R_BGI_L3_B1` / `TMO_QE-HFX_1` / `U_L3_02`).
 
 ### Per-client batch contributions (full federation)
 

@@ -104,14 +104,6 @@ class SharedDictionary:
         with self._lock:
             self._shared_dict[key] = value
 
-    def delete(self, key):
-        """
-        Removes the key-value pair from the shared dictionary.
-        """
-        with self._lock:
-            if key in self._shared_dict:
-                del self._shared_dict[key]
-
 class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
     """
     The simulator class, representing a single client in a federated learning environment.
@@ -120,8 +112,6 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
                  is_coordinator: bool,
                  client_id,
                  num_clients: int,
-                 inputfolder: str,
-                 outputfolder: str,
                  shared_dict: SharedDictionary,
                  client_ids: Optional[List] = None):
         """
@@ -134,8 +124,6 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
             num_clients: The total number of clients in the federated learning
                 environment. This is needed to correctly gather data,
                 specifically to know how many data packets to wait for
-            inputfolder: The path to the input folder containing the data for this client
-            outputfolder: The path to the output folder to store the results
             shared_dict: A shared dictionary to store the data.
                 The other clients (instances of this class) receive the same
                 dictionary. The client uses it's client_id as key to access the data.
@@ -147,8 +135,6 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
         if client_id == 'global':
             raise ValueError("The client_id 'global' is reserved for global data")
         self.num_clients = num_clients
-        self.inputfolder = inputfolder
-        self.outputfolder = outputfolder
         self.shared_dict = shared_dict
         self.client_ids = list(client_ids) if client_ids is not None else list(range(num_clients))
         if client_id not in self.client_ids:
@@ -173,7 +159,6 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
                                  use_smpc=False,
                                  use_dp=False,
                                  memo=None):
-        #print(f"Client {self.client_id} sending data to coordinator")
         while True:
             self.shared_dict.raise_if_aborted()
             # we can only send if what we send before was gather already
@@ -195,7 +180,6 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
         while True:
             self.shared_dict.raise_if_aborted()
             data_packets = self.shared_dict.get_all_non_global_values()
-            #print(f"gathering data, got {len(data_packets)} of {self.num_clients} data packets")
             if len(data_packets) == self.num_clients:
                 # reset the shared dictionary
                 self.shared_dict.delete_all_but_global()
@@ -209,7 +193,6 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
                        memo: Optional[Any] = None) -> None:
         if not self.coordinator:
             raise ValueError("Only the coordinator can broadcast data")
-        #print(f"Broadcasting data to all clients")
         while True:
             self.shared_dict.raise_if_aborted()
             if not self.shared_dict.get('times_accesed_global'):
@@ -239,7 +222,6 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
                 # accessed this broadcast yet. The data itself is not compared, as
                 # e.g. numpy arrays cannot be compared to a bool and the same data
                 # might be broadcasted twice
-                #print(f"Client {self.client_id} received data, incrementing times_accesed_global")
                 self.shared_dict.increment_times_accesed_global()
                 self.previously_awaited_version = version
                 break
@@ -309,13 +291,11 @@ class LocalFedLearningSimulationWrapper:
 
         # create the client instances
         self.clients: List[LocalFedLearningSingleClientSimulation] = []
-        for i, clientfolder in enumerate(clientfolders):
+        for i in range(self.num_clients):
             is_coordinator = i == 0
             client = LocalFedLearningSingleClientSimulation(is_coordinator=is_coordinator,
                                                client_id=client_ids[i],
                                                num_clients=self.num_clients,
-                                               inputfolder=clientfolder,
-                                               outputfolder=outputfolders[i],
                                                shared_dict=self.shared_dict,
                                                client_ids=client_ids)
             self.clients.append(client)

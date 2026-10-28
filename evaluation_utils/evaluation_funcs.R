@@ -1,10 +1,6 @@
 variance_projection_matrix <- function(design) {
   decomposition <- qr(design)
-  rank <- decomposition$rank
-  if (rank == 0) {
-    return(matrix(0, nrow = nrow(design), ncol = nrow(design)))
-  }
-  q_matrix <- qr.Q(decomposition)[, seq_len(rank), drop = FALSE]
+  q_matrix <- qr.Q(decomposition)[, seq_len(decomposition$rank), drop = FALSE]
   tcrossprod(q_matrix)
 }
 
@@ -13,9 +9,6 @@ fixed_effect_variance_partition <- function(data, metadata, form) {
   complete_data <- data[stats::complete.cases(data), , drop = FALSE]
   metadata <- metadata[colnames(complete_data), , drop = FALSE]
   model_terms <- attr(stats::terms(form), "term.labels")
-  if (length(model_terms) == 0) {
-    stop("Variance partitioning requires at least one model term.", call. = FALSE)
-  }
 
   response_matrix <- t(as.matrix(complete_data))
   storage.mode(response_matrix) <- "double"
@@ -50,9 +43,6 @@ variance_partition_long <- function(data, metadata, form) {
   if (requireNamespace("variancePartition", quietly = TRUE)) {
     var_part <- variancePartition::fitExtractVarPartModel(na.omit(data), form, metadata)
     model_terms <- setdiff(colnames(var_part), "Residuals")
-    if (length(model_terms) == 0) {
-      stop("No model terms available to plot after removing residual variance.", call. = FALSE)
-    }
     table <- as.data.frame(var_part[, model_terms, drop = FALSE], check.names = FALSE)
     table$feature <- rownames(table)
     return(tidyr::pivot_longer(
@@ -67,35 +57,33 @@ variance_partition_long <- function(data, metadata, form) {
 }
 
 
+# partition is variance_partition_long or fixed_effect_variance_partition;
+# box_args are passed to geom_boxplot().
 lmpv_plot <- function(
   data, metadata, title = "Variance explained by the model",
   y_limits = c(0, 1), show_legend = TRUE,
-  form = NULL, max_yval = NULL,
+  form,
   median_position = 0.05,
   median_label_size = 3,
   only_table = FALSE,
   term_labels = NULL,
-  fill_title = "Column"
+  fill_title = "Column",
+  partition = variance_partition_long,
+  box_args = list(),
+  median_nudge = -0.2
 ){
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package 'ggplot2' is required for lmpv_plot().", call. = FALSE)
-  }
-  if (is.null(form)){
-    form <- ~ Status + Dataset
   }
 
   model_terms <- attr(stats::terms(form), "term.labels")
   if (is.null(term_labels)) {
     term_labels <- stats::setNames(model_terms, model_terms)
   }
-  df_long <- variance_partition_long(data, metadata, form)
+  df_long <- partition(data, metadata, form)
   df_long$variable <- factor(df_long$variable, levels = model_terms, ordered = TRUE)
-  if (!"Var1" %in% names(df_long)) {
-    df_long$Var1 <- df_long$feature
-  }
-  if (!"Var2" %in% names(df_long)) {
-    df_long$Var2 <- df_long$variable
-  }
+  df_long$Var1 <- df_long$feature
+  df_long$Var2 <- df_long$variable
 
   if (isTRUE(only_table)) {
     return(df_long)
@@ -108,21 +96,16 @@ lmpv_plot <- function(
     label_y = median_value + ifelse(median_value > 0.8, -0.05, median_position)
   )
 
-  effective_y_limits <- y_limits
-  if (!is.null(max_yval)) {
-    effective_y_limits[2] <- max_yval
-  }
-
   # Create the boxplot using ggplot2
   res_plots <- ggplot2::ggplot(df_long, ggplot2::aes(x = variable, y = value, fill = variable)) +
-    ggplot2::geom_boxplot() +
+    do.call(ggplot2::geom_boxplot, box_args) +
     ggplot2::labs(title = title,
                   y = "Variance explained",
                   fill = fill_title) +
     ggplot2::scale_x_discrete(labels = term_labels) +
     ggplot2::scale_fill_discrete(name = fill_title, labels = term_labels) +
     ggplot2::theme_minimal() +
-    ggplot2::coord_cartesian(ylim = effective_y_limits) +
+    ggplot2::coord_cartesian(ylim = y_limits) +
     # Add the median values to the plot with conditional positioning
     ggplot2::geom_text(
       data = medians,
@@ -131,7 +114,7 @@ lmpv_plot <- function(
         y = label_y,
         label = sprintf("%.2f", median_value)
       ),
-      nudge_x = -0.2,
+      nudge_x = median_nudge,
       size = median_label_size,
       color = "black"
     ) +
