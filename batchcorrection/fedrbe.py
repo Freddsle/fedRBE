@@ -3,9 +3,10 @@ The whole federated batch effect correction protocol as one function.
 run_fedrbe only needs an object fulfilling the ProtocolFedLearning protocol
 (is_coordinator, id, clients, send_data_to_coordinator, gather_data,
 broadcast_data, await_data). FeatureCloud's AppState fulfills it, so states.py
-simply calls run_fedrbe. A local simulation (e.g. run_simulation_native of
+simply calls run_fedrbe. A local simulation (run_simulation_native of
 evaluation_classification_after_correction/fc_fed_forest_simple_app/
-fc_fedlearnsim_helper) can run the same function without docker.
+fc_fedlearnsim_helper) can run the same function without docker, see
+evaluation_utils/fedRBE_simulation_scrip_simdata.py.
 """
 import os
 
