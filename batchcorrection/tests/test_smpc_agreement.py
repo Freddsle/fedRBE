@@ -1,7 +1,9 @@
-"""Bounded protocol checks for SMPC agreement and the coordinator's coefficient broadcast."""
+"""Bounded protocol checks for SMPC agreement, invalid runs and coefficient broadcasts."""
 
+import contextlib
 import importlib
 import importlib.util
+import io
 from pathlib import Path
 import sys
 import tempfile
@@ -95,6 +97,60 @@ class SmpcAgreementTests(unittest.TestCase):
             with self.subTest(smpc=smpc, exponent=exponent):
                 with patch.object(fedrbe, "SMPC_EXPONENT", exponent):
                     self.assertEqual(fedrbe.smpc_error_bound(smpc, 2), expected)
+
+    def test_empty_batch_stops_the_participant_with_the_threshold_rule(self):
+        protocol, cohort = self.make_protocol(True, True)
+        protocol.is_coordinator = False
+        cohort.get_batch_feature_presence_info.return_value = {
+            "site_a|first": [], "site_a|second": ["feature"],
+        }
+        with patch.object(fedrbe, "Client", return_value=cohort):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                r"batches \['site_a\|first'\]\..*max\(min_samples=0, 2 batches \+ 1 covariates \+ 1\)",
+            ):
+                fedrbe.run_fedrbe(protocol, "input", "output")
+        # Only the label exchange happened; presence information was never sent.
+        self.assertEqual(protocol.send_data_to_coordinator.call_count, 1)
+        protocol.broadcast_data.assert_not_called()
+
+    def test_large_statistics_stop_before_the_smpc_send(self):
+        # At exponent 12 the two-client limit is about 4.61e6, for both XtX and XtY.
+        for smpc, value, stops in ((True, 5e6, True), (True, 4e6, False), (False, 5e6, False)):
+            for statistic in ("XtX", "XtY"):
+                with self.subTest(smpc=smpc, value=value, statistic=statistic):
+                    protocol, cohort = self.make_protocol(smpc, smpc)
+                    protocol.is_coordinator = False
+                    protocol.await_data.side_effect = [
+                        (["covariate"], 2), (["feature"], protocol.clients),
+                    ]
+                    cohort.validate_inputs = Mock()
+                    cohort.set_data = Mock()
+                    cohort.create_design = Mock(return_value=None)
+                    cohort.feature_names = ["feature"]
+                    cohort.data = MagicMock()
+                    cohort.design = pd.DataFrame(np.ones((4, 3)))
+                    cohort._check_consistency_designfile = Mock()
+                    xtx = np.full((1, 3, 3), value if statistic == "XtX" else 1.0)
+                    xty = np.full((1, 3), value if statistic == "XtY" else 1.0)
+                    cohort.compute_XtX_XtY = Mock(return_value=(xtx, xty, ""))
+                    # End the successful path at its statistics send.
+                    protocol.send_data_to_coordinator.side_effect = [None, None, StopProtocol]
+                    with patch.object(fedrbe, "Client", return_value=cohort), \
+                            contextlib.redirect_stdout(io.StringIO()):
+                        if stops:
+                            with self.assertRaisesRegex(
+                                RuntimeError, r"SMPC limit of 4\.61e\+06 for 2 clients",
+                            ):
+                                fedrbe.run_fedrbe(protocol, "input", "output")
+                            self.assertEqual(protocol.send_data_to_coordinator.call_count, 2)
+                        else:
+                            with self.assertRaises(StopProtocol):
+                                fedrbe.run_fedrbe(protocol, "input", "output")
+                            self.assertEqual(protocol.send_data_to_coordinator.call_count, 3)
+                            self.assertIs(
+                                protocol.send_data_to_coordinator.call_args.kwargs["use_smpc"], smpc,
+                            )
 
     def test_initial_state_runs_the_protocol_with_the_app_exponent(self):
         states, engine = load_states()

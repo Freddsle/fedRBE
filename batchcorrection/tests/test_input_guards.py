@@ -12,7 +12,10 @@ import pandas as pd
 import yaml
 
 from batchcorrection.classes.client import Client
-from batchcorrection.classes.coordinator_utils import create_feature_presence_matrix
+from batchcorrection.classes.coordinator_utils import (
+    create_feature_presence_matrix,
+    select_common_features_variables,
+)
 
 
 class InputGuardTests(unittest.TestCase):
@@ -123,6 +126,11 @@ class InputGuardTests(unittest.TestCase):
         self.expression.iloc[0, 0] = -1
         with self.assertRaisesRegex(ValueError, "1 values are <= -1.*null"):
             self.initialize(normalizationMethod="log2(x+1)")
+
+    def test_no_feature_kept_by_three_clients_is_rejected(self):
+        information = [(name, None, None, {name: ["feature_a"]}) for name in ("a", "b")]
+        with self.assertRaisesRegex(ValueError, r"at least 3 clients \(2 joined\)"):
+            select_common_features_variables(information, default_order=["a", "b"])
 
 
 class FiniteObservationTests(unittest.TestCase):

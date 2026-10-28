@@ -85,6 +85,9 @@ def create_feature_presence_matrix(
             client_order.append(reference_client)
     else:
         # if all positions are integers, we use the order of the positions
+        positions = [position for _, position, _, _ in feature_batch_info]
+        if len(set(positions)) != len(positions):
+            raise ValueError(f"Each client needs a distinct integer position, got {sorted(positions)}")
         client_order = [cohort_name for cohort_name, _, _, _ in sorted(feature_batch_info, key=lambda x: x[1])] # type: ignore
             # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
         print(f"INFO: Using given specific client order: {client_order}")
@@ -202,6 +205,10 @@ def select_common_features_variables(
 
     # Create the feature presence matrix - for global mask
     feature_presence_matrix, cohorts_order = create_feature_presence_matrix(feature_batch_info, global_feature_names, default_order) # type: ignore
+    if not global_feature_names:
+        raise ValueError(f"No feature is kept by at least {min_clients} clients ({len(feature_batch_info)} joined) "
+                         "after removing features with too few finite values; fedRBE needs at least "
+                         f"{min_clients} clients with matching feature identifiers")
 
     return global_feature_names, feature_presence_matrix, cohorts_order
 

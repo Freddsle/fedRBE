@@ -10,6 +10,8 @@ evaluation_utils/fedRBE_simulation_scrip_simdata.py.
 """
 import os
 
+import numpy as np
+
 try:
     # inside the app container, the app folder is the working directory
     from classes.client import Client
@@ -99,6 +101,14 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
     min_samples = max(num_batches+len(global_variables_hashed)+1, client.min_samples)
 
     batch_feature_presence = client.get_batch_feature_presence_info(min_samples=min_samples)
+    empty_batches = [batch for batch, features in batch_feature_presence.items() if not features]
+    if empty_batches:
+        raise RuntimeError(
+            f"No feature has at least {min_samples} finite values in batches {empty_batches}. "
+            f"For privacy, each batch needs max(min_samples={client.min_samples}, "
+            f"{num_batches} batches + {len(global_variables_hashed)} covariates + 1) finite "
+            "values per feature. Add samples to these batches, or merge or remove them."
+        )
 
     protocol.send_data_to_coordinator((cohort_name,
                                        client.position,
@@ -155,6 +165,17 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
     XtX, XtY, err = client.compute_XtX_XtY()
     if err:
         raise RuntimeError(f"Error in compute_XtX_XtY: {err}")
+
+    if smpc:
+        # The controller sums int64 fixed-point values; keep the clients' sum representable.
+        limit = np.iinfo(np.int64).max / 10 ** SMPC_EXPONENT / len(protocol.clients)
+        largest = max(np.abs(XtX).max(), np.abs(XtY).max())
+        if largest >= limit:
+            raise RuntimeError(
+                f"XtX/XtY values reach {largest:.3g}, above the SMPC limit of {limit:.3g} for "
+                f"{len(protocol.clients)} clients. Use log-scale data "
+                '(normalizationMethod: "log2(x+1)"), rescale large covariates or set smpc: false.'
+            )
 
     # send XtX and XtY
     print("[compute_XtX_XtY] Computation done, sending data to coordinator")
