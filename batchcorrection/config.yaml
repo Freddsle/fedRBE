@@ -32,8 +32,8 @@ flimmaBatchCorrection:
   separator: "\t" # the separator used in the annotation or data file
   design_separator: "\t" # the separator used in the design file
   normalizationMethod: "log2(x+1)" # the method used for normalization, supported:
-                                   # "log2(x+1)"
-                                   # if None is given, doesn't the app doesn't normalize
+                                   # "log2(x+1)" for raw non-negative values (all > -1)
+                                   # null or omitted: no normalization; other values stop the run
   # The following options are for privacy, we recommend one of these tiers:
   # minimum privacy:
   #   smpc = False, min_samples = 0
@@ -55,8 +55,7 @@ flimmaBatchCorrection:
                  # format: int, default: 5
                  # Please note that the actual used min_samples might be different
                  # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
-                 # This is to ensure that a sent Xty matrix always has more samples
-                 # than features so that neither X not y can be reconstructed from the Xty matrix
+                 # This keeps more samples than design columns in every sent Xty matrix
   position: 1    # if a number x is given, the order of the clients will be
                  # be determined by sorting after this number x.
                  # Example:
@@ -64,7 +63,7 @@ flimmaBatchCorrection:
                  # Order -> Client1, Client3, Client2
                  # The last client in that order is always used as the reference
                  # batch, so in this case Client2
-                 # positions apply only when every client supplies an integer
+                 # positions apply only when every client supplies an integer (duplicates stop the run)
                  # otherwise the coordinator's client order is used and may vary
                  # between runs; without an explicit reference, the last client's
                  # alphabetically last batch is used

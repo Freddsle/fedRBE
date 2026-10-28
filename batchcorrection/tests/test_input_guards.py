@@ -1,6 +1,7 @@
 """Check invalid-input rejection and finite-observation privacy filtering."""
 
 import contextlib
+import hashlib
 import io
 from pathlib import Path
 import tempfile
@@ -98,6 +99,30 @@ class InputGuardTests(unittest.TestCase):
             with self.subTest(flag=flag):
                 with self.assertRaisesRegex(ValueError, "smpc.*boolean"):
                     self.initialize(smpc=flag)
+
+    def test_non_numeric_cell_names_its_sample_column(self):
+        self.expression = self.expression.astype(object)
+        self.expression.loc["feature_b", "s3"] = "n.d."
+        with self.assertRaisesRegex(ValueError, r"1 non-numeric values in samples \['s3'\] and features \['feature_b'\]"):
+            self.initialize()
+
+    def test_numeric_identifiers_hash_and_duplicates_are_rejected(self):
+        self.expression.index = [7892501, 7892502]
+        client = self.initialize()
+        self.assertEqual(client.hash_names(client.feature_names)[0][7892501],
+                         hashlib.sha3_256(b"7892501").hexdigest())
+        self.expression.index = ["feature_a", "feature_a"]
+        with self.assertRaisesRegex(ValueError, r"missing or duplicated, e.g. \['feature_a'\]"):
+            self.initialize()
+
+    def test_unsupported_normalization_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "unsupported normalizationMethod 'log2'"):
+            self.initialize(normalizationMethod="log2")
+
+    def test_log_transform_rejects_values_at_or_below_minus_one(self):
+        self.expression.iloc[0, 0] = -1
+        with self.assertRaisesRegex(ValueError, "1 values are <= -1.*null"):
+            self.initialize(normalizationMethod="log2(x+1)")
 
 
 class FiniteObservationTests(unittest.TestCase):

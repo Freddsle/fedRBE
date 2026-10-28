@@ -72,6 +72,12 @@ class CovariateInitializationTests(unittest.TestCase):
         np.testing.assert_array_equal(client.design["local|first"], [1] * 4 + [-1] * 4)
         np.testing.assert_array_equal(client.data.to_numpy(), self.expression.to_numpy())
 
+    def test_covariates_must_be_a_list_of_names(self):
+        for covariates in (None, "target"):
+            with self.subTest(covariates=covariates), \
+                    self.assertRaisesRegex(ValueError, "covariates must be a list"):
+                self.initialize(covariates)
+
 
 if __name__ == "__main__":
     unittest.main()
