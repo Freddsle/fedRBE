@@ -105,42 +105,49 @@ class SmpcAgreementTests(unittest.TestCase):
         run.assert_called_once_with(state, states.INPUT_FOLDER, states.OUTPUT_FOLDER)
         self.assertEqual(state._app.default_smpc["exponent"], fedrbe.SMPC_EXPONENT)
 
-    def test_only_batch_coefficients_are_broadcast(self):
+    def test_statistics_follow_smpc_and_only_batch_coefficients_are_broadcast(self):
         cohorts = ["site_a", "site_b"]
-        protocol = SimpleNamespace(
-            id="site_a",
-            is_coordinator=True,
-            clients=cohorts,
-            send_data_to_coordinator=Mock(),
-            broadcast_data=Mock(),
-            gather_data=Mock(side_effect=[
-                [(["site_a"], ["covariate"], False), (["site_b"], ["covariate"], False)],
-                [],  # feature information, consumed by the patched feature selection
-                [],  # XtX and XtY, consumed by the patched solver
-            ]),
-            await_data=Mock(side_effect=[
-                (["covariate"], 2), (["feature"], cohorts), np.array([[3.]]),
-            ]),
-        )
-        cohort = MagicMock(
-            smpc=False, separator="\t", report="", min_samples=0, position=0,
-            reference_batch=False, batch_labels=["site_a"], feature_names=["feature"],
-            hash2feature={"feature": "feature_name"}, hash2variable={"covariate": "covariate_name"},
-            # Design columns: intercept, one covariate, one batch column (two batches).
-            design=pd.DataFrame(np.ones((4, 3))),
-        )
-        cohort.create_design.return_value = None
-        cohort.compute_XtX_XtY.return_value = (np.ones((1, 3, 3)), np.ones((1, 3)), "")
-        with patch.object(fedrbe, "Client", return_value=cohort), \
-                patch.object(fedrbe, "select_common_features_variables",
-                             return_value=(["feature"], np.ones((1, 2)), cohorts)), \
-                patch.object(fedrbe, "compute_beta", return_value=np.array([[1., 2., 3.]])), \
-                tempfile.TemporaryDirectory() as output:
-            fedrbe.run_fedrbe(protocol, "input", output)
-        beta_broadcast = protocol.broadcast_data.call_args
-        self.assertEqual(beta_broadcast.kwargs["memo"], "beta")
-        np.testing.assert_array_equal(beta_broadcast.args[0], [[3.]])
-
+        for smpc in (False, True):
+            with self.subTest(smpc=smpc):
+                protocol = SimpleNamespace(
+                    id="site_a",
+                    is_coordinator=True,
+                    clients=cohorts,
+                    send_data_to_coordinator=Mock(),
+                    broadcast_data=Mock(),
+                    gather_data=Mock(side_effect=[
+                        [(["site_a"], ["covariate"], smpc), (["site_b"], ["covariate"], smpc)],
+                        [],  # feature information, consumed by the patched feature selection
+                        [],  # XtX and XtY, consumed by the patched solver
+                    ]),
+                    await_data=Mock(side_effect=[
+                        (["covariate"], 2), (["feature"], cohorts), np.array([[3.]]),
+                    ]),
+                )
+                cohort = MagicMock(
+                    smpc=smpc, separator="\t", report="", min_samples=0, position=0,
+                    reference_batch=False, batch_labels=["site_a"], feature_names=["feature"],
+                    hash2feature={"feature": "feature_name"}, hash2variable={"covariate": "covariate_name"},
+                    # Design columns: intercept, one covariate, one batch column (two batches).
+                    design=pd.DataFrame(np.ones((4, 3))),
+                )
+                cohort.create_design.return_value = None
+                cohort.compute_XtX_XtY.return_value = (np.ones((1, 3, 3)), np.ones((1, 3)), "")
+                with patch.object(fedrbe, "Client", return_value=cohort), \
+                        patch.object(fedrbe, "select_common_features_variables",
+                                     return_value=(["feature"], np.ones((1, 2)), cohorts)), \
+                        patch.object(fedrbe, "compute_beta",
+                                     return_value=np.array([[1., 2., 3.]])) as solve, \
+                        tempfile.TemporaryDirectory() as output:
+                    fedrbe.run_fedrbe(protocol, "input", output)
+                # XtX/XtY travel with the configured SMPC setting and the solver gets the matching bound
+                self.assertIs(protocol.send_data_to_coordinator.call_args.kwargs["use_smpc"], smpc)
+                self.assertIs(protocol.gather_data.call_args.kwargs["use_smpc"], smpc)
+                self.assertEqual(solve.call_args.kwargs["xtx_error"],
+                                 fedrbe.smpc_error_bound(smpc, len(cohorts)))
+                beta_broadcast = protocol.broadcast_data.call_args
+                self.assertEqual(beta_broadcast.kwargs["memo"], "beta")
+                np.testing.assert_array_equal(beta_broadcast.args[0], [[3.]])
 
 if __name__ == "__main__":
     unittest.main()

@@ -29,7 +29,7 @@ Supports log scaling, multiple batches per client, and SMPC.
 - [Input requirements](#input-requirements)
 - [Outputs](#outputs)
 - [Configuration (config.yml)](#configuration-configyml)
-- [FeatureCloud App states](#featurecloud-app-states)
+- [Protocol phases](#protocol-phases)
 - [Additional resources](#additional-resources)
 - [License](#license)
 - [How to cite](#how-to-cite)
@@ -211,10 +211,13 @@ flimmaBatchCorrection:
 - Each feature's design must be identifiable at the available numerical precision,
   after masking missing batches. Rescale very small covariates if needed.
 
-## FeatureCloud App states
+## Protocol phases
+
+The app registers a single FeatureCloud state (`states.py`) that runs the whole
+protocol implemented in `fedrbe.py`. The figure shows the phases of that protocol.
 
 <p align="center">
-   <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE app states" width="60%">
+   <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE protocol phases" width="60%">
 </p>
 
 ---

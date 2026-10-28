@@ -234,6 +234,17 @@ Run fedRBE from the repository root:
 pixi run python ./generate_fedrbe_corrected_datasets.py
 ```
 
+For a quick check without Docker, run the same experiments in one process with
+the app's protocol code and compare each merged result to its central result:
+
+```bash
+pixi run python evaluation_utils/fedRBE_simulation_scrip_simdata.py --experiments [--only <text>]
+```
+
+This skips the SMPC experiments and writes no results. Both routes write the
+experiment's `config.yml` into the tracked client folders for the duration of the
+run and restore it afterwards, so run only one of them at a time.
+
 Both real-data correction arms run with and without SMPC by default.
 No-covariate variants retain the label-aware filtering threshold and other
 correction settings; preparation and evaluation labels remain available.
@@ -543,6 +554,7 @@ Main scripts live at the repository root; shared helpers live in `evaluation_uti
 | `generate_fedrbe_corrected_datasets.py` | Runs configured fedRBE experiments, assigns client inputs, executes the app, and stores corrected outputs. |
 | `analyse_fedvscentral.py` | Loads federated and central corrected datasets, checks shape/index consistency, and writes mean/max difference metrics. |
 | `evaluation_utils/featurecloud_api_extension.py` | Wraps the FeatureCloud testbed with automatic restart for the fedRBE correction script. |
+| `evaluation_utils/fedRBE_simulation_scrip_simdata.py` | Runs the app's protocol (`batchcorrection/fedrbe.py`) locally in threads without Docker or SMPC: `<input_dir> <output_file>` merges the corrected data of the client subfolders (simulated notebook 01 and `robustness_simulation.R`); `--experiments [--only <text>]` reruns the non-SMPC experiments of `generate_fedrbe_corrected_datasets.py` and compares them to the central results. |
 | `evaluation_utils/filtering.R` | Provides filtering and preprocessing functions used before centralized limma correction. |
 | `evaluation_utils/run_correction_experiments.py` | Runs central limma correction with selected covariates into canonical or isolated experiment outputs. |
 | `evaluation_utils/central_correction.R` | Provides the shared central limma correction step for real datasets. |

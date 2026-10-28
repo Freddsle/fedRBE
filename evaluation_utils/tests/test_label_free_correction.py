@@ -525,6 +525,20 @@ class NumericalSmokeTests(unittest.TestCase):
         correction._central_designs(directory, matrix, configs, designs, self.names)
         return directory
 
+    def test_native_simulation_matches_in_process_correction(self):
+        # The driver imports the FeatureCloud test helpers, so keep the import local.
+        from evaluation_utils import fedRBE_simulation_scrip_simdata as driver
+        for arm in ("label_aware", "no_label"):
+            with self.subTest(arm=arm), contextlib.redirect_stdout(io.StringIO()):
+                expected = client_correction(self.clients(arm), 5)
+                output = self.root / f"federated_{arm}.tsv"
+                driver.run_folder(str(self.root / "client_inputs"), str(output), verbose=False)
+                result = pd.read_csv(output, sep="\t", index_col=0)
+            self.assertEqual(list(result.columns), self.samples)
+            self.assertEqual(list(result.index), sorted(RETAINED))
+            pd.testing.assert_frame_equal(result, expected.sort_index(), atol=1e-12, rtol=0,
+                                          check_names=False)
+
     @requires_r
     def test_actual_client_matches_limma_for_both_arms(self):
         self.source["central"].unlink()
@@ -694,6 +708,39 @@ write.table(data.frame(rowname = rownames(expected), expected, check.names = FAL
         self.assertFalse(output.with_suffix(".pending.tsv").exists())
         self.assertEqual(self.canonical_hashes, self.hashes(self.source["source_root"].parent))
 
+
+
+class LocalDriverTests(unittest.TestCase):
+    def test_experiment_mode_restores_configs_and_skips_smpc(self):
+        # The driver imports the FeatureCloud test helpers, so keep the imports local.
+        from evaluation_utils import featurecloud_api_extension as api
+        from evaluation_utils import fedRBE_simulation_scrip_simdata as driver
+        import generate_fedrbe_corrected_datasets as generate
+        with tempfile.TemporaryDirectory() as directory:
+            clients = [Path(directory) / f"client_{i}" for i in range(3)]
+            for client in clients:
+                client.mkdir()
+            # two clients with a tracked config and one without
+            for client in clients[:2]:
+                (client / "config.yml").write_text("original")
+            for smpc, status, runs in ((False, "FAILED: no clients", 1), (True, "skipped (SMPC)", 0)):
+                with self.subTest(smpc=smpc):
+                    experiment = api.Experiment(
+                        name="fixture", clients=[str(client) for client in clients],
+                        app_image_name="image", fc_data_dir=directory,
+                        config_files=[deepcopy(generate.base_config) for _ in clients],
+                        config_file_changes=[{"flimmaBatchCorrection": {"smpc": smpc}} for _ in clients],
+                    )
+                    with patch.object(driver, "run_clients", side_effect=RuntimeError("no clients")) as run, \
+                            contextlib.redirect_stdout(io.StringIO()), \
+                            contextlib.redirect_stderr(io.StringIO()):
+                        row = driver.run_experiment(experiment, "fixture/FedApp_corrected_data.tsv",
+                                                    verbose=False)
+                    self.assertEqual(row["Status"], status)
+                    self.assertEqual(run.call_count, runs)
+                    self.assertEqual([(client / "config.yml").read_text() for client in clients[:2]],
+                                     ["original"] * 2)
+                    self.assertFalse((clients[2] / "config.yml").exists())
 
 if __name__ == "__main__":
     unittest.main()
