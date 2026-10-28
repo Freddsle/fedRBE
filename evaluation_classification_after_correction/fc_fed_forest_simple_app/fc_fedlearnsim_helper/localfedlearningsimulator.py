@@ -22,6 +22,9 @@ class SharedDictionary:
 
     def __init__(self, num_clients: int):
         self._shared_dict = {}
+        self._global_version = 0
+            # counts the broadcasts, so clients can detect new global data
+            # without comparing the data itself
         self._lock = Lock()
         self.abort_event = Event()
         self.num_clients = num_clients
@@ -36,6 +39,16 @@ class SharedDictionary:
         """
         with self._lock:
             return self._shared_dict.get(key)
+
+    def get_global(self):
+        """
+        Returns the version of the current global data and the data itself.
+        The version is None if no global data is available.
+        """
+        with self._lock:
+            if 'global' not in self._shared_dict:
+                return None, None
+            return self._global_version, self._shared_dict['global']
 
     def get_all_non_global_values(self):
         """
@@ -79,6 +92,7 @@ class SharedDictionary:
         Updates the value associated with the key 'global' in the shared dictionary.
         """
         with self._lock:
+            self._global_version += 1
             self._shared_dict['global'] = data
             self._shared_dict['times_accesed_global'] = 0
                 # reset as this new data has not been accessed by any client yet
@@ -104,11 +118,12 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
     """
     def __init__(self,
                  is_coordinator: bool,
-                 client_id: int,
+                 client_id,
                  num_clients: int,
                  inputfolder: str,
                  outputfolder: str,
-                 shared_dict: SharedDictionary):
+                 shared_dict: SharedDictionary,
+                 client_ids: Optional[List] = None):
         """
         The constructor, the following parameters are required:
 
@@ -124,6 +139,8 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
             shared_dict: A shared dictionary to store the data.
                 The other clients (instances of this class) receive the same
                 dictionary. The client uses it's client_id as key to access the data.
+            client_ids: The IDs of all clients, including client_id.
+                Defaults to 0, ..., num_clients-1.
         """
         self.coordinator = is_coordinator
         self.client_id = client_id
@@ -133,15 +150,22 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
         self.inputfolder = inputfolder
         self.outputfolder = outputfolder
         self.shared_dict = shared_dict
-        self.previously_awaited_data = None
+        self.client_ids = list(client_ids) if client_ids is not None else list(range(num_clients))
+        if client_id not in self.client_ids:
+            raise ValueError(f"The client_id {client_id} is not in client_ids")
+        self.previously_awaited_version = None
 
     @property
     def is_coordinator(self):
         return self.coordinator
 
     @property
+    def id(self):
+        return self.client_id
+
+    @property
     def clients(self):
-        return list(range(self.num_clients))
+        return list(self.client_ids)
 
     def send_data_to_coordinator(self,
                                  data,
@@ -207,15 +231,17 @@ class LocalFedLearningSingleClientSimulation(ProtocolFedLearning):
             raise ValueError("This method only supports n=1 right now")
         while True:
             self.shared_dict.raise_if_aborted()
-            data = self.shared_dict.get('global')
+            version, data = self.shared_dict.get_global()
 
-            if data is not None and data != self.previously_awaited_data:
-                # data is not None -> some data was broadcasted
-                # data != self.previously_awaited_data -> if this is true other clients have not yet
-                # accessed the data. We need to wait until all clients have accessed the data
+            if version is not None and version != self.previously_awaited_version:
+                # version is not None -> some data was broadcasted
+                # version != self.previously_awaited_version -> this client has not
+                # accessed this broadcast yet. The data itself is not compared, as
+                # e.g. numpy arrays cannot be compared to a bool and the same data
+                # might be broadcasted twice
                 #print(f"Client {self.client_id} received data, incrementing times_accesed_global")
                 self.shared_dict.increment_times_accesed_global()
-                self.previously_awaited_data = data
+                self.previously_awaited_version = version
                 break
             self.shared_dict.abort_event.wait(WAITING_TIME)
 
@@ -231,7 +257,8 @@ class LocalFedLearningSimulationWrapper:
     def __init__(self,
                  clientfolders: List[str],
                  outputfolders: List[str],
-                 generic_dir: Optional[str]) -> None:
+                 generic_dir: Optional[str],
+                 client_ids: Optional[List] = None) -> None:
         """
         The following arguments are required:
 
@@ -241,12 +268,18 @@ class LocalFedLearningSimulationWrapper:
                 each client folder. If the file in the generic folder already exists in the
                 client folder, it is not copied. Folders in the generic folder are not copied.
                 The first clientfolder is used as the coordinator.
+            client_ids: The IDs of the clients in the order of clientfolders.
+                Defaults to 0, ..., number of clients-1.
         """
         # checks
         if len(clientfolders) < 1:
             raise ValueError("At least one client folder is required")
         if len(clientfolders) != len(outputfolders):
             raise ValueError("The number of client folders and output folders must be the same")
+        if client_ids is None:
+            client_ids = list(range(len(clientfolders)))
+        if len(client_ids) != len(clientfolders) or len(set(client_ids)) != len(client_ids):
+            raise ValueError("client_ids must contain one unique ID per client folder")
         # basic variables
         self.num_clients = len(clientfolders)
         self.shared_dict = SharedDictionary(num_clients=self.num_clients)
@@ -279,11 +312,12 @@ class LocalFedLearningSimulationWrapper:
         for i, clientfolder in enumerate(clientfolders):
             is_coordinator = i == 0
             client = LocalFedLearningSingleClientSimulation(is_coordinator=is_coordinator,
-                                               client_id=i,
+                                               client_id=client_ids[i],
                                                num_clients=self.num_clients,
                                                inputfolder=clientfolder,
                                                outputfolder=outputfolders[i],
-                                               shared_dict=self.shared_dict)
+                                               shared_dict=self.shared_dict,
+                                               client_ids=client_ids)
             self.clients.append(client)
 
     def cleanup_created_files(self):
