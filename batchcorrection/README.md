@@ -29,7 +29,7 @@ Supports log scaling, multiple batches per client, and SMPC.
 - [Input requirements](#input-requirements)
 - [Outputs](#outputs)
 - [Configuration (config.yml)](#configuration-configyml)
-- [FeatureCloud App states](#featurecloud-app-states)
+- [Protocol phases](#protocol-phases)
 - [Additional resources](#additional-resources)
 - [License](#license)
 - [How to cite](#how-to-cite)
@@ -37,13 +37,13 @@ Supports log scaling, multiple batches per client, and SMPC.
 ---
 
 ## Overview
-`fedRBE` removes batch effects from omics data distributed across research centers. It uses limma's `removeBatchEffect()` method with **federated learning (FL)** and **secure multi-party computation (SMPC)**. Sensitive data remains on each participant's site; only summary-level information is shared.
+fedRBE corrects distributed omics data using limma's `removeBatchEffect()` method.
+Raw data stays at each site; only summary statistics are shared, with optional
+secure multi-party computation (SMPC). Two modes are available:
 
-fedRBE supports two usage modes:
+* [Federated mode](#running-a-true-federated-workflow-login-required): Collaborate across sites; registration required.
 
-* [Federated mode](#running-a-true-federated-workflow-login-required): Removes batch effects from decentralized, sensitive data. Registration required.
-
-* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Runs fedRBE locally to simulate federated batch effect correction. No registration required.
+* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Simulate clients locally; no registration required.
 
 For advanced parameters, see [Configuration](#configuration-configyml).
 
@@ -51,7 +51,7 @@ For advanced parameters, see [Configuration](#configuration-configyml).
 
 ## Prerequisites and setup
 
-Before using `fedRBE`, ensure:
+Install:
 1. **Docker** is installed ([FeatureCloud prerequisites](https://featurecloud.ai/developers)).
 1. **Python3** is installed. [Installation Instructions](https://www.python.org/doc/).
 1. **FeatureCloud CLI**:
@@ -69,21 +69,18 @@ Before using `fedRBE`, ensure:
      ```bash
      docker pull featurecloud.ai/bcorrect:latest
      ```
-   - Alternatively, if you are using an ARM architecture (e.g., Mac M-series), build the image locally from the repository checkout:
+   - For ARM (e.g., Mac M-series) or other platforms incompatible with linux/amd64,
+     build locally from the checkout:
      ```bash
      cd batchcorrection
      docker build . -t featurecloud.ai/bcorrect:latest
      ```
-
-The app image provided in the FeatureCloud Docker registry is built for the linux/amd64 platform. If you use a Mac with an M-series chip or another device that is not compatible with linux/amd64, build the image locally.
 
 ---
 
 ## Usage
 
 ### Simulating a federated workflow locally (No login required)
-To test how `fedRBE` behaves with multiple datasets on one machine:
-
 1. **Clone the full repository and enter it**:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
@@ -96,24 +93,19 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
    ```
   The script prints the browser link for the local run.
 
-This runs the bundled sample experiment.
-
 ### Running a true federated workflow (Login required)
-For an actual multi-party setting:
 1. **Create a Project** in [FeatureCloud](https://featurecloud.ai/projects) and invite at least 3 clients.
 2. **Clients Join with Tokens** provided by the coordinator.
 3. **Each Client** uploads their data and `config.yml` to their local FeatureCloud instance.
 4. **Start the Project**: `fedRBE` runs securely, never sharing raw data.
 
-See the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for project setup and client onboarding.
-A FeatureCloud account is required to restrict project access to invited participants.
+A FeatureCloud account restricts access to invited participants. See the
+[How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for setup.
 
 ---
 
 ## Input requirements
-- **Data File**: CSV or TSV with either:
-  - Samples x Features, or
-  - Features x Samples
+- **Data File**: CSV/TSV, samples × features or features × samples.
 - **`config.yml`**: Configuration file controlling formats, normalization, and additional parameters.
 - **Optional Design Matrix**: CSV/TSV with covariates (samples x covariates).
 
@@ -125,12 +117,14 @@ For details, see the [Configuration](#configuration-configyml) section.
 After completion, each client receives:
 - **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
-- **`report.txt`**: Includes:
-  - Excluded features (and why)
-  - Calculated beta values
-  - Internally used design matrix
+- **`report.txt`**: The client name, the batch coefficients used for the correction and the
+  design matrix. Features masked for privacy are listed in the app log.
 
-**Note**: Output files use the same `separator` defined in `config.yml`.
+**Note**: Output files use the same `separator` defined in `config.yml`. Both CSV files are
+features (rows) x samples (columns) whatever the input orientation; `full_corrected_data.csv`
+appends the covariates as rows. Values masked for privacy (fewer finite values than the
+effective `min_samples` in a batch or on the client) are exported as empty cells.
+Features available in fewer than three clients are omitted.
 
 ---
 
@@ -164,7 +158,10 @@ flimmaBatchCorrection:
 
   covariates: ["Pyr"]
     # Covariates included in the linear model.
-    # If no design file, covariates must be present as features in the data file.
+    # Use [] to correct batch effects without biological covariates.
+    # A design file is optional for single-batch clients.
+    # Without one, covariates are rows when expression_file_flag is True,
+    # or columns when False; their values are retained unchanged in the output.
 
   separator: "\t"
     # Separator for main data file.
@@ -179,27 +176,28 @@ flimmaBatchCorrection:
     # format: str
 
   normalizationMethod: "log2(x+1)"
-    # Normalization: "log2(x+1)" or None.
-    # If None, no normalization is applied.
+    # "log2(x+1)" for raw non-negative values (all values must be > -1), or
+    # null (or omit the key) for already log-transformed data; other values stop the run.
 
   smpc: True
     # Enable secure multiparty computation for privacy-preserving aggregation.
     # For more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
 
-  min_samples: 5      # format: int
-    # Minimum samples per feature required. Adjusted for privacy if needed.
-    # If for a feature less than min_samples samples are present,
-    # the client will not send any information about that feature
+  min_samples: 5      # format: int, default: 5
+    # Minimum samples per feature required in each batch. Adjusted for privacy if needed.
+    # If for a feature less than min_samples samples are present in a batch,
+    # the client will not send any information about that feature for that batch
     # The app may raise min_samples for privacy:
     # min_samples = max(min_samples, len(design.columns)+1)
-    # This ensures a sent Xty matrix always has more samples than features,
-    # so neither X nor y can be reconstructed from the Xty matrix.
+    # This keeps more samples than design columns in every sent Xty matrix.
 
   position: 1      # format: int
     # Defines client order. The last client in order is the reference batch.
     # Example:
     #  C1(position=0), C2(position=2), C3(position=1) -> Order: C1, C3, C2 (C2 is reference).
-    # If empty/None, the order is random, making the batch correction run non deterministic
+    # Positions apply only when every client supplies an integer; duplicates stop the run.
+    # Otherwise the coordinator's client order is used and may vary between runs.
+    # Without an explicit reference, the last client's alphabetically last batch is used.
 
   reference_batch: ""
     # Explicitly set a reference batch (string) or leave empty.
@@ -208,12 +206,26 @@ flimmaBatchCorrection:
 
 ---
 
-## FeatureCloud App states
+## Input requirements
 
-The app has the following states:
+- Covariates must be numeric and finite; encode categories as numeric indicators.
+- Batch labels must be complete and contain no `|`; spaces are allowed.
+- Feature identifiers must be unique, and every measurement cell must be numeric
+  (`NA` or empty for missing values).
+- All clients must use the same boolean `smpc` setting (default: `true`).
+- Only finite measurements count for privacy thresholds, batch presence and regression.
+- For each feature, a covariate that is constant (all 0 or all 1) among the samples
+  with observed measurements is omitted from that feature's fit, as in limma. Other
+  collinear or numerically unreliable fits stop the run. Rescale very small covariates.
+
+## Protocol phases
+
+The app registers a single FeatureCloud state (`states.py`) that runs the whole
+protocol implemented in `fedrbe.py`. The local simulator uses the same protocol.
+The figure shows the phases of that protocol.
 
 <p align="center">
-   <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE app states" width="60%">
+   <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE protocol phases" width="60%">
 </p>
 
 ---
@@ -224,24 +236,11 @@ The app has the following states:
 
 ## License
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+This project is licensed under the [Apache License 2.0](../LICENSE).
 
 
 
 ## How to cite
 
-If you use `fedRBE` in your research, please cite our [ArXiv preprint](https://arxiv.org/abs/2412.05894):
-
- > Burankova, Y., Klemm, J., Lohmann, J.J., Taheri, A., Probul, N., Baumbach, J. and Zolotareva, O., 2024. FedRBE--a decentralized privacy-preserving federated batch effect correction tool for omics data based on limma. arXiv preprint arXiv:2412.05894.
-
-   ```bibtex
-   @misc{burankova2024fedrbedecentralizedprivacypreserving,
-         title={FedRBE -- a decentralized privacy-preserving federated batch effect correction tool for omics data based on limma}, 
-         author={Yuliya Burankova and Julian Klemm and Jens J. G. Lohmann and Ahmad Taheri and Niklas Probul and Jan Baumbach and Olga Zolotareva},
-         year={2024},
-         eprint={2412.05894},
-         archivePrefix={arXiv},
-         primaryClass={q-bio.QM},
-         url={https://arxiv.org/abs/2412.05894}, 
-   }
-   ```
+Please cite the [ArXiv preprint](https://arxiv.org/abs/2412.05894);
+the [repository citation](../README.md#how-to-cite) includes BibTeX.

@@ -31,13 +31,12 @@ docker build \
 
 ## Run
 
-`real_datasets/03_federated_runs.ipynb` creates the per-client
-`intensities.tsv`, `design.tsv`, and `config_kmeans.yml` files and launches the
-FeatureCloud tests. `real_datasets/05_multiple_runs.ipynb` uses the same app
-for repeated seeded runs.
+`real_datasets/multiple_runs.py --rerun-federated` creates the per-client
+`intensities.tsv`, `design.tsv`, and `config_kmeans.yml` files and launches one
+FeatureCloud test per seed.
 
 Each client directory must contain a configuration file named
-`config_kmeans.yml` or `config_kmeans.yaml`. The notebooks generate the
+`config_kmeans.yml` or `config_kmeans.yaml`. `multiple_runs.py` generates the
 complete configuration, including input/output names, scaling options,
 cluster range, initialization counts, iteration limit, and random seed.
 

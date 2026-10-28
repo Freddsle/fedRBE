@@ -2,36 +2,22 @@ import os
 import os.path as op
 from kmeans.TabData import TabData
 import pandas as pd
-import traceback
 import numpy as np
-import copy
 from kmeans.params import INPUT_DIR, OUTPUT_DIR
 from kmeans.COParams import COParams
 import time
 from kmeans.Clustering import Clustering
 from kmeans.serialize import *
-import shutil
 
 class FCFederatedKMeans:
     def __init__(self):
-        self.step = 0
         self.tabdata = None
         self.clustering = None
-        self.config_available = False
         self.out = None
-        self.send_data = False
-        self.computation_done = False
-        self.coordinator = False
         self.iteration_counter = 0
-        self.converged = False
-        self.data_incoming = {}
-        self.progress = 0.0
-        self.silent_step=False
-        self.use_smpc = False
         self.start_time = time.monotonic()
         self.means = None
         self.std = None
-        self.total_sampels = 0
         self.cluster_on = 'samples'
         self.n_init_local = 50
         self.n_init_global = 50
@@ -40,7 +26,6 @@ class FCFederatedKMeans:
 
     def copy_configuration(self, config):
         print('[STARTUP] Copy configuration')
-        self.config_available = config.config_available
 
         self.centroids_file =  config.centroids_file
         self.clustering_file = config.clustering_file
@@ -53,12 +38,9 @@ class FCFederatedKMeans:
         self.stds_file = op.join(OUTPUT_DIR, config.output_dir, 'std.tsv')
         self.log_file = op.join(OUTPUT_DIR, config.output_dir, 'run_log.txt')
 
-        self.input_dir = config.input_dir
         self.k_min = config.k_min
         self.k_max = config.k_max
-        self.k_step = config.k_step
 
-        self.exponent = config.exponent
         self.sep = config.sep
         self.has_rownames = config.has_rownames
         self.has_colnames = config.has_colnames
@@ -76,7 +58,6 @@ class FCFederatedKMeans:
 
 
     def read_input_files(self):
-        self.progress = 0.1
         self.tabdata = TabData.from_file(self.input_file, header=self.has_colnames,
                                          index=self.has_rownames, sep=self.sep)
 
@@ -96,7 +77,6 @@ class FCFederatedKMeans:
         print('[API] Setting parameters')
         self.k_min = incoming[COParams.KMIN.n]
         self.k_max = incoming[COParams.KMAX.n]
-        self.k_step = incoming[COParams.KSTEP.n]
 
 
     def select_rows(self, incoming):
@@ -111,7 +91,6 @@ class FCFederatedKMeans:
         print(index)
         self.tabdata.scaled = self.tabdata.scaled[index,:]
         self.tabdata.rows = self.tabdata.rows[index]
-        self.tabdata.row_count = len(self.tabdata.rows)
 
     def unify_row_names(self, incoming):
         '''
@@ -148,8 +127,7 @@ class FCFederatedKMeans:
 
         print(select)
         myintersect = myintersect.intersection(set(select))
-        self.total_sampels = mysample_count
-        self.out = {COParams.KMIN.n: self.k_min, COParams.KMAX.n: self.k_max, COParams.KSTEP.n: self.k_step}
+        self.out = {COParams.KMIN.n: self.k_min, COParams.KMAX.n: self.k_max}
         newrownames = list(myintersect)
         self.out[COParams.ROW_NAMES.n] = newrownames
 
@@ -164,7 +142,7 @@ class FCFederatedKMeans:
     def compute_sums(self):
         self.sums = np.nansum(self.tabdata.scaled, axis=1)
 
-        self.out = {COParams.SUMS.n: self.sums, COParams.SAMPLE_COUNT.n: self.tabdata.col_count}
+        self.out = {COParams.SUMS.n: self.sums}
 
     def compute_sum_of_squares(self, incoming):
         self.means = incoming[COParams.MEANS.n].reshape((len(incoming[COParams.MEANS.n]),1))
@@ -172,18 +150,11 @@ class FCFederatedKMeans:
         self.sos = np.nansum(np.square(self.tabdata.scaled-self.means), axis=1)
         self.out = {COParams.SUM_OF_SQUARES.n: self.sos.flatten()}
 
-    def apply_scaling(self, incoming, highly_variable=True):
+    def apply_scaling(self, incoming):
         self.std = incoming[COParams.STDS.n].reshape((len(incoming[COParams.STDS.n]),1))
-        remove = incoming[COParams.REMOVE.n] # remove due to 0
-        select = incoming[COParams.SELECT.n] # select due to highly var
-        # for row in range(self.tabdata.scaled.shape[0]):
-        #     self.tabdata.scaled[row, :]= self.tabdata.scaled[row, :]- self.means[row,0]
         if self.center:
             self.tabdata.scaled = np.subtract(self.tabdata.scaled,self.means)
 
-
-        # self.tabdata.scaled = np.delete(self.tabdata.scaled, remove)
-        # self.tabdata.rows = np.delete(self.tabdata.rows, remove)
         if self.unit_variance:
             self.tabdata.scaled = self.tabdata.scaled/self.std
 
@@ -194,16 +165,12 @@ class FCFederatedKMeans:
             # impute
             self.tabdata.scaled = np.where(np.isnan(self.tabdata.scaled), self.means, self.tabdata.scaled)
 
-        return self.tabdata.scaled.shape[0]
-
     def compute_means(self, incoming):
         print(incoming)
         my_sums = []
-        my_samples = 0
 
         for s in incoming:
             my_sums.append(s[COParams.SUMS.n])
-            my_samples = my_samples+s[COParams.SAMPLE_COUNT.n]
 
         my_sums = np.stack(my_sums)
         my_sums = np.nansum(my_sums, axis=0)
@@ -213,7 +180,6 @@ class FCFederatedKMeans:
         print(my_sums)
 
         self.out = {COParams.MEANS.n : my_sums }
-        self.number_of_samples = my_samples
 
     def compute_std(self, incoming):
         my_ssq  = []
@@ -230,23 +196,12 @@ class FCFederatedKMeans:
         print('STD')
         print(self.std)
 
-        hv = self.tabdata.scaled.shape[0]
-
-
-        remove = np.where(self.std.flatten()==0)
-        # std in fact contains the standard deviation
-        select = np.argsort(self.std.flatten())[0:hv]
-
-        REM = self.tabdata.rows[remove]
-        SEL = self.tabdata.rows[select]
-
-
-        self.out = {COParams.STDS.n : self.std, COParams.SELECT.n: select, COParams.REMOVE.n: remove}
+        self.out = {COParams.STDS.n : self.std}
 
 
     def init_kmeans(self):
         self.clustering = Clustering.init_local_clustering(
-            self.tabdata, self.k_min, self.k_max, self.k_step, self.seed_value,
+            self.tabdata, self.k_min, self.k_max, self.seed_value,
             cluster_on=self.cluster_on,
             n_init_local=self.n_init_local,
             n_init_global=self.n_init_global,
@@ -306,8 +261,3 @@ class FCFederatedKMeans:
             handle.write('iterations:\t'+str(self.iteration_counter)+'\n')
             handle.write('runtime:\t' + str(time.monotonic()-self.start_time)+'\n')
         self.out = {COParams.FINISHED: True}
-
-
-    def copy_input_to_output(self):
-        print('MOVE INPUT TO OUTPUT')
-        shutil.copytree(INPUT_DIR, OUTPUT_DIR, dirs_exist_ok=True)

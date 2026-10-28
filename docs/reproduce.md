@@ -10,7 +10,10 @@
 
 # Reproduce the fedRBE Preprint <!-- omit in toc -->
 
-This guide explains how to reproduce the analyses from the [fedRBE preprint](https://arxiv.org/abs/2412.05894), including centralized limma correction, federated fedRBE correction, and downstream evaluation.
+This guide explains how to reproduce centralized limma correction, federated
+fedRBE correction, and downstream evaluation from the
+[fedRBE preprint](https://arxiv.org/abs/2412.05894). You can inspect saved results
+or regenerate the analysis stages you need.
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -20,11 +23,10 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
   - [1. Preparing inputs and obtaining centrally corrected data](#1-preparing-inputs-and-obtaining-centrally-corrected-data)
   - [2. Obtaining federated corrected data](#2-obtaining-federated-corrected-data)
   - [3. Comparing federated and central corrections](#3-comparing-federated-and-central-corrections)
-  - [4. Produce tables and figures](#4-produce-tables-and-figures)
+  - [4. Optional dataset diagnostics](#4-optional-dataset-diagnostics)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-    - [Prerequisites](#prerequisites)
-    - [Reproducing the clustering analysis](#reproducing-the-clustering-analysis)
+  - [7. Generate Figures 3, 4 and S5 for each correction arm](#7-generate-figures-3-4-and-s5-for-each-correction-arm)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
@@ -34,20 +36,19 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
 ---
 
 ## Prerequisites and setup
+
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
 1. **Git LFS** (required for large files used in this workflow)
-1. **Either** Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
+1. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
 1. **System resources**:
-  - ≥ 16 GB RAM (The script uses very close to 16 GB, so be careful with other programs running!)
-  - ≥ 20 GB free disk space
+   - ≥ 16 GB RAM; the correction script can use nearly all of it, so leave capacity for other processes
+   - ≥ 20 GB free disk space
 
 ### Setup steps
 
 1. **Set up Git LFS locally:**
 
-   Install git lfs following the [git lfs documentation](https://git-lfs.com/).
-   
-   Initialize Git LFS:
+   Install [Git LFS](https://git-lfs.com/), then initialize it:
    ```bash
    git lfs install
    ```
@@ -72,7 +73,22 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
 
    Choose one of the following setup paths.
 
-   **Option A: Conda or Mamba environment**
+   **Option A: pixi environment (recommended)**
+
+   `pixi.toml` and `pixi.lock` define one locked environment with Python 3.12, R 4.5,
+   the CRAN and Bioconductor packages, Jupyter with the `python3` and `ir` kernels, and
+   the FeatureCloud Python package:
+   ```bash
+   pixi install --locked
+   pixi run setup-affymetrix   # once, only for raw Affymetrix CEL preprocessing
+   ```
+
+   `setup-affymetrix` downloads the Affymetrix CDF data packages and rebuilds
+   `preprocessCore` without threading, which `affy::rma()` needs. Run notebooks with
+   `pixi run jupyter lab` and scripts with `pixi run python ...` or
+   `pixi run Rscript ...`, or activate the environment with `pixi shell`.
+
+   **Option B: Conda or Mamba environment**
 
    The Conda environment installs Python 3.11, R, the CRAN and Bioconductor
    packages used by the notebooks, and the FeatureCloud Python package:
@@ -85,17 +101,10 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
    `conda-forge::openblas=0.3.3` to avoid `pthread_create()` failures in
    `affy::rma()` on conda environments.
 
-   If the older OpenBLAS build cannot be resolved for your platform or channel
-   setup, use the `preprocessCore` source-install command from Option B after
-   activating this conda environment.
+   If that OpenBLAS build cannot be resolved, activate the environment and use
+   the `preprocessCore` source-install command from Option C.
 
-   Install the GitHub-only R dependency:
-
-   ```bash
-   Rscript -e 'remotes::install_github("mwgrassgreen/RobNorm")'
-   ```
-
-   **Option B: Separate Python and R installations**
+   **Option C: Separate Python and R installations**
 
    Set up Python dependencies:
    ```bash
@@ -104,182 +113,397 @@ This guide explains how to reproduce the analyses from the [fedRBE preprint](htt
    pip install -r requirements.txt
    ```
 
-   `requirements_r.txt` lists CRAN, Bioconductor, and GitHub dependencies in
-   separate sections. Install them with:
+   `requirements_r.txt` lists CRAN and Bioconductor dependencies in separate
+   sections. Install them with:
 
    ```bash
-   Rscript -e 'install.packages(c("data.table","ggpubr","gridExtra","ggsci","ggtext","glue","IRkernel","invgamma","jsonlite","knitr","nipals","patchwork","pheatmap","remotes","reshape2","scales","tidyverse","umap","viridis"), repos="https://cloud.r-project.org")'
+   Rscript -e 'install.packages(c("data.table","gridExtra","ggtext","glue","IRkernel","jsonlite","knitr","patchwork","reshape2","scales","tidyverse"), repos="https://cloud.r-project.org")'
    Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("AnnotationDbi","affy","GEOquery","GO.db","hgu133acdf","hgu133plus2cdf","impute","limma","variancePartition"), ask=FALSE, update=FALSE)'
    Rscript -e 'BiocManager::install("preprocessCore", configure.args=c(preprocessCore="--disable-threading"), type="source", force=TRUE, ask=FALSE, update=FALSE)'
    Rscript -e 'install.packages("WGCNA", repos="https://cloud.r-project.org")'
-   Rscript -e 'if (!requireNamespace("remotes", quietly=TRUE)) install.packages("remotes", repos="https://cloud.r-project.org"); remotes::install_github("mwgrassgreen/RobNorm")'
    ```
 
 ---
 
 ## Running the analysis
 
-This section guides you through running both federated and centralized batch effect corrections and comparing their results.
-Any step can be skipped because the corresponding outputs are already committed in the repository.
+After fetching Git LFS files and installing dependencies, choose where to start:
+
+- **Inspect existing results:** reuse committed inputs, corrected matrices, and
+  result tables. Skip a computation only when the inputs needed by the next
+  analysis are available locally.
+- **Regenerate results:** run the required stages in order. Preparation and
+  correction can be expensive; select the datasets you need before starting.
 
 Recommended order:
 
-1. Set up dependencies and fetch LFS data, see [Prerequisites and setup](#prerequisites-and-setup).
-2. Prepare or reuse the per-dataset `before/` inputs and central limma outputs, see [1. Preparing inputs and obtaining centrally corrected data](#1-preparing-inputs-and-obtaining-centrally-corrected-data).
-3. Run the federated correction script from the prepared `before/` inputs, or use the fedRBE outputs already committed in `evaluation_data/*/after/`, see [2. Obtaining federated corrected data](#2-obtaining-federated-corrected-data).
-4. Compare federated vs central corrections, then run the figure/table, classification, and clustering analyses.
+1. Complete [setup](#prerequisites-and-setup), including Git LFS downloads.
+2. [Prepare or reuse inputs and central corrections](#1-preparing-inputs-and-obtaining-centrally-corrected-data).
+3. [Run or reuse federated corrections](#2-obtaining-federated-corrected-data).
+4. [Compare central and federated outputs](#3-comparing-federated-and-central-corrections).
+5. Run the [classification](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
+   and [clustering](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
+   analyses, or inspect their available saved results.
+6. [Generate Figures 3, 4 and S5](#7-generate-figures-3-4-and-s5-for-each-correction-arm).
+
+Paths below are relative to the repository root. Run shell commands there unless
+another working directory is specified. Run notebook kernels from the directory
+containing the notebook so their relative paths resolve correctly.
+
+Full simulated 30-run recalculation and federated clustering need the generated
+inputs described below.
 
 ### 1. Preparing inputs and obtaining centrally corrected data
 
-Prepare the per-dataset `before/` inputs and perform centralized batch effect correction using limma's `removeBatchEffect` for comparison.
-
-Run the dataset preparation and central-correction notebooks from their own directories, or set the notebook working directory to the listed folder so relative paths resolve correctly.
+Prepare per-dataset `before/` inputs in the order below. Run preparation scripts
+and notebooks from their dataset directory.
 
 | Dataset | Run order |
 |---------|-----------|
 | Simulated | `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb`|
 | E. coli | `evaluation_data/ecoli/01_data_prep_and_central_RBE.ipynb` |
-| Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb` (run time ~30 minutes), then `evaluation_data/ovarian_cancer/02_central_RBE.ipynb` |
-| ccRCC proteomics | `python evaluation_data/ccRCC_studies/prepare_ccRCC_data.py`, then `evaluation_data/ccRCC_studies/01_central_RBE.ipynb` |
+| Ovarian cancer | `evaluation_data/ovarian_cancer/00_harmonize_meta_load_data.ipynb` (run time ~30 minutes), then `evaluation_data/ovarian_cancer/02_prepare_correction_inputs.ipynb` |
+| ccRCC proteomics | `python prepare_ccRCC_data.py`, then `evaluation_data/ccRCC_studies/01_central_RBE.ipynb` |
 | Quartet multiomics | `evaluation_data/quartet_multiomics/01_preprocess_eda.ipynb`, `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`, then `evaluation_data/quartet_multiomics/03_central_RBE.ipynb` |
 
-> For simulated datasets, if all 30 runs were not re-generated, the `evaluation_data/simulated/01_data_prep_and_central_RBE.ipynb` notebook will only run the single-run central correction for the committed inputs. If you want to run the full 30-run evaluation, first generate the `before/intermediate/` and `after/runs/` files via `evaluation_data/simulated/00_data_simulation.ipynb`, which will take 1-2 hours, then re-run the notebook.
+The real-data notebooks prepare inputs only. Each writes one filtered, uncorrected
+central input: `before/central_input.tsv` (`before/<Modality>/` for Quartet;
+`central_input.zip` for ovarian). Run central R/limma from the root:
+
+```bash
+pixi run python -m evaluation_utils.run_correction_experiments correct
+```
+
+This writes label-aware outputs under `after/label_aware/` for all four real datasets.
+Use `--datasets` for a subset and `--arms label_aware no_label` for both variants.
+`--arms no_label` writes under `after/no_label/`
+(`after/<arm>/<Modality>/` for Quartet). Simulation correction runs in its notebook.
+For isolated central experiments, add `--output-dir <run-directory>`. Both
+correction arms are then written under that directory without changing canonical
+results. `evaluation/dataset_diagnostics.R` writes the after-correction
+diagnostic plots.
+
+`--arms no_label` needs cohort/batch metadata but no biological or evaluation
+labels. Biological design columns are required only for `label_aware`.
+
+For ccRCC, the starting inputs are the tracked `report_filtered.tsv` and
+`design.tsv` files under `evaluation_data/ccRCC_studies/before/<study>/` for
+PDC000127, PXD030344, and PXD042844. `prepare_ccRCC_data.py` aligns their sample
+order, encodes `Condition`, and builds the union matrix. This route starts from
+prepared study inputs. Source acquisition and QC provenance are documented in the
+[ccRCC preparation archive](../evaluation_data/ccRCC_studies/archive/README.md).
+
+For simulated data, committed run-1 inputs support single-run correction. For all
+30 runs, first run `evaluation_data/simulated/00_data_simulation.ipynb` (1–2 hours)
+to generate `before/intermediate/` and `after/runs/`, then rerun
+`01_data_prep_and_central_RBE.ipynb`. For the separate 90-dataset robustness campaign,
+see the [simulation README](../evaluation_data/simulated/README.md#robustness-simulations).
 
 Output:
 
-- Prepared inputs: saved in `evaluation_data/[dataset]/before/` for each dataset.
-- Centrally corrected data: saved in `evaluation_data/[dataset]/after/` for each dataset.
-- Dataset-specific details and outputs are documented in the corresponding `evaluation_data/<dataset>/README.md` files.
+- Prepared matrices, metadata, and client inputs: `evaluation_data/[dataset]/before/`.
+- Real-data centrally corrected matrices: `evaluation_data/[dataset]/after/<arm>/`.
+- Dataset-specific prerequisites, filenames, and outputs: each `evaluation_data/<dataset>/README.md`.
 
-_Note: The preprocessing and centralized correction notebooks have already been run for the committed outputs. You can skip this step when using the provided inputs and corrected data._
-
-For simulated data, committed run-1 inputs support a quick check. The full 30-run evaluation requires generated `before/intermediate/` and `after/runs/` files via `evaluation_data/simulated/00_data_simulation.ipynb`.
+Skip this step when using the committed inputs and central corrections.
 
 ### 2. Obtaining federated corrected data
 
-Use the provided utility script to perform the configured federated batch
-effect correction experiments from the prepared `evaluation_data/[dataset]/before/`
-inputs. Edit the experiment list in the script to enable or disable any of the
-datasets; currently all datasets are enabled by default.
+This stage runs the fedRBE app on the prepared client inputs under
+`evaluation_data/[dataset]/before/` and combines their corrected outputs.
+Use the Docker and FeatureCloud environment installed during setup.
 
-```bash
-python3 ./generate_fedrbe_corrected_datasets.py
-```
+All datasets are enabled by default. Before starting, select the experiments:
 
-Steps Performed by the Script:
-
-1. Sets up multiple clients: Simulates clients based on the datasets in `evaluation_data/[dataset]/before/`.
-2. Runs fedRBE on each client: Applies federated batch effect correction using FeatureCloud testing environment.
-3. Aggregates results: Combines corrected data and writes outputs to `evaluation_data/[dataset]/after/` for each dataset.
-
-Output:
-
-- Corrected data: saved in `evaluation_data/[dataset]/after/individual_results/`. The merged client data is also written directly to `evaluation_data/[dataset]/after/` as `FedApp_corrected_data.tsv`, or `FedApp_corrected_data_smpc.tsv` when SMPC is used.
-- Report files: In `evaluation_data/[dataset]/after/individual_results/`, detailed logs and correction reports can be found.
-
-Notes:
-- Runtime depends on dataset size and client count; the full run can take several hours to a day.
-- Ovarian cancer correction can require at least 16 GB RAM. To skip it, comment the `experiments.append(ovarian_cancer_experiment)` block in `generate_fedrbe_corrected_datasets.py`.
-- FedRBE-corrected outputs are already stored in the repository, so this step can be skipped when only inspecting results.
-
-Customization:
-- To run a subset of datasets, edit the experiment list under `## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS` in `generate_fedrbe_corrected_datasets.py`.
+- In `generate_fedrbe_corrected_datasets.py`, comment or uncomment complete
+  `(experiment, result_path)` entries under `ADD EXPERIMENTS` to select runs.
+  Result paths are relative to `evaluation_data/`.
 - To add datasets, create `evaluation_data/[dataset]/before/` entries following the existing structure.
 - Quartet multiomics requires the client folders written by `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`; run that notebook before the federated correction script if those folders were regenerated or removed.
+
+If your local image is missing or predates the current code, build it from the
+repository root:
+
+```bash
+pixi run featurecloud app build ./batchcorrection featurecloud.ai/bcorrect latest
+```
+
+Run fedRBE from the repository root:
+
+```bash
+pixi run python ./generate_fedrbe_corrected_datasets.py
+```
+
+For a quick check without Docker, run the same experiments in one process with
+the app's protocol code and compare each merged result to its central result:
+
+```bash
+pixi run python evaluation_utils/fedRBE_simulation_scrip_simdata.py --experiments [--only <text>]
+```
+
+This skips the SMPC experiments and writes no results. Both routes write the
+experiment's `config.yml` into the tracked client folders for the duration of the
+run and restore it afterwards, so run only one of them at a time.
+
+Both real-data correction arms run with and without SMPC by default.
+No-covariate variants retain the label-aware filtering threshold and other
+correction settings; preparation and evaluation labels remain available.
+No-covariate results use `after/no_label/`; label-aware results use
+`after/label_aware/`. Quartet uses `after/<arm>/<Modality>/`.
+For Quartet, select modalities in `multiomics_modalities` near the definitions.
+
+The script sets up clients, executes fedRBE in the FeatureCloud test environment,
+and aggregates results. Real-data outputs under
+`evaluation_data/[dataset]/after/<arm>/` (`<arm>/<Modality>/` for Quartet) are:
+
+- `individual_results/`: client corrections, reports, and logs.
+- `FedApp_corrected_data.tsv`, or `FedApp_corrected_data_smpc.tsv` with SMPC:
+  merged client data.
+- `datainfo.json`: classification description of `individual_results/`, linked to
+  the original client designs.
+
+In each result folder, the SMPC run follows the non-SMPC run, so
+`individual_results/` and `datainfo.json` hold the SMPC client results.
+Classification uses these per-client results, and k-means uses the SMPC matrices.
+
+Each experiment publishes outputs only on success. Rejection leaves its output
+directory unchanged. A failed campaign exits nonzero and can leave a mixture of
+fresh and retained files. Check failed output paths and
+`evaluation_data/<dataset>/logs/` before comparison, learning or plotting.
+
+Notes:
+
+- Runtime depends on dataset size and client count; the full run can take several hours to a day.
+- Ovarian cancer correction can require at least 16 GB RAM. To skip it, comment out the ovarian entries in `generate_fedrbe_corrected_datasets.py`.
+- Committed fedRBE outputs can be reused without rerunning correction.
 
 For simulated data, the script checks that `before/lab*/` inputs still match run 1 before writing the single-run `FedApp_corrected_data*.tsv` files used by `analyse_fedvscentral.py`.
 
 ### 3. Comparing federated and central corrections
 
-Use the provided script to analyze and compare the results of federated and centralized batch effect corrections.
+Once both correction outputs from Steps 1 and 2 are available, compare them from
+the repository root. Committed outputs can be used without rerunning correction:
 
 ```bash
 python3 ./analyse_fedvscentral.py
 ```
 
-What this does:
+The script loads central and federated matrices, checks their sample/feature
+alignment, and calculates mean and maximum element-wise differences. It prints
+the comparison and saves the metrics to `evaluation_data/fed_vc_cent_results.tsv`.
+The `correction_arm` column identifies `label_aware` and `no_label` for real
+outputs. Simulated outputs use `label_aware` because correction preserves their
+A/B biological condition; no label-free simulated counterpart is included.
 
-- Loads corrected datasets: imports both federated and centralized corrected data.
-- Performs comparisons:
-  - Checks for consistency in indices and columns.
-  - Calculates mean and maximum element-wise differences.
-- Generates reports: summarizes similarities and differences between the two correction methods.
+### 4. Optional dataset diagnostics
 
-Output:
+These commands write the dataset-specific diagnostics of the label-aware correction.
+Generate Figures 3 and 4 in Step 7. Run from the repository root after the
+correction outputs from Steps 1 and 2 are available:
 
-- Comparison Metrics: Printed in the console and saved as `fed_vc_cent_results.tsv` in the `evaluation_data/` directory.
+```bash
+for dataset in simulated ecoli ovarian_cancer ccRCC_studies quartet_multiomics; do
+  pixi run Rscript evaluation/dataset_diagnostics.R "$dataset"
+done
+```
 
-### 4. Produce tables and figures
+The real datasets write their central-correction panels:
+`evaluation_data/{ecoli,ccRCC_studies}/plots/data_plot_Rcorrected.png`,
+`evaluation_data/ovarian_cancer/before/plots/norm_vs_tumor_plot_Rcorrected_UNION.png`
+and `evaluation_data/quartet_multiomics/plots/<Modality>_limma_after_diagnostics.png`.
+`simulated` writes the single-run PCA plots to `evaluation/eval_simulation/pca_plots/`
+and prints the federated-versus-R differences.
 
-To reproduce the tables and figures from the preprint, run the provided Jupyter notebooks in the `evaluation/` directory:
+For the optional 30-run analysis, run from the repository root:
 
-1. `evaluation/evaluation_simulated.ipynb`
-2. `evaluation/evaluation_simulated_30runs.ipynb` (may take several hours to run if all 30 runs are generated)
-3. `evaluation/evaluation_ecoli.ipynb`
-4. `evaluation/evaluation_ovarian_cancer.ipynb`
-5. `evaluation/evaluation_ccRCC.ipynb`
-6. `evaluation/evaluation_quartet_multiomics.ipynb`
+```bash
+pixi run Rscript evaluation/evaluation_simulated_30runs.R
+```
 
-These notebooks expect the corrected data from Steps 1 and 2. `evaluation_simulated_30runs.ipynb` can use the committed precomputed 30-run LMPV summary cache for the final variance-partitioning plots; full recalculation still requires the generated simulated `before/intermediate/` and `after/runs/` files. Figures are written under `evaluation/plots/` and related evaluation output folders.
+Cached plotting uses the committed
+`evaluation/eval_simulation/precomputed/simulated_30runs_lmpv_summary.tsv.gz`
+and reads the saved `evaluation/eval_simulation/<mode>/differences_fedRBE_R.tsv`
+tables. Variance-partitioning plots are written to
+`evaluation/eval_simulation/lmpv_plots/`.
+
+For each scenario with all 30 `<run>_FedSim_corrected.tsv` and
+`<run>_R_corrected.tsv` files under
+`evaluation_data/simulated/<mode>/after/runs/`, the script automatically
+recalculates its difference table before plotting, using that scenario's
+`all_metadata.tsv`. Full recalculation can take several hours.
+
+Without the summary cache, missing before-correction LMPV tables are computed
+from `evaluation_data/simulated/<mode>/before/intermediate/<run>_intensities_data.tsv`
+and `all_metadata.tsv`. Building the cache then requires both before- and
+after-correction per-run LMPV tables under
+`evaluation/eval_simulation/<mode>/lmvp/` for all 30 runs of all three scenarios;
+the script does not generate the after-correction LMPV tables.
 
 ### 5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data
-First run the classification experiments. This can take several hours; the repository already contains the generated results.
 
-The classification experiments are split into the two different experiment types:
-1. **train_test_split**: Each client reserves 20% of the data as test data, trains on the other 80%, and reports test-set metrics. This takes up to an hour.
+Classification compares predictive performance before and after correction.
+To regenerate results, run both experiment types below from the repository root;
+the full evaluation can take several hours. To inspect committed results, skip
+the experiment runs and use the plotting command below.
+
+Train/test uses stratified 70:30 splits, pooled for centralized learning and
+within each client for federated learning. Leave-one-cohort-out trains on all
+cohorts except the held-out test cohort. Run both for the four real datasets and
+each correction arm:
+
 ```bash
-python3 evaluation_classification_after_correction/run_classification_train_test_split.py
+for arm in label_aware no_label; do
+  pixi run python evaluation_classification_after_correction/run_classification_train_test_split.py \
+    --correction-arm "$arm" --datasets ecoli ovarian_cancer ccRCC_proteomics quartet_multiomics
+  pixi run python evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
+    --correction-arm "$arm" --datasets ecoli ovarian_cancer ccRCC_proteomics quartet_multiomics
+done
 ```
-1. **leave_one_cohort_out**: The model is trained on all clients except one, then evaluated on the held-out client. This trains *n_clients* models and can take several hours.
+
+Both experiment types save metrics under
+`evaluation_classification_after_correction/results`.
+
+Both launchers run ten seeds (42–51) and reuse complete result rows, including
+per-cohort scores for federated 70:30 runs. Use
+`--datasets` and `--seeds` to select runs, `--results-file` to choose the CSV, and
+`--force-run` to recompute. 70:30 scores include MCC and support-weighted F1.
+After code or correction-input changes, use a fresh `--results-file` or `--force-run`.
+
+Both launchers accept `--correction-arm label_aware` (default) or
+`--correction-arm no_label` to select the real-data `after/<arm>/datainfo.json`.
+Use the same seeds and results CSV for both arms. Results are labelled
+`uncorrected`, `corrected` (label-aware), or `no_label`, so the existing analyzer
+can compare them. Simulated data keeps its ordinary `after/` input.
+All four real datasets use these launchers. Quartet joint matrices and RF client
+files are prepared automatically from its modality outputs and original metadata.
+
+For custom inputs, use `--config rf_datasets.yaml` instead of `--correction-arm`,
+with entries such as:
+
+```yaml
+ecoli:
+  classification:
+    before: evaluation_data/ecoli/before/datainfo.json
+    corrected: evaluation_data/ecoli/after/label_aware/datainfo.json
+```
+
+Paths are absolute or repository-relative. Optional `preprocessing_name` labels
+corrected results (default: `no_label` for descriptors under a `no_label/` folder,
+otherwise `corrected`). Each correction result folder has its own
+descriptor, such as `evaluation_data/ecoli/after/no_label/datainfo.json`. For example:
+
 ```bash
-python3 evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py
+python3 evaluation_classification_after_correction/run_classification_train_test_split.py \
+  --config rf_datasets.yaml --datasets ecoli --seeds 42 \
+  --results-file evaluation_classification_after_correction/results/custom_metrics.csv
 ```
 
-The experiment results are saved in `evaluation_classification_after_correction/results`.
+Plot the saved metrics from the repository root:
 
-To visualize the experiments with plots, run the corresponding analysis script:
 ```bash
 python3 evaluation_classification_after_correction/analyse_classification_metric_report.py
 ```
-The resulting plots can be found in `evaluation_classification_after_correction/plots`.
-You can also use the helper shell scripts:
+Plots go to `evaluation_classification_after_correction/plots/{label_aware,no_label}/`:
+MCC and support-weighted F1 boxplots with dots for both validation methods.
+Train/test plots use pooled `All` scores; LOCO shows each held-out cohort's score
+per seed. Centralized and federated train/test sample splits differ.
+Use `--results-file` and `--plots-dir` to override paths. Plotting requires R.
+
+Optional helpers (default settings):
+
 - `run_all_classification_analysis.sh`: runs all three scripts sequentially; this can take several hours.
 - `run_all_classification_analysis_tmux.sh`: runs the same script in a tmux session so the terminal can disconnect safely. Logs are stored as `classification_analysis_{TIMESTAMP}.log`.
 
-_Note: If you want to inspect the RandomForest logic, this is located in `evaluation_classification_after_correction/fc_fed_forest_simple_app`._
+RandomForest implementation: `evaluation_classification_after_correction/fc_fed_forest_simple_app`.
 
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
-To reproduce the clustering results from the preprint, run the real-dataset clustering notebooks under `evaluation_clusterization_after_correction/`.
+Use `evaluation_clusterization_after_correction/real_datasets/multiple_runs.py`
+for the canonical ten-seed, ten-start comparison. It prepares all four datasets,
+including Quartet joint matrices, recomputes central fits and reuses saved
+federated assignments unless `--rerun-federated` is given. Both central
+and federated correction outputs and their original metadata must be available.
 
-#### Prerequisites
-- You need to have both the `R` and `Python3` environments set up with the required dependencies as described in the [Prerequisites and setup](#prerequisites-and-setup) section.
-- To rerun federated k-means, build the Docker image for the federated k-means app. Central-only k-means does not require Docker.
+From the repository root, reuse saved results for both arms and feature spaces:
+
 ```bash
-cd evaluation_clusterization_after_correction/federated_kmeans_upd/
-./build.sh
+pixi run python evaluation_clusterization_after_correction/real_datasets/multiple_runs.py
 ```
 
-#### Reproducing the clustering analysis
+`--arms` and `--spaces` select correction arms (`label_aware`, `no_label`) and
+feature spaces (`all`, `panel`). Cached reuse reads the requested seed/k columns
+without checking inputs or settings. Contingency and fixed-partition analyses
+need only assignment TSVs. For new federated fits, build the app with
+`evaluation_clusterization_after_correction/federated_kmeans_upd/build.sh` from
+its directory, then add `--rerun-federated`. For changed cohorts or experiments,
+set a separate `--root`. Individual FeatureCloud tests time out after 1,800
+seconds; cached reuse needs no Docker.
 
-Run the notebooks in `evaluation_clusterization_after_correction/real_datasets/`:
+The [clustering instructions](../evaluation_clusterization_after_correction/real_datasets/README.md)
+are the canonical reference for shared-panel preparation and RF exports, compact
+assignment/metric tables, saved assignment reuse, local output retention and
+sensitivity analyses. Figure 4 uses the panel and all-feature results for each
+correction arm; select matching inputs when rendering below.
 
-1. `00_build_kmeans_matrices.ipynb` — required only for Quartet multiomics.
-2. `01_data_preparation.ipynb`
-3. `02_central_kmeans.ipynb`
-4. `03_federated_runs.ipynb` — optional; required only when regenerating federated k-means outputs.
-5. `04_analysis_metrics_plots.ipynb`
-6. `05_multiple_runs.ipynb` — optional repeated seeded federated runs.
+#### Shared evaluation metrics
 
-See `evaluation_clusterization_after_correction/real_datasets/README.md` for detailed options and output paths.
+[`evaluation_utils/metrics.py`](../evaluation_utils/metrics.py) provides
+`classification_scores(truth, labels)` for MCC and support-weighted F1, and
+`clustering_scores(truth, labels)` for ARI and arithmetic AMI/NMI. Inputs must share
+sample order. F1/MCC require matching class meanings; partition scores allow
+arbitrary cluster names. `classification_scores_from_confusion(matrix)` scores
+counts whose true rows and predicted columns share class order.
+Add metrics to the appropriate helper; experiment writers select which to save.
 
-_Note: If you want to inspect the FedKMeans logic, this is located in `evaluation_clusterization_after_correction/federated_kmeans_upd`._
+### 7. Generate Figures 3, 4 and S5 for each correction arm
+
+After batch correction, run from the repository root. Figure 4 also requires the
+classification and clustering results from Steps 5 and 6, including the shared-panel
+branches described in the
+[clustering instructions](../evaluation_clusterization_after_correction/real_datasets/README.md).
+
+```bash
+for arm in label_aware no_label; do
+  for script in aggregate_figure3 aggregate_figure4 \
+      quartet_separated_modality_pca_fixed_effect_variance; do
+    CORRECTION_ARM="$arm" pixi run Rscript "evaluation/$script.R"
+  done
+done
+```
+
+Outputs: `figures/figure3_<arm>.png`, `figures/figure4_<arm>.png` and
+`figures/figureS5_<arm>.png`. Figures 3 and S5 also write matching `_variance.tsv`
+files containing median variance fractions and feature counts.
+
+Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
+shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
+The corresponding RF report is `classification_metric_report_panel5000.csv`.
+Generate the supplementary all-feature version for each arm with:
+
+```bash
+for arm in label_aware no_label; do
+  CORRECTION_ARM="$arm" FIGURE4_FEATURE_SPACE=all pixi run Rscript evaluation/aggregate_figure4.R
+done
+```
+
+These figures use all complete-case k-means features and all union RF features,
+and write `figures/figure4_all_features_<arm>.png`. Figure subtitles identify the
+feature space. Input and output path overrides remain available through
+`FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`; keep overrides
+consistent with the selected feature space.
+
+Set `FIGURE4_OUTPUT` to a path ending in `.svg` to export Figure 4 as SVG.
+PNG is the default; a path without an extension gets `.png`. For example:
+
+```bash
+CORRECTION_ARM=label_aware FIGURE4_FEATURE_SPACE=panel \
+  FIGURE4_OUTPUT=figures/figure4_label_aware.svg \
+  pixi run Rscript evaluation/aggregate_figure4.R
+```
 
 ---
 
 ## Repository structure
-
-Understanding the repository layout helps in navigating the files and scripts.
 
 ```
 fedRBE/
@@ -290,15 +514,16 @@ fedRBE/
 │   ├── ecoli/                                  # E. coli dataset
 │   ├── ovarian_cancer/                         # Ovarian cancer datasets
 │   │   ├── before/                             # Uncorrected data with structure needed to run the app
-│   │   ├── after/                              # Corrected data
+│   │   ├── after/                              # label_aware/ and no_label/ corrected data
 │   │   ├── 00_harmonize_meta_load_data.ipynb   # Data harmonization notebook
 │   │   ├── 01_check_datasets_intersection.ipynb
-│   │   └── 02_central_RBE.ipynb                # Centralized removeBatchEffect run
+│   │   └── 02_prepare_correction_inputs.ipynb # Prepare central and federated correction inputs
 │   ├── quartet_multiomics/                     # Quartet multiomics datasets
 │   └── simulated/                              # Simulated datasets
 ├── analyse_fedvscentral.py                     # Compares federated and centralized batch effect corrections.
 ├── generate_fedrbe_corrected_datasets.py       # Runs fedRBE on all configured datasets and saves results
 ├── run_sample_experiment.py                    # Runs fedRBE on the sample dataset
+├── pixi.toml, pixi.lock                        # Locked Python and R environment for all evaluation
 ├── evaluation_utils/                           # Utility scripts for evaluations
 │       ├── evaluation_funcs.R
 │       ├── featurecloud_api_extension.py
@@ -310,14 +535,13 @@ fedRBE/
 │       └── utils_analyse.py
 ├── evaluation/                                 # Main evaluation scripts to produce results and figures
 │   ├── eval_simulation/                        # Evaluations on simulated data
-│   ├── evaluation_ccRCC.ipynb
-│   ├── evaluation_ecoli.ipynb
-│   ├── evaluation_ovarian_cancer.ipynb         # Evaluation of ovarian_cancer datasets
-│   ├── evaluation_quartet_multiomics.ipynb
-│   ├── evaluation_simulated.ipynb
-│   ├── evaluation_simulated_30runs.ipynb
+│   ├── aggregate_figure3.R                     # Figure 3
+│   ├── aggregate_figure4.R                     # Figure 4
+│   ├── dataset_diagnostics.R                   # Central-correction panels and simulated PCA
+│   ├── evaluation_simulated_30runs.R           # Simulated 30-run differences and variance partitioning
+│   ├── quartet_separated_modality_pca_fixed_effect_variance.R  # Figure S5
 ├── evaluation_classification_after_correction/ # Classification comparison scripts and outputs
-├── evaluation_clusterization_after_correction/ # K-means comparison notebooks and FeatureCloud app
+├── evaluation_clusterization_after_correction/ # K-means comparison scripts and FeatureCloud app
 └── [other directories/files]
 ```
 
@@ -332,15 +556,16 @@ Main scripts live at the repository root; shared helpers live in `evaluation_uti
 |------|---------|
 | `generate_fedrbe_corrected_datasets.py` | Runs configured fedRBE experiments, assigns client inputs, executes the app, and stores corrected outputs. |
 | `analyse_fedvscentral.py` | Loads federated and central corrected datasets, checks shape/index consistency, and writes mean/max difference metrics. |
-| `evaluation_utils/featurecloud_api_extension.py` | Wraps the FeatureCloud testbed with automatic restart and result-extraction helpers used by the fedRBE correction script. |
+| `evaluation_utils/featurecloud_api_extension.py` | Wraps the FeatureCloud testbed with automatic restart for the fedRBE correction script. |
+| `evaluation_utils/fedRBE_simulation_scrip_simdata.py` | Runs the app's protocol (`batchcorrection/fedrbe.py`) locally in threads without Docker or SMPC: `<input_dir> <output_file>` merges the corrected data of the client subfolders (simulated notebook 01 and `robustness_simulation.R`); `--experiments [--only <text>]` reruns the non-SMPC experiments of `generate_fedrbe_corrected_datasets.py` and compares them to the central results. |
 | `evaluation_utils/filtering.R` | Provides filtering and preprocessing functions used before centralized limma correction. |
-| `evaluation_utils/plots_eda.R` | Provides boxplot, PCA, UMAP, heatmap, and correction-diagnostic plotting helpers. |
+| `evaluation_utils/run_correction_experiments.py` | Runs central limma correction with selected covariates into canonical or isolated experiment outputs. |
+| `evaluation_utils/central_correction.R` | Provides the shared central limma correction step for real datasets. |
+| `evaluation_utils/plots_eda.R` | Provides PCA, boxplots, density plots, and correction diagnostics. |
 | `evaluation_utils/upset_plot.py` | Creates UpSet plots for feature-overlap comparisons. |
 
 
 ## Troubleshooting
-
-Common checks:
 
 - **Docker build failures**: Confirm Docker is installed and running.
 - **FeatureCloud controller not starting**: Check port availability, logs, and FeatureCloud login status.
@@ -348,8 +573,6 @@ Common checks:
 - **Script errors**: Verify prerequisites, file paths, and permissions.
 - **Missing data files**: Confirm required inputs exist under `evaluation_data/[dataset]/before/`.
 - **Inconsistent results**: Use the same configuration parameters and filtering rules for federated and centralized corrections.
-
-For unresolved issues, open a [GitHub issue](https://github.com/Freddsle/fedRBE/issues).
 
 ## Additional resources
 

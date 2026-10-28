@@ -10,22 +10,16 @@ from shutil import copyfile
 class FCConfig:
     def __init__(self):
 
-        self.config_available = False
         self.input_file = None
 
         self.input_dir = None
 
-        self.scaled_data_file = None
         self.k_min = 2
         self.k_max = 15
-        self.k_step=1
         self.cluster_on = 'samples'
         self.sep = '\t'
         self.has_rownames = 0
         self.has_colnames = 0
-        self.encryption = False
-        self.use_smpc = False
-        self.exponent = 3
 
         self.output_dir = None
         self.output_delim = '\t'
@@ -35,12 +29,8 @@ class FCConfig:
 
         self.center = True
         self.unit_variance = True
-        self.highly_variable = True
-        self.perc_highly_var = 0.1
         self.log_transform = True
         self.max_nan_fraction = 0.5
-
-        self.seed = 11
 
         self.n_init_local = 50
         self.n_init_global = 50
@@ -68,7 +58,6 @@ class FCConfig:
             print('[API] /setup config file found ... parsing file: ' + str(op.join(INPUT_DIR, config_file)))
             copyfile(config_file, config_out)
 
-            self.config_available = True
             with open(config_file, 'r') as file:
                 parameter_list = yaml.safe_load(file)
                 parameter_list = parameter_list['fc_kmeans']
@@ -102,13 +91,6 @@ class FCConfig:
                     self.centroids_file = 'centroids.tsv'
 
                 try:
-                    self.scaled_data_file =   parameter_list['output']['scaled_data_file']
-                except KeyError:
-                    print('YAML file does not follow specification: missing key: projections')
-                    print('Setting default: projections.tsv')
-                    self.scaled_data_file = 'scaled_data.tsv'
-
-                try:
                     self.k_min = parameter_list['algorithm']['k_min']
                 except KeyError:
                     print('K MIN not specified, defaulting to 2')
@@ -119,12 +101,6 @@ class FCConfig:
                 except KeyError:
                     print('K MAX not specified, defaulting to 15')
                     self.k_max = 15
-
-                try:
-                    self.k_step = parameter_list['algorithm']['k_step']
-                except KeyError:
-                    print('K MAX not specified, defaulting to 1')
-                    self.k_step =1
 
                 try:
                     self.seed_value = parameter_list['algorithm']['seed']
@@ -180,18 +156,7 @@ class FCConfig:
                 except KeyError:
                     print('Scaling functionalities not specified.')
 
-                try:
-                    #self.use_smpc = parameter_list['privacy']['use_smpc']
-                    #self.exponent = parameter_list['privacy']['exponent']
-                    self.use_smpc=False
-                    self.exponent = 3
-
-                except KeyError:
-                    print('YAML file does not follow specification: privacy settings')
-                    raise KeyError
-
                 print('[API] /setup config file found ... parsing done')
 
         else:
             print('[API] /setup no configuration file found')
-            self.config_available = False

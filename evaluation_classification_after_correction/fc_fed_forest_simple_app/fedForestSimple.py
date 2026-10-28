@@ -1,5 +1,5 @@
 
-from typing import Optional
+from typing import List, Optional, Tuple
 import os
 import yaml
 import pandas as pd
@@ -8,10 +8,22 @@ from math import ceil
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
 import pickle
 import sklearn
 
 from .fc_fedlearnsim_helper.protocolfedlearning import ProtocolFedLearning
+from evaluation_utils.metrics import classification_scores_from_confusion
+
+
+def _pool_confusion_matrices(client_matrices: List[dict]) -> Tuple[list, np.ndarray]:
+    """Sum the clients' Phase 3 confusion matrices after aligning their class order."""
+    classes = list(dict.fromkeys(cls for p in client_matrices for cls in p['classes']))
+    pooled = np.zeros((len(classes), len(classes)), dtype=np.int64)
+    for payload in client_matrices:
+        positions = [classes.index(cls) for cls in payload['classes']]
+        pooled[np.ix_(positions, positions)] += payload['matrix']
+    return classes, pooled
 
 
 def main(protocol_fed_learning: ProtocolFedLearning,
@@ -94,7 +106,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     random_state = config.get('random_state', 42)
 
     if train_ratio >= 1.0:
-        #print("Using all data for training (no test split).")
         X_train = X
         y_train = y
         X_test = X
@@ -106,10 +117,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         random_state=random_state,
         stratify=y
         )
-
-    # Get number of clients (this would come from the protocol)
-    # For now, we'll get it after gathering data
-    num_clients = None
 
     # Extract forest parameters
     num_estimators_total = config.get('num_estimators_total', 100)
@@ -136,7 +143,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         # Convert to sorted list for consistent ordering
         common_features = sorted(list(common_features))
 
-        #print(f"Coordinator: Found {len(common_features)} common features across {len(all_feature_names)} clients")
 
         # Broadcast common features
         protocol_fed_learning.broadcast_data(common_features, send_to_self=True)
@@ -178,7 +184,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         for trees_data in all_trees_data:
             all_trees.extend(trees_data)
 
-        #print(f"Coordinator: Received {len(all_trees)} trees total from {len(all_trees_data)} clients")
 
         # Create global random forest with proper attributes
         global_forest = RandomForestClassifier(n_estimators=len(all_trees))
@@ -200,46 +205,17 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     # Phase 3: Calculate local confusion matrix counts and share with coordinator
     y_pred_test = global_forest.predict(X_test)
 
-    # Get unique classes for binary/multiclass support
-    classes = np.unique(y)
+    # Label the matrix with every class the local data holds or the forest can predict.
+    classes = np.union1d(np.unique(y), global_forest.classes_)
     num_classes = len(classes)
-
-    # Calculate aggregated TP, TN, FP, FN across all classes (one-vs-rest)
-    total_tp = 0
-    total_tn = 0
-    total_fp = 0
-    total_fn = 0
-
-    for cls in classes:
-        # Convert to binary: current class vs rest
-        y_test_binary = (y_test == cls).astype(int)
-            # is this entry equal to the class?
-        y_pred_binary = (y_pred_test == cls).astype(int)
-            # is this entry predicted as the class?
-
-        total_tp += int(np.sum((y_test_binary == 1) & (y_pred_binary == 1)))
-        total_tn += int(np.sum((y_test_binary == 0) & (y_pred_binary == 0)))
-        total_fp += int(np.sum((y_test_binary == 0) & (y_pred_binary == 1)))
-        total_fn += int(np.sum((y_test_binary == 1) & (y_pred_binary == 0)))
-
-    # Create local metrics with aggregated counts
+    local_matrix = confusion_matrix(y_test, y_pred_test, labels=classes)
     local_confusion_matrix = {
         'num_samples_training': len(X_train),
         'num_samples_test': len(X_test),
-        'num_classes': num_classes,
-        'TP': total_tp,
-        'TN': total_tn,
-        'FP': total_fp,
-        'FN': total_fn
+        'classes': classes.tolist(),
+        'matrix': local_matrix.tolist(),
     }
-
-    # store the local metrics
-    mcc_numerator = (total_tp * total_tn) - (total_fp * total_fn)
-    mcc_denominator = np.sqrt((total_tp + total_fp) * (total_tp + total_fn) * (total_tn + total_fp) * (total_tn + total_fn))
-    local_mcc = mcc_numerator / mcc_denominator if mcc_denominator != 0 else 0.0
-    local_f1_numerator = 2 * total_tp
-    local_f1_denominator = 2 * total_tp + total_fp + total_fn
-    local_f1 = local_f1_numerator / local_f1_denominator if local_f1_denominator != 0 else np.nan
+    local_scores = classification_scores_from_confusion(local_matrix)
 
     local_metrics_data = [
         {
@@ -248,7 +224,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
             'num_classes': num_classes,
             'class': 'local_client',
             'metric': 'MCC',
-            'score': local_mcc,
+            'score': local_scores['MCC'],
         },
         {
             'num_samples_training': len(X_train),
@@ -256,7 +232,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
             'num_classes': num_classes,
             'class': 'local_client',
             'metric': 'F1_score',
-            'score': local_f1,
+            'score': local_scores['F1_score'],
         }
     ]
 
@@ -275,25 +251,9 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         # Aggregate counts globally
         global_num_samples_training = sum(m['num_samples_training'] for m in all_local_metrics)
         global_num_samples_test = sum(m['num_samples_test'] for m in all_local_metrics)
-        num_classes = all_local_metrics[0]['num_classes']
-
-        # Aggregate TP, TN, FP, FN from all clients
-        total_tp = sum(m['TP'] for m in all_local_metrics)
-        total_tn = sum(m['TN'] for m in all_local_metrics)
-        total_fp = sum(m['FP'] for m in all_local_metrics)
-        total_fn = sum(m['FN'] for m in all_local_metrics)
-
-        # Calculate global MCC
-        # https://medium.com/@anishnama20/matthews-correlation-coefficient-mcc-one-of-the-best-metric-when-2-classes-are-imbalanced-c0318ac68c21
-        numerator = (total_tp * total_tn) - (total_fp * total_fn)
-        denominator = np.sqrt((total_tp + total_fp) * (total_tp + total_fn) * (total_tn + total_fp) * (total_tn + total_fn))
-        mcc = numerator / denominator if denominator != 0 else 0.0
-
-        # Calculate unweighted (micro-averaged) F1 score
-        # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html
-        numerator = 2 * total_tp
-        denominator = 2 * total_tp + total_fp + total_fn
-        f1 = numerator / denominator if denominator != 0 else 0.0
+        classes, pooled_matrix = _pool_confusion_matrices(all_local_metrics)
+        num_classes = len(classes)
+        pooled_scores = classification_scores_from_confusion(pooled_matrix)
 
         # Create metrics data
         global_metrics_data = [
@@ -303,7 +263,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
                 'num_classes': num_classes,
                 'class': 'overall',
                 'metric': 'MCC',
-                'score': mcc,
+                'score': pooled_scores['MCC'],
             },
             {
                 'num_samples_training': global_num_samples_training,
@@ -311,7 +271,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
                 'num_classes': num_classes,
                 'class': 'overall',
                 'metric': 'F1_score',
-                'score': f1,
+                'score': pooled_scores['F1_score'],
             }
         ]
 

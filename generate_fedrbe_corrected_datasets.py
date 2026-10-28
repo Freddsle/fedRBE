@@ -4,16 +4,20 @@ It uses featurecloud_api_extension.py to run the experiments.
 The Experiment class is used to define experiments that are then run.
 To add a new dataset, define a new Experiment object
 and add it to the experiments list.
-To skip a certain dataset, simply comment out the addition of the corresponding
-Experiment object to the experiments list below this comment:
+To skip an experiment, comment out its (Experiment, output path) entry below:
 ## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
 See the Experiment class and the examples below for more information.
 To change the postprocessing done, change the logic under the
 ###POSTPROCESSING comment.
 The postprocessing assumes the use of the federated limma RBE app given in
 the folder /batchcorrection of this repo.
+No-covariate variants run with and without SMPC alongside the other experiments.
+Results use after/label_aware/ and after/no_label/ folders (before Quartet modality names).
 '''
 import os
+import sys
+import io
+from pathlib import Path
 import json
 import zipfile
 from typing import List
@@ -22,6 +26,9 @@ import time
 from copy import deepcopy
 
 from evaluation_utils import featurecloud_api_extension as util
+from evaluation_utils.real_datasets_utils import (
+    read_correction_matrix, validate_corrected_matrix,
+)
 
 ### SETTINGS
 ## GENERALT SETTINGS
@@ -49,16 +56,6 @@ base_config = {
 app_image_name = "featurecloud.ai/bcorrect:latest"
 
 ### SETTING THE EXPERIMENTS
-experiments: List[util.Experiment] = list()
-    # Here aree all the experiments defined, including the location of
-    # the data, the configuration file changes and the app image name.
-result_file_names: List[str] = list()
-    # List of the names for the batch corrected result files generated
-    # by the experiments
-    # this list should have the same length as the experiments
-    # and is iterated with the experiments together, so experiments[i]
-    # will output to result_file_names[i]
-
 # Small helper to add a position argument to the config files of an experiment
 # based on the order in clients
 def add_position_to_config(exp: util.Experiment):
@@ -95,7 +92,7 @@ def ensure_simulated_before_inputs_are_single_run(run_number: int = SIMULATED_SI
     """Abort if simulated single-run fedRBE inputs no longer point to run 1."""
     simulated_dir = os.path.join(data_dir, "simulated")
     checked_modes = set()
-    for exp in experiments:
+    for exp, _ in experiments:
         if not _path_is_under(exp.fc_data_dir, simulated_dir):
             continue
 
@@ -247,7 +244,7 @@ ovarian_cancer_experiment = util.Experiment(
     fc_data_dir=os.path.join(data_dir, "ovarian_cancer"),
     clients=[
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE6008"),
-        os.path.join(data_dir, "ovarian_cancer", "before", "GSE14407"),
+        os.path.join(data_dir, "ovarian_cancer", "before", "GSE10971"),
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE26712"),
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE38666"),
         os.path.join(data_dir, "ovarian_cancer", "before", "GSE40595"),
@@ -292,16 +289,10 @@ add_position_to_config(ccRCC_proteomics_experiment_smpc)
 add_position_to_config(ccRCC_proteomics_experiment)
 
 ## Quartet MULTIOMICS (Quartet full Transcriptomics, Proteomics, Metabolomics)
-# Toggle for the synthetic client_04_L03_L14 (L03 + L14 fold-in). Driven from
-# the same single source (`fedrbe_multiomics_utils.INCLUDE_CLIENT_04`) used by
-# notebooks 01--04 of `evaluation_data/quartet_multiomics/`, so the entire pipeline
-# switches together. Default False -- only the three real cross-modality
-# clients run.
-import sys as _sys
-_sys.path.insert(0, os.path.join(data_dir, "quartet_multiomics"))
-from fedrbe_multiomics_utils import (  # noqa: E402
-    CLIENT_NAMES as _MULTIOMICS_ACTIVE_CLIENTS
-)
+# Toggle for the synthetic client_04_L03_L14 (L03 + L14 fold-in). It must match
+# INCLUDE_CLIENT_04 in notebooks 01-03 of `evaluation_data/quartet_multiomics/`.
+# Default False -- only the three real cross-modality clients run.
+INCLUDE_MULTIOMICS_CLIENT_04 = False
 
 multiomics_modalities = [
     "Transcriptomics",  "Proteomics",  "Metabolomics"]
@@ -317,7 +308,9 @@ _MULTIOMICS_REFERENCE_BATCH_BY_LAST_CLIENT = {
         "Metabolomics": "U_L3_02",
     },
 }
-multiomics_clients = list(_MULTIOMICS_ACTIVE_CLIENTS)
+multiomics_clients = ["client_01_L01", "client_02_L02", "client_03_L05_L04"]
+if INCLUDE_MULTIOMICS_CLIENT_04:
+    multiomics_clients.append("client_04_L03_L14")
 multiomics_reference_batches = _MULTIOMICS_REFERENCE_BATCH_BY_LAST_CLIENT[
     multiomics_clients[-1]
 ]
@@ -367,179 +360,246 @@ for multiomics_modality, multiomics_experiment_smpc in multiomics_experiments_sm
     multiomics_experiment_smpc.name = f"Quartet Multiomics {multiomics_modality} (SMPC)"
     set_smpc_true(multiomics_experiment_smpc)
 
+
+def without_covariates(baseline: util.Experiment) -> util.Experiment:
+    """Clone a selected experiment, retaining its label-aware privacy threshold."""
+    experiment = deepcopy(baseline)
+    configs = experiment.config_files
+    for config, changes in zip(configs, experiment.config_file_changes or [{}] * len(configs)):
+        config["flimmaBatchCorrection"].update(changes.get("flimmaBatchCorrection", {}))
+    settings = [config["flimmaBatchCorrection"] for config in configs]
+    common_covariates = set.intersection(*(set(c["covariates"]) for c in settings))
+    batches = 0
+    for client, config in zip(experiment.clients, settings):
+        if config.get("batch_col"):
+            design = pd.read_csv(Path(client) / config["design_filename"],
+                                 sep=config.get("design_separator", "\t"), index_col=0)
+            batches += design[config["batch_col"]].astype(str).nunique()
+        else:
+            batches += 1
+    for config in settings:
+        # Removing covariates must not loosen the app's feature privacy filter.
+        config["min_samples"] = max(batches + len(common_covariates) + 1,
+                                    config.get("min_samples", 0))
+        config["covariates"] = []
+    experiment.config_file_changes = None
+    experiment.name += " (no covariates)"
+    return experiment
+
+
 ## ADD EXPERIMENTS, CHANGE HERE TO INCLUDE/EXCLUDE EXPERIMENTS
-# Simulated
-experiments.append(simulated_balanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_balanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "balanced", "after", "FedApp_corrected_data_smpc.tsv"))
+# Each entry pairs an experiment with its output path relative to evaluation_data/.
+# Comment/uncomment a complete entry to disable/enable a run.
+experiments = [
+    # Simulated
+    (simulated_balanced_experiment, "simulated/balanced/after/FedApp_corrected_data.tsv"),
+    (simulated_balanced_experiment_smpc, "simulated/balanced/after/FedApp_corrected_data_smpc.tsv"),
+    (simulated_mildly_imbalanced_experiment, "simulated/mild_imbalanced/after/FedApp_corrected_data.tsv"),
+    (simulated_mildly_imbalanced_experiment_smpc, "simulated/mild_imbalanced/after/FedApp_corrected_data_smpc.tsv"),
+    (simulated_strongly_imbalanced_experiment, "simulated/strong_imbalanced/after/FedApp_corrected_data.tsv"),
+    (simulated_strongly_imbalanced_experiment_smpc, "simulated/strong_imbalanced/after/FedApp_corrected_data_smpc.tsv"),
 
-experiments.append(simulated_mildly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_mildly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "mild_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+    # E. coli
+    (ecoli_experiment, "ecoli/after/label_aware/FedApp_corrected_data.tsv"),
+    (ecoli_experiment_smpc, "ecoli/after/label_aware/FedApp_corrected_data_smpc.tsv"),
+    (without_covariates(ecoli_experiment), "ecoli/after/no_label/FedApp_corrected_data.tsv"),
+    (without_covariates(ecoli_experiment_smpc), "ecoli/after/no_label/FedApp_corrected_data_smpc.tsv"),
 
-experiments.append(simulated_strongly_imbalanced_experiment)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data.tsv"))
-experiments.append(simulated_strongly_imbalanced_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "simulated", "strong_imbalanced", "after", "FedApp_corrected_data_smpc.tsv"))
+    # Ovarian cancer
+    (ovarian_cancer_experiment, "ovarian_cancer/after/label_aware/FedApp_corrected_data.tsv"),
+    (ovarian_cancer_experiment_smpc, "ovarian_cancer/after/label_aware/FedApp_corrected_data_smpc.tsv"),
+    (without_covariates(ovarian_cancer_experiment), "ovarian_cancer/after/no_label/FedApp_corrected_data.tsv"),
+    (without_covariates(ovarian_cancer_experiment_smpc), "ovarian_cancer/after/no_label/FedApp_corrected_data_smpc.tsv"),
 
-## E. coli
-experiments.append(ecoli_experiment)
-result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data.tsv"))
-experiments.append(ecoli_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "ecoli", "after", "FedApp_corrected_data_smpc.tsv"))
+    # ccRCC Proteomics
+    (ccRCC_proteomics_experiment, "ccRCC_studies/after/label_aware/FedApp_corrected_data.tsv"),
+    (ccRCC_proteomics_experiment_smpc, "ccRCC_studies/after/label_aware/FedApp_corrected_data_smpc.tsv"),
+    (without_covariates(ccRCC_proteomics_experiment), "ccRCC_studies/after/no_label/FedApp_corrected_data.tsv"),
+    (without_covariates(ccRCC_proteomics_experiment_smpc), "ccRCC_studies/after/no_label/FedApp_corrected_data_smpc.tsv"),
+]
 
-## Ovarian cancer
-experiments.append(ovarian_cancer_experiment)
-result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data.tsv"))
-experiments.append(ovarian_cancer_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "ovarian_cancer", "after", "FedApp_corrected_data_smpc.tsv"))
+# Comment modalities in multiomics_modalities above to select individual omics.
+for modality in multiomics_modalities:
+    experiments.extend([
+        (multiomics_experiments[modality], f"quartet_multiomics/after/label_aware/{modality}/FedApp_corrected_data.tsv"),
+        (multiomics_experiments_smpc[modality], f"quartet_multiomics/after/label_aware/{modality}/FedApp_corrected_data_smpc.tsv"),
+        (without_covariates(multiomics_experiments[modality]), f"quartet_multiomics/after/no_label/{modality}/FedApp_corrected_data.tsv"),
+        (without_covariates(multiomics_experiments_smpc[modality]), f"quartet_multiomics/after/no_label/{modality}/FedApp_corrected_data_smpc.tsv"),
+    ])
 
-## ccRCC Proteomics
-experiments.append(ccRCC_proteomics_experiment)
-result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data.tsv"))
-experiments.append(ccRCC_proteomics_experiment_smpc)
-result_file_names.append(os.path.join(data_dir, "ccRCC_studies", "after", "FedApp_corrected_data_smpc.tsv"))
 
-## Quartet Multiomics
-for multiomics_modality in multiomics_modalities:
-    experiments.append(multiomics_experiments[multiomics_modality])
-    result_file_names.append(
-        os.path.join(
-            data_dir,
-            "quartet_multiomics",
-            "after",
-            multiomics_modality,
-            "FedApp_corrected_data.tsv",
-        )
-    )
-    experiments.append(multiomics_experiments_smpc[multiomics_modality])
-    result_file_names.append(
-        os.path.join(
-            data_dir,
-            "quartet_multiomics",
-            "after",
-            multiomics_modality,
-            "FedApp_corrected_data_smpc.tsv",
-        )
-    )
-
-### ACTUAL PROGRAM, NO NEED TO CHANGE IF A DIFFERENT EXPERIMENT WANTS TO BE RUN
-
-if len(experiments) != len(result_file_names):
-    raise RuntimeError("Number of experiments and result file names do not match, please fix this!")
-
-ensure_simulated_before_inputs_are_single_run()
-
-### MAIN
-# Starts the FeatureCloud controler and runs the experiments
-# The results are then postprocessed and saved in the result files.
-# This postprocessing simply takes the individual results (assumes the default
-# output file name used by the batch correction app (federated limma RBE)
-# of this repo) and concats them.
-
-# The FeatureCloud controller keeps the data directory it was started with.
-# Restart it when an experiment switches to a different data directory.
-active_fc_data_dir = None
-
-# Run the experiments
-for exp, result_filename in zip(experiments, result_file_names):
-    ### RUN THE FEATURECLOUD EXPERIMENT AND EXTARCT INDIVIDUAL RESULTS
-    print(f"Starting experiment:\n{exp}")
-    try:
-        if exp.fc_data_dir != active_fc_data_dir:
-            exp._startup()
-            active_fc_data_dir = exp.fc_data_dir
-        result_files_zipped, _, _ = exp.run_test()
-    except Exception as e:
-        print(f"Experiment could not be started or aborted too many times! Error: \n{e}")
-        print("_______________¡FAILED_EXPERIMENT!_______________")
-        continue
-    print(f"Experiment finished successfully! Result files: {result_files_zipped}")
-
-    ### Postprocessing
-    time.sleep(10)
-    print("Starting postprocessing...")
+### POSTPROCESSING
+def save_experiment_results(exp: util.Experiment, result_filename: str,
+                            client_files: List[dict]) -> None:
+    """
+    Validates the outputs of all clients of an experiment and saves them in the
+    folder of result_filename: individual_results/<clientname>/, datainfo.json
+    and the merged corrected data as result_filename.
+    Args:
+        exp: The experiment, its config_files must contain the used configs
+        result_filename: The path of the merged corrected data
+        client_files: Per client (in the order of exp.clients), a dict mapping
+            the output file names of the app to their content as bytes
+    """
     result_folder = os.path.dirname(result_filename)
     print("Results will be saved in: ", result_folder)
     individual_results_dir = os.path.join(result_folder, "individual_results")
-    if not os.path.exists(individual_results_dir):
-        os.makedirs(individual_results_dir)
-
-    # Derive client names from the experiment's client paths
     client_names = [os.path.basename(client_path) for client_path in exp.clients]
+    if len(client_files) != len(exp.clients):
+        raise ValueError("Correction requires the outputs of every client")
 
-    # Extract all output files from each client's zip into individual_results/<clientname>/
-    for idx, (zip_path, client_name) in enumerate(zip(result_files_zipped, client_names)):
-        for _ in range(60):
-            if os.path.exists(zip_path):
-                break
-            print(f"Waiting for file {zip_path} to be available...")
-            time.sleep(5)
-        else:
-            raise RuntimeError(f"Zip file not found after timeout: {zip_path}")
-        client_result_dir = os.path.join(individual_results_dir, client_name)
-        if not os.path.exists(client_result_dir):
-            os.makedirs(client_result_dir)
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_names = zip_ref.namelist()
-            for fname in ["only_batch_corrected_data.csv", "full_corrected_data.csv", "report.txt"]:
-                if fname in zip_names:
-                    # extract() preserves the filename at the root of client_result_dir
-                    zip_ref.extract(fname, client_result_dir)
-                # required file so we throw an error
-                elif fname == "full_corrected_data.csv":
-                    raise RuntimeError(
-                        f"'{fname}' not found in result zip for client '{client_name}'. "
-                        f"Did the batch effect correction app change its output filenames? "
-                        f"Files present in zip: {zip_names}"
-                    )
-                #
-                else:
-                    print(f"WARNING: '{fname}' not found in zip for client '{client_name}', skipping.")
+    # Validate every client's fresh outputs before replacing any published files.
+    client_outputs, corrected_frames = [], []
+    for idx, (outputs, client_name) in enumerate(zip(client_files, client_names)):
+        details = exp.config_files[idx]["flimmaBatchCorrection"]
+        separator = details.get("separator", "\t")
+        expected = pd.read_csv(Path(exp.clients[idx]) / details["data_filename"],
+                               sep=separator, index_col=0, nrows=0).columns
+        for fname in ("only_batch_corrected_data.csv", "full_corrected_data.csv"):
+            matrix = pd.read_csv(io.BytesIO(outputs[fname]), sep=separator, index_col=0,
+                                 nrows=None if fname == "only_batch_corrected_data.csv" else 0)
+            if not matrix.columns.equals(expected):
+                raise ValueError(f"Incomplete correction samples for {client_name}: {fname}")
+            if fname == "only_batch_corrected_data.csv":
+                corrected_frames.append(matrix)
+        client_outputs.append(outputs)
 
-    # Update the datainfo.json in the result folder so each cohort points to
-    # individual_results/<clientname>/full_corrected_data.csv
+    # Write datainfo.json in the result folder from the clients' input descriptor,
+    # so each cohort points to individual_results/<clientname>/full_corrected_data.csv
+    # and keeps its original design file in every correction arm.
+    source_path = Path(exp.clients[0]).parent / "datainfo.json"
+    with open(source_path, "r") as f:
+        datainfo = json.load(f)
+    for cohort in datainfo["cohorts"]:
+        design = source_path.parent / cohort["folder"] / cohort["designfile"]["filename"]
+        cohort["folder"] = os.path.join("individual_results", cohort["name"])
+        cohort["designfile"]["filename"] = os.path.relpath(
+            design, os.path.join(result_folder, cohort["folder"]))
+    # full_corrected_data.csv is written by the app using client.separator,
+    # which comes from the experiment's config. Derive it from the first client's
+    # merged config (base + changes) so it is never hardcoded here.
+    client0_config = deepcopy(exp.config_files[0])
+    if exp.config_file_changes:
+        for key, val in exp.config_file_changes[0].get("flimmaBatchCorrection", {}).items():
+            client0_config["flimmaBatchCorrection"][key] = val
+    output_separator = client0_config["flimmaBatchCorrection"].get("separator", "\t")
+    datainfo["covariates"] = client0_config["flimmaBatchCorrection"]["covariates"]
+    datainfo["datafile"] = {
+        "filename": "full_corrected_data.csv", "separator": output_separator,
+        "rotation": "features x samples", "samplename_column": None,
+        "featurename_column": None,
+    }
     datainfo_path = os.path.join(result_folder, "datainfo.json")
-    if os.path.exists(datainfo_path):
-        with open(datainfo_path, "r") as f:
-            datainfo = json.load(f)
-        for cohort in datainfo.get("cohorts", []):
-            cohort["folder"] = os.path.join("individual_results", cohort["name"])
-        # full_corrected_data.csv is written by the app using client.separator,
-        # which comes from the experiment's config. Derive it from the first client's
-        # merged config (base + changes) so it is never hardcoded here.
-        client0_config = deepcopy(exp.config_files[0])
-        if exp.config_file_changes:
-            for key, val in exp.config_file_changes[0].get("flimmaBatchCorrection", {}).items():
-                client0_config["flimmaBatchCorrection"][key] = val
-        output_separator = client0_config["flimmaBatchCorrection"].get("separator", "\t")
-        datainfo["datafile"]["filename"] = "full_corrected_data.csv"
-        datainfo["datafile"]["separator"] = output_separator
+
+    final_df = pd.concat(corrected_frames, axis=1) if corrected_frames else None
+    if final_df is not None:
+        output = Path(result_filename)
+        arm_folder = next((parent for parent in output.parents if parent.name == "no_label"), None)
+        reference = (arm_folder.with_name("label_aware") / output.relative_to(arm_folder)
+                     if arm_folder is not None else None)
+        if reference is not None and reference.exists():
+            final_df.index = final_df.index.astype(str)
+            final_df.columns = final_df.columns.astype(str)
+            final_df = validate_corrected_matrix(final_df, read_correction_matrix(reference))
+
+        # Publish only the outputs and descriptor that passed all checks above.
+        for client_name, outputs in zip(client_names, client_outputs):
+            client_result_dir = Path(individual_results_dir) / client_name
+            client_result_dir.mkdir(parents=True, exist_ok=True)
+            for fname, content in outputs.items():
+                (client_result_dir / fname).write_bytes(content)
         with open(datainfo_path, "w") as f:
             json.dump(datainfo, f, indent=2)
-        print(f"Updated datainfo.json at {datainfo_path}")
-    else:
-        print(f"WARNING: No datainfo.json found at {datainfo_path}, skipping datainfo update.")
+        print(f"Wrote datainfo.json at {datainfo_path}")
 
-    ### CONCAT THE RESULTS AND PRODUCE FINAL MERGED RESULT
-    print("Postprocessing finished! Concatenating results...")
-    final_df = None
-    for client_name in client_names:
-        result_file = os.path.join(individual_results_dir, client_name, "only_batch_corrected_data.csv")
-        if not os.path.exists(result_file):
-            print(f"WARNING: Result file not found for client '{client_name}': {result_file}")
-            continue
-        client_df = pd.read_csv(result_file, sep="\t", index_col=0)
-        if final_df is None:
-            final_df = client_df
-        else:
-            final_df = pd.concat([final_df, client_df], axis=1)
-    # Save the final df
-    if final_df is not None:
         final_df.to_csv(os.path.join(result_filename), sep="\t")
     else:
         raise RuntimeError("No data found in the test results!")
 
-    print("_______________¡SUCCESSFUL_EXPERIMENT!_______________")
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        raise SystemExit("Select experiments in the experiment list; this script takes no arguments.")
+
+    ### ACTUAL PROGRAM, NO NEED TO CHANGE IF A DIFFERENT EXPERIMENT WANTS TO BE RUN
+
+    ensure_simulated_before_inputs_are_single_run()
+
+    ### MAIN
+    # Starts the FeatureCloud controler and runs the experiments
+    # The results are then postprocessed and saved in the result files.
+    # This postprocessing simply takes the individual results (assumes the default
+    # output file name used by the batch correction app (federated limma RBE)
+    # of this repo) and concats them.
+
+    # The FeatureCloud controller keeps the data directory it was started with.
+    # Restart it when an experiment switches to a different data directory.
+    active_fc_data_dir = None
+    failed = []
+
+    # Run the experiments
+    for exp, result_filename in experiments:
+        result_filename = os.path.join(data_dir, result_filename)
+        ### RUN THE FEATURECLOUD EXPERIMENT AND EXTARCT INDIVIDUAL RESULTS
+        print(f"Starting experiment:\n{exp}")
+        config_paths = [Path(client) / "config.yml" for client in exp.clients]
+        original_configs = {path: path.read_bytes() if path.exists() else None for path in config_paths}
+        try:
+            if exp.fc_data_dir != active_fc_data_dir:
+                exp._startup()
+                active_fc_data_dir = exp.fc_data_dir
+            result_files_zipped, _, _ = exp.run_test()
+        except Exception as e:
+            print(f"Experiment could not be started or aborted too many times! Error: \n{e}")
+            print("_______________¡FAILED_EXPERIMENT!_______________")
+            failed.append(f"{exp.name} [{os.path.relpath(result_filename, data_dir)}]")
+            continue
+        finally:
+            for path, content in original_configs.items():
+                if content is None:
+                    path.unlink(missing_ok=True)
+                else:
+                    path.write_bytes(content)
+        print(f"Experiment finished successfully! Result files: {result_files_zipped}")
+
+        ### Postprocessing
+        time.sleep(10)
+        print("Starting postprocessing...")
+        # Derive client names from the experiment's client paths
+        client_names = [os.path.basename(client_path) for client_path in exp.clients]
+
+        if len(result_files_zipped) != len(exp.clients):
+            raise ValueError("Correction requires one result ZIP per client")
+
+        # Read every client's outputs from its result zip.
+        client_files = []
+        for zip_path, client_name in zip(result_files_zipped, client_names):
+            for _ in range(60):
+                if os.path.exists(zip_path):
+                    break
+                print(f"Waiting for file {zip_path} to be available...")
+                time.sleep(5)
+            else:
+                raise RuntimeError(f"Zip file not found after timeout: {zip_path}")
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                zip_names = zip_ref.namelist()
+                outputs = {}
+                for fname in ["only_batch_corrected_data.csv", "full_corrected_data.csv", "report.txt"]:
+                    if fname in zip_names:
+                        outputs[fname] = zip_ref.read(fname)
+                    elif fname != "report.txt":
+                        raise RuntimeError(
+                            f"'{fname}' not found in result zip for client '{client_name}'. "
+                            f"Did the batch effect correction app change its output filenames? "
+                            f"Files present in zip: {zip_names}"
+                        )
+                    else:
+                        print(f"WARNING: '{fname}' not found in zip for client '{client_name}', skipping.")
+                client_files.append(outputs)
+
+        save_experiment_results(exp, result_filename, client_files)
+
+        print("_______________¡SUCCESSFUL_EXPERIMENT!_______________")
+
+    if failed:
+        raise SystemExit("Failed experiments: " + ", ".join(failed))

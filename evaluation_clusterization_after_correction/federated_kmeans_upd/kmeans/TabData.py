@@ -8,21 +8,7 @@ class TabData:
         self.columns = columns
         self.rows = rows
         self.scaled = scaled
-        self.row_count = data.shape[0]
         self.col_count = data.shape[1]
-
-    @classmethod
-    def from_param(cls, data, columns, rows, scaled) -> 'TabData':
-        "Initialize MyData from a dict's items"
-        return cls(data, columns, rows, scaled)
-
-    @classmethod
-    def empty(cls) -> 'TabData':
-        """
-        Initialise an empty TabData object
-        :return:
-        """
-        return cls(None, None, None, None)
 
     @classmethod
     def from_file(cls, filename, header=0, index=0, sep ='\t', keep_original=True, federated_dimension='columns') -> 'TabData':
@@ -56,16 +42,3 @@ class TabData:
             return cls(data, sample_ids, variable_names, scaled)
         else:
             return cls(data, variable_names, sample_ids, scaled)
-
-
-
-
-if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser(description='Load a tabular data file as TabData.')
-    parser.add_argument('filename', help='Path to the input TSV file.')
-    args = parser.parse_args()
-
-    tb = TabData.from_file(args.filename)
-    print(f'Loaded {tb.row_count} rows and {tb.col_count} columns from {args.filename}')

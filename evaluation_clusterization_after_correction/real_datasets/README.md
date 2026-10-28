@@ -1,235 +1,147 @@
 # Real-Dataset Clustering Evaluation
 
-Evaluates k-means clustering quality (ARI) on real omics datasets before and after
-fedRBE batch correction, for both central and federated k-means.
-
-**Datasets:** `ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, and `quartet_multiomics` 
-(the latter is a multi-modal dataset with transcriptomics, proteomics, and metabolomics measured on matched samples).
-
----
+[`multiple_runs.py`](multiple_runs.py) is the canonical repeated-seed comparison
+of central and federated k-means before and after correction. Datasets are
+`ecoli`, `ovarian_cancer`, `ccRCC_proteomics` and `quartet_multiomics`. Both
+correction arms, `label_aware` and `no_label`, use ten seeds (1, 11, …, 91) and
+ten starts for central, local federated and coordinator k-means. The target is
+biological condition; k is its number of classes.
 
 ## Prerequisites
 
-1. **Python environment** — install repo dependencies from the root with either
-   the repository environment:
-   ```bash
-   conda env create -f environment.yml
-   conda activate fedRBE
-   ```
-   or a separate Python environment:
-   ```bash
-   python3 -m venv fedrbe_env
-   source fedrbe_env/bin/activate
-   pip install -r requirements.txt
-   ```
+Follow the [environment and correction guide](../../docs/reproduce.md). Inputs,
+metadata and both correction backends must exist at the paths in
+[`datasets.yaml`](../../evaluation_utils/datasets.yaml); fetch Git LFS data when
+needed. `multiple_runs.py` prepares Quartet joint matrices automatically from
+modality inputs. Joint columns are pseudo-matched samples, not necessarily
+measurements from the same physical aliquot. The dataset preparation's `INCLUDE_CLIENT_04` setting
+controls its three-client default or four-client layout.
 
-2. **Corrected matrices** — central batch correction must have been run for each dataset.
-   The corrected TSV files are expected at paths defined in `evaluation_utils/datasets.yaml`.
-   If the files are Git LFS pointers, fetch them first:
-   ```bash
-   git lfs pull
-   ```
-
-3. **FeatureCloud (for notebook 03)** — the repository environment or the
-   separate Python setup provides the FeatureCloud CLI required to generate
-   federated k-means results. Result archives under
-   `<dataset>/inputs/{before,corrected}/tests/tests/` are generated locally
-   and are not committed.
-
----
-
-## Step-by-Step Instructions
-
-### Step 0 — Build joint matrices (quartet multiomics only) (`00_build_kmeans_matrices.ipynb`)
-
-Quartet Multiomics-only pre-step. The other datasets (`ecoli`, `ovarian_cancer`,
-`ccRCC_proteomics`) get their `before` / `corrected` matrices
-directly from `evaluation_data/<dataset>/...` and skip this step.
-
-The R notebook stacks the three per-modality matrices written by
-`evaluation_data/quartet_multiomics/03_central_RBE.ipynb` and
-`04_run_fedrbe.ipynb` into a single joint matrix per condition
-(before / central-corrected / FedRBE-corrected), and writes per-client
-`design.tsv` / `intensities.tsv` slices for the standard flow.
+Fresh federated runs require Docker and the app image. From the repository root:
 
 ```bash
-cd evaluation_clusterization_after_correction/real_datasets
-jupyter execute --kernel_name=ir 00_build_kmeans_matrices.ipynb
+cd evaluation_clusterization_after_correction/federated_kmeans_upd
+./build.sh
 ```
 
-**Outputs:**
-- `evaluation_data/quartet_multiomics/after/all_modalities_{before,corrected}_kmeans_matrix.tsv`
-  plus `all_modalities_fedapp_kmeans_matrix.tsv` for real FeatureCloud
-  FedRBE outputs, or `all_modalities_fedsim_kmeans_matrix.tsv` for local
-  FedSim-only outputs
-  — joint matrices used as `before_matrix` / `corrected_central` /
-  `corrected_federated` in `evaluation_utils/datasets.yaml`. Kept under
-  `evaluation_data/` because `evaluation/evaluation_quartet_multiomics.ipynb` also
-  reads them.
-- `evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/<client>/{design.tsv, intensities.tsv}`
-  — per-client splits used when Step 3 builds FeatureCloud k-means inputs.
-  These are k-means-only and live inside this clustering-eval folder.
+Cached assignment reuse and central fits need no Docker.
 
-The three modality matrices are stacked vertically (rows: features prefixed
-by modality name; columns: pseudo-matched samples) and saved as a single
-joint matrix. No manual per-feature scaling is applied here — Steps 2 and 3
-each apply their own per-feature scaling on the joint matrix, the same way
-they do for every other dataset.
+## Run the repeated-seed comparison
 
-**Targets** must match the active client list in
-`evaluation_data/quartet_multiomics/fedrbe_multiomics_utils.py`, controlled by the
-`INCLUDE_CLIENT_04` toggle — default `False`, i.e. 3 clients / 48 joint samples.
+From the repository root:
 
-- `condition`: donor labels `D5/D6/F7/M8` (`D6` is the limma reference donor),
-  evaluated with `k = 4`.
-- `client`: client labels (default 3-client config: `client_01_L01`,
-  `client_02_L02`, `client_03_L05_L04`; with `INCLUDE_CLIENT_04 = True` also
-  `client_04_L03_L14`), evaluated with `k = len(CLIENT_NAMES)`. This is the
-  technical structure that batch correction is meant to remove. The metadata
-  column reusing the real-dataset schema is named `lab` for compatibility with
-  the other real-dataset scripts.
-
-Joint samples are matched across modalities via the `pseudo_sample` keys built
-in `evaluation_data/quartet_multiomics/02_prepare_RBE_inputs.ipynb`
-(`{client}_{donor}_{rep}_{i}`).
-
----
-
-### Step 1 — Data Preparation (`01_data_preparation.ipynb`)
-
-Loads raw and corrected matrices, aligns samples to metadata, drops NaN feature rows,
-and saves prepared matrices to `<dataset>/prepared/`.
-
-1. Open `01_data_preparation.ipynb`.
-2. (Optional) Edit the **Configuration** cell to change the dataset list or `CORRECTED_SOURCE`
-   (`"central"`, `"federated"`, or `"auto"`).
-3. Run all cells (`Run All`).
-
-**Outputs per dataset:**
-```
-<dataset>/prepared/before_matrix.tsv
-<dataset>/prepared/corrected_matrix.tsv
-<dataset>/prepared/metadata.tsv
+```bash
+pixi run python evaluation_clusterization_after_correction/real_datasets/multiple_runs.py
 ```
 
----
+| Option | Meaning |
+| --- | --- |
+| `--arms` | `label_aware` and/or `no_label` (default: both) |
+| `--spaces` | `all` complete-case features and/or the shared `panel` (default: both) |
+| `--rerun-federated` | Launch new FeatureCloud tests instead of reusing saved assignments |
+| `--datasets`, `--seeds` | Restrict the run; other rows of the metrics table are kept |
+| `--config` | Custom registry with explicit correction paths; use with `--arms label_aware` |
+| `--root` | Output base (default: this directory) |
 
-### Step 2 — Central K-Means (`02_central_kmeans.ipynb`)
+Results go to `--root` for `all` and to `<root>/panel5000/` for `panel`, with
+`no_label/` appended for that arm. Central fits are recomputed in every run.
+Saved federated assignments are reused without checking them against the current
+matrices or settings; after changing either, use `--rerun-federated`, with a
+separate `--root` to keep the canonical results. Assignment tables reject other
+samples or metadata. Each FeatureCloud test times out after 1,800 seconds.
 
-Runs scikit-learn k-means on the prepared matrices (k = number of conditions and number of
-batches), computes ARI against condition and batch labels.
+## Retained results and local outputs
 
-1. Ensure Step 1 has been run for all datasets.
-2. Open `02_central_kmeans.ipynb`.
-3. Run all cells.
+There are four canonical output roots: `.` and `no_label/` for all features,
+`panel5000/` and `panel5000/no_label/` for the shared panel. Each retains:
 
-**Outputs per dataset:**
-```
-<dataset>/kmeans_res/runs/1_metadata_cntrl_kmeans_res.tsv
-<dataset>/metrics/metrics_ari.tsv
-metrics_ari.tsv                          # combined across all datasets
-```
+| File within an output root | Use |
+| --- | --- |
+| `<dataset>/assignments.tsv` | One wide table per dataset with `file`, `condition`, `lab` and `<method>_seed_NNN_kK` prediction columns |
+| `metrics_ari_multirun.tsv` | One row per dataset/method/seed: ARI, arithmetic AMI and inertia |
 
----
+The four roots contain 16 assignment tables in total. Methods are `BC_Cntrl`,
+`AC_Cntrl`, `BC_Fed` and `AC_Fed`; for example, `BC_Cntrl_seed_001_k2`.
+Metadata is stored once per dataset table. Exact assignments support contingency,
+co-assignment and fixed-partition uncertainty analyses; aggregate ARI alone cannot
+reproduce those analyses.
 
-### Step 3 — Federated K-Means (`03_federated_runs.ipynb`)
+Central inertia uses population-SD scaling; federated pooled inertia is recomputed
+from assignments with sample-SD scaling.
 
-Prepares per-site input directories for the FeatureCloud fc_kmeans app, then either
-launches a new federated test or aggregates results generated by an earlier local run.
+Keep generated `inputs/`, `fc_kmeans_res/`, per-seed `kmeans_res/` exports and
+bulk analysis tables local. These can be regenerated or retained in ignored
+`real_pipeline_runs/<run>/` records.
+Selected summaries remain under `panel5000/analysis/`.
+The four canonical Figure 4 PNGs remain under the repository's `figures/`.
 
-#### Option A — Re-run federated k-means with FeatureCloud (default)
+## Shared variance panel
 
-1. Install the FeatureCloud CLI and ensure Docker is running (see
-   [FeatureCloud docs](https://featurecloud.ai/)).
+After preparing both correction arms and Quartet joint inputs, run from the
+repository root:
 
-2. Build the fc_kmeans Docker image. Either of the following methods works:
-
-   **Using the FeatureCloud CLI (recommended — matches the auto-build the notebook uses):**
-   ```bash
-   featurecloud app build evaluation_clusterization_after_correction/federated_kmeans_upd fc_kmeans_upd
-   ```
-   **Or directly with Docker:**
-   ```bash
-   cd evaluation_clusterization_after_correction/federated_kmeans_upd
-   docker build -t fc_kmeans_upd .
-   ```
-
-3. Open `03_federated_runs.ipynb`.
-4. Confirm `RERUN_FEDERATED = True` in the **Configuration** cell.
-5. Adjust `CONTROLLER_HOST`, `TIMEOUT`, and `QUERY_INTERVAL` if needed.
-6. Run all cells.
-
-   The notebook starts and stops the FeatureCloud controller automatically for each
-   dataset variant (via `_startup()`), pointing it at the correct
-   `<dataset>/inputs/{before,corrected}/` directory. Docker must be running;
-   no manual `featurecloud controller start` is needed.
-
-   Result zip files are saved by the FeatureCloud controller to
-   `<dataset>/inputs/{before,corrected}/tests/tests/results_test_<id>_client_<id>_<name>.zip`
-   and are automatically extracted and aggregated by the notebook.
-
-#### Option B — Aggregate results from an earlier local run
-
-1. Ensure Step 1 has been run and the generated result zip files still exist
-   under `<dataset>/inputs/*/tests/`.
-2. Open `03_federated_runs.ipynb`.
-3. Set `RERUN_FEDERATED = False` in the **Configuration** cell.
-4. Run all cells.
-
-**Outputs per dataset:**
-```
-<dataset>/inputs/before/<site>/intensities.tsv        # FC input files
-<dataset>/inputs/before/<site>/design.tsv
-<dataset>/inputs/before/<site>/config_kmeans.yml
-<dataset>/inputs/corrected/<site>/...                 # same for corrected
-<dataset>/fc_kmeans_res/before/1_fed_clustering/      # intermediate per-client clustering CSVs
-<dataset>/fc_kmeans_res/corrected/1_fed_clustering/
-<dataset>/kmeans_res/runs/1_metadata_before_fedclusters.tsv
-<dataset>/kmeans_res/runs/1_metadata_after_fedclusters.tsv
+```bash
+pixi run python -m evaluation_utils.feature_panel
 ```
 
----
+This selects up to 5,000 complete-case features per dataset or Quartet modality
+by pooled within-batch variance of uncorrected log-scale data, before scaling.
+Batches are clients, or client × batch for Quartet. Ties use feature names;
+ordered selections must agree across uncorrected, central and federated states
+in both arms.
 
-### Step 4 — Analysis & Plots (`04_analysis_metrics_plots.ipynb`)
+Lists are written to `panel5000/panel_top5000_<dataset>.tsv` under this directory.
+Add `--prepare-rf` to export panel-only cohorts to
+`evaluation_data/<dataset>/panel5000/` and write `panel5000/rf_datasets.yaml`.
+Use the registry with `--config` and a separate `--results-file`; see the
+[RF reproduction instructions](../../docs/reproduce.md).
 
-Combines central and federated results, computes ARI for all methods, and produces
-ARI bar charts, PCA plots, and a delta-ARI summary table.
+## Sensitivity analyses and descriptive tables
 
-1. Ensure Steps 1–3 have been run (Step 3 is optional; the notebook handles missing
-   federated results gracefully).
-2. Open `04_analysis_metrics_plots.ipynb`.
-3. Run all cells.
+[`figure4_analysis.py`](figure4_analysis.py) accepts `--output-dir` for every
+subcommand; dataset analyses also accept `--datasets`, `--arms` and `--seeds`.
+Defaults can be expensive: all datasets, both arms and seeds 1, 11, …, 91.
 
-**Outputs (written to `real_datasets/`):**
+| Subcommand | Analysis and principal controls |
+| --- | --- |
+| `sensitivity` | Feature-size/ranking/scaling grid and paired ARI/AMI changes; `--sizes`, `--rankings pooled equal total`, `--scalings zscore centered` |
+| `starts` | Individual starts, selected fits and partition frequencies; `--n-inits`, `--spaces`, `--states`; defaults to ovarian and Quartet, with Quartet before correction only |
+| `subsample` | Client × class subsampling with fresh clustering; `--repeats`, `--fraction`; correction and full-data panel remain fixed |
+| `arrival-order` | Offline client-order reconstruction; `--max-orders` bounds a partial check |
+| `contingency` | Study × class × cluster counts and class co-assignment from compact assignments |
+| `intervals` | Fixed-partition jackknife ARI and paired within-study bootstrap ARI/AMI; `--repeats`, `--alpha` |
+| `class-r2` | Feature-wise class R² by state/feature space, counting excluded constant features |
+| `rf-cohorts` | Held-out cohort MCC/F1 and seed summaries; `--reports` supplies CSVs |
+
+`contingency` and `intervals` need only compact assignment tables, with
+`--run-root` set to this directory or `panel5000/`; `no_label/` is appended for
+that arm. They read saved metadata without requiring correction matrices.
+Other matrix analyses require prepared inputs, including Quartet joint files; their
+`panel` space uses the saved panel lists. `rf-cohorts` reads its reports directly.
+
+For a bounded matrix-analysis check from the repository root:
+
+```bash
+pixi run python \
+  evaluation_clusterization_after_correction/real_datasets/figure4_analysis.py \
+  sensitivity --datasets ecoli --arms label_aware --seeds 1 \
+  --sizes all --rankings pooled --scalings zscore \
+  --output-dir real_pipeline_runs/clustering_smoke/sensitivity
 ```
-metrics_ari.tsv          # full metrics table (all datasets, methods, targets)
-```
-Plots are displayed inline in the notebook.
 
----
+Within-batch rankings use the uncorrected matrix in every state; total-variance
+rankings are state-specific. Feature limits apply per Quartet layer, before
+scaling. Subsampling intervals condition on correction; fixed-partition intervals
+also condition on assignments. Offline arrival-order analysis uses installed
+scikit-learn and does not recover actual FeatureCloud message arrival order.
 
-## Output Directory Layout
+## Figures
 
-After all four notebooks are run, the directory structure looks like:
-
-```
-real_datasets/
-├── <dataset>/
-│   ├── prepared/
-│   │   ├── before_matrix.tsv
-│   │   ├── corrected_matrix.tsv
-│   │   └── metadata.tsv
-│   ├── inputs/
-│   │   ├── before/<site>/{intensities,design,config_kmeans}.*
-│   │   │   └── tests/tests/results_test_<id>_client_*.zip  # generated FC output
-│   │   └── corrected/<site>/...
-│   ├── fc_kmeans_res/                          # if Step 3 ran
-│   │   ├── before/1_fed_clustering/            # intermediate per-client CSVs
-│   │   └── corrected/1_fed_clustering/
-│   ├── kmeans_res/runs/
-│   │   ├── 1_metadata_cntrl_kmeans_res.tsv
-│   │   ├── 1_metadata_before_fedclusters.tsv   # if Step 3 ran
-│   │   └── 1_metadata_after_fedclusters.tsv    # if Step 3 ran
-│   └── metrics/metrics_ari.tsv
-└── metrics_ari.tsv      # combined
-```
+[`evaluation/aggregate_figure4.R`](../../evaluation/aggregate_figure4.R)
+reads the aggregate clustering tables and RF reports. `FIGURE4_FEATURE_SPACE=panel`
+(default) selects shared-panel inputs and `figures/figure4_<arm>.png`; `all`
+selects ordinary metrics/reports and `figures/figure4_all_features_<arm>.png`.
+`CORRECTION_ARM` chooses the arm. `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and
+`FIGURE4_OUTPUT` override paths relative to the repository root or absolutely;
+keep overrides consistent with the feature-space label. See the
+[figure-rendering commands](../../docs/reproduce.md#7-generate-figures-3-4-and-s5-for-each-correction-arm).

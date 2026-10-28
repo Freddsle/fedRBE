@@ -1,11 +1,7 @@
 
 library(tidyverse)
 library(grid)
-for (package in c("gridExtra", "patchwork", "umap", "ggsci", "viridis")) {
-  if (requireNamespace(package, quietly = TRUE)) {
-    suppressPackageStartupMessages(library(package, character.only = TRUE))
-  }
-}
+suppressPackageStartupMessages(library(patchwork))
 
 build_scatter_mapping <- function(x, y, color_col, shape_col = NULL) {
   mapping <- list(x = rlang::sym(x), y = rlang::sym(y), color = rlang::sym(color_col))
@@ -74,35 +70,11 @@ pca_plot <- function(
     show_legend = TRUE,
     cbPalette = NULL,
     point_size = 2,
-    use_nipals = FALSE,
     use_gram = FALSE,
     color_title = NULL,
     shape_title = NULL
     ){
-  if (isTRUE(use_nipals) && isTRUE(use_gram)) {
-    stop("Choose either NIPALS PCA or Gram PCA, not both.", call. = FALSE)
-  }
-
-  if (use_nipals) {
-    if (!requireNamespace("nipals", quietly = TRUE)) stop("Package 'nipals' is required for NIPALS PCA. Install it with install.packages('nipals').")
-    ncomp <- max(as.integer(sub("PC", "", c(pc_x, pc_y))))
-    res <- nipals::nipals(
-      t(df),
-      ncomp = ncomp,
-      center = TRUE,
-      scale = TRUE,
-      maxiter = 500,
-      startcol = function(x) sum(!is.na(x))
-    )
-    scores <- res$scores %*% diag(res$eig)
-    colnames(scores) <- paste0("PC", seq_len(ncol(scores)))
-    pca_df <- scores %>%
-      as.data.frame() %>%
-      rownames_to_column(quantitative_col_name) %>%
-      left_join(batch_info, by = quantitative_col_name)
-    var_expl <- res$eig^2 / sum(res$eig^2)
-    names(var_expl) <- paste0("PC", seq_along(var_expl))
-  } else if (use_gram) {
+  if (use_gram) {
     pca <- gram_pca_scores(df, pc_x = pc_x, pc_y = pc_y)
     pca_df <- pca$scores %>%
       as.data.frame() %>%
@@ -185,52 +157,6 @@ plots_normtumor <- function(expr, metadata, i, dataset){
 
 
 
-umap_plot <- function(
-  df, metadata, 
-  title = "UMAP Projection", 
-  color_column = "study_accession", 
-  shape_column = "class",
-  quantitative_col_name = 'sample',
-  show_legend = TRUE,
-  path = "", cbPalette=NULL) {
-  
-  # Perform UMAP on the transposed data
-  umap_result <- umap(t(na.omit(df)))
-  
-  # Convert the UMAP result into a data frame and merge with metadata
-  umap_data <- umap_result$layout %>%
-    as.data.frame() %>%
-    setNames(c("X1", "X2")) %>% 
-    rownames_to_column(quantitative_col_name) %>% 
-    left_join(metadata, by = quantitative_col_name) %>%
-    column_to_rownames(quantitative_col_name)
-
-  plot_result <- ggplot(umap_data, build_scatter_mapping("X1", "X2", color_column, shape_column)) +
-    geom_point(size = 2) +
-    theme_minimal()
-
-  if (!is.null(cbPalette)) {
-    plot_result <- plot_result + scale_color_manual(values = cbPalette)
-
-  }
-  
-  plot_result <- plot_result +
-    labs(
-      title = title, 
-      x = "UMAP 1", 
-      y = "UMAP 2", 
-      color = "cohorts"  # Update legend label
-    ) +
-    guides(color = guide_legend(override.aes = list(size = 3))) # Ensure legend accurately represents centroids
-  
-  if (!show_legend) {
-    plot_result <- plot_result + 
-      theme(legend.position = "none")
-  }
-    
-  save_plot_if_requested(plot_result, path)
-}
-
 # boxplot
 boxplot_plot <- function(matrix, metadata_df, quantitativeColumnName, color_col, title, path="",
                          remove_xnames=FALSE) {
@@ -251,49 +177,6 @@ boxplot_plot <- function(matrix, metadata_df, quantitativeColumnName, color_col,
   save_plot_if_requested(boxplot, path)
 }
 
-boxplot_plot_groupped <- function(matrix, metadata_df, quantitativeColumnName, color_col, title, path="",
-                         remove_xnames=FALSE, y_limits=NULL,
-                         show_legend=TRUE, cbPalette=NULL) {
-  merged_data <- prepare_intensity_plot_data(matrix, metadata_df, quantitativeColumnName)
-  
-  # Group by color_col
-  merged_data_grouped <- merged_data %>%
-    group_by(.data[[color_col]])
-  
-  # Log transformed scale
-  boxplot <- ggplot(merged_data_grouped, aes(x = .data[[color_col]], y = Intensity, fill = .data[[color_col]])) + 
-    geom_violin(trim = FALSE) +
-    stat_summary(fun = median, geom = "crossbar", width = 0.35, color = "black", position = position_dodge(width = 0.2)) +
-    stat_summary(fun = mean, geom = "point", shape = 4, size = 3, color = "darkred") +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
-    # adjust font size for the x-axis
-    theme(axis.text.x = element_text(size = 8)) +
-    labs(title = title) +
-    guides(fill = guide_legend(override.aes = list(shape = NA, linetype = 0)))
-
-  if(remove_xnames){
-    boxplot <- boxplot + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
-  }
-
-  if (!is.null(y_limits)) {
-    boxplot <- boxplot + coord_cartesian(ylim = y_limits)
-  }
-
-  if (!is.null(cbPalette)) {
-    boxplot <- boxplot + scale_fill_manual(values = cbPalette)
-  }
-
-
-  if(!show_legend){
-    boxplot <- boxplot + theme(legend.position = "none")
-  }
-
-  save_plot_if_requested(boxplot, path)
-}
-
-
-
 plotIntensityDensity <- function(
     intensities_df, metadata_df, quantitativeColumnName, colorColumnName, title, path=""
 ) {
@@ -312,28 +195,13 @@ plotIntensityDensity <- function(
 }
 
 
-heatmap_plot <- function(pg_matrix, batch_info, name, condition="condition", lab="lab"){
-    cor_matrix <- cor(na.omit(pg_matrix), use = "pairwise.complete.obs")
-    resulting_plot <- ggpubr::as_ggplot(grid::grid.grabExpr(
-        pheatmap::pheatmap(cor_matrix, 
-                        annotation_col = select(batch_info, c(condition, lab)),
-                        treeheight_row = 0, treeheight_col = 0, 
-                        main = paste0(name, ' heatmap')
-        )
-      )
-    )
-    return(resulting_plot)
-}
-
-
-plots_multiple <- function(intensities, metadata, name, simulated = FALSE, use_nipals = FALSE){
+plots_multiple <- function(intensities, metadata, name){
 
   pca_plot_study <- pca_plot(
       intensities, metadata,
       title = name,
       quantitative_col_name = 'file',
-      col_col = "lab", shape_col = "condition",
-      use_nipals = use_nipals)
+      col_col = "lab", shape_col = "condition")
 
   density_plot <- plotIntensityDensity(
       intensities, metadata,
@@ -341,34 +209,51 @@ plots_multiple <- function(intensities, metadata, name, simulated = FALSE, use_n
       colorColumnName = 'lab',
       title = name)
 
-  if (simulated) {
-    boxplot <- boxplot_plot_groupped(
-        intensities, metadata,
-        title = name,
-        color_col = 'lab', quantitativeColumnName = 'file',
-        path = '')
+  pca_plot_class <- pca_plot(
+      intensities, metadata,
+      title = name,
+      quantitative_col_name = 'file',
+      shape_col = "lab", col_col = "condition")
 
-    layout <- pca_plot_study /
-                boxplot /
-                density_plot
-  } else {
-    pca_plot_class <- pca_plot(
-        intensities, metadata,
-        title = name,
-        quantitative_col_name = 'file',
-        shape_col = "lab", col_col = "condition",
-        use_nipals = use_nipals)
+  boxplot <- boxplot_plot(
+      intensities, metadata,
+      title = name,
+      color_col = 'lab', quantitativeColumnName = 'file',
+      path = '')
 
-    boxplot <- boxplot_plot(
-        intensities, metadata,
-        title = name,
-        color_col = 'lab', quantitativeColumnName = 'file',
-        path = '')
-
-    layout <- (pca_plot_class | pca_plot_study) /
-                boxplot /
-                density_plot
-  }
+  layout <- (pca_plot_class | pca_plot_study) /
+              boxplot /
+              density_plot
 
   return(layout)
+}
+
+# Saves a diagnostic panel per (modality, state): PCA by batch, PCA by donor,
+# sample boxplot coloured by batch, density by batch. Metadata needs file,
+# batch_code and condition columns (Quartet multiomics layout).
+plot_diagnostics <- function(expr, metadata, modality, state_label, plots_dir) {
+  pca_batch <- pca_plot(expr, metadata,
+    title = paste(modality, state_label, "by batch"),
+    quantitative_col_name = "file", col_col = "batch_code", shape_col = "condition",
+    point_size = 2.5)
+
+  pca_condition <- pca_plot(expr, metadata,
+    title = paste(modality, state_label, "by donor"),
+    quantitative_col_name = "file", col_col = "condition", shape_col = "batch_code",
+    point_size = 2.5)
+
+  box_by_batch <- boxplot_plot(expr, metadata,
+    quantitativeColumnName = "file", color_col = "batch_code",
+    title = paste(modality, state_label, "batch distributions"),
+    remove_xnames = TRUE)
+
+  density_by_batch <- plotIntensityDensity(expr, metadata,
+    quantitativeColumnName = "file", colorColumnName = "batch_code",
+    title = paste(modality, state_label))
+
+  layout <- (pca_batch | pca_condition) / box_by_batch / density_by_batch
+  out_path <- file.path(plots_dir, paste0(modality, "_limma_", state_label, "_diagnostics.png"))
+  ggsave(out_path, layout, width = 14, height = 16, bg = "white")
+
+  tibble(modality = modality, state = state_label, pca_features = nrow(na.omit(expr)))
 }
