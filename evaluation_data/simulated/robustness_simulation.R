@@ -356,7 +356,11 @@ fingerprint <- function() {
              file.path("evaluation_utils", c("simulation_func.R", "filtering.R",
                                              "evaluation_funcs.R",
                                              "fedRBE_simulation_scrip_simdata.py")),
-             file.path("batchcorrection", "classes", c("client.py", "coordinator_utils.py")),
+             file.path("batchcorrection", c("fedrbe.py", "classes/client.py",
+                                            "classes/coordinator_utils.py")),
+             file.path("evaluation_classification_after_correction", "fc_fed_forest_simple_app",
+                       "fc_fedlearnsim_helper",
+                       c("localfedlearningsimulator.py", "run_app_simulation.py")),
              "pixi.lock")
   files <- files[file.exists(file.path(repo, files))]
   c(paste("params:", paste(deparse(params), collapse = "")),
