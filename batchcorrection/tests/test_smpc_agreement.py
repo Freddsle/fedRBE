@@ -201,6 +201,7 @@ class SmpcAgreementTests(unittest.TestCase):
                 self.assertIs(protocol.gather_data.call_args.kwargs["use_smpc"], smpc)
                 self.assertEqual(solve.call_args.kwargs["xtx_error"],
                                  fedrbe.smpc_error_bound(smpc, len(cohorts)))
+                self.assertEqual(solve.call_args.kwargs["n_batch_columns"], 1)
                 beta_broadcast = protocol.broadcast_data.call_args
                 self.assertEqual(beta_broadcast.kwargs["memo"], "beta")
                 np.testing.assert_array_equal(beta_broadcast.args[0], [[3.]])

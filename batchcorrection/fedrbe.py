@@ -195,16 +195,17 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
         print("[compute_beta] gathering data")
         XtX_XtY_list = protocol.gather_data(use_smpc=smpc)
         print("[compute_beta] Got XtX_XtY_list from gather_data")
+        n_batch_columns = feature_presence_matrix.shape[1] - 1
         beta = compute_beta(XtX_XtY_list,
                             n=n,
                             k=k,
                             global_mask=global_mask,
-                            xtx_error=smpc_error_bound(smpc, len(protocol.clients)))
+                            xtx_error=smpc_error_bound(smpc, len(protocol.clients)),
+                            n_batch_columns=n_batch_columns)
 
         # send only the batch coefficients to the clients so they can correct
         # their data, the intercept and covariate coefficients stay with the
         # coordinator
-        n_batch_columns = feature_presence_matrix.shape[1] - 1
         print("[compute_beta] broadcasting batch coefficients")
         protocol.broadcast_data(batch_coefficients(beta, n_batch_columns),
                                 send_to_self=True,

@@ -66,7 +66,8 @@ def client_correction(clients, threshold):
         statistics.append((xtx, xty))
     n, k = len(features), clients[0].design.shape[1]
     beta = batch_coefficients(
-        compute_beta(statistics, n, k, create_beta_mask(presence, n, k)), presence.shape[1] - 1
+        compute_beta(statistics, n, k, create_beta_mask(presence, n, k),
+                     n_batch_columns=presence.shape[1] - 1), presence.shape[1] - 1
     )
     for client in clients:
         client.remove_batch_effects(beta)

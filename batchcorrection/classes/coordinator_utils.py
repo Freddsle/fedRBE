@@ -289,7 +289,7 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
 
 def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
                  n: int, k: int,
-                 global_mask: np.ndarray, xtx_error: float = 0.0
+                 global_mask: np.ndarray, xtx_error: float = 0.0, *, n_batch_columns: int
                  ) -> np.ndarray:
     """
     Gets a list of a List containing the XtX and XtY matrices from each client
@@ -301,6 +301,7 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
             XtX should be of shape n x k x k and XtY should be of shape n x k.
         xtx_error: Maximum absolute encoding error per aggregated XtX entry;
             zero for plaintext.
+        n_batch_columns: Number of batch columns, the trailing design columns.
         n: The expected number of features.
         k: The expected number of columns of the design matrix. Generally, is
             len(['intercept'] + [covariates] + [len(clients)-1])
@@ -328,16 +329,26 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         XtX_glob += XtX
         XtY_glob += XtY
 
-    # Solve XtX * beta = XtY only when the coefficients are numerically identifiable.
+    omitted = 0
+    # Solve XtX * beta = XtY only when the retained coefficients are identifiable.
     for i in range(0, n):
         # using the mask to remove the columns and rows that are not present
         mask = global_mask[i, :]
-        submatrix = XtX_glob[i, :, :][np.ix_(~mask, ~mask)]
+        columns = np.flatnonzero(~mask)
+        # Omit only zero/intercept-duplicate covariates in the received statistics.
+        # SMPC rounding can erase real variation; batch columns are never omitted here.
+        for column in range(1, k - n_batch_columns):
+            gram, target = XtX_glob[i, :, column], XtY_glob[i, column]
+            if ((gram == 0).all() and target == 0) or (
+                    (gram == XtX_glob[i, :, 0]).all() and target == XtY_glob[i, 0]):
+                columns = columns[columns != column]
+                omitted += 1
+        submatrix = XtX_glob[i][np.ix_(columns, columns)]
             # submatrix is of dimension (k, K)
             # we only take the rows and columns where the mask is set to
             # False (~ -> not mask)
 
-        if not np.isfinite(submatrix).all() or not np.isfinite(XtY_glob[i, ~mask]).all():
+        if not np.isfinite(submatrix).all() or not np.isfinite(XtY_glob[i, columns]).all():
             raise ValueError(f"Non-finite regression statistics for feature index {i}; check data and covariates.")
         singular_values = linalg.svd(submatrix, compute_uv=False)
         # Convert the per-entry error bound to a matrix error bound.
@@ -347,8 +358,10 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
                 f"Cannot reliably fit feature index {i}: rank-deficient design or insufficient "
                 "numerical precision; check collinearity, missing observations and covariate scaling."
             )
-        beta[i, ~mask] = linalg.solve(submatrix, XtY_glob[i, ~mask])
+        beta[i, columns] = linalg.solve(submatrix, XtY_glob[i, columns])
 
+    if omitted:
+        print(f"INFO: Omitted {omitted} constant covariate coefficients.")
     return beta
 
 
