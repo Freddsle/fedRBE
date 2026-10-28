@@ -26,7 +26,7 @@ or regenerate the analysis stages you need.
   - [4. Optional dataset diagnostics](#4-optional-dataset-diagnostics)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-  - [7. Generate Figures 3, 4 and S5 for each correction arm](#7-generate-figures-3-4-and-s5-for-each-correction-arm)
+  - [7. Generate Figures 3, 4, S5 and S7 for each correction arm](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
@@ -144,7 +144,7 @@ Recommended order:
 5. Run the [classification](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    and [clustering](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    analyses, or inspect their available saved results.
-6. [Generate Figures 3, 4 and S5](#7-generate-figures-3-4-and-s5-for-each-correction-arm).
+6. [Generate Figures 3, 4, S5 and S7](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
 
 Paths below are relative to the repository root. Run shell commands there unless
 another working directory is specified. Run notebook kernels from the directory
@@ -455,7 +455,7 @@ arbitrary cluster names. `classification_scores_from_confusion(matrix)` scores
 counts whose true rows and predicted columns share class order.
 Add metrics to the appropriate helper; experiment writers select which to save.
 
-### 7. Generate Figures 3, 4 and S5 for each correction arm
+### 7. Generate Figures 3, 4, S5 and S7 for each correction arm
 
 After batch correction, run from the repository root. Figure 4 also requires the
 classification and clustering results from Steps 5 and 6, including the shared-panel
@@ -471,9 +471,26 @@ for arm in label_aware no_label; do
 done
 ```
 
-Outputs: `figures/figure3_<arm>.png`, `figures/figure4_<arm>.png` and
-`figures/figureS5_<arm>.png`. Figures 3 and S5 also write matching `_variance.tsv`
-files containing median variance fractions and feature counts.
+Outputs: `figures/figure3_<arm>.png`, `figures/figure4_<arm>.png`,
+`figures/figureS5_<arm>.png` and `figures/figureS7_<arm>.png`. Figures 3 and S5 also
+write matching `_variance.tsv` files containing median variance fractions and feature
+counts. `aggregate_figure4.R` writes Figure S7 and the test results
+`figures/figure4_<arm>_statistics.tsv` together with Figure 4.
+
+#### Statistics in Figure 4 and S7
+
+Brackets compare the four scenarios within each dataset (Figure 4a ARI and 4c
+train/test MCC) or each held-out cohort (Figure S7, leave-one-cohort-out MCC). The data
+points are the 10 seeds of each scenario. Figure 4b shows no tests; its per-cohort
+tests are in Figure S7.
+
+- Central before vs after correction, and federated before vs after correction: exact
+  two-sided sign-flip permutation test on the differences of runs with the same seed.
+- Central vs federated, before and after correction: exact two-sided two-sample
+  permutation test on the difference in means.
+
+`*` marks p < 0.05; p-values are not corrected for multiple testing. The table also
+lists each mean difference with its 95% bootstrap confidence interval.
 
 Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
 shared complete-case panel, up to 5,000 features per dataset or Quartet layer.

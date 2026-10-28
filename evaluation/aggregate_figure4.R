@@ -10,8 +10,12 @@
 # Each arm and feature space writes its own PNG under figures/.
 # FIGURE4_ARI_TABLE, FIGURE4_RF_REPORT and FIGURE4_OUTPUT override the source and
 # output paths; an output path ending in .svg writes an SVG.
+# The panel feature space also writes the permutation-test table
+# (<output>_statistics.tsv), significance brackets in panels a and c, and Figure S7
+# (leave-one-cohort-out per held-out cohort) next to the Figure 4 output.
 
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
+source(file.path("evaluation_utils", "figure4_statistics.R"))
 require_figure4_packages()
 
 # Source and output files: Figure 4a uses the multi-run clustering ARI table.
@@ -108,6 +112,7 @@ point_size <- 1.05
 
 figure_width <- 7.5
 figure_height <- 8.5
+figureS7_height <- 10
 figure_dpi <- 600
 
 # Load data: the two canonical source tables. Select the matching correction arm
@@ -150,6 +155,25 @@ figure4_data <- prepare_figure4_plot_data(
   seeds_per_group = ari_seeds_per_group
 )
 
+# Statistics for the panel feature space only: exact permutation tests over seeds per
+# dataset (panels a and c) and per held-out cohort (Figure S7). Panel b has no tests.
+
+with_statistics <- FIGURE4_FEATURE_SPACE == "panel"
+figure4_annotations <- NULL
+statistics_caption <- NULL
+if (with_statistics) {
+  figure4_stats <- compute_figure4_statistics(figure4_data, CORRECTION_ARM)
+  statistics_path <- write_figure4_statistics(
+    figure4_stats, paste0(tools::file_path_sans_ext(output_path), "_statistics.tsv")
+  )
+  cat("Saved Figure 4 and S7 statistics to", statistics_path, "\n")
+  figure4_annotations <- list(
+    ari = figure4_annotation_data(figure4_stats, "4a ARI"),
+    split = figure4_annotation_data(figure4_stats, "4c train/test")
+  )
+  statistics_caption <- figure4_statistics_caption()
+}
+
 # Build the plot.
 
 figure4_plot <- make_figure4_plot(
@@ -161,7 +185,9 @@ figure4_plot <- make_figure4_plot(
   scenario_colors = scenario_colors,
   point_size = point_size,
   clustering_feature_label = clustering_feature_label,
-  classification_feature_label = classification_feature_label
+  classification_feature_label = classification_feature_label,
+  annotations = figure4_annotations,
+  annotation_caption = statistics_caption
 )
 
 figure4_plot$panels[[1]] <- figure4_plot$panels[[1]] + ggplot2::labs(
@@ -179,3 +205,44 @@ saved_path <- save_grid_png(
 )
 
 cat("Saved Figure 4 to", saved_path, "\n")
+
+# Figure S7: the panel b scores per held-out cohort, with the per-cohort tests.
+# It uses the Figure 4 output's directory and format.
+
+if (with_statistics) {
+  figureS7_tasks <- observed_levels(figure4_data$leave_one_cohort_out$Task, classification_task_order)
+  figureS7_annotations <- stats::setNames(lapply(figureS7_tasks, function(task) {
+    figure4_annotation_data(figure4_stats, "S7 LOCO", dataset = one_line(task))
+  }), figureS7_tasks)
+  figureS7_plot <- make_figureS7_plot(
+    loo_data = figure4_data$leave_one_cohort_out,
+    task_order = classification_task_order,
+    scenario_order = scenario_order,
+    scenario_colors = scenario_colors,
+    point_size = point_size,
+    feature_label = classification_feature_label,
+    annotations = figureS7_annotations,
+    annotation_caption = statistics_caption
+  )
+  figureS7_plot$panels[[1]] <- figureS7_plot$panels[[1]] + ggplot2::labs(
+    title = paste(
+      paste(correction_arm_titles[[CORRECTION_ARM]], "RF leave-one-cohort-out per held-out cohort",
+            sep = " · "),
+      figureS7_plot$panels[[1]]$labels$title,
+      sep = "\n"
+    )
+  )
+  figureS7_extension <- tools::file_ext(output_path)
+  figureS7_path <- file.path(
+    dirname(output_path),
+    paste0("figureS7_", CORRECTION_ARM, ".", if (nzchar(figureS7_extension)) figureS7_extension else "png")
+  )
+  saved_path <- save_grid_png(
+    function() draw_figure4(figureS7_plot),
+    output_path = figureS7_path,
+    width = figure_width,
+    height = figureS7_height,
+    dpi = figure_dpi
+  )
+  cat("Saved Figure S7 to", saved_path, "\n")
+}

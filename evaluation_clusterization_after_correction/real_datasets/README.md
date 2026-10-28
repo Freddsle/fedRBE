@@ -144,4 +144,4 @@ selects ordinary metrics/reports and `figures/figure4_all_features_<arm>.png`.
 `CORRECTION_ARM` chooses the arm. `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and
 `FIGURE4_OUTPUT` override paths relative to the repository root or absolutely;
 keep overrides consistent with the feature-space label. See the
-[figure-rendering commands](../../docs/reproduce.md#7-generate-figures-3-4-and-s5-for-each-correction-arm).
+[figure-rendering commands](../../docs/reproduce.md#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
