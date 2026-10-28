@@ -70,6 +70,16 @@ class InputGuardTests(unittest.TestCase):
                 error = client.create_design(["local|first", "local|second"])
                 self.assertRegex(error, "Covariate 'cov'.*finite")
 
+    def test_covariate_variation_below_smpc_precision_is_rejected(self):
+        # SMPC rounding would make these covariates look constant 0 or 1 to the coordinator.
+        for values in ([0, 1e-16] * 4, [1, 1 + 1e-15] * 4):
+            with self.subTest(values=values):
+                self.design["cov"] = values
+                client = self.initialize()
+                self.assertIsNone(client.create_design(["local|first", "local|second"]))
+                self.assertFalse(client.compute_XtX_XtY()[2])
+                self.assertRegex(client.compute_XtX_XtY(3e-12)[2], "below the SMPC precision")
+
     def test_missing_batch_names_are_rejected(self):
         self.design.loc["s7", "batch"] = None
         with self.assertRaisesRegex(ValueError, "Batch.*missing"):

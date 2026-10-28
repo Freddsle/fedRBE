@@ -162,7 +162,7 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
     client.n_samples = len(client.sample_names)
 
     # compute XtX and XtY
-    XtX, XtY, err = client.compute_XtX_XtY()
+    XtX, XtY, err = client.compute_XtX_XtY(smpc_error_bound(smpc, len(protocol.clients)))
     if err:
         raise RuntimeError(f"Error in compute_XtX_XtY: {err}")
 

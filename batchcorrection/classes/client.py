@@ -606,9 +606,12 @@ class Client:
         return None
 
     ####### limma: linear regression #########
-    def compute_XtX_XtY(self) -> Tuple[np.ndarray, np.ndarray, str]:
+    def compute_XtX_XtY(self, xtx_error: float = 0.0) -> Tuple[np.ndarray, np.ndarray, str]:
         """
         Computes the XtX and XtY matrices for the linear regression.
+        Args:
+            xtx_error: SMPC encoding error bound per aggregated XtX entry, zero
+                without SMPC.
         Returns:
             Returns a tuple of (XtX, XtY, Error) where
             - XtX is the XtX matrix of shape k x k
@@ -643,6 +646,15 @@ class Client:
                 y = y[non_nan_idxs]
                 XtX[feature_idx, :, :] = x.T @ x
                 XtY[feature_idx, :] = x.T @ y
+
+        # Stop if SMPC rounding could turn a varying covariate into the constant
+        # 0 or 1 column compute_beta omits; sum((x-1)^2) spans 4 XtX entries.
+        covariates = X[:, 1:1 + len(self.variables or [])]
+        present = np.isfinite(Y).astype(float)
+        for distance in (present @ covariates ** 2, present @ (covariates - 1) ** 2):
+            if ((distance > 0) & (distance <= 4 * xtx_error)).any():
+                return XtX, XtY, ("Covariate variation is below the SMPC precision; "
+                                  "rescale covariates or set smpc: false.")
 
         return XtX, XtY, ""
 
