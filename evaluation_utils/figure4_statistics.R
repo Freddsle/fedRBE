@@ -5,9 +5,9 @@
 # one held-out cohort, using the seeds as data points. Before/after correction
 # share a seed (and, for train/test, the split), so those contrasts are paired;
 # central and federated runs are different algorithms and are compared unpaired.
-# p-values are two-sided and not corrected for multiple testing. They are exact: all
-# arrangements of the midranks are enumerated, because ties and zero differences are
-# common here and standard implementations then fall back to a normal approximation.
+# p-values are two-sided and not corrected for multiple testing. They are exact on
+# midranks and come from the coin package, because ties and zero differences are
+# common here and stats::wilcox.test() then has no exact p-value and no Pratt's method.
 # Requires figure_aggregate_utils.R for figure4_scenarios().
 
 # Values closer than this count as equal, so floating-point noise is no difference.
@@ -21,12 +21,6 @@ figure4_min_difference <- 0.05
 
 figure4_marker <- function(p) {
   ifelse(p < 0.05, "*", "n.s.")
-}
-
-
-# Midranks; rounding keeps floating-point noise from breaking ties.
-figure4_midranks <- function(values) {
-  rank(round(values, 10), ties.method = "average")
 }
 
 
@@ -47,44 +41,23 @@ figure4_contrasts <- function() {
 
 
 # Exact Wilcoxon signed-rank test with Pratt's method: zero differences take part in
-# the ranking, but only the ranks of non-zero differences are summed.
-wilcoxon_pratt_exact <- function(diff, max_pairs = 20) {
-  diff[abs(diff) <= figure4_statistics_tolerance] <- 0
-  ranks <- figure4_midranks(abs(diff))
-  non_zero <- diff != 0
-  if (!any(non_zero)) return(1)
-  if (sum(non_zero) > max_pairs) {
-    stop("Exact Wilcoxon enumeration supports at most ", max_pairs, " non-zero pairs",
-         call. = FALSE)
-  }
-  ranks <- ranks[non_zero]
-  signs <- as.matrix(expand.grid(rep(list(c(-1, 1)), length(ranks))))
-  null <- abs(drop(signs %*% ranks))
-  mean(null >= abs(sum(sign(diff[non_zero]) * ranks)) - figure4_statistics_tolerance)
+# the ranking, but only the ranks of non-zero differences are summed. Rounding keeps
+# floating-point noise from breaking ties. coin cannot test all-zero differences.
+wilcoxon_pratt_exact <- function(diff) {
+  diff <- round(diff, 10)
+  if (all(diff == 0)) return(1)
+  as.numeric(coin::pvalue(coin::wilcoxsign_test(
+    diff ~ numeric(length(diff)), zero.method = "Pratt", distribution = "exact"
+  )))
 }
 
 
-# All splits of n values into groups of k, cached because every Figure 4 group has
-# the same size (choose(20, 10) = 184,756 splits).
-figure4_split_cache <- new.env(parent = emptyenv())
-figure4_splits <- function(n, k) {
-  key <- paste(n, k)
-  if (is.null(figure4_split_cache[[key]])) {
-    figure4_split_cache[[key]] <- utils::combn(n, k)
-  }
-  figure4_split_cache[[key]]
-}
-
-
-# Exact Mann-Whitney U test: the rank sum of `a` against its expectation under all
-# splits of the pooled midranks. U and the rank sum differ only by a constant.
+# Exact Mann-Whitney U test on the pooled midranks. coin cannot test identical values.
 mann_whitney_exact <- function(a, b) {
-  ranks <- figure4_midranks(c(a, b))
-  k <- length(a)
-  splits <- figure4_splits(length(ranks), k)
-  expected <- k * (length(ranks) + 1) / 2
-  null <- abs(colSums(matrix(ranks[splits], nrow = k)) - expected)
-  mean(null >= abs(sum(ranks[seq_len(k)]) - expected) - figure4_statistics_tolerance)
+  values <- round(c(a, b), 10)
+  if (length(unique(values)) == 1) return(1)
+  group <- factor(rep(c("a", "b"), c(length(a), length(b))))
+  as.numeric(coin::pvalue(coin::wilcox_test(values ~ group, distribution = "exact")))
 }
 
 

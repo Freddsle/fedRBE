@@ -6,7 +6,7 @@ require_figure_packages <- function(required = c("tidyverse", "ggplot2", "grid",
 }
 
 
-require_figure4_packages <- function(required = c("ggplot2", "grid", "gtable", "rlang")) {
+require_figure4_packages <- function(required = c("coin", "ggplot2", "grid", "gtable", "rlang")) {
   require_figure_packages(required)
 }
 

@@ -117,7 +117,7 @@ or regenerate the analysis stages you need.
    sections. Install them with:
 
    ```bash
-   Rscript -e 'install.packages(c("data.table","gridExtra","ggtext","glue","IRkernel","jsonlite","knitr","patchwork","reshape2","scales","tidyverse"), repos="https://cloud.r-project.org")'
+   Rscript -e 'install.packages(c("coin","data.table","gridExtra","ggtext","glue","IRkernel","jsonlite","knitr","patchwork","reshape2","scales","tidyverse"), repos="https://cloud.r-project.org")'
    Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("AnnotationDbi","affy","GEOquery","GO.db","hgu133acdf","hgu133plus2cdf","impute","limma","variancePartition"), ask=FALSE, update=FALSE)'
    Rscript -e 'BiocManager::install("preprocessCore", configure.args=c(preprocessCore="--disable-threading"), type="source", force=TRUE, ask=FALSE, update=FALSE)'
    Rscript -e 'install.packages("WGCNA", repos="https://cloud.r-project.org")'
@@ -489,8 +489,8 @@ tests are in Figure S7.
   differences.
 - Central vs federated, before and after correction: two-sided Mann-Whitney U test.
 
-p-values are exact, computed by enumerating the midranks because the scores contain
-many ties, and are not corrected for multiple testing. `*` marks p < 0.05. Seeds only
+p-values are exact on midranks, computed with the R package `coin` because the scores
+contain many ties, and are not corrected for multiple testing. `*` marks p < 0.05. Seeds only
 vary algorithmic randomness, so constant groups make even negligible differences
 significant: the table's `relevant` column is `FALSE` for absolute mean differences
 below 0.05, and `aggregate_figure4.R` prints those contrasts. The table also lists group
