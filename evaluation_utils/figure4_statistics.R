@@ -1,25 +1,32 @@
-# Exact permutation tests and effect sizes for Figure 4 (4a ARI, 4c train/test) and
-# Figure S7 (RF leave-one-cohort-out per held-out cohort).
+# Wilcoxon signed-rank and Mann-Whitney U tests and effect sizes for Figure 4 (4a ARI,
+# 4c train/test) and Figure S7 (RF leave-one-cohort-out per held-out cohort).
 #
 # Each contrast compares two of the four Figure 4 scenarios within one dataset or
 # one held-out cohort, using the seeds as data points. Before/after correction
 # share a seed (and, for train/test, the split), so those contrasts are paired;
 # central and federated runs are different algorithms and are compared unpaired.
-# p-values are exact, two-sided and not corrected for multiple testing.
+# p-values are two-sided and not corrected for multiple testing. They are exact: all
+# arrangements of the midranks are enumerated, because ties and zero differences are
+# common here and standard implementations then fall back to a normal approximation.
 # Requires figure_aggregate_utils.R for figure4_scenarios().
 
 # Values closer than this count as equal, so floating-point noise is no difference.
 figure4_statistics_tolerance <- 1e-10
 
-# Smallest ARI/MCC mean difference counted as relevant. Seeds only vary algorithmic
-# randomness, so constant groups make even negligible differences significant.
+# Smallest ARI/MCC mean difference counted as relevant. It only flags effects in the
+# table: seeds vary algorithmic randomness alone, so constant groups make even
+# negligible differences significant. Tests and bracket markers do not use it.
 figure4_min_difference <- 0.05
 
 
-# Bracket marker: `*` for a significant and relevant difference, `n.s.` otherwise.
-figure4_marker <- function(p, diff) {
-  relevant <- abs(diff) >= figure4_min_difference - figure4_statistics_tolerance
-  ifelse(p < 0.05 & relevant, "*", "n.s.")
+figure4_marker <- function(p) {
+  ifelse(p < 0.05, "*", "n.s.")
+}
+
+
+# Midranks; rounding keeps floating-point noise from breaking ties.
+figure4_midranks <- function(values) {
+  rank(round(values, 10), ties.method = "average")
 }
 
 
@@ -39,18 +46,21 @@ figure4_contrasts <- function() {
 }
 
 
-# Exact sign-flip test of paired differences; the statistic is their sum.
-# Zero differences contribute nothing under any sign, so they are dropped first.
-perm_test_paired <- function(diff, max_pairs = 20) {
-  diff <- diff[abs(diff) > figure4_statistics_tolerance]
-  if (!length(diff)) return(1)
-  if (length(diff) > max_pairs) {
-    stop("Exact sign-flip enumeration supports at most ", max_pairs, " non-zero pairs",
+# Exact Wilcoxon signed-rank test with Pratt's method: zero differences take part in
+# the ranking, but only the ranks of non-zero differences are summed.
+wilcoxon_pratt_exact <- function(diff, max_pairs = 20) {
+  diff[abs(diff) <= figure4_statistics_tolerance] <- 0
+  ranks <- figure4_midranks(abs(diff))
+  non_zero <- diff != 0
+  if (!any(non_zero)) return(1)
+  if (sum(non_zero) > max_pairs) {
+    stop("Exact Wilcoxon enumeration supports at most ", max_pairs, " non-zero pairs",
          call. = FALSE)
   }
-  signs <- as.matrix(expand.grid(rep(list(c(-1, 1)), length(diff))))
-  null <- abs(drop(signs %*% abs(diff)))
-  mean(null >= abs(sum(diff)) - figure4_statistics_tolerance)
+  ranks <- ranks[non_zero]
+  signs <- as.matrix(expand.grid(rep(list(c(-1, 1)), length(ranks))))
+  null <- abs(drop(signs %*% ranks))
+  mean(null >= abs(sum(sign(diff[non_zero]) * ranks)) - figure4_statistics_tolerance)
 }
 
 
@@ -66,14 +76,15 @@ figure4_splits <- function(n, k) {
 }
 
 
-# Exact two-sample permutation test of the difference in means.
-perm_test_unpaired <- function(a, b) {
-  values <- c(a, b)
+# Exact Mann-Whitney U test: the rank sum of `a` against its expectation under all
+# splits of the pooled midranks. U and the rank sum differ only by a constant.
+mann_whitney_exact <- function(a, b) {
+  ranks <- figure4_midranks(c(a, b))
   k <- length(a)
-  splits <- figure4_splits(length(values), k)
-  sum_a <- colSums(matrix(values[splits], nrow = k))
-  null <- abs(sum_a / k - (sum(values) - sum_a) / length(b))
-  mean(null >= abs(mean(a) - mean(b)) - figure4_statistics_tolerance)
+  splits <- figure4_splits(length(ranks), k)
+  expected <- k * (length(ranks) + 1) / 2
+  null <- abs(colSums(matrix(ranks[splits], nrow = k)) - expected)
+  mean(null >= abs(sum(ranks[seq_len(k)]) - expected) - figure4_statistics_tolerance)
 }
 
 
@@ -131,9 +142,9 @@ unit_statistics <- function(data, value_col, seed_col) {
     values_b <- b[[value_col]]
     ci <- bootstrap_ci(values_a, values_b, contrast$paired)
     p <- if (contrast$paired) {
-      perm_test_paired(values_b - values_a)
+      wilcoxon_pratt_exact(values_b - values_a)
     } else {
-      perm_test_unpaired(values_a, values_b)
+      mann_whitney_exact(values_a, values_b)
     }
     diff <- mean(values_b) - mean(values_a)
     data.frame(
@@ -141,9 +152,10 @@ unit_statistics <- function(data, value_col, seed_col) {
       group_a = contrast$group_a, group_b = contrast$group_b, paired = contrast$paired,
       n_a = length(values_a), n_b = length(values_b),
       mean_a = mean(values_a), mean_b = mean(values_b),
+      sd_a = stats::sd(values_a), sd_b = stats::sd(values_b),
       diff = diff, ci95_low = ci[[1]], ci95_high = ci[[2]], p_raw = p,
       relevant = abs(diff) >= figure4_min_difference - figure4_statistics_tolerance,
-      marker = figure4_marker(p, diff),
+      marker = figure4_marker(p),
       note = contrast_note(values_a, values_b, contrast$paired),
       stringsAsFactors = FALSE
     )
@@ -219,8 +231,15 @@ write_figure4_statistics <- function(stats, output_path) {
 }
 
 
-# Brackets for one panel (and, for S7, one dataset), labelled by figure4_marker().
-figure4_annotation_data <- function(stats, panel, dataset = NULL, p_column = "p_raw") {
+# Significant contrasts whose mean difference is below figure4_min_difference.
+figure4_negligible_effects <- function(stats) {
+  columns <- c("panel", "dataset", "cohort", "contrast", "diff", "p_raw")
+  stats[stats$p_raw < 0.05 & !stats$relevant, columns, drop = FALSE]
+}
+
+
+# Brackets for one panel (and, for S7, one dataset), labelled with the table's marker.
+figure4_annotation_data <- function(stats, panel, dataset = NULL) {
   rows <- stats[stats$panel == panel, , drop = FALSE]
   if (!is.null(dataset)) rows <- rows[rows$dataset == dataset, , drop = FALSE]
   if (!nrow(rows)) stop("No statistics for panel ", panel, call. = FALSE)
@@ -228,13 +247,13 @@ figure4_annotation_data <- function(stats, panel, dataset = NULL, p_column = "p_
   data.frame(
     x_level = rows$x_level, contrast = rows$contrast, level = levels,
     group_a = rows$group_a, group_b = rows$group_b,
-    label = figure4_marker(rows[[p_column]], rows$diff),
+    label = rows$marker,
     stringsAsFactors = FALSE
   )
 }
 
 
 figure4_statistics_caption <- function() {
-  paste0("Brackets: * p < 0.05 and |difference| ≥ ", figure4_min_difference,
-         ", n.s. otherwise; exact permutation tests over seeds (uncorrected)")
+  paste("Brackets: * p < 0.05, n.s. otherwise;",
+        "exact Wilcoxon signed-rank (paired) and Mann-Whitney U tests over seeds (uncorrected)")
 }

@@ -10,7 +10,7 @@
 # Each arm and feature space writes its own PNG under figures/.
 # FIGURE4_ARI_TABLE, FIGURE4_RF_REPORT and FIGURE4_OUTPUT override the source and
 # output paths; an output path ending in .svg writes an SVG.
-# The panel feature space also writes the permutation-test table
+# The panel feature space also writes the test table
 # (<output>_statistics.tsv), significance brackets in panels a and c, and Figure S7
 # (leave-one-cohort-out per held-out cohort) next to the Figure 4 output.
 
@@ -155,7 +155,7 @@ figure4_data <- prepare_figure4_plot_data(
   seeds_per_group = ari_seeds_per_group
 )
 
-# Statistics for the panel feature space only: exact permutation tests over seeds per
+# Statistics for the panel feature space only: exact rank tests over seeds per
 # dataset (panels a and c) and per held-out cohort (Figure S7). Panel b has no tests.
 
 with_statistics <- FIGURE4_FEATURE_SPACE == "panel"
@@ -167,6 +167,8 @@ if (with_statistics) {
     figure4_stats, paste0(tools::file_path_sans_ext(output_path), "_statistics.tsv")
   )
   cat("Saved Figure 4 and S7 statistics to", statistics_path, "\n")
+  cat("Significant contrasts with |mean difference| <", figure4_min_difference, ":\n")
+  print(figure4_negligible_effects(figure4_stats), row.names = FALSE, digits = 3)
   figure4_annotations <- list(
     ari = figure4_annotation_data(figure4_stats, "4a ARI"),
     split = figure4_annotation_data(figure4_stats, "4c train/test")

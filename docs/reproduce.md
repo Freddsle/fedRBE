@@ -484,16 +484,17 @@ train/test MCC) or each held-out cohort (Figure S7, leave-one-cohort-out MCC). T
 points are the 10 seeds of each scenario. Figure 4b shows no tests; its per-cohort
 tests are in Figure S7.
 
-- Central before vs after correction, and federated before vs after correction: exact
-  two-sided sign-flip permutation test on the differences of runs with the same seed.
-- Central vs federated, before and after correction: exact two-sided two-sample
-  permutation test on the difference in means.
+- Central before vs after correction, and federated before vs after correction:
+  two-sided Wilcoxon signed-rank test paired by seed, with Pratt's method for zero
+  differences.
+- Central vs federated, before and after correction: two-sided Mann-Whitney U test.
 
-`*` marks p < 0.05 with an absolute mean difference of at least 0.05; smaller
-differences are not considered relevant, because seeds only vary algorithmic randomness
-and constant groups make even negligible differences significant. p-values are not
-corrected for multiple testing. The table also lists each mean difference with its 95%
-bootstrap confidence interval.
+p-values are exact, computed by enumerating the midranks because the scores contain
+many ties, and are not corrected for multiple testing. `*` marks p < 0.05. Seeds only
+vary algorithmic randomness, so constant groups make even negligible differences
+significant: the table's `relevant` column is `FALSE` for absolute mean differences
+below 0.05, and `aggregate_figure4.R` prints those contrasts. The table also lists group
+means and SDs, each mean difference and its 95% bootstrap confidence interval.
 
 Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
 shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
