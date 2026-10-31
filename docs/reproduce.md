@@ -26,7 +26,7 @@ or regenerate the analysis stages you need.
   - [4. Optional dataset diagnostics](#4-optional-dataset-diagnostics)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-  - [7. Generate Figures 3, 4 and S5 for each correction arm](#7-generate-figures-3-4-and-s5-for-each-correction-arm)
+  - [7. Generate Figures 3, 4, S5 and S7 for each correction arm](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
@@ -117,7 +117,7 @@ or regenerate the analysis stages you need.
    sections. Install them with:
 
    ```bash
-   Rscript -e 'install.packages(c("data.table","gridExtra","ggtext","glue","IRkernel","jsonlite","knitr","patchwork","reshape2","scales","tidyverse"), repos="https://cloud.r-project.org")'
+   Rscript -e 'install.packages(c("coin","data.table","gridExtra","ggtext","glue","IRkernel","jsonlite","knitr","patchwork","reshape2","scales","tidyverse"), repos="https://cloud.r-project.org")'
    Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("AnnotationDbi","affy","GEOquery","GO.db","hgu133acdf","hgu133plus2cdf","impute","limma","variancePartition"), ask=FALSE, update=FALSE)'
    Rscript -e 'BiocManager::install("preprocessCore", configure.args=c(preprocessCore="--disable-threading"), type="source", force=TRUE, ask=FALSE, update=FALSE)'
    Rscript -e 'install.packages("WGCNA", repos="https://cloud.r-project.org")'
@@ -144,7 +144,7 @@ Recommended order:
 5. Run the [classification](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    and [clustering](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    analyses, or inspect their available saved results.
-6. [Generate Figures 3, 4 and S5](#7-generate-figures-3-4-and-s5-for-each-correction-arm).
+6. [Generate Figures 3, 4, S5 and S7](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
 
 Paths below are relative to the repository root. Run shell commands there unless
 another working directory is specified. Run notebook kernels from the directory
@@ -455,7 +455,7 @@ arbitrary cluster names. `classification_scores_from_confusion(matrix)` scores
 counts whose true rows and predicted columns share class order.
 Add metrics to the appropriate helper; experiment writers select which to save.
 
-### 7. Generate Figures 3, 4 and S5 for each correction arm
+### 7. Generate Figures 3, 4, S5 and S7 for each correction arm
 
 After batch correction, run from the repository root. Figure 4 also requires the
 classification and clustering results from Steps 5 and 6, including the shared-panel
@@ -471,9 +471,30 @@ for arm in label_aware no_label; do
 done
 ```
 
-Outputs: `figures/figure3_<arm>.png`, `figures/figure4_<arm>.png` and
-`figures/figureS5_<arm>.png`. Figures 3 and S5 also write matching `_variance.tsv`
-files containing median variance fractions and feature counts.
+Outputs: `figures/figure3_<arm>.png`, `figures/figure4_<arm>.png`,
+`figures/figureS5_<arm>.png` and `figures/figureS7_<arm>.png`. Figures 3 and S5 also
+write matching `_variance.tsv` files containing median variance fractions and feature
+counts. `aggregate_figure4.R` writes Figure S7 and the test results
+`figures/figure4_<arm>_statistics.tsv` together with Figure 4.
+
+#### Statistics in Figure 4 and S7
+
+Brackets compare the four scenarios within each dataset (Figure 4a ARI and 4c
+train/test MCC) or each held-out cohort (Figure S7, leave-one-cohort-out MCC). The data
+points are the 10 seeds of each scenario. Figure 4b shows no tests; its per-cohort
+tests are in Figure S7.
+
+- Central before vs after correction, and federated before vs after correction:
+  two-sided Wilcoxon signed-rank test paired by seed, with Pratt's method for zero
+  differences.
+- Central vs federated, before and after correction: two-sided Mann-Whitney U test.
+
+p-values are exact on midranks, computed with the R package `coin` because the scores
+contain many ties, and are not corrected for multiple testing. `*` marks p < 0.05. Seeds only
+vary algorithmic randomness, so constant groups make even negligible differences
+significant: the table's `relevant` column is `FALSE` for absolute mean differences
+below 0.05, and `aggregate_figure4.R` prints those contrasts. The table also lists group
+means and SDs, each mean difference and its 95% bootstrap confidence interval.
 
 Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
 shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
