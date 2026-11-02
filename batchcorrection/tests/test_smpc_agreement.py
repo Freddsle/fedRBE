@@ -49,12 +49,13 @@ class SmpcAgreementTests(unittest.TestCase):
             broadcast_data=Mock(),
             await_data=Mock(return_value=(["covariate"], 2)),
             gather_data=Mock(return_value=[
-                (["site_a"], ["covariate"], local_smpc),
-                (["site_b"], ["covariate"], remote_smpc),
+                (["site_a"], ["covariate"], local_smpc, None),
+                (["site_b"], ["covariate"], remote_smpc, None),
             ]),
         )
         cohort = SimpleNamespace(
             smpc=local_smpc,
+            feature_block_size=None,
             separator="\t",
             hash2feature={"feature": "feature_name"},
             hash2variable={"covariate": "covariate_name"},
@@ -78,6 +79,21 @@ class SmpcAgreementTests(unittest.TestCase):
                         fedrbe.run_fedrbe(protocol, "input", "output")
                 protocol.broadcast_data.assert_not_called()
 
+    def test_mismatched_block_sizes_stop_before_broadcast_or_feature_exchange(self):
+        for local_size, remote_size in ((None, 2), (2, None), (2, 3)):
+            with self.subTest(local_size=local_size, remote_size=remote_size):
+                protocol, cohort = self.make_protocol(True, True)
+                cohort.feature_block_size = local_size
+                protocol.gather_data.return_value = [
+                    (["site_a"], ["covariate"], True, local_size),
+                    (["site_b"], ["covariate"], True, remote_size),
+                ]
+                with patch.object(fedrbe, "Client", return_value=cohort):
+                    with self.assertRaisesRegex(RuntimeError, "feature_block_size"):
+                        fedrbe.run_fedrbe(protocol, "input", "output")
+                protocol.broadcast_data.assert_not_called()
+                cohort.get_batch_feature_presence_info.assert_not_called()
+
     def test_matching_boolean_settings_continue_initialization(self):
         for smpc in (False, True):
             with self.subTest(smpc=smpc):
@@ -88,8 +104,9 @@ class SmpcAgreementTests(unittest.TestCase):
                     with self.assertRaises(StopProtocol):
                         fedrbe.run_fedrbe(protocol, "input", "output")
                 self.assertIs(
-                    protocol.send_data_to_coordinator.call_args_list[0].args[0][-1], smpc,
+                    protocol.send_data_to_coordinator.call_args_list[0].args[0][2], smpc,
                 )
+                self.assertIsNone(protocol.send_data_to_coordinator.call_args_list[0].args[0][3])
                 protocol.broadcast_data.assert_called_once()
 
     def test_solver_error_bound_follows_smpc_settings(self):
@@ -172,16 +189,18 @@ class SmpcAgreementTests(unittest.TestCase):
                     send_data_to_coordinator=Mock(),
                     broadcast_data=Mock(),
                     gather_data=Mock(side_effect=[
-                        [(["site_a"], ["covariate"], smpc), (["site_b"], ["covariate"], smpc)],
+                        [(["site_a"], ["covariate"], smpc, None),
+                         (["site_b"], ["covariate"], smpc, None)],
                         [],  # feature information, consumed by the patched feature selection
                         [],  # XtX and XtY, consumed by the patched solver
                     ]),
                     await_data=Mock(side_effect=[
-                        (["covariate"], 2), (["feature"], cohorts), np.array([[3.]]),
+                        (["covariate"], 2), (["feature"], cohorts), None, np.array([[3.]]),
                     ]),
                 )
                 cohort = MagicMock(
-                    smpc=smpc, separator="\t", report="", min_samples=0, position=0,
+                    smpc=smpc, feature_block_size=None, separator="\t", report="",
+                    min_samples=0, position=0,
                     reference_batch=False, batch_labels=["site_a"], feature_names=["feature"],
                     hash2feature={"feature": "feature_name"}, hash2variable={"covariate": "covariate_name"},
                     # Design columns: intercept, one covariate, one batch column (two batches).
@@ -205,6 +224,91 @@ class SmpcAgreementTests(unittest.TestCase):
                 beta_broadcast = protocol.broadcast_data.call_args
                 self.assertEqual(beta_broadcast.kwargs["memo"], "beta")
                 np.testing.assert_array_equal(beta_broadcast.args[0], [[3.]])
+
+    def test_feature_blocks_preserve_results_and_wait(self):
+        features = ["f4", "f0", "f3", "f1", "f2"]
+        presence = np.array([[1, 1], [1, 1], [0, 1], [1, 1], [1, 0]])
+        mask = coordinator_utils.create_beta_mask(presence, 5, 3)
+        xtx = np.tile(np.diag([2., 3., 4.]), (5, 1, 1))
+        xtx[mask[:, -1], -1, -1] = 0
+        xty = np.einsum("fij,fj->fi", xtx, np.arange(15.).reshape(5, 3) + 1)
+        reference = coordinator_utils.compute_beta(
+            [[xtx, xty]], 5, 3, mask, n_batch_columns=1,
+        )[:, -1:]
+        cases = [(None, True, False), (1, True, False), (2, True, False),
+                 (10, True, False), (2, False, False), (2, True, True)]
+        cases = [(smpc, *case) for smpc in (False, True) for case in cases]
+        for smpc, size, coordinator, fail_later in cases:
+            with self.subTest(smpc=smpc, size=size, coordinator=coordinator,
+                              fail_later=fail_later):
+                width = size or len(features)
+                blocks = [[xtx[i:i + width].copy(), xty[i:i + width]]
+                          for i in range(0, len(features), width)]
+                if fail_later:
+                    blocks[1][0][0, 0, 0] = 0  # Second-block rank failure.
+                protocol, _ = self.make_protocol(smpc, smpc)
+                protocol.is_coordinator = coordinator
+                handshake = [(*item[:3], size) for item in protocol.gather_data.return_value]
+                protocol.gather_data.side_effect = [handshake, [], *[[block] for block in blocks]]
+                cohort = MagicMock(
+                    smpc=smpc, feature_block_size=size, separator="\t", report="", min_samples=0,
+                    position=0, reference_batch=False, batch_labels=["site_a"],
+                    feature_names=features, hash2feature=dict.fromkeys(features),
+                    hash2variable={"covariate": "covariate_name"},
+                    data=pd.DataFrame(np.ones((5, 4)), index=features),
+                    design=pd.DataFrame(np.ones((4, 3))),
+                )
+                cohort.create_design.return_value = None
+                cohort.compute_XtX_XtY.return_value = (xtx, xty, "")
+                waiting = [False]
+
+                def send(data, **kwargs):
+                    if kwargs.get("memo"):
+                        self.assertIs(kwargs["use_smpc"], smpc)
+                        self.assertFalse(waiting[0], "Next block sent before awaiting the ACK")
+                        waiting[0] = True
+
+                def receive(**kwargs):
+                    memo = kwargs["memo"]
+                    if memo == "commonVariables":
+                        return ["covariate"], 2
+                    if memo == "commonGenes":
+                        return features, protocol.clients
+                    if memo == "beta":
+                        return protocol.broadcast_data.call_args.args[0] if coordinator else reference
+                    self.assertTrue(memo.startswith("block_done_"))
+                    waiting[0] = False
+
+                protocol.send_data_to_coordinator.side_effect = send
+                protocol.await_data.side_effect = receive
+                with patch.object(fedrbe, "Client", return_value=cohort), \
+                        patch.object(fedrbe, "select_common_features_variables",
+                                     return_value=(features, presence, protocol.clients)), \
+                        tempfile.TemporaryDirectory() as output, \
+                        contextlib.redirect_stdout(io.StringIO()):
+                    if fail_later:
+                        with self.assertRaisesRegex(ValueError, "Cannot reliably fit"):
+                            fedrbe.run_fedrbe(protocol, "input", output)
+                        cohort.remove_batch_effects.assert_not_called()
+                        cohort.data_corrected.to_csv.assert_not_called()
+                        cohort.full_corrected_data.to_csv.assert_not_called()
+                        self.assertEqual(list(Path(output).iterdir()), [])
+                        self.assertFalse(any(call.kwargs.get("memo") == "beta"
+                                             for call in protocol.broadcast_data.call_args_list))
+                    else:
+                        fedrbe.run_fedrbe(protocol, "input", output)
+                        np.testing.assert_array_equal(
+                            cohort.remove_batch_effects.call_args.args[0], reference,
+                        )
+                        sends = [call.args[0] for call in protocol.send_data_to_coordinator.call_args_list
+                                 if call.kwargs.get("memo")]
+                        self.assertEqual([len(data[0]) for data in sends],
+                                         [len(block[0]) for block in blocks])
+                        np.testing.assert_array_equal(np.concatenate([data[0] for data in sends]), xtx)
+                        np.testing.assert_array_equal(np.concatenate([data[1] for data in sends]), xty)
+                for call in protocol.broadcast_data.call_args_list:
+                    if call.kwargs.get("memo", "").startswith("block_done_"):
+                        self.assertIsNone(call.args[0])
 
 if __name__ == "__main__":
     unittest.main()

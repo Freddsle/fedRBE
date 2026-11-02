@@ -123,6 +123,7 @@ class CanonicalExperimentTests(unittest.TestCase):
                                 **change.get("flimmaBatchCorrection", {})}
                     self.assertEqual(settings["position"], position)
                     self.assertEqual(settings["smpc"], path.endswith("_smpc.tsv"))
+                    self.assertEqual(settings["feature_block_size"], 10_000)
                     self.assertEqual(settings["covariates"],
                                      [] if "/no_label/" in path else ["HGSC"])
                     if "/no_label/" in path:
