@@ -183,6 +183,9 @@ flimmaBatchCorrection:
     # Enable secure multiparty computation for privacy-preserving aggregation.
     # For more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
 
+  # feature_block_size: 10000  # Positive integer; same on all clients.
+    # Omit or null: all features in one round.
+
   min_samples: 5      # format: int, default: 5
     # Minimum samples per feature required in each batch. Adjusted for privacy if needed.
     # If for a feature less than min_samples samples are present in a batch,
@@ -223,6 +226,15 @@ flimmaBatchCorrection:
 The app registers a single FeatureCloud state (`states.py`) that runs the whole
 protocol implemented in `fedrbe.py`. The local simulator uses the same protocol.
 The figure shows the phases of that protocol.
+
+With `feature_block_size`, clients send XtX/XtY in feature blocks and wait for the
+coordinator's acknowledgement before sending the next block. Only transport
+payloads are split; full local cross-product arrays remain allocated. Featurewise
+fits retain the same model and missingness masks. The ovarian configuration uses
+10,000 features per block; this is not a measured peak-memory guarantee, and
+deployed memory use still needs validation.
+Privacy thresholds and SMPC settings are unchanged. Batch coefficients and outputs
+are released after all blocks succeed. Rebuild the same app image for every client.
 
 <p align="center">
    <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE protocol phases" width="60%">

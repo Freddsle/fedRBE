@@ -47,6 +47,8 @@ flimmaBatchCorrection:
   smpc: True     # whether to use secure multi party computation to securely
                  # aggregate information sent from clients to the coordinator
                  # for more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
+  # feature_block_size: 10000  # Positive integer; same on all clients.
+    # Omit or null: all features in one round.
   min_samples: 5 # The minimum number of samples per feature that are required
                  # to be present and non-missing in each batch of the client.
                  # if for a feature less than min_samples samples are present

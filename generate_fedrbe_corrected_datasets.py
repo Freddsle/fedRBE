@@ -236,7 +236,8 @@ ovarian_cancer_config_file_changes = {
         "design_filename": "design.tsv",
         "covariates": ["HGSC"],
         "index_col": "Gene",
-        "min_samples": 2
+        "min_samples": 2,
+        "feature_block_size": 10_000,
     }
 }
 ovarian_cancer_experiment = util.Experiment(

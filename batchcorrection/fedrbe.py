@@ -61,7 +61,8 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
 
     # exchange the batch_labels and covariates
     protocol.send_data_to_coordinator((client.batch_labels,
-                                       list(client.hash2variable.keys()), client.smpc),
+                                       list(client.hash2variable.keys()), client.smpc,
+                                       client.feature_block_size),
                                       send_to_self=True,
                                       use_smpc=False)
     if protocol.is_coordinator:
@@ -69,9 +70,11 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
         list_labels_variables = protocol.gather_data(is_json=False)
         global_variables_hashed = None  # will become a list, not a set
         global_batch_labels = list()
-        for labels, variables, client_smpc in list_labels_variables:
+        for labels, variables, client_smpc, feature_block_size in list_labels_variables:
             if client_smpc != client.smpc:
                 raise RuntimeError("All clients must use the same boolean 'smpc' setting")
+            if feature_block_size != client.feature_block_size:
+                raise RuntimeError("All clients must use the same 'feature_block_size' setting")
             # intersect the variables while preserving deterministic order
             # (the order of the first client's list, which comes from the
             # config file). Using a set here would cause non-deterministic
@@ -180,41 +183,44 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
     # send XtX and XtY
     print("[compute_XtX_XtY] Computation done, sending data to coordinator")
     print(f"[compute_XtX_XtY] XtX of shape {XtX.shape}, X of shape {client.design.shape}, XtY of shape {XtY.shape}")
-    protocol.send_data_to_coordinator([XtX, XtY],
-                                      send_to_self=True,
-                                      use_smpc=smpc)
-
     ### compute_beta
+    n = len(client.feature_names)
+    k = client.design.shape[1]
+    n_batch_columns = num_batches - 1
     if protocol.is_coordinator:
         # calculate the global mask used to eliminate linearly dependant features
-        n = len(client.feature_names)
-        k = client.design.shape[1]
         global_mask = create_beta_mask(feature_presence_matrix, n, k)
+        beta = np.empty((n, n_batch_columns))
 
-        # wait for each client to compute XtX and XtY and collect data
-        print("[compute_beta] gathering data")
-        XtX_XtY_list = protocol.gather_data(use_smpc=smpc)
-        print("[compute_beta] Got XtX_XtY_list from gather_data")
-        n_batch_columns = feature_presence_matrix.shape[1] - 1
-        beta = compute_beta(XtX_XtY_list,
-                            n=n,
-                            k=k,
-                            global_mask=global_mask,
-                            xtx_error=smpc_error_bound(smpc, len(protocol.clients)),
-                            n_batch_columns=n_batch_columns)
+    block_size = client.feature_block_size or n
+    for start in range(0, n, block_size):
+        stop = min(start + block_size, n)
+        statistics_memo = f"XtX_XtY_{start}"
+        done_memo = f"block_done_{start}"
+        print(f"[compute_beta] features {start}:{stop}")
+        protocol.send_data_to_coordinator([XtX[start:stop], XtY[start:stop]],
+                                         send_to_self=True, use_smpc=smpc,
+                                         memo=statistics_memo)
+        if protocol.is_coordinator:
+            XtX_XtY_list = protocol.gather_data(use_smpc=smpc, memo=statistics_memo)
+            block_beta = compute_beta(
+                XtX_XtY_list, n=stop - start, k=k,
+                global_mask=global_mask[start:stop],
+                xtx_error=smpc_error_bound(smpc, len(protocol.clients)),
+                n_batch_columns=n_batch_columns)
+            del XtX_XtY_list
+            beta[start:stop] = batch_coefficients(block_beta, n_batch_columns)
+            protocol.broadcast_data(None, send_to_self=True, memo=done_memo)
 
-        # send only the batch coefficients to the clients so they can correct
-        # their data, the intercept and covariate coefficients stay with the
-        # coordinator
-        print("[compute_beta] broadcasting batch coefficients")
-        protocol.broadcast_data(batch_coefficients(beta, n_batch_columns),
-                                send_to_self=True,
-                                memo="beta")
+        # Wait before queuing another SMPC block.
+        protocol.await_data(n=1, is_json=False, memo=done_memo)
+
+    if protocol.is_coordinator:
+        # Share only batch coefficients, after all blocks succeed.
+        protocol.broadcast_data(beta, send_to_self=True, memo="beta")
 
     ### include_correction
-    # wait for the coordinator to calcualte beta
     beta = protocol.await_data(n=1, is_json=False, memo="beta")
-
     # remove the batch effects in own data and safe the results
     client.remove_batch_effects(beta)
     print(f"DEBUG: Shape of corrected data: {client.data_corrected.shape}")
