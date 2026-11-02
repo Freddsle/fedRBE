@@ -19,8 +19,8 @@ class FCFederatedKMeans:
         self.means = None
         self.std = None
         self.cluster_on = 'samples'
-        self.n_init_local = 50
-        self.n_init_global = 50
+        self.n_init_local = 1
+        self.n_init_global = 1
         self.max_global_iter = 300
 
 

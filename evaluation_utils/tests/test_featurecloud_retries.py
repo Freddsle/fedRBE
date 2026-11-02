@@ -9,6 +9,7 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
+import zipfile
 
 import pandas as pd
 
@@ -149,21 +150,8 @@ class FeatureCloudRetryTests(unittest.TestCase):
         for instance in finished.iloc[0]["instances"]:
             del instance["coordinator"]
         self.info.side_effect = [ConnectionError("controller unavailable"), finished]
-        for name in ("first", "second"):
-            client = self.root / name
-            client.mkdir()
-            (client / "config_kmeans.yml").write_text("fixture: true\n")
-        with patch.object(kmeans, "wait_for_paths"), \
-                patch.object(kmeans.shutil, "copy2"), \
-                patch.object(kmeans, "extract_clustering"), \
-                patch.object(kmeans, "aggregate_fed_clusters", return_value=pd.DataFrame()):
-            kmeans.run_single_federated_variant(
-                dataset_name="fixture", variant_label="before",
-                variant_input_dir=self.root, dataset_root=self.root / "output",
-                metadata=pd.DataFrame(), client_names=["first", "second"], k_values=[2],
-                app_image="fixture:latest", controller_host=api.DEFAULT_CONTROLLER_HOST,
-                query_interval=5, timeout=900, seed=1,
-            )
+        self.kmeans_archives(202)
+        self.run_kmeans()
         manifest = json.loads((
             self.root / "output/fc_kmeans_res/before/seed_001/manifest.json"
         ).read_text())
@@ -173,6 +161,79 @@ class FeatureCloudRetryTests(unittest.TestCase):
             "results_test_202_client_1_second.zip",
         ])
         self.assertEqual(manifest["experiment_meta"]["input_hashes"], "new-hashes")
+
+    def kmeans_archives(self, test_id, empty_last=False, wrong_sample=False):
+        directory = self.root / "tests/tests"
+        directory.mkdir(parents=True, exist_ok=True)
+        for idx, name in enumerate(("first", "second")):
+            path = directory / f"results_test_{test_id}_client_{idx}_{name}.zip"
+            with zipfile.ZipFile(path, "w") as archive:
+                if not (empty_last and idx == 1):
+                    sample = "unexpected" if wrong_sample and idx == 1 else name
+                    archive.writestr("kmeans/K_2/clustering.csv", f";cluster\n{sample};{idx}\n")
+
+    def run_kmeans(self):
+        for name in ("first", "second"):
+            client = self.root / name
+            client.mkdir(exist_ok=True)
+            (client / "config_kmeans.yml").write_text("fixture: true\n")
+        return kmeans.run_single_federated_variant(
+            dataset_name="fixture", variant_label="before",
+            variant_input_dir=self.root, dataset_root=self.root / "output",
+            metadata=pd.DataFrame({"file": ["first", "second"],
+                                   "lab": ["first", "second"]}),
+            client_names=["first", "second"], k_values=[2],
+            app_image="fixture:latest", controller_host=api.DEFAULT_CONTROLLER_HOST,
+            query_interval=5, timeout=900, seed=1,
+        )
+
+    def test_kmeans_empty_archive_retries_whole_test_and_keeps_failed_evidence(self):
+        self.starts()
+        self.info.return_value = test_info()
+        self.kmeans_archives(101, empty_last=True)
+        self.kmeans_archives(202)
+        output = self.run_kmeans()
+        run_output = self.root / "output/fc_kmeans_res/before/seed_001"
+        manifest = json.loads((run_output / "manifest.json").read_text())
+        self.assertEqual(manifest["test_id"], 202)
+        self.assertEqual(manifest["experiment_meta"]["input_hashes"], "new-hashes")
+        self.assertEqual(pd.read_csv(output, sep="\t").file.tolist(), ["first", "second"])
+        failed = list((run_output / "failed_attempts").iterdir())
+        self.assertEqual(len(failed), 1)
+        empty_zip = failed[0] / "results_test_101_client_1_second.zip"
+        self.assertEqual(empty_zip.stat().st_size, 22)
+        self.assertEqual(self.startup.call_count, 2)  # Initial startup and whole-test retry.
+
+    def test_kmeans_wrong_client_samples_retry_before_acceptance(self):
+        self.starts()
+        self.info.return_value = test_info()
+        self.kmeans_archives(101, wrong_sample=True)
+        self.kmeans_archives(202)
+        output = self.run_kmeans()
+        self.assertEqual(pd.read_csv(output, sep="\t").file.tolist(), ["first", "second"])
+        self.assertEqual(self.startup.call_count, 2)
+
+    def test_kmeans_missing_client_retries_even_when_global_status_is_finished(self):
+        self.starts()
+        incomplete = test_info()
+        incomplete.iloc[0]["instances"].pop()
+        self.info.side_effect = [incomplete, test_info()]
+        self.kmeans_archives(202)
+        self.run_kmeans()
+        self.assertEqual(self.startup.call_count, 2)
+
+    def test_kmeans_incomplete_outputs_exhaust_one_retry_budget(self):
+        self.info.return_value = test_info()
+        self.kmeans_archives(101, empty_last=True)
+        with patch.object(api.Experiment, "_start_test", return_value=(101, self.metadata[0])) \
+                as start:
+            with self.assertRaisesRegex(RuntimeError, "failed after 5 retries"):
+                self.run_kmeans()
+        self.assertEqual(start.call_count, 6)
+        run_output = self.root / "output/fc_kmeans_res/before/seed_001"
+        self.assertFalse((run_output / "manifest.json").exists())
+        self.assertFalse((run_output / "1_2_clustering.csv").exists())
+        self.assertEqual(len(list((run_output / "failed_attempts").iterdir())), 6)
 
 
 if __name__ == "__main__":

@@ -48,7 +48,7 @@ def partition_id(labels):
     return digest(pd.factorize(np.asarray(labels), sort=False)[0])
 
 
-def fit(matrix, truth, seed, n_init=10, scaling="zscore"):
+def fit(matrix, truth, seed, n_init=1, scaling="zscore"):
     k = len(pd.unique(truth))
     result = run_central_kmeans(matrix, [k], seed, n_init=n_init, scaling=scaling)[k]
     labels = result["labels"].reindex(matrix.columns).to_numpy()
@@ -417,7 +417,7 @@ def parser():
         if name in ("starts", "subsample", "arrival-order", "class-r2"):
             item.add_argument("--spaces", nargs="+", choices=("all", "panel"), default=["all", "panel"])
         if name in ("sensitivity", "subsample"):
-            item.add_argument("--n-init", type=int, default=10)
+            item.add_argument("--n-init", type=int, default=1)
         if name in ("starts", "arrival-order"):
             item.add_argument("--states", nargs="+", choices=("before", "central_corr", "fed_corr"),
                               default=None if name == "starts" else ["before", "fed_corr"])
@@ -434,12 +434,12 @@ def parser():
             item.add_argument("--scalings", nargs="+", choices=("zscore", "centered"), default=["zscore", "centered"])
         elif name == "starts":
             item.set_defaults(datasets=["ovarian_cancer", "quartet_multiomics"])
-            item.add_argument("--n-inits", nargs="+", type=int, default=[1, 10, 50])
+            item.add_argument("--n-inits", nargs="+", type=int, default=[1])
         elif name == "subsample":
             item.add_argument("--fraction", type=float, default=.8)
         elif name == "arrival-order":
-            item.add_argument("--n-init-local", type=int, default=10)
-            item.add_argument("--n-init-global", type=int, default=10)
+            item.add_argument("--n-init-local", type=int, default=1)
+            item.add_argument("--n-init-global", type=int, default=1)
             item.add_argument("--max-orders", type=int, help="Bound an explicitly partial smoke check")
     return command
 

@@ -420,7 +420,8 @@ RandomForest implementation: `evaluation_classification_after_correction/fc_fed_
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
 Use `evaluation_clusterization_after_correction/real_datasets/multiple_runs.py`
-for the canonical ten-seed, ten-start comparison. It prepares all four datasets,
+for the canonical ten-seed comparison with one start for central, local federated
+and coordinator k-means. It prepares all four datasets,
 including Quartet joint matrices, recomputes central fits and reuses saved
 federated assignments unless `--rerun-federated` is given. Both central
 and federated correction outputs and their original metadata must be available.
