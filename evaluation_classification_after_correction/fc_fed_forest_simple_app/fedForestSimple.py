@@ -160,13 +160,16 @@ def main(protocol_fed_learning: ProtocolFedLearning,
 
     # Phase 1: Train local decision trees
     local_trees = []
-    for i in range(trees_per_client):
+    # A run owns its tree RNG stream; adjacent run seeds must not reuse seed blocks.
+    tree_seeds = np.random.RandomState(random_state).randint(
+        np.iinfo(np.int32).max, size=trees_per_client)
+    for tree_seed in tree_seeds:
         tree = DecisionTreeClassifier(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             max_features=max_features,
-            random_state=random_state + i if random_state else None
+            random_state=int(tree_seed)
         )
 
         tree.fit(X_train, y_train)

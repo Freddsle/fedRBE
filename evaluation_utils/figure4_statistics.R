@@ -1,21 +1,17 @@
-# Wilcoxon signed-rank and Mann-Whitney U tests and effect sizes for Figure 4 (4a ARI,
-# 4c train/test) and Figure S7 (RF leave-one-cohort-out per held-out cohort).
-#
-# Each contrast compares two of the four Figure 4 scenarios within one dataset or
-# one held-out cohort, using the seeds as data points. Before/after correction
-# share a seed (and, for train/test, the split), so those contrasts are paired;
-# central and federated runs are different algorithms and are compared unpaired.
-# p-values are two-sided and not corrected for multiple testing. They are exact on
-# midranks and come from the coin package, because ties and zero differences are
-# common here and stats::wilcox.test() then has no exact p-value and no Pratt's method.
+# Exact rank comparisons for Figure 4 (ARI and train/test MCC) and Figure S7
+# (leave-one-cohort-out MCC per held-out cohort).
+# C1/C2 pair correction states by run seed; their Pratt signed-rank null assumes
+# symmetric paired differences. C3/C4 use unpaired Mann-Whitney tests, assuming
+# independent run groups and exchangeable scores under their null. Different
+# centralized/federated split schemes remain part of the pipeline comparison.
+# Inference concerns run variation on fixed data, not new patients or cohorts.
 # Requires figure_aggregate_utils.R for figure4_scenarios().
 
-# Values closer than this count as equal, so floating-point noise is no difference.
+# Numerical zeros use this tolerance; rank ties use ten-decimal rounding.
+# Effect estimates and bootstrap intervals retain source precision.
 figure4_statistics_tolerance <- 1e-10
 
-# Smallest ARI/MCC mean difference counted as relevant. It only flags effects in the
-# table: seeds vary algorithmic randomness alone, so constant groups make even
-# negligible differences significant. Tests and bracket markers do not use it.
+# Descriptive absolute mean-difference cutoff; independent of p-values and stars.
 figure4_min_difference <- 0.05
 
 
@@ -43,6 +39,7 @@ figure4_contrasts <- function() {
 # the ranking, but only the ranks of non-zero differences are summed. Rounding keeps
 # floating-point noise from breaking ties. coin cannot test all-zero differences.
 wilcoxon_pratt_exact <- function(diff) {
+  diff[abs(diff) <= figure4_statistics_tolerance] <- 0
   diff <- round(diff, 10)
   if (all(diff == 0)) return(1)
   as.numeric(coin::pvalue(coin::wilcoxsign_test(
@@ -53,6 +50,7 @@ wilcoxon_pratt_exact <- function(diff) {
 
 # Exact Mann-Whitney U test on the pooled midranks. coin cannot test identical values.
 mann_whitney_exact <- function(a, b) {
+  if (max(c(a, b)) - min(c(a, b)) <= figure4_statistics_tolerance) return(1)
   values <- round(c(a, b), 10)
   if (length(unique(values)) == 1) return(1)
   group <- factor(rep(c("a", "b"), c(length(a), length(b))))
@@ -71,7 +69,8 @@ bootstrap_ci <- function(a, b, paired, level = 0.95, resamples = 10000, seed = 1
   }
   set.seed(seed)
   resample_means <- function(x) {
-    colMeans(matrix(sample(x, length(x) * resamples, replace = TRUE), nrow = length(x)))
+    indices <- sample.int(length(x), length(x) * resamples, replace = TRUE)
+    colMeans(matrix(x[indices], nrow = length(x)))
   }
   estimates <- if (paired) resample_means(b - a) else resample_means(b) - resample_means(a)
   alpha <- 1 - level
@@ -92,8 +91,8 @@ contrast_note <- function(a, b, paired) {
 }
 
 
-# Tests C1-C4 within one unit (dataset or held-out cohort): `data` holds one value
-# per scenario and seed in `value_col`, with seeds in `seed_col`.
+# One score per scenario/seed within a dataset or held-out cohort.
+# All four contrasts in this unit and arm form one Holm family.
 unit_statistics <- function(data, value_col, seed_col) {
   contrasts <- figure4_contrasts()
   rows <- lapply(seq_len(nrow(contrasts)), function(i) {
@@ -103,13 +102,18 @@ unit_statistics <- function(data, value_col, seed_col) {
     if (!nrow(a) || !nrow(b)) {
       stop("Missing scenario rows for ", contrast$contrast, call. = FALSE)
     }
-    if (contrast$paired) {
-      if (anyDuplicated(a[[seed_col]]) || !setequal(a[[seed_col]], b[[seed_col]])) {
-        stop("Paired contrast ", contrast$contrast, " needs the same unique seeds in both groups",
-             call. = FALSE)
-      }
-      b <- b[match(a[[seed_col]], b[[seed_col]]), , drop = FALSE]
+    if (anyNA(c(a[[seed_col]], b[[seed_col]])) ||
+        anyDuplicated(a[[seed_col]]) || anyDuplicated(b[[seed_col]])) {
+      stop("Each scenario needs unique, nonmissing run seeds", call. = FALSE)
     }
+    if (contrast$paired && !setequal(a[[seed_col]], b[[seed_col]])) {
+      stop("Paired contrast ", contrast$contrast, " needs the same unique seeds in both groups",
+           call. = FALSE)
+    }
+    # Fixed within-group order makes finite bootstrap CIs invariant to row shuffles.
+    a <- a[order(a[[seed_col]]), , drop = FALSE]
+    b <- b[order(b[[seed_col]]), , drop = FALSE]
+    if (contrast$paired) b <- b[match(a[[seed_col]], b[[seed_col]]), , drop = FALSE]
     values_a <- a[[value_col]]
     values_b <- b[[value_col]]
     ci <- bootstrap_ci(values_a, values_b, contrast$paired)
@@ -127,12 +131,14 @@ unit_statistics <- function(data, value_col, seed_col) {
       sd_a = stats::sd(values_a), sd_b = stats::sd(values_b),
       diff = diff, ci95_low = ci[[1]], ci95_high = ci[[2]], p_raw = p,
       relevant = abs(diff) >= figure4_min_difference - figure4_statistics_tolerance,
-      marker = figure4_marker(p),
       note = contrast_note(values_a, values_b, contrast$paired),
       stringsAsFactors = FALSE
     )
   })
-  do.call(rbind, rows)
+  stats <- do.call(rbind, rows)
+  stats$p_holm <- stats::p.adjust(stats$p_raw, method = "holm")
+  stats$marker <- figure4_marker(stats$p_holm)
+  stats
 }
 
 
@@ -205,8 +211,8 @@ write_figure4_statistics <- function(stats, output_path) {
 
 # Significant contrasts whose mean difference is below figure4_min_difference.
 figure4_negligible_effects <- function(stats) {
-  columns <- c("panel", "dataset", "cohort", "contrast", "diff", "p_raw")
-  stats[stats$p_raw < 0.05 & !stats$relevant, columns, drop = FALSE]
+  columns <- c("panel", "dataset", "cohort", "contrast", "diff", "p_raw", "p_holm")
+  stats[stats$p_holm < 0.05 & !stats$relevant, columns, drop = FALSE]
 }
 
 
@@ -226,6 +232,7 @@ figure4_annotation_data <- function(stats, panel, dataset = NULL) {
 
 
 figure4_statistics_caption <- function() {
-  paste("Brackets: * p < 0.05, n.s. otherwise;",
-        "exact Wilcoxon signed-rank (paired) and Mann-Whitney U tests over seeds (uncorrected)")
+  paste("Exact paired Wilcoxon signed-rank (Pratt) and unpaired Mann-Whitney tests.",
+        "Holm per dataset/cohort (four contrasts): * p < 0.05, n.s. otherwise; inference on fixed data.",
+        sep = "\n")
 }

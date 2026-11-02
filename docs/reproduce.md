@@ -367,7 +367,8 @@ Both launchers run ten seeds (42–51) and reuse complete result rows, including
 per-cohort scores for federated 70:30 runs. Use
 `--datasets` and `--seeds` to select runs, `--results-file` to choose the CSV, and
 `--force-run` to recompute. 70:30 scores include MCC and support-weighted F1.
-After code or correction-input changes, use a fresh `--results-file` or `--force-run`.
+After code, configuration or correction-input changes, use a fresh
+`--results-file` or `--force-run`; cached rows do not check these inputs.
 
 Both launchers accept `--correction-arm label_aware` (default) or
 `--correction-arm no_label` to select the real-data `after/<arm>/datainfo.json`.
@@ -454,6 +455,8 @@ sample order. F1/MCC require matching class meanings; partition scores allow
 arbitrary cluster names. `classification_scores_from_confusion(matrix)` scores
 counts whose true rows and predicted columns share class order.
 Add metrics to the appropriate helper; experiment writers select which to save.
+Scikit-learn returns MCC 0 for constant-class predictions; zero does not establish
+random guessing.
 
 ### 7. Generate Figures 3, 4, S5 and S7 for each correction arm
 
@@ -477,20 +480,26 @@ write matching `_variance.tsv` files containing median variance fractions and fe
 counts. `aggregate_figure4.R` writes Figure S7 and the test results
 `figures/figure4_<arm>_statistics.tsv` together with Figure 4.
 
-#### Statistics in Figure 4 and S7
+#### Scenario comparisons in Figure 4 and S7
 
-Brackets compare the four scenarios within each dataset (Figure 4a ARI and 4c
-train/test MCC) or each held-out cohort (Figure S7, leave-one-cohort-out MCC). The data
-points are the 10 seeds of each scenario. Figure 4b shows no tests; its per-cohort
-tests are in Figure S7.
+Shared-panel comparisons use 10 runs per scenario (Figure 4a: ARI; Figure 4c:
+pooled train/test MCC; Figure S7: held-out-cohort MCC).
 
-- Central before vs after correction, and federated before vs after correction:
-  two-sided Wilcoxon signed-rank test paired by seed, with Pratt's method for zero
-  differences.
-- Central vs federated, before and after correction: two-sided Mann-Whitney U test.
+- C1/C2: before versus after correction within each learner; exact two-sided
+  Wilcoxon signed-rank tests paired by seed, with Pratt's method for zeros.
+- C3/C4: centralized versus federated learning, separately before and after
+  correction; exact two-sided unpaired Mann–Whitney U tests.
 
-p-values are exact on midranks, computed with the R package `coin` because the scores
-contain many ties, and are not corrected for multiple testing. `*` marks p < 0.05.
+Tables report raw p-values and Holm-adjusted p-values for the four contrasts
+per dataset/task or held-out cohort and correction arm. `*` marks adjusted
+p < 0.05; `n.s.` otherwise.
+
+Mean differences (`mean_b - mean_a`) have 95% percentile bootstrap intervals
+(10,000 resamples, seed 1), using paired resampling for C1/C2 and independent
+resampling for C3/C4. The `relevant` flag marks |mean difference| ≥0.05.
+
+Correction and panel selection use all cohorts; label-aware correction uses
+held-out labels.
 
 Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
 shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
