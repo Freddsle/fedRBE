@@ -30,7 +30,6 @@ figure4_contrasts <- function() {
   scenarios <- figure4_scenarios()$order
   data.frame(
     contrast = c("C1", "C2", "C3", "C4"),
-    role = c("primary", "primary", "secondary", "secondary"),
     group_a = scenarios[c(1, 2, 1, 3)],
     group_b = scenarios[c(3, 4, 2, 4)],
     paired = c(TRUE, TRUE, FALSE, FALSE),
@@ -121,7 +120,7 @@ unit_statistics <- function(data, value_col, seed_col) {
     }
     diff <- mean(values_b) - mean(values_a)
     data.frame(
-      contrast = contrast$contrast, role = contrast$role,
+      contrast = contrast$contrast,
       group_a = contrast$group_a, group_b = contrast$group_b, paired = contrast$paired,
       n_a = length(values_a), n_b = length(values_b),
       mean_a = mean(values_a), mean_b = mean(values_b),

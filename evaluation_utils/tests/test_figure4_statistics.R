@@ -97,11 +97,11 @@ for (check in list(list("4a ARI", data$ari, "ARI", "DatasetLabel"),
 
 # Known canonical outcomes: ARI improves in every seed with correction; the
 # centralized RF is at the ceiling in three train/test tasks; Quartet LOCO is 1.0 throughout.
-ari_primary <- stats[stats$panel == "4a ARI" & stats$role == "primary", ]
+ari_correction <- stats[stats$panel == "4a ARI" & stats$contrast %in% c("C1", "C2"), ]
 split_c1 <- stats[stats$panel == "4c train/test" & stats$contrast == "C1" &
                     !startsWith(stats$dataset, "ccRCC"), ]
 quartet_loo <- stats[stats$panel == "S7 LOCO" & startsWith(stats$dataset, "Quartet"), ]
-stopifnot(nrow(ari_primary) == 8L, all(ari_primary$p_raw == 2 / 2^10),
+stopifnot(nrow(ari_correction) == 8L, all(ari_correction$p_raw == 2 / 2^10),
           nrow(split_c1) == 3L, all(split_c1$p_raw == 1),
           all(split_c1$note == "all pairs identical"),
           nrow(quartet_loo) == 12L, all(quartet_loo$p_raw == 1))
@@ -114,7 +114,7 @@ stopifnot(nrow(ccrcc_c4) == 1L, ccrcc_c4$marker == "*", !ccrcc_c4$relevant,
           any(negligible$panel == "4a ARI" & startsWith(negligible$dataset, "ccRCC") &
                 negligible$contrast == "C4"),
           all(negligible$p_raw < 0.05), all(abs(negligible$diff) < figure4_min_difference),
-          all(ari_primary$marker == "*"))
+          all(ari_correction$marker == "*"))
 
 # Group SDs equal the SDs of the plotted scores.
 ari_sd <- tapply(data$ari$ARI, paste(data$ari$DatasetLabel, data$ari$Scenario), stats::sd)
