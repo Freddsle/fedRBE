@@ -490,11 +490,7 @@ tests are in Figure S7.
 - Central vs federated, before and after correction: two-sided Mann-Whitney U test.
 
 p-values are exact on midranks, computed with the R package `coin` because the scores
-contain many ties, and are not corrected for multiple testing. `*` marks p < 0.05. Seeds only
-vary algorithmic randomness, so constant groups make even negligible differences
-significant: the table's `relevant` column is `FALSE` for absolute mean differences
-below 0.05, and `aggregate_figure4.R` prints those contrasts. The table also lists group
-means and SDs, each mean difference and its 95% bootstrap confidence interval.
+contain many ties, and are not corrected for multiple testing. `*` marks p < 0.05.
 
 Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
 shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
