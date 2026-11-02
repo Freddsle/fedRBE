@@ -40,7 +40,6 @@ BASE_FOREST_CONFIG = {
         'features_as_columns': True,
         'max_depth': 10,
         'max_features': 'sqrt',
-        'max_samples': 0.75,
         'min_samples_leaf': 1,
         'min_samples_split': 2,
         'num_estimators_total': 100,
