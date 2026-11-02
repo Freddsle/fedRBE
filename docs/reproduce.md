@@ -515,7 +515,8 @@ done
 
 These figures use all complete-case k-means features and all union RF features,
 and write `figures/figure4_all_features_<arm>.png`. Figure subtitles identify the
-feature space. Input and output path overrides remain available through
+feature space. Saved RF comparisons across feature spaces are descriptive:
+tree seeding also differs. Input and output path overrides remain available through
 `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`; keep overrides
 consistent with the selected feature space.
 

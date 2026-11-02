@@ -45,6 +45,7 @@ BASE_FOREST_CONFIG = {
         'num_estimators_total': 100,
         'predicted_feature_name': 'label',
         'random_state': 42,
+        'save_predictions': False,
         'sample_col': DEFAULT_SAMPLE_COL,
         'train_test_ratio': 1.0,
     }

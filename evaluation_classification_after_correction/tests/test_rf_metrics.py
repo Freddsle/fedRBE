@@ -11,6 +11,8 @@ import yaml
 
 import numpy as np
 from sklearn.metrics import confusion_matrix, f1_score, matthews_corrcoef
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
 
 from evaluation_classification_after_correction.fc_fed_forest_simple_app.fedForestSimple import (
     _pool_confusion_matrices, main,
@@ -148,6 +150,96 @@ class RandomForestSeedTests(unittest.TestCase):
             pd.testing.assert_frame_equal(original[["label", "dataset"]],
                                           corrected[["label", "dataset"]])
             self.assertEqual((original.dataset == "test").sum(), 9)
+
+
+class RandomForestNumericInputTests(unittest.TestCase):
+    def test_trees_match_named_dataframe_reference(self):
+        # The reference keeps sklearn's DataFrame conversion inside every fit.
+        # Check both the numeric fast path and coercion, including missing values.
+        for kind in ("numeric", "coercion", "large_integer", "mixed_boolean"):
+            for ratio in (0.7, 1.0):
+                with self.subTest(kind=kind, ratio=ratio), tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp)
+                    input_dir, output_dir = root / 'input', root / 'output'
+                    input_dir.mkdir()
+                    output_dir.mkdir()
+                    rng = np.random.RandomState(17)
+                    frame = pd.DataFrame(rng.normal(size=(30, 6)),
+                                         columns=[f'x{i}' for i in range(6)])
+                    frame.loc[[0, 7], 'x1'] = np.nan
+                    if kind == "coercion":
+                        frame['x2'] = frame.x2.astype(str)
+                        frame.loc[4, 'x2'] = 'not_numeric'
+                    elif kind in ("large_integer", "mixed_boolean"):
+                        frame['x2'] = np.uint64(2**63 + 2**39) + np.arange(30, dtype=np.uint64)
+                        if kind == "mixed_boolean":
+                            frame['x3'] = np.tile([True, False], 15)
+                    frame['label'] = np.tile([0, 1], 15)
+                    data = input_dir / 'data.csv'
+                    frame.to_csv(data, index_label='sample_id')
+                    params = dict(max_depth=4, max_features='sqrt',
+                                  min_samples_leaf=1, min_samples_split=2)
+                    config = dict(data_filename='data.csv', csv_seperator=',',
+                                  features_as_columns=True, sample_col='sample_id',
+                                  predicted_feature_name='label', random_state=42,
+                                  num_estimators_total=7, train_test_ratio=ratio, **params)
+                    (input_dir / 'config_forest.yaml').write_text(
+                        yaml.safe_dump({'simple_forest': config}))
+                    run_simulation_native([str(input_dir)], [str(output_dir)], None, main)
+                    with (output_dir / 'global_model.pkl').open('rb') as stream:
+                        forest = pickle.load(stream)
+                    original = pd.read_csv(data, index_col='sample_id')
+                    features = original.drop(columns='label').apply(pd.to_numeric, errors='coerce')
+                    features = features[sorted(features.columns)]
+                    labels = original.label
+                    if ratio < 1:
+                        train, _, target, _ = train_test_split(
+                            features, labels, train_size=ratio, random_state=42, stratify=labels)
+                    else:
+                        train, target = features, labels
+                    seeds = np.random.RandomState(42).randint(np.iinfo(np.int32).max, size=7)
+                    self.assertEqual(len(forest.estimators_), len(seeds))
+                    for actual, seed in zip(forest.estimators_, seeds):
+                        expected = DecisionTreeClassifier(random_state=int(seed), **params).fit(
+                            train, target)
+                        np.testing.assert_array_equal(actual.feature_names_in_, train.columns)
+                        np.testing.assert_array_equal(actual.classes_, expected.classes_)
+                        for field in ('nodes', 'values'):
+                            np.testing.assert_array_equal(actual.tree_.__getstate__()[field],
+                                                          expected.tree_.__getstate__()[field])
+                        np.testing.assert_array_equal(actual.predict_proba(features),
+                                                      expected.predict_proba(features))
+
+
+class RandomForestArtifactTests(unittest.TestCase):
+    def test_omitting_prediction_exports_preserves_models_and_metrics(self):
+        for ratio in (0.7, 1.0):
+            with self.subTest(ratio=ratio), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                input_dir = root / 'input'
+                input_dir.mkdir()
+                rng = np.random.RandomState(19)
+                frame = pd.DataFrame(rng.normal(size=(30, 6)),
+                                     columns=[f'x{i}' for i in range(6)])
+                frame['label'] = np.tile([0, 1], 15)
+                frame.to_csv(input_dir / 'data.csv', index_label='sample_id')
+                config = dict(data_filename='data.csv', csv_seperator=',',
+                              features_as_columns=True, sample_col='sample_id',
+                              predicted_feature_name='label', random_state=42,
+                              num_estimators_total=7, max_depth=4, max_features='sqrt',
+                              train_test_ratio=ratio)
+                for save in (True, False):
+                    output = root / str(save)
+                    output.mkdir()
+                    config['save_predictions'] = save
+                    (input_dir / 'config_forest.yaml').write_text(
+                        yaml.safe_dump({'simple_forest': config}))
+                    run_simulation_native([str(input_dir)], [str(output)], None, main)
+                    self.assertEqual((output / 'pred.csv').exists(), save)
+                for name in ('global_model.pkl', 'model_info.yaml',
+                             'global_metrics.csv', 'local_metrics.csv'):
+                    self.assertEqual((root / 'True' / name).read_bytes(),
+                                     (root / 'False' / name).read_bytes())
 
 
 if __name__ == '__main__':
