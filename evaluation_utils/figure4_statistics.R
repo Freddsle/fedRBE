@@ -233,6 +233,6 @@ figure4_annotation_data <- function(stats, panel, dataset = NULL) {
 
 figure4_statistics_caption <- function() {
   paste("Exact paired Wilcoxon signed-rank (Pratt) and unpaired Mann-Whitney tests.",
-        "Holm per dataset/cohort (four contrasts): * p < 0.05, n.s. otherwise; inference on fixed data.",
+        "Holm-adjusted p: * p < 0.05; n.s. otherwise.",
         sep = "\n")
 }
