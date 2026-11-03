@@ -1158,9 +1158,10 @@ performance_runtime_caption <- paste(
 )
 
 performance_memory_caption <- paste(
-  "Container peak: cgroup memory.peak of the app container, incl. file cache, nginx and",
-  "supervisord.\nApp process peak: peak resident memory of the app's Python process during",
-  "the protocol run."
+  "Circles: clients, triangles: coordinator (client and aggregator).",
+  "\nApp process peak: peak resident memory of the app's Python process during the protocol run.",
+  "\nContainer peak: cgroup memory.peak of the app container, incl. file cache, nginx and",
+  "supervisord."
 )
 
 
@@ -1323,12 +1324,13 @@ plot_performance_runtime <- function(clients) {
 plot_performance_memory <- function(clients) {
   clients <- prepare_performance_clients(clients)
   metric_columns <- c(
-    "Container peak (memory.peak)" = "container_mem_peak_bytes",
-    "App process peak" = "app_peak_rss_bytes"
+    "App process peak" = "app_peak_rss_bytes",
+    "Container peak" = "container_mem_peak_bytes"
   )
   memory <- do.call(rbind, lapply(names(metric_columns), function(metric) {
-    data.frame(DataSize = clients$n_samples * clients$n_features, Role = clients$Role,
-               Metric = metric, MB = clients[[metric_columns[[metric]]]] / 1e6,
+    data.frame(DataSize = clients$n_samples * clients$n_features,
+               Point = paste0(metric, ", ", tolower(clients$Role)),
+               MB = clients[[metric_columns[[metric]]]] / 1e6,
                stringsAsFactors = FALSE)
   }))
   missing <- is.na(memory$MB)
@@ -1336,23 +1338,24 @@ plot_performance_memory <- function(clients) {
     message("Skipping ", sum(missing), " memory values that were not recorded")
     memory <- memory[!missing, , drop = FALSE]
   }
-  metric_colors <- stats::setNames(unname(performance_smpc_colors), names(metric_columns))
+  # One legend key per metric and role: colour shows the metric, shape the role.
+  point_fills <- c(
+    "App process peak, client" = "#D55E00", "App process peak, coordinator" = "#D55E00",
+    "Container peak, client" = "#0072B2", "Container peak, coordinator" = "#0072B2"
+  )
+  point_shapes <- stats::setNames(c(21, 24, 21, 24), names(point_fills))
 
   ggplot2::ggplot(
     memory,
-    ggplot2::aes(x = .data$DataSize, y = .data$MB, fill = .data$Metric, shape = .data$Role)
+    ggplot2::aes(x = .data$DataSize, y = .data$MB, fill = .data$Point, shape = .data$Point)
   ) +
     ggplot2::geom_point(size = 1.8, alpha = 0.8, stroke = 0.2, color = "white") +
     ggplot2::scale_x_log10(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
     ggplot2::scale_y_log10(labels = scales::label_number(big.mark = ",")) +
-    ggplot2::scale_fill_manual(
-      values = metric_colors, limits = names(metric_colors),
-      guide = ggplot2::guide_legend(override.aes = list(shape = 21, size = 2.4))
-    ) +
-    ggplot2::scale_shape_manual(
-      values = c(Client = 21, Coordinator = 24),
-      guide = ggplot2::guide_legend(override.aes = list(fill = "#777777", size = 2.4))
-    ) +
+    ggplot2::scale_fill_manual(values = point_fills, limits = names(point_fills), name = NULL) +
+    ggplot2::scale_shape_manual(values = point_shapes, limits = names(point_fills), name = NULL) +
+    ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE,
+                                                 override.aes = list(size = 2.4))) +
     ggplot2::labs(x = "Data size of the participant (samples x features)",
                   y = "Peak memory (MB)", caption = performance_memory_caption) +
     figure4_panel_theme() +
