@@ -64,6 +64,9 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
     client.config_based_init(clientname = cohort_name, input_folder = inputfolder)
     smpc = client.smpc
     perf.info["smpc"] = smpc
+    # size of the client's own data, used to relate the memory usage to it
+    perf.info["n_samples"] = client.n_samples
+    perf.info["n_features"] = len(client.feature_names)
     # send list of protein names (genes) to coordinator
     # we use the hashed values of the feature names and variables
     assert isinstance(client.hash2feature, dict)
@@ -180,6 +183,7 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
     client.validate_inputs(global_variables_hashed)
     print("[validate] Inputs have been validated")
     client.set_data(global_feauture_names_hashed)
+    perf.info["n_features_used"] = len(client.feature_names)
     print("[validate] Data has been set to contain all global features")
     # get all client names to generate design matrix
     err = client.create_design(cohorts_order)

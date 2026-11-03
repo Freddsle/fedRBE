@@ -26,7 +26,9 @@ import time
 from copy import deepcopy
 
 from evaluation_utils import featurecloud_api_extension as util
-from evaluation_utils.performance_report import load_reports, summarize_performance
+from evaluation_utils.performance_report import (
+    load_reports, summarize_clients, summarize_performance,
+)
 from evaluation_utils.real_datasets_utils import (
     read_correction_matrix, validate_corrected_matrix,
 )
@@ -540,7 +542,9 @@ def save_performance_report(exp: util.Experiment, result_filename: str,
                             client_names: List[str], client_files: List[dict],
                             experiment_result: util.ExperimentResult = None) -> None:
     """
-    Saves the performance of the run as <result_filename without suffix>_performance.csv.
+    Saves the performance of the run as <result_filename without suffix>_performance.csv
+    (one row per client and span) and <...>_performance_clients.csv (one row per
+    client, used by evaluation/aggregate_performance.R).
     Skipped with a warning if a client did not write a performance report.
     """
     reports = load_reports(client_files, PERFORMANCE_REPORT)
@@ -559,10 +563,20 @@ def save_performance_report(exp: util.Experiment, result_filename: str,
     performance.insert(0, "experiment", exp.name)
     performance.insert(1, "channel", exp.channel)
     performance.insert(2, "query_interval", exp.query_interval)
-    performance_path = Path(result_filename).with_suffix("")
-    performance_path = performance_path.with_name(performance_path.name + "_performance.csv")
+    output_stem = Path(result_filename).with_suffix("")
+    performance_path = output_stem.with_name(output_stem.name + "_performance.csv")
     performance.to_csv(performance_path, index=False)
     print(f"Wrote performance report at {performance_path}")
+
+    # The SMPC and no-covariate variants of a dataset share its name up to these suffixes
+    clients = summarize_clients(performance)
+    dataset = exp.name.replace(" (no covariates)", "").replace(" (SMPC)", "")
+    arm = "no_label" if "no_label" in Path(result_filename).parts else "label_aware"
+    clients.insert(1, "dataset", dataset)
+    clients.insert(2, "arm", arm)
+    clients_path = output_stem.with_name(output_stem.name + "_performance_clients.csv")
+    clients.to_csv(clients_path, index=False)
+    print(f"Wrote per client performance report at {clients_path}")
 
 
 if __name__ == "__main__":

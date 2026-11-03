@@ -24,12 +24,15 @@ whole_protocol span around all others, its length is run_duration) with:
             for the XtX blocks)
         client_await of the other clients: end of the await minus the end of
             the coordinator's agg_broadcast of the same round
-    and per client: the run duration, peak and baseline resident memory of
-    the app process and the container's cgroup peak memory, max anonymous
+    and per client: the run duration, the size of its data (samples, features
+    and features used for the correction), peak and baseline resident memory
+    of the app process and the container's cgroup peak memory, max anonymous
     memory and CPU time.
+summarize_clients condenses this to one row per client: its computation,
+aggregation and the remaining time it waits (communication, other clients and
+the aggregation).
 The coordinator's client_await contains its aggregation, so it has no delay,
 its waiting for the other clients is agg_gather.
-TODO: check and improve
 """
 import json
 from typing import Dict, List, Optional, Tuple
@@ -139,6 +142,9 @@ def summarize_performance(client_names: List[str], reports: List[dict],
             "coordinator": is_coordinator,
             "smpc": smpc,
             "run_duration": whole["t_end"] - whole["t_start"],
+            "n_samples": report["info"]["n_samples"],
+            "n_features": report["info"]["n_features"],
+            "n_features_used": report["info"]["n_features_used"],
             "app_pre_fedrbe_peak_rss_bytes": report["pre_fedrbe_peak_rss_kib"] * 1024,
             "app_baseline_rss_bytes": report["baseline_rss_kib"] * 1024,
             "app_peak_rss_bytes": report["peak_rss_kib"] * 1024,
@@ -166,6 +172,40 @@ def summarize_performance(client_names: List[str], reports: List[dict],
                 "delay": delay,
             })
     return pd.DataFrame(rows)
+
+
+# columns of summarize_performance that differ between the spans of a client
+SPAN_COLUMNS = ["role", "kind", "round", "idx", "t_start", "t_end", "duration",
+                "rss_end_bytes", "bytes", "delay"]
+
+
+def summarize_clients(spans: pd.DataFrame) -> pd.DataFrame:
+    """
+    Condenses the spans of one run (summarize_performance) to one row per client
+    with its per client columns and:
+        client_compute: computation in the client role, incl. serializing the
+            sent data (client_compute and client_send spans)
+        aggregation: computation in the aggregator role (agg_compute and
+            agg_broadcast spans), 0 for all but the coordinator
+        waiting: run_duration - client_compute - aggregation, all time the client
+            does not compute: communication, waiting for the other clients and,
+            for clients, waiting for the aggregation
+    """
+    per_client_columns = [column for column in spans.columns
+                          if column not in SPAN_COLUMNS]
+    durations = spans.pivot_table(index="client", columns="kind", values="duration",
+                                  aggfunc="sum", fill_value=0.0)
+    for kind in ("client_compute", "client_send", "agg_compute", "agg_broadcast"):
+        if kind not in durations:
+            durations[kind] = 0.0
+    clients = spans[per_client_columns].drop_duplicates().set_index("client")
+    if not clients.index.is_unique:
+        raise ValueError("The per client columns differ between spans of a client")
+    clients["client_compute"] = durations["client_compute"] + durations["client_send"]
+    clients["aggregation"] = durations["agg_compute"] + durations["agg_broadcast"]
+    clients["waiting"] = (clients["run_duration"] - clients["client_compute"]
+                          - clients["aggregation"])
+    return clients.reset_index()
 
 
 def load_reports(client_files: List[dict], filename: str) -> Optional[List[dict]]:

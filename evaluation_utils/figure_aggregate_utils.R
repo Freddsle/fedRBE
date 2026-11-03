@@ -1119,3 +1119,247 @@ draw_figure4 <- function(figure_plot) {
   grid::popViewport()
   invisible(figure_plot)
 }
+
+
+# Performance figures from the *_performance_clients.csv tables written by
+# generate_fedrbe_corrected_datasets.py (one row per participant and run).
+
+performance_client_columns <- c(
+  "dataset", "arm", "client", "coordinator", "smpc", "run_duration", "client_compute",
+  "aggregation", "waiting", "n_samples", "n_features", "app_peak_rss_bytes",
+  "container_mem_peak_bytes"
+)
+
+performance_dataset_order <- c(
+  "Simulated Balanced", "Simulated Mildly Imbalanced", "Simulated Strongly Imbalanced",
+  "E. coli", "Ovarian cancer", "ccRCC proteomics",
+  "Quartet Multiomics Transcriptomics", "Quartet Multiomics Proteomics",
+  "Quartet Multiomics Metabolomics"
+)
+
+performance_smpc_colors <- c("Without SMPC" = "#0072B2", "With SMPC" = "#D55E00")
+
+performance_coordinator_colors <- c(
+  "Coordinator: client computation" = "#009E73",
+  "Coordinator: aggregation" = "#E69F00",
+  "Coordinator: waiting & communication" = "#9E9E9E"
+)
+
+performance_entries <- c(
+  "Total\nruntime", "Client\ncomputation", "Waiting &\ncomm.", "Coordi-\nnator"
+)
+
+performance_runtime_caption <- paste(
+  "Waiting & comm.: all time a participant does not compute (runtime - client",
+  "computation - aggregation),\nincluding data transfer (controller polling every 5 s, relay),",
+  "waiting for other clients' computation and for the aggregation.\nComputation includes",
+  "serializing the sent data. Boxes: all participants incl. the coordinator, label-aware and",
+  "no-label runs pooled.\nCoordinator: stacked medians of its runs, points are its runtimes."
+)
+
+performance_memory_caption <- paste(
+  "Container peak: cgroup memory.peak of the app container, incl. file cache, nginx and",
+  "supervisord.\nApp process peak: peak resident memory of the app's Python process during",
+  "the protocol run."
+)
+
+
+# Reads and combines all *_performance_clients.csv tables below data_dir.
+read_performance_clients <- function(data_dir) {
+  paths <- list.files(data_dir, pattern = "_performance_clients\\.csv$",
+                      recursive = TRUE, full.names = TRUE)
+  if (length(paths) == 0) {
+    stop("No *_performance_clients.csv found below ", data_dir, call. = FALSE)
+  }
+  tables <- lapply(paths, function(path) {
+    table <- utils::read.csv(path, stringsAsFactors = FALSE, check.names = FALSE)
+    assert_columns(table, performance_client_columns, path)
+    table[, performance_client_columns]
+  })
+  do.call(rbind, tables)
+}
+
+
+# Orders the datasets: known datasets first, others alphabetically after them.
+performance_dataset_levels <- function(datasets) {
+  datasets <- unique(as.character(datasets))
+  c(performance_dataset_order[performance_dataset_order %in% datasets],
+    sort(setdiff(datasets, performance_dataset_order)))
+}
+
+
+# Adds the plot labels SMPC ("With SMPC"/"Without SMPC") and Role
+# ("Coordinator"/"Client") to a performance clients table.
+prepare_performance_clients <- function(clients) {
+  assert_columns(clients, performance_client_columns, "performance clients table")
+  clients$coordinator <- as.logical(clients$coordinator)
+  clients$SMPC <- ifelse(as.logical(clients$smpc), "With SMPC", "Without SMPC")
+  clients$Role <- ifelse(clients$coordinator, "Coordinator", "Client")
+  clients
+}
+
+
+# Medians of the coordinator's parts per dataset and SMPC setting, stacked up to
+# the median runtime. Expects a table of prepare_performance_clients and returns
+# one row per stacked part with ymin/ymax.
+performance_coordinator_stack <- function(clients) {
+  coordinators <- clients[clients$coordinator, , drop = FALSE]
+  groups <- split(coordinators, list(coordinators$dataset, coordinators$SMPC), drop = TRUE)
+  stacks <- lapply(groups, function(group) {
+    parts <- c(
+      stats::median(group$client_compute),
+      stats::median(group$aggregation)
+    )
+    total <- stats::median(group$run_duration)
+    remainder <- total - sum(parts)
+    if (remainder < 0) {
+      warning("Median coordinator parts exceed the median runtime for ", group$dataset[1],
+              " (", group$SMPC[1], "), the waiting part is set to 0", call. = FALSE)
+      remainder <- 0
+    }
+    heights <- c(parts, remainder)
+    data.frame(
+      dataset = group$dataset[1],
+      SMPC = group$SMPC[1],
+      Part = names(performance_coordinator_colors),
+      ymin = cumsum(heights) - heights,
+      ymax = cumsum(heights),
+      stringsAsFactors = FALSE
+    )
+  })
+  do.call(rbind, stacks)
+}
+
+
+# Runtime figure: per dataset boxes of the participants' total runtime, client
+# computation and waiting time, and the coordinator's stacked runtime parts.
+plot_performance_runtime <- function(clients) {
+  clients <- prepare_performance_clients(clients)
+  dataset_levels <- performance_dataset_levels(clients$dataset)
+  as_dataset_factor <- function(table) {
+    table$dataset <- factor(table$dataset, levels = dataset_levels)
+    table
+  }
+
+  bar_width <- 0.32
+  smpc_offsets <- c("Without SMPC" = -0.18, "With SMPC" = 0.18)
+
+  boxes <- do.call(rbind, lapply(seq_len(3), function(entry) {
+    column <- c("run_duration", "client_compute", "waiting")[entry]
+    data.frame(dataset = clients$dataset, SMPC = clients$SMPC, Entry = entry,
+               Time = clients[[column]], stringsAsFactors = FALSE)
+  }))
+  boxes$X <- boxes$Entry + unname(smpc_offsets[boxes$SMPC])
+  boxes$Group <- interaction(boxes$dataset, boxes$Entry, boxes$SMPC, drop = TRUE)
+  boxes <- as_dataset_factor(boxes)
+
+  stack <- performance_coordinator_stack(clients)
+  stack$X <- 4 + unname(smpc_offsets[stack$SMPC])
+  stack <- as_dataset_factor(stack)
+  coordinator_points <- clients[clients$coordinator, c("dataset", "SMPC", "run_duration")]
+  coordinator_points$X <- 4 + unname(smpc_offsets[coordinator_points$SMPC])
+  coordinator_points <- as_dataset_factor(coordinator_points)
+
+  fill_colors <- c(performance_smpc_colors, performance_coordinator_colors)
+
+  ggplot2::ggplot() +
+    ggplot2::geom_vline(xintercept = 3.5, color = "#6F6F6F", linewidth = 0.22, alpha = 0.32) +
+    ggplot2::geom_boxplot(
+      data = boxes,
+      ggplot2::aes(x = .data$X, y = .data$Time, fill = .data$SMPC, group = .data$Group),
+      width = bar_width, outlier.shape = NA, alpha = 0.72, linewidth = 0.28,
+      color = "#333333", key_glyph = "rect"
+    ) +
+    ggplot2::geom_point(
+      data = boxes,
+      ggplot2::aes(x = .data$X, y = .data$Time, fill = .data$SMPC),
+      position = ggplot2::position_jitter(width = 0.03, height = 0, seed = 17),
+      shape = 21, size = 1.05, alpha = 0.65, stroke = 0.14, color = "white",
+      show.legend = FALSE
+    ) +
+    ggplot2::geom_rect(
+      data = stack,
+      ggplot2::aes(xmin = .data$X - bar_width / 2, xmax = .data$X + bar_width / 2,
+                   ymin = .data$ymin, ymax = .data$ymax,
+                   fill = .data$Part, color = .data$SMPC),
+      alpha = 0.85, linewidth = 0.35
+    ) +
+    ggplot2::geom_point(
+      data = coordinator_points,
+      ggplot2::aes(x = .data$X, y = .data$run_duration, fill = .data$SMPC),
+      shape = 21, size = 1.05, alpha = 0.65, stroke = 0.14, color = "white",
+      show.legend = FALSE
+    ) +
+    ggplot2::facet_wrap(~dataset, scales = "free_y", ncol = 3) +
+    ggplot2::scale_x_continuous(
+      breaks = seq_along(performance_entries), labels = performance_entries,
+      limits = c(0.5, 4.5), expand = ggplot2::expansion(add = 0)
+    ) +
+    ggplot2::scale_y_continuous(limits = c(0, NA),
+                                expand = ggplot2::expansion(mult = c(0, 0.05))) +
+    ggplot2::scale_fill_manual(
+      values = fill_colors, limits = names(fill_colors),
+      guide = ggplot2::guide_legend(
+        nrow = 2, override.aes = list(alpha = 1, color = "#333333", linewidth = 0.28)
+      )
+    ) +
+    ggplot2::scale_color_manual(values = performance_smpc_colors, guide = "none") +
+    ggplot2::labs(y = "Time (s)", caption = performance_runtime_caption) +
+    figure4_panel_theme() +
+    ggplot2::theme(
+      strip.background = ggplot2::element_rect(fill = "#F2F2F2", color = "#444444",
+                                               linewidth = 0.28),
+      strip.text = ggplot2::element_text(face = "bold", size = 8.5),
+      axis.text.x = ggplot2::element_text(color = "#222222", size = 6.5, lineheight = 0.9,
+                                          margin = ggplot2::margin(t = 3)),
+      plot.caption = ggplot2::element_text(size = 7, color = "#444444", hjust = 0),
+      plot.caption.position = "plot"
+    )
+}
+
+
+# Memory figure: peak memory against the size of a participant's data, two
+# points (container and app process peak) per participant and run.
+plot_performance_memory <- function(clients) {
+  clients <- prepare_performance_clients(clients)
+  metric_columns <- c(
+    "Container peak (memory.peak)" = "container_mem_peak_bytes",
+    "App process peak" = "app_peak_rss_bytes"
+  )
+  memory <- do.call(rbind, lapply(names(metric_columns), function(metric) {
+    data.frame(DataSize = clients$n_samples * clients$n_features, Role = clients$Role,
+               Metric = metric, MB = clients[[metric_columns[[metric]]]] / 1e6,
+               stringsAsFactors = FALSE)
+  }))
+  missing <- is.na(memory$MB)
+  if (any(missing)) {
+    message("Skipping ", sum(missing), " memory values that were not recorded")
+    memory <- memory[!missing, , drop = FALSE]
+  }
+  metric_colors <- stats::setNames(unname(performance_smpc_colors), names(metric_columns))
+
+  ggplot2::ggplot(
+    memory,
+    ggplot2::aes(x = .data$DataSize, y = .data$MB, fill = .data$Metric, shape = .data$Role)
+  ) +
+    ggplot2::geom_point(size = 1.8, alpha = 0.8, stroke = 0.2, color = "white") +
+    ggplot2::scale_x_log10(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
+    ggplot2::scale_y_log10(labels = scales::label_number(big.mark = ",")) +
+    ggplot2::scale_fill_manual(
+      values = metric_colors, limits = names(metric_colors),
+      guide = ggplot2::guide_legend(override.aes = list(shape = 21, size = 2.4))
+    ) +
+    ggplot2::scale_shape_manual(
+      values = c(Client = 21, Coordinator = 24),
+      guide = ggplot2::guide_legend(override.aes = list(fill = "#777777", size = 2.4))
+    ) +
+    ggplot2::labs(x = "Data size of the participant (samples x features)",
+                  y = "Peak memory (MB)", caption = performance_memory_caption) +
+    figure4_panel_theme() +
+    ggplot2::theme(
+      axis.title.x = ggplot2::element_text(color = "#222222", margin = ggplot2::margin(t = 4)),
+      panel.grid.major.x = ggplot2::element_line(color = "#D7D7D7", linewidth = 0.25),
+      plot.caption = ggplot2::element_text(size = 7, color = "#444444", hjust = 0),
+      plot.caption.position = "plot"
+    )
+}

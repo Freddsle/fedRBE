@@ -17,7 +17,7 @@ import yaml
 from batchcorrection.fedrbe import run_fedrbe
 from batchcorrection.perf import PerfRecorder, REPORT_FILENAME
 from evaluation_utils import featurecloud_api_extension as api
-from evaluation_utils.performance_report import summarize_performance
+from evaluation_utils.performance_report import summarize_clients, summarize_performance
 
 sys.path.append(str(Path(__file__).resolve().parents[2] / "evaluation_classification_after_correction"))
 from fc_fed_forest_simple_app.fc_fedlearnsim_helper.run_app_simulation import (  # noqa: E402
@@ -186,6 +186,28 @@ class PerformanceReportTests(unittest.TestCase):
                                           if seg["kind"] != "whole_protocol"]
                 with self.assertRaisesRegex(ValueError, "whole_protocol"):
                     summarize_performance(NAMES, reports, stats)
+
+    def test_client_summary_splits_runtime_into_compute_aggregation_and_waiting(self):
+        reports = run_with_reports(self.root, smpc=False)
+        stats = [{"memory_peak": 3, "max_anon": 2, "cpu_usec": 1}] * len(NAMES)
+        spans = summarize_performance(NAMES, reports, stats)
+        clients = summarize_clients(spans).set_index("client")
+
+        self.assertEqual(list(clients.index), NAMES)
+        self.assertTrue((clients["n_samples"] == 8).all())
+        self.assertTrue((clients["n_features"] == 3).all())
+        self.assertTrue((clients["n_features_used"] == 3).all())
+        total = clients["client_compute"] + clients["aggregation"] + clients["waiting"]
+        np.testing.assert_allclose(total, clients["run_duration"])
+        self.assertTrue((clients["waiting"] >= 0).all())
+        self.assertTrue((clients["client_compute"] > 0).all())
+        coordinator = clients["coordinator"]
+        self.assertTrue((clients.loc[~coordinator, "aggregation"] == 0).all())
+        self.assertTrue((clients.loc[coordinator, "aggregation"] > 0).all())
+        for name, report in zip(NAMES, reports):
+            sends = sum(seg["t_end"] - seg["t_start"] for seg in report["segments"]
+                        if seg["kind"] in ("client_compute", "client_send"))
+            self.assertAlmostEqual(clients.loc[name, "client_compute"], sends)
 
     def test_controller_traffic_reads_fetches_of_the_test_window(self):
         logs = self.root / "logs"

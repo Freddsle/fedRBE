@@ -62,6 +62,8 @@ class SmpcAgreementTests(unittest.TestCase):
             hash2variable={"covariate": "covariate_name"},
             batch_labels=["site_a"],
             min_samples=0,
+            n_samples=4,
+            feature_names=["feature"],
             position=0,
             reference_batch=False,
             config_based_init=Mock(),
