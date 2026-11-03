@@ -3,6 +3,7 @@ import os
 from FeatureCloud.app.engine.app import AppState, app_state
 
 from fedrbe import run_fedrbe, SMPC_EXPONENT
+from perf import PerfRecorder
 
 # FeatureCloud requires that apps define the at least the 'initial' state.
 # This state is executed after the app instance is started.
@@ -18,5 +19,9 @@ class InitialState(AppState):
 
     def run(self):
         self.configure_smpc(exponent=SMPC_EXPONENT) # set the default values, we use a bigger exponent though
-        run_fedrbe(self, INPUT_FOLDER, OUTPUT_FOLDER)
+        # timeline and peak memory of this client, see perf.py
+        perf = PerfRecorder()
+        run_fedrbe(self, INPUT_FOLDER, OUTPUT_FOLDER, perf=perf)
+        perf.write(OUTPUT_FOLDER, client_id=self.id,
+                   is_coordinator=self.is_coordinator, clients=self.clients)
         return 'terminal'

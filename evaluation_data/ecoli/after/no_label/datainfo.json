@@ -1,7 +1,5 @@
 {
-  "covariates": [
-    "Pyr"
-  ],
+  "covariates": [],
   "prediction_targets": [
     "Pyr"
   ],
