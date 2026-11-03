@@ -113,6 +113,21 @@ class InputGuardTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "smpc.*boolean"):
                     self.initialize(smpc=flag)
 
+    def test_feature_block_size_defaults_to_no_splitting(self):
+        self.assertIsNone(self.initialize().feature_block_size)
+        self.assertIsNone(self.initialize(feature_block_size=None).feature_block_size)
+
+    def test_positive_feature_block_size_is_preserved(self):
+        for size in (1, 10_000):
+            with self.subTest(size=size):
+                self.assertEqual(self.initialize(feature_block_size=size).feature_block_size, size)
+
+    def test_invalid_feature_block_size_is_rejected(self):
+        for size in (True, False, 0, -1, 1.5, "10000", [], {}):
+            with self.subTest(size=size):
+                with self.assertRaisesRegex(ValueError, "feature_block_size.*positive integer"):
+                    self.initialize(feature_block_size=size)
+
     def test_non_numeric_cell_names_its_sample_column(self):
         self.expression = self.expression.astype(object)
         self.expression.loc["feature_b", "s3"] = "n.d."

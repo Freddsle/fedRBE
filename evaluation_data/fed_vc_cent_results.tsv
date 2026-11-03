@@ -1,10 +1,10 @@
 Experiment	correction_arm	Min difference	Mean difference	Max difference
-Simulated Balanced	label_aware	0.0	1.6528690403685303e-15	5.1514348342607263e-14
-Simulated Balanced (SMPC)	label_aware	0.0	2.5928124105000723e-15	5.684341886080802e-14
-Simulated Mildly Imbalanced	label_aware	0.0	1.9193302919257403e-15	5.3290705182007514e-14
-Simulated Mildly Imbalanced (SMPC)	label_aware	0.0	3.050885956456097e-15	6.039613253960852e-14
-Simulated Strongly Imbalanced	label_aware	0.0	2.438809746451159e-15	5.684341886080802e-14
-Simulated Strongly Imbalanced (SMPC)	label_aware	0.0	6.4194222398571106e-15	6.750155989720952e-14
+Simulated Balanced	label_aware	0.0	1.6509172261444699e-15	5.3290705182007514e-14
+Simulated Balanced (SMPC)	label_aware	0.0	2.626821124328443e-15	5.684341886080802e-14
+Simulated Mildly Imbalanced	label_aware	0.0	1.9072069466637927e-15	5.3290705182007514e-14
+Simulated Mildly Imbalanced (SMPC)	label_aware	0.0	3.0085778486831597e-15	6.039613253960852e-14
+Simulated Strongly Imbalanced	label_aware	0.0	1.910399711982026e-15	5.3290705182007514e-14
+Simulated Strongly Imbalanced (SMPC)	label_aware	0.0	5.938807481068775e-15	6.750155989720952e-14
 E. coli	label_aware	0.0	2.44432675817402e-14	8.171241461241152e-14
 E. coli (SMPC)	label_aware	0.0	2.5873219028662774e-14	1.8474111129762605e-13
 Quartet Multiomics Transcriptomics	label_aware	0.0	1.9221954782593934e-15	3.730349362740526e-14

@@ -26,6 +26,9 @@ import time
 from copy import deepcopy
 
 from evaluation_utils import featurecloud_api_extension as util
+from evaluation_utils.performance_report import (
+    load_reports, summarize_clients, summarize_performance,
+)
 from evaluation_utils.real_datasets_utils import (
     read_correction_matrix, validate_corrected_matrix,
 )
@@ -54,6 +57,13 @@ base_config = {
 
 # The name of the docker image that contains the application to be tested
 app_image_name = "featurecloud.ai/bcorrect:latest"
+# All experiments communicate via the FeatureCloud relay server, as in a real
+# federated run, so the performance reports contain realistic communication
+# times. The query interval stays at the default of featurecloud_api_extension
+# (5s, the interval used by the production controller).
+channel = "internet"
+# Name of the performance report each client writes (batchcorrection/perf.py)
+PERFORMANCE_REPORT = "performance_report.json"
 
 ### SETTING THE EXPERIMENTS
 # Small helper to add a position argument to the config files of an experiment
@@ -236,7 +246,8 @@ ovarian_cancer_config_file_changes = {
         "design_filename": "design.tsv",
         "covariates": ["HGSC"],
         "index_col": "Gene",
-        "min_samples": 2
+        "min_samples": 2,
+        "feature_block_size": 10_000,
     }
 }
 ovarian_cancer_experiment = util.Experiment(
@@ -430,16 +441,23 @@ for modality in multiomics_modalities:
 
 ### POSTPROCESSING
 def save_experiment_results(exp: util.Experiment, result_filename: str,
-                            client_files: List[dict]) -> None:
+                            client_files: List[dict],
+                            experiment_result: util.ExperimentResult = None) -> None:
     """
     Validates the outputs of all clients of an experiment and saves them in the
     folder of result_filename: individual_results/<clientname>/, datainfo.json
     and the merged corrected data as result_filename.
+    If all clients wrote a performance report, also saves the per client and
+    segment timings, payload sizes and memory usage as
+    <result_filename without suffix>_performance.csv, see
+    evaluation_utils/performance_report.py.
     Args:
         exp: The experiment, its config_files must contain the used configs
         result_filename: The path of the merged corrected data
         client_files: Per client (in the order of exp.clients), a dict mapping
             the output file names of the app to their content as bytes
+        experiment_result: The ExperimentResult of the run, used for the
+            container stats and the controller traffic of the performance report
     """
     result_folder = os.path.dirname(result_filename)
     print("Results will be saved in: ", result_folder)
@@ -516,6 +534,50 @@ def save_experiment_results(exp: util.Experiment, result_filename: str,
     else:
         raise RuntimeError("No data found in the test results!")
 
+    save_performance_report(exp, result_filename, client_names, client_files,
+                            experiment_result)
+
+
+def save_performance_report(exp: util.Experiment, result_filename: str,
+                            client_names: List[str], client_files: List[dict],
+                            experiment_result: util.ExperimentResult = None) -> None:
+    """
+    Saves the performance of the run as <result_filename without suffix>_performance.csv
+    (one row per client and span) and <...>_performance_clients.csv (one row per
+    client, used by evaluation/aggregate_performance.R).
+    Skipped with a warning if a client did not write a performance report.
+    """
+    reports = load_reports(client_files, PERFORMANCE_REPORT)
+    if reports is None:
+        print(f"WARNING: not every client wrote {PERFORMANCE_REPORT}, "
+              "skipping the performance report. Rebuild the app image?")
+        return
+    container_stats, controller_traffic = None, None
+    if experiment_result is not None:
+        if experiment_result.container_stats is not None:
+            container_stats = json.loads(experiment_result.container_stats)
+        if experiment_result.controller_traffic is not None:
+            controller_traffic = json.loads(experiment_result.controller_traffic)
+    performance = summarize_performance(client_names, reports,
+                                        container_stats, controller_traffic)
+    performance.insert(0, "experiment", exp.name)
+    performance.insert(1, "channel", exp.channel)
+    performance.insert(2, "query_interval", exp.query_interval)
+    output_stem = Path(result_filename).with_suffix("")
+    performance_path = output_stem.with_name(output_stem.name + "_performance.csv")
+    performance.to_csv(performance_path, index=False)
+    print(f"Wrote performance report at {performance_path}")
+
+    # The SMPC and no-covariate variants of a dataset share its name up to these suffixes
+    clients = summarize_clients(performance)
+    dataset = exp.name.replace(" (no covariates)", "").replace(" (SMPC)", "")
+    arm = "no_label" if "no_label" in Path(result_filename).parts else "label_aware"
+    clients.insert(1, "dataset", dataset)
+    clients.insert(2, "arm", arm)
+    clients_path = output_stem.with_name(output_stem.name + "_performance_clients.csv")
+    clients.to_csv(clients_path, index=False)
+    print(f"Wrote per client performance report at {clients_path}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -548,7 +610,9 @@ if __name__ == "__main__":
             if exp.fc_data_dir != active_fc_data_dir:
                 exp._startup()
                 active_fc_data_dir = exp.fc_data_dir
-            result_files_zipped, _, _ = exp.run_test()
+            exp.channel = channel
+            exp.monitor_containers = True
+            result_files_zipped, _, experiment_result = exp.run_test()
         except Exception as e:
             print(f"Experiment could not be started or aborted too many times! Error: \n{e}")
             print("_______________¡FAILED_EXPERIMENT!_______________")
@@ -584,10 +648,11 @@ if __name__ == "__main__":
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_names = zip_ref.namelist()
                 outputs = {}
-                for fname in ["only_batch_corrected_data.csv", "full_corrected_data.csv", "report.txt"]:
+                for fname in ["only_batch_corrected_data.csv", "full_corrected_data.csv",
+                              "report.txt", PERFORMANCE_REPORT]:
                     if fname in zip_names:
                         outputs[fname] = zip_ref.read(fname)
-                    elif fname != "report.txt":
+                    elif fname not in ("report.txt", PERFORMANCE_REPORT):
                         raise RuntimeError(
                             f"'{fname}' not found in result zip for client '{client_name}'. "
                             f"Did the batch effect correction app change its output filenames? "
@@ -597,7 +662,7 @@ if __name__ == "__main__":
                         print(f"WARNING: '{fname}' not found in zip for client '{client_name}', skipping.")
                 client_files.append(outputs)
 
-        save_experiment_results(exp, result_filename, client_files)
+        save_experiment_results(exp, result_filename, client_files, experiment_result)
 
         print("_______________¡SUCCESSFUL_EXPERIMENT!_______________")
 

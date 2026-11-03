@@ -537,6 +537,26 @@ CORRECTION_ARM=label_aware FIGURE4_FEATURE_SPACE=panel \
   pixi run Rscript evaluation/aggregate_figure4.R
 ```
 
+Please run the following to generate the performance related supplementary figures:
+
+```bash
+pixi run Rscript evaluation/aggregate_performance.R
+```
+
+The script reads every `*_performance_clients.csv` that
+`generate_fedrbe_corrected_datasets.py` writes next to the corrected data in Step 2
+(one row per client and run, from the Docker runs over the `internet` channel with
+the default query interval of 5 s).
+
+Outputs: `figures/performance_runtime.png` (per dataset: total runtime, client
+computation and waiting time of all participants, with and without SMPC, and the
+coordinator's runtime split into client computation, aggregation and waiting) and
+`figures/performance_memory.png` (container and app process peak memory against the
+participant's data size). `PERFORMANCE_DATA_DIR` overrides the searched folder
+(default `evaluation_data`), and `PERFORMANCE_RUNTIME_OUTPUT` and
+`PERFORMANCE_MEMORY_OUTPUT` override the output paths; a path ending in `.svg`
+writes an SVG.
+
 ---
 
 ## Repository structure

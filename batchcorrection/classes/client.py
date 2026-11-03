@@ -12,6 +12,7 @@ class Client:
         """
         self.client_name = ""
         self.smpc = False
+        self.feature_block_size = None
         self.covariates = None
         self.min_samples = 0
         self.XtX = None
@@ -109,6 +110,12 @@ class Client:
         if not isinstance(smpc, bool):
             raise ValueError("smpc must be a boolean (true or false)")
 
+        feature_block_size = config.get("feature_block_size")
+        if feature_block_size is not None and (
+                isinstance(feature_block_size, bool)
+                or not isinstance(feature_block_size, int) or feature_block_size <= 0):
+            raise ValueError("feature_block_size must be a positive integer or null")
+
         # read design file and design_seperator
         design_file_path = None
         if "design_filename" in config:
@@ -162,6 +169,7 @@ class Client:
         # set variables
         self.client_name = clientname
         self.smpc = smpc
+        self.feature_block_size = feature_block_size
         self.variables = covariates
         self.min_samples = min_samples
         self.separator = separator
