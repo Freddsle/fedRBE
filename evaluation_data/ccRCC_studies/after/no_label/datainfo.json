@@ -1,7 +1,5 @@
 {
-  "covariates": [
-    "Condition"
-  ],
+  "covariates": [],
   "prediction_targets": [
     "Condition"
   ],

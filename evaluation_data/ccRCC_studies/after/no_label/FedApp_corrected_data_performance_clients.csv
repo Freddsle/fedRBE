@@ -1,0 +1,4 @@
+client,dataset,arm,experiment,channel,query_interval,coordinator,smpc,run_duration,n_samples,n_features,n_features_used,app_pre_fedrbe_peak_rss_bytes,app_baseline_rss_bytes,app_peak_rss_bytes,container_mem_peak_bytes,container_max_anon_bytes,container_cpu_usec,client_compute,aggregation,waiting
+PDC000127,ccRCC proteomics,no_label,ccRCC proteomics (no covariates),internet,5,True,False,29.18680167198181,194,9964,6282,68218880,68222976,178810880,257167360,197791744,18133252,6.394557476043701,0.639662504196167,22.152581691741943
+PXD030344,ccRCC proteomics,no_label,ccRCC proteomics (no covariates),internet,5,False,False,42.91279697418213,464,12548,6282,68087808,68091904,292581376,434196480,311468032,20605192,11.95884084701538,0.0,30.953956127166748
+PXD042844,ccRCC proteomics,no_label,ccRCC proteomics (no covariates),internet,5,False,False,36.58014225959778,229,7655,6282,67969024,67973120,156479488,233394176,176017408,18485149,5.8259358406066895,0.0,30.75420641899109

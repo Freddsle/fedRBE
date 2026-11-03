@@ -1,10 +1,6 @@
 {
   "data_name": "Quartet full multiomics - Metabolomics",
-  "covariates": [
-    "D6",
-    "F7",
-    "M8"
-  ],
+  "covariates": [],
   "prediction_targets": [
     "condition"
   ],
