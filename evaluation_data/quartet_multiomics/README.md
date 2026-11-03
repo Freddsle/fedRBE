@@ -96,7 +96,7 @@ runs after federated correction, using the default layout of 48 profiles and fou
 batches across three clients per modality. Set `CORRECTION_ARM=label_aware`
 (default) or `no_label`. Its sequential model is `~ condition + batch` (donor first);
 PCA batch codes are modality-specific. See the
-[run command and outputs](../../docs/reproduce.md#7-generate-figures-3-4-and-s5-for-each-correction-arm).
+[run command and outputs](../../docs/reproduce.md#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
 
 ## Directory orientation
 

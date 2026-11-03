@@ -32,8 +32,8 @@ class FCConfig:
         self.log_transform = True
         self.max_nan_fraction = 0.5
 
-        self.n_init_local = 50
-        self.n_init_global = 50
+        self.n_init_local = 1
+        self.n_init_global = 1
         self.max_global_iter = 300
 
     def parse_configuration(self):
@@ -133,14 +133,14 @@ class FCConfig:
                 try:
                     self.n_init_local = parameter_list['algorithm']['n_init_local']
                 except KeyError:
-                    print('n_init_local not specified, defaulting to 50')
-                    self.n_init_local = 50
+                    print('n_init_local not specified, defaulting to 1')
+                    self.n_init_local = 1
 
                 try:
                     self.n_init_global = parameter_list['algorithm']['n_init_global']
                 except KeyError:
-                    print('n_init_global not specified, defaulting to 50')
-                    self.n_init_global = 50
+                    print('n_init_global not specified, defaulting to 1')
+                    self.n_init_global = 1
 
                 try:
                     self.max_global_iter = parameter_list['algorithm']['max_global_iter']

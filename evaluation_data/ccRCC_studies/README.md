@@ -127,7 +127,7 @@ pixi run Rscript evaluation/dataset_diagnostics.R ccRCC_studies
 
 This writes `plots/data_plot_Rcorrected.png`. Figure 3c, which assesses remaining
 study effects alongside the biological condition signal, is rendered with the
-[figure commands](../../docs/reproduce.md#7-generate-figures-3-4-and-s5-for-each-correction-arm).
+[figure commands](../../docs/reproduce.md#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
 
 ## Step 5 — Clustering evaluation (k-means)
 

@@ -5,27 +5,27 @@ Simulated Mildly Imbalanced	label_aware	0.0	1.9072069466637927e-15	5.32907051820
 Simulated Mildly Imbalanced (SMPC)	label_aware	0.0	3.0085778486831597e-15	6.039613253960852e-14
 Simulated Strongly Imbalanced	label_aware	0.0	1.910399711982026e-15	5.3290705182007514e-14
 Simulated Strongly Imbalanced (SMPC)	label_aware	0.0	5.938807481068775e-15	6.750155989720952e-14
-E. coli	label_aware	0.0	2.448014685985914e-14	7.815970093361102e-14
-E. coli (SMPC)	label_aware	0.0	2.604675391720894e-14	1.9895196601282805e-13
+E. coli	label_aware	0.0	2.44432675817402e-14	8.171241461241152e-14
+E. coli (SMPC)	label_aware	0.0	2.5873219028662774e-14	1.8474111129762605e-13
 Quartet Multiomics Transcriptomics	label_aware	0.0	1.9221954782593934e-15	3.730349362740526e-14
 Quartet Multiomics Transcriptomics (SMPC)	label_aware	0.0	2.8027312681774125e-14	1.4621637234313312e-13
 Quartet Multiomics Proteomics	label_aware	0.0	2.126274373147497e-15	3.730349362740526e-14
 Quartet Multiomics Proteomics (SMPC)	label_aware	0.0	2.9552358398006974e-14	1.496580637194711e-13
 Quartet Multiomics Metabolomics	label_aware	0.0	9.255038864915596e-15	3.907985046680551e-14
 Quartet Multiomics Metabolomics (SMPC)	label_aware	0.0	2.138552848761283e-14	9.947598300641403e-14
-Ovarian cancer	label_aware	0.0	3.722621763210781e-15	7.638334409421077e-14
-Ovarian cancer (SMPC)	label_aware	0.0	1.5816944909625028e-14	1.474376176702208e-13
-ccRCC proteomics	label_aware	0.0	1.5996223981142504e-15	4.973799150320701e-14
-ccRCC proteomics (SMPC)	label_aware	0.0	2.7830016668611104e-15	1.268984917146554e-13
-E. coli (no_label)	no_label	0.0	2.4393871772041562e-14	7.105427357601002e-14
-E. coli (SMPC) (no_label)	no_label	0.0	2.581608195180229e-14	1.1901590823981678e-13
-Quartet Multiomics Transcriptomics (no_label)	no_label	0.0	1.901017614801165e-15	3.730349362740526e-14
-Quartet Multiomics Transcriptomics (SMPC) (no_label)	no_label	0.0	2.2258800764055322e-14	1.4921397450962104e-13
-Quartet Multiomics Proteomics (no_label)	no_label	0.0	2.093277802799708e-15	3.730349362740526e-14
-Quartet Multiomics Proteomics (SMPC) (no_label)	no_label	0.0	2.2492604294944476e-14	1.580957587066223e-13
-Quartet Multiomics Metabolomics (no_label)	no_label	0.0	9.243981020786452e-15	3.730349362740526e-14
-Quartet Multiomics Metabolomics (SMPC) (no_label)	no_label	0.0	1.8858376405204396e-14	9.769962616701378e-14
-Ovarian cancer (no_label)	no_label	0.0	3.00738119849614e-15	7.105427357601002e-14
-Ovarian cancer (SMPC) (no_label)	no_label	0.0	1.1517993717659242e-14	1.2434497875801753e-13
-ccRCC proteomics (no_label)	no_label	0.0	1.6379544583238699e-15	4.973799150320701e-14
-ccRCC proteomics (SMPC) (no_label)	no_label	0.0	2.7997998351014435e-15	1.2789769243681803e-13
+Ovarian cancer	label_aware	0.0	3.2910347805905268e-15	6.572520305780927e-14
+Ovarian cancer (SMPC)	label_aware	0.0	1.5663084890428435e-14	1.3855583347321954e-13
+ccRCC proteomics	label_aware	0.0	1.7131615234067802e-15	5.3290705182007514e-14
+ccRCC proteomics (SMPC)	label_aware	0.0	2.871660837691775e-15	1.268984917146554e-13
+E. coli (no_label)	no_label	0.0	2.445056394849045e-14	8.171241461241152e-14
+E. coli (SMPC) (no_label)	no_label	0.0	2.5825436724456875e-14	1.3145040611561853e-13
+Quartet Multiomics Transcriptomics (no_label)	no_label	0.0	1.9223849628277514e-15	3.730349362740526e-14
+Quartet Multiomics Transcriptomics (SMPC) (no_label)	no_label	0.0	2.8029594364322818e-14	1.4660495040175192e-13
+Quartet Multiomics Proteomics (no_label)	no_label	0.0	2.1255824039431e-15	3.730349362740526e-14
+Quartet Multiomics Proteomics (SMPC) (no_label)	no_label	0.0	2.960937852948192e-14	1.5010215292932116e-13
+Quartet Multiomics Metabolomics (no_label)	no_label	0.0	9.298730685421448e-15	3.907985046680551e-14
+Quartet Multiomics Metabolomics (SMPC) (no_label)	no_label	0.0	2.1326537709127532e-14	9.947598300641403e-14
+Ovarian cancer (no_label)	no_label	0.0	3.0804310904408506e-15	6.927791673660977e-14
+Ovarian cancer (SMPC) (no_label)	no_label	0.0	1.138452216386574e-14	1.0480505352461478e-13
+ccRCC proteomics (no_label)	no_label	0.0	1.7141607358860437e-15	4.973799150320701e-14
+ccRCC proteomics (SMPC) (no_label)	no_label	0.0	2.859198723286771e-15	1.2789769243681803e-13

@@ -24,6 +24,7 @@ dependencies:
   - conda-forge::scipy
   - conda-forge::seaborn
   - conda-forge::upsetplot
+  - conda-forge::r-coin
   - conda-forge::r-data.table
   - conda-forge::r-ggtext
   - conda-forge::r-glue

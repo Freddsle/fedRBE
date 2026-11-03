@@ -7,6 +7,7 @@ import numpy as np
 from math import ceil
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.utils.validation import validate_data
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 import pickle
@@ -51,6 +52,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         max_features: 'sqrt'
         random_state: 42
         features_as_columns: True # whether features are given as columns or rows
+        save_predictions: True # Export per-sample features and predictions
         sample_col: 0
             # Ignored if features_as_columns = False
             # Which column contains the sample indexes. If not given each row is considered an
@@ -98,8 +100,9 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         y = df[target_col]
         X = df.drop(columns=[target_col])
 
-    # Ensure numeric features
-    X = X.apply(pd.to_numeric, errors='coerce')
+    # CSV numeric columns already have the required values and dtypes.
+    if not all(pd.api.types.is_numeric_dtype(dtype) for dtype in X.dtypes):
+        X = X.apply(pd.to_numeric, errors='coerce')
 
     # Train-test split with stratification
     train_ratio = config.get('train_test_ratio', 0.8)
@@ -158,19 +161,33 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     num_clients = len(protocol_fed_learning.clients)
     trees_per_client = ceil(num_estimators_total / num_clients)
 
+    # Apply the estimator's dtype and feature-name validation once. This also
+    # preserves its conversion rules for mixed numeric and boolean columns.
+    input_validator = DecisionTreeClassifier()
+    train_values = validate_data(
+        input_validator, X_train, dtype=np.float32,
+        accept_sparse="csc", ensure_all_finite=False)
+    feature_names = getattr(input_validator, "feature_names_in_", None)
+
     # Phase 1: Train local decision trees
     local_trees = []
-    for i in range(trees_per_client):
+    # A run owns its tree RNG stream; adjacent run seeds must not reuse seed blocks.
+    tree_seeds = np.random.RandomState(random_state).randint(
+        np.iinfo(np.int32).max, size=trees_per_client)
+    for tree_seed in tree_seeds:
         tree = DecisionTreeClassifier(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             max_features=max_features,
-            random_state=random_state + i if random_state else None
+            random_state=int(tree_seed)
         )
 
-        tree.fit(X_train, y_train)
+        tree.fit(train_values, y_train)
+        if feature_names is not None:
+            tree.feature_names_in_ = feature_names
         local_trees.append(tree)
+    del train_values
 
     # Phase 2: Send local trees to coordinator
     protocol_fed_learning.send_data_to_coordinator(local_trees, send_to_self=True)
@@ -311,6 +328,9 @@ def main(protocol_fed_learning: ProtocolFedLearning,
                 'used_features': common_features
             }, f)
 
+
+    if not config.get("save_predictions", True):
+        return
 
     # Save predictions (all clients save their local predictions)
     # Combine train and test data with predictions

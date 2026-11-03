@@ -1,4 +1,5 @@
 # CRAN packages
+coin
 data.table
 gridExtra
 ggtext

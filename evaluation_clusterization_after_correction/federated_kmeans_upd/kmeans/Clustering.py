@@ -10,7 +10,7 @@ from kmeans.params import *
 
 class Clustering:
     def __init__(self, centroids, tabdata, k_min, k_max, cluster_on='samples',
-                 n_init_global=50, seed_value=11):
+                 n_init_global=1, seed_value=11):
         self.tabdata = tabdata
         self.cluster_on = cluster_on
         self.data = self._select_cluster_data(tabdata, cluster_on)
@@ -31,7 +31,7 @@ class Clustering:
 
     @classmethod
     def init_local_clustering(cls, tabdata, k_min, k_max, seed_value, cluster_on='samples',
-                              n_init_local=50, n_init_global=50) -> 'Clustering':
+                              n_init_local=1, n_init_global=1) -> 'Clustering':
         """
         Initialise an SVD object with random matrices
         :param k: number of eigenvectors, (default: 10)

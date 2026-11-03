@@ -29,7 +29,7 @@ from evaluation_utils.real_datasets_utils import (
 )
 
 SEEDS = list(range(1, 92, 10))
-N_INIT = 10  # central, local federated and coordinator k-means starts
+N_INIT = 1  # central, local federated and coordinator k-means starts
 # Method -> (matrix state, FeatureCloud input variant or None for central k-means).
 METHODS = {
     "BC_Cntrl": ("before", None),

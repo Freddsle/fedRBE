@@ -6,7 +6,7 @@ outputs and original inputs live under `evaluation_data/`; this component runs
 clustering and evaluates biological condition labels using ARI and AMI.
 
 Use [real_datasets/multiple_runs.py](real_datasets/multiple_runs.py)
-for the canonical repeated-seed comparison: ten seeds and ten starts for central,
+for the canonical repeated-seed comparison: ten seeds and one start for central,
 local federated and coordinator k-means. It reads both correction backends and
 supports the shared variance panel or all complete-case features. The
 [real-dataset instructions](real_datasets/README.md) cover preparation, saved

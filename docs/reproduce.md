@@ -26,7 +26,7 @@ or regenerate the analysis stages you need.
   - [4. Optional dataset diagnostics](#4-optional-dataset-diagnostics)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-  - [7. Generate Figures 3, 4 and S5 for each correction arm](#7-generate-figures-3-4-and-s5-for-each-correction-arm)
+  - [7. Generate Figures 3, 4, S5 and S7 for each correction arm](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
@@ -117,7 +117,7 @@ or regenerate the analysis stages you need.
    sections. Install them with:
 
    ```bash
-   Rscript -e 'install.packages(c("data.table","gridExtra","ggtext","glue","IRkernel","jsonlite","knitr","patchwork","reshape2","scales","tidyverse"), repos="https://cloud.r-project.org")'
+   Rscript -e 'install.packages(c("coin","data.table","gridExtra","ggtext","glue","IRkernel","jsonlite","knitr","patchwork","reshape2","scales","tidyverse"), repos="https://cloud.r-project.org")'
    Rscript -e 'if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager", repos="https://cloud.r-project.org"); BiocManager::install(c("AnnotationDbi","affy","GEOquery","GO.db","hgu133acdf","hgu133plus2cdf","impute","limma","variancePartition"), ask=FALSE, update=FALSE)'
    Rscript -e 'BiocManager::install("preprocessCore", configure.args=c(preprocessCore="--disable-threading"), type="source", force=TRUE, ask=FALSE, update=FALSE)'
    Rscript -e 'install.packages("WGCNA", repos="https://cloud.r-project.org")'
@@ -144,7 +144,7 @@ Recommended order:
 5. Run the [classification](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    and [clustering](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    analyses, or inspect their available saved results.
-6. [Generate Figures 3, 4 and S5](#7-generate-figures-3-4-and-s5-for-each-correction-arm).
+6. [Generate Figures 3, 4, S5 and S7](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
 
 Paths below are relative to the repository root. Run shell commands there unless
 another working directory is specified. Run notebook kernels from the directory
@@ -367,7 +367,8 @@ Both launchers run ten seeds (42–51) and reuse complete result rows, including
 per-cohort scores for federated 70:30 runs. Use
 `--datasets` and `--seeds` to select runs, `--results-file` to choose the CSV, and
 `--force-run` to recompute. 70:30 scores include MCC and support-weighted F1.
-After code or correction-input changes, use a fresh `--results-file` or `--force-run`.
+After code, configuration or correction-input changes, use a fresh
+`--results-file` or `--force-run`; cached rows do not check these inputs.
 
 Both launchers accept `--correction-arm label_aware` (default) or
 `--correction-arm no_label` to select the real-data `after/<arm>/datainfo.json`.
@@ -419,7 +420,8 @@ RandomForest implementation: `evaluation_classification_after_correction/fc_fed_
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
 Use `evaluation_clusterization_after_correction/real_datasets/multiple_runs.py`
-for the canonical ten-seed, ten-start comparison. It prepares all four datasets,
+for the ten-seed comparison, with one start per seed
+for central, local federated and coordinator k-means. It prepares all four datasets,
 including Quartet joint matrices, recomputes central fits and reuses saved
 federated assignments unless `--rerun-federated` is given. Both central
 and federated correction outputs and their original metadata must be available.
@@ -454,8 +456,10 @@ sample order. F1/MCC require matching class meanings; partition scores allow
 arbitrary cluster names. `classification_scores_from_confusion(matrix)` scores
 counts whose true rows and predicted columns share class order.
 Add metrics to the appropriate helper; experiment writers select which to save.
+Scikit-learn returns MCC 0 for constant-class predictions; zero does not establish
+random guessing.
 
-### 7. Generate Figures 3, 4 and S5 for each correction arm
+### 7. Generate Figures 3, 4, S5 and S7 for each correction arm
 
 After batch correction, run from the repository root. Figure 4 also requires the
 classification and clustering results from Steps 5 and 6, including the shared-panel
@@ -471,14 +475,47 @@ for arm in label_aware no_label; do
 done
 ```
 
-Outputs: `figures/figure3_<arm>.png`, `figures/figure4_<arm>.png` and
-`figures/figureS5_<arm>.png`. Figures 3 and S5 also write matching `_variance.tsv`
-files containing median variance fractions and feature counts.
+Outputs under `figures/`: `figure3_<arm>.png`, `figure4_panel5000_<arm>.png`,
+`figureS5_<arm>.png` and `figureS7_panel5000_<arm>.png`. Figures 3 and S5 also
+write matching `_variance.tsv` files with median variance fractions and feature
+counts. In both feature spaces, Figure 4 writes a matching `_statistics.tsv`
+covering Figures 4 and S7.
+
+#### Scenario comparisons in Figure 4 and S7
+
+Both feature spaces and correction arms use 10 runs per scenario (Figure 4a: ARI;
+Figure 4c: pooled train/test MCC; Figure S7: held-out-cohort MCC).
+These panels show significance brackets; Figure 4b is an overview.
+
+- C1/C2: before versus after correction within each learner; exact two-sided
+  Wilcoxon signed-rank tests paired by seed, with Pratt's method for zeros.
+- C3/C4: centralized versus federated learning, separately before and after
+  correction; exact two-sided unpaired Mann–Whitney U tests.
+
+Tables report raw p-values and Holm-adjusted p-values for the four contrasts
+within each dataset/task or held-out cohort, correction arm and feature space.
+`*` marks adjusted p < 0.05; `n.s.` otherwise.
+
+Mean differences (`mean_b - mean_a`) have 95% percentile bootstrap intervals
+(10,000 resamples, seed 1), using paired resampling for C1/C2 and independent
+resampling for C3/C4. The `relevant` flag marks |mean difference| ≥0.05.
+
+Comparisons across feature spaces are descriptive and conditional on the
+observed cohorts. Correction and panel selection use all cohorts; label-aware
+correction uses held-out labels.
 
 Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
 shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
-The corresponding RF report is `classification_metric_report_panel5000.csv`.
-Generate the supplementary all-feature version for each arm with:
+ARI inputs are relative to `evaluation_clusterization_after_correction/real_datasets/`;
+RF reports are under `evaluation_classification_after_correction/results/`:
+
+| Feature space | Label-aware ARI table | No-label ARI table | RF report |
+| --- | --- | --- | --- |
+| Shared panel | `panel5000/metrics_ari_multirun.tsv` | `panel5000/no_label/metrics_ari_multirun.tsv` | `classification_metric_report_panel5000.csv` |
+| All features | `metrics_ari_multirun.tsv` | `no_label/metrics_ari_multirun.tsv` | `classification_metric_report.csv` |
+
+Use `FIGURE4_FEATURE_SPACE=all` for all complete-case k-means features and union
+RF features:
 
 ```bash
 for arm in label_aware no_label; do
@@ -486,10 +523,9 @@ for arm in label_aware no_label; do
 done
 ```
 
-These figures use all complete-case k-means features and all union RF features,
-and write `figures/figure4_all_features_<arm>.png`. Figure subtitles identify the
-feature space. Input and output path overrides remain available through
-`FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`; keep overrides
+This writes `figures/figure4_all_features_<arm>.png` and
+`figures/figureS7_all_features_<arm>.png`. Override paths with
+`FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`; keep inputs
 consistent with the selected feature space.
 
 Set `FIGURE4_OUTPUT` to a path ending in `.svg` to export Figure 4 as SVG.
@@ -497,7 +533,7 @@ PNG is the default; a path without an extension gets `.png`. For example:
 
 ```bash
 CORRECTION_ARM=label_aware FIGURE4_FEATURE_SPACE=panel \
-  FIGURE4_OUTPUT=figures/figure4_label_aware.svg \
+  FIGURE4_OUTPUT=figures/figure4_panel5000_label_aware.svg \
   pixi run Rscript evaluation/aggregate_figure4.R
 ```
 

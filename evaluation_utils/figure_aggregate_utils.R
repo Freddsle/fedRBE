@@ -6,7 +6,7 @@ require_figure_packages <- function(required = c("tidyverse", "ggplot2", "grid",
 }
 
 
-require_figure4_packages <- function(required = c("ggplot2", "grid", "gtable", "rlang")) {
+require_figure4_packages <- function(required = c("coin", "ggplot2", "grid", "gtable", "rlang")) {
   require_figure_packages(required)
 }
 
@@ -786,12 +786,17 @@ plot_figure4_box_panel <- function(
   scenario_order,
   scenario_colors,
   point_size,
-  scenario_col = "Scenario"
+  scenario_col = "Scenario",
+  annotations = NULL
 ) {
   box_cluster_width <- 0.68
   within_pair_gap <- 0.03
   before_after_gap <- 0.06
   point_jitter_width <- 0.03
+  has_brackets <- !is.null(annotations) && nrow(annotations) > 0
+  if (has_brackets) {
+    y_limits[[2]] <- max(y_limits[[2]], figure4_bracket_top(annotations))
+  }
 
   box_width <- (box_cluster_width - (2 * within_pair_gap + before_after_gap)) / length(scenario_order)
   scenario_centers <- c(
@@ -826,7 +831,7 @@ plot_figure4_box_panel <- function(
   }
   x_limits <- c(1 - x_axis_margin, length(x_levels) + x_axis_margin)
 
-  ggplot2::ggplot(
+  plot <- ggplot2::ggplot(
     plot_data,
     ggplot2::aes(
       x = .data$Figure4XPosition,
@@ -879,6 +884,54 @@ plot_figure4_box_panel <- function(
     ggplot2::coord_cartesian(ylim = y_limits) +
     ggplot2::labs(y = y_label, title = panel_tag) +
     figure4_panel_theme()
+  if (!has_brackets) return(plot)
+  plot + figure4_bracket_layers(annotations, x_levels, scenario_offsets)
+}
+
+
+# Significance brackets sit above the score range [-1, 1]: one height per level
+# (see figure4_contrasts()), with the label above the bracket.
+figure4_bracket_base <- 1.08
+figure4_bracket_step <- 0.11
+figure4_bracket_tick <- 0.025
+
+
+figure4_bracket_top <- function(annotations) {
+  figure4_bracket_base + (max(annotations$level) - 1) * figure4_bracket_step + 0.1
+}
+
+
+# `annotations` has one row per bracket: x_level, group_a, group_b (scenarios), level, label.
+figure4_bracket_layers <- function(annotations, x_levels, scenario_offsets) {
+  x_index <- match(annotations$x_level, x_levels)
+  if (anyNA(x_index)) {
+    stop("Bracket x values outside the panel: ",
+         paste(unique(annotations$x_level[is.na(x_index)]), collapse = ", "), call. = FALSE)
+  }
+  brackets <- data.frame(
+    x_start = x_index + unname(scenario_offsets[annotations$group_a]),
+    x_end = x_index + unname(scenario_offsets[annotations$group_b]),
+    y = figure4_bracket_base + (annotations$level - 1) * figure4_bracket_step,
+    label = annotations$label
+  )
+  ticks <- data.frame(x = c(brackets$x_start, brackets$x_end), y = rep(brackets$y, 2))
+  list(
+    ggplot2::geom_segment(
+      data = brackets,
+      ggplot2::aes(x = .data$x_start, xend = .data$x_end, y = .data$y, yend = .data$y),
+      inherit.aes = FALSE, color = "#333333", linewidth = 0.25
+    ),
+    ggplot2::geom_segment(
+      data = ticks,
+      ggplot2::aes(x = .data$x, xend = .data$x, y = .data$y, yend = .data$y - figure4_bracket_tick),
+      inherit.aes = FALSE, color = "#333333", linewidth = 0.25
+    ),
+    ggplot2::geom_text(
+      data = brackets,
+      ggplot2::aes(x = (.data$x_start + .data$x_end) / 2, y = .data$y + 0.012, label = .data$label),
+      inherit.aes = FALSE, vjust = 0, size = 2.2, color = "#222222"
+    )
+  )
 }
 
 
@@ -1021,8 +1074,12 @@ make_figure4_plot <- function(
   panel_gap = grid::unit(0.18, "cm"),
   legend_gap = grid::unit(0.08, "cm"),
   clustering_feature_label = NULL,
-  classification_feature_label = NULL
+  classification_feature_label = NULL,
+  annotations = NULL,
+  annotation_caption = NULL
 ) {
+  # `annotations` optionally holds bracket tables per panel (ari, loo, split); the
+  # caption goes below the last panel.
   ari_levels <- observed_levels(
     figure4_data$ari$DatasetLabel,
     unname(dataset_labels[dataset_order])
@@ -1041,7 +1098,8 @@ make_figure4_plot <- function(
     y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
-    point_size = point_size
+    point_size = point_size,
+    annotations = annotations$ari
   ) + ggplot2::labs(subtitle = clustering_feature_label)
   panel_b <- plot_figure4_box_panel(
     data = figure4_data$leave_one_cohort_out,
@@ -1054,7 +1112,8 @@ make_figure4_plot <- function(
     y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
-    point_size = point_size
+    point_size = point_size,
+    annotations = annotations$loo
   ) + ggplot2::labs(subtitle = classification_feature_label)
   panel_c <- plot_figure4_box_panel(
     data = figure4_data$train_test_split,
@@ -1067,12 +1126,63 @@ make_figure4_plot <- function(
     y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
-    point_size = point_size
-  ) + ggplot2::labs(subtitle = classification_feature_label)
+    point_size = point_size,
+    annotations = annotations$split
+  ) + ggplot2::labs(subtitle = classification_feature_label, caption = annotation_caption)
 
   list(
     panels = list(panel_a, panel_b, panel_c),
     panel_heights = panel_heights,
+    panel_gap = panel_gap,
+    legend_gap = legend_gap
+  )
+}
+
+
+# Figure S7: the Figure 4b leave-one-cohort-out scores per held-out cohort, one panel
+# per dataset in Figure 4 order; each box holds the seeds of one cohort and scenario.
+# `annotations` optionally maps Task labels to bracket tables. The result is drawn
+# with draw_figure4().
+make_figureS7_plot <- function(
+  loo_data,
+  task_order,
+  scenario_order,
+  scenario_colors,
+  point_size = 1.05,
+  panel_height = 2.4,
+  legend_height = 0.45,
+  panel_gap = grid::unit(0.18, "cm"),
+  legend_gap = grid::unit(0.08, "cm"),
+  feature_label = NULL,
+  annotations = NULL,
+  annotation_caption = NULL
+) {
+  tasks <- observed_levels(loo_data$Task, task_order)
+  y_min <- min(-0.25, floor(min(loo_data$metric_value) * 4) / 4)
+  panels <- lapply(seq_along(tasks), function(i) {
+    data <- loo_data[as.character(loo_data$Task) == tasks[[i]], , drop = FALSE]
+    plot_figure4_box_panel(
+      data = data,
+      x_col = "predicted_client_name",
+      y_col = "metric_value",
+      x_levels = unique(as.character(data$predicted_client_name)),
+      y_label = "MCC",
+      panel_tag = paste0(letters[[i]], ") ", gsub("\n", " ", tasks[[i]], fixed = TRUE)),
+      y_limits = c(y_min, 1.05),
+      y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
+      scenario_order = scenario_order,
+      scenario_colors = scenario_colors,
+      point_size = point_size,
+      annotations = annotations[[tasks[[i]]]]
+    )
+  })
+  panels[[1]] <- panels[[1]] + ggplot2::labs(subtitle = feature_label)
+  panels[[length(panels)]] <- panels[[length(panels)]] +
+    ggplot2::labs(caption = annotation_caption)
+
+  list(
+    panels = panels,
+    panel_heights = c(rep(panel_height, length(panels)), legend_height),
     panel_gap = panel_gap,
     legend_gap = legend_gap
   )

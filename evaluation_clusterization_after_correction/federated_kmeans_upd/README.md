@@ -39,6 +39,7 @@ Each client directory must contain a configuration file named
 `config_kmeans.yml` or `config_kmeans.yaml`. `multiple_runs.py` generates the
 complete configuration, including input/output names, scaling options,
 cluster range, initialization counts, iteration limit, and random seed.
+Local and coordinator initialization counts default to one when omitted.
 
 Generated FeatureCloud test archives, logs, and extracted results are ignored
 by the parent repository.

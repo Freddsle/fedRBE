@@ -4,7 +4,7 @@
 of central and federated k-means before and after correction. Datasets are
 `ecoli`, `ovarian_cancer`, `ccRCC_proteomics` and `quartet_multiomics`. Both
 correction arms, `label_aware` and `no_label`, use ten seeds (1, 11, …, 91) and
-ten starts for central, local federated and coordinator k-means. The target is
+one start for central, local federated and coordinator k-means. The target is
 biological condition; k is its number of classes.
 
 ## Prerequisites
@@ -49,6 +49,9 @@ Saved federated assignments are reused without checking them against the current
 matrices or settings; after changing either, use `--rerun-federated`, with a
 separate `--root` to keep the canonical results. Assignment tables reject other
 samples or metadata. Each FeatureCloud test times out after 1,800 seconds.
+New federated fits require complete clustering output for every client and the
+expected samples. Incomplete outputs retry the full test within the existing retry
+limit.
 
 ## Retained results and local outputs
 
@@ -101,6 +104,9 @@ Use the registry with `--config` and a separate `--results-file`; see the
 [`figure4_analysis.py`](figure4_analysis.py) accepts `--output-dir` for every
 subcommand; dataset analyses also accept `--datasets`, `--arms` and `--seeds`.
 Defaults can be expensive: all datasets, both arms and seeds 1, 11, …, 91.
+Clustering uses one start by default, including the `starts` analysis. Set
+`--n-init`, `--n-inits`, or `--n-init-local`/`--n-init-global` explicitly for
+restart-count sensitivity analyses.
 
 | Subcommand | Analysis and principal controls |
 | --- | --- |
@@ -139,9 +145,11 @@ scikit-learn and does not recover actual FeatureCloud message arrival order.
 
 [`evaluation/aggregate_figure4.R`](../../evaluation/aggregate_figure4.R)
 reads the aggregate clustering tables and RF reports. `FIGURE4_FEATURE_SPACE=panel`
-(default) selects shared-panel inputs and `figures/figure4_<arm>.png`; `all`
-selects ordinary metrics/reports and `figures/figure4_all_features_<arm>.png`.
+(default) selects shared-panel inputs and `figures/figure4_panel5000_<arm>.png`; `all`
+selects all-feature inputs and `figures/figure4_all_features_<arm>.png`.
+Both modes write a matching `_statistics.tsv` and per-cohort LOCO comparisons
+under `figures/`: `figureS7_panel5000_<arm>.png` or `figureS7_all_features_<arm>.png`.
 `CORRECTION_ARM` chooses the arm. `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and
 `FIGURE4_OUTPUT` override paths relative to the repository root or absolutely;
 keep overrides consistent with the feature-space label. See the
-[figure-rendering commands](../../docs/reproduce.md#7-generate-figures-3-4-and-s5-for-each-correction-arm).
+[figure-rendering commands](../../docs/reproduce.md#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
