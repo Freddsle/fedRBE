@@ -19,9 +19,13 @@ It uses three basic building blocks for this:
 """
 
 from dataclasses import dataclass
+from datetime import datetime
+from glob import glob
 from typing import List, Union, Dict, Tuple
 import subprocess
 import os
+import re
+import threading
 import time
 import hashlib
 import yaml
@@ -35,6 +39,11 @@ from FeatureCloud.api.imp.controller import commands as fc_controller
 DEFAULT_CONTROLLER_HOST = "http://localhost:8000"
 TESTS_DIR = 'tests'
 MAX_RETRIES = 5
+# cgroup v2 folders of the containers when docker uses the systemd cgroup driver
+CGROUP_ROOT = "/sys/fs/cgroup/system.slice"
+SAMPLE_INTERVAL = 0.5  # seconds between two samples of the container cgroups
+# The controller logs every payload it fetches from an app container
+FETCH_LOG_PATTERN = re.compile(r"^http://([0-9.]+):\d+/data: Fetched (\d+) bytes$")
 
 
 class _RetryableTestError(RuntimeError):
@@ -56,6 +65,15 @@ class ExperimentResult():
         # if the file cannot be hashed the hash is None
     config: str
         # A JSON string of the used config file
+    container_stats: Union[str, None] = None
+        # A JSON string of a list with one dict per client (ordered like the
+        # result files) with the container's cgroup values memory_peak and
+        # max_anon (bytes) and cpu_usec. None if monitor_containers is False
+    controller_traffic: Union[str, None] = None
+        # A JSON string of a list with one list per client (ordered like the
+        # result files) of the payloads the controller fetched from the
+        # container: [{"time": unix time (s), "bytes": n}, ...] in fetch order.
+        # None if monitor_containers is False
 
 @dataclass
 class Experiment():
@@ -96,6 +114,9 @@ class Experiment():
     timeout: int = 900  # The timeout in seconds for the test. if a test takes
                         # longer than this, it is stopped and retried
                         # default is 15 minutes
+    monitor_containers: bool = False # if True, samples the memory and CPU usage
+                        # of the app containers and reads the fetched payload
+                        # sizes from the controller log, see ExperimentResult
 
     def run_test(self) -> Tuple[List[str], int, ExperimentResult]:
         """
@@ -136,6 +157,10 @@ class Experiment():
             self._startup()
 
         for attempt in range(MAX_RETRIES + 1):
+            sampler = None
+            if self.monitor_containers:
+                sampler = _ContainerSampler(self.app_image_name)
+                sampler.start()
             try:
                 exp_id, experiment_meta_info = self._start_test()
                 instances = self._check_test(exp_id=exp_id)
@@ -158,7 +183,16 @@ class Experiment():
                 time.sleep(5)
                 self._startup()
                 continue
+            finally:
+                if sampler is not None:
+                    sampler.stop()
 
+            if sampler is not None:
+                container_names = [info['name'] for info in instances]
+                experiment_meta_info.container_stats = json.dumps(
+                    sampler.container_stats(container_names))
+                experiment_meta_info.controller_traffic = json.dumps(
+                    self._controller_traffic(sampler, container_names))
             print(f"instances: {instances}")
             print("_______________EXPERIMENT FINISHED SUCCESSFULLY_______________")
             return result_files, coord_idx, experiment_meta_info
@@ -406,6 +440,41 @@ class Experiment():
             with open(config_path, "w") as f:
                 yaml.dump(config, f, default_flow_style=False)
 
+    def _controller_traffic(self, sampler: "_ContainerSampler",
+                            container_names: List[str]) -> List[List[dict]]:
+        """
+        Reads the payload sizes the controller fetched from each of the given
+        containers during the sampler's time window from the newest controller
+        log (the controller logs to <fc_data_dir>/logs, one file per start).
+        Returns:
+            Per container (same order), [{"time": unix time, "bytes": n}, ...]
+            in the order of the log
+        """
+        logs = glob(os.path.join(self.fc_data_dir, "logs", "log-*.log"))
+        if not logs:
+            raise RuntimeError(f"No controller log found in {os.path.join(self.fc_data_dir, 'logs')}")
+        ip_to_name = sampler.ip_to_name()
+        traffic: Dict[str, List[dict]] = {name: [] for name in container_names}
+        with open(max(logs, key=os.path.getmtime)) as f:
+            for line in f:
+                try:
+                    entry = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if entry.get("component") != "LOCAL":
+                    continue
+                match = FETCH_LOG_PATTERN.match(entry.get("msg", ""))
+                if match is None:
+                    continue
+                # the log has a resolution of a second
+                logged = datetime.fromisoformat(entry["time"].replace("Z", "+00:00")).timestamp()
+                if not sampler.t_start - 1 <= logged <= sampler.t_end + 1:
+                    continue
+                name = ip_to_name.get(match.group(1))
+                if name in traffic:
+                    traffic[name].append({"time": logged, "bytes": int(match.group(2))})
+        return [traffic[name] for name in container_names]
+
     def _kill_leftover_container(self):
         """
         Eliminates any containers left of the app image.
@@ -420,27 +489,118 @@ class Experiment():
         # include stopped containers — they stay on networks until removed
         containers = dockerclient.containers.list(all=True)
 
-        image_name = self.app_image_name
-        if "/" in image_name:
-            image_name = image_name.split("/")[-1]
-        # FC strips underscores when naming containers, so also try without them
-        image_name_no_underscores = image_name.replace("_", "")
-
         for container in containers:
             tags = container.image.tags if container.image else []
-            name_match = (
-                image_name in container.name
-                or image_name_no_underscores in container.name
-            )
-            image_match = any(image_name in tag for tag in tags)
-            if name_match or image_match:
+            if _is_app_container(container.name, tags, self.app_image_name):
                 try:
                     container.remove(force=True)  # stops + removes in one call
                     print(f"Removed leftover container: {container.id} (image: {self.app_image_name})")
                 except Exception as e:
                     print(f"WARNING: failed to remove container {container.id}, will try to continue. Error: {e}")
 
+class _ContainerSampler():
+    """
+    Samples the cgroup (v2) memory and CPU usage of the running app containers
+    from the host in a background thread. The containers and their cgroups are
+    removed when the test ends, so the last sample per container is kept.
+    memory.peak never decreases and an app idles for at least 20s after its
+    protocol finished before its container stops, so the last sample contains
+    the peak. max_anon (memory without file cache) is the max over all samples.
+    # TODO: make sure that the idle time is true
+    """
+    def __init__(self, image_name: str, interval: float = SAMPLE_INTERVAL):
+        self.image_name = image_name
+        self.interval = interval
+        self.stats: Dict[str, dict] = dict()  # container name -> values
+        self.t_start = None
+        self.t_end = None
+        self._error = None
+        self._stop = threading.Event()
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._api = docker.from_env().api
+
+    def start(self) -> None:
+        self.t_start = time.time()
+        self._thread.start()
+
+    def stop(self) -> None:
+        self._stop.set()
+        self._thread.join()
+        self.t_end = time.time()
+
+    def container_stats(self, container_names: List[str]) -> List[dict]:
+        """Returns the sampled values per given container name (same order)."""
+        if self._error is not None:
+            raise RuntimeError(f"Sampling the containers failed: {self._error}") from self._error
+        missing = [name for name in container_names if name not in self.stats]
+        if missing:
+            raise RuntimeError(
+                f"No cgroup samples for the containers {missing}. "
+                f"Expected cgroup v2 folders {CGROUP_ROOT}/docker-<id>.scope "
+                "(docker with the systemd cgroup driver).")
+        return [{key: self.stats[name][key] for key in ("memory_peak", "max_anon", "cpu_usec")}
+                for name in container_names]
+
+    def ip_to_name(self) -> Dict[str, str]:
+        return {ip: name for name, values in self.stats.items() for ip in values["ips"]}
+
+    def _run(self) -> None:
+        try:
+            while not self._stop.is_set():
+                self._sample()
+                self._stop.wait(self.interval)
+        except Exception as e:  # reported by container_stats
+            self._error = e
+
+    def _sample(self) -> None:
+        for info in self._api.containers():
+            name = info["Names"][0].lstrip("/")
+            if not _is_app_container(name, [info["Image"]], self.image_name):
+                continue
+            cgroup = os.path.join(CGROUP_ROOT, f"docker-{info['Id']}.scope")
+            try:
+                memory_peak = int(_read_file(os.path.join(cgroup, "memory.peak")))
+                anon = _read_keyed_value(os.path.join(cgroup, "memory.stat"), "anon")
+                cpu_usec = _read_keyed_value(os.path.join(cgroup, "cpu.stat"), "usage_usec")
+            except FileNotFoundError:
+                continue  # the container stopped after it was listed
+            values = self.stats.setdefault(name, {"memory_peak": 0, "max_anon": 0,
+                                                  "cpu_usec": 0, "ips": set()})
+            values["memory_peak"] = max(values["memory_peak"], memory_peak)
+            values["max_anon"] = max(values["max_anon"], anon)
+            values["cpu_usec"] = max(values["cpu_usec"], cpu_usec)
+            for network in info["NetworkSettings"]["Networks"].values():
+                if network.get("IPAddress"):
+                    values["ips"].add(network["IPAddress"])
+
+
 ### Helper functions
+def _is_app_container(container_name: str, image_refs: List[str], app_image_name: str) -> bool:
+    """
+    Whether a container belongs to the app image, matched by its name or its
+    image references. FeatureCloud strips underscores from image names when
+    generating container names (e.g. fc_kmeans_upd -> fc_fckmeansupd_*).
+    """
+    image_name = app_image_name.split("/")[-1]
+    return (image_name in container_name
+            or image_name.replace("_", "") in container_name
+            or any(image_name in ref for ref in image_refs))
+
+
+def _read_file(path: str) -> str:
+    with open(path) as f:
+        return f.read()
+
+
+def _read_keyed_value(path: str, key: str) -> int:
+    """Reads the value of key from a cgroup file of 'key value' lines."""
+    for line in _read_file(path).splitlines():
+        name, value = line.split()
+        if name == key:
+            return int(value)
+    raise RuntimeError(f"{key} not found in {path}")
+
+
 def hash_file(file_path, exclude=None):
     """Generate a SHA-256 hash of the contents of a file."""
     hasher = hashlib.sha512()

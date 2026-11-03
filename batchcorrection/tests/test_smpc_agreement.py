@@ -14,7 +14,7 @@ from unittest.mock import MagicMock, Mock, patch
 import numpy as np
 import pandas as pd
 
-from batchcorrection import classes, fedrbe
+from batchcorrection import classes, fedrbe, perf
 from batchcorrection.classes import client, coordinator_utils
 
 
@@ -29,6 +29,7 @@ def load_states():
         "classes.client": client,
         "classes.coordinator_utils": coordinator_utils,
         "fedrbe": fedrbe,
+        "perf": perf,
     }
     with patch.dict(sys.modules, aliases), patch.object(engine, "app", engine.App()):
         spec.loader.exec_module(states)
@@ -173,9 +174,12 @@ class SmpcAgreementTests(unittest.TestCase):
         states, engine = load_states()
         state = states.InitialState()
         state._app = engine.App()
-        with patch.object(states, "run_fedrbe") as run:
+        with patch.object(states, "run_fedrbe") as run, \
+                patch.object(states, "PerfRecorder") as recorder:
             self.assertEqual(state.run(), "terminal")
-        run.assert_called_once_with(state, states.INPUT_FOLDER, states.OUTPUT_FOLDER)
+        run.assert_called_once_with(state, states.INPUT_FOLDER, states.OUTPUT_FOLDER,
+                                    perf=recorder.return_value)
+        recorder.return_value.write.assert_called_once()
         self.assertEqual(state._app.default_smpc["exponent"], fedrbe.SMPC_EXPONENT)
 
     def test_statistics_follow_smpc_and_only_batch_coefficients_are_broadcast(self):

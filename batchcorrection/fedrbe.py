@@ -17,11 +17,13 @@ try:
     from classes.client import Client
     from classes.coordinator_utils import select_common_features_variables, \
         compute_beta, create_beta_mask, batch_coefficients
+    from perf import NullRecorder
 except ImportError:
     # imported from the repository, e.g. by tests or local simulations
     from batchcorrection.classes.client import Client
     from batchcorrection.classes.coordinator_utils import select_common_features_variables, \
         compute_beta, create_beta_mask, batch_coefficients
+    from batchcorrection.perf import NullRecorder
 
 # Exponent used for the fixed point representation in SMPC, we use a bigger
 # exponent than FeatureCloud's default
@@ -38,28 +40,34 @@ def smpc_error_bound(smpc: bool, num_clients: int) -> float:
     return num_clients * 10.0 ** -SMPC_EXPONENT
 
 
-def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
+def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None:
     """
     Runs fedRBE for one client. The coordinator is also a client.
     Args:
         protocol: Used for sending and receiving data, see the module docstring
         inputfolder: Folder containing the config file and the data of this client
         outputfolder: Folder the corrected data and the report are written to
+        perf: Optional perf.PerfRecorder, every switch call marks what this
+            client does from then on, in the client or the aggregator role
     Raises:
         RuntimeError: if the clients' inputs are inconsistent
     """
+    perf = perf or NullRecorder()
     ### initial
+    perf.switch("client_compute", "commonVariables")
     # defining the client
     cohort_name = protocol.id
     client = Client()
     client.config_based_init(clientname = cohort_name, input_folder = inputfolder)
     smpc = client.smpc
+    perf.info["smpc"] = smpc
     # send list of protein names (genes) to coordinator
     # we use the hashed values of the feature names and variables
     assert isinstance(client.hash2feature, dict)
     assert isinstance(client.hash2variable, dict)
 
     # exchange the batch_labels and covariates
+    perf.switch("client_send", "commonVariables")
     protocol.send_data_to_coordinator((client.batch_labels,
                                        list(client.hash2variable.keys()), client.smpc,
                                        client.feature_block_size),
@@ -67,7 +75,9 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
                                       use_smpc=False)
     if protocol.is_coordinator:
         # union the batch_labels and intersect the covariates
+        perf.switch("agg_gather", "commonVariables")
         list_labels_variables = protocol.gather_data(is_json=False)
+        perf.switch("agg_compute", "commonVariables")
         global_variables_hashed = None  # will become a list, not a set
         global_batch_labels = list()
         for labels, variables, client_smpc, feature_block_size in list_labels_variables:
@@ -95,11 +105,14 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
         if len(global_batch_labels) != len(set(global_batch_labels)):
             raise RuntimeError("Batch labels are not unique")
         # send around the number of batches and the variables
+        perf.switch("agg_broadcast", "commonVariables")
         protocol.broadcast_data((global_variables_hashed, len(global_batch_labels)),
                                 send_to_self=True,
                                 memo="commonVariables")
     # we receive the common variables and the number of batches
+    perf.switch("client_await", "commonVariables")
     global_variables_hashed, num_batches = protocol.await_data(n=1, is_json=False, memo="commonVariables")
+    perf.switch("client_compute", "commonGenes")
     # now we can calculate the min_samples_per_feature
     min_samples = max(num_batches+len(global_variables_hashed)+1, client.min_samples)
 
@@ -113,6 +126,7 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
             "values per feature. Add samples to these batches, or merge or remove them."
         )
 
+    perf.switch("client_send", "commonGenes")
     protocol.send_data_to_coordinator((cohort_name,
                                        client.position,
                                        client.reference_batch,
@@ -125,7 +139,9 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
     if protocol.is_coordinator:
         # wait for each client to send the list of genes they have
         print("[global_feature_selection] Gathering features from all clients")
+        perf.switch("agg_gather", "commonGenes")
         feature_information = protocol.gather_data(is_json=False)
+        perf.switch("agg_compute", "commonGenes")
         # synchronize the covariate and batch information of all clients
         # so that each client can decide which features it can use
         # the clients need the info about covariates and batches to know
@@ -135,13 +151,16 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
         global_feature_names, feature_presence_matrix, cohorts_order = \
               select_common_features_variables(feature_information,
                                                default_order=list(protocol.clients))
+        perf.switch("agg_broadcast", "commonGenes")
         protocol.broadcast_data((global_feature_names, cohorts_order),
                                 send_to_self=True, memo="commonGenes")
 
     ### validate
     # obtain and safe common genes and indices of design matrix
     print("[validate] waiting for common features and covariates")
+    perf.switch("client_await", "commonGenes")
     global_feauture_names_hashed, cohorts_order = protocol.await_data(n=1, is_json=False, memo="commonGenes")
+    perf.switch("client_compute", "XtX_block")
 
     client.validate_inputs(global_variables_hashed)
     print("[validate] Inputs have been validated")
@@ -189,6 +208,7 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
     n_batch_columns = num_batches - 1
     if protocol.is_coordinator:
         # calculate the global mask used to eliminate linearly dependant features
+        perf.switch("agg_compute", "XtX_block")
         global_mask = create_beta_mask(feature_presence_matrix, n, k)
         beta = np.empty((n, n_batch_columns))
 
@@ -197,12 +217,16 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
         stop = min(start + block_size, n)
         statistics_memo = f"XtX_XtY_{start}"
         done_memo = f"block_done_{start}"
+        block = start // block_size
         print(f"[compute_beta] features {start}:{stop}")
+        perf.switch("client_send", "XtX_block", block)
         protocol.send_data_to_coordinator([XtX[start:stop], XtY[start:stop]],
                                          send_to_self=True, use_smpc=smpc,
                                          memo=statistics_memo)
         if protocol.is_coordinator:
+            perf.switch("agg_gather", "XtX_block", block)
             XtX_XtY_list = protocol.gather_data(use_smpc=smpc, memo=statistics_memo)
+            perf.switch("agg_compute", "XtX_block", block)
             block_beta = compute_beta(
                 XtX_XtY_list, n=stop - start, k=k,
                 global_mask=global_mask[start:stop],
@@ -210,17 +234,22 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
                 n_batch_columns=n_batch_columns)
             del XtX_XtY_list
             beta[start:stop] = batch_coefficients(block_beta, n_batch_columns)
+            perf.switch("agg_broadcast", "XtX_block", block)
             protocol.broadcast_data(None, send_to_self=True, memo=done_memo)
 
         # Wait before queuing another SMPC block.
+        perf.switch("client_await", "XtX_block", block)
         protocol.await_data(n=1, is_json=False, memo=done_memo)
 
     if protocol.is_coordinator:
         # Share only batch coefficients, after all blocks succeed.
+        perf.switch("agg_broadcast", "beta")
         protocol.broadcast_data(beta, send_to_self=True, memo="beta")
 
     ### include_correction
+    perf.switch("client_await", "beta")
     beta = protocol.await_data(n=1, is_json=False, memo="beta")
+    perf.switch("client_compute", "final")
     # remove the batch effects in own data and safe the results
     client.remove_batch_effects(beta)
     print(f"DEBUG: Shape of corrected data: {client.data_corrected.shape}")
@@ -230,3 +259,4 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str) -> None:
                                       sep=client.separator)
     with open(os.path.join(outputfolder, "report.txt"), "w") as f:
         f.write(client.report)
+    perf.end()
