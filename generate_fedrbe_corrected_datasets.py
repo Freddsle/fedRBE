@@ -60,7 +60,7 @@ app_image_name = "featurecloud.ai/bcorrect:latest"
 # All experiments communicate via the FeatureCloud relay server, as in a real
 # federated run, so the performance reports contain realistic communication
 # times. The query interval stays at the default of featurecloud_api_extension
-# (5s, the interval used by the production controller).
+# (0.5s, the interval used by the production controller).
 channel = "internet"
 # Name of the performance report each client writes (batchcorrection/perf.py)
 PERFORMANCE_REPORT = "performance_report.json"
