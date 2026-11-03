@@ -420,8 +420,8 @@ RandomForest implementation: `evaluation_classification_after_correction/fc_fed_
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
 Use `evaluation_clusterization_after_correction/real_datasets/multiple_runs.py`
-for the canonical ten-seed comparison with one start for central, local federated
-and coordinator k-means. It prepares all four datasets,
+for the ten-seed comparison, with one start per seed
+for central, local federated and coordinator k-means. It prepares all four datasets,
 including Quartet joint matrices, recomputes central fits and reuses saved
 federated assignments unless `--rerun-federated` is given. Both central
 and federated correction outputs and their original metadata must be available.
@@ -475,16 +475,17 @@ for arm in label_aware no_label; do
 done
 ```
 
-Outputs: `figures/figure3_<arm>.png`, `figures/figure4_<arm>.png`,
-`figures/figureS5_<arm>.png` and `figures/figureS7_<arm>.png`. Figures 3 and S5 also
-write matching `_variance.tsv` files containing median variance fractions and feature
-counts. `aggregate_figure4.R` writes Figure S7 and the test results
-`figures/figure4_<arm>_statistics.tsv` together with Figure 4.
+Outputs under `figures/`: `figure3_<arm>.png`, `figure4_panel5000_<arm>.png`,
+`figureS5_<arm>.png` and `figureS7_panel5000_<arm>.png`. Figures 3 and S5 also
+write matching `_variance.tsv` files with median variance fractions and feature
+counts. In both feature spaces, Figure 4 writes a matching `_statistics.tsv`
+covering Figures 4 and S7.
 
 #### Scenario comparisons in Figure 4 and S7
 
-Shared-panel comparisons use 10 runs per scenario (Figure 4a: ARI; Figure 4c:
-pooled train/test MCC; Figure S7: held-out-cohort MCC).
+Both feature spaces and correction arms use 10 runs per scenario (Figure 4a: ARI;
+Figure 4c: pooled train/test MCC; Figure S7: held-out-cohort MCC).
+These panels show significance brackets; Figure 4b is an overview.
 
 - C1/C2: before versus after correction within each learner; exact two-sided
   Wilcoxon signed-rank tests paired by seed, with Pratt's method for zeros.
@@ -492,20 +493,29 @@ pooled train/test MCC; Figure S7: held-out-cohort MCC).
   correction; exact two-sided unpaired Mann–Whitney U tests.
 
 Tables report raw p-values and Holm-adjusted p-values for the four contrasts
-per dataset/task or held-out cohort and correction arm. `*` marks adjusted
-p < 0.05; `n.s.` otherwise.
+within each dataset/task or held-out cohort, correction arm and feature space.
+`*` marks adjusted p < 0.05; `n.s.` otherwise.
 
 Mean differences (`mean_b - mean_a`) have 95% percentile bootstrap intervals
 (10,000 resamples, seed 1), using paired resampling for C1/C2 and independent
 resampling for C3/C4. The `relevant` flag marks |mean difference| ≥0.05.
 
-Correction and panel selection use all cohorts; label-aware correction uses
-held-out labels.
+Comparisons across feature spaces are descriptive and conditional on the
+observed cohorts. Correction and panel selection use all cohorts; label-aware
+correction uses held-out labels.
 
 Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
 shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
-The corresponding RF report is `classification_metric_report_panel5000.csv`.
-Generate the supplementary all-feature version for each arm with:
+ARI inputs are relative to `evaluation_clusterization_after_correction/real_datasets/`;
+RF reports are under `evaluation_classification_after_correction/results/`:
+
+| Feature space | Label-aware ARI table | No-label ARI table | RF report |
+| --- | --- | --- | --- |
+| Shared panel | `panel5000/metrics_ari_multirun.tsv` | `panel5000/no_label/metrics_ari_multirun.tsv` | `classification_metric_report_panel5000.csv` |
+| All features | `metrics_ari_multirun.tsv` | `no_label/metrics_ari_multirun.tsv` | `classification_metric_report.csv` |
+
+Use `FIGURE4_FEATURE_SPACE=all` for all complete-case k-means features and union
+RF features:
 
 ```bash
 for arm in label_aware no_label; do
@@ -513,11 +523,9 @@ for arm in label_aware no_label; do
 done
 ```
 
-These figures use all complete-case k-means features and all union RF features,
-and write `figures/figure4_all_features_<arm>.png`. Figure subtitles identify the
-feature space. Saved RF comparisons across feature spaces are descriptive:
-tree seeding also differs. Input and output path overrides remain available through
-`FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`; keep overrides
+This writes `figures/figure4_all_features_<arm>.png` and
+`figures/figureS7_all_features_<arm>.png`. Override paths with
+`FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`; keep inputs
 consistent with the selected feature space.
 
 Set `FIGURE4_OUTPUT` to a path ending in `.svg` to export Figure 4 as SVG.
@@ -525,7 +533,7 @@ PNG is the default; a path without an extension gets `.png`. For example:
 
 ```bash
 CORRECTION_ARM=label_aware FIGURE4_FEATURE_SPACE=panel \
-  FIGURE4_OUTPUT=figures/figure4_label_aware.svg \
+  FIGURE4_OUTPUT=figures/figure4_panel5000_label_aware.svg \
   pixi run Rscript evaluation/aggregate_figure4.R
 ```
 

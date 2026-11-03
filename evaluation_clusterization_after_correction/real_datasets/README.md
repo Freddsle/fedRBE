@@ -145,8 +145,10 @@ scikit-learn and does not recover actual FeatureCloud message arrival order.
 
 [`evaluation/aggregate_figure4.R`](../../evaluation/aggregate_figure4.R)
 reads the aggregate clustering tables and RF reports. `FIGURE4_FEATURE_SPACE=panel`
-(default) selects shared-panel inputs and `figures/figure4_<arm>.png`; `all`
-selects ordinary metrics/reports and `figures/figure4_all_features_<arm>.png`.
+(default) selects shared-panel inputs and `figures/figure4_panel5000_<arm>.png`; `all`
+selects all-feature inputs and `figures/figure4_all_features_<arm>.png`.
+Both modes write a matching `_statistics.tsv` and per-cohort LOCO comparisons
+under `figures/`: `figureS7_panel5000_<arm>.png` or `figureS7_all_features_<arm>.png`.
 `CORRECTION_ARM` chooses the arm. `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and
 `FIGURE4_OUTPUT` override paths relative to the repository root or absolutely;
 keep overrides consistent with the feature-space label. See the

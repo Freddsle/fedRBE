@@ -1,5 +1,5 @@
 # Run from the repository root: pixi run Rscript evaluation_utils/tests/test_figure4_statistics.R
-# Check exact rank tests and paired/unpaired intervals, then render both arms
+# Check exact rank tests and paired/unpaired intervals, then render both arms/spaces
 # temporarily and compare the summaries with their source scores.
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 source(file.path("evaluation_utils", "figure4_statistics.R"))
@@ -117,15 +117,29 @@ missing_seed$seed[[1]] <- NA
 expect_seed_error(missing_seed)
 cat("Exact rank tests, numerical ties, paired/unpaired intervals and seed handling verified\n")
 
-for (arm in c("label_aware", "no_label")) {
-  output <- file.path(tempdir(), paste0("figure4_test_", arm, ".png"))
-  Sys.setenv(CORRECTION_ARM = arm, FIGURE4_FEATURE_SPACE = "panel", FIGURE4_OUTPUT = output)
+cases <- expand.grid(arm = c("label_aware", "no_label"), space = c("panel", "all"),
+                     stringsAsFactors = FALSE)
+verified_outputs <- character()
+for (case in seq_len(nrow(cases))) {
+  arm <- cases$arm[[case]]
+  space <- cases$space[[case]]
+  previous_hashes <- tools::md5sum(verified_outputs)
+  output <- file.path(tempdir(), paste0("figure4_test_", space, "_", arm, ".png"))
+  Sys.setenv(CORRECTION_ARM = arm, FIGURE4_FEATURE_SPACE = space, FIGURE4_OUTPUT = output)
   script <- new.env()
   source(file.path("evaluation", "aggregate_figure4.R"), local = script)
+  expected_prefix <- if (space == "panel") "figure4_panel5000_" else "figure4_all_features_"
+  stopifnot(identical(script$output_prefix, expected_prefix))
   Sys.unsetenv(c("CORRECTION_ARM", "FIGURE4_FEATURE_SPACE", "FIGURE4_OUTPUT"))
   statistics_file <- sub("\\.png$", "_statistics.tsv", output)
-  stopifnot(file.exists(output), file.exists(statistics_file),
-            file.exists(file.path(tempdir(), paste0("figureS7_", arm, ".png"))))
+  cohort_file <- file.path(tempdir(), paste0(
+    "figureS7_", if (space == "all") "all_features_" else "panel5000_", arm, ".png"
+  ))
+  current_outputs <- c(output, statistics_file, cohort_file)
+  stopifnot(all(file.exists(current_outputs)),
+            !any(current_outputs %in% verified_outputs),
+            identical(tools::md5sum(verified_outputs), previous_hashes))
+  verified_outputs <- c(verified_outputs, current_outputs)
 
   summary <- script$figure4_stats
   data <- script$figure4_data
@@ -152,6 +166,17 @@ for (arm in c("label_aware", "no_label")) {
             nrow(figure4_annotation_data(summary, "4a ARI")) == 16L,
             nrow(figure4_annotation_data(summary, "4c train/test")) == 16L,
             nrow(figure4_annotation_data(summary, "S7 LOCO")) == 68L)
+  stopifnot(
+    identical(script$figure4_annotations$ari$label,
+              summary$marker[summary$panel == "4a ARI"]),
+    identical(script$figure4_annotations$split$label,
+              summary$marker[summary$panel == "4c train/test"]),
+    length(script$figureS7_annotations) == 4L
+  )
+  for (task in names(script$figureS7_annotations)) {
+    expected <- summary$marker[summary$panel == "S7 LOCO" & summary$dataset == one_line(task)]
+    stopifnot(identical(script$figureS7_annotations[[task]]$label, expected))
+  }
   for (indices in families) {
     stopifnot(same(summary$p_holm[indices], stats::p.adjust(summary$p_raw[indices], "holm")))
   }
@@ -192,5 +217,6 @@ for (arm in c("label_aware", "no_label")) {
     stopifnot(same(row$p_raw, p), row$ci95_low >= bounds[[1]] - 1e-12,
               row$ci95_high <= bounds[[2]] + 1e-12, row$ci95_low <= row$ci95_high)
   }
-  cat(arm, ": 100 rank-test contrasts in 25 Holm families and both figures verified\n")
+  cat(arm, space, ": 100 rank-test contrasts in 25 Holm families and both figures verified\n")
 }
+stopifnot(length(verified_outputs) == 12L, !anyDuplicated(verified_outputs))
