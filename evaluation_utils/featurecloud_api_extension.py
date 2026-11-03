@@ -44,6 +44,7 @@ CGROUP_ROOT = "/sys/fs/cgroup/system.slice"
 SAMPLE_INTERVAL = 0.5  # seconds between two samples of the container cgroups
 # The controller logs every payload it fetches from an app container
 FETCH_LOG_PATTERN = re.compile(r"^http://([0-9.]+):\d+/data: Fetched (\d+) bytes$")
+QUERY_INTERVAL_DEFAULT = 0.5  # polling interval of the fedRBE app for outgoing messages
 
 
 class _RetryableTestError(RuntimeError):
@@ -107,8 +108,8 @@ class Experiment():
     channel: Union[str, None] = None # The channel to be used,
                                      # if None, the default channel is used!
                                      # Options are local and internet
-    query_interval: Union[int, None] = None  # The query interval in seconds,
-                                             # None for default
+    query_interval: Union[float, None] = None  # The query interval in seconds,
+                                             # None to use QUERY_INTERVAL_DEFAULT
     controller_host: Union[str, None] = None # The controller host to be used
                                     # if None, DEFAULT_CONTROLLER_HOST is used
     timeout: int = 900  # The timeout in seconds for the test. if a test takes
@@ -309,7 +310,7 @@ class Experiment():
         if self.channel is None:
             self.channel = "local"
         if self.query_interval is None:
-            self.query_interval = 5
+            self.query_interval = QUERY_INTERVAL_DEFAULT
 
         client_dirs = ",".join([os.path.relpath(client, self.fc_data_dir) for client in self.clients])
         try:
