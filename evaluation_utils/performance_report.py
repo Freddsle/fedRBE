@@ -1,17 +1,23 @@
 """
 Interprets the performance reports of a dockerized fedRBE run.
-Each client writes performance_report.json (batchcorrection/perf.py), a
-contiguous timeline of segments in the client role (client_compute,
-client_send, client_await) and, for the coordinator, the aggregator role
-(agg_compute, agg_gather, agg_broadcast). As all containers run on the same
-host, the timestamps are comparable between clients.
+Each client writes performance_report.json (batchcorrection/perf.py), the
+spans of its work in the client role (client_compute, client_send,
+client_await) and, for the coordinator, the aggregator role (agg_compute,
+agg_gather, agg_broadcast). Spans of one role follow each other, spans of
+different roles overlap: the coordinator's client_await of a round contains
+its agg_gather, agg_compute and agg_broadcast of that round, as it awaits the
+aggregated result while it creates it. Only the coordinator's agg_compute of
+XtX_block without idx (the beta mask, before the first block is sent) lies
+outside its client spans. As all containers run on the same host, the
+timestamps are comparable between clients.
 
-summarize_performance creates one row per client and segment with:
-    duration: length of the segment
-    bytes: payload bytes the segment sent, taken from the controller log
+summarize_performance creates one row per client and span (except the
+whole_protocol span around all others, its length is run_duration) with:
+    duration: length of the span
+    bytes: payload bytes the span sent, taken from the controller log
         (what the controller fetched from the container, for SMPC this is
         the payload before it is split into shards)
-    delay: only for segments that end with received data:
+    delay: only for spans that end with received data:
         agg_gather of the coordinator: end of the gather minus the end of the
             last client_send of a client that sends via the network (the
             coordinator sends to itself without the network unless SMPC is used
@@ -21,16 +27,17 @@ summarize_performance creates one row per client and segment with:
     and per client: the run duration, peak and baseline resident memory of
     the app process and the container's cgroup peak memory, max anonymous
     memory and CPU time.
-For the coordinator, client_await is about 0 as it awaits its own broadcast,
-its waiting is agg_gather, so nothing is counted twice.
+The coordinator's client_await contains its aggregation, so it has no delay,
+its waiting for the other clients is agg_gather.
+TODO: check and improve
 """
 import json
 from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 
-ROUND_TIME_TOLERANCE = 1e-3  # seconds, segments must be contiguous up to this
-
+# kind and round of the span around the whole protocol of a client
+WHOLE_PROTOCOL = "whole_protocol"
 
 def _sends_via_network(segment: dict, is_coordinator: bool, smpc: bool) -> bool:
     """Whether the controller fetches the data queued in this segment."""
@@ -63,10 +70,12 @@ def summarize_performance(client_names: List[str], reports: List[dict],
             [{"time": ..., "bytes": ...}, ...] in the order they happened, from
             featurecloud_api_extension.ExperimentResult.controller_traffic
     Returns:
-        DataFrame with one row per client and segment, see the module docstring
+        DataFrame with one row per client and span, see the module docstring
     Raises:
-        ValueError: if a timeline is not contiguous, there is not exactly one
-            coordinator or the number of fetches does not match the sends
+        ValueError: if spans of the same role overlap, a client has not exactly
+            one whole_protocol span containing all its other spans, there is
+            not exactly one coordinator or the number of fetches does not
+            match the sends
     """
     if len(client_names) != len(reports):
         raise ValueError("Need one performance report per client")
@@ -77,10 +86,12 @@ def summarize_performance(client_names: List[str], reports: List[dict],
     smpc = bool(coordinator["info"]["smpc"])
 
     for name, report in zip(client_names, reports):
-        segments = report["segments"]
-        for previous, current in zip(segments, segments[1:]):
-            if abs(current["t_start"] - previous["t_end"]) > ROUND_TIME_TOLERANCE:
-                raise ValueError(f"Timeline of {name} is not contiguous at {current}")
+        for role in ("client_", "agg_"):
+            spans = sorted((seg for seg in report["segments"] if seg["kind"].startswith(role)),
+                           key=lambda seg: seg["t_start"])
+            for previous, current in zip(spans, spans[1:]):
+                if current["t_start"] < previous["t_end"]:
+                    raise ValueError(f"Spans of {name} overlap: {previous} and {current}")
 
     # end of the coordinator's broadcast per round, used for the downlink delay
     broadcast_end: Dict[tuple, float] = {
@@ -98,7 +109,17 @@ def summarize_performance(client_names: List[str], reports: List[dict],
     rows = list()
     for idx, (name, report) in enumerate(zip(client_names, reports)):
         is_coordinator = report["is_coordinator"]
-        segments = report["segments"]
+        whole = [seg for seg in report["segments"] if seg["kind"] == WHOLE_PROTOCOL]
+        if len(whole) != 1:
+            raise ValueError(f"Client {name}: expected one {WHOLE_PROTOCOL} span, got {len(whole)}")
+        whole = whole[0]
+        # spans are stored in the order they ended
+        segments = sorted((seg for seg in report["segments"] if seg["kind"] != WHOLE_PROTOCOL),
+                          key=lambda seg: seg["t_start"])
+        outside = [seg for seg in segments
+                   if seg["t_start"] < whole["t_start"] or seg["t_end"] > whole["t_end"]]
+        if outside:
+            raise ValueError(f"Client {name}: spans outside of {WHOLE_PROTOCOL}: {outside}")
         network_sends = [seg for seg in segments
                          if _sends_via_network(seg, is_coordinator, smpc)]
         fetched = None
@@ -117,7 +138,7 @@ def summarize_performance(client_names: List[str], reports: List[dict],
             "client": name,
             "coordinator": is_coordinator,
             "smpc": smpc,
-            "run_duration": segments[-1]["t_end"] - segments[0]["t_start"],
+            "run_duration": whole["t_end"] - whole["t_start"],
             "app_pre_fedrbe_peak_rss_bytes": report["pre_fedrbe_peak_rss_kib"] * 1024,
             "app_baseline_rss_bytes": report["baseline_rss_kib"] * 1024,
             "app_peak_rss_bytes": report["peak_rss_kib"] * 1024,

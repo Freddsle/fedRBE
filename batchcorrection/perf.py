@@ -1,9 +1,11 @@
 """
 Records a per client timeline of run_fedrbe for performance reports.
-run_fedrbe calls switch(kind, round_name, idx) whenever it changes what it is
-doing, which closes the open segment and opens the next one. So the segments
-are contiguous and every moment of the run belongs to exactly one segment.
-Segment kinds:
+run_fedrbe marks each span of work with start(kind, round_name, idx) and
+end(kind, round_name, idx). Spans of the same role follow each other, spans of
+different roles can overlap: the coordinator awaits the aggregated result as a
+client (client_await) while it gathers, aggregates and broadcasts it as the
+aggregator.
+Span kinds:
     client role: client_compute, client_send, client_await
     aggregator role (coordinator only): agg_compute, agg_gather, agg_broadcast
 The report only contains raw timestamps (time.time(), so they are comparable
@@ -32,16 +34,16 @@ class NullRecorder():
     def __init__(self):
         self.info = dict()
 
-    def switch(self, kind: str, round_name: str, idx=None) -> None:
+    def start(self, kind: str, round_name: str, idx=None) -> None:
         pass
 
-    def end(self) -> None:
+    def end(self, kind: str, round_name: str, idx=None) -> None:
         pass
 
 
 class PerfRecorder():
     """
-    Records contiguous timeline segments and the peak resident memory of
+    Records the timeline spans and the peak resident memory of
     this process. Create it right before run_fedrbe, as it resets the peak
     resident memory (VmHWM) of the process.
     Raises:
@@ -55,29 +57,40 @@ class PerfRecorder():
             f.write("5")
         self.baseline_rss_kib = _status_kib("VmRSS")
         self.info = dict()
-        self.segments = list()
-        self._open = None
+        self.segments = list()  # closed spans, in the order they ended
+        self._open = dict()  # (kind, round_name, idx) -> start time
 
-    def switch(self, kind: str, round_name: str, idx=None) -> None:
+    def start(self, kind: str, round_name: str, idx=None) -> None:
+        """Opens the span (kind, round_name, idx), which must not be open."""
+        key = (kind, round_name, idx)
+        if key in self._open:
+            raise RuntimeError(f"Span {key} is already open")
+        self._open[key] = time.time()
+
+    def end(self, kind: str, round_name: str, idx=None) -> None:
+        """Closes the open span (kind, round_name, idx)."""
+        # read the memory before the end time, so the time of the read
+        # belongs to this span instead of a gap to the next span
+        rss_kib = _status_kib("VmRSS")
         now = time.time()
-        self._close(now)
-        self._open = {"kind": kind, "round": round_name, "idx": idx, "t_start": now}
-
-    def end(self) -> None:
-        self._close(time.time())
-
-    def _close(self, now: float) -> None:
-        if self._open is None:
-            return
-        self._open["t_end"] = now
-        self._open["rss_end_kib"] = _status_kib("VmRSS")
-        self.segments.append(self._open)
-        self._open = None
+        key = (kind, round_name, idx)
+        if key not in self._open:
+            raise RuntimeError(f"Span {key} is not open")
+        self.segments.append({"kind": kind, "round": round_name, "idx": idx,
+                              "t_start": self._open.pop(key), "t_end": now,
+                              "rss_end_kib": rss_kib})
 
     def write(self, outputfolder: str, client_id: str, is_coordinator: bool,
               clients: list) -> None:
-        """Writes the report as REPORT_FILENAME to outputfolder."""
-        self.end()
+        """
+        Writes the report as REPORT_FILENAME to outputfolder.
+        Raises:
+            RuntimeError: if a span is still open
+        """
+        if self._open:
+            raise RuntimeError(f"Spans still open: {list(self._open)}")
+        # the peak is read last, so it covers the final resident memory
+        final_rss_kib = _status_kib("VmRSS")
         report = {
             "client_id": client_id,
             "is_coordinator": bool(is_coordinator),
@@ -85,8 +98,8 @@ class PerfRecorder():
             "info": self.info,
             "baseline_rss_kib": self.baseline_rss_kib,
             "pre_fedrbe_peak_rss_kib": self.pre_fedrbe_peak_rss_kib,
+            "final_rss_kib": final_rss_kib,
             "peak_rss_kib": _status_kib("VmHWM"),
-            "final_rss_kib": _status_kib("VmRSS"),
             "segments": self.segments,
         }
         with open(os.path.join(outputfolder, REPORT_FILENAME), "w") as f:

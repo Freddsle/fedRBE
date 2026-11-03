@@ -26,6 +26,22 @@ from fc_fed_forest_simple_app.fc_fedlearnsim_helper.run_app_simulation import ( 
 
 NAMES = ["client_a", "client_b", "client_c"]
 N_BLOCKS = 2
+# seconds, maximal gap between two client spans that follow each other. The
+# clients of the native simulation are threads sharing the GIL, so the next
+# start can be delayed by the other clients.
+GAP = 0.05
+RSS_TOLERANCE_KIB = 1024
+# kind, round, idx of the client spans of every client, in order
+CLIENT_SPANS = [
+    ("client_compute", "commonVariables", None), ("client_send", "commonVariables", None),
+    ("client_await", "commonVariables", None),
+    ("client_compute", "commonGenes", None), ("client_send", "commonGenes", None),
+    ("client_await", "commonGenes", None),
+    ("client_compute", "XtX_block", None),
+    ("client_send", "XtX_block", 0), ("client_await", "XtX_block", 0),
+    ("client_send", "XtX_block", 1), ("client_await", "XtX_block", 1),
+    ("client_await", "beta", None), ("client_compute", "final", None),
+]
 
 
 def write_clients(root: Path, smpc: bool):
@@ -85,15 +101,22 @@ class PerformanceReportTests(unittest.TestCase):
     def test_timeline_separates_client_and_aggregator_roles(self):
         reports = run_with_reports(self.root, smpc=False)
         for report in reports:
-            segments = report["segments"]
-            self.assertEqual((segments[0]["kind"], segments[0]["round"]),
-                             ("client_compute", "commonVariables"))
-            self.assertEqual((segments[-1]["kind"], segments[-1]["round"]),
-                             ("client_compute", "final"))
-            for previous, current in zip(segments, segments[1:]):
-                self.assertEqual(previous["t_end"], current["t_start"])
-            self.assertGreaterEqual(report["peak_rss_kib"], report["final_rss_kib"])
+            segments = sorted(report["segments"], key=lambda seg: seg["t_start"])
+            client = [seg for seg in segments if seg["kind"].startswith("client_")]
+            self.assertEqual([(seg["kind"], seg["round"], seg["idx"]) for seg in client],
+                             CLIENT_SPANS)
+            # VmRSS of a multithreaded process is summed from per CPU
+            # counters and can be off by a few pages
+            self.assertGreaterEqual(report["peak_rss_kib"] + RSS_TOLERANCE_KIB,
+                                    report["final_rss_kib"])
             aggregator = [seg for seg in segments if seg["kind"].startswith("agg_")]
+            for previous, current in zip(client, client[1:]):
+                gap = current["t_start"] - previous["t_end"]
+                self.assertGreaterEqual(gap, 0)
+                # only the coordinator's beta mask lies between two client spans
+                if not (report["is_coordinator"] and current["kind"] == "client_send"
+                        and current["idx"] == 0):
+                    self.assertLess(gap, GAP)
             awaits = [(seg["round"], seg["idx"]) for seg in segments
                       if seg["kind"] == "client_await"]
             self.assertEqual(awaits, [("commonVariables", None), ("commonGenes", None),
@@ -105,6 +128,15 @@ class PerformanceReportTests(unittest.TestCase):
                        if seg["kind"] == "agg_gather"]
             self.assertEqual(gathers, [("commonVariables", None), ("commonGenes", None),
                                        ("XtX_block", 0), ("XtX_block", 1)])
+            # the coordinator aggregates while it awaits the aggregated result
+            await_spans = {(seg["round"], seg["idx"]): seg for seg in client
+                           if seg["kind"] == "client_await"}
+            for seg in aggregator:
+                key = (seg["round"], seg["idx"])
+                if key == ("XtX_block", None):
+                    continue  # the beta mask, before the first block is sent
+                self.assertLessEqual(await_spans[key]["t_start"], seg["t_start"])
+                self.assertLessEqual(seg["t_end"], await_spans[key]["t_end"])
             # the beta mask is aggregator work before the first block
             self.assertIn(("agg_compute", "XtX_block", None),
                           [(seg["kind"], seg["round"], seg["idx"]) for seg in aggregator])
@@ -121,22 +153,39 @@ class PerformanceReportTests(unittest.TestCase):
                 summary = summarize_performance(NAMES, reports, stats, traffic)
 
                 for name, rows in summary.groupby("client"):
-                    self.assertAlmostEqual(rows["duration"].sum(),
-                                           rows["run_duration"].iloc[0], places=6)
+                    # the client spans plus the beta mask cover the whole run
+                    covered = rows[(rows["role"] == "client")
+                                   | (rows["idx"].isna() & (rows["round"] == "XtX_block"))]
+                    self.assertAlmostEqual(covered["duration"].sum(),
+                                           rows["run_duration"].iloc[0], delta=GAP)
                     sent = rows.dropna(subset=["bytes"])
                     self.assertEqual(len(sent), len(traffic[NAMES.index(name)]))
                 coordinator = summary[summary["coordinator"]]
                 self.assertTrue(coordinator["kind"].isin(["agg_broadcast", "client_send"])
                                 .loc[coordinator["bytes"].notna()].all())
                 gathers = coordinator[coordinator["kind"] == "agg_gather"]
-                self.assertTrue(gathers["delay"].notna().all())
+                self.assertTrue(gathers["delay"].notna().all(), gathers["delay"])
                 awaits = summary[(summary["kind"] == "client_await") & ~summary["coordinator"]]
-                self.assertTrue((awaits["delay"] >= 0).all())
+                # a client thread of the simulation can receive the broadcast
+                # before the coordinator thread ends its agg_broadcast span
+                self.assertTrue((awaits["delay"] > -GAP).all(), awaits["delay"].min())
                 self.assertEqual(len(awaits), (len(NAMES) - 1) * (3 + N_BLOCKS))
+
+                self.assertFalse((summary["kind"] == "whole_protocol").any())
+                for name, report in zip(NAMES, reports):
+                    whole = next(seg for seg in report["segments"]
+                                 if seg["kind"] == "whole_protocol")
+                    self.assertEqual(
+                        summary.loc[summary["client"] == name, "run_duration"].iloc[0],
+                        whole["t_end"] - whole["t_start"])
 
                 traffic[1] = traffic[1][1:]
                 with self.assertRaisesRegex(ValueError, "fetched"):
                     summarize_performance(NAMES, reports, stats, traffic)
+                reports[0]["segments"] = [seg for seg in reports[0]["segments"]
+                                          if seg["kind"] != "whole_protocol"]
+                with self.assertRaisesRegex(ValueError, "whole_protocol"):
+                    summarize_performance(NAMES, reports, stats)
 
     def test_controller_traffic_reads_fetches_of_the_test_window(self):
         logs = self.root / "logs"
