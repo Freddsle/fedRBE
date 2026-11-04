@@ -28,6 +28,13 @@ class ProtocolFedLearning(Protocol):
         ...
 
     @property
+    def id(self) -> Union[str, int]:
+        """
+        The ID of this client, one of the IDs in clients
+        """
+        ...
+
+    @property
     def clients(self) -> List[Union[str, int]]:
         """
         A list of all client IDs (including the coordinator's ID)

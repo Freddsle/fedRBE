@@ -76,14 +76,18 @@ def create_feature_presence_matrix(
     if any([not isinstance(position, int) for _, position, _, _ in feature_batch_info]):
         # if any position is None, we use the default order
         print(f"INFO: Using the default client order: {default_order}")
-        client_order = default_order
-        if reference_client not in client_order:
-            raise ValueError(f"Reference client {reference_client} not found in the default order")
-        # switch reference_client to the last position
-        client_order.remove(reference_client)
-        client_order.append(reference_client)
+        client_order = list(default_order)
+        if reference_client is not None:
+            if reference_client not in client_order:
+                raise ValueError(f"Reference client {reference_client} not found in the default order")
+            # switch reference_client to the last position
+            client_order.remove(reference_client)
+            client_order.append(reference_client)
     else:
         # if all positions are integers, we use the order of the positions
+        positions = [position for _, position, _, _ in feature_batch_info]
+        if len(set(positions)) != len(positions):
+            raise ValueError(f"Each client needs a distinct integer position, got {sorted(positions)}")
         client_order = [cohort_name for cohort_name, _, _, _ in sorted(feature_batch_info, key=lambda x: x[1])] # type: ignore
             # pylance complains as it doesn't understand that we ensured we only have ints for the position by the if clause
         print(f"INFO: Using given specific client order: {client_order}")
@@ -119,7 +123,7 @@ def create_feature_presence_matrix(
     # we populate the matrix and the dictionary
     for cohort_idx, batch_name in enumerate(cohorts_order):
         # batch_name is a string like "<client_label>|<batch_label>"
-        if len(batch_name.split()) > 2:
+        if len(batch_name.split("|")) > 2:
             # sanity check of the input
             raise ValueError(f"Batch name incorrectly formatted: {batch_name}")
 
@@ -201,6 +205,10 @@ def select_common_features_variables(
 
     # Create the feature presence matrix - for global mask
     feature_presence_matrix, cohorts_order = create_feature_presence_matrix(feature_batch_info, global_feature_names, default_order) # type: ignore
+    if not global_feature_names:
+        raise ValueError(f"No feature is kept by at least {min_clients} clients ({len(feature_batch_info)} joined) "
+                         "after removing features with too few finite values; fedRBE needs at least "
+                         f"{min_clients} clients with matching feature identifiers")
 
     return global_feature_names, feature_presence_matrix, cohorts_order
 
@@ -281,7 +289,7 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
 
 def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
                  n: int, k: int,
-                 global_mask: np.ndarray
+                 global_mask: np.ndarray, xtx_error: float = 0.0, *, n_batch_columns: int
                  ) -> np.ndarray:
     """
     Gets a list of a List containing the XtX and XtY matrices from each client
@@ -291,8 +299,9 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
             each client. The first element of the tuple is the XtX matrix and the
             second element is the XtY matrix.
             XtX should be of shape n x k x k and XtY should be of shape n x k.
-        smpc: A boolean indicating if then computation was done using SMPC
-            if yes, the data is already aggregated
+        xtx_error: Maximum absolute encoding error per aggregated XtX entry;
+            zero for plaintext.
+        n_batch_columns: Number of batch columns, the trailing design columns.
         n: The expected number of features.
         k: The expected number of columns of the design matrix. Generally, is
             len(['intercept'] + [covariates] + [len(clients)-1])
@@ -320,28 +329,55 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         XtX_glob += XtX
         XtY_glob += XtY
 
-    # calculate the betas
-    # formula is beta = (XtX)^-1 * XtY
-    # if XtX is singular, we need to use the pseudo inverse
+    omitted = 0
+    # Solve XtX * beta = XtY only when the retained coefficients are identifiable.
     for i in range(0, n):
         # using the mask to remove the columns and rows that are not present
         mask = global_mask[i, :]
-        submatrix = XtX_glob[i, :, :][np.ix_(~mask, ~mask)]
+        columns = np.flatnonzero(~mask)
+        # Omit only zero/intercept-duplicate covariates in the received statistics.
+        # SMPC rounding can erase real variation; batch columns are never omitted here.
+        for column in range(1, k - n_batch_columns):
+            gram, target = XtX_glob[i, :, column], XtY_glob[i, column]
+            if ((gram == 0).all() and target == 0) or (
+                    (gram == XtX_glob[i, :, 0]).all() and target == XtY_glob[i, 0]):
+                columns = columns[columns != column]
+                omitted += 1
+        submatrix = XtX_glob[i][np.ix_(columns, columns)]
             # submatrix is of dimension (k, K)
             # we only take the rows and columns where the mask is set to
             # False (~ -> not mask)
 
-        if linalg.det(submatrix) == 0:
-            invXtX = linalg.pinv(submatrix)
-            print(f"INFO: Error at feature {i}")
-            print(f"Mask: {mask}")
-            print(f"submatrix: {submatrix}")
-            print(f"full XTX: {XtX_glob[i, :, :]}")
-            # raise ValueError(
-            #     "ERROR: Cannot calculate the linear models as the design matrix containing batch information " +\
-            #     "and covariates is singular, please check for colinearity between covariates/covariates and batches")
-        else:
-            invXtX = linalg.inv(submatrix)
-        beta[i, ~mask] = invXtX @ XtY_glob[i, ~mask]
+        if not np.isfinite(submatrix).all() or not np.isfinite(XtY_glob[i, columns]).all():
+            raise ValueError(f"Non-finite regression statistics for feature index {i}; check data and covariates.")
+        singular_values = linalg.svd(submatrix, compute_uv=False)
+        # Convert the per-entry error bound to a matrix error bound.
+        tolerance = len(submatrix) * max(singular_values[0] * np.finfo(float).eps, xtx_error)
+        if singular_values[-1] <= tolerance:
+            raise ValueError(
+                f"Cannot reliably fit feature index {i}: rank-deficient design or insufficient "
+                "numerical precision; check collinearity, missing observations and covariate scaling."
+            )
+        beta[i, columns] = linalg.solve(submatrix, XtY_glob[i, columns])
 
+    if omitted:
+        print(f"INFO: Omitted {omitted} constant covariate coefficients.")
     return beta
+
+
+def batch_coefficients(beta: np.ndarray, n_batch_columns: int) -> np.ndarray:
+    """
+    Reduces the coefficients of the linear models to the coefficients of the
+    batch columns. Only these are needed by the clients to remove the batch
+    effects. The intercept and covariate coefficients are not shared, as they
+    can reproduce single samples, e.g. if only one sample has a specific
+    covariate value.
+    Args:
+        beta: The coefficients of shape n x k, the design columns are ordered
+            as intercept, covariates, batches.
+        n_batch_columns: The number of batch columns in the design matrix,
+            the number of batches - 1.
+    Returns:
+        The batch coefficients of shape n x n_batch_columns.
+    """
+    return beta[:, beta.shape[1] - n_batch_columns:]

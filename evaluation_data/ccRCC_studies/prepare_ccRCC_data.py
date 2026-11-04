@@ -2,7 +2,7 @@
 Prepares the ccRCC proteomics dataset for fedRBE evaluation.
 
 Steps performed:
-1. Adds a 'Condition' column ("Tumor" / "Normal") to each site's design.tsv,
+1. Adds a numeric 'Condition' column (Tumor=1, Normal=0) to each site's design.tsv,
    derived from the existing binary Normal/Tumor columns.
 2. Builds a union matrix (outer join across all sites) from each site's
    report_filtered.tsv and writes it to before/central_intensities_log_UNION.tsv.

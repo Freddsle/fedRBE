@@ -15,8 +15,8 @@
   },
   "cohorts": [
     {
-      "name": "GSE14407",
-      "folder": "GSE14407",
+      "name": "GSE10971",
+      "folder": "GSE10971",
       "designfile": {
         "filename": "design.tsv",
         "separator": "\t",

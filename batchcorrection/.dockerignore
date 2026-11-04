@@ -2,7 +2,8 @@ venv
 .idea
 .gitignore
 .gitattributes
-__pycache__/
-*.py[cod]
+**/__pycache__/
+**/*.py[cod]
+tests/
 .pytest_cache/
 .mypy_cache/
