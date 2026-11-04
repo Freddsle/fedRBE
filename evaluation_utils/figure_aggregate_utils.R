@@ -1243,8 +1243,7 @@ performance_client_columns <- c(
 performance_dataset_order <- c(
   "Simulated Balanced", "Simulated Mildly Imbalanced", "Simulated Strongly Imbalanced",
   "E. coli", "Ovarian cancer", "ccRCC proteomics",
-  "Quartet Multiomics Transcriptomics", "Quartet Multiomics Proteomics",
-  "Quartet Multiomics Metabolomics"
+  "Quartet Transcriptomics", "Quartet Proteomics", "Quartet Metabolomics"
 )
 
 performance_smpc_colors <- c("Without SMPC" = "#0072B2", "With SMPC" = "#D55E00")
@@ -1261,7 +1260,7 @@ performance_entries <- c(
 
 performance_runtime_caption <- paste(
   "Waiting & comm.: all time a participant does not compute (runtime - client",
-  "computation - aggregation),\nincluding data transfer (controller polling every 5 s, relay),",
+  "computation - aggregation),\nincluding data transfer,",
   "waiting for other clients' computation and for the aggregation.\nComputation includes",
   "serializing the sent data. Boxes: all participants incl. the coordinator, label-aware and",
   "no-label runs pooled.\nCoordinator: stacked medians of its runs, points are its runtimes."
@@ -1300,9 +1299,12 @@ performance_dataset_levels <- function(datasets) {
 
 
 # Adds the plot labels SMPC ("With SMPC"/"Without SMPC") and Role
-# ("Coordinator"/"Client") to a performance clients table.
+# ("Coordinator"/"Client") to a performance clients table and shortens the
+# Quartet dataset names ("Quartet Multiomics X" to "Quartet X") to fit the
+# panel titles.
 prepare_performance_clients <- function(clients) {
   assert_columns(clients, performance_client_columns, "performance clients table")
+  clients$dataset <- sub("^Quartet Multiomics ", "Quartet ", clients$dataset)
   clients$coordinator <- as.logical(clients$coordinator)
   clients$SMPC <- ifelse(as.logical(clients$smpc), "With SMPC", "Without SMPC")
   clients$Role <- ifelse(clients$coordinator, "Coordinator", "Client")
