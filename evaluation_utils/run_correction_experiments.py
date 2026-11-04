@@ -95,8 +95,20 @@ def _central_designs(directory: Path, matrix: pd.DataFrame, configs: dict,
     if len(batch_order) != len(set(batch_order)) or set(batch_order) != set(batches):
         raise ValueError("Explicit batch levels do not match the correction inputs")
     ranks = {name: rank for rank, name in enumerate(batch_order, start=1)}
+    # The app's privacy settings per client, for central_correction.R to mirror
+    # its leverage check (only applied with covariates); defaults as in the app.
+    sample_client = pd.concat([pd.Series(name, index=designs[name].index)
+                               for name in clients]).loc[matrix.columns]
+    n_covariates = len(details.get("covariates") or [])
+    settings = {name: configs[name]["flimmaBatchCorrection"] for name in clients}
     pd.DataFrame({"file": matrix.columns, "batch": batches.values,
-                  "batch_order": batches.map(ranks).values}).to_csv(
+                  "batch_order": batches.map(ranks).values,
+                  "client": sample_client.values,
+                  "min_samples": sample_client.map(lambda name: max(
+                      len(batch_order) + n_covariates + 1,
+                      int(settings[name].get("min_samples", 5)))).values,
+                  "max_leverage": sample_client.map(
+                      lambda name: settings[name].get("max_leverage", 0.5)).values}).to_csv(
         directory / "batch.tsv", sep="\t", index=False)
     for arm in arms:
         design = pd.DataFrame({"intercept": 1}, index=matrix.columns)
@@ -126,7 +138,8 @@ def _run_limma(input_file: Path, prepared: Path, arm: str, output: Path,
         ], capture_output=True, text=True)
         if completed.returncode:
             raise RuntimeError(f"Central correction failed for {output}:\n{completed.stderr}")
-        validate_corrected(read_matrix(pending), expected)
+        # with covariates, the leverage mirror may mask batches as the app does
+        validate_corrected(read_matrix(pending), expected, allow_masking=arm == "label_aware")
         pending.replace(output)
     finally:
         pending.unlink(missing_ok=True)

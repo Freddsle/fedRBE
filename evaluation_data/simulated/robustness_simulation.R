@@ -9,7 +9,7 @@ script <- if (sys.nframe() == 0L) {
 } else sys.frame(1)$ofile
 script <- normalizePath(script)
 repo <- normalizePath(file.path(dirname(script), "..", ".."))
-for (helper in c("simulation_func.R", "filtering.R", "evaluation_funcs.R")) {
+for (helper in c("simulation_func.R", "filtering.R", "evaluation_funcs.R", "central_correction.R")) {
   suppressPackageStartupMessages(source(file.path(repo, "evaluation_utils", helper)))
 }
 fedrbe_script <- file.path(repo, "evaluation_utils", "fedRBE_simulation_scrip_simdata.py")
@@ -129,7 +129,12 @@ correct_central <- function(x, meta, arm) {
   input <- suppressMessages(filter_fedrbe_client(x, meta, "file", "lab", num_batches = 3,
                                                  covariates = covariates))
   corrected <- if (arm == "with_condition") {
-    limma::removeBatchEffect(input, batch = meta$lab, design = model.matrix(~condition, meta))
+    # mirror the app's leverage check (default max_leverage 0.5)
+    design <- model.matrix(~condition, meta)
+    mirrored <- fedrbe_leverage_weights(input, design[, -1, drop = FALSE], meta$lab, meta$lab,
+                                        min_samples = fedrbe_min_samples(3, covariates))
+    input <- mirrored$expr
+    limma::removeBatchEffect(input, batch = meta$lab, design = design, weights = mirrored$weights)
   } else {
     limma::removeBatchEffect(input, batch = meta$lab)
   }

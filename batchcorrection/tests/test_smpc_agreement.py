@@ -67,6 +67,7 @@ class SmpcAgreementTests(unittest.TestCase):
             position=0,
             reference_batch=False,
             config_based_init=Mock(),
+            exclude_high_leverage=Mock(return_value=0),
             get_batch_feature_presence_info=Mock(
                 return_value={"site_a": ["feature"]}
             ),

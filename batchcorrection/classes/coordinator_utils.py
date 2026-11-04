@@ -356,7 +356,9 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         if singular_values[-1] <= tolerance:
             raise ValueError(
                 f"Cannot reliably fit feature index {i}: rank-deficient design or insufficient "
-                "numerical precision; check collinearity, missing observations and covariate scaling."
+                "numerical precision; check collinearity, missing observations and covariate scaling. "
+                "Values left out for a high leverage (max_leverage) can make a covariate constant on "
+                "a feature, collinearity handling is not supported yet."
             )
         beta[i, columns] = linalg.solve(submatrix, XtY_glob[i, columns])
 

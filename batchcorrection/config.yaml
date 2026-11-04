@@ -58,6 +58,13 @@ flimmaBatchCorrection:
                  # Please note that the actual used min_samples might be different
                  # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
                  # This keeps more samples than design columns in every sent Xty matrix
+  max_leverage: 0.5 # Values whose leverage within this client exceeds this
+                 # threshold are left out of the fit of their feature, but are
+                 # still corrected. With known covariates, XtX and XtY reveal
+                 # a value up to a remaining fraction (1 - leverage) of its
+                 # variance, e.g. a single sample with a rare covariate level
+                 # (leverage 1) exactly. Only used with covariates.
+                 # format: number in (0, 1], default: 0.5, 1 disables the check
   position: 1    # if a number x is given, the order of the clients will be
                  # be determined by sorting after this number x.
                  # Example:
