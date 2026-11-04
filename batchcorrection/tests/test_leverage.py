@@ -4,6 +4,8 @@ import contextlib
 import io
 import os
 from pathlib import Path
+import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -12,18 +14,14 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from batchcorrection.classes.client import Client, _leverage
+from batchcorrection.classes.client import Client, _hat_values
 
 REPO = Path(__file__).resolve().parents[2]
 
 
-def hat_diagonal(design: np.ndarray) -> np.ndarray:
-    """Diagonal of the hat matrix, via the pseudo-inverse like limma's QR fit."""
-    return np.einsum("ij,ji->i", design, np.linalg.pinv(design))
-
-
-def batch_indicators(batches: np.ndarray) -> np.ndarray:
-    return (batches[:, None] == pd.unique(batches)[None, :]).astype(float)
+def local_design(batches, covariates) -> np.ndarray:
+    """One intercept per batch plus the covariates."""
+    return np.column_stack([pd.get_dummies(pd.Series(batches)).to_numpy(dtype=float), covariates])
 
 
 def make_client(values, covariate, batches, max_leverage=0.5):
@@ -31,8 +29,9 @@ def make_client(values, covariate, batches, max_leverage=0.5):
     client = Client()
     client.client_name = "local"
     samples = [f"s{i}" for i in range(len(covariate))]
-    client.data = pd.DataFrame(np.atleast_2d(np.asarray(values, dtype=float)), columns=samples,
-                               index=[f"feature{i}" for i in range(np.atleast_2d(values).shape[0])])
+    values = np.atleast_2d(np.asarray(values, dtype=float))
+    client.data = pd.DataFrame(values, columns=samples,
+                               index=[f"feature{i}" for i in range(len(values))])
     client.feature_names = list(client.data.index)
     client.hash2feature = {name: name for name in client.feature_names}
     client.batch_col = "batch"
@@ -43,56 +42,45 @@ def make_client(values, covariate, batches, max_leverage=0.5):
     return client
 
 
-class LeverageFormulaTests(unittest.TestCase):
-    def test_leverage_matches_the_hat_matrix_of_the_local_fit(self):
+class HatValueTests(unittest.TestCase):
+    def test_hat_values_are_the_diagonal_of_the_hat_matrix(self):
         rng = np.random.default_rng(1)
-        batches = np.repeat(["a", "b"], 10)
-        X = rng.normal(size=(20, 2))
-        fitted = rng.random((6, 20)) > 0.25
-        groups = [np.flatnonzero(batches == b) for b in ("a", "b")]
-        h = _leverage(X, groups, fitted)
-        design = np.hstack([batch_indicators(batches), X])
-        for f in range(6):
-            rows = fitted[f]
-            np.testing.assert_allclose(h[f, rows], hat_diagonal(design[rows]), atol=1e-10)
-            self.assertTrue((h[f, ~rows] == 0).all())
+        design = local_design(np.repeat(["a", "b"], 10), rng.normal(size=(20, 2)))
+        hat = design @ np.linalg.inv(design.T @ design) @ design.T
+        np.testing.assert_allclose(_hat_values(design), np.diag(hat), atol=1e-12)
+
+    def test_aliased_covariate_is_dropped(self):
+        # constant within each batch, so the covariate adds nothing to the batch intercepts
+        design = local_design(["a"] * 4 + ["b"] * 6, [[3.7]] * 4 + [[1.2]] * 6)
+        np.testing.assert_allclose(_hat_values(design), [1 / 4] * 4 + [1 / 6] * 6, atol=1e-12)
 
     def test_local_leverage_bounds_the_leverage_over_all_clients(self):
         rng = np.random.default_rng(2)
         sizes = [12, 15, 9]
         batches = np.concatenate([[f"c{c}|b{i % 2}" for i in range(n)] for c, n in enumerate(sizes)])
-        X = rng.normal(size=(sum(sizes), 2))
-        X[3] = [6, -5]  # an outlier in the first client
-        global_h = hat_diagonal(np.hstack([batch_indicators(batches), X]))
+        covariates = rng.normal(size=(sum(sizes), 2))
+        covariates[3] = [6, -5]  # an outlier in the first client
+        global_h = _hat_values(local_design(batches, covariates))
         start = 0
         for n in sizes:
             rows = slice(start, start + n)
-            local_batches = batches[rows]
-            groups = [np.flatnonzero(local_batches == b) for b in pd.unique(local_batches)]
-            local_h = _leverage(X[rows], groups, np.ones((1, n), bool))[0]
+            local_h = _hat_values(local_design(batches[rows], covariates[rows]))
             self.assertTrue((local_h >= global_h[rows] - 1e-12).all())
             start += n
-
-    def test_constant_covariate_gives_the_batch_share(self):
-        groups = [np.arange(4), np.arange(4, 10)]
-        h = _leverage(np.full((10, 1), 3.7), groups, np.ones((1, 10), bool))[0]
-        np.testing.assert_allclose(h, [1 / 4] * 4 + [1 / 6] * 6, atol=1e-12)
 
 
 class ExclusionTests(unittest.TestCase):
     def setUp(self):
         self.enterContext(contextlib.redirect_stdout(io.StringIO()))
 
-    def test_covariate_outlier_is_excluded_and_restored_for_the_correction(self):
+    def test_covariate_outlier_is_excluded_but_kept_for_the_correction(self):
         covariate = list(range(7)) + [100] + list(range(8))
-        values = np.arange(16.0)
-        client = make_client(values, covariate, ["a"] * 8 + ["b"] * 8)
+        client = make_client(np.arange(16.0), covariate, ["a"] * 8 + ["b"] * 8)
         self.assertEqual(client.exclude_high_leverage(["cov"], 5), 1)
         self.assertTrue(np.isnan(client.data.iloc[0, 7]))
         self.assertEqual(int(client.data.notna().sum().sum()), 15)
-        client.restore_excluded_values()
-        np.testing.assert_array_equal(client.data.iloc[0].to_numpy(), values)
-        self.assertIn("1 values were left out", client.leverage_report)
+        self.assertEqual(client.leverage_excluded.iloc[0, 7], 7.0)
+        self.assertIn("1 values of 1 features", client.leverage_report)
 
     def test_balanced_design_keeps_every_value(self):
         client = make_client(np.arange(16.0), [0, 1] * 8, ["a"] * 8 + ["b"] * 8)
@@ -104,6 +92,14 @@ class ExclusionTests(unittest.TestCase):
         client = make_client(np.arange(16.0), [0] * 7 + [1] + [0] * 8, ["a"] * 8 + ["b"] * 8)
         self.assertEqual(client.exclude_high_leverage(["cov"], 5), 1)
         self.assertTrue(np.isnan(client.data.iloc[0, 7]))
+
+    def test_pair_with_leverage_exactly_at_the_threshold_is_kept(self):
+        # only batch a varies, its two samples with cov = 1 have h = 1/8 + 0.5625/1.5 = 0.5
+        batches, covariate = ["a"] * 8 + ["b"] * 8, [1, 1, 0, 0, 0, 0, 0, 0] + [0] * 8
+        h = _hat_values(local_design(batches, np.array(covariate, float)))
+        self.assertAlmostEqual(h.max(), 0.5, places=12)
+        client = make_client(np.arange(16.0), covariate, batches)
+        self.assertEqual(client.exclude_high_leverage(["cov"], 5), 0)
 
     def test_max_leverage_one_and_no_covariates_disable_the_check(self):
         covariate = [0] * 7 + [1] + [0] * 8
@@ -120,10 +116,10 @@ class ExclusionTests(unittest.TestCase):
         client.exclude_high_leverage(["cov"], 5)
         self.assertTrue(client.data.iloc[0, :5].isna().all())
         self.assertTrue(client.data.iloc[0, 5:].notna().all())
+        # the excluded value of the dropped batch is not corrected either
+        self.assertTrue(client.leverage_excluded.isna().all().all())
         presence = client.get_batch_feature_presence_info(5)
         self.assertEqual(presence, {"local|small": [], "local|large": ["feature0"]})
-        client.restore_excluded_values()
-        self.assertTrue(client.data.iloc[0, :5].isna().all())
 
 
 class ConfigTests(unittest.TestCase):
@@ -158,7 +154,15 @@ class ConfigTests(unittest.TestCase):
 
 
 class FederatedRunTests(unittest.TestCase):
-    """run_fedrbe through the local simulator equals a central fit without the excluded value."""
+    """
+    run_fedrbe through the local simulator equals limma with the R mirror of
+    the leverage check in central_correction.R.
+    Client 1 has a covariate outlier; for feature f1 its batch has exactly
+    min_samples = 4 clients + 1 covariate + 1 = 6 values, so excluding the
+    outlier masks that batch.
+    """
+    N_CLIENTS, N_SAMPLES = 4, 12
+    OUTLIER = 12 + 11  # last sample of client 1
 
     def setUp(self):
         sys.path.insert(0, str(REPO / "evaluation_classification_after_correction"))
@@ -170,24 +174,27 @@ class FederatedRunTests(unittest.TestCase):
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
         rng = np.random.default_rng(5)
+        self.names = [f"client{c}" for c in range(self.N_CLIENTS)]
         self.covariates, self.data = [], []
-        for c in range(3):
-            covariate = np.linspace(0, 10, 12)
+        for c in range(self.N_CLIENTS):
+            covariate = np.linspace(0, 10, self.N_SAMPLES)
             if c == 1:
                 covariate[-1] = 100  # local leverage close to 1
-            values = rng.normal(size=(4, 12)) + 2 * c + 0.1 * covariate
+            values = rng.normal(size=(4, self.N_SAMPLES)) + 2 * c + 0.1 * covariate
             values[0, c] = np.nan
+            if c == 1:
+                values[1, :6] = np.nan  # 6 values left, including the outlier
             self.covariates.append(covariate)
             self.data.append(values)
+        self.samples = [f"{name}_s{i}" for name in self.names for i in range(self.N_SAMPLES)]
 
     def run_clients(self, max_leverage):
-        names = [f"client{c}" for c in range(3)]
         inputs, outputs = [], []
-        for c, name in enumerate(names):
+        for c, name in enumerate(self.names):
             folder, output = self.root / max_leverage / name, self.root / max_leverage / f"{name}_out"
             folder.mkdir(parents=True)
             output.mkdir()
-            samples = [f"{name}_s{i}" for i in range(12)]
+            samples = self.samples[c * self.N_SAMPLES:(c + 1) * self.N_SAMPLES]
             pd.DataFrame(self.data[c], index=[f"f{i}" for i in range(4)], columns=samples).to_csv(
                 folder / "expression.tsv", sep="\t")
             pd.DataFrame({"cov": self.covariates[c]}, index=samples).to_csv(folder / "design.tsv", sep="\t")
@@ -198,34 +205,46 @@ class FederatedRunTests(unittest.TestCase):
             inputs.append(str(folder))
             outputs.append(str(output))
         with contextlib.redirect_stdout(io.StringIO()):
-            self.run_simulation_native(inputs, outputs, None, self.run_fedrbe, client_ids=names)
+            self.run_simulation_native(inputs, outputs, None, self.run_fedrbe, client_ids=self.names)
         # the output keeps the global feature order, which follows the hashed names
         return np.hstack([pd.read_csv(os.path.join(output, "only_batch_corrected_data.csv"),
                                       sep="\t", index_col=0).loc[[f"f{i}" for i in range(4)]].to_numpy()
                           for output in outputs])
 
-    def central(self, fit):
-        """Fit on the values in fit, correct all values (limma with weights 0)."""
-        Y = np.hstack(self.data)
-        effect = np.zeros((36, 2))  # effect coding, the last client is the reference
-        effect[:12, 0], effect[12:24, 1], effect[24:] = 1, 1, -1
-        X = np.column_stack([np.ones(36), np.concatenate(self.covariates), effect])
-        corrected = np.empty_like(Y)
-        for f in range(4):
-            rows = fit[f] & np.isfinite(Y[f])
-            beta = np.linalg.lstsq(X[rows], Y[f, rows], rcond=None)[0]
-            corrected[f] = Y[f] - effect @ beta[2:]
-        return corrected
+    def central_r(self, max_leverage):
+        """The central reference through central_correction.R and its leverage mirror."""
+        rscript = REPO / ".pixi/envs/default/bin/Rscript"
+        if not rscript.is_file():
+            rscript = Path(shutil.which("Rscript") or "/unavailable")
+        if not rscript.is_file():
+            self.skipTest("Rscript is unavailable")
+        folder = self.root / f"central_{max_leverage}"
+        folder.mkdir()
+        pd.DataFrame(np.hstack(self.data), index=[f"f{i}" for i in range(4)],
+                     columns=self.samples).rename_axis("rowname").to_csv(folder / "data.tsv", sep="\t")
+        pd.DataFrame({"intercept": 1.0, "cov": np.concatenate(self.covariates)},
+                     index=pd.Index(self.samples, name="file")).to_csv(folder / "design.tsv", sep="\t")
+        clients = np.repeat(self.names, self.N_SAMPLES)
+        pd.DataFrame({"file": self.samples, "batch": clients,
+                      "batch_order": np.repeat(np.arange(1, self.N_CLIENTS + 1), self.N_SAMPLES),
+                      "client": clients, "min_samples": self.N_CLIENTS + 2,
+                      "max_leverage": float(max_leverage)}).to_csv(folder / "batch.tsv", sep="\t", index=False)
+        completed = subprocess.run(
+            [str(rscript), str(REPO / "evaluation_utils/central_correction.R"), str(folder / "data.tsv"),
+             str(folder / "design.tsv"), str(folder / "batch.tsv"), str(folder / "out.tsv")],
+            capture_output=True, text=True)
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        return pd.read_csv(folder / "out.tsv", sep="\t", index_col=0)[self.samples].to_numpy()
 
     def test_excluded_value_is_corrected_but_left_out_of_the_fit(self):
-        fit = np.ones((4, 36), bool)
-        fit[:, 23] = False  # the outlier of the second client
         result = self.run_clients("0.5")
-        np.testing.assert_allclose(result, self.central(fit), atol=1e-10)
-        self.assertTrue(np.isfinite(result[:, 23]).all())
-        # without the check the outlier enters the fit
-        np.testing.assert_allclose(self.run_clients("1"), self.central(np.ones((4, 36), bool)),
-                                   atol=1e-10)
+        np.testing.assert_allclose(result, self.central_r("0.5"), atol=1e-10)
+        self.assertTrue(np.isfinite(result[[0, 2, 3], self.OUTLIER]).all())
+        self.assertTrue(np.isnan(result[1, 12:24]).all())  # f1 of client 1 dropped
+        # without the check, the outlier enters the fit
+        without = self.run_clients("1")
+        np.testing.assert_allclose(without, self.central_r("1"), atol=1e-10)
+        self.assertGreater(np.nanmax(np.abs(result - without)), 0.01)
 
 
 if __name__ == "__main__":

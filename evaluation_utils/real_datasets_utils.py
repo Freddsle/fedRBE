@@ -160,12 +160,20 @@ def read_correction_matrix(path: Path) -> pd.DataFrame:
     return matrix
 
 
-def validate_corrected_matrix(matrix: pd.DataFrame, expected: pd.DataFrame) -> pd.DataFrame:
-    """Require unchanged coverage and missingness; return the expected identity order."""
+def validate_corrected_matrix(matrix: pd.DataFrame, expected: pd.DataFrame,
+                              allow_masking: bool = False) -> pd.DataFrame:
+    """
+    Require unchanged coverage and missingness; return the expected identity order.
+    With allow_masking, the correction may add missing values (the central
+    mirror of fedRBE's privacy masking) but never fill one.
+    """
     if set(matrix.index) != set(expected.index) or set(matrix.columns) != set(expected.columns):
         raise ValueError("Correction changed sample or feature coverage")
     matrix = matrix.loc[expected.index, expected.columns]
-    if not matrix.isna().equals(expected.isna()):
+    if allow_masking:
+        if (expected.isna() & matrix.notna()).any().any():
+            raise ValueError("Correction filled missing values")
+    elif not matrix.isna().equals(expected.isna()):
         raise ValueError("Correction changed the missing-value mask")
     return matrix
 
