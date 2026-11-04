@@ -1,4 +1,4 @@
-Client 908bd4e2ee376b16:
+Client 315e2e32fbb64bed:
 The following batch coefficients were used for batch correction:
 [[ 1.23571114e+00 -3.76440172e-01  2.63457131e-01  3.68438887e-02
    9.35741060e-01]
@@ -604,7 +604,7 @@ The following batch coefficients were used for batch correction:
    1.41257467e+00]
  [ 3.83942769e+00 -1.09221638e+00  0.00000000e+00 -8.39650891e-01
    0.00000000e+00]
- [ 7.66106871e-01 -1.25826220e+00 -2.24535923e-06  1.46389055e+00
+ [ 7.66106871e-01 -1.25826220e+00 -2.24535922e-06  1.46389055e+00
    2.16210084e-01]
  [ 7.89684953e-02  3.37841825e-02 -4.72214850e-01  2.02993686e+00
    8.48812669e-01]
@@ -102553,7 +102553,7 @@ The following batch coefficients were used for batch correction:
  [ 1.08097222e+00 -1.07211246e-01 -1.05081773e+00  6.36093517e-01
    1.51748596e+00]]
 The corresponding design matrix was:
-           intercept  HGSC  ...  d7c1b0cc92f4cf22  973616632ca7f8a3
+           intercept  HGSC  ...  8ca0bde37fd3c342  bf5f726f89c22dbe
 file                        ...                                    
 GSM277776        1.0     0  ...                 0                 0
 GSM277777        1.0     0  ...                 0                 0
