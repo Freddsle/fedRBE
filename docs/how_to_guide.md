@@ -84,6 +84,7 @@ flimmaBatchCorrection:
   normalizationMethod: "log2(x+1)"  # Normalization method or log transformation
   smpc: True  # Recommended to set to True
   min_samples: 5  # Minimum number of samples per batch to include a feature
+  max_leverage: 0.5  # Values with a higher leverage (with covariates) are left out of the fit but corrected
   position: 1   # position of the client (first, second, third, etc.)
   reference_batch: ""  # Leave empty to use the last client in positional order as the reference
 ```

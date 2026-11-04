@@ -193,6 +193,7 @@ Output files include:
       normalizationMethod: "log2(x+1)"
       smpc: True
       min_samples: 5
+      max_leverage: 0.5
       position: 1
       reference_batch: ""
    ```

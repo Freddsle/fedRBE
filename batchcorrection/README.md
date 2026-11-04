@@ -124,6 +124,8 @@ After completion, each client receives:
 features (rows) x samples (columns) whatever the input orientation; `full_corrected_data.csv`
 appends the covariates as rows. Values masked for privacy (fewer finite values than the
 effective `min_samples` in a batch or on the client) are exported as empty cells.
+Values left out of the fit for a high leverage (`max_leverage`) are corrected and listed in
+`report.txt`.
 Features available in fewer than three clients are omitted.
 
 ---
@@ -193,6 +195,12 @@ flimmaBatchCorrection:
     # The app may raise min_samples for privacy:
     # min_samples = max(min_samples, len(design.columns)+1)
     # This keeps more samples than design columns in every sent Xty matrix.
+
+  max_leverage: 0.5   # format: number in (0, 1], default: 0.5
+    # Only used with covariates. Values whose leverage within this client exceeds
+    # max_leverage (e.g. the only sample with a covariate level, or a covariate
+    # outlier) are left out of the fit of their feature, but are still corrected.
+    # 1 disables the check.
 
   position: 1      # format: int
     # Defines client order. The last client in order is the reference batch.

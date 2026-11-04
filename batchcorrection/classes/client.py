@@ -15,6 +15,10 @@ class Client:
         self.feature_block_size = None
         self.covariates = None
         self.min_samples = 0
+        self.max_leverage = 1.0
+        self.leverage_excluded = None
+        self.sample_batches = None
+        self.leverage_report = ""
         self.XtX = None
         self.XtY = None
         self.data = None
@@ -110,6 +114,11 @@ class Client:
         if not isinstance(smpc, bool):
             raise ValueError("smpc must be a boolean (true or false)")
 
+        max_leverage = config.get("max_leverage", 0.5)
+        if isinstance(max_leverage, bool) or not isinstance(max_leverage, (int, float)) \
+                or not 0 < max_leverage <= 1:
+            raise ValueError("max_leverage must be a number in (0, 1], 1 disables the leverage check")
+
         feature_block_size = config.get("feature_block_size")
         if feature_block_size is not None and (
                 isinstance(feature_block_size, bool)
@@ -172,6 +181,7 @@ class Client:
         self.feature_block_size = feature_block_size
         self.variables = covariates
         self.min_samples = min_samples
+        self.max_leverage = float(max_leverage)
         self.separator = separator
         self.position = position
         self.reference_batch = reference_batch
@@ -331,6 +341,92 @@ class Client:
         else:
             raise ValueError(f"Client {self.client_name}: unsupported normalizationMethod "
                              f"{normalizationMethod!r}; use \"log2(x+1)\" or null (or omit the key)")
+
+    def exclude_high_leverage(self, variables: List[str], min_samples: int) -> int:
+        """
+        Leaves values with a high leverage out of the fit, before anything is
+        sent. With known covariates X, XtY reveals the fitted values Hy, so a
+        value with leverage h is disclosed up to a remaining variance of
+        sigma^2 (1 - h), exactly for h = 1. The leverage within this client's
+        own data bounds the leverage within any set of clients containing it,
+        so the check covers the aggregate as well as a single client's XtX/XtY.
+        Excluded values are still corrected, see restore_excluded_values.
+        Per feature, the leverage of the client's own fit (one intercept per
+        batch plus the covariates) is h = 1/n_b + d' W^+ d, d being the
+        covariates minus their batch mean and W the within batch scatter, both
+        over the feature's fitted values. Excluding values changes W, so the
+        check and the per batch min_samples rule are repeated until stable.
+        Args:
+            variables: the global covariate names (not hashed)
+            min_samples: the effective per batch minimum of fitted values
+        Returns:
+            The number of excluded values
+        """
+        assert isinstance(self.data, pd.DataFrame)
+        if self.design is not None and self.batch_col:
+            batches = self.design[self.batch_col].reindex(self.data.columns).to_numpy()
+        else:
+            batches = np.zeros(self.data.shape[1])
+        self.sample_batches = pd.Series(batches, index=self.data.columns)
+        if not variables or self.max_leverage >= 1:
+            return 0
+        source = self._data_covariates(variables) if self.variables_in_data else self.design
+        error = self._covariate_error(source, variables)
+        if error:
+            raise ValueError(error)
+        X = source.loc[self.data.columns, variables].to_numpy(dtype=float)
+        groups = [np.flatnonzero(batches == batch) for batch in pd.unique(batches)]
+
+        Y = self.data.to_numpy(dtype=float, copy=True)
+        excluded = np.full(Y.shape, np.nan)
+        while True:
+            for idx in groups:
+                # same rule as get_batch_feature_presence_info, it changes W
+                count = np.isfinite(Y[:, idx]).sum(axis=1)
+                Y[np.ix_((count > 0) & (count < min_samples), idx)] = np.nan
+            fitted = np.isfinite(Y)
+            high = fitted & (_leverage(X, groups, fitted) > self.max_leverage)
+            if not high.any():
+                break
+            excluded[high] = Y[high]
+            Y[high] = np.nan
+
+        self.leverage_excluded = pd.DataFrame(excluded, index=self.data.index, columns=self.data.columns)
+        self.data = pd.DataFrame(Y, index=self.data.index, columns=self.data.columns)
+        n_excluded = int(np.isfinite(excluded).sum())
+        if n_excluded:
+            print(f"INFO: {n_excluded} values of {int(np.isfinite(excluded).any(axis=1).sum())} "
+                  f"features have a leverage above max_leverage={self.max_leverage} and are "
+                  "left out of the fit, they are still corrected")
+        return n_excluded
+
+    def restore_excluded_values(self) -> None:
+        """
+        Puts the values left out by exclude_high_leverage back for the
+        correction, but only where their batch still has fitted values of the
+        feature. Otherwise the batch was dropped for that feature (min_samples,
+        or the feature was not selected) and the values stay missing.
+        """
+        if self.leverage_excluded is None:
+            return
+        assert isinstance(self.data, pd.DataFrame)
+        excluded = self.leverage_excluded.reindex(index=self.data.index, columns=self.data.columns)
+        restored = 0
+        batches = self.sample_batches.reindex(self.data.columns).to_numpy()
+        for batch in pd.unique(batches):
+            columns = self.data.columns[batches == batch]
+            has_fit = self.data[columns].notna().any(axis=1).to_numpy()[:, None]
+            restore = excluded[columns].notna().to_numpy() & has_fit
+            self.data[columns] = self.data[columns].mask(restore, excluded[columns])
+            restored += int(restore.sum())
+        per_feature = excluded.notna().sum(axis=1)
+        per_feature = per_feature[per_feature > 0].rename(index=self.hash2feature or {})
+        if len(per_feature):
+            self.leverage_report = (
+                f"{restored} values were left out of the fit for a leverage above "
+                f"max_leverage={self.max_leverage} and corrected with the batch coefficients. "
+                f"Excluded values per feature:\n{per_feature.to_dict()}\n")
+        self.leverage_excluded = None
 
     def get_batch_feature_presence_info(self, min_samples: int) -> Dict[str, List[str]]:
         """
@@ -589,12 +685,9 @@ class Client:
             else:
                 if not all(column_name in self.design.columns for column_name in self.variables):
                     return f"ERROR: the given variables {self.variables} were not found in the given design matrix file."
-            for variable in self.variables:
-                values = self.design[variable]
-                if not pd.api.types.is_numeric_dtype(values):
-                    return f"Covariate '{variable}' must be numeric; encode categories as indicator columns."
-                if not np.isfinite(values.to_numpy()).all():
-                    return f"Covariate '{variable}' must contain only finite values (no missing values or infinities)."
+            error = self._covariate_error(self.design, self.variables)
+            if error:
+                return error
             self.design = self.design.loc[:, ['intercept'] + self.variables + design_cohorts]
                 # IMPORTANT: this order of intercept, variables, cohorts is
                 # relevant for the batch correction later as well as for the
@@ -683,6 +776,7 @@ class Client:
         """
         assert self.data is not None
         assert self.design is not None
+        self.restore_excluded_values()
         print("INFO: Removing the batch effects with the trained betas")
         self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
         batch_design = self.design.drop(columns=['intercept', *(self.variables or [])])
@@ -712,6 +806,7 @@ class Client:
         self.report += f"Client {self.client_name}:\n"
         self.report += f"The following batch coefficients were used for batch correction:\n{betas}\n"
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
+        self.report += self.leverage_report
         np.set_printoptions(threshold=1000)
         print(f"INFO: Shape of corrected data after correction: {self.data_corrected.shape}")
 
@@ -732,11 +827,23 @@ class Client:
         print(f"INFO: Shape of full corrected data (features + covariates): {self.full_corrected_data.shape}")
 
     ### Helpers ###
-    def _data_covariates(self) -> pd.DataFrame:
+    def _data_covariates(self, variables=None) -> pd.DataFrame:
         """Return embedded covariates as samples x covariates in either layout."""
+        variables = self.variables if variables is None else variables
         if self.expr_file_flag:
-            return self.rawdata.loc[self.variables].T
-        return self.rawdata[self.variables]
+            return self.rawdata.loc[variables].T
+        return self.rawdata[variables]
+
+    @staticmethod
+    def _covariate_error(frame: pd.DataFrame, variables: List[str]):
+        """Returns an error message if a covariate is not numeric and finite, else None."""
+        for variable in variables:
+            values = frame[variable]
+            if not pd.api.types.is_numeric_dtype(values):
+                return f"Covariate '{variable}' must be numeric; encode categories as indicator columns."
+            if not np.isfinite(values.to_numpy()).all():
+                return f"Covariate '{variable}' must contain only finite values (no missing values or infinities)."
+        return None
 
     def _check_consistency_designfile(self) -> None:
         """
@@ -757,3 +864,41 @@ class Client:
             print(f"The following indexes are in both files (intercept): {intercept_indexes}")
             print(f"The following indexes are only in one of the files (union-intercept): {union_indexes.difference(intercept_indexes)}")
             raise ValueError("aborting...")
+
+
+def _leverage(X: np.ndarray, groups: List[np.ndarray], fitted: np.ndarray,
+              block_size: int = 2000) -> np.ndarray:
+    """
+    Leverage of every fitted value in a fit with one intercept per batch plus
+    the covariates X (samples x covariates), separately for every feature.
+    Args:
+        X: covariates, samples x covariates
+        groups: sample indices of each batch
+        fitted: features x samples, True where the value enters the fit
+    Returns:
+        features x samples, the leverage of fitted values, 0 elsewhere
+    """
+    k = X.shape[1]
+    # eigenvalues below this are numerical noise of a covariate that is
+    # constant on the fitted values, they are not inverted
+    floor = k * X.shape[0] * np.finfo(float).eps * max(float((X ** 2).max()), 1.0)
+    h = np.zeros(fitted.shape)
+    for start in range(0, fitted.shape[0], block_size):
+        M = fitted[start:start + block_size].astype(float)
+        W = np.zeros((M.shape[0], k, k))
+        parts = []
+        for idx in groups:
+            Mb, Xb = M[:, idx], X[idx]
+            count = Mb.sum(axis=1)
+            mean = (Mb @ Xb) / np.maximum(count, 1)[:, None]
+            W += np.einsum("fi,ij,il->fjl", Mb, Xb, Xb) - count[:, None, None] * mean[:, :, None] * mean[:, None, :]
+            parts.append((idx, count, mean))
+        lam, V = np.linalg.eigh(W)
+        tol = np.maximum(k * np.finfo(float).eps * lam[:, -1:], floor)
+        inv = np.where(lam > tol, 1 / np.where(lam > tol, lam, 1), 0)
+        W_pinv = (V * inv[:, None, :]) @ V.transpose(0, 2, 1)
+        for idx, count, mean in parts:
+            D = X[idx][None, :, :] - mean[:, None, :]
+            h[start:start + block_size, idx] = 1 / np.maximum(count, 1)[:, None] \
+                + np.einsum("fij,fjl,fil->fi", D, W_pinv, D)
+    return np.where(fitted, h, 0)

@@ -127,6 +127,10 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
     perf.start("client_compute", "commonGenes")
     # now we can calculate the min_samples_per_feature
     min_samples = max(num_batches+len(global_variables_hashed)+1, client.min_samples)
+    # leave values out of the fit whose leverage within this client is high,
+    # before anything about the features is sent
+    client.exclude_high_leverage([client.hash2variable[hashed] for hashed in global_variables_hashed],
+                                 min_samples)
 
     batch_feature_presence = client.get_batch_feature_presence_info(min_samples=min_samples)
     empty_batches = [batch for batch, features in batch_feature_presence.items() if not features]
