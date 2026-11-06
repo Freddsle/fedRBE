@@ -179,13 +179,10 @@ evaluation_data/**/config_forest.yaml
 /evaluation_clusterization_after_correction/real_datasets/**/inputs/
 /evaluation_clusterization_after_correction/real_datasets/**/kmeans_res/
 # Regenerable per-fit details; selected analysis summaries remain tracked.
-/evaluation_clusterization_after_correction/real_datasets/panel5000/analysis/arrival-order/arrival_orders.tsv
-/evaluation_clusterization_after_correction/real_datasets/panel5000/analysis/starts/individual_starts.tsv
-/evaluation_clusterization_after_correction/real_datasets/panel5000/analysis/sensitivity/sensitivity.tsv
-/evaluation_clusterization_after_correction/real_datasets/panel5000/analysis/subsample/subsample_paired_deltas.tsv
-/evaluation_clusterization_after_correction/real_datasets/panel5000/analysis/subsample/subsample_seed_medians.tsv
-# RF panels are reproducible subsets of canonical inputs.
-/evaluation_data/*/panel5000/
+/evaluation_clusterization_after_correction/real_datasets/analysis/arrival-order/arrival_orders.tsv
+/evaluation_clusterization_after_correction/real_datasets/analysis/starts/individual_starts.tsv
+/evaluation_clusterization_after_correction/real_datasets/analysis/subsample/subsample_paired_deltas.tsv
+/evaluation_clusterization_after_correction/real_datasets/analysis/subsample/subsample_seed_medians.tsv
 
 # ccRCC raw acquisition files and intermediate reports remain local.
 evaluation_data/ccRCC_studies/data/

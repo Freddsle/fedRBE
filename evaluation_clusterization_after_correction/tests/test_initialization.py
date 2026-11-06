@@ -53,10 +53,8 @@ class InitializationTests(unittest.TestCase):
 
     def test_analysis_defaults_and_explicit_restart_counts(self):
         parser = analysis.parser()
-        for command in ("sensitivity", "subsample"):
-            with self.subTest(command=command):
-                args = parser.parse_args([command, "--output-dir", str(self.root)])
-                self.assertEqual(args.n_init, 1)
+        args = parser.parse_args(["subsample", "--output-dir", str(self.root)])
+        self.assertEqual(args.n_init, 1)
         args = parser.parse_args(["starts", "--output-dir", str(self.root)])
         self.assertEqual(args.n_inits, [1])
         args = parser.parse_args(["starts", "--output-dir", str(self.root),

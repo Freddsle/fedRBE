@@ -516,6 +516,25 @@ def load_dataset_metadata(cfg: DatasetConfig):
     return metadata, [cfg.sites_root / name for name in names]
 
 
+def load_evaluation_matrices(cfg: DatasetConfig):
+    """Read complete-case matrices in evaluation sample order without regenerating inputs.
+
+    Returns metadata, clients and the ``before``, ``central_corr`` and ``fed_corr``
+    matrices. The uncorrected matrix is the serialized before matrix; Quartet
+    requires the joint metadata/matrices prepared by the ordinary data preparation.
+    """
+    metadata, clients = load_dataset_metadata(cfg)
+    matrices = {"before": load_matrix_with_lfs_fallback(
+        cfg.before_matrix, f"{cfg.name} before", cfg)}
+    for source, path in (("central_corr", cfg.corrected_central),
+                         ("fed_corr", cfg.corrected_federated)):
+        matrices[source] = load_matrix_with_lfs_fallback(path, f"{cfg.name} {source}")
+    matrices = {state: drop_rows_with_any_na(
+        align_matrix_to_metadata(matrix, metadata, state), state)
+        for state, matrix in matrices.items()}
+    return metadata, clients, matrices
+
+
 
 def prepare_variant_inputs(
     dataset_root: Path,

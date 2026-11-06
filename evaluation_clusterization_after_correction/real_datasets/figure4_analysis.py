@@ -1,4 +1,4 @@
-"""Central sensitivity analyses and descriptive tables for real-data clustering.
+"""Central robustness analyses and descriptive tables for real-data clustering.
 
 Run from the repository root; use ``--help`` on a subcommand for its inputs.
 Offline centroid reconstruction describes an optimizer replica, not a new
@@ -26,12 +26,9 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from evaluation_utils.feature_panel import (
-    PANEL_DIR, compute_feature_panel, correction_batches, load_panel_matrices, read_panel,
-)
 from evaluation_utils.metrics import clustering_scores
 from evaluation_utils.real_datasets_utils import (
-    arm_root, dataset_configs, pooled_inertia,
+    arm_root, dataset_configs, load_evaluation_matrices, pooled_inertia,
     read_assignments as read_saved_assignments, read_metadata, run_central_kmeans,
     scale_like_federated,
 )
@@ -48,9 +45,9 @@ def partition_id(labels):
     return digest(pd.factorize(np.asarray(labels), sort=False)[0])
 
 
-def fit(matrix, truth, seed, n_init=1, scaling="zscore"):
+def fit(matrix, truth, seed, n_init=1):
     k = len(pd.unique(truth))
-    result = run_central_kmeans(matrix, [k], seed, n_init=n_init, scaling=scaling)[k]
+    result = run_central_kmeans(matrix, [k], seed, n_init=n_init)[k]
     labels = result["labels"].reindex(matrix.columns).to_numpy()
     row = {**clustering_scores(truth, labels), "inertia": result["inertia"],
            "n_iter": result["n_iter"], "partition": partition_id(labels),
@@ -59,40 +56,13 @@ def fit(matrix, truth, seed, n_init=1, scaling="zscore"):
     return row, labels
 
 
-def subset(matrix, groups, size, ranking="pooled", ranking_matrix=None):
-    # Saved panels use layer/rank order; use that same order for the fitted matrix.
-    if size == "all":
-        return matrix
-    source = matrix if ranking_matrix is None else ranking_matrix
-    if size == "10%":
-        tables = []
-        for layer, labels in groups.items():
-            block = source if layer == "all" else source.loc[
-                source.index.str.startswith(layer + "__")]
-            tables.append(compute_feature_panel(
-                block, {layer: labels}, max(1, int(len(block) * .1)), ranking))
-        features = pd.concat(tables).feature
-    else:
-        features = compute_feature_panel(source, groups, int(size), ranking).feature
-    return matrix.loc[features]
-
-
-def spaces(name, matrices, selected):
-    for space in selected:
-        if space == "all":
-            yield space, matrices
-        else:
-            panel = PANEL_DIR / f"panel_top5000_{name}.tsv"
-            yield space, {key: read_panel(panel, value) for key, value in matrices.items()}
-
-
 def datasets(args):
     for arm in args.arms:
         configs = dataset_configs(REPO_ROOT, args.config, correction_arm=arm)
         for name in args.datasets or list(configs):
             cfg = configs[name]
-            metadata, clients, matrices = load_panel_matrices(cfg, canonical_before=True)
-            yield name, arm, cfg, metadata, clients, matrices, correction_batches(cfg, metadata)
+            metadata, clients, matrices = load_evaluation_matrices(cfg)
+            yield name, arm, cfg, metadata, clients, matrices
 
 
 def save(args, name, rows):
@@ -101,67 +71,37 @@ def save(args, name, rows):
     return table
 
 
-def sensitivity(args):
-    """E1: complete central feature-count/ranking/scaling grid and paired changes."""
-    rows = []
-    for name, arm, _, meta, _, matrices, groups in datasets(args):
-        truth = meta.condition.to_numpy()
-        for size in args.sizes:
-            for ranking in args.rankings:
-                for scaling in args.scalings:
-                    for state in ("before", "central_corr"):
-                        source = matrices[state] if ranking == "total" else matrices["before"]
-                        matrix = subset(matrices[state], groups, size, ranking, source)
-                        for seed in args.seeds:
-                            row, _ = fit(matrix, truth, seed, args.n_init, scaling)
-                            rows.append({"dataset": name, "arm": arm, "size": size,
-                                         "ranking": ranking, "scaling": scaling, "state": state,
-                                         "selection_source": state if ranking == "total" else "before",
-                                         "seed": seed, "n_init": args.n_init, **row})
-    table = save(args, "sensitivity", rows)
-    keys = ["dataset", "arm", "size", "ranking", "scaling", "seed"]
-    wide = table.pivot(index=keys, columns="state", values=["ARI", "AMI"])
-    paired = wide.xs("central_corr", level="state", axis=1) - wide.xs(
-        "before", level="state", axis=1)
-    summary = paired.groupby(keys[:-1], sort=False).median().add_prefix("median_delta_").reset_index()
-    summary["positive_ARI_cell"] = summary.median_delta_ARI.gt(0)
-    save(args, "sensitivity_summary", summary)
-    save(args, "sensitivity_positive_counts", summary.groupby(["dataset", "arm"], sort=False)
-         .positive_ARI_cell.agg(positive_cells="sum", total_cells="size").reset_index())
-
-
 def starts(args):
     """E1b: individual local optima, restart counts and the pooled best solution."""
     rows, starts_rows = [], []
-    for name, arm, _, meta, _, matrices, groups in datasets(args):
+    for name, arm, _, meta, _, matrices in datasets(args):
         truth = meta.condition.to_numpy()
-        for space, selected in spaces(name, matrices, args.spaces):
-            states = args.states or (["before"] if name == "quartet_multiomics" else
-                                     ["before", "central_corr"])
-            for state in states:
-                matrix = selected[state]
-                for seed in args.seeds:
-                    rng = np.random.RandomState(seed)
-                    stream = []
-                    for index in range(max(args.n_inits)):
-                        row, labels = fit(matrix, truth, rng, 1)
-                        row = {"dataset": name, "arm": arm, "space": space, "state": state,
-                               "seed": seed, "start": index + 1, **row}
-                        starts_rows.append(row)
-                        stream.append((row, labels))
-                    for n_init in args.n_inits:
-                        row, labels = fit(matrix, truth, seed, n_init)
-                        best_inertia = min(value[0]["inertia"] for value in stream[:n_init])
-                        matches = any(np.isclose(row["inertia"], value[0]["inertia"], rtol=1e-10)
-                                      and partition_id(labels) == value[0]["partition"]
-                                      for value in stream[:n_init])
-                        if not matches or not np.isclose(row["inertia"], best_inertia, rtol=1e-10):
-                            raise ValueError("Individual starts do not reproduce the library multi-start fit")
-                        rows.append({"dataset": name, "arm": arm, "space": space, "state": state,
-                                     "seed": seed, "n_init": n_init, **row})
+        states = args.states or (["before"] if name == "quartet_multiomics" else
+                                 ["before", "central_corr"])
+        for state in states:
+            matrix = matrices[state]
+            for seed in args.seeds:
+                rng = np.random.RandomState(seed)
+                stream = []
+                for index in range(max(args.n_inits)):
+                    row, labels = fit(matrix, truth, rng, 1)
+                    row = {"dataset": name, "arm": arm, "state": state,
+                           "seed": seed, "start": index + 1, **row}
+                    starts_rows.append(row)
+                    stream.append((row, labels))
+                for n_init in args.n_inits:
+                    row, labels = fit(matrix, truth, seed, n_init)
+                    best_inertia = min(value[0]["inertia"] for value in stream[:n_init])
+                    matches = any(np.isclose(row["inertia"], value[0]["inertia"], rtol=1e-10)
+                                  and partition_id(labels) == value[0]["partition"]
+                                  for value in stream[:n_init])
+                    if not matches or not np.isclose(row["inertia"], best_inertia, rtol=1e-10):
+                        raise ValueError("Individual starts do not reproduce the library multi-start fit")
+                    rows.append({"dataset": name, "arm": arm, "state": state,
+                                 "seed": seed, "n_init": n_init, **row})
     fits = save(args, "start_count_fits", rows)
     individual = save(args, "individual_starts", starts_rows)
-    keys = ["dataset", "arm", "space", "state", "partition"]
+    keys = ["dataset", "arm", "state", "partition"]
     save(args, "distinct_start_partitions", individual.groupby(keys, sort=False).agg(
         frequency=("start", "size"), inertia=("inertia", "min"), ARI=("ARI", "first"),
         AMI=("AMI", "first")).reset_index())
@@ -175,83 +115,80 @@ def starts(args):
 def subsample(args):
     """E1c: paired, stratified subsampling with fresh scaling and clustering."""
     rows = []
-    for name, arm, _, meta, _, matrices, groups in datasets(args):
+    for name, arm, _, meta, _, matrices in datasets(args):
         rng = np.random.default_rng(args.resample_seed)
         strata = list(meta.groupby(["lab", "condition"], sort=False).indices.values())
-        selected_spaces = list(spaces(name, matrices, args.spaces))
         for repeat in range(args.repeats):
             indices = np.sort(np.concatenate([
                 rng.choice(values, max(1, int(len(values) * args.fraction)), replace=False)
                 for values in strata]))
             sampled = meta.iloc[indices]
-            for space, selected in selected_spaces:
-                for seed in args.seeds:
-                    scores = {}
-                    for state in ("before", "central_corr"):
-                        scores[state], _ = fit(selected[state].iloc[:, indices], sampled.condition,
-                                               seed, args.n_init)
-                    rows.append({"dataset": name, "arm": arm, "space": space,
-                                 "repeat": repeat, "seed": seed, "n_samples": len(indices),
-                                 "delta_ARI": scores["central_corr"]["ARI"] - scores["before"]["ARI"],
-                                 "delta_AMI": scores["central_corr"]["AMI"] - scores["before"]["AMI"]})
+            for seed in args.seeds:
+                scores = {}
+                for state in ("before", "central_corr"):
+                    scores[state], _ = fit(matrices[state].iloc[:, indices], sampled.condition,
+                                           seed, args.n_init)
+                rows.append({"dataset": name, "arm": arm,
+                             "repeat": repeat, "seed": seed, "n_samples": len(indices),
+                             "delta_ARI": scores["central_corr"]["ARI"] - scores["before"]["ARI"],
+                             "delta_AMI": scores["central_corr"]["AMI"] - scores["before"]["AMI"]})
     table = save(args, "subsample_paired_deltas", rows)
-    median = table.groupby(["dataset", "arm", "space", "repeat"], sort=False)[
+    median = table.groupby(["dataset", "arm", "repeat"], sort=False)[
         ["delta_ARI", "delta_AMI"]].median().reset_index()
     save(args, "subsample_seed_medians", median)
     intervals = []
-    for key, block in median.groupby(["dataset", "arm", "space"], sort=False):
+    for key, block in median.groupby(["dataset", "arm"], sort=False):
         for metric in ("delta_ARI", "delta_AMI"):
             values = block[metric].to_numpy()
-            intervals.append(dict(zip(("dataset", "arm", "space"), key)) | {
+            intervals.append(dict(zip(("dataset", "arm"), key)) | {
                 "metric": metric, "median": np.median(values), "lower": np.quantile(values, args.alpha / 2),
                 "upper": np.quantile(values, 1 - args.alpha / 2), "repeats": len(values),
-                "fraction": args.fraction, "scope": "reclustering; correction and feature panel fixed"})
+                "fraction": args.fraction, "scope": "reclustering; correction fixed"})
     save(args, "subsample_intervals", intervals)
 
 
 def arrival_order(args):
     """Reconstruct local centroids and permute coordinator inputs offline."""
     rows, summaries = [], []
-    for name, arm, _, meta, clients, matrices, groups in datasets(args):
+    for name, arm, _, meta, clients, matrices in datasets(args):
         truth = meta.condition.to_numpy()
         k = len(pd.unique(truth))
         parts = [np.flatnonzero(meta.lab.eq(client.name)) for client in clients]
-        for space, selected in spaces(name, matrices, args.spaces):
-            for state in args.states:
-                data = scale_like_federated(selected[state])
-                for seed in args.seeds:
-                    centroids = [KMeans(k, n_init=args.n_init_local,
-                                        random_state=np.random.RandomState(seed)).fit(data[part]).cluster_centers_
-                                 for part in parts]
-                    solutions = {}
-                    orders = permutations(range(len(clients)))
-                    if args.max_orders is not None:
-                        orders = islice(orders, args.max_orders)
-                    for index, order in enumerate(orders):
-                        coordinator = KMeans(k, n_init=args.n_init_global,
-                                             random_state=np.random.RandomState(seed)).fit(
-                            np.concatenate([centroids[i] for i in order]))
-                        labels = np.empty(len(meta), dtype=int)
-                        for part in parts:
-                            labels[part] = KMeans(k, n_init=1, init=coordinator.cluster_centers_,
-                                                  random_state=seed, max_iter=1).fit(data[part]).labels_
-                        identity = partition_id(labels)
-                        if identity not in solutions:
-                            solutions[identity] = {**clustering_scores(truth, labels),
-                                                   "pooled_inertia": pooled_inertia(data, labels)}
-                        rows.append({"dataset": name, "arm": arm, "space": space,
-                                     "state": state, "seed": seed, "order_index": index,
-                                     "client_order": json.dumps([clients[i].name for i in order]),
-                                     "n_init_local": args.n_init_local, "n_init_global": args.n_init_global,
-                                     "partition": identity, "coordinator_inertia": coordinator.inertia_,
-                                     **solutions[identity]})
-                    summaries.append({"dataset": name, "arm": arm, "space": space,
-                                      "state": state, "seed": seed, "distinct_partitions": len(solutions),
-                                      "orders_checked": index + 1,
-                                      "exhaustive": index + 1 == math.factorial(len(clients)),
-                                      "ARI_min": min(row["ARI"] for row in solutions.values()),
-                                      "ARI_max": max(row["ARI"] for row in solutions.values()),
-                                      "scope": "local sklearn optimizer replica; message order unobserved"})
+        for state in args.states:
+            data = scale_like_federated(matrices[state])
+            for seed in args.seeds:
+                centroids = [KMeans(k, n_init=args.n_init_local,
+                                    random_state=np.random.RandomState(seed)).fit(data[part]).cluster_centers_
+                             for part in parts]
+                solutions = {}
+                orders = permutations(range(len(clients)))
+                if args.max_orders is not None:
+                    orders = islice(orders, args.max_orders)
+                for index, order in enumerate(orders):
+                    coordinator = KMeans(k, n_init=args.n_init_global,
+                                         random_state=np.random.RandomState(seed)).fit(
+                        np.concatenate([centroids[i] for i in order]))
+                    labels = np.empty(len(meta), dtype=int)
+                    for part in parts:
+                        labels[part] = KMeans(k, n_init=1, init=coordinator.cluster_centers_,
+                                              random_state=seed, max_iter=1).fit(data[part]).labels_
+                    identity = partition_id(labels)
+                    if identity not in solutions:
+                        solutions[identity] = {**clustering_scores(truth, labels),
+                                               "pooled_inertia": pooled_inertia(data, labels)}
+                    rows.append({"dataset": name, "arm": arm,
+                                 "state": state, "seed": seed, "order_index": index,
+                                 "client_order": json.dumps([clients[i].name for i in order]),
+                                 "n_init_local": args.n_init_local, "n_init_global": args.n_init_global,
+                                 "partition": identity, "coordinator_inertia": coordinator.inertia_,
+                                 **solutions[identity]})
+                summaries.append({"dataset": name, "arm": arm,
+                                  "state": state, "seed": seed, "distinct_partitions": len(solutions),
+                                  "orders_checked": index + 1,
+                                  "exhaustive": index + 1 == math.factorial(len(clients)),
+                                  "ARI_min": min(row["ARI"] for row in solutions.values()),
+                                  "ARI_max": max(row["ARI"] for row in solutions.values()),
+                                  "scope": "local sklearn optimizer replica; message order unobserved"})
     save(args, "arrival_orders", rows)
     save(args, "arrival_order_summary", summaries)
 
@@ -327,20 +264,19 @@ def rf_cohorts(args):
 def class_r2(args):
     """Summarize unadjusted pooled per-feature class R-squared by correction state."""
     rows = []
-    for name, arm, _, meta, _, matrices, groups in datasets(args):
-        for space, selected in spaces(name, matrices, args.spaces):
-            for state, matrix in selected.items():
-                values = matrix.to_numpy(float)
-                total = np.square(values - values.mean(axis=1, keepdims=True)).sum(axis=1)
-                within = np.zeros(len(matrix))
-                for condition in meta.condition.unique():
-                    block = values[:, meta.condition.eq(condition)]
-                    within += np.square(block - block.mean(axis=1, keepdims=True)).sum(axis=1)
-                r2 = np.divide(total - within, total, out=np.full(len(matrix), np.nan), where=total > 0)
-                rows.append({"dataset": name, "arm": arm, "space": space, "state": state,
-                             "mean_class_r2": np.nanmean(r2), "median_class_r2": np.nanmedian(r2),
-                             "n_features": len(matrix), "undefined_constant_features": int((total == 0).sum()),
-                             "scope": "pooled unadjusted class association; correction fixed"})
+    for name, arm, _, meta, _, matrices in datasets(args):
+        for state, matrix in matrices.items():
+            values = matrix.to_numpy(float)
+            total = np.square(values - values.mean(axis=1, keepdims=True)).sum(axis=1)
+            within = np.zeros(len(matrix))
+            for condition in meta.condition.unique():
+                block = values[:, meta.condition.eq(condition)]
+                within += np.square(block - block.mean(axis=1, keepdims=True)).sum(axis=1)
+            r2 = np.divide(total - within, total, out=np.full(len(matrix), np.nan), where=total > 0)
+            rows.append({"dataset": name, "arm": arm, "state": state,
+                         "mean_class_r2": np.nanmean(r2), "median_class_r2": np.nanmedian(r2),
+                         "n_features": len(matrix), "undefined_constant_features": int((total == 0).sum()),
+                         "scope": "pooled unadjusted class association; correction fixed"})
     save(args, "class_r2", rows)
 
 
@@ -399,7 +335,7 @@ def intervals(args):
 def parser():
     command = argparse.ArgumentParser(description=__doc__)
     sub = command.add_subparsers(dest="command", required=True)
-    actions = {"sensitivity": sensitivity, "starts": starts, "subsample": subsample,
+    actions = {"starts": starts, "subsample": subsample,
                "arrival-order": arrival_order, "contingency": contingency,
                "rf-cohorts": rf_cohorts, "class-r2": class_r2, "intervals": intervals}
     for name, action in actions.items():
@@ -414,9 +350,7 @@ def parser():
         item.add_argument("--arms", nargs="+", choices=("label_aware", "no_label"),
                           default=["label_aware", "no_label"])
         item.add_argument("--seeds", nargs="+", type=int, default=SEEDS)
-        if name in ("starts", "subsample", "arrival-order", "class-r2"):
-            item.add_argument("--spaces", nargs="+", choices=("all", "panel"), default=["all", "panel"])
-        if name in ("sensitivity", "subsample"):
+        if name == "subsample":
             item.add_argument("--n-init", type=int, default=1)
         if name in ("starts", "arrival-order"):
             item.add_argument("--states", nargs="+", choices=("before", "central_corr", "fed_corr"),
@@ -428,11 +362,7 @@ def parser():
         if name in ("contingency", "intervals"):
             item.add_argument("--run-root", type=Path, required=True,
                               help="Notebook output base; no_label is appended for that arm")
-        if name == "sensitivity":
-            item.add_argument("--sizes", nargs="+", default=["500", "1000", "2000", "3000", "5000", "10%", "all"])
-            item.add_argument("--rankings", nargs="+", choices=("pooled", "equal", "total"), default=["pooled", "equal", "total"])
-            item.add_argument("--scalings", nargs="+", choices=("zscore", "centered"), default=["zscore", "centered"])
-        elif name == "starts":
+        if name == "starts":
             item.set_defaults(datasets=["ovarian_cancer", "quartet_multiomics"])
             item.add_argument("--n-inits", nargs="+", type=int, default=[1])
         elif name == "subsample":
