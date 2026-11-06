@@ -118,7 +118,8 @@ scikit-learn and does not recover actual FeatureCloud message arrival order.
 
 [`evaluation/aggregate_figure4.R`](../../evaluation/aggregate_figure4.R)
 reads the aggregate clustering tables and RF reports and writes
-`figures/figure4_<arm>.png`, a matching `_statistics.tsv` and per-cohort LOCO
+`figures/figure4_<arm>.png` without statistics, `figures/figure4_<arm>_statistics.png`
+with significance brackets, a matching `_statistics.tsv` and per-cohort LOCO
 comparisons in `figures/figureS7_<arm>.png`.
 `CORRECTION_ARM` chooses the arm. `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and
 `FIGURE4_OUTPUT` override paths relative to the repository root or absolutely.

@@ -127,8 +127,9 @@ for (arm in c("label_aware", "no_label")) {
   stopifnot(identical(script$output_prefix, "figure4_"))
   Sys.unsetenv(c("CORRECTION_ARM", "FIGURE4_OUTPUT"))
   statistics_file <- sub("\\.png$", "_statistics.tsv", output)
+  annotated_file <- sub("\\.png$", "_statistics.png", output)
   cohort_file <- file.path(tempdir(), paste0("figureS7_", arm, ".png"))
-  current_outputs <- c(output, statistics_file, cohort_file)
+  current_outputs <- c(output, annotated_file, statistics_file, cohort_file)
   stopifnot(all(file.exists(current_outputs)),
             !any(current_outputs %in% verified_outputs),
             identical(tools::md5sum(verified_outputs), previous_hashes))
@@ -212,4 +213,4 @@ for (arm in c("label_aware", "no_label")) {
   }
   cat(arm, ": 100 rank-test contrasts in 25 Holm families and both figures verified\n")
 }
-stopifnot(length(verified_outputs) == 6L, !anyDuplicated(verified_outputs))
+stopifnot(length(verified_outputs) == 8L, !anyDuplicated(verified_outputs))

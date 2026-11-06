@@ -5,12 +5,13 @@
 # Run from the repository root:
 #   CORRECTION_ARM=label_aware pixi run Rscript evaluation/aggregate_figure4.R
 # Set CORRECTION_ARM=label_aware (default) or CORRECTION_ARM=no_label.
-# Each arm writes figures/figure4_<arm>.png.
+# Each arm writes figures/figure4_<arm>.png without statistics and
+# figures/figure4_<arm>_statistics.png with significance brackets in panels a and c.
 # FIGURE4_ARI_TABLE, FIGURE4_RF_REPORT and FIGURE4_OUTPUT override the source and
 # output paths; an output path ending in .svg writes an SVG.
-# The script also writes the test table (<output>_statistics.tsv), significance
-# brackets in panels a and c, and Figure S7 (leave-one-cohort-out per held-out
-# cohort, figureS7_<arm>) next to the Figure 4 output.
+# The script also writes the test table (<output>_statistics.tsv) and Figure S7
+# (leave-one-cohort-out per held-out cohort with brackets, figureS7_<arm>) next to
+# the Figure 4 output.
 
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 source(file.path("evaluation_utils", "figure4_statistics.R"))
@@ -149,37 +150,49 @@ figure4_annotations <- list(
 )
 statistics_caption <- figure4_statistics_caption()
 
-# Build the plot.
+# Build and save Figure 4 twice: plain at the output path, and with significance
+# brackets and the test caption at the same path with a `_statistics` suffix.
 
-figure4_plot <- make_figure4_plot(
-  figure4_data = figure4_data,
-  dataset_labels = ari_dataset_labels,
-  dataset_order = ari_dataset_order,
-  task_order = classification_task_order,
-  scenario_order = scenario_order,
-  scenario_colors = scenario_colors,
-  point_size = point_size,
-  clustering_feature_label = clustering_feature_label,
-  classification_feature_label = classification_feature_label,
-  annotations = figure4_annotations,
-  annotation_caption = statistics_caption
+build_figure4 <- function(annotations, caption) {
+  plot <- make_figure4_plot(
+    figure4_data = figure4_data,
+    dataset_labels = ari_dataset_labels,
+    dataset_order = ari_dataset_order,
+    task_order = classification_task_order,
+    scenario_order = scenario_order,
+    scenario_colors = scenario_colors,
+    point_size = point_size,
+    clustering_feature_label = clustering_feature_label,
+    classification_feature_label = classification_feature_label,
+    annotations = annotations,
+    annotation_caption = caption
+  )
+  plot$panels[[1]] <- plot$panels[[1]] + ggplot2::labs(
+    title = paste(correction_arm_titles[[CORRECTION_ARM]], plot$panels[[1]]$labels$title, sep = "\n")
+  )
+  plot
+}
+
+figure4_extension <- tools::file_ext(output_path)
+statistics_output_path <- paste0(
+  tools::file_path_sans_ext(output_path), "_statistics.",
+  if (nzchar(figure4_extension)) figure4_extension else "png"
 )
-
-figure4_plot$panels[[1]] <- figure4_plot$panels[[1]] + ggplot2::labs(
-  title = paste(correction_arm_titles[[CORRECTION_ARM]], figure4_plot$panels[[1]]$labels$title, sep = "\n")
+figure4_variants <- list(
+  list(path = output_path, plot = build_figure4(NULL, NULL)),
+  list(path = statistics_output_path,
+       plot = build_figure4(figure4_annotations, statistics_caption))
 )
-
-# Save the paper-ready figure.
-
-saved_path <- save_grid_png(
-  function() draw_figure4(figure4_plot),
-  output_path = output_path,
-  width = figure_width,
-  height = figure_height,
-  dpi = figure_dpi
-)
-
-cat("Saved Figure 4 to", saved_path, "\n")
+for (variant in figure4_variants) {
+  saved_path <- save_grid_png(
+    function() draw_figure4(variant$plot),
+    output_path = variant$path,
+    width = figure_width,
+    height = figure_height,
+    dpi = figure_dpi
+  )
+  cat("Saved Figure 4 to", saved_path, "\n")
+}
 
 # Figure S7: the panel b scores per held-out cohort, with the per-cohort tests.
 # It uses the Figure 4 output's directory and format.

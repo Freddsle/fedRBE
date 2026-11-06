@@ -473,15 +473,19 @@ done
 ```
 
 Outputs under `figures/`: `figure3_<arm>.png`, `figure4_<arm>.png`,
-`figureS5_<arm>.png` and `figureS7_<arm>.png`. Figures 3 and S5 also
-write matching `_variance.tsv` files with median variance fractions and feature
-counts. Figure 4 writes a matching `_statistics.tsv` covering Figures 4 and S7.
+`figure4_<arm>_statistics.png`, `figureS5_<arm>.png` and `figureS7_<arm>.png`.
+Figure 4 is drawn twice: `figure4_<arm>.png` without statistics and
+`figure4_<arm>_statistics.png` with significance brackets and the test caption.
+Figures 3 and S5 also write matching `_variance.tsv` files with median variance
+fractions and feature counts. Figure 4 writes a matching `_statistics.tsv`
+covering Figures 4 and S7.
 
 #### Scenario comparisons in Figure 4 and S7
 
 Both correction arms use 10 runs per scenario (Figure 4a: ARI;
 Figure 4c: pooled train/test MCC; Figure S7: held-out-cohort MCC).
-These panels show significance brackets; Figure 4b is an overview.
+These panels show significance brackets in `figure4_<arm>_statistics.png` and
+`figureS7_<arm>.png`; Figure 4b is an overview.
 
 - C1/C2: before versus after correction within each learner; exact two-sided
   Wilcoxon signed-rank tests paired by seed, with Pratt's method for zeros.
@@ -505,7 +509,8 @@ under `evaluation_clusterization_after_correction/real_datasets/`; the RF report
 Override paths with `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`.
 
 Set `FIGURE4_OUTPUT` to a path ending in `.svg` to export Figure 4 as SVG.
-PNG is the default; a path without an extension gets `.png`. For example:
+PNG is the default; a path without an extension gets `.png`. The annotated
+variant uses the same path with a `_statistics` suffix. For example:
 
 ```bash
 CORRECTION_ARM=label_aware FIGURE4_OUTPUT=figures/figure4_label_aware.svg \
