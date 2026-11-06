@@ -1,5 +1,5 @@
 # Run from the repository root: pixi run Rscript evaluation_utils/tests/test_figure4_statistics.R
-# Check exact rank tests and paired/unpaired intervals, then render both arms/spaces
+# Check exact rank tests and paired/unpaired intervals, then render both arms
 # temporarily and compare the summaries with their source scores.
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 source(file.path("evaluation_utils", "figure4_statistics.R"))
@@ -117,24 +117,17 @@ missing_seed$seed[[1]] <- NA
 expect_seed_error(missing_seed)
 cat("Exact rank tests, numerical ties, paired/unpaired intervals and seed handling verified\n")
 
-cases <- expand.grid(arm = c("label_aware", "no_label"), space = c("panel", "all"),
-                     stringsAsFactors = FALSE)
 verified_outputs <- character()
-for (case in seq_len(nrow(cases))) {
-  arm <- cases$arm[[case]]
-  space <- cases$space[[case]]
+for (arm in c("label_aware", "no_label")) {
   previous_hashes <- tools::md5sum(verified_outputs)
-  output <- file.path(tempdir(), paste0("figure4_test_", space, "_", arm, ".png"))
-  Sys.setenv(CORRECTION_ARM = arm, FIGURE4_FEATURE_SPACE = space, FIGURE4_OUTPUT = output)
+  output <- file.path(tempdir(), paste0("figure4_test_", arm, ".png"))
+  Sys.setenv(CORRECTION_ARM = arm, FIGURE4_OUTPUT = output)
   script <- new.env()
   source(file.path("evaluation", "aggregate_figure4.R"), local = script)
-  expected_prefix <- if (space == "panel") "figure4_panel5000_" else "figure4_all_features_"
-  stopifnot(identical(script$output_prefix, expected_prefix))
-  Sys.unsetenv(c("CORRECTION_ARM", "FIGURE4_FEATURE_SPACE", "FIGURE4_OUTPUT"))
+  stopifnot(identical(script$output_prefix, "figure4_"))
+  Sys.unsetenv(c("CORRECTION_ARM", "FIGURE4_OUTPUT"))
   statistics_file <- sub("\\.png$", "_statistics.tsv", output)
-  cohort_file <- file.path(tempdir(), paste0(
-    "figureS7_", if (space == "all") "all_features_" else "panel5000_", arm, ".png"
-  ))
+  cohort_file <- file.path(tempdir(), paste0("figureS7_", arm, ".png"))
   current_outputs <- c(output, statistics_file, cohort_file)
   stopifnot(all(file.exists(current_outputs)),
             !any(current_outputs %in% verified_outputs),
@@ -217,6 +210,6 @@ for (case in seq_len(nrow(cases))) {
     stopifnot(same(row$p_raw, p), row$ci95_low >= bounds[[1]] - 1e-12,
               row$ci95_high <= bounds[[2]] + 1e-12, row$ci95_low <= row$ci95_high)
   }
-  cat(arm, space, ": 100 rank-test contrasts in 25 Holm families and both figures verified\n")
+  cat(arm, ": 100 rank-test contrasts in 25 Holm families and both figures verified\n")
 }
-stopifnot(length(verified_outputs) == 12L, !anyDuplicated(verified_outputs))
+stopifnot(length(verified_outputs) == 6L, !anyDuplicated(verified_outputs))

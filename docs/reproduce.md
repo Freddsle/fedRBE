@@ -426,14 +426,14 @@ including Quartet joint matrices, recomputes central fits and reuses saved
 federated assignments unless `--rerun-federated` is given. Both central
 and federated correction outputs and their original metadata must be available.
 
-From the repository root, reuse saved results for both arms and feature spaces:
+K-means uses all complete-case features. From the repository root, reuse saved
+results for both arms:
 
 ```bash
 pixi run python evaluation_clusterization_after_correction/real_datasets/multiple_runs.py
 ```
 
-`--arms` and `--spaces` select correction arms (`label_aware`, `no_label`) and
-feature spaces (`all`, `panel`). Cached reuse reads the requested seed/k columns
+`--arms` selects correction arms (`label_aware`, `no_label`). Cached reuse reads the requested seed/k columns
 without checking inputs or settings. Contingency and fixed-partition analyses
 need only assignment TSVs. For new federated fits, build the app with
 `evaluation_clusterization_after_correction/federated_kmeans_upd/build.sh` from
@@ -442,10 +442,9 @@ set a separate `--root`. Individual FeatureCloud tests time out after 1,800
 seconds; cached reuse needs no Docker.
 
 The [clustering instructions](../evaluation_clusterization_after_correction/real_datasets/README.md)
-are the canonical reference for shared-panel preparation and RF exports, compact
-assignment/metric tables, saved assignment reuse, local output retention and
-sensitivity analyses. Figure 4 uses the panel and all-feature results for each
-correction arm; select matching inputs when rendering below.
+are the canonical reference for compact assignment/metric tables, saved
+assignment reuse, local output retention and robustness analyses. Figure 4 uses
+these results for each correction arm.
 
 #### Shared evaluation metrics
 
@@ -462,9 +461,7 @@ random guessing.
 ### 7. Generate Figures 3, 4, S5 and S7 for each correction arm
 
 After batch correction, run from the repository root. Figure 4 also requires the
-classification and clustering results from Steps 5 and 6, including the shared-panel
-branches described in the
-[clustering instructions](../evaluation_clusterization_after_correction/real_datasets/README.md).
+classification and clustering results from Steps 5 and 6.
 
 ```bash
 for arm in label_aware no_label; do
@@ -475,15 +472,14 @@ for arm in label_aware no_label; do
 done
 ```
 
-Outputs under `figures/`: `figure3_<arm>.png`, `figure4_panel5000_<arm>.png`,
-`figureS5_<arm>.png` and `figureS7_panel5000_<arm>.png`. Figures 3 and S5 also
+Outputs under `figures/`: `figure3_<arm>.png`, `figure4_<arm>.png`,
+`figureS5_<arm>.png` and `figureS7_<arm>.png`. Figures 3 and S5 also
 write matching `_variance.tsv` files with median variance fractions and feature
-counts. In both feature spaces, Figure 4 writes a matching `_statistics.tsv`
-covering Figures 4 and S7.
+counts. Figure 4 writes a matching `_statistics.tsv` covering Figures 4 and S7.
 
 #### Scenario comparisons in Figure 4 and S7
 
-Both feature spaces and correction arms use 10 runs per scenario (Figure 4a: ARI;
+Both correction arms use 10 runs per scenario (Figure 4a: ARI;
 Figure 4c: pooled train/test MCC; Figure S7: held-out-cohort MCC).
 These panels show significance brackets; Figure 4b is an overview.
 
@@ -493,47 +489,26 @@ These panels show significance brackets; Figure 4b is an overview.
   correction; exact two-sided unpaired Mann–Whitney U tests.
 
 Tables report raw p-values and Holm-adjusted p-values for the four contrasts
-within each dataset/task or held-out cohort, correction arm and feature space.
+within each dataset/task or held-out cohort and correction arm.
 `*` marks adjusted p < 0.05; `n.s.` otherwise.
 
 Mean differences (`mean_b - mean_a`) have 95% percentile bootstrap intervals
 (10,000 resamples, seed 1), using paired resampling for C1/C2 and independent
 resampling for C3/C4. The `relevant` flag marks |mean difference| ≥0.05.
 
-Comparisons across feature spaces are descriptive and conditional on the
-observed cohorts. Correction and panel selection use all cohorts; label-aware
-correction uses held-out labels.
+Correction uses all cohorts; label-aware correction uses held-out labels.
 
-Figure 4 defaults to `FIGURE4_FEATURE_SPACE=panel`: both k-means and RF use the
-shared complete-case panel, up to 5,000 features per dataset or Quartet layer.
-ARI inputs are relative to `evaluation_clusterization_after_correction/real_datasets/`;
-RF reports are under `evaluation_classification_after_correction/results/`:
-
-| Feature space | Label-aware ARI table | No-label ARI table | RF report |
-| --- | --- | --- | --- |
-| Shared panel | `panel5000/metrics_ari_multirun.tsv` | `panel5000/no_label/metrics_ari_multirun.tsv` | `classification_metric_report_panel5000.csv` |
-| All features | `metrics_ari_multirun.tsv` | `no_label/metrics_ari_multirun.tsv` | `classification_metric_report.csv` |
-
-Use `FIGURE4_FEATURE_SPACE=all` for all complete-case k-means features and union
-RF features:
-
-```bash
-for arm in label_aware no_label; do
-  CORRECTION_ARM="$arm" FIGURE4_FEATURE_SPACE=all pixi run Rscript evaluation/aggregate_figure4.R
-done
-```
-
-This writes `figures/figure4_all_features_<arm>.png` and
-`figures/figureS7_all_features_<arm>.png`. Override paths with
-`FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`; keep inputs
-consistent with the selected feature space.
+K-means uses all complete-case features and RF uses all union features. ARI inputs
+are `metrics_ari_multirun.tsv` (label-aware) and `no_label/metrics_ari_multirun.tsv`
+under `evaluation_clusterization_after_correction/real_datasets/`; the RF report is
+`evaluation_classification_after_correction/results/classification_metric_report.csv`.
+Override paths with `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT`.
 
 Set `FIGURE4_OUTPUT` to a path ending in `.svg` to export Figure 4 as SVG.
 PNG is the default; a path without an extension gets `.png`. For example:
 
 ```bash
-CORRECTION_ARM=label_aware FIGURE4_FEATURE_SPACE=panel \
-  FIGURE4_OUTPUT=figures/figure4_panel5000_label_aware.svg \
+CORRECTION_ARM=label_aware FIGURE4_OUTPUT=figures/figure4_label_aware.svg \
   pixi run Rscript evaluation/aggregate_figure4.R
 ```
 

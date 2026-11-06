@@ -1,9 +1,9 @@
 """Repeated-seed central and federated k-means before and after batch correction.
 
-Run from the repository root. Each feature space and correction arm has its own
-output root: ``--root`` for all complete-case features and ``<root>/panel5000``
-for the shared panel, with ``no_label/`` appended for that arm. Every root holds
-``<dataset>/assignments.tsv`` and ``metrics_ari_multirun.tsv``. Saved federated
+Run from the repository root. K-means uses all complete-case features. Each
+correction arm has its own output root: ``--root``, with ``no_label/`` appended
+for that arm. Every root holds ``<dataset>/assignments.tsv`` and
+``metrics_ari_multirun.tsv``. Saved federated
 assignments are reused unless ``--rerun-federated`` launches new FeatureCloud
 tests, which require Docker and the ``fc_kmeans_upd`` app image.
 """
@@ -20,10 +20,9 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from evaluation_utils.feature_panel import PANEL_DIR, load_panel_matrices, read_panel
 from evaluation_utils.metrics import clustering_scores
 from evaluation_utils.real_datasets_utils import (
-    arm_root, build_quartet_matrices, dataset_configs, pooled_inertia,
+    arm_root, build_quartet_matrices, dataset_configs, load_evaluation_matrices, pooled_inertia,
     prepare_variant_inputs, read_assignments, run_central_kmeans, scale_like_federated,
     write_assignments, write_kmeans_config,
 )
@@ -60,14 +59,11 @@ def run_federated(root, name, variant, inputs, metadata, clients, k, seed):
     return frame.set_index("file")[f"Fed_{k}clusters"]
 
 
-def run_dataset(cfg, root, space, seeds, rerun_federated, rows):
+def run_dataset(cfg, root, seeds, rerun_federated, rows):
     """Fit or reuse every method and seed for one dataset; append metric rows per method."""
     if cfg.name == "quartet_multiomics" and cfg.correction_arm is not None:
         build_quartet_matrices(cfg.before_matrix.parent.parent, cfg.correction_arm)
-    metadata, clients, matrices = load_panel_matrices(cfg, canonical_before=True)
-    if space == "panel":
-        panel = PANEL_DIR / f"panel_top5000_{cfg.name}.tsv"
-        matrices = {state: read_panel(panel, matrix) for state, matrix in matrices.items()}
+    metadata, clients, matrices = load_evaluation_matrices(cfg)
     k = int(metadata.condition.nunique())
     for method, (state, variant) in METHODS.items():
         matrix = matrices[state]
@@ -103,7 +99,6 @@ def main():
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--arms", nargs="+", choices=("label_aware", "no_label"),
                         default=["label_aware", "no_label"])
-    parser.add_argument("--spaces", nargs="+", choices=("all", "panel"), default=["all", "panel"])
     parser.add_argument("--config", type=Path,
                         help="Custom dataset registry; use with --arms label_aware")
     parser.add_argument("--datasets", nargs="+", help="Dataset IDs; default: whole registry")
@@ -113,28 +108,27 @@ def main():
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent,
                         help="Output base (default: this directory)")
     args = parser.parse_args()
-    for space in args.spaces:
-        for arm in args.arms:
-            root = arm_root(args.root / "panel5000" if space == "panel" else args.root, arm)
-            configs = dataset_configs(REPO_ROOT, args.config, correction_arm=arm)
-            rows = {method: [] for method in METHODS}
-            for name in args.datasets or list(configs):
-                run_dataset(configs[name], root, space, args.seeds, args.rerun_federated, rows)
-            table = pd.DataFrame([row for method in METHODS for row in rows[method]])
-            path = root / "metrics_ari_multirun.tsv"
-            if path.exists():
-                # Replace this run's rows; keep method, registry and seed order.
-                keys = ["Dataset", "Method", "Seed"]
-                saved = pd.read_csv(path, sep="\t", float_precision="round_trip")
-                saved = saved[~saved.set_index(keys).index.isin(table.set_index(keys).index)]
-                table = pd.concat([saved, table], ignore_index=True)
-                rank = pd.DataFrame({
-                    "method": table.Method.map({m: i for i, m in enumerate(METHODS)}),
-                    "dataset": table.Dataset.map({d: i for i, d in enumerate(configs)}),
-                    "seed": table.Seed})
-                table = table.loc[rank.sort_values(["method", "dataset", "seed"]).index]
-            table.to_csv(path, sep="\t", index=False)
-            print(f"Saved {path}")
+    for arm in args.arms:
+        root = arm_root(args.root, arm)
+        configs = dataset_configs(REPO_ROOT, args.config, correction_arm=arm)
+        rows = {method: [] for method in METHODS}
+        for name in args.datasets or list(configs):
+            run_dataset(configs[name], root, args.seeds, args.rerun_federated, rows)
+        table = pd.DataFrame([row for method in METHODS for row in rows[method]])
+        path = root / "metrics_ari_multirun.tsv"
+        if path.exists():
+            # Replace this run's rows; keep method, registry and seed order.
+            keys = ["Dataset", "Method", "Seed"]
+            saved = pd.read_csv(path, sep="\t", float_precision="round_trip")
+            saved = saved[~saved.set_index(keys).index.isin(table.set_index(keys).index)]
+            table = pd.concat([saved, table], ignore_index=True)
+            rank = pd.DataFrame({
+                "method": table.Method.map({m: i for i, m in enumerate(METHODS)}),
+                "dataset": table.Dataset.map({d: i for i, d in enumerate(configs)}),
+                "seed": table.Seed})
+            table = table.loc[rank.sort_values(["method", "dataset", "seed"]).index]
+        table.to_csv(path, sep="\t", index=False)
+        print(f"Saved {path}")
 
 
 if __name__ == "__main__":

@@ -8,10 +8,10 @@ import unittest
 
 import pandas as pd
 
-from evaluation_utils.feature_panel import load_panel_matrices
 from evaluation_utils.real_datasets_utils import (
     DatasetConfig,
     load_dataset_metadata,
+    load_evaluation_matrices,
 )
 from evaluation_utils import real_datasets_utils as shared
 
@@ -48,7 +48,7 @@ class ClusteringPreparationTests(unittest.TestCase):
 
     def load(self, cfg=None):
         with contextlib.redirect_stdout(io.StringIO()):
-            return load_panel_matrices(cfg or self.cfg, canonical_before=True)
+            return load_evaluation_matrices(cfg or self.cfg)
 
     def test_canonical_ovarian_metadata_contains_six_distinct_studies(self):
         root = Path(__file__).resolve().parents[2]

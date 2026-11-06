@@ -1,19 +1,16 @@
 # Aggregate Figure 4
 #
-# Build Figure 4 from the clustering and classification tables in the same feature space.
+# Build Figure 4 from the clustering and classification tables. K-means uses all
+# complete-case features and RF uses all union features.
 # Run from the repository root:
-#   CORRECTION_ARM=label_aware FIGURE4_FEATURE_SPACE=panel \
-#     pixi run Rscript evaluation/aggregate_figure4.R
+#   CORRECTION_ARM=label_aware pixi run Rscript evaluation/aggregate_figure4.R
 # Set CORRECTION_ARM=label_aware (default) or CORRECTION_ARM=no_label.
-# Set FIGURE4_FEATURE_SPACE=panel (default) for the shared panel in both methods,
-# or FIGURE4_FEATURE_SPACE=all for all complete-case k-means and union RF features.
-# Each arm and feature space writes its own PNG under figures/.
+# Each arm writes figures/figure4_<arm>.png.
 # FIGURE4_ARI_TABLE, FIGURE4_RF_REPORT and FIGURE4_OUTPUT override the source and
 # output paths; an output path ending in .svg writes an SVG.
-# Both feature spaces write the test table
-# (<output>_statistics.tsv), significance brackets in panels a and c, and Figure S7
-# (leave-one-cohort-out per held-out cohort) next to the Figure 4 output.
-# Filenames include panel5000 or all_features to identify the feature space.
+# The script also writes the test table (<output>_statistics.tsv), significance
+# brackets in panels a and c, and Figure S7 (leave-one-cohort-out per held-out
+# cohort, figureS7_<arm>) next to the Figure 4 output.
 
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 source(file.path("evaluation_utils", "figure4_statistics.R"))
@@ -24,33 +21,22 @@ require_figure4_packages()
 # to real MCC tasks.
 
 CORRECTION_ARM <- correction_arm()
-FIGURE4_FEATURE_SPACE <- match.arg(
-  Sys.getenv("FIGURE4_FEATURE_SPACE", "panel"), c("panel", "all")
-)
 
 ari_dir <- file.path(
   "evaluation_clusterization_after_correction",
   "real_datasets"
 )
-if (FIGURE4_FEATURE_SPACE == "panel") {
-  ari_dir <- file.path(ari_dir, "panel5000")
-}
 if (CORRECTION_ARM == "no_label") {
   ari_dir <- file.path(ari_dir, "no_label")
 }
 ari_path <- file.path(ari_dir, "metrics_ari_multirun.tsv")
-classification_filename <- if (FIGURE4_FEATURE_SPACE == "panel") {
-  "classification_metric_report_panel5000.csv"
-} else {
-  "classification_metric_report.csv"
-}
 classification_path <- file.path(
   "evaluation_classification_after_correction",
   "results",
-  classification_filename
+  "classification_metric_report.csv"
 )
 output_dir <- "figures"
-output_prefix <- if (FIGURE4_FEATURE_SPACE == "panel") "figure4_panel5000_" else "figure4_all_features_"
+output_prefix <- "figure4_"
 output_path <- file.path(output_dir, paste0(output_prefix, CORRECTION_ARM, ".png"))
 
 # Path overrides are absolute or relative to the repository root.
@@ -97,17 +83,8 @@ excluded_classification_datasets <- c("Proteomics Multibatch Data")
 average_client_name <- "All"
 ari_seeds_per_group <- 10
 
-panel_feature_label <- "Shared complete-case panel (up to 5,000 per dataset / Quartet layer)"
-clustering_feature_label <- if (FIGURE4_FEATURE_SPACE == "panel") {
-  panel_feature_label
-} else {
-  "All complete-case features"
-}
-classification_feature_label <- if (FIGURE4_FEATURE_SPACE == "panel") {
-  panel_feature_label
-} else {
-  "All union features"
-}
+clustering_feature_label <- "All complete-case features"
+classification_feature_label <- "All union features"
 
 point_size <- 1.05
 
@@ -156,7 +133,7 @@ figure4_data <- prepare_figure4_plot_data(
   seeds_per_group = ari_seeds_per_group
 )
 
-# Exact rank tests over seeds for each selected feature space: per dataset
+# Exact rank tests over seeds: per dataset
 # (panels a and c) and per held-out cohort (Figure S7). Panel b is an overview.
 
 figure4_stats <- compute_figure4_statistics(figure4_data, CORRECTION_ARM)
