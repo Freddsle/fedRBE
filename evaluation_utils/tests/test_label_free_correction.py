@@ -22,6 +22,7 @@ from batchcorrection.classes.client import Client
 from batchcorrection.classes.coordinator_utils import (
     batch_coefficients, compute_beta, create_beta_mask, select_common_features_variables,
 )
+from batchcorrection.fedrbe import BATCH_COEFFICIENTS_FILE
 from evaluation_utils import run_correction_experiments as correction
 from evaluation_utils.real_datasets_utils import (
     dataset_configs,
@@ -40,6 +41,9 @@ requires_r = unittest.skipUnless(RSCRIPT.is_file(), "Rscript is unavailable; lim
 DATASET = "ccRCC_proteomics"
 RETAINED = ["feature_z", "feature_a", "feature_m", "feature_c", "feature_n", "feature_d"]
 SEED = 73
+# The coordinator's batch coefficients in the archive fixtures
+COEFFICIENTS = pd.DataFrame([[0.5, -0.25]], columns=["client_0", "client_1"],
+                            index=pd.Index(["feature_hash_a"], name="feature_hash"))
 
 
 
@@ -214,6 +218,9 @@ class ArchiveCoverageTests(unittest.TestCase):
             for name in ("only_batch_corrected_data.csv", "full_corrected_data.csv"):
                 archive.writestr(name, (self.inputs[index] + .25 if matrix is None
                                        else matrix).to_csv(sep="\t"))
+            if index == 0:
+                # only the coordinator writes the batch coefficients
+                archive.writestr(BATCH_COEFFICIENTS_FILE, COEFFICIENTS.to_csv(sep="\t"))
         return path
 
     def run_campaign(self, folder="after", paired=True, protocols=(True,), modality=None):
@@ -302,8 +309,13 @@ class ArchiveCoverageTests(unittest.TestCase):
                 self.assertEqual(details["min_samples"], 0 if i % 2 == 0 else 5)
                 self.assertEqual(details["position"], position)
                 self.assertEqual(details["smpc"], i >= 2)
-            matrix = read_matrix(self.output(no_label=bool(i % 2), smpc=i >= 2))
+            output = self.output(no_label=bool(i % 2), smpc=i >= 2)
+            matrix = read_matrix(output)
             pd.testing.assert_frame_equal(matrix, (raw + .25 * (i + 1)).rename_axis("rowname"))
+            coefficients = output.with_name(output.name.replace(
+                "FedApp_corrected_data", "FedApp_batch_coefficients")).with_suffix(".csv")
+            pd.testing.assert_frame_equal(pd.read_csv(coefficients, sep="\t", index_col=0),
+                                          COEFFICIENTS)
         self.assertFalse((self.root / "inputs").exists())
         for no_label in (False, True):
             descriptor = self.output(no_label=no_label).with_name("datainfo.json")

@@ -39,3 +39,9 @@ evaluation_data/quartet_multiomics/after/*/all_modalities_*_kmeans_matrix.tsv fi
 evaluation_data/quartet_multiomics/after/*/*/individual_results/*/full_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/quartet_multiomics/after/*/*/individual_results/*/only_batch_corrected_data.csv filter=lfs diff=lfs merge=lfs -text
 evaluation_data/quartet_multiomics/merged_omics/after/*/client_*/merged_data.tsv filter=lfs diff=lfs merge=lfs -text
+
+# fedRBE batch coefficients (written by the coordinator)
+evaluation_data/**/after/**/FedApp_batch_coefficients.csv filter=lfs diff=lfs merge=lfs -text
+evaluation_data/**/after/**/FedApp_batch_coefficients_smpc.csv filter=lfs diff=lfs merge=lfs -text
+# Splits and batch coefficients of the repeated 70/30 classification
+evaluation_classification_after_correction/results/train_test_splits/**/batch_coefficients*.csv filter=lfs diff=lfs merge=lfs -text

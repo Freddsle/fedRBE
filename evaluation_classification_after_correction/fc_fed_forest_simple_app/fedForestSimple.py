@@ -1,5 +1,5 @@
 
-from typing import List, Optional, Tuple
+from typing import Optional
 import os
 import yaml
 import pandas as pd
@@ -8,23 +8,10 @@ from math import ceil
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils.validation import validate_data
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
 import pickle
 import sklearn
 
 from .fc_fedlearnsim_helper.protocolfedlearning import ProtocolFedLearning
-from evaluation_utils.metrics import classification_scores_from_confusion
-
-
-def _pool_confusion_matrices(client_matrices: List[dict]) -> Tuple[list, np.ndarray]:
-    """Sum the clients' Phase 3 confusion matrices after aligning their class order."""
-    classes = list(dict.fromkeys(cls for p in client_matrices for cls in p['classes']))
-    pooled = np.zeros((len(classes), len(classes)), dtype=np.int64)
-    for payload in client_matrices:
-        positions = [classes.index(cls) for cls in payload['classes']]
-        pooled[np.ix_(positions, positions)] += payload['matrix']
-    return classes, pooled
 
 
 def main(protocol_fed_learning: ProtocolFedLearning,
@@ -34,6 +21,8 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     Implements a simple federated random forst algorithm for classification.
     Creates ceil(num_estimators/clients) decision trees per client, aggregates them globally
     and creates as the final global model simply the ensemble of all clients trees.
+    All given samples are used for training, test data must be split off before
+    and evaluated with the saved global model.
     # Expected files in inputfolder:
     - config_forest.yaml:
     ```
@@ -41,9 +30,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         data_filename: "data.csv"
             # the file containing data, see further down as another expected input
         csv_seperator: "\t"
-        train_test_ratio: 1.0
-            # ratio of samples to take as training data
-            # makes sure that training and test data both contain all to be predicted
         predicted_feature_name: "cancer"
         num_estimators_total: 5
         max_depth: 10
@@ -52,7 +38,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         max_features: 'sqrt'
         random_state: 42
         features_as_columns: True # whether features are given as columns or rows
-        save_predictions: True # Export per-sample features and predictions
+        save_predictions: True # Export per-sample features and predictions of the training data
         sample_col: 0
             # Ignored if features_as_columns = False
             # Which column contains the sample indexes. If not given each row is considered an
@@ -62,9 +48,8 @@ def main(protocol_fed_learning: ProtocolFedLearning,
             # Which col contains the feature names. By default the first column.
     - <data.csv>: The file containing the data to be used
     # Resulting output in outputfolder:
-    - global_metrics.csv: A simple csv with the following columns:
-        [num_samples_training, num_samples_test, num_classes, metric, score]
-        The following metrics are tested: MCC, F1_score
+    - global_model.pkl, model_info.yaml, model_description.txt (coordinator only):
+        The global forest and the features it uses
     - <pred.csv>: The given data in the format of columns being features.
         An additional prediction_simple_forest column is added.
     ```
@@ -79,6 +64,9 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     config_path = os.path.join(inputfolder, "config_forest.yaml")
     with open(config_path, 'r') as f:
         config = yaml.safe_load(f)['simple_forest']
+    if 'train_test_ratio' in config:
+        raise ValueError("train_test_ratio is not supported, the forest is trained on all given "
+                         "samples. Split off the test data before.")
 
     # Load data
     data_path = os.path.join(inputfolder, config['data_filename'])
@@ -104,22 +92,10 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     if not all(pd.api.types.is_numeric_dtype(dtype) for dtype in X.dtypes):
         X = X.apply(pd.to_numeric, errors='coerce')
 
-    # Train-test split with stratification
-    train_ratio = config.get('train_test_ratio', 0.8)
+    # All given samples are training samples
+    X_train = X
+    y_train = y
     random_state = config.get('random_state', 42)
-
-    if train_ratio >= 1.0:
-        X_train = X
-        y_train = y
-        X_test = X
-        y_test = y
-    else:
-        X_train, X_test, y_train, y_test = train_test_split(
-        X, y,
-        train_size=train_ratio,
-        random_state=random_state,
-        stratify=y
-        )
 
     # Extract forest parameters
     num_estimators_total = config.get('num_estimators_total', 100)
@@ -155,7 +131,6 @@ def main(protocol_fed_learning: ProtocolFedLearning,
 
     # Filter datasets to only include common features
     X_train = X_train[common_features]
-    X_test = X_test[common_features]
 
     # Calculate trees per client
     num_clients = len(protocol_fed_learning.clients)
@@ -219,85 +194,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     global_forest = pickle.loads(global_forest_data) #type: ignore
         # we just sent a pickle.dumps object, linters complain but interpreters are fine
 
-    # Phase 3: Calculate local confusion matrix counts and share with coordinator
-    y_pred_test = global_forest.predict(X_test)
-
-    # Label the matrix with every class the local data holds or the forest can predict.
-    classes = np.union1d(np.unique(y), global_forest.classes_)
-    num_classes = len(classes)
-    local_matrix = confusion_matrix(y_test, y_pred_test, labels=classes)
-    local_confusion_matrix = {
-        'num_samples_training': len(X_train),
-        'num_samples_test': len(X_test),
-        'classes': classes.tolist(),
-        'matrix': local_matrix.tolist(),
-    }
-    local_scores = classification_scores_from_confusion(local_matrix)
-
-    local_metrics_data = [
-        {
-            'num_samples_training': len(X_train),
-            'num_samples_test': len(X_test),
-            'num_classes': num_classes,
-            'class': 'local_client',
-            'metric': 'MCC',
-            'score': local_scores['MCC'],
-        },
-        {
-            'num_samples_training': len(X_train),
-            'num_samples_test': len(X_test),
-            'num_classes': num_classes,
-            'class': 'local_client',
-            'metric': 'F1_score',
-            'score': local_scores['F1_score'],
-        }
-    ]
-
-    # Save local metrics
-    local_metrics_df = pd.DataFrame(data=local_metrics_data)
-    local_metrics_path = os.path.join(outputfolder, "local_metrics.csv")
-    local_metrics_df.to_csv(local_metrics_path, index=False)
-
-    # Send local metrics to coordinator
-    protocol_fed_learning.send_data_to_coordinator(local_confusion_matrix, send_to_self=True)
-
     if protocol_fed_learning.is_coordinator:
-        # Gather all local metrics from clients
-        all_local_metrics = protocol_fed_learning.gather_data()
-
-        # Aggregate counts globally
-        global_num_samples_training = sum(m['num_samples_training'] for m in all_local_metrics)
-        global_num_samples_test = sum(m['num_samples_test'] for m in all_local_metrics)
-        classes, pooled_matrix = _pool_confusion_matrices(all_local_metrics)
-        num_classes = len(classes)
-        pooled_scores = classification_scores_from_confusion(pooled_matrix)
-
-        # Create metrics data
-        global_metrics_data = [
-            {
-                'num_samples_training': global_num_samples_training,
-                'num_samples_test': global_num_samples_test,
-                'num_classes': num_classes,
-                'class': 'overall',
-                'metric': 'MCC',
-                'score': pooled_scores['MCC'],
-            },
-            {
-                'num_samples_training': global_num_samples_training,
-                'num_samples_test': global_num_samples_test,
-                'num_classes': num_classes,
-                'class': 'overall',
-                'metric': 'F1_score',
-                'score': pooled_scores['F1_score'],
-            }
-        ]
-
-        # Save metrics (only coordinator)
-        metrics_df = pd.DataFrame(data=global_metrics_data)
-
-        metrics_path = os.path.join(outputfolder, "global_metrics.csv")
-        metrics_df.to_csv(metrics_path, index=False)
-
         # Save the global model and relevant information
         model_path = os.path.join(outputfolder, "global_model.pkl")
         with open(model_path, 'wb') as f:
@@ -332,26 +229,10 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     if not config.get("save_predictions", True):
         return
 
-    # Save predictions (all clients save their local predictions)
-    # Combine train and test data with predictions
-
-    # Train predictions
-    X_train_pred = X_train.copy()
-    X_train_pred[config['predicted_feature_name']] = y_train
-    X_train_pred['prediction_simple_forest'] = global_forest.predict(X_train)
-    X_train_pred['dataset'] = 'train'
-
-    # Test predictions
-    if train_ratio < 1.0:
-        X_test_pred = X_test.copy()
-        X_test_pred[config['predicted_feature_name']] = y_test
-        X_test_pred['prediction_simple_forest'] = y_pred_test
-        X_test_pred['dataset'] = 'test'
-
-        # Combine train and test
-        pred_df = pd.concat([X_train_pred, X_test_pred], axis=0)
-    else:
-        pred_df = X_train_pred
+    # Save the predictions of the training data (all clients save their local predictions)
+    pred_df = X_train.copy()
+    pred_df[config['predicted_feature_name']] = y_train
+    pred_df['prediction_simple_forest'] = global_forest.predict(X_train)
 
     pred_path = os.path.join(outputfolder, "pred.csv")
     pred_df.to_csv(pred_path, sep=separator)

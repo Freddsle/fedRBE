@@ -39,10 +39,11 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(ROOT)
 sys.path.append(os.path.join(ROOT, "evaluation_classification_after_correction"))
 
-from batchcorrection.fedrbe import run_fedrbe  # noqa: E402
+from batchcorrection.fedrbe import BATCH_COEFFICIENTS_FILE, run_fedrbe  # noqa: E402
 from fc_fed_forest_simple_app.fc_fedlearnsim_helper.run_app_simulation import run_simulation_native  # noqa: E402
 
-OUTPUT_FILES = ["only_batch_corrected_data.csv", "full_corrected_data.csv", "report.txt"]
+OUTPUT_FILES = ["only_batch_corrected_data.csv", "full_corrected_data.csv", "report.txt",
+                BATCH_COEFFICIENTS_FILE]  # the batch coefficients only from the coordinator
 
 
 def run_clients(client_dirs: List[str], verbose: bool, log: io.StringIO) -> List[dict]:

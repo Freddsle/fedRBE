@@ -19,7 +19,8 @@ source_plotting_utils <- function() {
 }
 
 
-correction_arm_titles <- c(label_aware = "Label-aware correction", no_label = "Label-free correction")
+correction_arm_titles <- c(label_aware = "Label-aware correction", no_label = "Label-free correction",
+                           label_free = "Label-free correction")
 
 
 # CORRECTION_ARM selects the corrected outputs under after/<arm>/.
@@ -670,8 +671,8 @@ prepare_figure4_classification_data <- function(
     stop("Classification scores must be finite and within the metric's range",
          call. = FALSE)
   }
-  # Both learning methods contribute one pooled score per seed for train/test.
-  # Their sample splits still differ. LOCO contributes individual held-out cohorts.
+  # Both learning methods contribute one pooled score per seed for train/test,
+  # each seed is one shared split. LOCO contributes individual held-out cohorts.
   pooled <- subset$predicted_client_name == average_client_name
   subset <- subset[if (cv_method == "Train-Test-Split") pooled else !pooled, , drop = FALSE]
 
@@ -977,7 +978,8 @@ export_classification_plots <- function(results_file, plots_dir) {
   if (!nrow(report)) stop("No canonical real-data RF tasks in the report", call. = FALSE)
   task_labels <- task_labels[sub("\\|.*$", "", names(task_labels)) %in% report$data_name]
   task_order <- unname(task_labels)
-  arms <- c(label_aware = "corrected", no_label = "no_label")
+  # data_preprocessing_name of the correction arms, named by their plot folder
+  arms <- c(label_aware = "label_aware", label_free = "label_free")
   cv_titles <- c(
     "Leave-One-Cohort-Out" = "RF leave-one-cohort-out",
     "Train-Test-Split" = "RF 70:30 train/test split"
@@ -994,7 +996,8 @@ export_classification_plots <- function(results_file, plots_dir) {
   if (any(!is.finite(report$seed) | report$seed != floor(report$seed))) {
     stop("RF seeds must contain finite integers", call. = FALSE)
   }
-  seeds <- sort(unique(report$seed))
+  # Each evaluation has its own repetitions; evaluations not run yet are skipped.
+  cv_titles <- cv_titles[names(cv_titles) %in% report$cross_validation_method]
   arms <- arms[arms %in% report$data_preprocessing_name]
   if (!length(arms)) stop("No corrected RF arm found in the report", call. = FALSE)
   style <- figure4_scenarios()
@@ -1005,6 +1008,7 @@ export_classification_plots <- function(results_file, plots_dir) {
     scenario_labels <- classification_scenario_labels(arms[[arm]])
     for (metric in names(metric_labels)) {
       for (cv in names(cv_titles)) {
+        seeds <- sort(unique(report$seed[report$cross_validation_method == cv]))
         data <- prepare_figure4_classification_data(
           arm_data, cv, task_labels, task_order, scenario_labels, style$order,
           simulated_datasets = character(), excluded_datasets = character(),

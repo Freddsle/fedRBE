@@ -259,6 +259,10 @@ and aggregates results. Real-data outputs under
 - `individual_results/`: client corrections, reports, and logs.
 - `FedApp_corrected_data.tsv`, or `FedApp_corrected_data_smpc.tsv` with SMPC:
   merged client data.
+- `FedApp_batch_coefficients.csv`, or `FedApp_batch_coefficients_smpc.csv`: the
+  batch coefficients written by the coordinator. Rows are the hashed feature
+  names (sha3-256), columns the batch columns of the design matrix; the
+  reference batch has no column.
 - `datainfo.json`: classification description of `individual_results/`, linked to
   the original client designs.
 
@@ -344,39 +348,58 @@ the script does not generate the after-correction LMPV tables.
 Classification compares predictive performance before and after correction.
 To regenerate results, run both experiment types below from the repository root;
 the full evaluation can take several hours. To inspect committed results, skip
-the experiment runs and use the plotting command below.
+the experiment runs and use the plotting command below. Results are labelled
+`uncorrected`, `label_free` (correction without covariates) or `label_aware`
+(the label as fedRBE covariate).
 
-Train/test uses stratified 70:30 splits, pooled for centralized learning and
-within each client for federated learning. Leave-one-cohort-out trains on all
-cohorts except the held-out test cohort. Run both for the four real datasets and
-each correction arm:
+**Train/test (70:30).** Each repetition splits every cohort's uncorrected fedRBE
+input 70:30, stratified by the label (and by the batch for clients holding
+several batches; Quartet modalities share one split by pseudo-sample). fedRBE
+then runs on the training samples only, in the native simulation of the app's
+protocol (`batchcorrection/fedrbe.py`, plain aggregation without SMPC).
+Federated (one client per cohort) and centralized (pooled) random forests are
+trained on all corrected training samples. The test samples are corrected with
+the coordinator's batch coefficients of that run, which needs no labels, and
+predicted. Features fedRBE did not correct for a batch, for example for
+privacy, stay uncorrected and are left out of that batch's test samples. The
+uncorrected baseline uses the same splits. Each repetition reports MCC and
+support-weighted F1 pooled over all test samples (`All`) and, for federated
+learning, per cohort.
 
 ```bash
-for arm in label_aware no_label; do
-  pixi run python evaluation_classification_after_correction/run_classification_train_test_split.py \
-    --correction-arm "$arm" --datasets ecoli ovarian_cancer ccRCC_proteomics quartet_multiomics
+pixi run python evaluation_classification_after_correction/run_classification_train_test_split.py
+```
+
+This runs every dataset (`balanced`, `mild_imbalanced`, `strong_imbalanced`,
+`ecoli`, `ovarian_cancer`, `ccRCC_proteomics`, `quartet_multiomics`), both
+correction arms and ten repetitions (seeds 42–51, each seed is one split).
+Select runs with `--datasets`, `--arms label_free label_aware` and `--seeds`;
+use `--results-file` to choose the CSV, `--work-dir` for the temporary files
+(default: system temp) and `--force-run` to recompute. Complete result rows are
+reused; after code or input changes, use a fresh `--results-file` or
+`--force-run`. The fedRBE configurations are those of
+`generate_fedrbe_corrected_datasets.py` (label-free: `without_covariates`).
+Every repetition's split and batch coefficients are saved next to the results
+file, by default under
+`evaluation_classification_after_correction/results/train_test_splits/<dataset>/seed_<seed>/`.
+Ovarian cancer needs about 16 GB RAM.
+
+**Leave-one-cohort-out.** Trains on all cohorts except the held-out test cohort,
+using the published corrections of Step 2. Run it for the four real datasets
+and each correction arm:
+
+```bash
+for arm in label_aware label_free; do
   pixi run python evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
     --correction-arm "$arm" --datasets ecoli ovarian_cancer ccRCC_proteomics quartet_multiomics
 done
 ```
 
-Both experiment types save metrics under
-`evaluation_classification_after_correction/results`.
-
-Both launchers run ten seeds (42–51) and reuse complete result rows, including
-per-cohort scores for federated 70:30 runs. Use
-`--datasets` and `--seeds` to select runs, `--results-file` to choose the CSV, and
-`--force-run` to recompute. 70:30 scores include MCC and support-weighted F1.
-After code, configuration or correction-input changes, use a fresh
-`--results-file` or `--force-run`; cached rows do not check these inputs.
-
-Both launchers accept `--correction-arm label_aware` (default) or
-`--correction-arm no_label` to select the real-data `after/<arm>/datainfo.json`.
-Use the same seeds and results CSV for both arms. Results are labelled
-`uncorrected`, `corrected` (label-aware), or `no_label`, so the existing analyzer
-can compare them. Simulated data keeps its ordinary `after/` input.
-All four real datasets use these launchers. Quartet joint matrices and RF client
-files are prepared automatically from its modality outputs and original metadata.
+It runs ten seeds (42–51) and reuses complete result rows. `--correction-arm
+label_aware` (default) or `label_free` selects the real-data
+`after/label_aware/` or `after/no_label/` descriptors; simulated data keeps its
+ordinary `after/` input. Quartet joint matrices and RF client files are
+prepared automatically from its modality outputs and original metadata.
 
 For custom inputs, use `--config rf_datasets.yaml` instead of `--correction-arm`,
 with entries such as:
@@ -389,25 +412,27 @@ ecoli:
 ```
 
 Paths are absolute or repository-relative. Optional `preprocessing_name` labels
-corrected results (default: `no_label` for descriptors under a `no_label/` folder,
-otherwise `corrected`). Each correction result folder has its own
-descriptor, such as `evaluation_data/ecoli/after/no_label/datainfo.json`. For example:
+corrected results (default: `label_free` for descriptors under a `no_label/`
+folder, otherwise `label_aware`). For example:
 
 ```bash
-python3 evaluation_classification_after_correction/run_classification_train_test_split.py \
+python3 evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
   --config rf_datasets.yaml --datasets ecoli --seeds 42 \
   --results-file evaluation_classification_after_correction/results/custom_metrics.csv
 ```
+
+Both experiment types save metrics to
+`evaluation_classification_after_correction/results/classification_metric_report.csv`.
 
 Plot the saved metrics from the repository root:
 
 ```bash
 python3 evaluation_classification_after_correction/analyse_classification_metric_report.py
 ```
-Plots go to `evaluation_classification_after_correction/plots/{label_aware,no_label}/`:
-MCC and support-weighted F1 boxplots with dots for both validation methods.
-Train/test plots use pooled `All` scores; LOCO shows each held-out cohort's score
-per seed. Centralized and federated train/test sample splits differ.
+Plots go to `evaluation_classification_after_correction/plots/{label_aware,label_free}/`:
+MCC and support-weighted F1 boxplots with dots for each validation method in the
+results. Train/test plots use pooled `All` scores per repetition; LOCO shows
+each held-out cohort's score per seed.
 Use `--results-file` and `--plots-dir` to override paths. Plotting requires R.
 
 Optional helpers (default settings):
@@ -500,7 +525,9 @@ Mean differences (`mean_b - mean_a`) have 95% percentile bootstrap intervals
 (10,000 resamples, seed 1), using paired resampling for C1/C2 and independent
 resampling for C3/C4. The `relevant` flag marks |mean difference| ≥0.05.
 
-Correction uses all cohorts; label-aware correction uses held-out labels.
+In the 70:30 panel, correction is fitted on the training samples only. K-means
+and LOCO use the corrections of all samples; there, label-aware correction
+uses held-out labels.
 
 K-means uses all complete-case features and RF uses all union features. ARI inputs
 are `metrics_ari_multirun.tsv` (label-aware) and `no_label/metrics_ari_multirun.tsv`

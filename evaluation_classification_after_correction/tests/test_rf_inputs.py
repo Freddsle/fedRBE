@@ -19,6 +19,7 @@ COMPONENT = Path(__file__).resolve().parents[1]
 REPO = COMPONENT.parent
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
     from helper import helper_run_classification_report_metrics as helper
+    from helper import train_test_correction
 
 
 class RandomForestInputTests(unittest.TestCase):
@@ -60,7 +61,7 @@ class RandomForestInputTests(unittest.TestCase):
         constructor = Mock()
         helper.run_classification_experiments(constructor, args)
         self.assertEqual([call.args[0] for call in constructor.call_args_list],
-                         ["uncorrected", "corrected", "alternative"])
+                         ["uncorrected", "label_aware", "alternative"])
         self.assertEqual(constructor.return_value.run_experiment.call_count, 6)
         self.assertEqual([call.kwargs["seed"] for call in constructor.return_value.run_experiment.call_args_list],
                          [42, 42, 42, 43, 43, 43])
@@ -88,15 +89,18 @@ class RandomForestInputTests(unittest.TestCase):
         self.assertEqual(constructor.call_count, 10)  # Five datasets, before and after.
         self.assertEqual(len({call.args[0] for call in data.call_args_list}), 10)
         self.assertEqual(constructor.return_value.run_experiment.call_count, 100)
-        for script, experiment in (
-            ("run_classification_leave_one_cohort_out.py", helper.ClassificationExperimentLeaveOneCohortOut),
-            ("run_classification_train_test_split.py", helper.ClassificationExperimentTrainTestSplit),
-        ):
-            with patch.object(helper, "run_classification_experiments") as runner:
-                runpy.run_path(str(COMPONENT / script), run_name="import_check")
-                runner.assert_not_called()
-                runpy.run_path(str(COMPONENT / script), run_name="__main__")
-                runner.assert_called_once_with(experiment)
+        script = COMPONENT / "run_classification_leave_one_cohort_out.py"
+        with patch.object(helper, "run_classification_experiments") as runner:
+            runpy.run_path(str(script), run_name="import_check")
+            runner.assert_not_called()
+            runpy.run_path(str(script), run_name="__main__")
+            runner.assert_called_once_with(helper.ClassificationExperimentLeaveOneCohortOut)
+        script = COMPONENT / "run_classification_train_test_split.py"
+        with patch.object(train_test_correction, "run_train_test_split_experiments") as runner:
+            runpy.run_path(str(script), run_name="import_check")
+            runner.assert_not_called()
+            runpy.run_path(str(script), run_name="__main__")
+            runner.assert_called_once_with()
 
     def test_quartet_export_uses_named_variants_and_explicit_sample_mapping(self):
         exporter = importlib.import_module("evaluation_data.quartet_multiomics.05_create_merged_omics_folder")
@@ -133,7 +137,7 @@ class RandomForestInputTests(unittest.TestCase):
                 pd.testing.assert_frame_equal(info.receive_data(cohort), expected.rename_axis("sample_id"))
 
     def test_correction_arm_selects_real_data_folders_and_distinct_result_keys(self):
-        for arm, preprocessing in (("label_aware", "corrected"), ("no_label", "no_label")):
+        for arm, folder in (("label_aware", "label_aware"), ("label_free", "no_label")):
             with self.subTest(arm=arm), patch.object(helper, "DataInfo") as data, \
                     patch.object(helper, "build_quartet_matrices"), \
                     patch.object(helper.quartet_exporter, "create_merged_omics_folder"):
@@ -144,15 +148,15 @@ class RandomForestInputTests(unittest.TestCase):
                 ])
                 self.assertEqual([call.args[0] for call in data.call_args_list], [
                     REPO / "evaluation_data/ecoli/before/datainfo.json",
-                    REPO / f"evaluation_data/ecoli/after/{arm}/datainfo.json",
+                    REPO / f"evaluation_data/ecoli/after/{folder}/datainfo.json",
                     REPO / "evaluation_data/quartet_multiomics/merged_omics/before/datainfo.json",
-                    REPO / f"evaluation_data/quartet_multiomics/merged_omics/after/{arm}/datainfo.json",
+                    REPO / f"evaluation_data/quartet_multiomics/merged_omics/after/{folder}/datainfo.json",
                     REPO / "evaluation_data/simulated/balanced/before/datainfo.json",
                     REPO / "evaluation_data/simulated/balanced/after/datainfo.json",
                 ])
                 self.assertEqual([call.args[0] for call in constructor.call_args_list],
-                                 ["uncorrected", preprocessing, "uncorrected", preprocessing,
-                                  "uncorrected", "corrected"])
+                                 ["uncorrected", arm, "uncorrected", arm,
+                                  "uncorrected", "label_aware"])
                 self.assertEqual(constructor.return_value.run_experiment.call_count, 6)
 
     def test_canonical_quartet_prepares_both_arms_from_modality_inputs(self):
@@ -182,7 +186,7 @@ class RandomForestInputTests(unittest.TestCase):
         expected.index.name = "sample_id"
         self.assertFalse((quartet / "merged_omics").exists())
         self.assertFalse((quartet / "all_modalities_metadata.tsv").exists())
-        for arm, offset in (("label_aware", 10.), ("no_label", 100.)):
+        for arm, offset in (("label_aware", 10.), ("label_free", 100.)):
             constructor = Mock()
             with patch.object(helper, "SCRIPT_FOLDER", self.root / "classification/helper"), \
                     contextlib.redirect_stdout(io.StringIO()):
@@ -192,7 +196,7 @@ class RandomForestInputTests(unittest.TestCase):
                 ])
             self.assertEqual(constructor.call_count, 2)
             self.assertEqual([call.args[0] for call in constructor.call_args_list],
-                             ["uncorrected", "corrected" if arm == "label_aware" else "no_label"])
+                             ["uncorrected", arm])
             for call, delta in zip(constructor.call_args_list, (0., offset)):
                 info = call.args[1]
                 actual = pd.concat([info.receive_data(cohort) for cohort in info.cohorts]).sort_index()
@@ -206,7 +210,7 @@ class RandomForestInputTests(unittest.TestCase):
     def test_correction_arm_cannot_override_explicit_registry_paths(self):
         with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
             helper.run_classification_experiments(
-                Mock(), ["--config", "datasets.yaml", "--correction-arm", "no_label"])
+                Mock(), ["--config", "datasets.yaml", "--correction-arm", "label_free"])
         self.assertEqual(error.exception.code, 2)
         before, corrected = self.descriptor("before"), self.descriptor("corrected")
         registry = self.root / "registry.yaml"

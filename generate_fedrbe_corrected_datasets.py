@@ -21,10 +21,12 @@ from pathlib import Path
 import json
 import zipfile
 from typing import List
+import numpy as np
 import pandas as pd
 import time
 from copy import deepcopy
 
+from batchcorrection.fedrbe import BATCH_COEFFICIENTS_FILE
 from evaluation_utils import featurecloud_api_extension as util
 from evaluation_utils.performance_report import (
     load_reports, summarize_clients, summarize_performance,
@@ -440,13 +442,23 @@ for modality in multiomics_modalities:
 
 
 ### POSTPROCESSING
+def batch_coefficients_filename(result_filename: str) -> Path:
+    """FedApp_corrected_data[_smpc].tsv -> FedApp_batch_coefficients[_smpc].csv in the same folder."""
+    result = Path(result_filename)
+    if not result.name.startswith("FedApp_corrected_data"):
+        raise ValueError(f"Unexpected result filename {result.name}")
+    name = result.with_suffix(".csv").name.replace("FedApp_corrected_data", "FedApp_batch_coefficients", 1)
+    return result.with_name(name)
+
+
 def save_experiment_results(exp: util.Experiment, result_filename: str,
                             client_files: List[dict],
                             experiment_result: util.ExperimentResult = None) -> None:
     """
     Validates the outputs of all clients of an experiment and saves them in the
-    folder of result_filename: individual_results/<clientname>/, datainfo.json
-    and the merged corrected data as result_filename.
+    folder of result_filename: individual_results/<clientname>/, datainfo.json,
+    the merged corrected data as result_filename and the coordinator's batch
+    coefficients as FedApp_batch_coefficients[_smpc].csv.
     If all clients wrote a performance report, also saves the per client and
     segment timings, payload sizes and memory usage as
     <result_filename without suffix>_performance.csv, see
@@ -467,6 +479,19 @@ def save_experiment_results(exp: util.Experiment, result_filename: str,
         raise ValueError("Correction requires the outputs of every client")
 
     # Validate every client's fresh outputs before replacing any published files.
+    # The coordinator (the first client) additionally wrote the batch coefficients.
+    client_files = [dict(outputs) for outputs in client_files]
+    coefficients = client_files[0].pop(BATCH_COEFFICIENTS_FILE, None)
+    if coefficients is None:
+        raise ValueError(f"The coordinator {client_names[0]} wrote no {BATCH_COEFFICIENTS_FILE}. "
+                         "Rebuild the app image?")
+    if any(BATCH_COEFFICIENTS_FILE in outputs for outputs in client_files[1:]):
+        raise ValueError(f"Only the coordinator should write {BATCH_COEFFICIENTS_FILE}")
+    coefficients_separator = exp.config_files[0]["flimmaBatchCorrection"].get("separator", "\t")
+    coefficients_frame = pd.read_csv(io.BytesIO(coefficients), sep=coefficients_separator,
+                                     index_col=0)
+    if coefficients_frame.empty or not np.isfinite(coefficients_frame.to_numpy()).all():
+        raise ValueError(f"Empty or non-finite batch coefficients from {client_names[0]}")
     client_outputs, corrected_frames = [], []
     for idx, (outputs, client_name) in enumerate(zip(client_files, client_names)):
         details = exp.config_files[idx]["flimmaBatchCorrection"]
@@ -531,6 +556,9 @@ def save_experiment_results(exp: util.Experiment, result_filename: str,
         print(f"Wrote datainfo.json at {datainfo_path}")
 
         final_df.to_csv(os.path.join(result_filename), sep="\t")
+        coefficients_path = batch_coefficients_filename(result_filename)
+        coefficients_path.write_bytes(coefficients)
+        print(f"Wrote the batch coefficients at {coefficients_path}")
     else:
         raise RuntimeError("No data found in the test results!")
 
@@ -649,9 +677,13 @@ if __name__ == "__main__":
                 zip_names = zip_ref.namelist()
                 outputs = {}
                 for fname in ["only_batch_corrected_data.csv", "full_corrected_data.csv",
-                              "report.txt", PERFORMANCE_REPORT]:
+                              "report.txt", PERFORMANCE_REPORT, BATCH_COEFFICIENTS_FILE]:
                     if fname in zip_names:
                         outputs[fname] = zip_ref.read(fname)
+                    elif fname == BATCH_COEFFICIENTS_FILE:
+                        # only the coordinator (the first client) writes them,
+                        # checked in save_experiment_results
+                        continue
                     elif fname not in ("report.txt", PERFORMANCE_REPORT):
                         raise RuntimeError(
                             f"'{fname}' not found in result zip for client '{client_name}'. "

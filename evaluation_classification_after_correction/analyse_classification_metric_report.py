@@ -15,7 +15,7 @@ def main():
     )
     parser.add_argument(
         "--plots-dir", type=Path, default=component / "plots",
-        help="Output directory for label_aware/ and no_label/ PNGs",
+        help="Output directory for label_aware/ and label_free/ PNGs",
     )
     args = parser.parse_args()
     if not args.results_file.is_file():

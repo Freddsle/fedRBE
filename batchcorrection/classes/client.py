@@ -5,6 +5,31 @@ import hashlib
 import os
 import bios
 
+
+def subtract_batch_effect(data: pd.DataFrame, betas: np.ndarray,
+                          batch_design: pd.DataFrame) -> pd.DataFrame:
+    """
+    The correction step of limma::removeBatchEffect(): subtracts the batch
+    effect predicted by the batch coefficients from the data, NaN values stay NaN.
+    Args:
+        data: features x samples
+        betas: (#features x #batch columns), the batch coefficients in the
+            feature order of data
+        batch_design: samples x batch columns, the batch columns of the design
+            matrix (1 for the sample's batch, -1 everywhere for the reference
+            batch, 0 otherwise) in the sample order of data
+    Returns:
+        The corrected data, features x samples
+    """
+    if betas.shape[1] != batch_design.shape[1]:
+        raise ValueError(f"Expected coefficients for {batch_design.shape[1]} batch columns, "
+                         f"got {betas.shape[1]}")
+    values = np.where(data == 'NA', np.nan, data)
+    batch_effect = betas @ batch_design.T
+    corrected = np.where(np.isnan(values), values, values - batch_effect)
+    return pd.DataFrame(corrected, index=data.index, columns=data.columns)
+
+
 class Client:
     def __init__(self):
         """
@@ -681,24 +706,13 @@ class Client:
         Returns:
             None, sets self.data_corrected and adds to self.report
         """
-        assert self.data is not None
+        assert isinstance(self.data, pd.DataFrame)
         assert self.design is not None
         print("INFO: Removing the batch effects with the trained betas")
-        self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
         batch_design = self.design.drop(columns=['intercept', *(self.variables or [])])
-        if betas.shape[1] != batch_design.shape[1]:
-            raise ValueError(f"Expected coefficients for {batch_design.shape[1]} batch columns, "
-                             f"got {betas.shape[1]}")
-
-        # Calculate the prediction of the data only based on the betas concerning
-        # batches (calculate the batch effect)
-        batch_effect = betas @ batch_design.T
-
-        # Substract the calculated batch effect (for NaN values we don't need to substract, we keep them as NaN)
-        assert isinstance(self.data, pd.DataFrame)
-        self.data_corrected = np.where(np.isnan(self.data_corrected), self.data_corrected, self.data_corrected - batch_effect)
-        # Add the column_names/index information from the original DataFrame
-        self.data_corrected = pd.DataFrame(self.data_corrected, index=self.data.index, columns=self.data.columns)
+        # Subtract the batch effect predicted by the batch coefficients, the
+        # effects of the intercept and the covariates are kept
+        self.data_corrected = subtract_batch_effect(self.data, betas, batch_design)
         # now we drop the extra global features that were added and
         # that we don't actually have data for
         if self.extra_global_features is not None:

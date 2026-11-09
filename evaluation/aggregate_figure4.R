@@ -104,7 +104,7 @@ classification_report <- utils::read.csv(
   check.names = FALSE
 )
 
-preprocessing <- if (CORRECTION_ARM == "label_aware") "corrected" else "no_label"
+preprocessing <- if (CORRECTION_ARM == "label_aware") "label_aware" else "label_free"
 classification_report <- classification_report[
   classification_report$data_preprocessing_name %in% c("uncorrected", preprocessing),
   , drop = FALSE

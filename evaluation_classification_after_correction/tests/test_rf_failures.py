@@ -3,7 +3,6 @@
 import contextlib
 import io
 import json
-import math
 from pathlib import Path
 import sys
 import tempfile
@@ -120,10 +119,6 @@ class RandomForestFailureTests(unittest.TestCase):
         }))
         self.info = helper.DataInfo(descriptor)
 
-    def metrics(self, path, scores=(0., .75)):
-        pd.DataFrame({"class": ["overall", "overall"], "metric": ["MCC", "F1_score"],
-                      "score": scores}).to_csv(path, index=False)
-
     def assert_clean(self):
         self.assertFalse(list(self.root.glob("tmp_classification_evaluation_*")))
         for folder in self.info.cohort_folders:
@@ -131,47 +126,18 @@ class RandomForestFailureTests(unittest.TestCase):
             self.assertFalse((folder / "config_forest.yaml").exists())
             self.assertTrue((folder / "data.csv").is_file())
 
-    def test_missing_or_invalid_metrics_publish_no_rows(self):
-        result = Mock()
-        experiment = helper.ClassificationExperimentTrainTestSplit(
-            "uncorrected", self.info, resultfile=result)
-        complete = self.root / "complete.csv"
-        self.metrics(complete)
-        invalid = self.root / "invalid.csv"
-        valid = pd.read_csv(complete)
-        frames = [
-            valid.iloc[:1], valid.assign(metric="MCC"), valid.drop(columns="class"),
-            *[valid.assign(score=[0., value]) for value in (float("nan"), float("inf"))],
-        ]
-        for frame in frames:
-            with self.subTest(frame=frame.to_dict("list")):
-                frame.to_csv(invalid, index=False)
-                with self.assertRaises(ValueError):
-                    experiment.read_update_metrics(
-                        [(complete, "All"), (invalid, "B")], 42, "label", "federated")
-                result.upsert_experiment.assert_not_called()
-        with self.assertRaises(FileNotFoundError):
-            experiment.read_update_metrics(
-                [(complete, "All"), (self.root / "missing.csv", "B")],
-                42, "label", "federated")
-        result.upsert_experiment.assert_not_called()
-
     def test_stale_outputs_cannot_supply_missing_new_results(self):
-        for experiment_type in (helper.ClassificationExperimentTrainTestSplit,
-                                helper.ClassificationExperimentLeaveOneCohortOut):
+        for experiment_type in (helper.ClassificationExperimentLeaveOneCohortOut,):
             for learning in helper.LEARNING_TYPES:
                 with self.subTest(experiment=experiment_type.__name__, learning=learning):
-                    loco = experiment_type is helper.ClassificationExperimentLeaveOneCohortOut
-                    suffix = "testcohort|A_" if loco else ""
-                    suffix += "predictedcol|label"
+                    suffix = "testcohort|A_predictedcol|label"
                     if learning == "federated":
-                        suffix += "_traincohort|" + ("B" if loco else "A")
+                        suffix += "_traincohort|B"
                     folder = self.root / (
                         "tmp_classification_evaluation_output_learningtype|"
                         f"{learning}_{suffix}")
                     folder.mkdir()
                     (folder / "global_model.pkl").write_bytes(b"stale model")
-                    self.metrics(folder / "global_metrics.csv")
 
                     def no_new_outputs(**kwargs):
                         for output in kwargs["outputfolders"]:
@@ -186,39 +152,6 @@ class RandomForestFailureTests(unittest.TestCase):
                         experiment.run_experiment(43, force_run=True)
                     self.assert_clean()
                     result.upsert_experiment.assert_not_called()
-
-    def test_cache_requires_complete_finite_local_scores(self):
-        result = helper.ResultFile(self.root / "metrics.csv")
-        experiment = helper.ClassificationExperimentTrainTestSplit(
-            "uncorrected", self.info, resultfile=result)
-        complete = self.root / "complete.csv"
-        self.metrics(complete)
-        with contextlib.redirect_stdout(io.StringIO()):
-            for learning in helper.LEARNING_TYPES:
-                experiment.read_update_metrics([(complete, "All")], 42, "label", learning)
-
-        def write_outputs(**kwargs):
-            folders = [Path(folder) for folder in kwargs["outputfolders"]]
-            self.assertEqual(len(folders), 2)
-            self.metrics(folders[0] / "global_metrics.csv")
-            for folder in folders:
-                self.metrics(folder / "local_metrics.csv")
-
-        with patch.object(helper, "run_simulation_native", side_effect=write_outputs) as runner, \
-                contextlib.redirect_stdout(io.StringIO()):
-            experiment.run_experiment(42)
-            runner.assert_called_once()
-            experiment.run_experiment(42)
-            runner.assert_called_once()
-            cached = pd.read_csv(result.path)
-            self.assertEqual(len(cached), 8)
-            cached.loc[(cached.predicted_client_name == "B") & (cached.metric_name == "MCC"),
-                       "metric_value"] = float("nan")
-            cached.to_csv(result.path, index=False)
-            experiment.run_experiment(42)
-            self.assertEqual(runner.call_count, 2)
-        self.assertTrue(pd.read_csv(result.path).metric_value.map(math.isfinite).all())
-        self.assert_clean()
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ evaluation_utils/fedRBE_simulation_scrip_simdata.py.
 import os
 
 import numpy as np
+import pandas as pd
 
 try:
     # inside the app container, the app folder is the working directory
@@ -28,6 +29,9 @@ except ImportError:
 # Exponent used for the fixed point representation in SMPC, we use a bigger
 # exponent than FeatureCloud's default
 SMPC_EXPONENT = 12
+# Output file of the coordinator containing the batch coefficients
+BATCH_COEFFICIENTS_FILE = "batch_coefficients.csv"
+BATCH_COEFFICIENTS_INDEX = "feature_hash"
 
 
 def smpc_error_bound(smpc: bool, num_clients: int) -> float:
@@ -38,6 +42,20 @@ def smpc_error_bound(smpc: bool, num_clients: int) -> float:
     if not smpc:
         return 0.0
     return num_clients * 10.0 ** -SMPC_EXPONENT
+
+
+def batch_coefficients_frame(beta: np.ndarray, hashed_features: list, cohorts_order: list):
+    """
+    The batch coefficients as a DataFrame of shape (#features x #batches-1).
+    Rows are the hashed feature names (classes.client.Client.hash_names), as
+    the coordinator does not know the names of features only other clients
+    have. Columns are the batch columns of the design matrix, i.e. all batches
+    of cohorts_order ("client" or "client|batch") except the last one, the
+    reference batch. A sample of a batch with a column has the value 1 in that
+    column and 0 in all others, a sample of the reference batch -1 in all.
+    """
+    return pd.DataFrame(beta, index=pd.Index(hashed_features, name=BATCH_COEFFICIENTS_INDEX),
+                        columns=list(cohorts_order[:-1]))
 
 
 def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None:
@@ -287,5 +305,11 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
                                       sep=client.separator)
     with open(os.path.join(outputfolder, "report.txt"), "w") as f:
         f.write(client.report)
+    if protocol.is_coordinator:
+        # Every client received the same coefficients, the coordinator saves
+        # them once so that new samples can be corrected later on
+        # (see classes.client.subtract_batch_effect)
+        batch_coefficients_frame(beta, global_feauture_names_hashed, cohorts_order).to_csv(
+            os.path.join(outputfolder, BATCH_COEFFICIENTS_FILE), sep=client.separator)
     perf.end("client_compute", "final")
     perf.end("whole_protocol", "whole_protocol")
