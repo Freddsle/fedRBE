@@ -383,7 +383,7 @@ reused; after code or input changes, use a fresh `--results-file` or
 Every repetition's split and batch coefficients are saved next to the results
 file, by default under
 `evaluation_classification_after_correction/results/train_test_splits/<dataset>/seed_<seed>/`.
-Ovarian cancer needs about 16 GB RAM.
+Ovarian cancer needs about 4 GB RAM.
 
 **Leave-one-cohort-out.** Trains on all cohorts except the held-out test cohort,
 using the published corrections of Step 2. Run it for the four real datasets
