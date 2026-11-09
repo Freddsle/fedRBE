@@ -17,7 +17,8 @@ For every dataset and repetition (seed):
    forests are trained on all (corrected) training samples.
 4. The test samples are corrected with the training batch coefficients
    (batchcorrection.classes.client.subtract_batch_effect, no labels needed)
-   and predicted. MCC and F1 are reported pooled over all cohorts ("All") and,
+   and predicted. Values fedRBE did not correct in a batch's training samples
+   stay uncorrected in training and test samples. MCC and F1 are reported pooled over all cohorts ("All") and,
    for federated learning, per cohort.
 
 The uncorrected arm uses the same splits without steps 2 and 4's correction.
@@ -417,11 +418,11 @@ def correct_new_samples(client: Client, coefficients: pd.DataFrame, training_bat
     """
     Corrects the samples of a loaded client with the batch coefficients of a
     previous fedRBE run on the client's training samples.
-    fedRBE leaves out features without coefficients and, for privacy, sets the
-    features of a batch with too few finite values to NaN instead of
-    correcting them. Correspondingly, a feature of a new sample is only kept if
-    it has a corrected (finite) value in the training samples of the sample's
-    batch.
+    fedRBE does not correct features without coefficients (present in too few
+    clients) nor, for privacy, the features of a batch with too few finite
+    values. As in the training data (see training_matrix), a value of a new
+    sample is only corrected if its feature was corrected in the training
+    samples of the sample's batch, otherwise it stays uncorrected.
     Args:
         client: The loaded new samples, see load_client
         coefficients: The coordinator's batch coefficients of the training run
@@ -430,22 +431,36 @@ def correct_new_samples(client: Client, coefficients: pd.DataFrame, training_bat
             features (as text) x samples
         training_sample_batches: The batch label of every training sample
     Returns:
-        The corrected new samples, features (real names) x samples
+        The new samples, features (as text) x samples
     """
+    result = uncorrected_matrix(client)
+    result.index = result.index.astype(str)
     data = client.data.loc[client.data.index.isin(coefficients.index)]
     labels = client_batch_labels(client)
     design = batch_design(labels, list(data.columns), coefficients, training_batches)
     corrected = subtract_batch_effect(data, coefficients.loc[data.index].to_numpy(), design)
     corrected = corrected.rename(index=client.hash2feature)
-    names = corrected.index.astype(str)
+    corrected.index = corrected.index.astype(str)
     for label in set(labels):
         training_samples = training_sample_batches.index[training_sample_batches == label]
         corrected_features = corrected_training.index[
             corrected_training.loc[:, training_samples].notna().any(axis=1)]
+        features = corrected.index[corrected.index.isin(corrected_features)]
         samples = [sample for sample, sample_label in zip(data.columns, labels)
                    if sample_label == label]
-        corrected.loc[~names.isin(corrected_features), samples] = np.nan
-    return corrected
+        result.loc[features, samples] = corrected.loc[features, samples]
+    return result
+
+
+def training_matrix(corrected_training: pd.DataFrame, client: Client) -> pd.DataFrame:
+    """
+    The client's training data for the forest: fedRBE's corrected values and,
+    where fedRBE did not correct a feature (NaN for the batch or left out),
+    the uncorrected values. Features (as text) x samples.
+    """
+    raw = uncorrected_matrix(client)
+    raw.index = raw.index.astype(str)
+    return corrected_training.combine_first(raw).loc[:, corrected_training.columns]
 
 
 def sample_batches(cohort: str, client: ClientInput, batch_col: Optional[str],
@@ -648,7 +663,9 @@ class ClassificationExperimentTrainTestSplit:
             for cohort_idx, (cohort, output, folder) in enumerate(
                     zip(federation.cohorts, outputs, test_folders)):
                 corrected_training = read_corrected_data(output, configs[cohort_idx]["separator"])
-                matrices["train"][cohort_idx].append(corrected_training)
+                matrices["train"][cohort_idx].append(training_matrix(
+                    corrected_training, load_client(train_folders[cohort_idx], cohort,
+                                                    configs[cohort_idx])))
                 client = load_client(folder, cohort, configs[cohort_idx])
                 training_sample_batches = sample_batches(
                     cohort, inputs[fed_idx][cohort_idx], configs[cohort_idx].get("batch_col"),

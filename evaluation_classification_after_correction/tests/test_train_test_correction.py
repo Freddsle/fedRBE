@@ -17,14 +17,15 @@ with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
     from helper import helper_run_classification_report_metrics as helper
     from helper import train_test_correction as ttc
 
-FEATURES = [f"feature_{i}" for i in range(8)]
+FEATURES = [f"feature_{i}" for i in range(9)]
 BATCHES = {"client_a": [None], "client_b": ["x", "y"], "client_c": [None], "client_d": [None]}
 
 
 def write_fixture(root: Path, seed: int = 3):
     """
     Four clients, client_b holds two batches. feature_7 is too sparse in
-    client_a, fedRBE corrects it only for the other clients.
+    client_a, fedRBE corrects it only for the other clients. feature_8 only
+    exists in client_a and client_b, too few clients for fedRBE to correct it.
     """
     rng = np.random.RandomState(seed)
     federation_dirs, configs = [], {ttc.ARM_LABEL_FREE: [], ttc.ARM_LABEL_AWARE: []}
@@ -44,6 +45,8 @@ def write_fixture(root: Path, seed: int = 3):
         if name == "client_a":
             # five finite values: fewer than fedRBE needs (6 or 7) in any training split
             values[7, np.setdiff1d(np.arange(len(samples)), [0, 5, 10, 15, 19])] = np.nan
+        if name in ("client_c", "client_d"):
+            values[8] = np.nan
         pd.DataFrame(values, index=pd.Index(FEATURES, name="rowname"), columns=samples).to_csv(
             folder / "data.tsv", sep="\t")
         pd.DataFrame({"label": labels, "batch": batch_values},
@@ -123,20 +126,26 @@ class CorrectionTests(unittest.TestCase):
         self.batches = set(ttc.training_batches(self.federation, self.inputs[0], self.split))
 
     def correct(self, arm, part):
+        """Per cohort fedRBE's corrected training data, the forest's training data and part."""
         outputs, coefficients = ttc.run_correction(
             self.federation, arm, self.folders[(0, "train")],
             Path(tempfile.mkdtemp(dir=self.root)) / "fedrbe")
         corrected = {}
-        for idx, (cohort, output, folder) in enumerate(zip(
-                self.federation.cohorts, outputs, self.folders[(0, part)])):
+        for idx, (cohort, output) in enumerate(zip(self.federation.cohorts, outputs)):
             config = self.federation.configs[arm][idx]
-            training = ttc.read_corrected_data(output, config["separator"])
+            fedrbe_training = ttc.read_corrected_data(output, config["separator"])
+            training = ttc.training_matrix(fedrbe_training, ttc.load_client(
+                self.folders[(0, "train")][idx], cohort, config))
             sample_batches = ttc.sample_batches(cohort, self.inputs[0][idx],
-                                                config.get("batch_col"), training.columns)
-            client = ttc.load_client(folder, cohort, config)
-            corrected[cohort] = (training, ttc.correct_new_samples(
-                client, coefficients, self.batches, training, sample_batches))
+                                                config.get("batch_col"), fedrbe_training.columns)
+            client = ttc.load_client(self.folders[(0, part)][idx], cohort, config)
+            corrected[cohort] = (fedrbe_training, training, ttc.correct_new_samples(
+                client, coefficients, self.batches, fedrbe_training, sample_batches))
         return coefficients, corrected
+
+    def raw(self, part, cohort_idx):
+        return pd.read_csv(self.folders[(0, part)][cohort_idx] / "data.tsv", sep="\t",
+                           index_col=0)
 
     def test_coefficients_reproduce_the_correction_of_the_training_samples(self):
         for arm in ttc.ARMS:
@@ -144,16 +153,28 @@ class CorrectionTests(unittest.TestCase):
                 coefficients, corrected = self.correct(arm, "train")
                 self.assertEqual(list(coefficients.columns),
                                  ["client_a", "client_b|x", "client_b|y", "client_c"])
-                for cohort, (training, recomputed) in corrected.items():
-                    recomputed.index = recomputed.index.astype(str)
-                    self.assertTrue(recomputed.drop(index=training.index, errors="ignore")
-                                    .isna().all().all())
+                for idx, (cohort, (fedrbe, training, recomputed)) in enumerate(corrected.items()):
+                    raw = self.raw("train", idx).dropna(how="all")
+                    # corrected where fedRBE corrected, uncorrected elsewhere
+                    self.assertEqual(set(recomputed.index), set(raw.index))
+                    expected = fedrbe.combine_first(raw).loc[recomputed.index, recomputed.columns]
+                    pd.testing.assert_frame_equal(recomputed, expected, check_names=False,
+                                                  rtol=0, atol=1e-12)
+                    # applied to the training samples, the test rule gives the training data
                     pd.testing.assert_frame_equal(
-                        recomputed.loc[training.index, training.columns], training,
+                        recomputed, training.loc[recomputed.index, recomputed.columns],
                         check_names=False, rtol=0, atol=1e-12)
-                # feature_7 is too sparse in client_a: not corrected there, but elsewhere
+                # feature_7 is too sparse in client_a: uncorrected there, corrected elsewhere
                 self.assertTrue(corrected["client_a"][0].loc["feature_7"].isna().all())
+                pd.testing.assert_series_equal(corrected["client_a"][1].loc["feature_7"],
+                                               self.raw("train", 0).loc["feature_7"],
+                                               check_names=False)
                 self.assertTrue(corrected["client_c"][0].loc["feature_7"].notna().all())
+                # feature_8 is not corrected at all, but kept
+                self.assertNotIn("feature_8", corrected["client_a"][0].index)
+                pd.testing.assert_series_equal(corrected["client_a"][1].loc["feature_8"],
+                                               self.raw("train", 0).loc["feature_8"],
+                                               check_names=False)
 
     def test_test_samples_are_corrected_without_their_labels(self):
         _, corrected = self.correct(ttc.ARM_LABEL_AWARE, "test")
@@ -161,14 +182,22 @@ class CorrectionTests(unittest.TestCase):
             design = pd.read_csv(folder / "design.tsv", sep="\t", index_col=0)
             design.assign(label=-design.label).to_csv(folder / "design.tsv", sep="\t")
         _, shuffled = self.correct(ttc.ARM_LABEL_AWARE, "test")
-        for cohort in corrected:
-            pd.testing.assert_frame_equal(corrected[cohort][1], shuffled[cohort][1])
-            self.assertTrue(corrected[cohort][1].notna().any().all())
-        # client_a has feature_7 values in test samples, they are not corrected
-        test_input = pd.read_csv(self.folders[(0, "test")][0] / "data.tsv", sep="\t", index_col=0)
-        self.assertTrue(test_input.loc["feature_7"].notna().any())
-        self.assertTrue(corrected["client_a"][1].loc["feature_7"].isna().all())
-        self.assertTrue(corrected["client_c"][1].loc["feature_7"].notna().all())
+        for idx, cohort in enumerate(corrected):
+            pd.testing.assert_frame_equal(corrected[cohort][2], shuffled[cohort][2])
+            raw = self.raw("test", idx).dropna(how="all")
+            self.assertEqual(set(corrected[cohort][2].index), set(raw.index))
+            # corrected features differ from the raw values
+            self.assertFalse(np.allclose(corrected[cohort][2].loc["feature_0"],
+                                         raw.loc["feature_0"]))
+        # client_a's test values of feature_7 and feature_8 stay uncorrected
+        raw = self.raw("test", 0)
+        self.assertTrue(raw.loc["feature_7"].notna().any())
+        for feature in ("feature_7", "feature_8"):
+            pd.testing.assert_series_equal(corrected["client_a"][2].loc[feature],
+                                           raw.loc[feature], check_names=False)
+        # with feature_7 missing in client_a, fedRBE's coefficient for client_c is 0
+        self.assertFalse(np.allclose(corrected["client_b"][2].loc["feature_7"],
+                                     self.raw("test", 1).loc["feature_7"]))
 
 
 class ExperimentTests(unittest.TestCase):

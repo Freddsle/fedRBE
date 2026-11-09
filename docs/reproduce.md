@@ -359,9 +359,10 @@ then runs on the training samples only, in the native simulation of the app's
 protocol (`batchcorrection/fedrbe.py`, plain aggregation without SMPC).
 Federated (one client per cohort) and centralized (pooled) random forests are
 trained on all corrected training samples. The test samples are corrected with
-the coordinator's batch coefficients of that run, which needs no labels, and
-predicted. Features fedRBE did not correct for a batch, for example for
-privacy, stay uncorrected and are left out of that batch's test samples. The
+the coordinator's batch coefficients of that fedRBE run, which needs no labels,
+and predicted. Values fedRBE did not correct, because a feature is too sparse
+in a batch or present in fewer than three clients, stay uncorrected in both
+training and test samples, so every arm uses the same features. The
 uncorrected baseline uses the same splits. Each repetition reports MCC and
 support-weighted F1 pooled over all test samples (`All`) and, for federated
 learning, per cohort.
