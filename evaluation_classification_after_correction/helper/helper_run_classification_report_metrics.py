@@ -680,7 +680,7 @@ def run_classification_experiments(experiment_type, argv=None) -> None:
     inputs = parser.add_mutually_exclusive_group()
     inputs.add_argument("--config", type=Path, help="Dataset YAML with classification paths")
     inputs.add_argument("--correction-arm", choices=tuple(CORRECTION_ARM_FOLDERS),
-                        help=f"Canonical real-data correction arm (default: {ARM_LABEL_AWARE})")
+                        help=f"Canonical real-data correction arm (default: {ARM_LABEL_FREE})")
     parser.add_argument("--datasets", nargs="+", help="Dataset IDs from the selected registry")
     parser.add_argument("--results-file", type=Path, default=DEFAULT_RESULTFILE.path)
     parser.add_argument("--seeds", nargs="+", type=int, default=list(range(42, 52)))
@@ -690,7 +690,7 @@ def run_classification_experiments(experiment_type, argv=None) -> None:
         entries = yaml.safe_load(args.config.read_text())
         base = SCRIPT_FOLDER.parent.parent
     else:
-        correction_arm = args.correction_arm or ARM_LABEL_AWARE
+        correction_arm = args.correction_arm or ARM_LABEL_FREE
         arm_folder = CORRECTION_ARM_FOLDERS[correction_arm]
         base = SCRIPT_FOLDER.parent.parent / "evaluation_data"
         folders = {"balanced": "simulated/balanced", "ovarian_cancer": "ovarian_cancer",

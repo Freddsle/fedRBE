@@ -87,6 +87,10 @@ class RandomForestInputTests(unittest.TestCase):
             helper.run_classification_experiments(
                 constructor, ["--results-file", str(self.root / "metrics.csv")])
         self.assertEqual(constructor.call_count, 10)  # Five datasets, before and after.
+        # label-free by default; the balanced simulation only has a label-aware correction
+        self.assertEqual({call.args[0] for call in constructor.call_args_list},
+                         {"uncorrected", "label_free", "label_aware"})
+        self.assertEqual(sum(call.args[0] == "label_free" for call in constructor.call_args_list), 4)
         self.assertEqual(len({call.args[0] for call in data.call_args_list}), 10)
         self.assertEqual(constructor.return_value.run_experiment.call_count, 100)
         script = COMPONENT / "run_classification_leave_one_cohort_out.py"

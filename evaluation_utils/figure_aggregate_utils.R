@@ -1105,7 +1105,9 @@ make_figure4_plot <- function(
     point_size = point_size,
     annotations = annotations$ari
   ) + ggplot2::labs(subtitle = clustering_feature_label)
-  panel_b <- plot_figure4_box_panel(
+  # Without leave-one-cohort-out results, panel b is left out
+  has_loo <- nrow(figure4_data$leave_one_cohort_out) > 0
+  panel_b <- if (has_loo) plot_figure4_box_panel(
     data = figure4_data$leave_one_cohort_out,
     x_col = "Task",
     y_col = "metric_value",
@@ -1135,8 +1137,8 @@ make_figure4_plot <- function(
   ) + ggplot2::labs(subtitle = classification_feature_label, caption = annotation_caption)
 
   list(
-    panels = list(panel_a, panel_b, panel_c),
-    panel_heights = panel_heights,
+    panels = Filter(Negate(is.null), list(panel_a, panel_b, panel_c)),
+    panel_heights = if (has_loo) panel_heights else panel_heights[-2],
     panel_gap = panel_gap,
     legend_gap = legend_gap
   )

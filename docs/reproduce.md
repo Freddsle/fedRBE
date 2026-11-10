@@ -397,8 +397,8 @@ done
 ```
 
 It runs ten seeds (42–51) and reuses complete result rows. `--correction-arm
-label_aware` (default) or `label_free` selects the real-data
-`after/label_aware/` or `after/no_label/` descriptors; simulated data keeps its
+label_free` (default) or `label_aware` selects the real-data
+`after/no_label/` or `after/label_aware/` descriptors; simulated data keeps its
 ordinary `after/` input. Quartet joint matrices and RF client files are
 prepared automatically from its modality outputs and original metadata.
 

@@ -137,7 +137,20 @@ figure4_data <- prepare_figure4_plot_data(
 # Exact rank tests over seeds: per dataset
 # (panels a and c) and per held-out cohort (Figure S7). Panel b is an overview.
 
-figure4_stats <- compute_figure4_statistics(figure4_data, CORRECTION_ARM)
+# Incomplete leave-one-cohort-out results skip panel b and Figure S7; errors of
+# panels a and c recur in the second attempt and stop the script.
+figure4_stats <- tryCatch(
+  compute_figure4_statistics(figure4_data, CORRECTION_ARM),
+  error = function(error) {
+    warning("Skipping panel b and Figure S7: ", conditionMessage(error), call. = FALSE)
+    NULL
+  }
+)
+if (is.null(figure4_stats)) {
+  figure4_data$leave_one_cohort_out <- figure4_data$leave_one_cohort_out[0, , drop = FALSE]
+  figure4_stats <- compute_figure4_statistics(figure4_data, CORRECTION_ARM)
+}
+has_loo <- nrow(figure4_data$leave_one_cohort_out) > 0
 statistics_path <- write_figure4_statistics(
   figure4_stats, paste0(tools::file_path_sans_ext(output_path), "_statistics.tsv")
 )
@@ -188,7 +201,8 @@ for (variant in figure4_variants) {
     function() draw_figure4(variant$plot),
     output_path = variant$path,
     width = figure_width,
-    height = figure_height,
+    # without panel b, a and c keep their size
+    height = if (has_loo) figure_height else figure_height * 2 / 3,
     dpi = figure_dpi
   )
   cat("Saved Figure 4 to", saved_path, "\n")
@@ -197,40 +211,42 @@ for (variant in figure4_variants) {
 # Figure S7: the panel b scores per held-out cohort, with the per-cohort tests.
 # It uses the Figure 4 output's directory and format.
 
-figureS7_tasks <- observed_levels(figure4_data$leave_one_cohort_out$Task, classification_task_order)
-figureS7_annotations <- stats::setNames(lapply(figureS7_tasks, function(task) {
-  figure4_annotation_data(figure4_stats, "S7 LOCO", dataset = one_line(task))
-}), figureS7_tasks)
-figureS7_plot <- make_figureS7_plot(
-  loo_data = figure4_data$leave_one_cohort_out,
-  task_order = classification_task_order,
-  scenario_order = scenario_order,
-  scenario_colors = scenario_colors,
-  point_size = point_size,
-  feature_label = classification_feature_label,
-  annotations = figureS7_annotations,
-  annotation_caption = statistics_caption
-)
-figureS7_plot$panels[[1]] <- figureS7_plot$panels[[1]] + ggplot2::labs(
-  title = paste(
-    paste(correction_arm_titles[[CORRECTION_ARM]], "RF leave-one-cohort-out per held-out cohort",
-          sep = " · "),
-    figureS7_plot$panels[[1]]$labels$title,
-    sep = "\n"
+if (has_loo) {
+  figureS7_tasks <- observed_levels(figure4_data$leave_one_cohort_out$Task, classification_task_order)
+  figureS7_annotations <- stats::setNames(lapply(figureS7_tasks, function(task) {
+    figure4_annotation_data(figure4_stats, "S7 LOCO", dataset = one_line(task))
+  }), figureS7_tasks)
+  figureS7_plot <- make_figureS7_plot(
+    loo_data = figure4_data$leave_one_cohort_out,
+    task_order = classification_task_order,
+    scenario_order = scenario_order,
+    scenario_colors = scenario_colors,
+    point_size = point_size,
+    feature_label = classification_feature_label,
+    annotations = figureS7_annotations,
+    annotation_caption = statistics_caption
   )
-)
-figureS7_extension <- tools::file_ext(output_path)
-figureS7_prefix <- sub("^figure4", "figureS7", output_prefix)
-figureS7_path <- file.path(
-  dirname(output_path),
-  paste0(figureS7_prefix, CORRECTION_ARM, ".",
-         if (nzchar(figureS7_extension)) figureS7_extension else "png")
-)
-saved_path <- save_grid_png(
-  function() draw_figure4(figureS7_plot),
-  output_path = figureS7_path,
-  width = figure_width,
-  height = figureS7_height,
-  dpi = figure_dpi
-)
-cat("Saved Figure S7 to", saved_path, "\n")
+  figureS7_plot$panels[[1]] <- figureS7_plot$panels[[1]] + ggplot2::labs(
+    title = paste(
+      paste(correction_arm_titles[[CORRECTION_ARM]], "RF leave-one-cohort-out per held-out cohort",
+            sep = " · "),
+      figureS7_plot$panels[[1]]$labels$title,
+      sep = "\n"
+    )
+  )
+  figureS7_extension <- tools::file_ext(output_path)
+  figureS7_prefix <- sub("^figure4", "figureS7", output_prefix)
+  figureS7_path <- file.path(
+    dirname(output_path),
+    paste0(figureS7_prefix, CORRECTION_ARM, ".",
+           if (nzchar(figureS7_extension)) figureS7_extension else "png")
+  )
+  saved_path <- save_grid_png(
+    function() draw_figure4(figureS7_plot),
+    output_path = figureS7_path,
+    width = figure_width,
+    height = figureS7_height,
+    dpi = figure_dpi
+  )
+  cat("Saved Figure S7 to", saved_path, "\n")
+}
