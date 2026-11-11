@@ -1,23 +1,16 @@
 # CRAN packages
+coin
 data.table
-ggpubr
 gridExtra
-ggsci
 ggtext
 glue
 IRkernel
-invgamma
 jsonlite
 knitr
-nipals
 patchwork
-pheatmap
-remotes
 reshape2
 scales
 tidyverse
-umap
-viridis
 WGCNA
 
 # Bioconductor packages
@@ -31,6 +24,3 @@ impute
 limma
 preprocessCore
 variancePartition
-
-# GitHub package: mwgrassgreen/RobNorm
-RobNorm

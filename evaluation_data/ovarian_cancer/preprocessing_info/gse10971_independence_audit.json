@@ -1,0 +1,74 @@
+{
+  "verified_at_utc": "2026-10-21",
+  "purpose": "Independence check of the GSE10971 raw arrays against the retained GPL570 studies before adoption as the sixth ovarian client.",
+  "byte_level": {
+    "method": "Downloaded the GEO series RAW archives, decompressed every CEL.gz and compared SHA-256 of the decompressed CEL bytes.",
+    "studies_compared": {
+      "GSE10971": 37,
+      "GSE38666": 45,
+      "GSE40595": 77,
+      "GSE69428": 29
+    },
+    "same_lab_reference": {
+      "GSE28044": 24
+    },
+    "cross_study_identical_files": 0,
+    "within_study_identical_files": 0,
+    "gpl96_note": "GSE6008 and GSE26712 are HG-U133A arrays; their CEL files cannot be byte-identical to HG-U133 Plus 2.0 files."
+  },
+  "intensity_level": {
+    "method": "Spearman correlation of raw log2 cell intensities on a fixed subsample of 60,000 cells across all HG-U133 Plus 2.0 arrays; GSE14407 arrays (known byte-identical copies of GSE38666 arrays) serve as the positive control.",
+    "arrays": 236,
+    "positive_control_pairs_r_1": 24,
+    "other_cross_study_pairs_r_ge_0.98": 0,
+    "max_cross_study_r_per_study": {
+      "GSE10971": 0.8209,
+      "GSE14407": 1.0,
+      "GSE28044": 0.8209,
+      "GSE38666": 1.0,
+      "GSE40595": 0.8349,
+      "GSE69428": 0.8349
+    },
+    "within_study_max_r_per_study": {
+      "GSE10971": 0.8593,
+      "GSE14407": 0.9586,
+      "GSE28044": 0.93,
+      "GSE38666": 0.9586,
+      "GSE40595": 0.96,
+      "GSE69428": 0.9555
+    }
+  },
+  "scan_dates_by_group": {
+    "12/08/05": {
+      "FTEn": 2,
+      "FTEb": 2,
+      "HGSC": 1
+    },
+    "12/13/05": {
+      "FTEn": 2,
+      "FTEb": 2,
+      "HGSC": 3
+    },
+    "12/15/05": {
+      "FTEn": 2,
+      "FTEb": 2,
+      "HGSC": 2
+    },
+    "06/08/06": {
+      "FTEn": 2,
+      "FTEb": 2,
+      "HGSC": 3
+    },
+    "06/14/06": {
+      "FTEn": 2,
+      "FTEb": 2,
+      "HGSC": 2
+    },
+    "06/20/06": {
+      "FTEn": 2,
+      "FTEb": 2,
+      "HGSC": 2
+    }
+  },
+  "selection": "Controls: 12 FTEn arrays (GSM277776-GSM277787). HGSC: 11 arrays, one per patient, ovary-site array for patients 2 and 3 (GSM277800, GSM277803-GSM277812 except GSM277810/GSM277811 replace GSM277801/GSM277802). Excluded: 12 FTEb and GSM277801/GSM277802."
+}

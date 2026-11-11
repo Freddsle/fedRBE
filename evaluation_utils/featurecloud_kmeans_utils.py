@@ -1,6 +1,6 @@
 """
-FeatureCloud federated k-means infrastructure: Docker image management,
-test execution, zip extraction, and result aggregation.
+FeatureCloud federated k-means infrastructure: test execution, zip extraction,
+and result aggregation.
 
 This module isolates all FeatureCloud-specific logic so that the evaluation
 notebooks can run central k-means without any Docker/FC dependency.
@@ -11,76 +11,15 @@ from __future__ import annotations
 import json
 import re
 import shutil
-import subprocess
+import tempfile
 import time
 import zipfile
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Iterable, List, Optional, Sequence
 
 import pandas as pd
 
 from evaluation_utils.real_datasets_utils import aggregate_fed_clusters
-
-
-# ---------------------------------------------------------------------------
-# Docker helpers
-# ---------------------------------------------------------------------------
-
-def docker_image_exists(image_name: str) -> bool:
-    """Return True if a Docker image with *image_name* exists locally."""
-    cmd = ["docker", "image", "inspect", image_name]
-    proc = subprocess.run(
-        cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False
-    )
-    return proc.returncode == 0
-
-
-def ensure_app_image(
-    app_image: str,
-    app_source_dir: Path,
-    auto_build: bool,
-    build_timeout: int,
-) -> None:
-    """Build the FeatureCloud app Docker image if it doesn't exist."""
-    if docker_image_exists(app_image):
-        return
-
-    if not auto_build:
-        raise RuntimeError(
-            f"App image '{app_image}' not found. Build it first with:\n"
-            f"  featurecloud app build {app_source_dir} {app_image}"
-        )
-
-    if not app_source_dir.exists():
-        raise FileNotFoundError(f"App source directory not found: {app_source_dir}")
-
-    print(
-        f"App image '{app_image}' not found. "
-        f"Building from local source: {app_source_dir}"
-    )
-    build_cmd = ["featurecloud", "app", "build", str(app_source_dir), app_image]
-    try:
-        subprocess.run(build_cmd, check=True, timeout=build_timeout)
-    except FileNotFoundError as exc:
-        raise RuntimeError(
-            "FeatureCloud CLI is not installed or not in PATH. "
-            "Cannot auto-build missing app image."
-        ) from exc
-    except subprocess.TimeoutExpired as exc:
-        raise RuntimeError(
-            f"Timed out while building app image '{app_image}' "
-            f"(timeout={build_timeout}s)."
-        ) from exc
-    except subprocess.CalledProcessError as exc:
-        raise RuntimeError(
-            f"Failed to build app image '{app_image}' from {app_source_dir}."
-        ) from exc
-
-    if not docker_image_exists(app_image):
-        raise RuntimeError(
-            f"Image '{app_image}' is still missing after build. "
-            "Please verify Docker/FeatureCloud build output."
-        )
 
 
 # ---------------------------------------------------------------------------
@@ -110,40 +49,11 @@ def parse_test_id(paths: Iterable[Path]) -> Optional[int]:
     return None
 
 
-def has_extracted_clustering(
-    run_output: Path, num_clients: int, k_values: Sequence[int]
-) -> bool:
-    """Check whether all expected per-client clustering CSVs already exist."""
-    for idx in range(1, num_clients + 1):
-        for k in k_values:
-            if not (run_output / f"{idx}_{k}_clustering.csv").exists():
-                return False
-    return True
-
-
-def select_latest_test_zip_files(zip_files: Sequence[Path]) -> List[Path]:
-    """From a list of FC result zips, return those belonging to the latest test ID."""
-    if not zip_files:
-        return []
-    grouped: Dict[int, List[Path]] = {}
-    for zf in zip_files:
-        match = re.search(r"results_test_(\d+)_client_", zf.name)
-        if not match:
-            continue
-        test_id = int(match.group(1))
-        grouped.setdefault(test_id, []).append(zf)
-    if not grouped:
-        return sorted(zip_files, key=lambda p: p.name)
-    latest_test_id = max(grouped)
-    return sorted(grouped[latest_test_id], key=lambda p: p.name)
-
-
 def extract_clustering(
     zip_path: Path,
     output_dir: Path,
     client_idx: int,
     k_values: Sequence[int],
-    keep_extracted: bool,
 ) -> None:
     """Extract clustering CSVs from a FeatureCloud result zip.
 
@@ -158,86 +68,30 @@ def extract_clustering(
                 raise FileNotFoundError(f"Missing {member} in {zip_path}")
             zh.extract(member, path=output_dir)
             extracted = output_dir / member
-            target = output_dir / f"{client_idx}_{k}_clustering.csv"
-            if keep_extracted:
-                shutil.copy2(extracted, target)
-            else:
-                shutil.move(str(extracted), str(target))
+            shutil.move(str(extracted), str(output_dir / f"{client_idx}_{k}_clustering.csv"))
 
-    if not keep_extracted:
-        kmeans_dir = output_dir / "kmeans"
-        if kmeans_dir.exists():
-            shutil.rmtree(kmeans_dir)
+    kmeans_dir = output_dir / "kmeans"
+    if kmeans_dir.exists():
+        shutil.rmtree(kmeans_dir)
 
 
-# ---------------------------------------------------------------------------
-# Aggregate existing federated outputs
-# ---------------------------------------------------------------------------
-
-def aggregate_existing_federated_output(
-    dataset_name: str,
-    variant_label: str,
-    variant_input_dir: Path,
+def validate_client_samples(
     run_output: Path,
+    metadata: pd.DataFrame,
+    client_names: Sequence[str],
     k_values: Sequence[int],
-    num_clients: int,
-    keep_extracted: bool,
 ) -> None:
-    """Re-use existing federated zip outputs without running a new FC test."""
-    if has_extracted_clustering(run_output, num_clients, k_values):
-        print(
-            f"[{dataset_name}] Using existing extracted clustering "
-            f"files for '{variant_label}'"
-        )
-        return
-
-    # Look for zip files in run_output first, then in the inputs/tests dir
-    zip_candidates = select_latest_test_zip_files(
-        list(run_output.glob("results_test_*_client_*.zip"))
-    )
-    if not zip_candidates:
-        tests_dir = variant_input_dir / "tests" / "tests"
-        zip_candidates = select_latest_test_zip_files(
-            list(tests_dir.glob("results_test_*_client_*.zip"))
-        )
-
-    if not zip_candidates:
-        raise FileNotFoundError(
-            f"No existing federated outputs found for '{variant_label}'. Checked:\n"
-            f" - {run_output}\n"
-            f" - {variant_input_dir / 'tests' / 'tests'}\n"
-            "Use the federated runs notebook to launch a new FeatureCloud run."
-        )
-
-    print(
-        f"[{dataset_name}] Aggregating existing federated zip outputs "
-        f"for '{variant_label}' ({len(zip_candidates)} zip files)"
-    )
-
-    for client_idx, zf in enumerate(
-        sorted(zip_candidates, key=lambda p: p.name), start=1
-    ):
-        source_zip = zf
-        if zf.parent != run_output:
-            target_zip = run_output / zf.name
-            shutil.copy2(zf, target_zip)
-            source_zip = target_zip
-
-        extract_clustering(
-            source_zip,
-            run_output,
-            client_idx=client_idx,
-            k_values=k_values,
-            keep_extracted=keep_extracted,
-        )
-        if source_zip.parent == run_output and source_zip.exists():
-            source_zip.unlink()
-
-    if not has_extracted_clustering(run_output, num_clients, k_values):
-        raise FileNotFoundError(
-            f"Could not build all expected clustering files "
-            f"for '{variant_label}' in {run_output}"
-        )
+    """Require exactly the requested samples in every client's clustering."""
+    for idx, client in enumerate(client_names, start=1):
+        expected = set(metadata.loc[metadata.lab.eq(client), "file"].astype(str))
+        for k in k_values:
+            path = run_output / f"{idx}_{k}_clustering.csv"
+            frame = pd.read_csv(path, sep=";", index_col=0)
+            samples = frame.index.astype(str)
+            if not expected or not samples.is_unique or set(samples) != expected:
+                raise ValueError(f"Incomplete or unexpected samples for {client} in {path}")
+            if frame.shape[1] != 1 or frame.isna().any().any():
+                raise ValueError(f"Missing clustering labels in {path}")
 
 
 # ---------------------------------------------------------------------------
@@ -268,110 +122,76 @@ def run_single_federated_variant(
     controller_host: str,
     query_interval: int,
     timeout: int,
-    keep_extracted: bool,
-    aggregate_only: bool,
-    run_label: Optional[str] = None,
-    seed: Optional[int] = None,
+    seed: int,
 ) -> Path:
-    """Run or aggregate a federated k-means variant (before or after correction).
+    """Run a federated k-means variant (before or after correction).
 
-    When *aggregate_only* is True, existing zip outputs are re-used without
-    launching a new FeatureCloud test.
-
-    When *run_label* is provided, extracted clustering files and the aggregated
-    metadata TSV are written to run-specific paths. This is used by repeated
-    seed runs so each seed remains auditable after the loop.
+    Extracted clustering files and the aggregated metadata TSV are written to
+    seed-specific paths, so each seed of a repeated run remains auditable.
 
     Returns the path to the saved metadata-with-clusters TSV.
     """
-    if run_label is None:
-        run_dir_name = "1_fed_clustering"
-    else:
-        run_dir_name = re.sub(r"[^A-Za-z0-9_.-]+", "_", run_label).strip("._")
-        if not run_dir_name:
-            raise ValueError("run_label must contain at least one path-safe character")
+    run_dir_name = f"seed_{seed:03d}"
 
     run_output = dataset_root / "fc_kmeans_res" / variant_label / run_dir_name
     run_output.mkdir(parents=True, exist_ok=True)
 
     kmeans_run_dir = dataset_root / "kmeans_res" / "runs"
     kmeans_run_dir.mkdir(parents=True, exist_ok=True)
-    if run_label is None:
-        output_path = kmeans_run_dir / (
-            "1_metadata_before_fedclusters.tsv"
-            if variant_label == "before"
-            else "1_metadata_after_fedclusters.tsv"
-        )
-    else:
-        variant_path_label = re.sub(r"[^A-Za-z0-9_.-]+", "_", variant_label)
-        output_path = (
-            kmeans_run_dir
-            / f"{run_dir_name}_metadata_{variant_path_label}_fedclusters.tsv"
-        )
-
-    if aggregate_only:
-        aggregate_existing_federated_output(
-            dataset_name=dataset_name,
-            variant_label=variant_label,
-            variant_input_dir=variant_input_dir,
-            run_output=run_output,
-            k_values=k_values,
-            num_clients=len(client_names),
-            keep_extracted=keep_extracted,
-        )
-        aggregated = aggregate_fed_clusters(
-            metadata=metadata,
-            run_output=run_output,
-            client_names=client_names,
-            k_values=k_values,
-        )
-        aggregated.to_csv(output_path, sep="\t", index=False)
-        print(
-            f"[{dataset_name}] Aggregated existing federated output saved: {output_path}"
-        )
-        return output_path
+    output_path = kmeans_run_dir / f"{run_dir_name}_metadata_{variant_label}_fedclusters.tsv"
 
     # Launch a real FeatureCloud test
     fc_utils = import_featurecloud_utils()
+    staged_output: Optional[Path] = None
+    aggregated: Optional[pd.DataFrame] = None
 
     class KMeansExperiment(fc_utils.Experiment):
         def _set_config_files(self) -> None:
             return
 
-        def run_test(self, retry: int = 0):
-            if retry == 0:
-                print("_______________EXPERIMENT_______________")
+        def _check_test(self, exp_id: int) -> List[dict]:
+            nonlocal staged_output, aggregated
+            instances = super()._check_test(exp_id)
+            attempt_dir = Path(tempfile.mkdtemp(prefix=".attempt_", dir=run_output))
+            try:
+                if sorted(info["id"] for info in instances) != list(range(len(client_names))):
+                    raise ValueError("FeatureCloud did not return every requested client")
+                zip_paths = [
+                    variant_input_dir / "tests" / fc_utils.TESTS_DIR /
+                    f"results_test_{exp_id}_client_{info['id']}_{info['name']}.zip"
+                    for info in sorted(instances, key=lambda info: info["id"])
+                ]
+                wait_for_paths(zip_paths, timeout=timeout)
+                for idx, path in enumerate(zip_paths, start=1):
+                    copied = attempt_dir / path.name
+                    shutil.copy2(path, copied)
+                    extract_clustering(copied, attempt_dir, idx, k_values)
+                validate_client_samples(attempt_dir, metadata, client_names, k_values)
+                result = aggregate_fed_clusters(
+                    metadata, attempt_dir, client_names, k_values,
+                )
+            except (OSError, ValueError, KeyError, zipfile.BadZipFile) as exc:
+                failures = run_output / "failed_attempts"
+                failures.mkdir(exist_ok=True)
+                saved = attempt_dir.rename(failures / attempt_dir.name.removeprefix("."))
+                raise fc_utils._RetryableTestError(
+                    f"Incomplete k-means test {exp_id}: {exc}. Evidence saved in {saved}"
+                ) from exc
+            staged_output, aggregated = attempt_dir, result
+            return instances
 
-            exp_id, exp_meta = self._start_test(retry=retry)
-            instances, _dirs = self._check_test(exp_id=exp_id, retry=retry)
-            print(f"instances: {instances}")
-            print("TEST DONE:")
-
-            instances.sort(key=lambda item: item["id"])
-            result_files: List[str] = []
+        def _coordinator_index(self, instances: List[dict]) -> int:
             coord_idx: Optional[int] = None
-            tests_subdir = getattr(fc_utils, "TESTS_DIR", "tests")
-
             for idx, info in enumerate(instances):
                 if bool(info.get("coordinator", False)):
                     coord_idx = idx
-                file_path = (
-                    Path(self.fc_data_dir)
-                    / "tests"
-                    / tests_subdir
-                    / f"results_test_{exp_id}_client_{info['id']}_{info['name']}.zip"
-                )
-                result_files.append(str(file_path))
-
             if coord_idx is None:
                 print(
                     "[WARN] No coordinator reported by controller metadata. "
                     "Continuing with fallback coordinator index 0."
                 )
-                coord_idx = 0 if result_files else -1
-
-            print("_______________EXPERIMENT FINISHED SUCCESSFULLY_______________")
-            return result_files, coord_idx, exp_meta
+                coord_idx = 0 if instances else -1
+            return coord_idx
 
     client_dirs = [variant_input_dir / client for client in client_names]
     for cd in client_dirs:
@@ -397,34 +217,21 @@ def run_single_federated_variant(
     print(f"[{dataset_name}] Running federated k-means for '{variant_label}' data")
     zip_files_str, _, exp_meta = experiment.run_test()
     zip_paths = [Path(p) for p in zip_files_str]
-    wait_for_paths(zip_paths, timeout=timeout)
     test_id = parse_test_id(zip_paths)
 
-    for idx, zp in enumerate(zip_paths, start=1):
-        copied_zip = run_output / zp.name
-        shutil.copy2(zp, copied_zip)
-        extract_clustering(
-            copied_zip,
-            run_output,
-            client_idx=idx,
-            k_values=k_values,
-            keep_extracted=keep_extracted,
-        )
-        if copied_zip.exists():
-            copied_zip.unlink()
-
-    aggregated = aggregate_fed_clusters(
-        metadata=metadata,
-        run_output=run_output,
-        client_names=client_names,
-        k_values=k_values,
-    )
+    if staged_output is None or aggregated is None:
+        raise RuntimeError("FeatureCloud returned without validated k-means results")
+    for idx in range(1, len(client_names) + 1):
+        for k in k_values:
+            name = f"{idx}_{k}_clustering.csv"
+            (staged_output / name).replace(run_output / name)
+    shutil.rmtree(staged_output)
     aggregated.to_csv(output_path, sep="\t", index=False)
 
     manifest = {
         "dataset": dataset_name,
         "variant": variant_label,
-        "run_label": run_label,
+        "run_label": run_dir_name,
         "seed": seed,
         "test_id": test_id,
         "k_values": list(k_values),

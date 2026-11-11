@@ -1,0 +1,12 @@
+{
+  "verified_at_utc": "2026-10-21T14:44:19.688379+00:00",
+  "source": "Original GEO sample supplementary CEL files",
+  "comparison": "Download each source URL, decompress gzip, compare complete CEL bytes and SHA-256.",
+  "downloaded_raw_files": 48,
+  "byte_identical_pairs": 24,
+  "distinct_decompressed_cel_sha256": 24,
+  "identity_claim": "Exact duplicate raw measurement files; individual clinical identities not independently verified.",
+  "selection": "Exclude all 24 GSE14407 arrays; retain all 30 previously selected GSE38666 arrays under the existing HGSC/control eligibility criteria.",
+  "source_clinical_table_sha256": "0620eb1e971941242b96deceaa2e17e4581aad38cbedc122365f3b01017104ce",
+  "pair_manifest": "duplicate_cel_pairs.tsv"
+}

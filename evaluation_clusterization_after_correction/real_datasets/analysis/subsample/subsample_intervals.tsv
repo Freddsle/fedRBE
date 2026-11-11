@@ -1,0 +1,17 @@
+dataset	arm	metric	median	lower	upper	repeats	fraction	scope
+ecoli	label_aware	delta_ARI	1.0066975631634025	1.0066975631634025	1.0066975631634025	100	0.8	reclustering; correction fixed
+ecoli	label_aware	delta_AMI	1.0093066067075203	1.0093066067075203	1.0093066067075203	100	0.8	reclustering; correction fixed
+ovarian_cancer	label_aware	delta_ARI	-0.1478453398011545	-0.16450023424574936	0.2955535973951937	100	0.8	reclustering; correction fixed
+ovarian_cancer	label_aware	delta_AMI	0.06158862651171471	0.03928588661764406	0.3931093077227802	100	0.8	reclustering; correction fixed
+ccRCC_proteomics	label_aware	delta_ARI	0.8679756225131632	0.8404026863660687	0.8933274167477683	100	0.8	reclustering; correction fixed
+ccRCC_proteomics	label_aware	delta_AMI	0.7841234125164287	0.7486163120729854	0.8170712896007202	100	0.8	reclustering; correction fixed
+quartet_multiomics	label_aware	delta_ARI	0.7083313548280332	0.5916778482294917	0.8258810838937755	100	0.8	reclustering; correction fixed
+quartet_multiomics	label_aware	delta_AMI	0.705603594853859	0.5835682822934487	0.8593419554427509	100	0.8	reclustering; correction fixed
+ecoli	no_label	delta_ARI	1.0066975631634025	1.0066975631634025	1.0066975631634025	100	0.8	reclustering; correction fixed
+ecoli	no_label	delta_AMI	1.0093066067075203	1.0093066067075203	1.0093066067075203	100	0.8	reclustering; correction fixed
+ovarian_cancer	no_label	delta_ARI	-0.14000680611640712	-0.16452179361384367	-0.09170170490134065	100	0.8	reclustering; correction fixed
+ovarian_cancer	no_label	delta_AMI	0.016411501337599138	-0.0029622358288263913	0.042147277611749995	100	0.8	reclustering; correction fixed
+ccRCC_proteomics	no_label	delta_ARI	0.874578314160471	0.8508021528547545	0.905325360423388	100	0.8	reclustering; correction fixed
+ccRCC_proteomics	no_label	delta_AMI	0.7931838075598192	0.7622181881570869	0.833440385645122	100	0.8	reclustering; correction fixed
+quartet_multiomics	no_label	delta_ARI	0.7083313548280332	0.5916778482294917	0.8258810838937755	100	0.8	reclustering; correction fixed
+quartet_multiomics	no_label	delta_AMI	0.705603594853859	0.5835682822934487	0.8593419554427509	100	0.8	reclustering; correction fixed
