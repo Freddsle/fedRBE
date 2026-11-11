@@ -46,6 +46,7 @@ from .helper_run_classification_report_metrics import (
     LEARNING_TYPE_FEDERATED, PREPROCESSING_UNCORRECTED, REPO_ROOT, RESULTS_FOLDER, ResultFile,
     _read_model_and_info, predict_test_data, run_simulation_native, train_forest,
 )
+from batchcorrection.align_new_batch import read_training_level
 from batchcorrection.classes.client import Client, subtract_batch_effect
 from batchcorrection.fedrbe import BATCH_COEFFICIENTS_FILE, run_fedrbe
 from evaluation_utils.metrics import classification_scores
@@ -290,8 +291,10 @@ def write_split_inputs(spec: DatasetSpec, inputs: List[List[ClientInput]], split
                        folder: Path) -> Dict[Tuple[int, str], List[Path]]:
     """
     Writes the uncorrected train and test inputs of every client in the format
-    of the original files to <folder>/<federation>/<part>/<cohort>/.
-    Returns per (federation index, part) the client folders.
+    of the original files to <folder>/<federation>/<part>/<cohort>/. Only the
+    clients with samples in a part are written for that part.
+    Returns per (federation index, part) the client folders, in the order of
+    the federation's cohorts.
     """
     folders = {}
     for fed_idx, (federation, fed_inputs) in enumerate(zip(spec.federations, inputs)):
@@ -301,6 +304,8 @@ def write_split_inputs(spec: DatasetSpec, inputs: List[List[ClientInput]], split
             for cohort, client, config in zip(federation.cohorts, fed_inputs, configs):
                 keys = set(split.loc[(split.cohort == cohort) & (split.part == part), "sample"])
                 samples = client.design.index[client.keys.isin(keys)]
+                if samples.empty:
+                    continue
                 client_folder = folder / (federation.modality or "data") / part / cohort
                 client_folder.mkdir(parents=True)
                 client.data.loc[:, samples].to_csv(client_folder / config["data_filename"],
@@ -478,6 +483,37 @@ def uncorrected_matrix(client: Client) -> pd.DataFrame:
     return client.data.rename(index=client.hash2feature)
 
 
+@dataclass
+class TrainingCorrection:
+    """The result of fedRBE on the training samples of one federation."""
+    coefficients: pd.DataFrame       # the coordinator's batch coefficients
+    level: pd.Series                 # the coordinator's training level per hashed feature
+    level_info: dict                 # the settings of the run, see align_new_batch
+    batches: set                     # all training batch labels
+    corrected: List[pd.DataFrame]    # per cohort fedRBE's corrected training data
+    matrices: List[pd.DataFrame]     # per cohort the forest's training data, see training_matrix
+
+
+def correct_training(federation: Federation, fed_inputs: List[ClientInput], arm: str,
+                     train_folders: List[Path], split: pd.DataFrame,
+                     work: Path) -> TrainingCorrection:
+    """Runs fedRBE on the training inputs of every cohort of the federation."""
+    configs = federation.configs[arm]
+    outputs, coefficients = run_correction(
+        federation, arm, train_folders, work / f"{federation.modality or 'data'}_fedrbe")
+    level, level_info = read_training_level(str(outputs[0]))
+    corrected, matrices = [], []
+    for cohort, output, folder, config in zip(federation.cohorts, outputs, train_folders,
+                                              configs):
+        corrected_training = read_corrected_data(output, config["separator"])
+        corrected.append(corrected_training)
+        matrices.append(training_matrix(corrected_training,
+                                        load_client(folder, cohort, config)))
+    return TrainingCorrection(coefficients, level, level_info,
+                              set(training_batches(federation, fed_inputs, split)),
+                              corrected, matrices)
+
+
 # ---------------------------------------------------------------------------
 # Random forest inputs and evaluation
 # ---------------------------------------------------------------------------
@@ -510,8 +546,14 @@ def forest_table(spec: DatasetSpec, matrices: List[pd.DataFrame], inputs: List[C
 
 
 def _score_rows(predictions: Dict[str, Tuple[np.ndarray, np.ndarray]],
-                learning_type: str) -> Dict[str, Dict[str, float]]:
-    """Scores per cohort (federated only) and pooled over all cohorts."""
+                learning_type: str, pooled: bool = True) -> Dict[str, Dict[str, float]]:
+    """
+    Scores per cohort (federated only) and pooled over all cohorts. Without
+    pooled, only the scores per cohort, for both learning types.
+    """
+    if not pooled:
+        return {cohort: classification_scores(true, pred)
+                for cohort, (true, pred) in predictions.items()}
     truth = np.concatenate([true for true, _ in predictions.values()])
     predicted = np.concatenate([pred for _, pred in predictions.values()])
     scores = {ALL_COHORTS: classification_scores(truth, predicted)}
@@ -525,7 +567,105 @@ def _score_rows(predictions: Dict[str, Tuple[np.ndarray, np.ndarray]],
 # Experiment
 # ---------------------------------------------------------------------------
 
-class ClassificationExperimentTrainTestSplit:
+class FedrbeClassificationExperiment:
+    """
+    Shared parts of the random forest evaluations whose batch effect correction
+    only sees the training samples: result rows, caching, and training and
+    scoring the forests. Subclasses set the cross-validation method and whether
+    scores are pooled over the test cohorts.
+    """
+
+    cross_validation_method: str
+    pooled_scores = True
+
+    def __init__(self, spec: DatasetSpec, arms=ARMS,
+                 resultfile: ResultFile = DEFAULT_RESULTFILE,
+                 work_folder: Optional[Path] = None) -> None:
+        unknown = set(arms) - set(ARMS)
+        if unknown:
+            raise ValueError(f"Unknown correction arms {sorted(unknown)}")
+        self.spec = spec
+        self.arms = list(arms)
+        self.resultfile = resultfile
+        self.work_folder = work_folder
+        self._inputs = None
+
+    @property
+    def preprocessings(self) -> List[str]:
+        return [PREPROCESSING_UNCORRECTED, *self.arms]
+
+    def _read_inputs(self) -> List[List[ClientInput]]:
+        if self._inputs is None:
+            self._inputs = read_inputs(self.spec)
+        return self._inputs
+
+    def _result_key(self, seed: int, preprocessing: str, learning_type: str,
+                    client_name: str, metric_name: str) -> dict:
+        return dict(data_name=self.spec.data_name, data_preprocessing_name=preprocessing,
+                    metric_name=metric_name, predicted_client_name=client_name,
+                    cross_validation_method=self.cross_validation_method, seed=seed,
+                    predicted_target=self.spec.target, learning_type=learning_type)
+
+    def _scored_clients(self, learning_type: str, test_cohorts: List[str]) -> List[str]:
+        """The predicted_client_name of every score row, see _score_rows."""
+        if not self.pooled_scores:
+            return list(test_cohorts)
+        if learning_type == LEARNING_TYPE_FEDERATED:
+            return [ALL_COHORTS, *test_cohorts]
+        return [ALL_COHORTS]
+
+    def _is_cached(self, seed: int, preprocessing: str, test_cohorts: List[str]) -> bool:
+        for learning_type in LEARNING_TYPES:
+            for client in self._scored_clients(learning_type, test_cohorts):
+                for metric in METRICS:
+                    value = self.resultfile.check_experiment(
+                        **self._result_key(seed, preprocessing, learning_type, client, metric))
+                    if value is False:
+                        return False
+        return True
+
+    def _work_directory(self, prefix: str) -> tempfile.TemporaryDirectory:
+        if self.work_folder is not None:
+            self.work_folder.mkdir(parents=True, exist_ok=True)
+        return tempfile.TemporaryDirectory(prefix=prefix, dir=self.work_folder)
+
+    def _publish(self, seed: int, all_scores) -> None:
+        """Writes the scores {preprocessing: {learning type: {client: metrics}}}."""
+        for preprocessing, scores_by_type in all_scores.items():
+            for learning_type, scores in scores_by_type.items():
+                for client, metrics in scores.items():
+                    print(f"seed {seed} {preprocessing} {learning_type} {client}: "
+                          f"MCC {metrics['MCC']:.4f}, F1 {metrics['F1_score']:.4f}")
+                    for metric in METRICS:
+                        self.resultfile.upsert_experiment(
+                            metric_value=metrics[metric],
+                            **self._result_key(seed, preprocessing, learning_type, client, metric))
+
+    def _train_and_score(self, tables, work: Path, seed: int):
+        """Trains both learning types on the training tables and scores the test tables."""
+        target = self.spec.target
+        train_folders = []
+        for cohort, table in tables["train"].items():
+            folder = work / "forest_input" / cohort
+            folder.mkdir(parents=True)
+            table.to_csv(folder / "tmp_data.csv", sep=",", index=True,
+                         index_label=DEFAULT_SAMPLE_COL)
+            train_folders.append(folder)
+        scores = {}
+        for learning_type in LEARNING_TYPES:
+            output_folders = _run_quietly(
+                train_forest, learning_type, train_folders, list(tables["train"]), work,
+                f"predictedcol|{target}", target, seed, [])
+            model, model_info = _read_model_and_info(output_folders[0])
+            predictions = {
+                cohort: predict_test_data(model, model_info, table, target)
+                for cohort, table in tables["test"].items()
+            }
+            scores[learning_type] = _score_rows(predictions, learning_type, self.pooled_scores)
+        return scores
+
+
+class ClassificationExperimentTrainTestSplit(FedrbeClassificationExperiment):
     """
     Repeated stratified 70/30 train/test evaluation of federated and centralized
     random forests on uncorrected data and on data whose batch effect
@@ -539,44 +679,13 @@ class ClassificationExperimentTrainTestSplit:
                  train_ratio: float = TRAIN_RATIO,
                  splits_folder: Optional[Path] = SPLITS_FOLDER,
                  work_folder: Optional[Path] = None) -> None:
-        unknown = set(arms) - set(ARMS)
-        if unknown:
-            raise ValueError(f"Unknown correction arms {sorted(unknown)}")
-        self.spec = spec
-        self.arms = list(arms)
-        self.resultfile = resultfile
+        super().__init__(spec, arms, resultfile, work_folder)
         self.train_ratio = train_ratio
         self.splits_folder = splits_folder
-        self.work_folder = work_folder
-        self._inputs = None
-
-    @property
-    def preprocessings(self) -> List[str]:
-        return [PREPROCESSING_UNCORRECTED, *self.arms]
-
-    def _result_key(self, seed: int, preprocessing: str, learning_type: str,
-                    client_name: str, metric_name: str) -> dict:
-        return dict(data_name=self.spec.data_name, data_preprocessing_name=preprocessing,
-                    metric_name=metric_name, predicted_client_name=client_name,
-                    cross_validation_method=self.cross_validation_method, seed=seed,
-                    predicted_target=self.spec.target, learning_type=learning_type)
-
-    def _is_cached(self, seed: int, preprocessing: str) -> bool:
-        for learning_type in LEARNING_TYPES:
-            clients = [ALL_COHORTS]
-            if learning_type == LEARNING_TYPE_FEDERATED:
-                clients.extend(self.spec.cohorts)
-            for client in clients:
-                for metric in METRICS:
-                    value = self.resultfile.check_experiment(
-                        **self._result_key(seed, preprocessing, learning_type, client, metric))
-                    if value is False:
-                        return False
-        return True
 
     def run_experiment(self, seed: int, force_run: bool = False) -> None:
         todo = [preprocessing for preprocessing in self.preprocessings
-                if force_run or not self._is_cached(seed, preprocessing)]
+                if force_run or not self._is_cached(seed, preprocessing, self.spec.cohorts)]
         if not todo:
             print(f"Skipping {self.spec.data_name} seed={seed}, results exist in "
                   f"{self.resultfile.path}.")
@@ -584,16 +693,11 @@ class ClassificationExperimentTrainTestSplit:
         print("=" * 80)
         print(f"{self.spec.data_name}: seed {seed}, {', '.join(todo)}")
         print("=" * 80)
-        if self._inputs is None:
-            self._inputs = read_inputs(self.spec)
-        inputs = self._inputs
+        inputs = self._read_inputs()
         split = split_samples(self.spec, inputs, seed, self.train_ratio)
         arms = [preprocessing for preprocessing in todo if preprocessing in ARMS]
         check_min_samples(self.spec, inputs, split, arms)
-        if self.work_folder is not None:
-            self.work_folder.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(prefix=f"train_test_{self.spec.name}_",
-                                         dir=self.work_folder) as tmp:
+        with self._work_directory(f"train_test_{self.spec.name}_") as tmp:
             work = Path(tmp)
             folders = write_split_inputs(self.spec, inputs, split, work / "split")
             all_scores, all_coefficients = {}, {}
@@ -604,15 +708,7 @@ class ClassificationExperimentTrainTestSplit:
                     tables, work / preprocessing, seed)
         # Only publish once every preprocessing succeeded
         self._save_split(seed, split, all_coefficients)
-        for preprocessing, scores_by_type in all_scores.items():
-            for learning_type, scores in scores_by_type.items():
-                for client, metrics in scores.items():
-                    print(f"{preprocessing} {learning_type} {client}: "
-                          f"MCC {metrics['MCC']:.4f}, F1 {metrics['F1_score']:.4f}")
-                    for metric in METRICS:
-                        self.resultfile.upsert_experiment(
-                            metric_value=metrics[metric],
-                            **self._result_key(seed, preprocessing, learning_type, client, metric))
+        self._publish(seed, all_scores)
 
     def _save_split(self, seed: int, split: pd.DataFrame,
                     coefficients: Dict[str, Dict[str, pd.DataFrame]]) -> None:
@@ -655,23 +751,20 @@ class ClassificationExperimentTrainTestSplit:
                         client = load_client(folder, cohort, configs[cohort_idx])
                         matrices[part][cohort_idx].append(uncorrected_matrix(client))
                 continue
-            name = f"{federation.modality or 'data'}_fedrbe"
-            outputs, coefficients = run_correction(federation, arm, train_folders, work / name)
+            correction = correct_training(federation, inputs[fed_idx], arm, train_folders,
+                                          split, work)
             suffix = f"_{federation.modality}" if federation.modality else ""
-            coefficients_files[f"batch_coefficients{suffix}.csv"] = coefficients
-            batches = set(training_batches(federation, inputs[fed_idx], split))
-            for cohort_idx, (cohort, output, folder) in enumerate(
-                    zip(federation.cohorts, outputs, test_folders)):
-                corrected_training = read_corrected_data(output, configs[cohort_idx]["separator"])
-                matrices["train"][cohort_idx].append(training_matrix(
-                    corrected_training, load_client(train_folders[cohort_idx], cohort,
-                                                    configs[cohort_idx])))
+            coefficients_files[f"batch_coefficients{suffix}.csv"] = correction.coefficients
+            for cohort_idx, (cohort, folder) in enumerate(zip(federation.cohorts, test_folders)):
+                corrected_training = correction.corrected[cohort_idx]
+                matrices["train"][cohort_idx].append(correction.matrices[cohort_idx])
                 client = load_client(folder, cohort, configs[cohort_idx])
                 training_sample_batches = sample_batches(
                     cohort, inputs[fed_idx][cohort_idx], configs[cohort_idx].get("batch_col"),
                     corrected_training.columns)
                 matrices["test"][cohort_idx].append(correct_new_samples(
-                    client, coefficients, batches, corrected_training, training_sample_batches))
+                    client, correction.coefficients, correction.batches, corrected_training,
+                    training_sample_batches))
         tables = {}
         for part in ("train", "test"):
             tables[part] = {}
@@ -682,29 +775,6 @@ class ClassificationExperimentTrainTestSplit:
                     self.spec, matrices[part][cohort_idx],
                     [fed_inputs[cohort_idx] for fed_inputs in inputs], labels)
         return tables, coefficients_files
-
-    def _train_and_score(self, tables, work: Path, seed: int):
-        """Trains both learning types on the training tables and scores the test tables."""
-        target = self.spec.target
-        train_folders = []
-        for cohort, table in tables["train"].items():
-            folder = work / "forest_input" / cohort
-            folder.mkdir(parents=True)
-            table.to_csv(folder / "tmp_data.csv", sep=",", index=True,
-                         index_label=DEFAULT_SAMPLE_COL)
-            train_folders.append(folder)
-        scores = {}
-        for learning_type in LEARNING_TYPES:
-            output_folders = _run_quietly(
-                train_forest, learning_type, train_folders, list(tables["train"]), work,
-                f"predictedcol|{target}", target, seed, [])
-            model, model_info = _read_model_and_info(output_folders[0])
-            predictions = {
-                cohort: predict_test_data(model, model_info, table, target)
-                for cohort, table in tables["test"].items()
-            }
-            scores[learning_type] = _score_rows(predictions, learning_type)
-        return scores
 
 
 def run_train_test_split_experiments(argv=None) -> None:

@@ -385,42 +385,36 @@ file, by default under
 `evaluation_classification_after_correction/results/train_test_splits/<dataset>/seed_<seed>/`.
 Ovarian cancer needs about 4 GB RAM.
 
-**Leave-one-cohort-out.** Trains on all cohorts except the held-out test cohort,
-using the published corrections of Step 2. Run it for the four real datasets
-and each correction arm:
+**Leave-one-cohort-out.** Each cohort is held out once. fedRBE runs on the other
+(training) cohorts only, in the same native simulation, with `min_clients: 2` so
+that datasets with three cohorts keep two training clients. Federated and
+centralized random forests are trained on the corrected training cohorts. Besides
+the batch coefficients, the coordinator saves the training level: per feature, the
+mean of the corrected training data (the intercept, plus the covariate effects at
+the training data's covariate mean). Each batch of the held-out cohort is shifted
+per feature so that its mean equals this level, with
+`batchcorrection.classes.client.align_to_training_level`, the function behind
+`batchcorrection/align_new_batch.py`. Features with fewer than `min_samples` values
+in a held-out batch stay uncorrected. The forests then predict the held-out cohort;
+MCC and support-weighted F1 are reported for that cohort and both learning types.
+
+The held-out cohort's labels are not used in either arm, so its alignment is
+label-free: if its label mix differs from the training data's, part of that
+difference is removed as batch effect. The arms differ only in the correction of
+the training cohorts.
 
 ```bash
-for arm in label_aware label_free; do
-  pixi run python evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
-    --correction-arm "$arm" --datasets ecoli ovarian_cancer ccRCC_proteomics quartet_multiomics
-done
+pixi run python evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py
 ```
 
-It runs ten seeds (42–51) and reuses complete result rows. `--correction-arm
-label_free` (default) or `label_aware` selects the real-data
-`after/no_label/` or `after/label_aware/` descriptors; simulated data keeps its
-ordinary `after/` input. Quartet joint matrices and RF client files are
-prepared automatically from its modality outputs and original metadata.
-
-For custom inputs, use `--config rf_datasets.yaml` instead of `--correction-arm`,
-with entries such as:
-
-```yaml
-ecoli:
-  classification:
-    before: evaluation_data/ecoli/before/datainfo.json
-    corrected: evaluation_data/ecoli/after/label_aware/datainfo.json
-```
-
-Paths are absolute or repository-relative. Optional `preprocessing_name` labels
-corrected results (default: `label_free` for descriptors under a `no_label/`
-folder, otherwise `label_aware`). For example:
-
-```bash
-python3 evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
-  --config rf_datasets.yaml --datasets ecoli --seeds 42 \
-  --results-file evaluation_classification_after_correction/results/custom_metrics.csv
-```
+This runs every dataset of the train/test evaluation, both correction arms and ten
+random forest seeds (42–51). The correction does not depend on the seed, so it runs
+once per held-out cohort. The options are those of the train/test script
+(`--datasets`, `--arms`, `--seeds`, `--results-file`, `--work-dir`, `--force-run`).
+The coordinator's batch coefficients, training level and `training_level_info.yml`
+of every held-out cohort and arm are saved next to the results file, by default
+under
+`evaluation_classification_after_correction/results/loco_corrections/<dataset>/<held-out cohort>/<arm>/`.
 
 Both experiment types save metrics to
 `evaluation_classification_after_correction/results/classification_metric_report.csv`.
@@ -526,9 +520,10 @@ Mean differences (`mean_b - mean_a`) have 95% percentile bootstrap intervals
 (10,000 resamples, seed 1), using paired resampling for C1/C2 and independent
 resampling for C3/C4. The `relevant` flag marks |mean difference| ≥0.05.
 
-In the 70:30 panel, correction is fitted on the training samples only. K-means
-and LOCO use the corrections of all samples; there, label-aware correction
-uses held-out labels.
+In the 70:30 and LOCO panels, correction is fitted without the test samples;
+held-out LOCO cohorts are aligned to the training level without their labels.
+K-means uses the corrections of all samples; there, label-aware correction uses
+all labels.
 
 K-means uses all complete-case features and RF uses all union features. ARI inputs
 are `metrics_ari_multirun.tsv` (label-aware) and `no_label/metrics_ari_multirun.tsv`
