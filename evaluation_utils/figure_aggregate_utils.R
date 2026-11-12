@@ -671,10 +671,10 @@ prepare_figure4_classification_data <- function(
     stop("Classification scores must be finite and within the metric's range",
          call. = FALSE)
   }
-  # Both learning methods contribute one pooled score per seed for train/test,
-  # each seed is one shared split. LOCO contributes individual held-out cohorts.
-  pooled <- subset$predicted_client_name == average_client_name
-  subset <- subset[if (cv_method == "Train-Test-Split") pooled else !pooled, , drop = FALSE]
+  # One score per test cohort and seed for both evaluations and learning
+  # methods: the 70:30 test part of a cohort, or the held-out LOCO cohort. The
+  # pooled score over all cohorts is left out.
+  subset <- subset[subset$predicted_client_name != average_client_name, , drop = FALSE]
 
   subset$Task <- factor(subset$Task, levels = task_order, ordered = TRUE)
   subset$Scenario <- factor(subset$Scenario, levels = scenario_order, ordered = TRUE)
@@ -1145,12 +1145,12 @@ make_figure4_plot <- function(
 }
 
 
-# Figure S7: the Figure 4b leave-one-cohort-out scores per held-out cohort, one panel
-# per dataset in Figure 4 order; each box holds the seeds of one cohort and scenario.
-# `annotations` optionally maps Task labels to bracket tables. The result is drawn
-# with draw_figure4().
-make_figureS7_plot <- function(
-  loo_data,
+# Figures S7 and S8: the scores of Figure 4b (leave-one-cohort-out) or 4c (70:30)
+# per test cohort, one panel per dataset in Figure 4 order; each box holds the
+# seeds of one cohort and scenario. `annotations` optionally maps Task labels to
+# bracket tables. The result is drawn with draw_figure4().
+make_per_cohort_plot <- function(
+  cohort_data,
   task_order,
   scenario_order,
   scenario_colors,
@@ -1163,10 +1163,10 @@ make_figureS7_plot <- function(
   annotations = NULL,
   annotation_caption = NULL
 ) {
-  tasks <- observed_levels(loo_data$Task, task_order)
-  y_min <- min(-0.25, floor(min(loo_data$metric_value) * 4) / 4)
+  tasks <- observed_levels(cohort_data$Task, task_order)
+  y_min <- min(-0.25, floor(min(cohort_data$metric_value) * 4) / 4)
   panels <- lapply(seq_along(tasks), function(i) {
-    data <- loo_data[as.character(loo_data$Task) == tasks[[i]], , drop = FALSE]
+    data <- cohort_data[as.character(cohort_data$Task) == tasks[[i]], , drop = FALSE]
     plot_figure4_box_panel(
       data = data,
       x_col = "predicted_client_name",

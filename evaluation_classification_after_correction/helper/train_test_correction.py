@@ -18,8 +18,9 @@ For every dataset and repetition (seed):
 4. The test samples are corrected with the training batch coefficients
    (batchcorrection.classes.client.subtract_batch_effect, no labels needed)
    and predicted. Values fedRBE did not correct in a batch's training samples
-   stay uncorrected in training and test samples. MCC and F1 are reported pooled over all cohorts ("All") and,
-   for federated learning, per cohort.
+   stay uncorrected in training and test samples. MCC and F1 are reported
+   pooled over all cohorts ("All") and per test cohort, for both learning
+   types.
 
 The uncorrected arm uses the same splits without steps 2 and 4's correction.
 """
@@ -43,7 +44,7 @@ from sklearn.model_selection import train_test_split
 
 from .helper_run_classification_report_metrics import (
     ARM_LABEL_AWARE, ARM_LABEL_FREE, DEFAULT_RESULTFILE, DEFAULT_SAMPLE_COL, LEARNING_TYPES,
-    LEARNING_TYPE_FEDERATED, PREPROCESSING_UNCORRECTED, REPO_ROOT, RESULTS_FOLDER, ResultFile,
+    PREPROCESSING_UNCORRECTED, REPO_ROOT, RESULTS_FOLDER, ResultFile,
     _read_model_and_info, predict_test_data, run_simulation_native, train_forest,
 )
 from batchcorrection.align_new_batch import read_training_level
@@ -546,20 +547,15 @@ def forest_table(spec: DatasetSpec, matrices: List[pd.DataFrame], inputs: List[C
 
 
 def _score_rows(predictions: Dict[str, Tuple[np.ndarray, np.ndarray]],
-                learning_type: str, pooled: bool = True) -> Dict[str, Dict[str, float]]:
-    """
-    Scores per cohort (federated only) and pooled over all cohorts. Without
-    pooled, only the scores per cohort, for both learning types.
-    """
-    if not pooled:
-        return {cohort: classification_scores(true, pred)
-                for cohort, (true, pred) in predictions.items()}
-    truth = np.concatenate([true for true, _ in predictions.values()])
-    predicted = np.concatenate([pred for _, pred in predictions.values()])
-    scores = {ALL_COHORTS: classification_scores(truth, predicted)}
-    if learning_type == LEARNING_TYPE_FEDERATED:
-        for cohort, (true, pred) in predictions.items():
-            scores[cohort] = classification_scores(true, pred)
+                pooled: bool = True) -> Dict[str, Dict[str, float]]:
+    """Scores per test cohort and, with pooled, over all test cohorts ("All")."""
+    scores = {}
+    if pooled:
+        truth = np.concatenate([true for true, _ in predictions.values()])
+        predicted = np.concatenate([pred for _, pred in predictions.values()])
+        scores[ALL_COHORTS] = classification_scores(truth, predicted)
+    for cohort, (true, pred) in predictions.items():
+        scores[cohort] = classification_scores(true, pred)
     return scores
 
 
@@ -606,17 +602,15 @@ class FedrbeClassificationExperiment:
                     cross_validation_method=self.cross_validation_method, seed=seed,
                     predicted_target=self.spec.target, learning_type=learning_type)
 
-    def _scored_clients(self, learning_type: str, test_cohorts: List[str]) -> List[str]:
+    def _scored_clients(self, test_cohorts: List[str]) -> List[str]:
         """The predicted_client_name of every score row, see _score_rows."""
         if not self.pooled_scores:
             return list(test_cohorts)
-        if learning_type == LEARNING_TYPE_FEDERATED:
-            return [ALL_COHORTS, *test_cohorts]
-        return [ALL_COHORTS]
+        return [ALL_COHORTS, *test_cohorts]
 
     def _is_cached(self, seed: int, preprocessing: str, test_cohorts: List[str]) -> bool:
         for learning_type in LEARNING_TYPES:
-            for client in self._scored_clients(learning_type, test_cohorts):
+            for client in self._scored_clients(test_cohorts):
                 for metric in METRICS:
                     value = self.resultfile.check_experiment(
                         **self._result_key(seed, preprocessing, learning_type, client, metric))
@@ -661,7 +655,7 @@ class FedrbeClassificationExperiment:
                 cohort: predict_test_data(model, model_info, table, target)
                 for cohort, table in tables["test"].items()
             }
-            scores[learning_type] = _score_rows(predictions, learning_type, self.pooled_scores)
+            scores[learning_type] = _score_rows(predictions, self.pooled_scores)
         return scores
 
 

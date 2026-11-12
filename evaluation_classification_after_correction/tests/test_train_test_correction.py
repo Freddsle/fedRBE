@@ -218,15 +218,16 @@ class ExperimentTests(unittest.TestCase):
     def test_rows_splits_and_caching(self):
         self.experiment().run_experiment(5)
         rows = pd.read_csv(self.results.path)
-        # 3 preprocessings x (federated All + 4 cohorts + centralized All) x 2 metrics
-        self.assertEqual(len(rows), 36)
+        # 3 preprocessings x 2 learning types x (All + 4 cohorts) x 2 metrics
+        self.assertEqual(len(rows), 60)
         self.assertEqual(set(rows.data_preprocessing_name),
                          {"uncorrected", "label_free", "label_aware"})
         self.assertEqual(set(rows.cross_validation_method), {"Train-Test-Split"})
         self.assertEqual(set(rows.seed), {5})
         self.assertTrue(np.isfinite(rows.metric_value).all())
-        centralized = rows[rows.learning_type == "centralized"]
-        self.assertEqual(set(centralized.predicted_client_name), {"All"})
+        for learning_type in ("centralized", "federated"):
+            scored = rows[rows.learning_type == learning_type]
+            self.assertEqual(set(scored.predicted_client_name), {"All", *self.spec.cohorts})
         seed_folder = self.splits / "fixture" / "seed_5"
         split = pd.read_csv(seed_folder / "split.tsv", sep="\t")
         self.assertEqual(set(split.part), {"train", "test"})

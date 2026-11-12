@@ -26,7 +26,7 @@ or regenerate the analysis stages you need.
   - [4. Optional dataset diagnostics](#4-optional-dataset-diagnostics)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-  - [7. Generate Figures 3, 4, S5 and S7 for each correction arm](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm)
+  - [7. Generate Figures 3, 4, S5, S7 and S8 for each correction arm](#7-generate-figures-3-4-s5-s7-and-s8-for-each-correction-arm)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
@@ -144,7 +144,7 @@ Recommended order:
 5. Run the [classification](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    and [clustering](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    analyses, or inspect their available saved results.
-6. [Generate Figures 3, 4, S5 and S7](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
+6. [Generate Figures 3, 4, S5, S7 and S8](#7-generate-figures-3-4-s5-s7-and-s8-for-each-correction-arm).
 
 Paths below are relative to the repository root. Run shell commands there unless
 another working directory is specified. Run notebook kernels from the directory
@@ -364,8 +364,8 @@ and predicted. Values fedRBE did not correct, because a feature is too sparse
 in a batch or present in fewer than three clients, stay uncorrected in both
 training and test samples, so every arm uses the same features. The
 uncorrected baseline uses the same splits. Each repetition reports MCC and
-support-weighted F1 pooled over all test samples (`All`) and, for federated
-learning, per cohort.
+support-weighted F1 pooled over all test samples (`All`) and per test cohort,
+for both learning types.
 
 ```bash
 pixi run python evaluation_classification_after_correction/run_classification_train_test_split.py
@@ -426,8 +426,7 @@ python3 evaluation_classification_after_correction/analyse_classification_metric
 ```
 Plots go to `evaluation_classification_after_correction/plots/{label_aware,label_free}/`:
 MCC and support-weighted F1 boxplots with dots for each validation method in the
-results. Train/test plots use pooled `All` scores per repetition; LOCO shows
-each held-out cohort's score per seed.
+results. Train/test and LOCO plots show each test cohort's score per seed.
 Use `--results-file` and `--plots-dir` to override paths. Plotting requires R.
 
 Optional helpers (default settings):
@@ -478,7 +477,7 @@ Add metrics to the appropriate helper; experiment writers select which to save.
 Scikit-learn returns MCC 0 for constant-class predictions; zero does not establish
 random guessing.
 
-### 7. Generate Figures 3, 4, S5 and S7 for each correction arm
+### 7. Generate Figures 3, 4, S5, S7 and S8 for each correction arm
 
 After batch correction, run from the repository root. Figure 4 also requires the
 classification and clustering results from Steps 5 and 6.
@@ -493,19 +492,22 @@ done
 ```
 
 Outputs under `figures/`: `figure3_<arm>.png`, `figure4_<arm>.png`,
-`figure4_<arm>_statistics.png`, `figureS5_<arm>.png` and `figureS7_<arm>.png`.
+`figure4_<arm>_statistics.png`, `figureS5_<arm>.png`, `figureS7_<arm>.png` and
+`figureS8_<arm>.png`.
 Figure 4 is drawn twice: `figure4_<arm>.png` without statistics and
 `figure4_<arm>_statistics.png` with significance brackets and the test caption.
 Figures 3 and S5 also write matching `_variance.tsv` files with median variance
 fractions and feature counts. Figure 4 writes a matching `_statistics.tsv`
-covering Figures 4 and S7.
+covering Figures 4, S7 and S8.
 
-#### Scenario comparisons in Figure 4 and S7
+#### Scenario comparisons in Figures 4, S7 and S8
 
-Both correction arms use 10 runs per scenario (Figure 4a: ARI;
-Figure 4c: pooled train/test MCC; Figure S7: held-out-cohort MCC).
-These panels show significance brackets in `figure4_<arm>_statistics.png` and
-`figureS7_<arm>.png`; Figure 4b is an overview.
+Figures 4b (leave-one-cohort-out) and 4c (70:30) show one MCC per test cohort
+and seed and are overviews; their tests are per test cohort in Figures S7 and
+S8. Both correction arms use 10 runs per scenario (Figure 4a: ARI per dataset;
+Figure S7: MCC per held-out cohort; Figure S8: MCC per 70:30 test cohort).
+These show significance brackets in `figure4_<arm>_statistics.png`,
+`figureS7_<arm>.png` and `figureS8_<arm>.png`.
 
 - C1/C2: before versus after correction within each learner; exact two-sided
   Wilcoxon signed-rank tests paired by seed, with Pratt's method for zeros.
@@ -513,7 +515,7 @@ These panels show significance brackets in `figure4_<arm>_statistics.png` and
   correction; exact two-sided unpaired Mann–Whitney U tests.
 
 Tables report raw p-values and Holm-adjusted p-values for the four contrasts
-within each dataset/task or held-out cohort and correction arm.
+within each dataset, held-out cohort or 70:30 test cohort, and correction arm.
 `*` marks adjusted p < 0.05; `n.s.` otherwise.
 
 Mean differences (`mean_b - mean_a`) have 95% percentile bootstrap intervals

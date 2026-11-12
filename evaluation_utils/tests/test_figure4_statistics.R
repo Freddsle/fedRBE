@@ -128,8 +128,8 @@ for (arm in c("label_aware", "no_label")) {
   Sys.unsetenv(c("CORRECTION_ARM", "FIGURE4_OUTPUT"))
   statistics_file <- sub("\\.png$", "_statistics.tsv", output)
   annotated_file <- sub("\\.png$", "_statistics.png", output)
-  cohort_file <- file.path(tempdir(), paste0("figureS7_", arm, ".png"))
-  current_outputs <- c(output, annotated_file, statistics_file, cohort_file)
+  cohort_files <- file.path(tempdir(), paste0(c("figureS7_", "figureS8_"), arm, ".png"))
+  current_outputs <- c(output, annotated_file, statistics_file, cohort_files)
   stopifnot(all(file.exists(current_outputs)),
             !any(current_outputs %in% verified_outputs),
             identical(tools::md5sum(verified_outputs), previous_hashes))
@@ -138,38 +138,44 @@ for (arm in c("label_aware", "no_label")) {
   summary <- script$figure4_stats
   data <- script$figure4_data
   loo <- data$leave_one_cohort_out
+  split <- data$train_test_split
   cohort_seeds <- table(paste(loo$Task, loo$predicted_client_name), loo$Scenario)
+  split_seeds <- table(paste(split$Task, split$predicted_client_name), split$Scenario)
   saved <- utils::read.delim(statistics_file, check.names = FALSE)
   inference_columns <- c("p_raw", "p_holm", "ci95_low", "ci95_high", "marker")
   family <- paste(summary$panel, summary$dataset,
                   ifelse(is.na(summary$cohort), "", summary$cohort), sep = "|")
   families <- split(seq_len(nrow(summary)), family)
   stopifnot(nrow(cohort_seeds) == 17L, all(cohort_seeds == 10L),
-            identical(as.vector(table(summary$panel)[c("4a ARI", "4c train/test", "S7 LOCO")]),
-                      c(16L, 16L, 68L)),
-            all(summary$n_a == 10L), all(summary$n_b == 10L), nrow(saved) == 100L,
+            nrow(split_seeds) == 17L, all(split_seeds == 10L),
+            identical(as.vector(table(summary$panel)[c("4a ARI", "S7 LOCO", "S8 train/test")]),
+                      c(16L, 68L, 68L)),
+            all(summary$n_a == 10L), all(summary$n_b == 10L), nrow(saved) == 152L,
             identical(summary$paired, summary$contrast %in% c("C1", "C2")),
             !anyNA(summary[inference_columns]),
             identical(summary$marker, figure4_marker(summary$p_holm)),
             same(saved$p_raw, summary$p_raw), same(saved$p_holm, summary$p_holm),
             same(saved$ci95_low, summary$ci95_low), same(saved$ci95_high, summary$ci95_high),
-            length(families) == 25L, all(lengths(families) == 4L),
+            length(families) == 38L, all(lengths(families) == 4L),
             identical(saved$relevant, summary$relevant),
             identical(summary$relevant,
                       abs(summary$diff) >= figure4_min_difference - figure4_statistics_tolerance),
             nrow(figure4_annotation_data(summary, "4a ARI")) == 16L,
-            nrow(figure4_annotation_data(summary, "4c train/test")) == 16L,
-            nrow(figure4_annotation_data(summary, "S7 LOCO")) == 68L)
+            nrow(figure4_annotation_data(summary, "S7 LOCO")) == 68L,
+            nrow(figure4_annotation_data(summary, "S8 train/test")) == 68L)
   stopifnot(
+    identical(names(script$figure4_annotations), "ari"),
     identical(script$figure4_annotations$ari$label,
               summary$marker[summary$panel == "4a ARI"]),
-    identical(script$figure4_annotations$split$label,
-              summary$marker[summary$panel == "4c train/test"]),
-    length(script$figureS7_annotations) == 4L
+    length(script$figureS7_annotations) == 4L,
+    length(script$figureS8_annotations) == 4L
   )
-  for (task in names(script$figureS7_annotations)) {
-    expected <- summary$marker[summary$panel == "S7 LOCO" & summary$dataset == one_line(task)]
-    stopifnot(identical(script$figureS7_annotations[[task]]$label, expected))
+  for (figure in c("S7 LOCO", "S8 train/test")) {
+    annotations <- if (figure == "S7 LOCO") script$figureS7_annotations else script$figureS8_annotations
+    for (task in names(annotations)) {
+      expected <- summary$marker[summary$panel == figure & summary$dataset == one_line(task)]
+      stopifnot(identical(annotations[[task]]$label, expected))
+    }
   }
   for (indices in families) {
     stopifnot(same(summary$p_holm[indices], stats::p.adjust(summary$p_raw[indices], "holm")))
@@ -178,16 +184,16 @@ for (arm in c("label_aware", "no_label")) {
   # Match each output row to its actual plotted scores, including dataset/cohort keys.
   panels <- list(
     "4a ARI" = list(data = data$ari, label = "DatasetLabel", value = "ARI", seed = "Seed"),
-    "4c train/test" = list(data = data$train_test_split, label = "Task",
-                           value = "metric_value", seed = "seed"),
     "S7 LOCO" = list(data = loo, label = "predicted_client_name",
-                      value = "metric_value", seed = "seed")
+                      value = "metric_value", seed = "seed"),
+    "S8 train/test" = list(data = split, label = "predicted_client_name",
+                           value = "metric_value", seed = "seed")
   )
   for (i in seq_len(nrow(summary))) {
     row <- summary[i, ]
     panel <- panels[[row$panel]]
     scores <- panel$data[as.character(panel$data[[panel$label]]) == row$x_level, , drop = FALSE]
-    if (row$panel == "S7 LOCO") {
+    if (row$panel %in% c("S7 LOCO", "S8 train/test")) {
       scores <- scores[one_line(as.character(scores$Task)) == row$dataset, , drop = FALSE]
     }
     a <- scores[scores$Scenario == row$group_a, , drop = FALSE]
@@ -211,6 +217,6 @@ for (arm in c("label_aware", "no_label")) {
     stopifnot(same(row$p_raw, p), row$ci95_low >= bounds[[1]] - 1e-12,
               row$ci95_high <= bounds[[2]] + 1e-12, row$ci95_low <= row$ci95_high)
   }
-  cat(arm, ": 100 rank-test contrasts in 25 Holm families and both figures verified\n")
+  cat(arm, ": 152 rank-test contrasts in 38 Holm families and all figures verified\n")
 }
 stopifnot(length(verified_outputs) == 8L, !anyDuplicated(verified_outputs))

@@ -74,7 +74,7 @@ class RandomForestMetricTests(unittest.TestCase):
             ['M8', 'D6', 'F7', 'D5'],
         )
 
-    def test_pooled_scores_use_all_samples_and_federated_scores_each_cohort(self):
+    def test_pooled_scores_use_all_samples_and_each_cohort_is_scored(self):
         cohorts = {
             "A": (np.array(['D5'] * 9 + ['D6']), np.array(['D5'] * 10)),
             "B": (np.array(['D6', 'F7', 'M8', 'M8']), np.array(['D6', 'M8', 'M8', 'F7'])),
@@ -82,16 +82,16 @@ class RandomForestMetricTests(unittest.TestCase):
         }
         true = np.concatenate([y for y, _ in cohorts.values()])
         predicted = np.concatenate([p for _, p in cohorts.values()])
-        federated = train_test_correction._score_rows(cohorts, "federated")
-        centralized = train_test_correction._score_rows(cohorts, "centralized")
-        self.assertEqual(list(federated), ["All", "A", "B", "C"])
-        self.assertEqual(list(centralized), ["All"])
-        for scores in (federated, centralized):
-            self.assertEqual(scores["All"], classification_scores(true, predicted))
+        pooled = train_test_correction._score_rows(cohorts)
+        per_cohort = train_test_correction._score_rows(cohorts, pooled=False)
+        self.assertEqual(list(pooled), ["All", "A", "B", "C"])
+        self.assertEqual(list(per_cohort), ["A", "B", "C"])
+        self.assertEqual(pooled["All"], classification_scores(true, predicted))
         for cohort, (y, p) in cohorts.items():
-            self.assertEqual(federated[cohort], classification_scores(y, p))
-        local_average = np.mean([list(federated[c].values()) for c in cohorts], axis=0)
-        self.assertFalse(np.allclose(list(federated["All"].values()), local_average))
+            self.assertEqual(pooled[cohort], classification_scores(y, p))
+            self.assertEqual(per_cohort[cohort], classification_scores(y, p))
+        local_average = np.mean([list(pooled[c].values()) for c in cohorts], axis=0)
+        self.assertFalse(np.allclose(list(pooled["All"].values()), local_average))
 
 
 class RandomForestSeedTests(unittest.TestCase):
