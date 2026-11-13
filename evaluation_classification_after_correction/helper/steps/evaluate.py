@@ -5,9 +5,14 @@ and the CSV result file the scores are recorded in.
 
 from __future__ import annotations
 
+import contextlib
+import fcntl
 import math
+import os
 from pathlib import Path
-from typing import Dict, Tuple, Union
+import stat
+import tempfile
+from typing import Dict, Iterable, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -88,10 +93,45 @@ class ResultFile:
         data_name, data_preprocessing_name, metric_name, metric_value,
         predicted_client_name, cross_validation_method, seed, predicted_target,
         learning_type
+
+    Several processes can write to the same file (see experiment.run_units):
+    writes hold an exclusive lock on <file>.lock and replace the file
+    atomically, so readers never see a partly written file.
     """
 
     def __init__(self, path: Union[str, Path]) -> None:
         self.path = Path(path)
+
+    @property
+    def lock_path(self) -> Path:
+        return self.path.with_name(self.path.name + ".lock")
+
+    @contextlib.contextmanager
+    def _locked(self):
+        """Holds the exclusive write lock of the file."""
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self.lock_path, "a", encoding="utf-8") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                fcntl.flock(lock, fcntl.LOCK_UN)
+
+    def _write(self, df: pd.DataFrame) -> None:
+        """Replaces the file atomically with df."""
+        handle, temporary = tempfile.mkstemp(dir=self.path.parent, prefix=f".{self.path.name}.",
+                                             suffix=".tmp")
+        try:
+            with os.fdopen(handle, "w", encoding="utf-8") as f:
+                df.to_csv(f, index=False)
+            # mkstemp creates the file private (0600), keep the file's permissions
+            mode = stat.S_IMODE(os.stat(self.path).st_mode) if self.path.exists() else 0o644
+            os.chmod(temporary, mode)
+            os.replace(temporary, self.path)
+        except BaseException:
+            with contextlib.suppress(FileNotFoundError):
+                os.unlink(temporary)
+            raise
 
     def check_experiment(self,
                          data_name: str,
@@ -134,36 +174,40 @@ class ResultFile:
                           seed: int,
                           predicted_target: str,
                           learning_type: str) -> None:
+        """Writes one row, see upsert_experiments."""
+        self.upsert_experiments([dict(
+            data_name=data_name, data_preprocessing_name=data_preprocessing_name,
+            metric_name=metric_name, metric_value=metric_value,
+            predicted_client_name=predicted_client_name,
+            cross_validation_method=cross_validation_method, seed=seed,
+            predicted_target=predicted_target, learning_type=learning_type)])
+
+    def upsert_experiments(self, rows: Iterable[dict]) -> None:
         """
-        Write a row to the result file.
+        Writes rows (dicts with every column of the file) to the result file in
+        one locked, atomic update.
 
         If a row with matching identifying columns already exists, its
         ``metric_value`` is updated in place.  Otherwise a new row is appended.
         """
-        data = {
-            'data_name': data_name,
-            'data_preprocessing_name': data_preprocessing_name,
-            'metric_name': metric_name,
-            'metric_value': metric_value,
-            'predicted_client_name': predicted_client_name,
-            'cross_validation_method': cross_validation_method,
-            'seed': seed,
-            'predicted_target': predicted_target,
-            'learning_type': learning_type
-        }
-        if self.path.exists():
-            df = pd.read_csv(self.path)
-            if 'learning_type' not in df.columns:
-                df['learning_type'] = pd.NA
-            mask = _matching_rows(df, **{column: value for column, value in data.items()
-                                         if column != 'metric_value'})
-            if mask.any():
-                df.loc[mask, 'metric_value'] = metric_value
-            else:
-                df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
-            df.to_csv(self.path, index=False)
-        else:
-            pd.DataFrame([data]).to_csv(self.path, index=False)
+        rows = list(rows)
+        if not rows:
+            return
+        with self._locked():
+            df = pd.read_csv(self.path) if self.path.exists() else None
+            for data in rows:
+                if df is None:
+                    df = pd.DataFrame([data])
+                    continue
+                if 'learning_type' not in df.columns:
+                    df['learning_type'] = pd.NA
+                mask = _matching_rows(df, **{column: value for column, value in data.items()
+                                             if column != 'metric_value'})
+                if mask.any():
+                    df.loc[mask, 'metric_value'] = data['metric_value']
+                else:
+                    df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
+            self._write(df)
 
 
 DEFAULT_RESULTFILE = ResultFile(RESULTS_FOLDER / "classification_metric_report.csv")

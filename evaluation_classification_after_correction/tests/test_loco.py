@@ -18,6 +18,7 @@ from batchcorrection.align_new_batch import read_training_level
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
     from helper import common, loco
+    from helper.experiment import run_units
     from helper.steps import correct, datasets, evaluate, prepare, train_forest
     from tests.test_train_test_split import write_fixture
 
@@ -163,6 +164,26 @@ class ExperimentTests(unittest.TestCase):
         return loco.ClassificationExperimentLeaveOneCohortOut(
             self.spec, resultfile=self.results, corrections_folder=self.corrections,
             work_folder=self.root / "work")
+
+    def test_parallel_folds_give_the_same_rows_and_corrections(self):
+        self.experiment().run_experiment(seeds=[5])
+        parallel_results = evaluate.ResultFile(self.root / "parallel.csv")
+        parallel = loco.ClassificationExperimentLeaveOneCohortOut(
+            self.spec, resultfile=parallel_results,
+            corrections_folder=self.root / "parallel_corrections", work_folder=self.root / "work")
+        # one job per held-out cohort; spawned workers re-import helper
+        with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
+            run_units(parallel.units([5]), jobs=3)
+        keys = ["predicted_client_name", "data_preprocessing_name", "learning_type",
+                "metric_name"]
+        sequential_rows = pd.read_csv(self.results.path).sort_values(keys, ignore_index=True)
+        parallel_rows = pd.read_csv(parallel_results.path).sort_values(keys, ignore_index=True)
+        self.assertEqual(len(parallel_rows), 36)
+        pd.testing.assert_frame_equal(parallel_rows, sequential_rows)
+        for path in sorted(self.corrections.rglob("*.*")):
+            other = self.root / "parallel_corrections" / path.relative_to(self.corrections)
+            self.assertEqual(path.read_bytes(), other.read_bytes(), path)
+        self.assertEqual(list((self.root / "work").iterdir()), [])
 
     def test_rows_corrections_and_caching(self):
         with patch.object(correct, "correct_training", wraps=correct.correct_training) as correction:

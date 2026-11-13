@@ -15,6 +15,7 @@ import pandas as pd
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
     from helper import common, train_test_split
+    from helper.experiment import run_units
     from helper.steps import correct, datasets, evaluate, prepare, train_forest
 
 FEATURES = [f"feature_{i}" for i in range(9)]
@@ -239,6 +240,26 @@ class ExperimentTests(unittest.TestCase):
             self.experiment().run_experiment(5)
             correction.assert_not_called()
         pd.testing.assert_frame_equal(pd.read_csv(self.results.path), rows)
+
+    def test_parallel_seeds_give_the_same_rows_and_splits(self):
+        run_units(self.experiment().units([5, 6]), jobs=1)
+        parallel_results = evaluate.ResultFile(self.root / "parallel.csv")
+        parallel = train_test_split.ClassificationExperimentTrainTestSplit(
+            self.spec, resultfile=parallel_results, splits_folder=self.root / "parallel_splits",
+            work_folder=self.root / "work")
+        # spawned workers re-import helper from the component folder
+        with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
+            run_units(parallel.units([5, 6]), jobs=2)
+        keys = ["seed", "data_preprocessing_name", "learning_type", "predicted_client_name",
+                "metric_name"]
+        sequential_rows = pd.read_csv(self.results.path).sort_values(keys, ignore_index=True)
+        parallel_rows = pd.read_csv(parallel_results.path).sort_values(keys, ignore_index=True)
+        self.assertEqual(len(parallel_rows), 120)
+        pd.testing.assert_frame_equal(parallel_rows, sequential_rows)
+        for path in sorted(self.splits.rglob("*.*")):
+            other = self.root / "parallel_splits" / path.relative_to(self.splits)
+            self.assertEqual(path.read_bytes(), other.read_bytes(), path)
+        self.assertEqual(list((self.root / "work").iterdir()), [])
 
     def test_failures_publish_nothing(self):
         def fail(*args, **kwargs):

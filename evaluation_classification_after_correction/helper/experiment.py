@@ -1,14 +1,17 @@
 """
 The shared run loop of the random forest evaluations (train_test_split.py and
-loco.py): result rows and their caching, and training plus scoring the
-federated and centralized forests on prepared tables.
+loco.py): result rows and their caching, training plus scoring the federated
+and centralized forests on prepared tables, and running independent units of
+an evaluation in parallel processes.
 """
 
 from __future__ import annotations
 
+from concurrent.futures import FIRST_EXCEPTION, ProcessPoolExecutor, wait
+import multiprocessing
 from pathlib import Path
 import tempfile
-from typing import List, Optional
+from typing import Any, Callable, List, Optional, Sequence, Tuple
 
 from .common import (
     ALL_COHORTS, ARMS, LEARNING_TYPES, METRICS, PREPROCESSING_UNCORRECTED, run_quietly,
@@ -77,16 +80,22 @@ class FedrbeClassificationExperiment:
         return tempfile.TemporaryDirectory(prefix=prefix, dir=self.work_folder)
 
     def _publish(self, seed: int, all_scores) -> None:
-        """Writes the scores {preprocessing: {learning type: {client: metrics}}}."""
+        """
+        Writes the scores {preprocessing: {learning type: {client: metrics}}} in
+        one update of the result file.
+        """
+        rows = []
         for preprocessing, scores_by_type in all_scores.items():
             for learning_type, scores in scores_by_type.items():
                 for client, metrics in scores.items():
-                    print(f"seed {seed} {preprocessing} {learning_type} {client}: "
-                          f"MCC {metrics['MCC']:.4f}, F1 {metrics['F1_score']:.4f}")
-                    for metric in METRICS:
-                        self.resultfile.upsert_experiment(
-                            metric_value=metrics[metric],
-                            **self._result_key(seed, preprocessing, learning_type, client, metric))
+                    print(f"{self.spec.data_name} seed {seed} {preprocessing} {learning_type} "
+                          f"{client}: MCC {metrics['MCC']:.4f}, F1 {metrics['F1_score']:.4f}")
+                    rows.extend(
+                        dict(metric_value=metrics[metric],
+                             **self._result_key(seed, preprocessing, learning_type, client,
+                                                metric))
+                        for metric in METRICS)
+        self.resultfile.upsert_experiments(rows)
 
     def _train_and_score(self, tables, work: Path, seed: int):
         """
@@ -108,3 +117,33 @@ class FedrbeClassificationExperiment:
             }
             scores[learning_type] = evaluate.score_predictions(predictions, self.pooled_scores)
         return scores
+
+
+def run_units(units: Sequence[Tuple[Callable, Tuple[Any, ...]]], jobs: int = 1) -> None:
+    """
+    Runs the independent units of an evaluation, each a (function, args) pair,
+    for example an experiment's run for one seed or one held-out cohort.
+    With jobs > 1, up to jobs units run at the same time in separate processes:
+    run_quietly redirects the process-wide stdout, so threads would interfere.
+    Units only share the result file, which serializes its writes. On the first
+    failure no further units start; running units finish, then the error is
+    raised. Every unit publishes its results only once it fully succeeded.
+    """
+    if jobs < 1:
+        raise ValueError(f"jobs must be at least 1, got {jobs}")
+    if jobs == 1:
+        for function, args in units:
+            function(*args)
+        return
+    # spawn: safe with threads (BLAS, the simulation) of the parent; children
+    # get the parent's sys.path and re-import helper
+    context = multiprocessing.get_context("spawn")
+    with ProcessPoolExecutor(max_workers=jobs, mp_context=context) as executor:
+        futures = [executor.submit(function, *args) for function, args in units]
+        _, pending = wait(futures, return_when=FIRST_EXCEPTION)
+        for future in pending:
+            future.cancel()
+        wait(pending)
+    for future in futures:
+        if future.done() and not future.cancelled() and future.exception() is not None:
+            raise future.exception()

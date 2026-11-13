@@ -37,18 +37,20 @@ class RandomForestInputTests(unittest.TestCase):
         registry = {"first": "spec_1", "second": "spec_2"}
         results = self.root / "results" / "metrics.csv"
         with patch.object(datasets, "dataset_registry", return_value=registry), \
-                patch.object(loco, "ClassificationExperimentLeaveOneCohortOut") as experiment:
+                patch.object(loco, "ClassificationExperimentLeaveOneCohortOut") as experiment, \
+                patch.object(loco, "run_units") as run_units:
+            experiment.return_value.units.return_value = [("unit", ())]
             loco.run_loco_experiments([
                 "--datasets", "second", "--arms", "label_free", "--seeds", "1", "2",
-                "--results-file", str(results), "--force-run"])
+                "--results-file", str(results), "--force-run", "--jobs", "3"])
         experiment.assert_called_once()
         self.assertEqual(experiment.call_args.args, ("spec_2",))
         self.assertEqual(experiment.call_args.kwargs["arms"], ["label_free"])
         self.assertEqual(experiment.call_args.kwargs["resultfile"].path, results)
         self.assertEqual(experiment.call_args.kwargs["corrections_folder"],
                          results.parent / "loco_corrections")
-        experiment.return_value.run_experiment.assert_called_once_with(seeds=[1, 2],
-                                                                       force_run=True)
+        experiment.return_value.units.assert_called_once_with([1, 2], True)
+        run_units.assert_called_once_with([("unit", ())], 3)
         self.assertTrue(results.parent.is_dir())
         with patch.object(datasets, "dataset_registry", return_value=registry), \
                 contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):

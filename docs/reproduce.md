@@ -385,6 +385,16 @@ file, by default under
 `evaluation_classification_after_correction/results/train_test_splits/<dataset>/seed_<seed>/`.
 Ovarian cancer needs about 4 GB RAM.
 
+`--jobs N` runs up to N units (here: one dataset and seed) at the same time in
+separate processes. Each job needs the memory of its unit, so up to N × 4 GB
+when ovarian cancer runs in parallel. The units only share the results CSV,
+which they update one at a time (locked via `<results file>.lock`). The results
+are the same as with the default `--jobs 1`. For example, on a server:
+
+```bash
+pixi run python -u evaluation_classification_after_correction/run_classification_train_test_split.py --jobs 8
+```
+
 **Leave-one-cohort-out.** Each cohort is held out once. fedRBE runs on the other
 (training) cohorts only, in the same native simulation, with `min_clients: 2` so
 that datasets with three cohorts keep two training clients. Federated and
@@ -410,7 +420,9 @@ pixi run python evaluation_classification_after_correction/run_classification_le
 This runs every dataset of the train/test evaluation, both correction arms and ten
 random forest seeds (42–51). The correction does not depend on the seed, so it runs
 once per held-out cohort. The options are those of the train/test script
-(`--datasets`, `--arms`, `--seeds`, `--results-file`, `--work-dir`, `--force-run`).
+(`--datasets`, `--arms`, `--seeds`, `--results-file`, `--work-dir`, `--jobs`,
+`--force-run`); with `--jobs`, a unit is one dataset and held-out cohort, with all
+its seeds.
 The coordinator's batch coefficients, training level and `training_level_info.yml`
 of every held-out cohort and arm are saved next to the results file, by default
 under

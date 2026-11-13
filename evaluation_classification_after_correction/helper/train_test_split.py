@@ -37,7 +37,7 @@ import pandas as pd
 from .common import (
     ARM_LABEL_FREE, ARMS, DEFAULT_SEEDS, PREPROCESSING_UNCORRECTED, RESULTS_FOLDER,
 )
-from .experiment import FedrbeClassificationExperiment
+from .experiment import FedrbeClassificationExperiment, run_units
 from .steps import correct, datasets, evaluate, prepare, train_forest
 
 CROSS_VALIDATION_METHOD = "Train-Test-Split"
@@ -64,6 +64,10 @@ class ClassificationExperimentTrainTestSplit(FedrbeClassificationExperiment):
         super().__init__(spec, arms, resultfile, work_folder)
         self.train_ratio = train_ratio
         self.splits_folder = splits_folder
+
+    def units(self, seeds: List[int], force_run: bool = False):
+        """The independent units of this dataset for run_units, one per seed."""
+        return [(self.run_experiment, (seed, force_run)) for seed in seeds]
 
     def run_experiment(self, seed: int, force_run: bool = False) -> None:
         todo = [preprocessing for preprocessing in self.preprocessings
@@ -170,6 +174,10 @@ def run_train_test_split_experiments(argv=None) -> None:
     parser.add_argument("--results-file", type=Path, default=evaluate.DEFAULT_RESULTFILE.path)
     parser.add_argument("--work-dir", type=Path, default=None,
                         help="Parent folder of the temporary files (default: system temp)")
+    parser.add_argument("--jobs", type=int, default=1,
+                        help="Units (dataset and seed) run at the same time in separate processes; each "
+                             "needs the memory of one unit, ovarian cancer about 4 GB "
+                             "(default: 1)")
     parser.add_argument("--force-run", action="store_true")
     args = parser.parse_args(argv)
     registry = datasets.dataset_registry()
@@ -180,10 +188,11 @@ def run_train_test_split_experiments(argv=None) -> None:
                      f"Available: {', '.join(registry)}")
     args.results_file.parent.mkdir(parents=True, exist_ok=True)
     resultfile = evaluate.ResultFile(args.results_file)
+    units = []
     for name in selected:
         experiment = ClassificationExperimentTrainTestSplit(
             registry[name], arms=args.arms, resultfile=resultfile,
             splits_folder=args.results_file.parent / SPLITS_FOLDER_NAME,
             work_folder=args.work_dir)
-        for seed in args.seeds:
-            experiment.run_experiment(seed=seed, force_run=args.force_run)
+        units.extend(experiment.units(args.seeds, args.force_run))
+    run_units(units, args.jobs)
