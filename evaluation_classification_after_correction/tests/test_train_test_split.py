@@ -14,8 +14,8 @@ import pandas as pd
 
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
-    from helper import helper_run_classification_report_metrics as helper
-    from helper import train_test_correction as ttc
+    from helper import common, train_test_split
+    from helper.steps import correct, datasets, evaluate, prepare, train_forest
 
 FEATURES = [f"feature_{i}" for i in range(9)]
 BATCHES = {"client_a": [None], "client_b": ["x", "y"], "client_c": [None], "client_d": [None]}
@@ -28,7 +28,7 @@ def write_fixture(root: Path, seed: int = 3):
     exists in client_a and client_b, too few clients for fedRBE to correct it.
     """
     rng = np.random.RandomState(seed)
-    federation_dirs, configs = [], {ttc.ARM_LABEL_FREE: [], ttc.ARM_LABEL_AWARE: []}
+    federation_dirs, configs = [], {common.ARM_LABEL_FREE: [], common.ARM_LABEL_AWARE: []}
     for number, (name, batches) in enumerate(BATCHES.items()):
         folder = root / "before" / name
         folder.mkdir(parents=True)
@@ -55,11 +55,11 @@ def write_fixture(root: Path, seed: int = 3):
                 "expression_file_flag": True, "index_col": "rowname", "separator": "\t",
                 "design_separator": "\t", "normalizationMethod": None, "smpc": False,
                 "batch_col": "batch" if len(batches) > 1 else None, "position": number}
-        configs[ttc.ARM_LABEL_FREE].append({**base, "covariates": [], "min_samples": 6})
-        configs[ttc.ARM_LABEL_AWARE].append({**base, "covariates": ["label"], "min_samples": 2})
+        configs[common.ARM_LABEL_FREE].append({**base, "covariates": [], "min_samples": 6})
+        configs[common.ARM_LABEL_AWARE].append({**base, "covariates": ["label"], "min_samples": 2})
         federation_dirs.append(folder)
-    federation = ttc.Federation(None, list(BATCHES), federation_dirs, configs)
-    return ttc.DatasetSpec("fixture", "Fixture", "label", [federation])
+    federation = datasets.Federation(None, list(BATCHES), federation_dirs, configs)
+    return datasets.DatasetSpec("fixture", "Fixture", "label", [federation])
 
 
 class SplitTests(unittest.TestCase):
@@ -68,12 +68,12 @@ class SplitTests(unittest.TestCase):
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
         self.spec = write_fixture(self.root)
-        self.inputs = ttc.read_inputs(self.spec)
+        self.inputs = datasets.read_inputs(self.spec)
 
     def test_split_is_stratified_by_label_and_batch_and_deterministic(self):
-        split = ttc.split_samples(self.spec, self.inputs, 42)
-        pd.testing.assert_frame_equal(split, ttc.split_samples(self.spec, self.inputs, 42))
-        self.assertFalse(split.equals(ttc.split_samples(self.spec, self.inputs, 43)))
+        split = prepare.split_samples(self.spec, self.inputs, 42)
+        pd.testing.assert_frame_equal(split, prepare.split_samples(self.spec, self.inputs, 42))
+        self.assertFalse(split.equals(prepare.split_samples(self.spec, self.inputs, 43)))
         design = pd.concat([client.design for client in self.inputs[0]])
         split["batch"] = design.loc[split["sample"], "batch"].to_numpy()
         counts = split.groupby(["cohort", "batch", "label", "part"]).size().unstack()
@@ -82,34 +82,34 @@ class SplitTests(unittest.TestCase):
 
     def test_modalities_share_the_split_and_must_agree(self):
         federation = self.spec.federations[0]
-        spec = ttc.DatasetSpec("two", "Two", "label",
+        spec = datasets.DatasetSpec("two", "Two", "label",
                                [replace(federation, modality="one"),
                                 replace(federation, modality="other")])
         inputs = [self.inputs[0], self.inputs[0]]
-        pd.testing.assert_frame_equal(ttc.split_samples(spec, inputs, 7),
-                                      ttc.split_samples(self.spec, self.inputs, 7))
-        changed = [ttc.ClientInput(client.data, client.design.assign(label=1 - client.design.label),
+        pd.testing.assert_frame_equal(prepare.split_samples(spec, inputs, 7),
+                                      prepare.split_samples(self.spec, self.inputs, 7))
+        changed = [datasets.ClientInput(client.data, client.design.assign(label=1 - client.design.label),
                                    client.keys) for client in self.inputs[0]]
         with self.assertRaisesRegex(ValueError, "labels differ"):
-            ttc.split_samples(spec, [self.inputs[0], changed], 7)
+            prepare.split_samples(spec, [self.inputs[0], changed], 7)
 
     def test_too_small_training_batches_are_rejected(self):
-        split = ttc.split_samples(self.spec, self.inputs, 42)
-        ttc.check_min_samples(self.spec, self.inputs, split, ttc.ARMS)
-        self.spec.federations[0].configs[ttc.ARM_LABEL_FREE][1]["min_samples"] = 15
+        split = prepare.split_samples(self.spec, self.inputs, 42)
+        prepare.check_min_samples(self.spec, self.inputs, split, common.ARMS)
+        self.spec.federations[0].configs[common.ARM_LABEL_FREE][1]["min_samples"] = 15
         with self.assertRaisesRegex(ValueError, "training batch client_b|x has 14 samples"):
-            ttc.check_min_samples(self.spec, self.inputs, split, [ttc.ARM_LABEL_FREE])
-        ttc.check_min_samples(self.spec, self.inputs, split, [ttc.ARM_LABEL_AWARE])
+            prepare.check_min_samples(self.spec, self.inputs, split, [common.ARM_LABEL_FREE])
+        prepare.check_min_samples(self.spec, self.inputs, split, [common.ARM_LABEL_AWARE])
 
     def test_batch_design_codes_reference_and_rejects_unknown_batches(self):
         coefficients = pd.DataFrame(np.zeros((1, 2)), columns=["a", "b|x"])
-        design = ttc.batch_design(["a", "b|x", "c"], ["s1", "s2", "s3"], coefficients,
+        design = correct.batch_design(["a", "b|x", "c"], ["s1", "s2", "s3"], coefficients,
                                   {"a", "b|x", "c"})
         np.testing.assert_array_equal(design.to_numpy(), [[1, 0], [0, 1], [-1, -1]])
         with self.assertRaisesRegex(ValueError, "not a training batch"):
-            ttc.batch_design(["d"], ["s1"], coefficients, {"a", "b|x", "c"})
+            correct.batch_design(["d"], ["s1"], coefficients, {"a", "b|x", "c"})
         with self.assertRaisesRegex(ValueError, "do not match the training batches"):
-            ttc.batch_design(["a"], ["s1"], coefficients, {"a", "b|x", "c", "e"})
+            correct.batch_design(["a"], ["s1"], coefficients, {"a", "b|x", "c", "e"})
 
 
 class CorrectionTests(unittest.TestCase):
@@ -118,28 +118,28 @@ class CorrectionTests(unittest.TestCase):
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
         self.spec = write_fixture(self.root)
-        self.inputs = ttc.read_inputs(self.spec)
-        self.split = ttc.split_samples(self.spec, self.inputs, 42)
-        self.folders = ttc.write_split_inputs(self.spec, self.inputs, self.split,
+        self.inputs = datasets.read_inputs(self.spec)
+        self.split = prepare.split_samples(self.spec, self.inputs, 42)
+        self.folders = prepare.write_split_inputs(self.spec, self.inputs, self.split,
                                               self.root / "split")
         self.federation = self.spec.federations[0]
-        self.batches = set(ttc.training_batches(self.federation, self.inputs[0], self.split))
+        self.batches = set(prepare.training_batches(self.federation, self.inputs[0], self.split))
 
     def correct(self, arm, part):
         """Per cohort fedRBE's corrected training data, the forest's training data and part."""
-        outputs, coefficients = ttc.run_correction(
+        outputs, coefficients = correct.run_correction(
             self.federation, arm, self.folders[(0, "train")],
             Path(tempfile.mkdtemp(dir=self.root)) / "fedrbe")
         corrected = {}
         for idx, (cohort, output) in enumerate(zip(self.federation.cohorts, outputs)):
             config = self.federation.configs[arm][idx]
-            fedrbe_training = ttc.read_corrected_data(output, config["separator"])
-            training = ttc.training_matrix(fedrbe_training, ttc.load_client(
+            fedrbe_training = correct.read_corrected_data(output, config["separator"])
+            training = correct.training_matrix(fedrbe_training, prepare.load_client(
                 self.folders[(0, "train")][idx], cohort, config))
-            sample_batches = ttc.sample_batches(cohort, self.inputs[0][idx],
+            sample_batches = correct.sample_batches(cohort, self.inputs[0][idx],
                                                 config.get("batch_col"), fedrbe_training.columns)
-            client = ttc.load_client(self.folders[(0, part)][idx], cohort, config)
-            corrected[cohort] = (fedrbe_training, training, ttc.correct_new_samples(
+            client = prepare.load_client(self.folders[(0, part)][idx], cohort, config)
+            corrected[cohort] = (fedrbe_training, training, correct.correct_new_samples(
                 client, coefficients, self.batches, fedrbe_training, sample_batches))
         return coefficients, corrected
 
@@ -148,7 +148,7 @@ class CorrectionTests(unittest.TestCase):
                            index_col=0)
 
     def test_coefficients_reproduce_the_correction_of_the_training_samples(self):
-        for arm in ttc.ARMS:
+        for arm in common.ARMS:
             with self.subTest(arm=arm):
                 coefficients, corrected = self.correct(arm, "train")
                 self.assertEqual(list(coefficients.columns),
@@ -177,11 +177,11 @@ class CorrectionTests(unittest.TestCase):
                                                check_names=False)
 
     def test_test_samples_are_corrected_without_their_labels(self):
-        _, corrected = self.correct(ttc.ARM_LABEL_AWARE, "test")
+        _, corrected = self.correct(common.ARM_LABEL_AWARE, "test")
         for folder in self.folders[(0, "test")]:
             design = pd.read_csv(folder / "design.tsv", sep="\t", index_col=0)
             design.assign(label=-design.label).to_csv(folder / "design.tsv", sep="\t")
-        _, shuffled = self.correct(ttc.ARM_LABEL_AWARE, "test")
+        _, shuffled = self.correct(common.ARM_LABEL_AWARE, "test")
         for idx, cohort in enumerate(corrected):
             pd.testing.assert_frame_equal(corrected[cohort][2], shuffled[cohort][2])
             raw = self.raw("test", idx).dropna(how="all")
@@ -206,12 +206,12 @@ class ExperimentTests(unittest.TestCase):
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
         self.spec = write_fixture(self.root)
-        self.results = helper.ResultFile(self.root / "results.csv")
+        self.results = evaluate.ResultFile(self.root / "results.csv")
         self.splits = self.root / "splits"
         self.enterContext(contextlib.redirect_stdout(io.StringIO()))
 
-    def experiment(self, arms=ttc.ARMS):
-        return ttc.ClassificationExperimentTrainTestSplit(
+    def experiment(self, arms=common.ARMS):
+        return train_test_split.ClassificationExperimentTrainTestSplit(
             self.spec, arms=arms, resultfile=self.results, splits_folder=self.splits,
             work_folder=self.root / "work")
 
@@ -231,11 +231,11 @@ class ExperimentTests(unittest.TestCase):
         seed_folder = self.splits / "fixture" / "seed_5"
         split = pd.read_csv(seed_folder / "split.tsv", sep="\t")
         self.assertEqual(set(split.part), {"train", "test"})
-        for arm in ttc.ARMS:
+        for arm in common.ARMS:
             coefficients = pd.read_csv(seed_folder / arm / "batch_coefficients.csv", index_col=0)
             self.assertEqual(coefficients.shape[1], 4)
         self.assertEqual(list((self.root / "work").iterdir()), [])
-        with patch.object(ttc, "run_correction") as correction:
+        with patch.object(correct, "run_correction") as correction:
             self.experiment().run_experiment(5)
             correction.assert_not_called()
         pd.testing.assert_frame_equal(pd.read_csv(self.results.path), rows)
@@ -244,7 +244,7 @@ class ExperimentTests(unittest.TestCase):
         def fail(*args, **kwargs):
             raise RuntimeError("forest failed")
 
-        with patch.object(ttc, "train_forest", side_effect=fail), \
+        with patch.object(train_forest, "train", side_effect=fail), \
                 self.assertRaisesRegex(RuntimeError, "forest failed"):
             self.experiment().run_experiment(5)
         self.assertFalse(self.results.path.exists())

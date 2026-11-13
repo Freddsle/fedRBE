@@ -24,7 +24,7 @@ from evaluation_classification_after_correction.fc_fed_forest_simple_app.fc_fedl
 
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
-    from helper import train_test_correction
+    from helper.steps import evaluate
 
 
 class RandomForestMetricTests(unittest.TestCase):
@@ -82,8 +82,8 @@ class RandomForestMetricTests(unittest.TestCase):
         }
         true = np.concatenate([y for y, _ in cohorts.values()])
         predicted = np.concatenate([p for _, p in cohorts.values()])
-        pooled = train_test_correction._score_rows(cohorts)
-        per_cohort = train_test_correction._score_rows(cohorts, pooled=False)
+        pooled = evaluate.score_predictions(cohorts)
+        per_cohort = evaluate.score_predictions(cohorts, pooled=False)
         self.assertEqual(list(pooled), ["All", "A", "B", "C"])
         self.assertEqual(list(per_cohort), ["A", "B", "C"])
         self.assertEqual(pooled["All"], classification_scores(true, predicted))

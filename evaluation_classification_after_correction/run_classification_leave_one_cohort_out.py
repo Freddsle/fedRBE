@@ -1,6 +1,6 @@
 """Run the leave-one-cohort-out classification, correcting with fedRBE fitted on the training cohorts."""
 
-from helper.loco_correction import run_loco_experiments
+from helper.loco import run_loco_experiments
 
 
 if __name__ == "__main__":

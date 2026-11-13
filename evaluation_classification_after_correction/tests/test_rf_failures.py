@@ -7,13 +7,14 @@ import sys
 import tempfile
 from threading import Barrier, Thread
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pandas as pd
 
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
-    from helper import helper_run_classification_report_metrics as helper
+    from helper import common
+    from helper.steps import train_forest
 
 
 class NativeSimulationFailureTests(unittest.TestCase):
@@ -38,7 +39,7 @@ class NativeSimulationFailureTests(unittest.TestCase):
 
         def run():
             try:
-                helper.run_simulation_native(
+                train_forest.run_simulation_native(
                     self.clientpaths, self.outputfolders, str(self.generic), algorithm)
             except BaseException as error:
                 outcome.append(error)
@@ -113,7 +114,7 @@ class RandomForestFailureTests(unittest.TestCase):
             self.inputs.append(folder)
 
     def test_stale_outputs_cannot_supply_missing_new_results(self):
-        for learning in helper.LEARNING_TYPES:
+        for learning in common.LEARNING_TYPES:
             with self.subTest(learning=learning):
                 work = self.root / learning
                 work.mkdir()
@@ -128,13 +129,13 @@ class RandomForestFailureTests(unittest.TestCase):
                     for output in kwargs["outputfolders"]:
                         self.assertEqual(list(Path(output).iterdir()), [])
 
-                with patch.object(helper, "run_simulation_native", side_effect=no_new_outputs), \
+                with patch.object(train_forest, "run_simulation_native", side_effect=no_new_outputs), \
                         contextlib.redirect_stdout(io.StringIO()):
-                    outputs = helper.train_forest(learning, self.inputs, ["A", "B"], work,
+                    outputs = train_forest.train(learning, self.inputs, ["A", "B"], work,
                                                   "predictedcol|label", "label", 43, [])
                 self.assertEqual(outputs[0], stale)
                 with self.assertRaises(FileNotFoundError):
-                    helper._read_model_and_info(outputs[0])
+                    train_forest.read_model(outputs[0])
 
 
 if __name__ == "__main__":

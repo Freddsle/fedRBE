@@ -11,8 +11,8 @@ from unittest.mock import patch
 
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
-    from helper import loco_correction
-    from helper import train_test_correction
+    from helper import loco, train_test_split
+    from helper.steps import datasets
 
 
 class RandomForestInputTests(unittest.TestCase):
@@ -23,9 +23,9 @@ class RandomForestInputTests(unittest.TestCase):
 
     def test_entrypoints_run_their_experiments(self):
         for script, module, runner in (
-                ("run_classification_leave_one_cohort_out.py", loco_correction,
+                ("run_classification_leave_one_cohort_out.py", loco,
                  "run_loco_experiments"),
-                ("run_classification_train_test_split.py", train_test_correction,
+                ("run_classification_train_test_split.py", train_test_split,
                  "run_train_test_split_experiments")):
             with self.subTest(script=script), patch.object(module, runner) as run:
                 runpy.run_path(str(COMPONENT / script), run_name="import_check")
@@ -36,9 +36,9 @@ class RandomForestInputTests(unittest.TestCase):
     def test_loco_cli_selects_datasets_and_saves_corrections_next_to_the_results(self):
         registry = {"first": "spec_1", "second": "spec_2"}
         results = self.root / "results" / "metrics.csv"
-        with patch.object(loco_correction, "dataset_registry", return_value=registry), \
-                patch.object(loco_correction, "ClassificationExperimentLeaveOneCohortOut") as experiment:
-            loco_correction.run_loco_experiments([
+        with patch.object(datasets, "dataset_registry", return_value=registry), \
+                patch.object(loco, "ClassificationExperimentLeaveOneCohortOut") as experiment:
+            loco.run_loco_experiments([
                 "--datasets", "second", "--arms", "label_free", "--seeds", "1", "2",
                 "--results-file", str(results), "--force-run"])
         experiment.assert_called_once()
@@ -50,9 +50,9 @@ class RandomForestInputTests(unittest.TestCase):
         experiment.return_value.run_experiment.assert_called_once_with(seeds=[1, 2],
                                                                        force_run=True)
         self.assertTrue(results.parent.is_dir())
-        with patch.object(loco_correction, "dataset_registry", return_value=registry), \
+        with patch.object(datasets, "dataset_registry", return_value=registry), \
                 contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
-            loco_correction.run_loco_experiments(["--datasets", "third"])
+            loco.run_loco_experiments(["--datasets", "third"])
 
 
 if __name__ == "__main__":
