@@ -10,11 +10,15 @@ For every dataset and held-out cohort H:
    label as covariate, the label_free arm no covariates. Besides the batch
    coefficients, the coordinator saves the training level: per feature, the
    mean of the corrected training data.
+   For the centralized forest, central limma::removeBatchEffect corrects the
+   pooled training cohorts instead, with the same batches and covariates but
+   without fedRBE's privacy filters; its training level is defined the same way.
 2. Federated (one client per training cohort) and centralized (pooled cohorts)
-   random forests are trained on the corrected training cohorts. Values fedRBE
-   did not correct stay uncorrected.
+   random forests are trained on the training cohorts, each corrected by its
+   learner's correction. Values a correction did not correct stay uncorrected.
 3. Each batch of H is shifted per feature so that its mean equals the training
-   level (batchcorrection.classes.client.align_to_training_level, also used by
+   level of the learner's correction
+   (batchcorrection.classes.client.align_to_training_level, also used by
    batchcorrection/align_new_batch.py). H's labels are not used in either arm:
    if H's label mix differs from the training data's, part of that difference is
    removed as batch effect.
@@ -35,8 +39,11 @@ from typing import Dict, List, Optional
 import pandas as pd
 import yaml
 
-from .common import ARM_LABEL_FREE, ARMS, DEFAULT_SEEDS, PREPROCESSING_UNCORRECTED, RESULTS_FOLDER
-from .experiment import FedrbeClassificationExperiment, run_units
+from .common import (
+    ARM_LABEL_FREE, ARMS, DEFAULT_SEEDS, LEARNING_TYPE_FEDERATED, LEARNING_TYPES,
+    PREPROCESSING_UNCORRECTED, RESULTS_FOLDER,
+)
+from .experiment import SAVED_FILE_PREFIX, FedrbeClassificationExperiment, run_units
 from .steps import correct, datasets, evaluate, prepare, train_forest
 
 CROSS_VALIDATION_METHOD = "Leave-One-Cohort-Out"
@@ -117,12 +124,15 @@ class ClassificationExperimentLeaveOneCohortOut(FedrbeClassificationExperiment):
                  inputs: List[List[datasets.ClientInput]], split: pd.DataFrame, folders,
                  work: Path):
         """
-        The forest tables {"train": {cohort: table}, "test": {held_out: table}}
-        and, for the arms, the coordinator's output per file name.
+        The forest tables per learning type, {learning type: {"train": {cohort:
+        table}, "test": {held_out: table}}}, corrected for the arms (fedRBE for
+        the federated forest, central limma for the centralized one), and the
+        corrections' output per file name.
         """
         held_out_idx = self.spec.cohorts.index(held_out)
-        train_matrices = [[] for _ in training.cohorts]
-        test_matrices = []
+        train_matrices = {learning_type: [[] for _ in training.cohorts]
+                          for learning_type in LEARNING_TYPES}
+        test_matrices = {learning_type: [] for learning_type in LEARNING_TYPES}
         files = {}
         for fed_idx, (federation, training_federation) in enumerate(
                 zip(self.spec.federations, training.federations)):
@@ -135,31 +145,40 @@ class ClassificationExperimentLeaveOneCohortOut(FedrbeClassificationExperiment):
                 configs = training_federation.configs[ARM_LABEL_FREE]
                 for cohort_idx, (cohort, folder) in enumerate(zip(training_federation.cohorts,
                                                                   train_folders)):
-                    train_matrices[cohort_idx].append(prepare.uncorrected_matrix(
-                        prepare.load_client(folder, cohort, configs[cohort_idx])))
-                test_matrices.append(prepare.uncorrected_matrix(held_out_client))
+                    matrix = prepare.uncorrected_matrix(
+                        prepare.load_client(folder, cohort, configs[cohort_idx]))
+                    for learning_type in LEARNING_TYPES:
+                        train_matrices[learning_type][cohort_idx].append(matrix)
+                for learning_type in LEARNING_TYPES:
+                    test_matrices[learning_type].append(
+                        prepare.uncorrected_matrix(held_out_client))
                 continue
-            correction = correct.correct_training(training_federation, training_inputs[fed_idx],
-                                                  preprocessing, train_folders, split, work)
-            for cohort_idx, matrix in enumerate(correction.matrices):
-                train_matrices[cohort_idx].append(matrix)
-            test_matrices.append(correct.align_held_out(held_out_client, held_out_config,
-                                                        correction))
+            corrections = self._correct_training(training_federation, training_inputs[fed_idx],
+                                                 preprocessing, train_folders, split, work)
             suffix = f"_{federation.modality}" if federation.modality else ""
-            files[f"batch_coefficients{suffix}.csv"] = correction.coefficients
-            files[f"training_level{suffix}.csv"] = correction.level.rename("training_level")
-            files[f"training_level_info{suffix}.yml"] = correction.level_info
-        tables = {
+            for learning_type, correction in corrections.items():
+                for cohort_idx, matrix in enumerate(correction.matrices):
+                    train_matrices[learning_type][cohort_idx].append(matrix)
+                test_matrices[learning_type].append(
+                    correct.align_held_out(held_out_client, held_out_config, correction))
+                prefix = SAVED_FILE_PREFIX[learning_type]
+                files[f"{prefix}batch_coefficients{suffix}.csv"] = correction.coefficients
+                files[f"{prefix}training_level{suffix}.csv"] = correction.level.rename(
+                    "training_level")
+            # the settings of the fedRBE run, see batchcorrection/align_new_batch.py
+            files[f"training_level_info{suffix}.yml"] = \
+                corrections[LEARNING_TYPE_FEDERATED].level_info
+        tables = {learning_type: {
             "train": {cohort: train_forest.forest_table(
-                          training, train_matrices[cohort_idx],
+                          training, train_matrices[learning_type][cohort_idx],
                           [fed_inputs[cohort_idx] for fed_inputs in training_inputs],
                           prepare.cohort_labels(split, cohort, "train"))
                       for cohort_idx, cohort in enumerate(training.cohorts)},
             "test": {held_out: train_forest.forest_table(
-                         self.spec, test_matrices,
+                         self.spec, test_matrices[learning_type],
                          [fed_inputs[held_out_idx] for fed_inputs in inputs],
                          prepare.cohort_labels(split, held_out, "test"))},
-        }
+        } for learning_type in LEARNING_TYPES}
         return tables, files
 
     def _save_corrections(self, held_out: str, corrections: Dict[str, dict]) -> None:

@@ -354,16 +354,23 @@ the experiment runs and use the plotting command below. Results are labelled
 
 **Train/test (70:30).** Each repetition splits every cohort's uncorrected fedRBE
 input 70:30, stratified by the label (and by the batch for clients holding
-several batches; Quartet modalities share one split by pseudo-sample). fedRBE
-then runs on the training samples only, in the native simulation of the app's
-protocol (`batchcorrection/fedrbe.py`, plain aggregation without SMPC).
-Federated (one client per cohort) and centralized (pooled) random forests are
-trained on all corrected training samples. The test samples are corrected with
-the coordinator's batch coefficients of that fedRBE run, which needs no labels,
-and predicted. Values fedRBE did not correct, because a feature is too sparse
-in a batch or present in fewer than three clients, stay uncorrected in both
-training and test samples, so every arm uses the same features. The
-uncorrected baseline uses the same splits. Each repetition reports MCC and
+several batches; Quartet modalities share one split by pseudo-sample). The
+correction is fitted on the training samples only, separately for the two
+learners:
+
+- The federated random forest (one client per cohort) uses fedRBE, run in the
+  native simulation of the app's protocol (`batchcorrection/fedrbe.py`, plain
+  aggregation without SMPC).
+- The centralized random forest (pooled cohorts) uses central limma
+  `removeBatchEffect` on the pooled training samples
+  (`central_batch_fit` in `evaluation_utils/central_correction.R`), with the same
+  batches and covariates but without fedRBE's privacy filters.
+
+The test samples are corrected with the batch coefficients of their learner's
+correction, which needs no labels, and predicted. Values a correction did not
+correct (with fedRBE, a feature too sparse in a batch or present in fewer than
+three clients) stay uncorrected in both training and test samples, so every arm
+uses the same features. The uncorrected baseline uses the same splits. Each repetition reports MCC and
 support-weighted F1 pooled over all test samples (`All`) and per test cohort,
 for both learning types.
 
@@ -397,12 +404,13 @@ pixi run python -u evaluation_classification_after_correction/run_classification
 
 **Leave-one-cohort-out.** Each cohort is held out once. fedRBE runs on the other
 (training) cohorts only, in the same native simulation, with `min_clients: 2` so
-that datasets with three cohorts keep two training clients. Federated and
-centralized random forests are trained on the corrected training cohorts. Besides
-the batch coefficients, the coordinator saves the training level: per feature, the
-mean of the corrected training data (the intercept, plus the covariate effects at
-the training data's covariate mean). Each batch of the held-out cohort is shifted
-per feature so that its mean equals this level, with
+that datasets with three cohorts keep two training clients; the centralized
+forest again uses central limma on the pooled training cohorts instead. Each
+forest is trained on its learner's corrected training cohorts. Besides the batch
+coefficients, each correction gives the training level: per feature, the mean of
+the corrected training data (the intercept, plus the covariate effects at the
+training data's covariate mean). Each batch of the held-out cohort is shifted per
+feature so that its mean equals the level of the learner's correction, with
 `batchcorrection.classes.client.align_to_training_level`, the function behind
 `batchcorrection/align_new_batch.py`. Features with fewer than `min_samples` values
 in a held-out batch stay uncorrected. The forests then predict the held-out cohort;
@@ -423,7 +431,8 @@ once per held-out cohort. The options are those of the train/test script
 (`--datasets`, `--arms`, `--seeds`, `--results-file`, `--work-dir`, `--jobs`,
 `--force-run`); with `--jobs`, a unit is one dataset and held-out cohort, with all
 its seeds.
-The coordinator's batch coefficients, training level and `training_level_info.yml`
+The coordinator's batch coefficients, training level and `training_level_info.yml`,
+and central limma's `central_batch_coefficients.csv` and `central_training_level.csv`,
 of every held-out cohort and arm are saved next to the results file, by default
 under
 `evaluation_classification_after_correction/results/loco_corrections/<dataset>/<held-out cohort>/<arm>/`.

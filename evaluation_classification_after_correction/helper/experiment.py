@@ -11,12 +11,18 @@ from concurrent.futures import FIRST_EXCEPTION, ProcessPoolExecutor, wait
 import multiprocessing
 from pathlib import Path
 import tempfile
-from typing import Any, Callable, List, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
+
+import pandas as pd
 
 from .common import (
-    ALL_COHORTS, ARMS, LEARNING_TYPES, METRICS, PREPROCESSING_UNCORRECTED, run_quietly,
+    ALL_COHORTS, ARMS, LEARNING_TYPE_CENTRALIZED, LEARNING_TYPE_FEDERATED, LEARNING_TYPES,
+    METRICS, PREPROCESSING_UNCORRECTED, run_quietly,
 )
-from .steps import datasets, evaluate, train_forest
+from .steps import correct, datasets, evaluate, train_forest
+
+# Prefix of the saved files of the central correction, next to fedRBE's
+SAVED_FILE_PREFIX = {LEARNING_TYPE_FEDERATED: "", LEARNING_TYPE_CENTRALIZED: "central_"}
 
 
 class FedrbeClassificationExperiment:
@@ -97,23 +103,41 @@ class FedrbeClassificationExperiment:
                         for metric in METRICS)
         self.resultfile.upsert_experiments(rows)
 
+    @staticmethod
+    def _correct_training(federation: datasets.Federation,
+                          fed_inputs: List[datasets.ClientInput], arm: str,
+                          train_folders: List[Path], split: pd.DataFrame,
+                          work: Path) -> Dict[str, correct.TrainingCorrection]:
+        """
+        The correction of the training data per learning type: fedRBE for the
+        federated forest, central limma for the centralized one.
+        """
+        return {
+            LEARNING_TYPE_FEDERATED: correct.correct_training(
+                federation, fed_inputs, arm, train_folders, split, work),
+            LEARNING_TYPE_CENTRALIZED: correct.correct_training_central(
+                federation, fed_inputs, arm, train_folders, split, work),
+        }
+
     def _train_and_score(self, tables, work: Path, seed: int):
         """
-        Trains both learning types on the training tables {cohort: table} and
-        scores the test tables {cohort: table}.
+        Trains each learning type on its training tables and scores its test
+        tables: tables is {learning type: {"train"/"test": {cohort: table}}}.
         """
         target = self.spec.target
-        train_folders = [train_forest.write_forest_input(table, work / "forest_input" / cohort)
-                         for cohort, table in tables["train"].items()]
         scores = {}
         for learning_type in LEARNING_TYPES:
+            train_tables = tables[learning_type]["train"]
+            train_folders = [
+                train_forest.write_forest_input(table, work / "forest_input" / learning_type / cohort)
+                for cohort, table in train_tables.items()]
             output_folders = run_quietly(
-                train_forest.train, learning_type, train_folders, list(tables["train"]), work,
+                train_forest.train, learning_type, train_folders, list(train_tables), work,
                 f"predictedcol|{target}", target, seed, [])
             model, model_info = train_forest.read_model(output_folders[0])
             predictions = {
                 cohort: evaluate.predict(model, model_info, table, target)
-                for cohort, table in tables["test"].items()
+                for cohort, table in tables[learning_type]["test"].items()
             }
             scores[learning_type] = evaluate.score_predictions(predictions, self.pooled_scores)
         return scores

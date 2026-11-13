@@ -20,7 +20,7 @@ with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
     from helper import common, loco
     from helper.experiment import run_units
     from helper.steps import correct, datasets, evaluate, prepare, train_forest
-    from tests.test_train_test_split import write_fixture
+    from tests.test_train_test_split import requires_r, write_fixture
 
 
 def three_cohorts(root: Path) -> datasets.DatasetSpec:
@@ -79,6 +79,7 @@ class FoldTests(unittest.TestCase):
         self.assertEqual(len(split), sum(len(client.keys) for client in inputs[0]))
 
 
+@requires_r
 class HeldOutCorrectionTests(unittest.TestCase):
     def setUp(self):
         directory = tempfile.TemporaryDirectory()
@@ -108,31 +109,44 @@ class HeldOutCorrectionTests(unittest.TestCase):
         return raw.loc[column_names.index]
 
     def test_held_out_batches_are_shifted_onto_the_training_level(self):
+        # fedRBE's level for the federated forest, central limma's for the centralized one
+        level_files = {common.LEARNING_TYPE_FEDERATED: "training_level.csv",
+                       common.LEARNING_TYPE_CENTRALIZED: "central_training_level.csv"}
         for arm in common.ARMS:
-            with self.subTest(arm=arm):
-                tables, files, folders = self.prepare("client_b", arm)
-                self.assertEqual(list(tables["train"]), ["client_a", "client_c"])
-                test = tables["test"]["client_b"]
-                level = files["training_level.csv"]
-                info = files["training_level_info.yml"]
-                self.assertEqual(info["covariates_used"], arm == common.ARM_LABEL_AWARE)
-                # each of client_b's batches has the training level as mean
-                for batch in ("x", "y"):
-                    samples = test.index[test.index.str.startswith(f"client_b_{batch}")]
-                    means = test.loc[samples, ["feature_0", "feature_3"]].mean()
-                    np.testing.assert_allclose(
-                        means, level.loc[[feature_hash("feature_0"), feature_hash("feature_3")]])
-                # the training data is fedRBE's corrected data
-                train_mean = pd.concat(tables["train"].values())["feature_3"].mean()
-                np.testing.assert_allclose(train_mean, level.loc[feature_hash("feature_3")])
+            tables, files, folders = self.prepare("client_b", arm)
+            info = files["training_level_info.yml"]
+            self.assertEqual(info["covariates_used"], arm == common.ARM_LABEL_AWARE)
+            for learning_type, level_file in level_files.items():
+                with self.subTest(arm=arm, learning_type=learning_type):
+                    learner = tables[learning_type]
+                    self.assertEqual(list(learner["train"]), ["client_a", "client_c"])
+                    test = learner["test"]["client_b"]
+                    level = files[level_file]
+                    # each of client_b's batches has the training level as mean
+                    for batch in ("x", "y"):
+                        samples = test.index[test.index.str.startswith(f"client_b_{batch}")]
+                        means = test.loc[samples, ["feature_0", "feature_3"]].mean()
+                        np.testing.assert_allclose(
+                            means, level.loc[[feature_hash("feature_0"),
+                                              feature_hash("feature_3")]])
+                    # the training data is the learner's corrected data
+                    train_mean = pd.concat(learner["train"].values())["feature_3"].mean()
+                    np.testing.assert_allclose(train_mean, level.loc[feature_hash("feature_3")])
+            # on complete features, central limma and fedRBE agree
+            np.testing.assert_allclose(
+                files["central_training_level.csv"].loc[files["training_level.csv"].index],
+                files["training_level.csv"], rtol=0, atol=1e-10)
 
     def test_sparse_held_out_features_stay_uncorrected(self):
         # client_a has 5 values of feature_7, fewer than its min_samples (6)
         tables, _, folders = self.prepare("client_a", common.ARM_LABEL_FREE)
-        test = tables["test"]["client_a"]
-        raw = self.raw(folders, test)
-        pd.testing.assert_series_equal(test["feature_7"], raw["feature_7"], check_names=False)
-        self.assertFalse(np.allclose(test["feature_0"], raw["feature_0"]))
+        for learning_type in common.LEARNING_TYPES:
+            with self.subTest(learning_type=learning_type):
+                test = tables[learning_type]["test"]["client_a"]
+                raw = self.raw(folders, test)
+                pd.testing.assert_series_equal(test["feature_7"], raw["feature_7"],
+                                               check_names=False)
+                self.assertFalse(np.allclose(test["feature_0"], raw["feature_0"]))
 
     def test_held_out_labels_are_not_used(self):
         tables, _, folders = self.prepare("client_c", common.ARM_LABEL_AWARE)
@@ -147,9 +161,12 @@ class HeldOutCorrectionTests(unittest.TestCase):
         flipped, _ = self.experiment._prepare(
             common.ARM_LABEL_AWARE, "client_c", training, training_inputs, self.inputs, split,
             folders, self.root / "work_flipped")
-        pd.testing.assert_frame_equal(tables["test"]["client_c"], flipped["test"]["client_c"])
+        for learning_type in common.LEARNING_TYPES:
+            pd.testing.assert_frame_equal(tables[learning_type]["test"]["client_c"],
+                                          flipped[learning_type]["test"]["client_c"])
 
 
+@requires_r
 class ExperimentTests(unittest.TestCase):
     def setUp(self):
         directory = tempfile.TemporaryDirectory()
@@ -204,7 +221,8 @@ class ExperimentTests(unittest.TestCase):
                 folder = self.corrections / "fixture" / held_out / arm
                 self.assertEqual({path.name for path in folder.iterdir()},
                                  {"batch_coefficients.csv", "training_level.csv",
-                                  "training_level_info.yml"})
+                                  "training_level_info.yml", "central_batch_coefficients.csv",
+                                  "central_training_level.csv"})
                 # readable by batchcorrection/align_new_batch.py
                 level, info = read_training_level(str(folder))
                 self.assertEqual(info["covariates_used"], arm == common.ARM_LABEL_AWARE)

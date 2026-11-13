@@ -2,6 +2,7 @@
 
 import contextlib
 from dataclasses import replace
+import hashlib
 import io
 from pathlib import Path
 import sys
@@ -17,6 +18,18 @@ with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
     from helper import common, train_test_split
     from helper.experiment import run_units
     from helper.steps import correct, datasets, evaluate, prepare, train_forest
+
+
+def _has_rscript() -> bool:
+    try:
+        correct.rscript()
+    except RuntimeError:
+        return False
+    return True
+
+
+# the central correction of the centralized forest runs limma in R
+requires_r = unittest.skipUnless(_has_rscript(), "Rscript with limma is unavailable")
 
 FEATURES = [f"feature_{i}" for i in range(9)]
 BATCHES = {"client_a": [None], "client_b": ["x", "y"], "client_c": [None], "client_d": [None]}
@@ -126,6 +139,37 @@ class CorrectionTests(unittest.TestCase):
         self.federation = self.spec.federations[0]
         self.batches = set(prepare.training_batches(self.federation, self.inputs[0], self.split))
 
+    @requires_r
+    def test_central_limma_matches_fedrbe_and_also_corrects_sparse_values(self):
+        complete = [f"feature_{i}" for i in range(7)]
+        hashes = [hashlib.sha3_256(name.encode()).hexdigest() for name in complete]
+        for arm in common.ARMS:
+            with self.subTest(arm=arm):
+                work = Path(tempfile.mkdtemp(dir=self.root))
+                arguments = (self.federation, self.inputs[0], arm, self.folders[(0, "train")],
+                             self.split, work)
+                fedrbe = correct.correct_training(*arguments)
+                central = correct.correct_training_central(*arguments)
+                self.assertEqual(central.batches, fedrbe.batches)
+                self.assertEqual(list(central.coefficients.columns),
+                                 list(fedrbe.coefficients.columns))
+                np.testing.assert_allclose(central.coefficients.loc[hashes],
+                                           fedrbe.coefficients.loc[hashes], rtol=0, atol=1e-10)
+                np.testing.assert_allclose(central.level.loc[hashes], fedrbe.level.loc[hashes],
+                                           rtol=0, atol=1e-10)
+                for cohort_idx in range(len(self.federation.cohorts)):
+                    pd.testing.assert_frame_equal(
+                        central.matrices[cohort_idx].loc[complete],
+                        fedrbe.matrices[cohort_idx].loc[complete], rtol=0, atol=1e-10,
+                        check_names=False)
+                # feature_7 is too sparse in client_a for fedRBE: uncorrected there,
+                # while central limma corrects it
+                raw = self.raw("train", 0).loc["feature_7"]
+                pd.testing.assert_series_equal(fedrbe.matrices[0].loc["feature_7"], raw,
+                                               check_names=False)
+                corrected = central.matrices[0].loc["feature_7"].dropna()
+                self.assertFalse(np.allclose(corrected, raw.loc[corrected.index]))
+
     def correct(self, arm, part):
         """Per cohort fedRBE's corrected training data, the forest's training data and part."""
         outputs, coefficients = correct.run_correction(
@@ -201,6 +245,7 @@ class CorrectionTests(unittest.TestCase):
                                      self.raw("test", 1).loc["feature_7"]))
 
 
+@requires_r
 class ExperimentTests(unittest.TestCase):
     def setUp(self):
         directory = tempfile.TemporaryDirectory()

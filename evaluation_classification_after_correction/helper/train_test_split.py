@@ -9,18 +9,21 @@ For every dataset and repetition (seed):
    shared by all preprocessing arms and both learning types. Quartet
    modalities are split by pseudo-sample, so every modality uses the same
    samples.
-2. Per correction arm, fedRBE (batchcorrection/fedrbe.py, run in the native
-   simulation) corrects the training samples. The label_aware arm uses the
-   label as covariate, the label_free arm no covariates. The coordinator
-   returns the batch coefficients.
+2. Per correction arm, the training samples are corrected for each learner:
+   fedRBE (batchcorrection/fedrbe.py, run in the native simulation) for the
+   federated forest, central limma::removeBatchEffect on the pooled training
+   samples for the centralized forest. The label_aware arm uses the label as
+   covariate, the label_free arm no covariates. Both return the batch
+   coefficients.
 3. Federated (one client per cohort) and centralized (pooled cohorts) random
-   forests are trained on all (corrected) training samples.
-4. The test samples are corrected with the training batch coefficients
-   (batchcorrection.classes.client.subtract_batch_effect, no labels needed)
-   and predicted. Values fedRBE did not correct in a batch's training samples
-   stay uncorrected in training and test samples. MCC and F1 are reported
-   pooled over all cohorts ("All") and per test cohort, for both learning
-   types.
+   forests are trained on all training samples, each corrected by its learner's
+   correction.
+4. The test samples are corrected with the batch coefficients of the learner's
+   correction (batchcorrection.classes.client.subtract_batch_effect, no labels
+   needed) and predicted. Values a correction did not correct in a batch's
+   training samples stay uncorrected in training and test samples. MCC and F1
+   are reported pooled over all cohorts ("All") and per test cohort, for both
+   learning types.
 
 The uncorrected arm uses the same splits without steps 2 and 4's correction.
 """
@@ -35,14 +38,15 @@ from typing import Dict, List, Optional, Tuple
 import pandas as pd
 
 from .common import (
-    ARM_LABEL_FREE, ARMS, DEFAULT_SEEDS, PREPROCESSING_UNCORRECTED, RESULTS_FOLDER,
+    ARM_LABEL_FREE, ARMS, DEFAULT_SEEDS, LEARNING_TYPES, PREPROCESSING_UNCORRECTED, RESULTS_FOLDER,
 )
-from .experiment import FedrbeClassificationExperiment, run_units
+from .experiment import SAVED_FILE_PREFIX, FedrbeClassificationExperiment, run_units
 from .steps import correct, datasets, evaluate, prepare, train_forest
 
 CROSS_VALIDATION_METHOD = "Train-Test-Split"
-# The splits and the coordinator's batch coefficients of every repetition are
-# saved in this folder next to the results file
+# The splits and the batch coefficients of every repetition (fedRBE's and,
+# prefixed central_, central limma's) are saved in this folder next to the
+# results file
 SPLITS_FOLDER_NAME = "train_test_splits"
 SPLITS_FOLDER = RESULTS_FOLDER / SPLITS_FOLDER_NAME
 
@@ -121,10 +125,14 @@ class ClassificationExperimentTrainTestSplit(FedrbeClassificationExperiment):
     def _prepare(self, preprocessing: str, inputs: List[List[datasets.ClientInput]],
                  split: pd.DataFrame, folders: Dict[Tuple[int, str], List[Path]], work: Path):
         """
-        The forest tables of every cohort per part, corrected for the arms.
-        Returns {part: {cohort: table}} and the batch coefficients by file name.
+        The forest tables of every cohort per learning type and part, corrected
+        for the arms (fedRBE for the federated forest, central limma for the
+        centralized one). Returns {learning type: {part: {cohort: table}}} and
+        the batch coefficients by file name.
         """
-        matrices = {"train": [[] for _ in self.spec.cohorts], "test": [[] for _ in self.spec.cohorts]}
+        matrices = {learning_type: {part: [[] for _ in self.spec.cohorts]
+                                    for part in ("train", "test")}
+                    for learning_type in LEARNING_TYPES}
         coefficients_files = {}
         for fed_idx, federation in enumerate(self.spec.federations):
             arm = ARM_LABEL_FREE if preprocessing == PREPROCESSING_UNCORRECTED else preprocessing
@@ -135,30 +143,36 @@ class ClassificationExperimentTrainTestSplit(FedrbeClassificationExperiment):
                     for cohort_idx, (cohort, folder) in enumerate(zip(federation.cohorts,
                                                                       part_folders)):
                         client = prepare.load_client(folder, cohort, configs[cohort_idx])
-                        matrices[part][cohort_idx].append(prepare.uncorrected_matrix(client))
+                        matrix = prepare.uncorrected_matrix(client)
+                        for learning_type in LEARNING_TYPES:
+                            matrices[learning_type][part][cohort_idx].append(matrix)
                 continue
-            correction = correct.correct_training(federation, inputs[fed_idx], arm, train_folders,
-                                                  split, work)
+            corrections = self._correct_training(federation, inputs[fed_idx], arm, train_folders,
+                                                 split, work)
             suffix = f"_{federation.modality}" if federation.modality else ""
-            coefficients_files[f"batch_coefficients{suffix}.csv"] = correction.coefficients
-            for cohort_idx, (cohort, folder) in enumerate(zip(federation.cohorts, test_folders)):
-                corrected_training = correction.corrected[cohort_idx]
-                matrices["train"][cohort_idx].append(correction.matrices[cohort_idx])
-                client = prepare.load_client(folder, cohort, configs[cohort_idx])
-                training_sample_batches = correct.sample_batches(
-                    cohort, inputs[fed_idx][cohort_idx], configs[cohort_idx].get("batch_col"),
-                    corrected_training.columns)
-                matrices["test"][cohort_idx].append(correct.correct_new_samples(
-                    client, correction.coefficients, correction.batches, corrected_training,
-                    training_sample_batches))
-        tables = {}
-        for part in ("train", "test"):
-            tables[part] = {}
-            for cohort_idx, cohort in enumerate(self.spec.cohorts):
-                tables[part][cohort] = train_forest.forest_table(
-                    self.spec, matrices[part][cohort_idx],
-                    [fed_inputs[cohort_idx] for fed_inputs in inputs],
-                    prepare.cohort_labels(split, cohort, part))
+            for learning_type, correction in corrections.items():
+                coefficients_files[f"{SAVED_FILE_PREFIX[learning_type]}batch_coefficients"
+                                   f"{suffix}.csv"] = correction.coefficients
+                for cohort_idx, (cohort, folder) in enumerate(zip(federation.cohorts,
+                                                                  test_folders)):
+                    corrected_training = correction.corrected[cohort_idx]
+                    matrices[learning_type]["train"][cohort_idx].append(
+                        correction.matrices[cohort_idx])
+                    client = prepare.load_client(folder, cohort, configs[cohort_idx])
+                    training_sample_batches = correct.sample_batches(
+                        cohort, inputs[fed_idx][cohort_idx], configs[cohort_idx].get("batch_col"),
+                        corrected_training.columns)
+                    matrices[learning_type]["test"][cohort_idx].append(correct.correct_new_samples(
+                        client, correction.coefficients, correction.batches, corrected_training,
+                        training_sample_batches))
+        tables = {learning_type: {part: {
+            cohort: train_forest.forest_table(
+                self.spec, matrices[learning_type][part][cohort_idx],
+                [fed_inputs[cohort_idx] for fed_inputs in inputs],
+                prepare.cohort_labels(split, cohort, part))
+            for cohort_idx, cohort in enumerate(self.spec.cohorts)}
+            for part in ("train", "test")}
+            for learning_type in LEARNING_TYPES}
         return tables, coefficients_files
 
 
