@@ -120,11 +120,18 @@ After completion, each client receives:
 - **`report.txt`**: The client name, the batch coefficients used for the correction and the
   design matrix. Features masked for privacy are listed in the app log.
 
+The coordinator additionally receives the files needed to correct new batches later on,
+without another run (see [Correcting new batches](#correcting-new-batches-after-a-fedrbe-run)):
+- **`batch_coefficients.csv`**: The batch coefficients per hashed feature name.
+- **`training_level.csv`**: Per hashed feature name, the level the corrected data sits at.
+- **`training_level_info.yml`**: The normalization of the run, whether covariates were used,
+  the number of batches and the file separator.
+
 **Note**: Output files use the same `separator` defined in `config.yml`. Both CSV files are
 features (rows) x samples (columns) whatever the input orientation; `full_corrected_data.csv`
 appends the covariates as rows. Values masked for privacy (fewer finite values than the
 effective `min_samples` in a batch or on the client) are exported as empty cells.
-Features available in fewer than three clients are omitted.
+Features available in fewer than `min_clients` (default: three) clients are omitted.
 
 ---
 
@@ -178,6 +185,7 @@ flimmaBatchCorrection:
   normalizationMethod: "log2(x+1)"
     # "log2(x+1)" for raw non-negative values (all values must be > -1), or
     # null (or omit the key) for already log-transformed data; other values stop the run.
+    # All clients must use the same setting, so that the corrected data share one scale.
 
   smpc: True
     # Enable secure multiparty computation for privacy-preserving aggregation.
@@ -185,6 +193,12 @@ flimmaBatchCorrection:
 
   # feature_block_size: 10000  # Positive integer; same on all clients.
     # Omit or null: all features in one round.
+
+  min_clients: 3      # format: int >= 2, default: 3; same on all clients.
+    # Features present in fewer clients are not corrected. With two clients, each
+    # client can derive the other client's mean of every feature from the shared
+    # batch coefficients, so keep the default of 3 in deployments; lower values
+    # are meant for evaluations.
 
   min_samples: 5      # format: int, default: 5
     # Minimum samples per feature required in each batch. Adjusted for privacy if needed.
@@ -215,11 +229,48 @@ flimmaBatchCorrection:
 - Batch labels must be complete and contain no `|`; spaces are allowed.
 - Feature identifiers must be unique, and every measurement cell must be numeric
   (`NA` or empty for missing values).
-- All clients must use the same boolean `smpc` setting (default: `true`).
+- All clients must use the same boolean `smpc` setting (default: `true`), the same
+  `normalizationMethod`, `min_clients` and `feature_block_size`.
 - Only finite measurements count for privacy thresholds, batch presence and regression.
 - For each feature, a covariate that is constant (all 0 or all 1) among the samples
   with observed measurements is omitted from that feature's fit, as in limma. Other
   collinear or numerically unreliable fits stop the run. Rescale very small covariates.
+
+## Correcting new batches after a fedRBE run
+
+fedRBE moves every batch, the reference batch included, to a common level per feature:
+the intercept of the linear model, plus, with covariates, the covariate effects at the
+covariates' mean in the training data. This level is the mean of all corrected values.
+The coordinator saves it in `training_level.csv`; neither the intercept nor the
+covariate coefficients are shared, as they can reveal single samples.
+
+A new batch that was not part of the run, e.g. a validation cohort, can be aligned to
+this level without another federated run: each of its batches is shifted per feature so
+that its mean equals the training level. The aligned batch can then be used with models
+trained on the corrected data of the run.
+
+```bash
+python batchcorrection/align_new_batch.py \
+  --fedrbe-output <output folder of the coordinator> \
+  --input <folder of the new batch> \
+  --output <result folder>
+```
+
+- `--input` is laid out like a fedRBE client: `config.yml` with the keys above, the
+  data file and, for `batch_col`, a design file. Each batch of `batch_col` is aligned
+  on its own. `covariates` is ignored, so no labels are needed.
+- `normalizationMethod` is taken from `training_level_info.yml`; a different setting in
+  the new batch's config stops the script, as the level is only valid on that scale.
+- A feature is aligned in a batch if it has a training level and at least `min_samples`
+  (at least 1) finite values in that batch; other values are kept as loaded (normalized).
+- Writes `aligned_data.csv` (features x samples, separator of the config) and
+  `report.txt` (aligned features per batch).
+
+The alignment only shifts means; the spread within a batch is kept. Without labels, a
+new batch's mean mixes its classes: if the run used covariates (e.g. the label) and the
+new batch has a different class mix than the training data, part of that difference is
+removed as batch effect. This is the same assumption a correction without covariates
+makes for every batch.
 
 ## Protocol phases
 

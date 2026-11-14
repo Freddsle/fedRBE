@@ -2,19 +2,19 @@
 
 import contextlib
 import io
-import json
 from pathlib import Path
 import sys
 import tempfile
 from threading import Barrier, Thread
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pandas as pd
 
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
-    from helper import helper_run_classification_report_metrics as helper
+    from helper import common
+    from helper.steps import train_forest
 
 
 class NativeSimulationFailureTests(unittest.TestCase):
@@ -39,7 +39,7 @@ class NativeSimulationFailureTests(unittest.TestCase):
 
         def run():
             try:
-                helper.run_simulation_native(
+                train_forest.run_simulation_native(
                     self.clientpaths, self.outputfolders, str(self.generic), algorithm)
             except BaseException as error:
                 outcome.append(error)
@@ -104,54 +104,38 @@ class RandomForestFailureTests(unittest.TestCase):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
+        self.inputs = []
         for name in ("A", "B"):
-            folder = self.root / name
-            folder.mkdir()
+            folder = self.root / "input" / name
+            folder.mkdir(parents=True)
             pd.DataFrame({"signal": [0., 1.], "label": [0, 1]},
-                         index=[f"{name}_0", f"{name}_1"]).to_csv(
-                folder / "data.csv", index_label="sample_id")
-        descriptor = self.root / "datainfo.json"
-        descriptor.write_text(json.dumps({
-            "data_name": "fixture", "covariates": [], "prediction_targets": ["label"],
-            "datafile": {"filename": "data.csv", "separator": ",",
-                         "rotation": "samples x features", "samplename_column": "sample_id"},
-            "cohorts": [{"name": name, "folder": name} for name in ("A", "B")],
-        }))
-        self.info = helper.DataInfo(descriptor)
-
-    def assert_clean(self):
-        self.assertFalse(list(self.root.glob("tmp_classification_evaluation_*")))
-        for folder in self.info.cohort_folders:
-            self.assertFalse((folder / "tmp_data.csv").exists())
-            self.assertFalse((folder / "config_forest.yaml").exists())
-            self.assertTrue((folder / "data.csv").is_file())
+                         index=pd.Index([f"{name}_0", f"{name}_1"], name="sample_col")).to_csv(
+                folder / "tmp_data.csv")
+            self.inputs.append(folder)
 
     def test_stale_outputs_cannot_supply_missing_new_results(self):
-        for experiment_type in (helper.ClassificationExperimentLeaveOneCohortOut,):
-            for learning in helper.LEARNING_TYPES:
-                with self.subTest(experiment=experiment_type.__name__, learning=learning):
-                    suffix = "testcohort|A_predictedcol|label"
-                    if learning == "federated":
-                        suffix += "_traincohort|B"
-                    folder = self.root / (
-                        "tmp_classification_evaluation_output_learningtype|"
-                        f"{learning}_{suffix}")
-                    folder.mkdir()
-                    (folder / "global_model.pkl").write_bytes(b"stale model")
+        for learning in common.LEARNING_TYPES:
+            with self.subTest(learning=learning):
+                work = self.root / learning
+                work.mkdir()
+                suffix = "predictedcol|label"
+                if learning == "federated":
+                    suffix += "_traincohort|A"
+                stale = work / f"tmp_classification_evaluation_output_learningtype|{learning}_{suffix}"
+                stale.mkdir()
+                (stale / "global_model.pkl").write_bytes(b"stale model")
 
-                    def no_new_outputs(**kwargs):
-                        for output in kwargs["outputfolders"]:
-                            self.assertEqual(list(Path(output).iterdir()), [])
+                def no_new_outputs(**kwargs):
+                    for output in kwargs["outputfolders"]:
+                        self.assertEqual(list(Path(output).iterdir()), [])
 
-                    result = Mock()
-                    experiment = experiment_type("uncorrected", self.info, resultfile=result)
-                    with patch.object(helper, "LEARNING_TYPES", [learning]), \
-                            patch.object(helper, "run_simulation_native", side_effect=no_new_outputs), \
-                            contextlib.redirect_stdout(io.StringIO()), \
-                            self.assertRaises(FileNotFoundError):
-                        experiment.run_experiment(43, force_run=True)
-                    self.assert_clean()
-                    result.upsert_experiment.assert_not_called()
+                with patch.object(train_forest, "run_simulation_native", side_effect=no_new_outputs), \
+                        contextlib.redirect_stdout(io.StringIO()):
+                    outputs = train_forest.train(learning, self.inputs, ["A", "B"], work,
+                                                  "predictedcol|label", "label", 43, [])
+                self.assertEqual(outputs[0], stale)
+                with self.assertRaises(FileNotFoundError):
+                    train_forest.read_model(outputs[0])
 
 
 if __name__ == "__main__":

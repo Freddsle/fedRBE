@@ -26,7 +26,7 @@ or regenerate the analysis stages you need.
   - [4. Optional dataset diagnostics](#4-optional-dataset-diagnostics)
   - [5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
   - [6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
-  - [7. Generate Figures 3, 4, S5 and S7 for each correction arm](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm)
+  - [7. Generate Figures 3, 4, S5, S7 and S8 for each correction arm](#7-generate-figures-3-4-s5-s7-and-s8-for-each-correction-arm)
 - [Repository structure](#repository-structure)
 - [Utility scripts overview](#utility-scripts-overview)
 - [Troubleshooting](#troubleshooting)
@@ -144,7 +144,7 @@ Recommended order:
 5. Run the [classification](#5-reproduce-the-classification-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    and [clustering](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    analyses, or inspect their available saved results.
-6. [Generate Figures 3, 4, S5 and S7](#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
+6. [Generate Figures 3, 4, S5, S7 and S8](#7-generate-figures-3-4-s5-s7-and-s8-for-each-correction-arm).
 
 Paths below are relative to the repository root. Run shell commands there unless
 another working directory is specified. Run notebook kernels from the directory
@@ -354,18 +354,25 @@ the experiment runs and use the plotting command below. Results are labelled
 
 **Train/test (70:30).** Each repetition splits every cohort's uncorrected fedRBE
 input 70:30, stratified by the label (and by the batch for clients holding
-several batches; Quartet modalities share one split by pseudo-sample). fedRBE
-then runs on the training samples only, in the native simulation of the app's
-protocol (`batchcorrection/fedrbe.py`, plain aggregation without SMPC).
-Federated (one client per cohort) and centralized (pooled) random forests are
-trained on all corrected training samples. The test samples are corrected with
-the coordinator's batch coefficients of that fedRBE run, which needs no labels,
-and predicted. Values fedRBE did not correct, because a feature is too sparse
-in a batch or present in fewer than three clients, stay uncorrected in both
-training and test samples, so every arm uses the same features. The
-uncorrected baseline uses the same splits. Each repetition reports MCC and
-support-weighted F1 pooled over all test samples (`All`) and, for federated
-learning, per cohort.
+several batches; Quartet modalities share one split by pseudo-sample). The
+correction is fitted on the training samples only, separately for the two
+learners:
+
+- The federated random forest (one client per cohort) uses fedRBE, run in the
+  native simulation of the app's protocol (`batchcorrection/fedrbe.py`, plain
+  aggregation without SMPC).
+- The centralized random forest (pooled cohorts) uses central limma
+  `removeBatchEffect` on the pooled training samples
+  (`central_batch_fit` in `evaluation_utils/central_correction.R`), with the same
+  batches and covariates but without fedRBE's privacy filters.
+
+The test samples are corrected with the batch coefficients of their learner's
+correction, which needs no labels, and predicted. Values a correction did not
+correct (with fedRBE, a feature too sparse in a batch or present in fewer than
+three clients) stay uncorrected in both training and test samples, so every arm
+uses the same features. The uncorrected baseline uses the same splits. Each repetition reports MCC and
+support-weighted F1 pooled over all test samples (`All`) and per test cohort,
+for both learning types.
 
 ```bash
 pixi run python evaluation_classification_after_correction/run_classification_train_test_split.py
@@ -385,42 +392,50 @@ file, by default under
 `evaluation_classification_after_correction/results/train_test_splits/<dataset>/seed_<seed>/`.
 Ovarian cancer needs about 4 GB RAM.
 
-**Leave-one-cohort-out.** Trains on all cohorts except the held-out test cohort,
-using the published corrections of Step 2. Run it for the four real datasets
-and each correction arm:
+`--jobs N` runs up to N units (here: one dataset and seed) at the same time in
+separate processes. Each job needs the memory of its unit, so up to N × 4 GB
+when ovarian cancer runs in parallel. The units only share the results CSV,
+which they update one at a time (locked via `<results file>.lock`). The results
+are the same as with the default `--jobs 1`. For example, on a server:
 
 ```bash
-for arm in label_aware label_free; do
-  pixi run python evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
-    --correction-arm "$arm" --datasets ecoli ovarian_cancer ccRCC_proteomics quartet_multiomics
-done
+pixi run python -u evaluation_classification_after_correction/run_classification_train_test_split.py --jobs 8
 ```
 
-It runs ten seeds (42–51) and reuses complete result rows. `--correction-arm
-label_free` (default) or `label_aware` selects the real-data
-`after/no_label/` or `after/label_aware/` descriptors; simulated data keeps its
-ordinary `after/` input. Quartet joint matrices and RF client files are
-prepared automatically from its modality outputs and original metadata.
+**Leave-one-cohort-out.** Each cohort is held out once. fedRBE runs on the other
+(training) cohorts only, in the same native simulation, with `min_clients: 2` so
+that datasets with three cohorts keep two training clients; the centralized
+forest again uses central limma on the pooled training cohorts instead. Each
+forest is trained on its learner's corrected training cohorts. Besides the batch
+coefficients, each correction gives the training level: per feature, the mean of
+the corrected training data (the intercept, plus the covariate effects at the
+training data's covariate mean). Each batch of the held-out cohort is shifted per
+feature so that its mean equals the level of the learner's correction, with
+`batchcorrection.classes.client.align_to_training_level`, the function behind
+`batchcorrection/align_new_batch.py`. Features with fewer than `min_samples` values
+in a held-out batch stay uncorrected. The forests then predict the held-out cohort;
+MCC and support-weighted F1 are reported for that cohort and both learning types.
 
-For custom inputs, use `--config rf_datasets.yaml` instead of `--correction-arm`,
-with entries such as:
-
-```yaml
-ecoli:
-  classification:
-    before: evaluation_data/ecoli/before/datainfo.json
-    corrected: evaluation_data/ecoli/after/label_aware/datainfo.json
-```
-
-Paths are absolute or repository-relative. Optional `preprocessing_name` labels
-corrected results (default: `label_free` for descriptors under a `no_label/`
-folder, otherwise `label_aware`). For example:
+The held-out cohort's labels are not used in either arm, so its alignment is
+label-free: if its label mix differs from the training data's, part of that
+difference is removed as batch effect. The arms differ only in the correction of
+the training cohorts.
 
 ```bash
-python3 evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
-  --config rf_datasets.yaml --datasets ecoli --seeds 42 \
-  --results-file evaluation_classification_after_correction/results/custom_metrics.csv
+pixi run python evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py
 ```
+
+This runs every dataset of the train/test evaluation, both correction arms and ten
+random forest seeds (42–51). The correction does not depend on the seed, so it runs
+once per held-out cohort. The options are those of the train/test script
+(`--datasets`, `--arms`, `--seeds`, `--results-file`, `--work-dir`, `--jobs`,
+`--force-run`); with `--jobs`, a unit is one dataset and held-out cohort, with all
+its seeds.
+The coordinator's batch coefficients, training level and `training_level_info.yml`,
+and central limma's `central_batch_coefficients.csv` and `central_training_level.csv`,
+of every held-out cohort and arm are saved next to the results file, by default
+under
+`evaluation_classification_after_correction/results/loco_corrections/<dataset>/<held-out cohort>/<arm>/`.
 
 Both experiment types save metrics to
 `evaluation_classification_after_correction/results/classification_metric_report.csv`.
@@ -432,8 +447,7 @@ python3 evaluation_classification_after_correction/analyse_classification_metric
 ```
 Plots go to `evaluation_classification_after_correction/plots/{label_aware,label_free}/`:
 MCC and support-weighted F1 boxplots with dots for each validation method in the
-results. Train/test plots use pooled `All` scores per repetition; LOCO shows
-each held-out cohort's score per seed.
+results. Train/test and LOCO plots show each test cohort's score per seed.
 Use `--results-file` and `--plots-dir` to override paths. Plotting requires R.
 
 Optional helpers (default settings):
@@ -484,34 +498,38 @@ Add metrics to the appropriate helper; experiment writers select which to save.
 Scikit-learn returns MCC 0 for constant-class predictions; zero does not establish
 random guessing.
 
-### 7. Generate Figures 3, 4, S5 and S7 for each correction arm
+### 7. Generate Figures 3, 4, S5, S7 and S8 for each correction arm
 
 After batch correction, run from the repository root. Figure 4 also requires the
 classification and clustering results from Steps 5 and 6.
 
 ```bash
-for arm in label_aware no_label; do
-  for script in aggregate_figure3 aggregate_figure4 \
-      quartet_separated_modality_pca_fixed_effect_variance; do
-    CORRECTION_ARM="$arm" pixi run Rscript "evaluation/$script.R"
-  done
+for script in aggregate_figure3 aggregate_figure4 \
+    quartet_separated_modality_pca_fixed_effect_variance; do
+  pixi run Rscript "evaluation/$script.R"
 done
 ```
 
+Without `CORRECTION_ARM`, each script draws both arms; `CORRECTION_ARM=<arm>`
+draws only that arm.
+
 Outputs under `figures/`: `figure3_<arm>.png`, `figure4_<arm>.png`,
-`figure4_<arm>_statistics.png`, `figureS5_<arm>.png` and `figureS7_<arm>.png`.
+`figure4_<arm>_statistics.png`, `figureS5_<arm>.png`, `figureS7_<arm>.png` and
+`figureS8_<arm>.png`.
 Figure 4 is drawn twice: `figure4_<arm>.png` without statistics and
 `figure4_<arm>_statistics.png` with significance brackets and the test caption.
 Figures 3 and S5 also write matching `_variance.tsv` files with median variance
 fractions and feature counts. Figure 4 writes a matching `_statistics.tsv`
-covering Figures 4 and S7.
+covering Figures 4, S7 and S8.
 
-#### Scenario comparisons in Figure 4 and S7
+#### Scenario comparisons in Figures 4, S7 and S8
 
-Both correction arms use 10 runs per scenario (Figure 4a: ARI;
-Figure 4c: pooled train/test MCC; Figure S7: held-out-cohort MCC).
-These panels show significance brackets in `figure4_<arm>_statistics.png` and
-`figureS7_<arm>.png`; Figure 4b is an overview.
+Figures 4b (leave-one-cohort-out) and 4c (70:30) show one MCC per test cohort
+and seed and are overviews; their tests are per test cohort in Figures S7 and
+S8. Both correction arms use 10 runs per scenario (Figure 4a: ARI per dataset;
+Figure S7: MCC per held-out cohort; Figure S8: MCC per 70:30 test cohort).
+These show significance brackets in `figure4_<arm>_statistics.png`,
+`figureS7_<arm>.png` and `figureS8_<arm>.png`.
 
 - C1/C2: before versus after correction within each learner; exact two-sided
   Wilcoxon signed-rank tests paired by seed, with Pratt's method for zeros.
@@ -519,16 +537,17 @@ These panels show significance brackets in `figure4_<arm>_statistics.png` and
   correction; exact two-sided unpaired Mann–Whitney U tests.
 
 Tables report raw p-values and Holm-adjusted p-values for the four contrasts
-within each dataset/task or held-out cohort and correction arm.
+within each dataset, held-out cohort or 70:30 test cohort, and correction arm.
 `*` marks adjusted p < 0.05; `n.s.` otherwise.
 
 Mean differences (`mean_b - mean_a`) have 95% percentile bootstrap intervals
 (10,000 resamples, seed 1), using paired resampling for C1/C2 and independent
 resampling for C3/C4. The `relevant` flag marks |mean difference| ≥0.05.
 
-In the 70:30 panel, correction is fitted on the training samples only. K-means
-and LOCO use the corrections of all samples; there, label-aware correction
-uses held-out labels.
+In the 70:30 and LOCO panels, correction is fitted without the test samples;
+held-out LOCO cohorts are aligned to the training level without their labels.
+K-means uses the corrections of all samples; there, label-aware correction uses
+all labels.
 
 K-means uses all complete-case features and RF uses all union features. ARI inputs
 are `metrics_ari_multirun.tsv` (label-aware) and `no_label/metrics_ari_multirun.tsv`

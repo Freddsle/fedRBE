@@ -3,19 +3,45 @@
 # Build Figure 4 from the clustering and classification tables. K-means uses all
 # complete-case features and RF uses all union features.
 # Run from the repository root:
-#   CORRECTION_ARM=label_aware pixi run Rscript evaluation/aggregate_figure4.R
-# Set CORRECTION_ARM=label_aware (default) or CORRECTION_ARM=no_label.
+#   pixi run Rscript evaluation/aggregate_figure4.R
+# Without CORRECTION_ARM, the script runs once per arm (label_aware, then
+# no_label). CORRECTION_ARM=label_aware or CORRECTION_ARM=no_label runs only that
+# arm, as does sourcing the script (default label_aware).
 # Each arm writes figures/figure4_<arm>.png without statistics and
-# figures/figure4_<arm>_statistics.png with significance brackets in panels a and c.
+# figures/figure4_<arm>_statistics.png with significance brackets in panel a.
 # FIGURE4_ARI_TABLE, FIGURE4_RF_REPORT and FIGURE4_OUTPUT override the source and
-# output paths; an output path ending in .svg writes an SVG.
-# The script also writes the test table (<output>_statistics.tsv) and Figure S7
-# (leave-one-cohort-out per held-out cohort with brackets, figureS7_<arm>) next to
-# the Figure 4 output.
+# output paths; an output path ending in .svg writes an SVG. The ARI table and
+# the output belong to one arm, so overriding them requires CORRECTION_ARM.
+# The script also writes the test table (<output>_statistics.tsv), Figure S7
+# (leave-one-cohort-out per held-out cohort with brackets, figureS7_<arm>) and
+# Figure S8 (70:30 per test cohort with brackets, figureS8_<arm>) next to the
+# Figure 4 output.
+#
+# What the panels show. Every panel has four scenarios per dataset: central or
+# federated learning, each on uncorrected data ("before BEC") and on data
+# corrected with the chosen arm ("after BEC"). Central learning uses central
+# limma::removeBatchEffect, federated learning uses fedRBE.
+# - 4a, k-means clustering: one dot per seed (10 seeds), giving the ARI between
+#   the k-means clusters and the condition labels. K is the number of
+#   conditions. K-means clusters all samples of a dataset on the complete-case
+#   features, and the correction is fitted on all samples. With label_aware,
+#   the correction also uses all of the labels.
+# - 4b, random forest, leave-one-cohort-out: one dot per held-out cohort and
+#   seed, giving the MCC on that cohort. The correction and the forest see only
+#   the other cohorts. The held-out cohort is shifted onto the training level
+#   without its labels.
+# - 4c, random forest, 70:30 train/test split: one dot per cohort and seed,
+#   giving the MCC on that cohort's 30% test part. The split is stratified by
+#   label and batch. The correction and the forest see only the 70% training
+#   part. The test samples are corrected with the training batch coefficients,
+#   without their labels.
+# The pooled RF score over all cohorts ("All" in the report) is not plotted.
 
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 source(file.path("evaluation_utils", "figure4_statistics.R"))
 require_figure4_packages()
+
+run_each_correction_arm("Figure 4", c("FIGURE4_ARI_TABLE", "FIGURE4_OUTPUT"))
 
 # Source and output files: Figure 4a uses the multi-run clustering ARI table.
 # Figure 4b and Figure 4c use the classification metric report and are filtered
@@ -91,7 +117,7 @@ point_size <- 1.05
 
 figure_width <- 7.5
 figure_height <- 8.5
-figureS7_height <- 10
+per_cohort_figure_height <- 10
 figure_dpi <- 600
 
 # Load data: the two canonical source tables. Select the matching correction arm
@@ -114,8 +140,8 @@ classification_report$data_preprocessing_name[
 ] <- "corrected"
 
 # Prepare figure data: condition-target clustering ARI for panel a and real MCC
-# tasks for panels b and c. The 70:30 panel uses one pooled `All` score per seed
-# for both learning methods. Leave-one-cohort-out keeps each held-out cohort score.
+# tasks for panels b and c. Both keep one score per test cohort and seed for both
+# learning methods: the held-out cohort (LOCO) or a cohort's 70:30 test part.
 # Duplicate metric identities are rejected by the shared helper.
 
 figure4_data <- prepare_figure4_plot_data(
@@ -134,11 +160,11 @@ figure4_data <- prepare_figure4_plot_data(
   seeds_per_group = ari_seeds_per_group
 )
 
-# Exact rank tests over seeds: per dataset
-# (panels a and c) and per held-out cohort (Figure S7). Panel b is an overview.
+# Exact rank tests over seeds: per dataset (panel a), per held-out cohort
+# (Figure S7) and per 70:30 test cohort (Figure S8). Panels b and c are overviews.
 
 # Incomplete leave-one-cohort-out results skip panel b and Figure S7; errors of
-# panels a and c recur in the second attempt and stop the script.
+# panel a or Figure S8 recur in the second attempt and stop the script.
 figure4_stats <- tryCatch(
   compute_figure4_statistics(figure4_data, CORRECTION_ARM),
   error = function(error) {
@@ -154,13 +180,10 @@ has_loo <- nrow(figure4_data$leave_one_cohort_out) > 0
 statistics_path <- write_figure4_statistics(
   figure4_stats, paste0(tools::file_path_sans_ext(output_path), "_statistics.tsv")
 )
-cat("Saved Figure 4 and S7 statistics to", statistics_path, "\n")
+cat("Saved Figure 4, S7 and S8 statistics to", statistics_path, "\n")
 cat("Significant contrasts with |mean difference| <", figure4_min_difference, ":\n")
 print(figure4_negligible_effects(figure4_stats), row.names = FALSE, digits = 3)
-figure4_annotations <- list(
-  ari = figure4_annotation_data(figure4_stats, "4a ARI"),
-  split = figure4_annotation_data(figure4_stats, "4c train/test")
-)
+figure4_annotations <- list(ari = figure4_annotation_data(figure4_stats, "4a ARI"))
 statistics_caption <- figure4_statistics_caption()
 
 # Build and save Figure 4 twice: plain at the output path, and with significance
@@ -208,45 +231,56 @@ for (variant in figure4_variants) {
   cat("Saved Figure 4 to", saved_path, "\n")
 }
 
-# Figure S7: the panel b scores per held-out cohort, with the per-cohort tests.
-# It uses the Figure 4 output's directory and format.
+# Figures S7 and S8: the panel b and c scores per test cohort, with the per-cohort
+# tests. They use the Figure 4 output's directory and format. Returns the brackets
+# per task.
 
-if (has_loo) {
-  figureS7_tasks <- observed_levels(figure4_data$leave_one_cohort_out$Task, classification_task_order)
-  figureS7_annotations <- stats::setNames(lapply(figureS7_tasks, function(task) {
-    figure4_annotation_data(figure4_stats, "S7 LOCO", dataset = one_line(task))
-  }), figureS7_tasks)
-  figureS7_plot <- make_figureS7_plot(
-    loo_data = figure4_data$leave_one_cohort_out,
+save_per_cohort_figure <- function(data, figure, panel, description) {
+  tasks <- observed_levels(data$Task, classification_task_order)
+  annotations <- stats::setNames(lapply(tasks, function(task) {
+    figure4_annotation_data(figure4_stats, panel, dataset = one_line(task))
+  }), tasks)
+  plot <- make_per_cohort_plot(
+    cohort_data = data,
     task_order = classification_task_order,
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
     point_size = point_size,
     feature_label = classification_feature_label,
-    annotations = figureS7_annotations,
+    annotations = annotations,
     annotation_caption = statistics_caption
   )
-  figureS7_plot$panels[[1]] <- figureS7_plot$panels[[1]] + ggplot2::labs(
+  plot$panels[[1]] <- plot$panels[[1]] + ggplot2::labs(
     title = paste(
-      paste(correction_arm_titles[[CORRECTION_ARM]], "RF leave-one-cohort-out per held-out cohort",
-            sep = " · "),
-      figureS7_plot$panels[[1]]$labels$title,
+      paste(correction_arm_titles[[CORRECTION_ARM]], description, sep = " · "),
+      plot$panels[[1]]$labels$title,
       sep = "\n"
     )
   )
-  figureS7_extension <- tools::file_ext(output_path)
-  figureS7_prefix <- sub("^figure4", "figureS7", output_prefix)
-  figureS7_path <- file.path(
+  extension <- tools::file_ext(output_path)
+  path <- file.path(
     dirname(output_path),
-    paste0(figureS7_prefix, CORRECTION_ARM, ".",
-           if (nzchar(figureS7_extension)) figureS7_extension else "png")
+    paste0(sub("^figure4", figure, output_prefix), CORRECTION_ARM, ".",
+           if (nzchar(extension)) extension else "png")
   )
   saved_path <- save_grid_png(
-    function() draw_figure4(figureS7_plot),
-    output_path = figureS7_path,
+    function() draw_figure4(plot),
+    output_path = path,
     width = figure_width,
-    height = figureS7_height,
+    height = per_cohort_figure_height,
     dpi = figure_dpi
   )
-  cat("Saved Figure S7 to", saved_path, "\n")
+  cat("Saved Figure", sub("^figure", "", figure), "to", saved_path, "\n")
+  annotations
 }
+
+if (has_loo) {
+  figureS7_annotations <- save_per_cohort_figure(
+    figure4_data$leave_one_cohort_out, "figureS7", "S7 LOCO",
+    "RF leave-one-cohort-out per held-out cohort"
+  )
+}
+figureS8_annotations <- save_per_cohort_figure(
+  figure4_data$train_test_split, "figureS8", "S8 train/test",
+  "RF 70:30 train-test split per test cohort"
+)
