@@ -468,10 +468,14 @@ Cached result rows do not record the correction or forest settings, so rerun
 with `--force-run` after changing either.
 
 RandomForest implementation: `evaluation_classification_after_correction/fc_fed_forest_simple_app`.
-Each client trains its share of the 100 trees (maximum depth 10, `sqrt`
-features per split) on its own data only, and the forest is the ensemble of all
-clients' trees; the centralized forest is a single client with the pooled
-cohorts.
+Each client trains its share of the 100 trees on its own data only, and the
+forest is the ensemble of all clients' trees; the centralized forest is a single
+client with the pooled cohorts. The trees have a maximum depth of 10, try `sqrt`
+features per split, need at least 5 samples per leaf and use balanced class
+weights (computed from the client's own labels). Without the last two, a cohort
+with a strong class imbalance, such as GSE26712 (185 of 195 samples HGSC),
+isolates its few minority samples in tiny leaves, and on other cohorts' samples
+its trees lean towards the majority class.
 
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 

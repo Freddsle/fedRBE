@@ -162,7 +162,8 @@ class RandomForestNumericInputTests(unittest.TestCase):
     def test_trees_match_named_dataframe_reference(self):
         # The reference keeps sklearn's DataFrame conversion inside every fit.
         # Check both the numeric fast path and coercion, including missing values.
-        for kind in ("numeric", "coercion", "large_integer", "mixed_boolean"):
+        # "imbalanced" checks the balanced class weights, which change its trees.
+        for kind in ("numeric", "coercion", "large_integer", "mixed_boolean", "imbalanced"):
             with self.subTest(kind=kind), tempfile.TemporaryDirectory() as tmp:
                 root = Path(tmp)
                 input_dir, output_dir = root / 'input', root / 'output'
@@ -180,10 +181,12 @@ class RandomForestNumericInputTests(unittest.TestCase):
                     if kind == "mixed_boolean":
                         frame['x3'] = np.tile([True, False], 15)
                 frame['label'] = np.tile([0, 1], 15)
+                if kind == "imbalanced":
+                    frame['label'] = (np.arange(30) % 5 == 0).astype(int)
                 data = input_dir / 'data.csv'
                 frame.to_csv(data, index_label='sample_id')
                 params = dict(max_depth=4, max_features='sqrt',
-                              min_samples_leaf=1, min_samples_split=2)
+                              min_samples_leaf=5, min_samples_split=2)
                 config = dict(data_filename='data.csv', csv_seperator=',',
                               features_as_columns=True, sample_col='sample_id',
                               predicted_feature_name='label', random_state=42,
@@ -201,8 +204,15 @@ class RandomForestNumericInputTests(unittest.TestCase):
                 seeds = np.random.RandomState(42).randint(np.iinfo(np.int32).max, size=7)
                 self.assertEqual(len(forest.estimators_), len(seeds))
                 for actual, seed in zip(forest.estimators_, seeds):
-                    expected = DecisionTreeClassifier(random_state=int(seed), **params).fit(
+                    expected = DecisionTreeClassifier(
+                        random_state=int(seed), class_weight="balanced", **params).fit(
                         train, target)
+                    if kind == "imbalanced":
+                        unweighted = DecisionTreeClassifier(
+                            random_state=int(seed), **params).fit(train, target)
+                        self.assertFalse(np.array_equal(
+                            actual.tree_.__getstate__()['values'],
+                            unweighted.tree_.__getstate__()['values']))
                     np.testing.assert_array_equal(actual.feature_names_in_, train.columns)
                     np.testing.assert_array_equal(actual.classes_, expected.classes_)
                     for field in ('nodes', 'values'):
@@ -238,6 +248,16 @@ class RandomForestArtifactTests(unittest.TestCase):
             for name in ('global_model.pkl', 'model_info.yaml'):
                 self.assertEqual((root / 'True' / name).read_bytes(),
                                  (root / 'False' / name).read_bytes())
+            model_info = yaml.safe_load((root / 'True' / 'model_info.yaml').read_text())
+            self.assertEqual(model_info['class_weight'], 'balanced')
+            # the class weights are fixed, a configured one is rejected
+            config['class_weight'] = None
+            (input_dir / 'config_forest.yaml').write_text(
+                yaml.safe_dump({'simple_forest': config}))
+            output = root / 'configured'
+            output.mkdir()
+            with self.assertRaisesRegex(ValueError, "class_weight is not configurable"):
+                run_simulation_native([str(input_dir)], [str(output)], None, main)
 
 
 if __name__ == '__main__':

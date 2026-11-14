@@ -9,10 +9,12 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+import yaml
+
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
     from helper import loco, train_test_split
-    from helper.steps import datasets
+    from helper.steps import datasets, train_forest
 
 
 class RandomForestInputTests(unittest.TestCase):
@@ -20,6 +22,14 @@ class RandomForestInputTests(unittest.TestCase):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
+
+    def test_forest_config_keeps_minority_samples_out_of_tiny_leaves(self):
+        train_forest._write_forest_config(self.root, "label", 7)
+        config = yaml.safe_load((self.root / "config_forest.yaml").read_text())["simple_forest"]
+        self.assertEqual(config["min_samples_leaf"], 5)
+        self.assertEqual((config["predicted_feature_name"], config["random_state"]), ("label", 7))
+        # the app fixes the balanced class weights
+        self.assertNotIn("class_weight", config)
 
     def test_entrypoints_run_their_experiments(self):
         for script, module, runner in (

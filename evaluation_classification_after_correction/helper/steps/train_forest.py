@@ -32,7 +32,7 @@ BASE_FOREST_CONFIG = {
         'features_as_columns': True,
         'max_depth': 10,
         'max_features': 'sqrt',
-        'min_samples_leaf': 1,
+        'min_samples_leaf': 5,
         'min_samples_split': 2,
         'num_estimators_total': 100,
         'predicted_feature_name': 'label',

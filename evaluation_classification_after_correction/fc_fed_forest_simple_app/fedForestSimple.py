@@ -13,6 +13,9 @@ import sklearn
 
 from .fc_fedlearnsim_helper.protocolfedlearning import ProtocolFedLearning
 
+# The local trees weight the classes inversely to their frequency in the client's data.
+CLASS_WEIGHT = "balanced"
+
 
 def main(protocol_fed_learning: ProtocolFedLearning,
          inputfolder: Optional[str] = None,
@@ -21,6 +24,11 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     Implements a simple federated random forst algorithm for classification.
     Creates ceil(num_estimators/clients) decision trees per client, aggregates them globally
     and creates as the final global model simply the ensemble of all clients trees.
+    The trees weight the classes inversely to their frequency in the client's
+    training data (class_weight="balanced") and need at least min_samples_leaf
+    samples per leaf. Together, these keep a client with a strong class
+    imbalance from isolating its few minority samples in tiny leaves and biasing
+    its trees towards its majority class.
     All given samples are used for training, test data must be split off before
     and evaluated with the saved global model.
     # Expected files in inputfolder:
@@ -34,7 +42,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
         num_estimators_total: 5
         max_depth: 10
         min_samples_split: 2
-        min_samples_leaf: 1
+        min_samples_leaf: 5
         max_features: 'sqrt'
         random_state: 42
         features_as_columns: True # whether features are given as columns or rows
@@ -67,6 +75,9 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     if 'train_test_ratio' in config:
         raise ValueError("train_test_ratio is not supported, the forest is trained on all given "
                          "samples. Split off the test data before.")
+    if 'class_weight' in config:
+        raise ValueError("class_weight is not configurable, the trees always use balanced "
+                         "class weights.")
 
     # Load data
     data_path = os.path.join(inputfolder, config['data_filename'])
@@ -155,6 +166,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             max_features=max_features,
+            class_weight=CLASS_WEIGHT,
             random_state=int(tree_seed)
         )
 
@@ -221,6 +233,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
                 'min_samples_split': min_samples_split,
                 'min_samples_leaf': min_samples_leaf,
                 'max_features': max_features,
+                'class_weight': CLASS_WEIGHT,
                 'random_state': random_state,
                 'used_features': common_features
             }, f)
