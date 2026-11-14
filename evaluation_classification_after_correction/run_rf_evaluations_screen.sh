@@ -10,7 +10,7 @@
 # All output goes to evaluation_classification_after_correction/rf_evaluations_<timestamp>_<pid>.log.
 
 # Units (dataset and seed, or dataset and held-out cohort) run at the same time
-N_JOBS=8
+N_JOBS=16
 # Recompute results that are already in the results file. Needed after changing
 # the correction or the forest: cached rows do not record these settings.
 FORCE_RUN=true
