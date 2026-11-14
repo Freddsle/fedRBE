@@ -450,12 +450,28 @@ MCC and support-weighted F1 boxplots with dots for each validation method in the
 results. Train/test and LOCO plots show each test cohort's score per seed.
 Use `--results-file` and `--plots-dir` to override paths. Plotting requires R.
 
-Optional helpers (default settings):
+To rerun everything on a server, `run_rf_evaluations_screen.sh` starts a
+detached `screen` session that runs the train/test evaluation, then the LOCO
+evaluation, then Figures 4, S7 and S8 for both correction arms (Step 7), and
+stops at the first failing step:
 
-- `run_all_classification_analysis.sh`: runs all three scripts sequentially; this can take several hours.
-- `run_all_classification_analysis_tmux.sh`: runs the same script in a tmux session so the terminal can disconnect safely. Logs are stored as `classification_analysis_{TIMESTAMP}.log`.
+```bash
+bash evaluation_classification_after_correction/run_rf_evaluations_screen.sh
+```
+
+`N_JOBS` (default 8, passed as `--jobs`) and `FORCE_RUN` (default `true`, passes
+`--force-run`) are set at the top of the script; extra arguments such as
+`--datasets ecoli` go to both evaluations. The script prints the session name
+and the log file,
+`evaluation_classification_after_correction/rf_evaluations_<timestamp>.log`.
+Cached result rows do not record the correction or forest settings, so rerun
+with `--force-run` after changing either.
 
 RandomForest implementation: `evaluation_classification_after_correction/fc_fed_forest_simple_app`.
+Each client trains its share of the 100 trees (maximum depth 10, `sqrt`
+features per split) on its own data only, and the forest is the ensemble of all
+clients' trees; the centralized forest is a single client with the pooled
+cohorts.
 
 ### 6. Reproduce the clustering analysis comparing fedRBE-corrected to uncorrected data
 
