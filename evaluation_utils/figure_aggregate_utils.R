@@ -29,6 +29,30 @@ correction_arm <- function() {
 }
 
 
+# Run by Rscript without CORRECTION_ARM, a figure script draws both arms: this
+# runs the calling script once per arm, each in its own environment, and then
+# exits. An error in an arm stops the run. A sourced script, or one with
+# CORRECTION_ARM set, continues with that single arm. arm_specific names
+# environment variables (e.g. output paths) that fit only one arm; setting them
+# requires CORRECTION_ARM.
+run_each_correction_arm <- function(figure, arm_specific = character()) {
+  if (sys.nframe() != 1L || nzchar(Sys.getenv("CORRECTION_ARM"))) {
+    return(invisible(NULL))
+  }
+  if (length(arm_specific) > 0L && any(nzchar(Sys.getenv(arm_specific)))) {
+    stop(paste(arm_specific, collapse = " and "), " fit only one arm; set CORRECTION_ARM",
+         call. = FALSE)
+  }
+  script_path <- sub("^--file=", "", grep("^--file=", commandArgs(), value = TRUE))
+  for (arm in c("label_aware", "no_label")) {
+    cat("==", figure, arm, "==\n")
+    Sys.setenv(CORRECTION_ARM = arm)
+    source(script_path, local = new.env())
+  }
+  quit(save = "no")
+}
+
+
 read_matrix_table <- function(path, zip_inner_file = NULL) {
   read_with_base <- function(table_path, inner_file = NULL) {
     if (file.exists(table_path)) {

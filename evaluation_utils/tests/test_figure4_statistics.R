@@ -219,4 +219,4 @@ for (arm in c("label_aware", "no_label")) {
   }
   cat(arm, ": 152 rank-test contrasts in 38 Holm families and all figures verified\n")
 }
-stopifnot(length(verified_outputs) == 8L, !anyDuplicated(verified_outputs))
+stopifnot(length(verified_outputs) == 10L, !anyDuplicated(verified_outputs))

@@ -2,9 +2,10 @@
 #
 # Run from the repository root after preparing and correcting the default layout
 # (48 profiles, four batches and three clients per modality):
-#   CORRECTION_ARM=label_aware pixi run Rscript \
-#     evaluation/quartet_separated_modality_pca_fixed_effect_variance.R
-# Set CORRECTION_ARM=label_aware (default) or no_label.
+#   pixi run Rscript evaluation/quartet_separated_modality_pca_fixed_effect_variance.R
+# Without CORRECTION_ARM, the script runs once per arm (label_aware, then
+# no_label). CORRECTION_ARM=label_aware or CORRECTION_ARM=no_label runs only that
+# arm, as does sourcing the script (default label_aware).
 #
 # Inputs under evaluation_data/quartet_multiomics/:
 # before/<Modality>/central_intensities_log_UNION.tsv,
@@ -17,6 +18,7 @@
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 require_figure_packages()
 source_plotting_utils()
+run_each_correction_arm("Figure S5")
 
 CORRECTION_ARM <- correction_arm()
 output_dir <- "figures"

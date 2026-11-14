@@ -504,13 +504,14 @@ After batch correction, run from the repository root. Figure 4 also requires the
 classification and clustering results from Steps 5 and 6.
 
 ```bash
-for arm in label_aware no_label; do
-  for script in aggregate_figure3 aggregate_figure4 \
-      quartet_separated_modality_pca_fixed_effect_variance; do
-    CORRECTION_ARM="$arm" pixi run Rscript "evaluation/$script.R"
-  done
+for script in aggregate_figure3 aggregate_figure4 \
+    quartet_separated_modality_pca_fixed_effect_variance; do
+  pixi run Rscript "evaluation/$script.R"
 done
 ```
+
+Without `CORRECTION_ARM`, each script draws both arms; `CORRECTION_ARM=<arm>`
+draws only that arm.
 
 Outputs under `figures/`: `figure3_<arm>.png`, `figure4_<arm>.png`,
 `figure4_<arm>_statistics.png`, `figureS5_<arm>.png`, `figureS7_<arm>.png` and

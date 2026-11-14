@@ -3,20 +3,45 @@
 # Build Figure 4 from the clustering and classification tables. K-means uses all
 # complete-case features and RF uses all union features.
 # Run from the repository root:
-#   CORRECTION_ARM=label_aware pixi run Rscript evaluation/aggregate_figure4.R
-# Set CORRECTION_ARM=label_aware (default) or CORRECTION_ARM=no_label.
+#   pixi run Rscript evaluation/aggregate_figure4.R
+# Without CORRECTION_ARM, the script runs once per arm (label_aware, then
+# no_label). CORRECTION_ARM=label_aware or CORRECTION_ARM=no_label runs only that
+# arm, as does sourcing the script (default label_aware).
 # Each arm writes figures/figure4_<arm>.png without statistics and
 # figures/figure4_<arm>_statistics.png with significance brackets in panel a.
 # FIGURE4_ARI_TABLE, FIGURE4_RF_REPORT and FIGURE4_OUTPUT override the source and
-# output paths; an output path ending in .svg writes an SVG.
+# output paths; an output path ending in .svg writes an SVG. The ARI table and
+# the output belong to one arm, so overriding them requires CORRECTION_ARM.
 # The script also writes the test table (<output>_statistics.tsv), Figure S7
 # (leave-one-cohort-out per held-out cohort with brackets, figureS7_<arm>) and
 # Figure S8 (70:30 per test cohort with brackets, figureS8_<arm>) next to the
 # Figure 4 output.
+#
+# What the panels show. Every panel has four scenarios per dataset: central or
+# federated learning, each on uncorrected data ("before BEC") and on data
+# corrected with the chosen arm ("after BEC"). Central learning uses central
+# limma::removeBatchEffect, federated learning uses fedRBE.
+# - 4a, k-means clustering: one dot per seed (10 seeds), giving the ARI between
+#   the k-means clusters and the condition labels. K is the number of
+#   conditions. K-means clusters all samples of a dataset on the complete-case
+#   features, and the correction is fitted on all samples. With label_aware,
+#   the correction also uses all of the labels.
+# - 4b, random forest, leave-one-cohort-out: one dot per held-out cohort and
+#   seed, giving the MCC on that cohort. The correction and the forest see only
+#   the other cohorts. The held-out cohort is shifted onto the training level
+#   without its labels.
+# - 4c, random forest, 70:30 train/test split: one dot per cohort and seed,
+#   giving the MCC on that cohort's 30% test part. The split is stratified by
+#   label and batch. The correction and the forest see only the 70% training
+#   part. The test samples are corrected with the training batch coefficients,
+#   without their labels.
+# The pooled RF score over all cohorts ("All" in the report) is not plotted.
 
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 source(file.path("evaluation_utils", "figure4_statistics.R"))
 require_figure4_packages()
+
+run_each_correction_arm("Figure 4", c("FIGURE4_ARI_TABLE", "FIGURE4_OUTPUT"))
 
 # Source and output files: Figure 4a uses the multi-run clustering ARI table.
 # Figure 4b and Figure 4c use the classification metric report and are filtered
