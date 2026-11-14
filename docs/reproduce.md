@@ -463,7 +463,7 @@ bash evaluation_classification_after_correction/run_rf_evaluations_screen.sh
 `--force-run`) are set at the top of the script; extra arguments such as
 `--datasets ecoli` go to both evaluations. The script prints the session name
 and the log file,
-`evaluation_classification_after_correction/rf_evaluations_<timestamp>.log`.
+`evaluation_classification_after_correction/rf_evaluations_<timestamp>_<pid>.log`.
 Cached result rows do not record the correction or forest settings, so rerun
 with `--force-run` after changing either.
 

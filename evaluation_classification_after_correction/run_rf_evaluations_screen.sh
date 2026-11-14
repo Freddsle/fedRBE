@@ -7,7 +7,7 @@
 # The run stops at the first failing step. Start it from anywhere:
 #   bash evaluation_classification_after_correction/run_rf_evaluations_screen.sh
 # Extra arguments go to both evaluations, e.g. --datasets ecoli --seeds 42.
-# All output goes to evaluation_classification_after_correction/rf_evaluations_<timestamp>.log.
+# All output goes to evaluation_classification_after_correction/rf_evaluations_<timestamp>_<pid>.log.
 
 # Units (dataset and seed, or dataset and held-out cohort) run at the same time
 N_JOBS=8
@@ -17,7 +17,9 @@ FORCE_RUN=true
 
 set -euo pipefail
 
+# Absolute paths, so the script works from any directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_PATH="${SCRIPT_DIR}/$(basename "${BASH_SOURCE[0]}")"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 cd "$REPO_ROOT"
 
@@ -31,18 +33,20 @@ if [[ "${1:-}" != "--in-screen" ]]; then
         echo "Error: screen is not installed" >&2
         exit 1
     fi
-    timestamp="$(date +%Y%m%d_%H%M%S)"
+    timestamp="$(date +%Y%m%d_%H%M%S)_$$"
     session="rf_evaluations_${timestamp}"
     log="${SCRIPT_DIR}/rf_evaluations_${timestamp}.log"
-    screen -dmS "$session" bash -c \
-        "bash $(printf '%q' "${BASH_SOURCE[0]}") --in-screen $(printf '%q ' "$@") > $(printf '%q' "$log") 2>&1"
+    # screen passes the arguments on as they are, no shell quoting involved
+    screen -dmS "$session" bash "$SCRIPT_PATH" --in-screen "$log" "$@"
     echo "Started screen session ${session}"
     echo "Log:    ${log}"
     echo "Follow: tail -f ${log}"
     echo "Attach: screen -r ${session} (detach with Ctrl-A, D)"
     exit 0
 fi
-shift
+log="$2"
+shift 2
+exec > "$log" 2>&1
 
 export PYTHONUNBUFFERED=1
 force=()
@@ -54,12 +58,12 @@ step "Settings: N_JOBS=${N_JOBS}, FORCE_RUN=${FORCE_RUN}, extra arguments: ${*:-
 
 step "1/3 Train/test split evaluation"
 pixi run python -u evaluation_classification_after_correction/run_classification_train_test_split.py \
-    --jobs "$N_JOBS" "${force[@]}" "$@"
+    --jobs "$N_JOBS" ${force[@]+"${force[@]}"} "$@"
 step "1/3 done"
 
 step "2/3 Leave-one-cohort-out evaluation"
 pixi run python -u evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
-    --jobs "$N_JOBS" "${force[@]}" "$@"
+    --jobs "$N_JOBS" ${force[@]+"${force[@]}"} "$@"
 step "2/3 done"
 
 step "3/3 Figure 4, S7 and S8 for both correction arms"
