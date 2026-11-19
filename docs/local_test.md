@@ -10,13 +10,12 @@
 
 # Local test simulation
 
-This guide is designed for people who want to test the `fedRBE` tool locally on their machine via command line.
-
-For more detailed information and advanced usage, please refer to the [Documentation](https://freddsle.github.io/fedRBE/).
+Test `fedRBE` locally with the FeatureCloud CLI. See the
+[Documentation](https://freddsle.github.io/fedRBE/) for other usage modes.
 
 ## Prerequisites and setup
 
-Ensure you have the following installed before starting:
+Install:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
 1. **Python 3.8+**: [Installation Instructions](https://www.python.org/)
 1. **FeatureCloud CLI**:
@@ -30,14 +29,13 @@ For Windows users, git must also be installed and added to PATH. We recommend us
 
 ## Usage
 
-Run simulations locally to understand `fedRBE`'s behavior:
-
-1. **Ensure the full repository including sample data is cloned and the current working directory**:
+1. **Clone the repository and enter it**:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
    ```
-   > **Note**: Some of the sample data used in this guide is tracked by Git LFS. If you need the full evaluation datasets, install [Git LFS](https://git-lfs.com/) and run `git lfs pull` after cloning.
+   Some sample data uses [Git LFS](https://git-lfs.com/); install it and run
+   `git lfs pull` after cloning to fetch the full evaluation datasets.
 
 2. **Start the FeatureCloud Controller with the correct input folder**:
    ```bash
@@ -48,12 +46,9 @@ Run simulations locally to understand `fedRBE`'s behavior:
    ```bash
    featurecloud test start --app-image=featurecloud.ai/bcorrect:latest --client-dirs=lab1,lab2,lab3
    ```
-   Alternatively, you can start the experiment from the **[frontend](https://featurecloud.ai/development/test/new)**.  
-   Select 3 clients and add lab1, lab2, and lab3 respectively to their paths.
-   
-   Use `featurecloud.ai/bcorrect:latest` as the app image.
+   Alternatively, use the [frontend](https://featurecloud.ai/development/test/new)
+   with three clients (`lab1`, `lab2`, `lab3`) and image
+   `featurecloud.ai/bcorrect:latest`. Monitor logs and collect client results in
+   the [browser](https://featurecloud.ai/development/test).
 
-   You can monitor the logs of the batch effect correction run and receive the final results of the
-   different clients on the [frontend in your browser](https://featurecloud.ai/development/test).
-   
-_For a step-by-step detailed instructions on how to start collaboration using multiple machines, refer to the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html)._
+For multiple machines, follow the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html).

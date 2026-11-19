@@ -1,0 +1,1021 @@
+report	data_name	data_preprocessing_name	predicted_client_name	cross_validation_method	seed	predicted_target	learning_type	F1_score	MCC
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_A	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_B	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_C	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_D	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	corrected	lab_E	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_A	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_B	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_C	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_D	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	45	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	no_label	lab_E	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	42	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	42	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	43	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	43	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	44	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	44	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	45	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	45	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	46	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	46	Pyr	federated	0.9582608695652174	0.9198662110078
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	47	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	47	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	48	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	48	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	49	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	49	Pyr	federated	0.9582608695652174	0.9198662110078
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	50	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	50	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	51	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_A	Leave-One-Cohort-Out	51	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	42	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	42	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	43	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	43	Pyr	federated	0.3577639751552794	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	44	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	44	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	45	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	45	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	46	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	46	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	47	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	47	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	48	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	48	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	49	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	49	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	50	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	50	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	51	Pyr	centralized	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_B	Leave-One-Cohort-Out	51	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	42	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	43	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	44	Pyr	federated	0.8680745341614906	0.7676494735787384
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	45	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	46	Pyr	federated	0.399108138238573	0.2041241452319315
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	47	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	48	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	49	Pyr	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	50	Pyr	federated	0.6697239615486374	0.5046083923495819
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_C	Leave-One-Cohort-Out	51	Pyr	federated	0.4778726708074534	0.2954684201426394
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	42	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	42	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	43	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	43	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	44	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	44	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	45	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	45	Pyr	federated	0.9582608695652174	0.9198662110078
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	46	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	46	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	47	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	47	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	48	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	48	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	49	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	49	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	50	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	50	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	51	Pyr	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_D	Leave-One-Cohort-Out	51	Pyr	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	42	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	42	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	43	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	43	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	44	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	44	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	45	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	45	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	46	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	46	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	47	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	47	Pyr	federated	0.5636363636363636	0.3779644730092272
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	48	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	48	Pyr	federated	0.916083916083916	0.8451542547285166
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	49	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	49	Pyr	federated	0.5208711433756806	0.0916698497028211
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	50	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	50	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	51	Pyr	centralized	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	E. coli	uncorrected	lab_E	Leave-One-Cohort-Out	51	Pyr	federated	0.3333333333333333	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	42	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	42	HGSC	federated	0.4778726708074534	0.2954684201426394
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	43	HGSC	centralized	0.9565217391304348	0.9166666666666666
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	43	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	44	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	44	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	45	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	45	HGSC	federated	0.4778726708074534	0.2954684201426394
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	46	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	46	HGSC	federated	0.399108138238573	0.2041241452319315
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	47	HGSC	centralized	0.9565217391304348	0.9166666666666666
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	47	HGSC	federated	0.399108138238573	0.2041241452319315
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	48	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	48	HGSC	federated	0.399108138238573	0.2041241452319315
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	49	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	49	HGSC	federated	0.399108138238573	0.2041241452319315
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	50	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	50	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	51	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE10971	Leave-One-Cohort-Out	51	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	42	HGSC	centralized	0.9842312602987876	0.835321661641454
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	42	HGSC	federated	0.9457332790666124	0.4378468277372642
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	43	HGSC	centralized	0.9849608386193752	0.8501093327197284
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	43	HGSC	federated	0.9702564102564102	0.6977407149243606
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	44	HGSC	centralized	0.9849608386193752	0.8501093327197284
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	44	HGSC	federated	0.9547711351424878	0.5376453291901642
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	45	HGSC	centralized	0.9947437534329292	0.9461296371653204
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	45	HGSC	federated	0.962882861819032	0.6224424109697394
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	46	HGSC	centralized	0.989201360169102	0.8896313001841717
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	46	HGSC	federated	0.935513035776888	0.3088054804278383
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	47	HGSC	centralized	0.9849608386193752	0.8501093327197284
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	47	HGSC	federated	0.977032771150418	0.7663560447348134
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	48	HGSC	centralized	0.9897435897435898	0.8945945945945946
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	48	HGSC	federated	0.935513035776888	0.3088054804278383
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	49	HGSC	centralized	0.9897435897435898	0.8945945945945946
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	49	HGSC	federated	0.9547711351424878	0.5376453291901642
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	50	HGSC	centralized	0.9794871794871794	0.7891891891891892
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	50	HGSC	federated	0.9547711351424878	0.5376453291901642
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	51	HGSC	centralized	0.9849608386193752	0.8501093327197284
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE26712	Leave-One-Cohort-Out	51	HGSC	federated	0.935513035776888	0.3088054804278383
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	42	HGSC	centralized	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	42	HGSC	federated	0.821566110397946	0.6756639246921763
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	43	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	43	HGSC	federated	0.7376196990424078	0.5477225575051661
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	44	HGSC	centralized	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	44	HGSC	federated	0.6909090909090909	0.4803844614152614
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	45	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	45	HGSC	federated	0.780952380952381	0.6123724356957946
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	46	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	46	HGSC	federated	0.6400000000000001	0.408248290463863
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	47	HGSC	centralized	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	47	HGSC	federated	0.6400000000000001	0.408248290463863
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	48	HGSC	centralized	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	48	HGSC	federated	0.6909090909090909	0.4803844614152614
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	49	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	49	HGSC	federated	0.780952380952381	0.6123724356957946
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	50	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	50	HGSC	federated	0.7376196990424078	0.5477225575051661
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	51	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE38666	Leave-One-Cohort-Out	51	HGSC	federated	0.7376196990424078	0.5477225575051661
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	42	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	42	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	43	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	43	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	44	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	44	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	45	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	45	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	46	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	46	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	47	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	47	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	48	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	48	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	49	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	49	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	50	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	50	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	51	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE40595	Leave-One-Cohort-Out	51	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	42	HGSC	centralized	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	42	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	43	HGSC	centralized	0.9151234567901236	0.6782329983125268
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	43	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	44	HGSC	centralized	0.9151234567901236	0.6782329983125268
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	44	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	45	HGSC	centralized	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	45	HGSC	federated	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	46	HGSC	centralized	0.9151234567901236	0.6782329983125268
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	46	HGSC	federated	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	47	HGSC	centralized	0.9151234567901236	0.6782329983125268
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	47	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	48	HGSC	centralized	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	48	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	49	HGSC	centralized	0.9151234567901236	0.6782329983125268
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	49	HGSC	federated	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	50	HGSC	centralized	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	50	HGSC	federated	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	51	HGSC	centralized	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE6008	Leave-One-Cohort-Out	51	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	42	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	42	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	43	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	43	HGSC	federated	0.4706766917293233	0.2484519974999766
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	44	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	44	HGSC	federated	0.5621123515860358	0.3615507630310936
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	45	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	45	HGSC	federated	0.6417004048582996	0.4564354645876384
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	46	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	46	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	47	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	47	HGSC	federated	0.4706766917293233	0.2484519974999766
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	48	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	48	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	49	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	49	HGSC	federated	0.5621123515860358	0.3615507630310936
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	50	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	50	HGSC	federated	0.6417004048582996	0.4564354645876384
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	51	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	corrected	GSE69428	Leave-One-Cohort-Out	51	HGSC	federated	0.6417004048582996	0.4564354645876384
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	42	HGSC	centralized	0.8220735785953177	0.699205898780101
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	42	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	43	HGSC	centralized	0.6697239615486374	0.5046083923495819
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	43	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	44	HGSC	centralized	0.7236024844720497	0.5687964589945211
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	44	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	45	HGSC	centralized	0.8220735785953177	0.699205898780101
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	45	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	46	HGSC	centralized	0.5481065918653577	0.3708099243547831
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	46	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	47	HGSC	centralized	0.7236024844720497	0.5687964589945211
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	47	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	48	HGSC	centralized	0.6697239615486374	0.5046083923495819
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	48	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	49	HGSC	centralized	0.8220735785953177	0.699205898780101
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	49	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	50	HGSC	centralized	0.7741334011356894	0.6332785063987777
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	50	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	51	HGSC	centralized	0.7236024844720497	0.5687964589945211
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE10971	Leave-One-Cohort-Out	51	HGSC	federated	0.309462915601023	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	42	HGSC	centralized	0.9604326326076256	0.7076095233625271
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	42	HGSC	federated	0.9759264153293296	0.7767122075014999
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	43	HGSC	centralized	0.9565527065527064	0.6877303054053768
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	43	HGSC	federated	0.971626733921816	0.7459047232037165
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	44	HGSC	centralized	0.9565527065527064	0.6877303054053768
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	44	HGSC	federated	0.9643818428348814	0.7290620903129797
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	45	HGSC	centralized	0.9684098168946654	0.7523149223884441
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	45	HGSC	federated	0.9855558491975978	0.8699176724016799
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	46	HGSC	centralized	0.9604326326076256	0.7076095233625271
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	46	HGSC	federated	0.971626733921816	0.7459047232037165
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	47	HGSC	centralized	0.9565527065527064	0.6877303054053768
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	47	HGSC	federated	0.9684098168946654	0.7523149223884441
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	48	HGSC	centralized	0.9643818428348814	0.7290620903129797
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	48	HGSC	federated	0.989201360169102	0.8896313001841717
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	49	HGSC	centralized	0.9604326326076256	0.7076095233625271
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	49	HGSC	federated	0.9810844892812106	0.8359675225998309
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	50	HGSC	centralized	0.9604326326076256	0.7076095233625271
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	50	HGSC	federated	0.9901819195297455	0.9079230828238284
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	51	HGSC	centralized	0.9527337909043362	0.6692357192174129
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE26712	Leave-One-Cohort-Out	51	HGSC	federated	0.9901819195297455	0.9079230828238284
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	42	HGSC	centralized	0.8967032967032967	0.8017837257372731
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	42	HGSC	federated	0.6909090909090909	0.4803844614152614
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	43	HGSC	centralized	0.9320574162679426	0.8660254037844386
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	43	HGSC	federated	0.5838509316770186	0.3273268353539885
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	44	HGSC	centralized	0.9320574162679426	0.8660254037844386
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	44	HGSC	federated	0.6400000000000001	0.408248290463863
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	45	HGSC	centralized	0.8967032967032967	0.8017837257372731
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	45	HGSC	federated	0.6909090909090909	0.4803844614152614
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	46	HGSC	centralized	0.9320574162679426	0.8660254037844386
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	46	HGSC	federated	0.6400000000000001	0.408248290463863
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	47	HGSC	centralized	0.9320574162679426	0.8660254037844386
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	47	HGSC	federated	0.5211129296235679	0.227429413073671
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	48	HGSC	centralized	0.8967032967032967	0.8017837257372731
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	48	HGSC	federated	0.6400000000000001	0.408248290463863
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	49	HGSC	centralized	0.8967032967032967	0.8017837257372731
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	49	HGSC	federated	0.6909090909090909	0.4803844614152614
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	50	HGSC	centralized	0.86	0.7385489458759964
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	50	HGSC	federated	0.6400000000000001	0.408248290463863
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	51	HGSC	centralized	0.8967032967032967	0.8017837257372731
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE38666	Leave-One-Cohort-Out	51	HGSC	federated	0.6400000000000001	0.408248290463863
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	42	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	42	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	43	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	43	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	44	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	44	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	45	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	45	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	46	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	46	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	47	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	47	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	48	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	48	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	49	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	49	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	50	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	50	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	51	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE40595	Leave-One-Cohort-Out	51	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	42	HGSC	centralized	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	42	HGSC	federated	0.9151234567901236	0.6782329983125268
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	43	HGSC	centralized	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	43	HGSC	federated	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	44	HGSC	centralized	0.9151234567901236	0.6782329983125268
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	44	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	45	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	45	HGSC	federated	0.9607114713497692	0.8477912478906585
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	46	HGSC	centralized	0.9151234567901236	0.6782329983125268
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	46	HGSC	federated	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	47	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	47	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	48	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	48	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	49	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	49	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	50	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	50	HGSC	federated	0.9607114713497692	0.8477912478906585
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	51	HGSC	centralized	0.8589569160997733	0.4702699715629801
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE6008	Leave-One-Cohort-Out	51	HGSC	federated	0.9607114713497692	0.8477912478906585
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	42	HGSC	centralized	0.8366132723112127	0.7161148740394329
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	42	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	43	HGSC	centralized	0.7125506072874493	0.5443310539518174
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	43	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	44	HGSC	centralized	0.8929425837320574	0.8050764858994133
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	44	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	45	HGSC	centralized	0.8366132723112127	0.7161148740394329
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	45	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	46	HGSC	centralized	0.8366132723112127	0.7161148740394329
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	46	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	47	HGSC	centralized	0.8366132723112127	0.7161148740394329
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	47	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	48	HGSC	centralized	0.8366132723112127	0.7161148740394329
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	48	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	49	HGSC	centralized	0.8366132723112127	0.7161148740394329
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	49	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	50	HGSC	centralized	0.8366132723112127	0.7161148740394329
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	50	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	51	HGSC	centralized	0.8366132723112127	0.7161148740394329
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	no_label	GSE69428	Leave-One-Cohort-Out	51	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	42	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	42	HGSC	federated	0.9565217391304348	0.9166666666666666
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	43	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	43	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	44	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	44	HGSC	federated	0.399108138238573	0.2041241452319315
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	45	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	45	HGSC	federated	0.9563561076604556	0.9160572248286888
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	46	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	46	HGSC	federated	0.8690683229813665	0.7404795900698569
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	47	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	47	HGSC	federated	0.399108138238573	0.2041241452319315
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	48	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	48	HGSC	federated	0.9127140974967062	0.8397191227596315
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	49	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	49	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	50	HGSC	centralized	0.9565217391304348	0.9166666666666666
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	50	HGSC	federated	0.8695652173913043	0.7424242424242424
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	51	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE10971	Leave-One-Cohort-Out	51	HGSC	federated	0.7693800158744157	0.620505227994023
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	42	HGSC	centralized	0.962882861819032	0.6224424109697394
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	42	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	43	HGSC	centralized	0.9842312602987876	0.835321661641454
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	43	HGSC	federated	0.9702564102564102	0.6977407149243606
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	44	HGSC	centralized	0.9842312602987876	0.835321661641454
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	44	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	45	HGSC	centralized	0.973718767164646	0.7245136861175877
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	45	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	46	HGSC	centralized	0.9842312602987876	0.835321661641454
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	46	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	47	HGSC	centralized	0.935513035776888	0.3088054804278383
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	47	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	48	HGSC	centralized	0.9655491567256274	0.6317259287678867
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	48	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	49	HGSC	centralized	0.9418486023260558	0.3487429162314578
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	49	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	50	HGSC	centralized	0.9655491567256274	0.6317259287678867
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	50	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	51	HGSC	centralized	0.9457332790666124	0.4378468277372642
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE26712	Leave-One-Cohort-Out	51	HGSC	federated	0.9237516869095818	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	42	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	42	HGSC	federated	0.8641148325358851	0.7216878364870322
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	43	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	43	HGSC	federated	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	44	HGSC	centralized	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	44	HGSC	federated	0.5211129296235679	0.227429413073671
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	45	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	45	HGSC	federated	0.5211129296235679	0.227429413073671
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	46	HGSC	centralized	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	46	HGSC	federated	0.821566110397946	0.6756639246921763
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	47	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	47	HGSC	federated	0.821566110397946	0.6756639246921763
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	48	HGSC	centralized	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	48	HGSC	federated	0.6400000000000001	0.408248290463863
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	49	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	49	HGSC	federated	0.45	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	50	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	50	HGSC	federated	0.9320574162679426	0.8660254037844386
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	51	HGSC	centralized	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE38666	Leave-One-Cohort-Out	51	HGSC	federated	0.966392479435958	0.9318911162960932
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	42	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	42	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	43	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	43	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	44	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	44	HGSC	federated	0.8216446723909411	0.3788383804718293
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	45	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	45	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	46	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	46	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	47	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	47	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	48	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	48	HGSC	federated	0.971958971958972	0.8984941105353261
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	49	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	49	HGSC	federated	0.8681408681408682	0.5433581647846062
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	50	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	50	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	51	HGSC	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE40595	Leave-One-Cohort-Out	51	HGSC	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	42	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	42	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	43	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	43	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	44	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	44	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	45	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	45	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	46	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	46	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	47	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	47	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	48	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	48	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	49	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	49	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	50	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	50	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	51	HGSC	centralized	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE6008	Leave-One-Cohort-Out	51	HGSC	federated	0.7837037037037037	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	42	HGSC	centralized	0.5839676113360324	0.4107919181288746
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	42	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	43	HGSC	centralized	0.5839676113360324	0.4107919181288746
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	43	HGSC	federated	0.4706766917293233	0.2484519974999766
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	44	HGSC	centralized	0.4114832535885167	0.2236067977499789
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	44	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	45	HGSC	centralized	0.5033738191632928	0.3253956867279842
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	45	HGSC	federated	0.8394515701017248	0.724568837309472
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	46	HGSC	centralized	0.5839676113360324	0.4107919181288746
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	46	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	47	HGSC	centralized	0.5033738191632928	0.3253956867279842
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	47	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	48	HGSC	centralized	0.8941520467836256	0.8090398349558905
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	48	HGSC	federated	0.4706766917293233	0.2484519974999766
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	49	HGSC	centralized	0.5033738191632928	0.3253956867279842
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	49	HGSC	federated	0.3629764065335753	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	50	HGSC	centralized	0.3045112781954888	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	50	HGSC	federated	0.5621123515860358	0.3615507630310936
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	51	HGSC	centralized	0.5033738191632928	0.3253956867279842
+evaluation_classification_after_correction/results/classification_metric_report.csv	Ovarian cancer	uncorrected	GSE69428	Leave-One-Cohort-Out	51	HGSC	federated	0.9470735662686128	0.8989331499509895
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_01_L01	Leave-One-Cohort-Out	51	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_02_L02	Leave-One-Cohort-Out	51	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	corrected	client_03_L05_L04	Leave-One-Cohort-Out	51	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_01_L01	Leave-One-Cohort-Out	51	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_02_L02	Leave-One-Cohort-Out	51	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	no_label	client_03_L05_L04	Leave-One-Cohort-Out	51	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_01_L01	Leave-One-Cohort-Out	51	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_02_L02	Leave-One-Cohort-Out	51	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	42	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	42	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	43	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	43	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	44	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	44	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	45	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	45	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	46	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	46	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	47	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	47	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	48	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	48	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	49	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	49	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	50	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	50	condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	51	condition	centralized	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	Quartet Multiomics	uncorrected	client_03_L05_L04	Leave-One-Cohort-Out	51	condition	federated	0.958041958041958	0.9466382788624976
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	42	Condition	centralized	0.963765029972101	0.9272910162912698
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	42	Condition	federated	0.9636894618679126	0.9283444198266944
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	43	Condition	centralized	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	43	Condition	federated	0.9636894618679126	0.9283444198266944
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	44	Condition	centralized	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	44	Condition	federated	0.9636894618679126	0.9283444198266944
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	45	Condition	centralized	0.9689711376127016	0.937492791294024
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	45	Condition	federated	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	46	Condition	centralized	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	46	Condition	federated	0.9584554168927474	0.9183801580002452
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	47	Condition	centralized	0.963765029972101	0.9272910162912698
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	47	Condition	federated	0.9636894618679126	0.9283444198266944
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	48	Condition	centralized	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	48	Condition	federated	0.9532069016188888	0.908476819766372
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	49	Condition	centralized	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	49	Condition	federated	0.9636894618679126	0.9283444198266944
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	50	Condition	centralized	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	50	Condition	federated	0.9585466316603988	0.9171546588922944
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	51	Condition	centralized	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PDC000127	Leave-One-Cohort-Out	51	Condition	federated	0.9533150224016018	0.9070812772710416
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	42	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	42	Condition	federated	0.9784446715599738	0.9572167208490524
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	43	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	43	Condition	federated	0.9719815873694184	0.9440444481573034
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	44	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	44	Condition	federated	0.978446674098848	0.957038809444648
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	45	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	45	Condition	federated	0.9698270256210172	0.9396900902032336
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	46	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	46	Condition	federated	0.9698270256210172	0.9396900902032336
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	47	Condition	centralized	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	47	Condition	federated	0.9719815873694184	0.9440444481573034
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	48	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	48	Condition	federated	0.982755737247979	0.9658402949107554
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	49	Condition	centralized	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	49	Condition	federated	0.976292112389508	0.9526658586427582
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	50	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	50	Condition	federated	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	51	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD030344	Leave-One-Cohort-Out	51	Condition	federated	0.9676686595036024	0.935562126279226
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	42	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	42	Condition	federated	0.9912663755458516	0.9825324180015256
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	43	Condition	centralized	0.9868995633187772	0.9738367658276124
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	43	Condition	federated	0.9912663755458516	0.9825324180015256
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	44	Condition	centralized	0.9956331877729258	0.991304347826087
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	44	Condition	federated	0.9956331877729258	0.991304347826087
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	45	Condition	centralized	0.9956331877729258	0.991304347826087
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	45	Condition	federated	0.9868995633187772	0.9738367658276124
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	46	Condition	centralized	0.9956331877729258	0.991304347826087
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	46	Condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	47	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	47	Condition	federated	0.9868990636549262	0.9738347728387936
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	48	Condition	centralized	0.9956331877729258	0.991304347826087
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	48	Condition	federated	0.9912663755458516	0.9825324180015256
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	49	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	49	Condition	federated	0.9912663755458516	0.9825324180015256
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	50	Condition	centralized	0.9912663755458516	0.9825324180015256
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	50	Condition	federated	0.9956330212183088	0.9913036873758518
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	51	Condition	centralized	0.9956331877729258	0.991304347826087
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	corrected	PXD042844	Leave-One-Cohort-Out	51	Condition	federated	0.9956330212183088	0.9913036873758518
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	42	Condition	centralized	0.9741658646471184	0.947762464548726
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	42	Condition	federated	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	43	Condition	centralized	0.9741658646471184	0.947762464548726
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	43	Condition	federated	0.963765029972101	0.9272910162912698
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	44	Condition	centralized	0.9741658646471184	0.947762464548726
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	44	Condition	federated	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	45	Condition	centralized	0.9741658646471184	0.947762464548726
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	45	Condition	federated	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	46	Condition	centralized	0.979314091741801	0.958626140296004
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	46	Condition	federated	0.9741178785515008	0.9484650343186364
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	47	Condition	centralized	0.9741178785515008	0.9484650343186364
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	47	Condition	federated	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	48	Condition	centralized	0.979314091741801	0.958626140296004
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	48	Condition	federated	0.9636894618679126	0.9283444198266944
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	49	Condition	centralized	0.979314091741801	0.958626140296004
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	49	Condition	federated	0.968909973745299	0.9383719262217848
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	50	Condition	centralized	0.9741178785515008	0.9484650343186364
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	50	Condition	federated	0.9689711376127016	0.937492791294024
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	51	Condition	centralized	0.9741178785515008	0.9484650343186364
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PDC000127	Leave-One-Cohort-Out	51	Condition	federated	0.963765029972101	0.9272910162912698
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	42	Condition	centralized	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	42	Condition	federated	0.9805990327391322	0.9616447246650176
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	43	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	43	Condition	federated	0.9784446715599738	0.9572167208490524
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	44	Condition	centralized	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	44	Condition	federated	0.982755737247979	0.9658402949107554
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	45	Condition	centralized	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	45	Condition	federated	0.9719815873694184	0.9440444481573034
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	46	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	46	Condition	federated	0.9698253437383872	0.9397948669321318
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	47	Condition	centralized	0.9698270256210172	0.9396900902032336
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	47	Condition	federated	0.9719815873694184	0.9440444481573034
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	48	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	48	Condition	federated	0.982755737247979	0.9658402949107554
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	49	Condition	centralized	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	49	Condition	federated	0.974130240856378	0.948840144095737
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	50	Condition	centralized	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	50	Condition	federated	0.9719815873694184	0.9440444481573034
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	51	Condition	centralized	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD030344	Leave-One-Cohort-Out	51	Condition	federated	0.9676650545652205	0.9357708755708916
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	42	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	42	Condition	federated	0.9912663755458516	0.9825324180015256
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	43	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	43	Condition	federated	0.982532751091703	0.9650648360030512
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	44	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	44	Condition	federated	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	45	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	45	Condition	federated	0.9868995633187772	0.9738367658276124
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	46	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	46	Condition	federated	1.0	1.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	47	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	47	Condition	federated	0.9868990636549262	0.9738347728387936
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	48	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	48	Condition	federated	0.9868990636549262	0.9738347728387936
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	49	Condition	centralized	0.9912663755458516	0.9825324180015256
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	49	Condition	federated	0.9868995633187772	0.9738367658276124
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	50	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	50	Condition	federated	0.9912663755458516	0.9825324180015256
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	51	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	no_label	PXD042844	Leave-One-Cohort-Out	51	Condition	federated	0.9956330212183088	0.9913036873758518
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	42	Condition	centralized	0.2838093103669079	0.0891882585015844
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	42	Condition	federated	0.6148422842021479	0.452365539254671
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	43	Condition	centralized	0.261662834680709	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	43	Condition	federated	0.5363200152026224	0.3737506905866114
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	44	Condition	centralized	0.3659280915012566	0.2037203384166269
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	44	Condition	federated	0.3561836185821433	0.1927430339853483
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	45	Condition	centralized	0.6479349540138734	0.4871821398064971
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	45	Condition	federated	0.5133029474396791	0.351371835205867
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	46	Condition	centralized	0.261662834680709	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	46	Condition	federated	0.6080452799676572	0.4453617714151233
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	47	Condition	centralized	0.3334808860931523	0.1289111389254221
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	47	Condition	federated	0.6011851428971762	0.4383386390262021
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	48	Condition	centralized	0.2946240804173474	0.1095184387857999
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	48	Condition	federated	0.6282532432436307	0.4663253819279224
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	49	Condition	centralized	0.261662834680709	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	49	Condition	federated	0.261662834680709	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	50	Condition	centralized	0.2838093103669079	0.0891882585015844
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	50	Condition	federated	0.2728238678218208	0.0629020277619209
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	51	Condition	centralized	0.261662834680709	0.0
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PDC000127	Leave-One-Cohort-Out	51	Condition	federated	0.3755357349704622	0.214246678723994
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	42	Condition	centralized	0.9698253437383872	0.9397948669321318
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	42	Condition	federated	0.9698270256210172	0.9396900902032336
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	43	Condition	centralized	0.9719815873694184	0.9440444481573034
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	43	Condition	federated	0.9762877066811616	0.9530201083003088
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	44	Condition	centralized	0.9698225401839636	0.939969572725646
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	44	Condition	federated	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	45	Condition	centralized	0.9698253437383872	0.9397948669321318
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	45	Condition	federated	0.9784446715599738	0.9572167208490524
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	46	Condition	centralized	0.9676686595036024	0.935562126279226
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	46	Condition	federated	0.9719670036017196	0.9450283588130846
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	47	Condition	centralized	0.9762877066811616	0.9530201083003088
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	47	Condition	federated	0.9719826284864952	0.9439742863654778
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	48	Condition	centralized	0.9719815873694184	0.9440444481573034
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	48	Condition	federated	0.9741360089186176	0.9484168381883898
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	49	Condition	centralized	0.9741360089186176	0.9484168381883898
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	49	Condition	federated	0.9741360089186176	0.9484168381883898
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	50	Condition	centralized	0.9655114744959584	0.9313459986639429
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	50	Condition	federated	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	51	Condition	centralized	0.974130240856378	0.948840144095737
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD030344	Leave-One-Cohort-Out	51	Condition	federated	0.9741374505323004	0.948311100205098
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	42	Condition	centralized	0.9956331877729258	0.991304347826087
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	42	Condition	federated	0.9956331877729258	0.991304347826087
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	43	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	43	Condition	federated	0.9868990636549262	0.9738347728387936
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	44	Condition	centralized	0.991266042455674	0.982683655311714
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	44	Condition	federated	0.651680946326903	0.4787196575438845
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	45	Condition	centralized	0.9606446644427832	0.924280695361319
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	45	Condition	federated	0.986898064327224	0.9741359834018584
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	46	Condition	centralized	0.9606446644427832	0.924280695361319
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	46	Condition	federated	0.9606446644427832	0.924280695361319
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	47	Condition	centralized	0.9518641151421452	0.9081658534603162
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	47	Condition	federated	0.986898064327224	0.9741359834018584
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	48	Condition	centralized	0.9562852023809764	0.9149233615319492
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	48	Condition	federated	0.986898064327224	0.9741359834018584
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	49	Condition	centralized	0.978157609227572	0.9572521873003692
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	49	Condition	federated	0.9868995633187772	0.9738367658276124
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	50	Condition	centralized	0.9694078159314276	0.9406383869049528
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	50	Condition	federated	0.9956330212183088	0.9913036873758518
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	51	Condition	centralized	0.982528753399704	0.9656594418845657
+evaluation_classification_after_correction/results/classification_metric_report.csv	ccRCC	uncorrected	PXD042844	Leave-One-Cohort-Out	51	Condition	federated	0.982528753399704	0.9656594418845657

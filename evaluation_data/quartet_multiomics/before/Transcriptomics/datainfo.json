@@ -1,6 +1,6 @@
 {
   "data_name": "Quartet full multiomics - Transcriptomics",
-  "covariates": ["D6", "F7", "M8"],
+  "covariates": ["D5", "F7", "M8"],
   "prediction_targets": [
     "condition"
   ],

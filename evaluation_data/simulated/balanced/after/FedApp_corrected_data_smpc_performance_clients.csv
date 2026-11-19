@@ -1,0 +1,4 @@
+client,dataset,arm,experiment,channel,query_interval,coordinator,smpc,run_duration,n_samples,n_features,n_features_used,app_pre_fedrbe_peak_rss_bytes,app_baseline_rss_bytes,app_peak_rss_bytes,container_mem_peak_bytes,container_max_anon_bytes,container_cpu_usec,client_compute,aggregation,waiting
+lab1,Simulated Balanced,label_aware,Simulated Balanced,internet,0.5,True,True,13.390233278274536,200,6000,6000,68001792,68005888,155602944,234045440,174981120,25783361,5.554373264312744,0.7041471004486084,7.131712913513184
+lab2,Simulated Balanced,label_aware,Simulated Balanced,internet,0.5,False,True,14.470387935638428,200,6000,6000,68108288,68112384,161665024,231165952,171737088,20554101,5.6530492305755615,0.0,8.817338705062866
+lab3,Simulated Balanced,label_aware,Simulated Balanced,internet,0.5,False,True,12.481298446655273,200,6000,6000,68046848,67907584,153305088,231743488,172503040,18911613,5.665988445281982,0.0,6.815310001373291

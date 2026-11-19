@@ -1,0 +1,24 @@
+Sample_geo_ID	Status	HistSubtypes	Stage	Grade2	ClinicopathologicSubtypes	platform_id	supplementary_file	cycle_phase	brca_status	family_history	tumour_site	tissue	donor_id	age	Stage2	Stage3
+GSM277776	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277776/suppl/GSM277776.CEL.gz	Luteal	NA	No	NA	Fallopian tube epithelium	FTEn_1	46	NA	NA
+GSM277777	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277777/suppl/GSM277777.CEL.gz	Luteal	NA	No	NA	Fallopian tube epithelium	FTEn_2	46	NA	NA
+GSM277778	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277778/suppl/GSM277778.CEL.gz	Luteal	NA	No	NA	Fallopian tube epithelium	FTEn_3	42	NA	NA
+GSM277779	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277779/suppl/GSM277779.CEL.gz	Luteal	NA	No	NA	Fallopian tube epithelium	FTEn_4	36	NA	NA
+GSM277780	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277780/suppl/GSM277780.CEL.gz	Luteal	NA	No	NA	Fallopian tube epithelium	FTEn_5	43	NA	NA
+GSM277781	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277781/suppl/GSM277781.CEL.gz	Luteal	NA	No	NA	Fallopian tube epithelium	FTEn_6	47	NA	NA
+GSM277782	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277782/suppl/GSM277782.CEL.gz	Follicular	NA	No	NA	Fallopian tube epithelium	FTEn_7	41	NA	NA
+GSM277783	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277783/suppl/GSM277783.CEL.gz	Follicular	NA	No	NA	Fallopian tube epithelium	FTEn_8	42	NA	NA
+GSM277784	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277784/suppl/GSM277784.CEL.gz	Follicular	NA	No	NA	Fallopian tube epithelium	FTEn_9	46	NA	NA
+GSM277785	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277785/suppl/GSM277785.CEL.gz	Follicular	NA	No	NA	Fallopian tube epithelium	FTEn_10	47	NA	NA
+GSM277786	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277786/suppl/GSM277786.CEL.gz	Follicular	NA	No	NA	Fallopian tube epithelium	FTEn_11	50	NA	NA
+GSM277787	normal	NA	NA	NA	NA	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277787/suppl/GSM277787.CEL.gz	Follicular	NA	No	NA	Fallopian tube epithelium	FTEn_12	48	NA	NA
+GSM277800	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277800/suppl/GSM277800.CEL.gz	NA	Negative	No	fallopian tube	High-grade serous carcinoma, fallopian tube	HGSC_1	41	NA	NA
+GSM277803	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277803/suppl/GSM277803.CEL.gz	NA	Unknown	No	fallopian tube	High-grade serous carcinoma, fallopian tube	HGSC_4	59	NA	NA
+GSM277804	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277804/suppl/GSM277804.CEL.gz	NA	Unknown	Yes	fallopian tube	High-grade serous carcinoma, fallopian tube	HGSC_5	57	NA	NA
+GSM277805	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277805/suppl/GSM277805.CEL.gz	NA	BRCA1	Yes	fallopian tube	High-grade serous carcinoma, fallopian tube	HGSC_6	58	NA	NA
+GSM277806	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277806/suppl/GSM277806.CEL.gz	NA	BRCA1	Yes	ovary	High-grade serous carcinoma, ovary	HGSC_7	54	NA	NA
+GSM277807	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277807/suppl/GSM277807.CEL.gz	NA	Unknown	Yes	ovary	High-grade serous carcinoma, ovary	HGSC_8	55	NA	NA
+GSM277808	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277808/suppl/GSM277808.CEL.gz	NA	BRCA1 917delTT	Yes	ovary	High-grade serous carcinoma, ovary	HGSC_9	50	NA	NA
+GSM277809	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277809/suppl/GSM277809.CEL.gz	NA	BRCA1 3875delGTCT	No	ovary	High-grade serous carcinoma, ovary	HGSC_10	42	NA	NA
+GSM277810	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277810/suppl/GSM277810.CEL.gz	NA	Unknown	Yes	ovary	High-grade serous carcinoma, ovary	HGSC_2	57	NA	NA
+GSM277811	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277811/suppl/GSM277811.CEL.gz	NA	Unknown	No	ovary	High-grade serous carcinoma, ovary	HGSC_3	57	NA	NA
+GSM277812	ovarian tumour	high-grade serous carcinoma	NA	High	Type II	GPL570	ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM277nnn/GSM277812/suppl/GSM277812.CEL.gz	NA	BRCA1	Yes	ovary	High-grade serous carcinoma, ovary	HGSC_11	32	NA	NA

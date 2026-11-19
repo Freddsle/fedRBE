@@ -1,7 +1,3 @@
-library(invgamma)
-library(RobNorm)
-library(tidyverse)
-
 normalize_count <- function(n, max_n = NULL) {
     out <- max(0L, as.integer(round(n)))
     if (!is.null(max_n)) {
@@ -93,9 +89,9 @@ expand_effects_by_sample <- function(effect_values, batch_vec, n_rows, col_names
 
 ################################################################################################
 # Adapted from RobNorm sim.dat.fn with modified IG parameters
-sim.dat.fn = function(row.frac, col.frac, mu.up, mu.down, n, m, nu.fix=TRUE) {
+sim.dat.fn = function(row.frac, col.frac, mu.up, mu.down, n, m) {
     mu.00 = rnorm(n, 0, 1)
-    var.00 = rinvgamma(n, 2, 3)
+    var.00 = 1 / rgamma(n, 2, 3) # InvGamma(shape 2, scale 3); same draws as invgamma::rinvgamma
 
     X.0 = matrix(rnorm(n*m, 
 					outer(mu.00, rep(1, m)),
@@ -119,17 +115,23 @@ sim.dat.fn = function(row.frac, col.frac, mu.up, mu.down, n, m, nu.fix=TRUE) {
 	
 	rownames(X) = paste("prt", 1:nrow(X), sep=".")
 	colnames(X) = paste("s", 1:ncol(X), sep=".")
-    return(list(dat=X, raw=X.0))
+    return(list(dat=X))
 }
 
+
+# Graded batch-condition confounding: 150/300/150 samples per lab with condition-B
+# fractions p, 1 - p and p. The names are simulation scenarios.
+confounded_b_fraction <- c(confounded_p50 = 0.5, confounded_p30 = 0.3,
+                           confounded_p15 = 0.15, confounded_p05 = 0.05)
 
 select_proportions <- function(mode_version){
     proportions <- switch(
         mode_version,
         balanced = list(0.6, 0.6, 0.6),
-        imbalanced_balanced = list(0.6, 0.6, 0.6),
         mild_imbalanced = list(0.4, 0.5, 0.66),
         strong_imbalanced = list(0.2, 0.5, 0.7),
+        confounded_p50 = , confounded_p30 = , confounded_p15 = ,
+        confounded_p05 = list(0.6, 0.6, 0.6),
         NULL
     )
 
@@ -141,11 +143,52 @@ select_proportions <- function(mode_version){
 }
 
 
+generate_metadata <- function(batch_info, mode){
+
+    if (mode == "balanced"){
+        batches <- rep(c("batch1", "batch2", "batch3"), each = 100)
+        batch_info$condition <- as.factor(c(rep("A", 300), rep("B", 300)))
+        batch_info$batch <- as.factor(c(batches[sample(1:300)], batches[sample(1:300)]))
+
+    } else if (mode == "strong_imbalanced") {
+        batches_A <- c(rep("batch1", 32), rep("batch2", 28), rep("batch3", 288))
+        batches_B <- c(rep("batch1", 8), rep("batch2", 52), rep("batch3", 192))
+        batch_info$condition <- as.factor(c(rep("A", length(batches_A)), rep("B", length(batches_B))))
+        batch_info$batch <- as.factor(c(
+            batches_A[sample(1:length(batches_A))],
+            batches_B[sample(1:length(batches_B))]))
+
+    } else if(mode == "mild_imbalanced") {
+        batches_A <- c(rep("batch1", 36), rep("batch2", 91), rep("batch3", 185))
+        batches_B <- c(rep("batch1", 54), rep("batch2", 49), rep("batch3", 185))
+        batch_info$condition <- as.factor(c(rep("A", length(batches_A)), rep("B", length(batches_B))))
+        batch_info$batch <- as.factor(c(
+            batches_A[sample(1:length(batches_A))],
+            batches_B[sample(1:length(batches_B))]))
+    } else if (mode %in% names(confounded_b_fraction)) {
+        p <- confounded_b_fraction[[mode]]
+        sizes <- c(150L, 300L, 150L)
+        n_B <- c(normalize_count(sizes[1] * p), normalize_count(sizes[2] * (1 - p)),
+                 normalize_count(sizes[3] * p))
+        batches_A <- rep(c("batch1", "batch2", "batch3"), sizes - n_B)
+        batches_B <- rep(c("batch1", "batch2", "batch3"), n_B)
+        batch_info$condition <- as.factor(c(rep("A", length(batches_A)), rep("B", length(batches_B))))
+        batch_info$batch <- as.factor(c(
+            batches_A[sample(1:length(batches_A))],
+            batches_B[sample(1:length(batches_B))]))
+    } else {
+        stop("Unknown mode: ", mode, call. = FALSE)
+    }
+    return(batch_info)
+
+}
+
+
 generate_data <- function(
     col_frac_A, col_frac_B,
     frac_1, frac_7,
     mu_1 = 1.25, mu_4 = 1.25,
-    batch_info = NULL, nu.fix = TRUE,
+    batch_info = NULL,
     mode_version = "balanced",
     m = 600
     ){
@@ -154,9 +197,9 @@ generate_data <- function(
     }
 
     # add A condition
-    data_mu1 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_A, mu.up=mu_1, mu.down=0, n=2500, m=m, nu.fix=nu.fix)
+    data_mu1 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_A, mu.up=mu_1, mu.down=0, n=2500, m=m)
     # add B condition
-    data_mu2 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_B, mu.up=0, mu.down=mu_1, n=2500, m=m, nu.fix=nu.fix)
+    data_mu2 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_B, mu.up=0, mu.down=mu_1, n=2500, m=m)
 
     # % of confounder in batches
     b_proportions <- select_proportions(mode_version)
@@ -173,7 +216,7 @@ generate_data <- function(
     batch3_size <- normalize_count(b_proportions[[3]] * length(batch3_files), length(batch3_files))
     need_to_generate <- (batch1_size + batch2_size + batch3_size) / m
     # add confounder
-    data_mu7 <- sim.dat.fn(row.frac=frac_7, col.frac=need_to_generate, mu.up=0, mu.down=-1*mu_4, n=1000, m=m,  nu.fix=nu.fix)
+    data_mu7 <- sim.dat.fn(row.frac=frac_7, col.frac=need_to_generate, mu.up=0, mu.down=-1*mu_4, n=1000, m=m)
     cat(ncol(data_mu7$dat) * need_to_generate, "\n")
 
     new_names <- c(
@@ -204,70 +247,16 @@ generate_data <- function(
         drop_last_rows(data_mu2$dat, mu1_signal_rows),
         drop_last_rows(data_mu7$dat, mu7_signal_rows)
         )
+    # Ground truth for evaluation: row blocks follow the rbind order above.
+    attr(data_allmu, "feature_role") <- rep(
+        c("A_DE", "B_DE", "latent", "null"),
+        c(mu1_signal_rows, mu1_signal_rows, mu7_signal_rows,
+          nrow(data_allmu) - 2 * mu1_signal_rows - mu7_signal_rows)
+    )
+    attr(data_allmu, "latent_samples") <- new_names
 
     return(data_allmu)
 }
-
-
-apply_rotation_effect_1pc <- function(X, batch_vec, target_batch, angle_deg = 25, pc = 1) {
-    # X: proteins x samples matrix
-    # batch_vec: length == ncol(X)
-    # target_batch: which batch label to rotate (e.g., "batch2")
-    # angle_deg: rotation angle (degrees); 0 => no-op
-    # pc: axis PC index (default 1). Rotation is done in (PCpc, PCpc+1) plane.
-
-    if (is.null(target_batch) || is.na(target_batch) || angle_deg == 0) return(X)
-
-    batch_chr <- as.character(batch_vec)
-    idx <- which(batch_chr == target_batch)
-    if (length(idx) == 0) return(X)
-
-    # Center by protein means (keeps per-protein mean structure stable)
-    mu <- rowMeans(X, na.rm = TRUE)
-    Xc <- sweep(X, 1, mu, "-")
-
-    # Neutralize NAs for SVD math (if you ever call after missingness)
-    if (anyNA(Xc)) Xc[is.na(Xc)] <- 0
-
-    pc <- as.integer(pc)
-    k <- max(2L, pc + 1L)  # need pc and pc+1 to define a rotation plane
-
-    # Truncated SVD in protein space
-    sv <- svd(Xc, nu = k, nv = 0)
-
-    if (ncol(sv$u) < (pc + 1L)) return(X)  # degenerate edge case
-
-    u1 <- sv$u[, pc]
-    u2 <- sv$u[, pc + 1L]  # <-- key fix: use the *actual* next PC direction
-
-    # Fix signs deterministically (avoid run-to-run random flips)
-    j1 <- which.max(abs(u1)); if (u1[j1] < 0) u1 <- -u1
-    j2 <- which.max(abs(u2)); if (u2[j2] < 0) u2 <- -u2
-
-    # Rotation in (u1, u2) plane
-    theta <- angle_deg * pi / 180
-    ct <- cos(theta); st <- sin(theta)
-
-    # Project target batch columns to (u1, u2) coordinates
-    a1 <- as.numeric(crossprod(u1, Xc[, idx, drop = FALSE]))
-    a2 <- as.numeric(crossprod(u2, Xc[, idx, drop = FALSE]))
-
-    # Rotate coordinates
-    a1p <- ct * a1 - st * a2
-    a2p <- st * a1 + ct * a2
-
-    # Rank-2 update only on target batch columns
-    Xc[, idx] <- Xc[, idx, drop = FALSE] +
-        u1 %*% t(a1p - a1) +
-        u2 %*% t(a2p - a2)
-
-    # Add means back
-    Xrot <- sweep(Xc, 1, mu, "+")
-    rownames(Xrot) <- rownames(X)
-    colnames(Xrot) <- colnames(X)
-    Xrot
-}
-
 
 
 pc1_var_explained_fast <- function(X, iters = 15L) {
@@ -333,7 +322,8 @@ add_batch_effect <- function(
         mult_batch_effects <- sample_effects_with_min_spacing(
             multiplicative_params$shape,
             multiplicative_params$scale,
-            function(shape, scale) rinvgamma(1, shape, scale)
+            # Rate `scale` gives InvGamma(shape, scale), as invgamma::rinvgamma did.
+            function(shape, scale) 1 / rgamma(1, shape, scale)
         )
         names(mult_batch_effects) <- batch_levels
         print(mult_batch_effects)
@@ -366,33 +356,10 @@ add_batch_effect <- function(
         }
     }
 
-    # ---- Rotation effect (optional): one batch, 1 PC ----
-    # Enable by setting either:
-    #   attr(batch_info, "rotation") <- list(batch="batch2", angle_deg=25, pc=1)
-    # or by adding columns rotation_batch + rotation_angle_deg (single unique value each).
-    rot <- attr(batch_info, "rotation")
-
-    if (is.null(rot) &&
-        ("rotation_batch" %in% names(batch_info)) &&
-        ("rotation_angle_deg" %in% names(batch_info))) {
-
-        rb <- unique(na.omit(as.character(batch_info$rotation_batch)))
-        ra <- unique(na.omit(as.numeric(batch_info$rotation_angle_deg)))
-        if (length(rb) >= 1 && length(ra) >= 1) {
-            rot <- list(batch = rb[1], angle_deg = ra[1], pc = 1)
-        }
-    }
-
-    if (!is.null(rot) && !is.null(rot$batch) && !is.null(rot$angle_deg) && rot$angle_deg != 0) {
-        data_with_batch_effects <- apply_rotation_effect_1pc(
-            X = data_with_batch_effects,
-            batch_vec = batch_info$batch,
-            target_batch = as.character(rot$batch),
-            angle_deg = as.numeric(rot$angle_deg),
-            pc = ifelse(is.null(rot$pc), 1, as.integer(rot$pc))
-        )
-    }
-
+    # Realized lab parameters for provenance; the added noise is N(0, 0.5) scaled per lab.
+    attr(data_with_batch_effects, "batch_params") <- list(
+        additive = add_batch_effects, multiplicative = mult_batch_effects,
+        noise_sd = 0.5 * mult_batch_effects)
     return(data_with_batch_effects)
 }
 

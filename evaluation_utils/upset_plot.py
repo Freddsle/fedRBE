@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from upsetplot import UpSet, from_memberships
 import matplotlib.pyplot as plt
@@ -40,6 +41,11 @@ def generate_upset_plot(intensities, colname, title, splited=False,
     # Creating and displaying the UpSet plot
     upset = UpSet(example, subset_size='count', show_counts=True, sort_by='cardinality', min_subset_size=100)
     upset.plot()
+    # Convert upsetplot 0.9 count-label coordinates for current matplotlib.
+    for axis in plt.gcf().axes:
+        for text in axis.texts:
+            x, y = text.get_position()
+            text.set_position((float(np.asarray(x).ravel()[0]), float(np.asarray(y).ravel()[0])))
     plt.title(title)
 
     if save_plot:

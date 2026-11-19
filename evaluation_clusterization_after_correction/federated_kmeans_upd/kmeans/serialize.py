@@ -1,5 +1,4 @@
 import numpy as np
-import json
 
 def serialize_array(ar):
     shape = ar.shape
@@ -36,13 +35,3 @@ def deserialize_dict(seri):
         else:
             dict[elem] = seri[elem]
     return dict
-
-
-if __name__ == '__main__':
-    b = np.array([[1,2,3], [1,2,3]])
-    ser = serialize_array(b)
-    ar = deserialize_array(ser)
-
-    d = {'a': ar}
-    seri = serialize_dict(d)
-    dd = deserialize_dict(seri)

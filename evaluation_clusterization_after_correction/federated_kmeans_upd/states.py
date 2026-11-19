@@ -1,10 +1,6 @@
-import time
-
-
 from FeatureCloud.app.engine.app import AppState, app_state, Role
 from kmeans.config import FCConfig
 from kmeans.FCFederatedKMeans import FCFederatedKMeans
-from kmeans.COParams import COParams
 
 # This is the first (initial) state all app instances are in at the beginning
 # By calling it 'initial' the FeatureCloud template engine knows that this state is the first one to go into automatically at the beginning
@@ -17,7 +13,6 @@ class InitialState(AppState):
             # parse parameters
             self.config = FCConfig()
             self.config.parse_configuration()
-            self.store('configuration', self.config)
             print("[CLIENT] finished parsing parameter file.", flush=True)
 
     def register(self):
@@ -84,8 +79,6 @@ class WaitForParamsState(AppState):
         print('setting parameters')
         self.load('kmeans').set_parameters(incoming)
         self.load('kmeans').select_rows(incoming)
-
-        config = self.load('configuration')
 
         self.load('kmeans').compute_sums()
         out = self.load('kmeans').out
@@ -164,9 +157,8 @@ class ScaleDataState(AppState):
 
 
     def run(self):
-        config = self.load('configuration')
         incoming = self.await_data()
-        self.load('kmeans').apply_scaling(incoming, highly_variable=config.highly_variable)
+        self.load('kmeans').apply_scaling(incoming)
 
         return 'start_k_means'
 
@@ -210,7 +202,6 @@ class ShareProjectionsState(AppState):
 
     def run(self):
         print('SAVING RESULTS')
-        config = self.load('configuration')
 
         self.load('kmeans').save_clustering()
         self.load('kmeans').save_logs()
