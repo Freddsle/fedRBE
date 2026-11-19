@@ -93,10 +93,10 @@ figure.
 
 The [S5 script](../../evaluation/quartet_separated_modality_pca_fixed_effect_variance.R)
 runs after federated correction, using the default layout of 48 profiles and four
-batches across three clients per modality. Set `CORRECTION_ARM=label_aware`
-(default) or `no_label`. Its sequential model is `~ condition + batch` (donor first);
+batches across three clients per modality. Without `CORRECTION_ARM` it draws both
+arms; `CORRECTION_ARM=label_aware` or `no_label` draws one. Its sequential model is `~ condition + batch` (donor first);
 PCA batch codes are modality-specific. See the
-[run command and outputs](../../docs/reproduce.md#7-generate-figures-3-4-s5-and-s7-for-each-correction-arm).
+[run command and outputs](../../docs/reproduce.md#7-generate-figures-3-4-s5-s7-and-s8-for-each-correction-arm).
 
 ## Directory orientation
 

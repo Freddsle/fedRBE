@@ -23,11 +23,10 @@ The corrected-data loop expects numbered files such as
 `after/individual_results/only_batch_corrected_data_0.csv`, silently skipping them
 when absent. Current results use study-named directories, so that loop is stale.
 
-Current classification uses [before/datainfo.json](../before/datainfo.json) and
-[after/label_aware/datainfo.json](../after/label_aware/datainfo.json), with study-level expression/design
-inputs and corrected `full_corrected_data.csv` files. The
-[DataInfo loader](../../../evaluation_classification_after_correction/helper/helper_run_classification_report_metrics.py)
-performs alignment, transposition, target joining, and temporary input creation.
+Current classification reads the study-level expression/design inputs under
+[before/](../before/) and the target from [before/datainfo.json](../before/datainfo.json)
+([dataset registry](../../../evaluation_classification_after_correction/helper/steps/datasets.py)),
+and corrects them with fedRBE inside each evaluation run.
 Clustering reads matrices and designs through
 [datasets.yaml](../../../evaluation_utils/datasets.yaml).
 Follow the [current dataset guide](../README.md); this script is retained only

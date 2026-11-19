@@ -30,6 +30,57 @@ def subtract_batch_effect(data: pd.DataFrame, betas: np.ndarray,
     return pd.DataFrame(corrected, index=data.index, columns=data.columns)
 
 
+def align_to_training_level(client: "Client",
+                            training_level: pd.Series) -> Tuple[pd.DataFrame, Dict[str, int]]:
+    """
+    Corrects a new batch, which was not part of a fedRBE run, with the training
+    level of that run (see coordinator_utils.training_level). The corrected
+    training data of the run sits at the training level, so each batch of the
+    client is shifted per feature such that its mean equals the training level:
+    value - (batch mean - training level).
+    No labels are needed, so differences in the label mix between the batch and
+    the training data are treated as batch effect.
+    A feature is only shifted in a batch if it has a training level and at
+    least client.min_samples finite values in that batch, otherwise the values
+    stay as loaded (normalized, not corrected).
+    Args:
+        client: The new batch, loaded with config_based_init (hashed feature
+            names, normalized like the fedRBE run)
+        training_level: The training level per hashed feature name
+    Returns:
+        The aligned data, features (real names) x samples, and per batch label
+        the number of aligned features
+    """
+    assert isinstance(client.data, pd.DataFrame)
+    assert isinstance(client.hash2feature, dict)
+    data = client.data.apply(pd.to_numeric, errors="coerce")
+    shared_features = data.index[data.index.isin(training_level.index)]
+    if shared_features.empty:
+        raise ValueError(f"Client {client.client_name}: none of its features has a training "
+                         "level; the feature names (or their hashes) do not match the fedRBE run")
+    aligned = data.copy()
+    aligned_per_batch = {}
+    min_values = max(client.min_samples, 1)
+    for batch_label in client.batch_labels:
+        if client.batch_col:
+            assert isinstance(client.design, pd.DataFrame)
+            batch_name = batch_label.split("|", 1)[1]
+            batch_samples = client.design.index[client.design[client.batch_col] == batch_name]
+        else:
+            batch_samples = data.columns
+        batch_values = data.loc[shared_features, batch_samples]
+        num_finite_values = np.isfinite(batch_values).sum(axis=1)
+        features = num_finite_values.index[num_finite_values >= min_values]
+        if features.empty:
+            raise ValueError(f"Batch {batch_label}: no feature with a training level has at "
+                             f"least {min_values} finite values")
+        batch_mean = batch_values.loc[features].mean(axis=1)
+        shift = batch_mean - training_level.loc[features]
+        aligned.loc[features, batch_samples] = batch_values.loc[features].sub(shift, axis=0)
+        aligned_per_batch[batch_label] = len(features)
+    return aligned.rename(index=client.hash2feature), aligned_per_batch
+
+
 class Client:
     def __init__(self):
         """
@@ -38,6 +89,8 @@ class Client:
         self.client_name = ""
         self.smpc = False
         self.feature_block_size = None
+        self.min_clients = 3
+        self.normalization_method = None
         self.covariates = None
         self.min_samples = 0
         self.XtX = None
@@ -135,6 +188,10 @@ class Client:
         if not isinstance(smpc, bool):
             raise ValueError("smpc must be a boolean (true or false)")
 
+        min_clients = config.get("min_clients", 3)
+        if isinstance(min_clients, bool) or not isinstance(min_clients, int) or min_clients < 2:
+            raise ValueError("min_clients must be an integer of at least 2 (default: 3)")
+
         feature_block_size = config.get("feature_block_size")
         if feature_block_size is not None and (
                 isinstance(feature_block_size, bool)
@@ -195,6 +252,9 @@ class Client:
         self.client_name = clientname
         self.smpc = smpc
         self.feature_block_size = feature_block_size
+        self.min_clients = min_clients
+        # None if the data is used as given, see normalize
+        self.normalization_method = normalizationMethod or None
         self.variables = covariates
         self.min_samples = min_samples
         self.separator = separator

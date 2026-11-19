@@ -12,6 +12,7 @@ import os
 
 import numpy as np
 import pandas as pd
+import yaml
 
 try:
     # inside the app container, the app folder is the working directory
@@ -32,6 +33,11 @@ SMPC_EXPONENT = 12
 # Output file of the coordinator containing the batch coefficients
 BATCH_COEFFICIENTS_FILE = "batch_coefficients.csv"
 BATCH_COEFFICIENTS_INDEX = "feature_hash"
+# Output files of the coordinator used to correct new batches later on, see
+# align_new_batch.py: the training level per feature and the settings needed to
+# bring a new batch to the same scale
+TRAINING_LEVEL_FILE = "training_level.csv"
+TRAINING_LEVEL_INFO_FILE = "training_level_info.yml"
 
 
 def smpc_error_bound(smpc: bool, num_clients: int) -> float:
@@ -95,7 +101,8 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
     perf.start("client_send", "commonVariables")
     protocol.send_data_to_coordinator((client.batch_labels,
                                        list(client.hash2variable.keys()), client.smpc,
-                                       client.feature_block_size),
+                                       client.feature_block_size, client.min_clients,
+                                       client.normalization_method),
                                       send_to_self=True,
                                       use_smpc=False)
     perf.end("client_send", "commonVariables")
@@ -108,11 +115,17 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
         perf.start("agg_compute", "commonVariables")
         global_variables_hashed = None  # will become a list, not a set
         global_batch_labels = list()
-        for labels, variables, client_smpc, feature_block_size in list_labels_variables:
+        for (labels, variables, client_smpc, feature_block_size, min_clients,
+             normalization_method) in list_labels_variables:
             if client_smpc != client.smpc:
                 raise RuntimeError("All clients must use the same boolean 'smpc' setting")
             if feature_block_size != client.feature_block_size:
                 raise RuntimeError("All clients must use the same 'feature_block_size' setting")
+            if min_clients != client.min_clients:
+                raise RuntimeError("All clients must use the same 'min_clients' setting")
+            if normalization_method != client.normalization_method:
+                # the corrected data of all clients must be on the same scale
+                raise RuntimeError("All clients must use the same 'normalizationMethod' setting")
             # intersect the variables while preserving deterministic order
             # (the order of the first client's list, which comes from the
             # config file). Using a set here would cause non-deterministic
@@ -184,7 +197,8 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
         print("[global_feature_selection] Gathered data from all clients")
         global_feature_names, feature_presence_matrix, cohorts_order = \
               select_common_features_variables(feature_information,
-                                               default_order=list(protocol.clients))
+                                               default_order=list(protocol.clients),
+                                               min_clients=client.min_clients)
         perf.end("agg_compute", "commonGenes")
         perf.start("agg_broadcast", "commonGenes")
         protocol.broadcast_data((global_feature_names, cohorts_order),
@@ -249,6 +263,7 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
         perf.start("agg_compute", "XtX_block")
         global_mask = create_beta_mask(feature_presence_matrix, n, k)
         beta = np.empty((n, n_batch_columns))
+        level = np.empty(n)
         perf.end("agg_compute", "XtX_block")
 
     block_size = client.feature_block_size or n
@@ -269,11 +284,11 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
             XtX_XtY_list = protocol.gather_data(use_smpc=smpc, memo=statistics_memo)
             perf.end("agg_gather", "XtX_block", block)
             perf.start("agg_compute", "XtX_block", block)
-            block_beta = compute_beta(
+            block_beta, level[start:stop] = compute_beta(
                 XtX_XtY_list, n=stop - start, k=k,
                 global_mask=global_mask[start:stop],
                 xtx_error=smpc_error_bound(smpc, len(protocol.clients)),
-                n_batch_columns=n_batch_columns)
+                n_batch_columns=n_batch_columns, with_training_level=True)
             del XtX_XtY_list
             beta[start:stop] = batch_coefficients(block_beta, n_batch_columns)
             perf.end("agg_compute", "XtX_block", block)
@@ -311,5 +326,20 @@ def run_fedrbe(protocol, inputfolder: str, outputfolder: str, perf=None) -> None
         # (see classes.client.subtract_batch_effect)
         batch_coefficients_frame(beta, global_feauture_names_hashed, cohorts_order).to_csv(
             os.path.join(outputfolder, BATCH_COEFFICIENTS_FILE), sep=client.separator)
+        # The level of the corrected training data, so that new batches can be
+        # aligned to it without another run (see align_new_batch.py). Only the
+        # coordinator has it, it is not sent to the other clients.
+        pd.Series(level, index=pd.Index(global_feauture_names_hashed,
+                                        name=BATCH_COEFFICIENTS_INDEX),
+                  name="training_level").to_csv(
+            os.path.join(outputfolder, TRAINING_LEVEL_FILE), sep=client.separator)
+        with open(os.path.join(outputfolder, TRAINING_LEVEL_INFO_FILE), "w",
+                  encoding="utf-8") as info_file:
+            yaml.safe_dump({
+                "normalizationMethod": client.normalization_method,
+                "covariates_used": bool(global_variables_hashed),
+                "n_batches": num_batches,
+                "separator": client.separator,
+            }, info_file, sort_keys=False)
     perf.end("client_compute", "final")
     perf.end("whole_protocol", "whole_protocol")

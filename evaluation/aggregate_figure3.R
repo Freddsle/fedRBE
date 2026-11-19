@@ -2,13 +2,16 @@
 #
 # Generate the four real-dataset Figure 3 panels from source matrices and metadata.
 # Run from the repository root:
-#   CORRECTION_ARM=label_aware pixi run Rscript evaluation/aggregate_figure3.R
-# Set CORRECTION_ARM=label_aware (default) or CORRECTION_ARM=no_label. Each arm
-# writes its own PNG and median variance summary under figures/.
+#   pixi run Rscript evaluation/aggregate_figure3.R
+# Without CORRECTION_ARM, the script runs once per arm (label_aware, then
+# no_label). CORRECTION_ARM=label_aware or CORRECTION_ARM=no_label runs only that
+# arm, as does sourcing the script (default label_aware). Each arm writes its own
+# PNG and median variance summary under figures/.
 
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 require_figure_packages()
 source_plotting_utils()
+run_each_correction_arm("Figure 3")
 
 # Paths
 

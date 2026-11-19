@@ -289,8 +289,9 @@ def create_beta_mask(feature_presence_matrix: np.ndarray, n: int, k: int) -> np.
 
 def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
                  n: int, k: int,
-                 global_mask: np.ndarray, xtx_error: float = 0.0, *, n_batch_columns: int
-                 ) -> np.ndarray:
+                 global_mask: np.ndarray, xtx_error: float = 0.0, *, n_batch_columns: int,
+                 with_training_level: bool = False
+                 ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     """
     Gets a list of a List containing the XtX and XtY matrices from each client
     and calculates the linear model from them, returning the beta vector.
@@ -309,9 +310,12 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
         global_mask: A matrix of shape (num_features, num_clients) that indicates
             which features are present in the clients. The matrix contains 1
             if the feature is absent in the client and 1 otherwise.
+        with_training_level: Also return the training level of every feature,
+            see training_level.
     Returns:
         beta: The beta vector calculated from the XtX and XtY matrices.
             Shape of beta is n x k.
+        With with_training_level, the tuple (beta, training level of shape n).
     """
     if len(XtX_XtY_list) == 0:
         raise ValueError("No data received from clients")
@@ -362,7 +366,37 @@ def compute_beta(XtX_XtY_list: List[List[np.ndarray]],
 
     if omitted:
         print(f"INFO: Omitted {omitted} constant covariate coefficients.")
+    if with_training_level:
+        return beta, training_level(XtX_glob, beta, n_covariates=k - 1 - n_batch_columns)
     return beta
+
+
+def training_level(XtX_glob: np.ndarray, beta: np.ndarray, n_covariates: int) -> np.ndarray:
+    """
+    Per feature, the mean of the batch-corrected training values: the level a
+    new batch is aligned to (see classes.client.align_to_training_level).
+    Removing the batch effects leaves the intercept and covariate effects, and
+    least-squares residuals sum to 0, so this mean is the intercept plus each
+    covariate coefficient times the covariate's mean. Without covariates it is
+    the intercept. Only this combination is shared, never the intercept or
+    covariate coefficients themselves, which can reveal single samples (see
+    batch_coefficients).
+    Args:
+        XtX_glob: features x k x k, summed over all clients. Row 0 belongs to
+            the intercept column (all ones), so XtX_glob[:, 0, c] is the sum of
+            design column c over the samples with a value.
+        beta: features x k, the fitted coefficients (0 for omitted columns).
+        n_covariates: Number of covariate columns, which follow the intercept.
+    Returns:
+        The training level per feature, shape (features,).
+    """
+    num_samples = XtX_glob[:, 0, 0]
+    covariate_columns = slice(1, 1 + n_covariates)
+    covariate_means = XtX_glob[:, 0, covariate_columns] / num_samples[:, None]
+    intercept = beta[:, 0]
+    covariate_coefficients = beta[:, covariate_columns]
+    covariate_effect_at_mean = (covariate_coefficients * covariate_means).sum(axis=1)
+    return intercept + covariate_effect_at_mean
 
 
 def batch_coefficients(beta: np.ndarray, n_batch_columns: int) -> np.ndarray:

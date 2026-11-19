@@ -1,9 +1,9 @@
-# Exact rank comparisons for Figure 4 (ARI and train/test MCC) and Figure S7
-# (leave-one-cohort-out MCC per held-out cohort).
+# Exact rank comparisons for Figure 4a (ARI per dataset), Figure S7
+# (leave-one-cohort-out MCC per held-out cohort) and Figure S8 (70:30 MCC per test
+# cohort). Figures 4b and 4c are overviews of the S7 and S8 scores.
 # C1/C2 pair correction states by run seed; their Pratt signed-rank null assumes
 # symmetric paired differences. C3/C4 use unpaired Mann-Whitney tests, assuming
-# independent run groups and exchangeable scores under their null. Different
-# centralized/federated split schemes remain part of the pipeline comparison.
+# independent run groups and exchangeable scores under their null.
 # Inference concerns run variation on fixed data, not new patients or cohorts.
 # Requires figure_aggregate_utils.R for figure4_scenarios().
 
@@ -158,43 +158,42 @@ panel_statistics <- function(data, units, unit_rows, value_col, seed_col, figure
 one_line <- function(label) gsub("\n", " ", label, fixed = TRUE)
 
 
+# Per-cohort statistics of classification scores (Figures S7 and S8): one unit per
+# task and test cohort, in task order.
+cohort_statistics <- function(data, figure, panel, unit) {
+  units <- unique(data.frame(task = as.character(data$Task),
+                             cohort = data$predicted_client_name,
+                             stringsAsFactors = FALSE))
+  units <- units[order(match(units$task, levels(droplevels(data$Task)))), ]
+  panel_statistics(
+    data,
+    data.frame(x_level = units$cohort, dataset = one_line(units$task),
+               cohort = units$cohort, task = units$task, stringsAsFactors = FALSE),
+    function(data, unit) {
+      as.character(data$Task) == unit$task & data$predicted_client_name == unit$cohort
+    },
+    "metric_value", "seed", figure, panel, unit
+  )
+}
+
+
 # One row per unit and contrast. `x_level` is the plot's x label used for brackets;
 # write_figure4_statistics() drops it from the saved table.
 compute_figure4_statistics <- function(figure4_data, arm) {
   ari <- figure4_data$ari
   ari_levels <- levels(droplevels(ari$DatasetLabel))
-  split <- figure4_data$train_test_split
-  split_levels <- levels(droplevels(split$Task))
-  loo <- figure4_data$leave_one_cohort_out
-  loo_units <- unique(data.frame(task = as.character(loo$Task),
-                                 cohort = loo$predicted_client_name,
-                                 stringsAsFactors = FALSE))
-  loo_units <- loo_units[order(match(loo_units$task, levels(droplevels(loo$Task)))), ]
-
-  by_dataset <- function(levels) {
-    data.frame(x_level = levels, dataset = one_line(levels), cohort = NA_character_,
-               stringsAsFactors = FALSE)
-  }
   stats <- rbind(
     panel_statistics(
-      ari, by_dataset(ari_levels),
+      ari,
+      data.frame(x_level = ari_levels, dataset = one_line(ari_levels), cohort = NA_character_,
+                 stringsAsFactors = FALSE),
       function(data, unit) as.character(data$DatasetLabel) == unit$x_level,
       "ARI", "Seed", "figure4", "4a ARI", "k-means run (seed)"
     ),
-    panel_statistics(
-      split, by_dataset(split_levels),
-      function(data, unit) as.character(data$Task) == unit$x_level,
-      "metric_value", "seed", "figure4", "4c train/test", "RF run (seed), pooled 70:30 test set"
-    ),
-    panel_statistics(
-      loo,
-      data.frame(x_level = loo_units$cohort, dataset = one_line(loo_units$task),
-                 cohort = loo_units$cohort, task = loo_units$task, stringsAsFactors = FALSE),
-      function(data, unit) {
-        as.character(data$Task) == unit$task & data$predicted_client_name == unit$cohort
-      },
-      "metric_value", "seed", "figureS7", "S7 LOCO", "RF run (seed), held-out cohort"
-    )
+    cohort_statistics(figure4_data$leave_one_cohort_out, "figureS7", "S7 LOCO",
+                      "RF run (seed), held-out cohort"),
+    cohort_statistics(figure4_data$train_test_split, "figureS8", "S8 train/test",
+                      "RF run (seed), 70:30 test cohort")
   )
   rownames(stats) <- NULL
   data.frame(arm = arm, stats, stringsAsFactors = FALSE)
@@ -216,7 +215,7 @@ figure4_negligible_effects <- function(stats) {
 }
 
 
-# Brackets for one panel (and, for S7, one dataset), labelled with the table's marker.
+# Brackets for one panel (and, for S7 and S8, one dataset), labelled with the table's marker.
 figure4_annotation_data <- function(stats, panel, dataset = NULL) {
   rows <- stats[stats$panel == panel, , drop = FALSE]
   if (!is.null(dataset)) rows <- rows[rows$dataset == dataset, , drop = FALSE]

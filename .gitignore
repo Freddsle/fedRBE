@@ -218,3 +218,6 @@ evaluation_data/quartet_multiomics/before/preparation_summary.tsv
 
 # Local pixi environments
 .pixi/
+
+# Write lock of the classification result file (see helper/steps/evaluate.py)
+evaluation_classification_after_correction/results/*.csv.lock

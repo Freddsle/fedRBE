@@ -50,13 +50,15 @@ class SmpcAgreementTests(unittest.TestCase):
             broadcast_data=Mock(),
             await_data=Mock(return_value=(["covariate"], 2)),
             gather_data=Mock(return_value=[
-                (["site_a"], ["covariate"], local_smpc, None),
-                (["site_b"], ["covariate"], remote_smpc, None),
+                (["site_a"], ["covariate"], local_smpc, None, 3, None),
+                (["site_b"], ["covariate"], remote_smpc, None, 3, None),
             ]),
         )
         cohort = SimpleNamespace(
             smpc=local_smpc,
             feature_block_size=None,
+            min_clients=3,
+            normalization_method=None,
             separator="\t",
             hash2feature={"feature": "feature_name"},
             hash2variable={"covariate": "covariate_name"},
@@ -88,11 +90,29 @@ class SmpcAgreementTests(unittest.TestCase):
                 protocol, cohort = self.make_protocol(True, True)
                 cohort.feature_block_size = local_size
                 protocol.gather_data.return_value = [
-                    (["site_a"], ["covariate"], True, local_size),
-                    (["site_b"], ["covariate"], True, remote_size),
+                    (["site_a"], ["covariate"], True, local_size, 3, None),
+                    (["site_b"], ["covariate"], True, remote_size, 3, None),
                 ]
                 with patch.object(fedrbe, "Client", return_value=cohort):
                     with self.assertRaisesRegex(RuntimeError, "feature_block_size"):
+                        fedrbe.run_fedrbe(protocol, "input", "output")
+                protocol.broadcast_data.assert_not_called()
+                cohort.get_batch_feature_presence_info.assert_not_called()
+
+    def test_mismatched_min_clients_or_normalization_stop_before_broadcast(self):
+        for index, local, remote, setting in ((4, 3, 2, "min_clients"),
+                                              (5, None, "log2(x+1)", "normalizationMethod"),
+                                              (5, "log2(x+1)", None, "normalizationMethod")):
+            with self.subTest(setting=setting, local=local, remote=remote):
+                protocol, cohort = self.make_protocol(True, True)
+                local_settings = [["site_a"], ["covariate"], True, None, 3, None]
+                remote_settings = [["site_b"], ["covariate"], True, None, 3, None]
+                local_settings[index], remote_settings[index] = local, remote
+                cohort.min_clients, cohort.normalization_method = local_settings[4:]
+                protocol.gather_data.return_value = [tuple(local_settings),
+                                                     tuple(remote_settings)]
+                with patch.object(fedrbe, "Client", return_value=cohort):
+                    with self.assertRaisesRegex(RuntimeError, f"'{setting}'"):
                         fedrbe.run_fedrbe(protocol, "input", "output")
                 protocol.broadcast_data.assert_not_called()
                 cohort.get_batch_feature_presence_info.assert_not_called()
@@ -195,8 +215,8 @@ class SmpcAgreementTests(unittest.TestCase):
                     send_data_to_coordinator=Mock(),
                     broadcast_data=Mock(),
                     gather_data=Mock(side_effect=[
-                        [(["site_a"], ["covariate"], smpc, None),
-                         (["site_b"], ["covariate"], smpc, None)],
+                        [(["site_a"], ["covariate"], smpc, None, 3, None),
+                         (["site_b"], ["covariate"], smpc, None, 3, None)],
                         [],  # feature information, consumed by the patched feature selection
                         [],  # XtX and XtY, consumed by the patched solver
                     ]),
@@ -206,7 +226,7 @@ class SmpcAgreementTests(unittest.TestCase):
                 )
                 cohort = MagicMock(
                     smpc=smpc, feature_block_size=None, separator="\t", report="",
-                    min_samples=0, position=0,
+                    min_samples=0, position=0, min_clients=3, normalization_method=None,
                     reference_batch=False, batch_labels=["site_a"], feature_names=["feature"],
                     hash2feature={"feature": "feature_name"}, hash2variable={"covariate": "covariate_name"},
                     # Design columns: intercept, one covariate, one batch column (two batches).
@@ -218,7 +238,8 @@ class SmpcAgreementTests(unittest.TestCase):
                         patch.object(fedrbe, "select_common_features_variables",
                                      return_value=(["feature"], np.ones((1, 2)), cohorts)), \
                         patch.object(fedrbe, "compute_beta",
-                                     return_value=np.array([[1., 2., 3.]])) as solve, \
+                                     return_value=(np.array([[1., 2., 3.]]),
+                                                   np.array([5.]))) as solve, \
                         tempfile.TemporaryDirectory() as output:
                     fedrbe.run_fedrbe(protocol, "input", output)
                 # XtX/XtY travel with the configured SMPC setting and the solver gets the matching bound
@@ -254,11 +275,12 @@ class SmpcAgreementTests(unittest.TestCase):
                     blocks[1][0][0, 0, 0] = 0  # Second-block rank failure.
                 protocol, _ = self.make_protocol(smpc, smpc)
                 protocol.is_coordinator = coordinator
-                handshake = [(*item[:3], size) for item in protocol.gather_data.return_value]
+                handshake = [(*item[:3], size, *item[4:])
+                             for item in protocol.gather_data.return_value]
                 protocol.gather_data.side_effect = [handshake, [], *[[block] for block in blocks]]
                 cohort = MagicMock(
                     smpc=smpc, feature_block_size=size, separator="\t", report="", min_samples=0,
-                    position=0, reference_batch=False, batch_labels=["site_a"],
+                    position=0, min_clients=3, normalization_method=None, reference_batch=False, batch_labels=["site_a"],
                     feature_names=features, hash2feature=dict.fromkeys(features),
                     hash2variable={"covariate": "covariate_name"},
                     data=pd.DataFrame(np.ones((5, 4)), index=features),
