@@ -3,7 +3,8 @@
 # one step after the other:
 #   1. 70:30 train/test split (run_classification_train_test_split.py)
 #   2. leave-one-cohort-out (run_classification_leave_one_cohort_out.py)
-#   3. Figure 4, S7 and S8 for both correction arms (evaluation/aggregate_figure4.R)
+#   3. RF metric boxplots for both correction arms (analyse_classification_metric_report.py)
+#   4. Figure 4, S7 and S8 for both correction arms (evaluation/aggregate_figure4.R)
 # The run stops at the first failing step. Start it from anywhere:
 #   bash evaluation_classification_after_correction/run_rf_evaluations_screen.sh
 # Extra arguments go to both evaluations, e.g. --datasets ecoli --seeds 42.
@@ -56,16 +57,20 @@ fi
 
 step "Settings: N_JOBS=${N_JOBS}, FORCE_RUN=${FORCE_RUN}, extra arguments: ${*:-none}"
 
-step "1/3 Train/test split evaluation"
+step "1/4 Train/test split evaluation"
 pixi run python -u evaluation_classification_after_correction/run_classification_train_test_split.py \
     --jobs "$N_JOBS" ${force[@]+"${force[@]}"} "$@"
-step "1/3 done"
+step "1/4 done"
 
-step "2/3 Leave-one-cohort-out evaluation"
+step "2/4 Leave-one-cohort-out evaluation"
 pixi run python -u evaluation_classification_after_correction/run_classification_leave_one_cohort_out.py \
     --jobs "$N_JOBS" ${force[@]+"${force[@]}"} "$@"
-step "2/3 done"
+step "2/4 done"
 
-step "3/3 Figure 4, S7 and S8 for both correction arms"
+step "3/4 RF metric boxplots for both correction arms"
+pixi run python -u evaluation_classification_after_correction/analyse_classification_metric_report.py
+step "3/4 done"
+
+step "4/4 Figure 4, S7 and S8 for both correction arms"
 env -u CORRECTION_ARM pixi run Rscript evaluation/aggregate_figure4.R
-step "3/3 done, all steps completed"
+step "4/4 done, all steps completed"

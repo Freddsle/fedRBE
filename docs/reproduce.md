@@ -452,14 +452,14 @@ Use `--results-file` and `--plots-dir` to override paths. Plotting requires R.
 
 To rerun everything on a server, `run_rf_evaluations_screen.sh` starts a
 detached `screen` session that runs the train/test evaluation, then the LOCO
-evaluation, then Figures 4, S7 and S8 for both correction arms (Step 7), and
-stops at the first failing step:
+evaluation, then the RF metric plots above, then Figures 4, S7 and S8 for both
+correction arms (Step 7), and stops at the first failing step:
 
 ```bash
 bash evaluation_classification_after_correction/run_rf_evaluations_screen.sh
 ```
 
-`N_JOBS` (default 8, passed as `--jobs`) and `FORCE_RUN` (default `true`, passes
+`N_JOBS` (default 16, passed as `--jobs`) and `FORCE_RUN` (default `true`, passes
 `--force-run`) are set at the top of the script; extra arguments such as
 `--datasets ecoli` go to both evaluations. The script prints the session name
 and the log file,
