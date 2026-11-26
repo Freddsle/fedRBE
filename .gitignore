@@ -207,11 +207,13 @@ evaluation_data/quartet_multiomics/figshare_data/Metabolomics_fullset_expr_r984c
 evaluation_data/quartet_multiomics/before/preparation_summary.tsv
 
 
-# Robustness simulation campaign: per-run files, plot and log are regenerable in about
-# an hour; only summary.tsv, equivalence.tsv and provenance.txt are tracked.
+# Robustness simulation campaign: per-run files and log are regenerable; only
+# summary.tsv, equivalence.tsv and provenance.txt are tracked.
 /evaluation_data/simulated/robustness/runs/
-/evaluation_data/simulated/robustness/summary.pdf
 /evaluation_data/simulated/robustness/campaign.log
+# Sample-size scaling campaign: local reproductions use a separate output directory.
+/evaluation_data/simulated/sample_size_scaling_work/
+/evaluation_data/simulated/sample_size_scaling/provenance.txt
 
 # Local experiment logs, prepared inputs, backups and temporary execution copies.
 /real_pipeline_runs/

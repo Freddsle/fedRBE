@@ -40,20 +40,19 @@ fixed_effect_variance_partition <- function(data, metadata, form) {
 
 
 variance_partition_long <- function(data, metadata, form) {
-  if (requireNamespace("variancePartition", quietly = TRUE)) {
-    var_part <- variancePartition::fitExtractVarPartModel(na.omit(data), form, metadata)
-    model_terms <- setdiff(colnames(var_part), "Residuals")
-    table <- as.data.frame(var_part[, model_terms, drop = FALSE], check.names = FALSE)
-    table$feature <- rownames(table)
-    return(tidyr::pivot_longer(
-      table,
-      cols = dplyr::all_of(model_terms),
-      names_to = "variable",
-      values_to = "value"
-    ))
+  if (!requireNamespace("variancePartition", quietly = TRUE)) {
+    stop("Package 'variancePartition' is required for variance_partition_long().", call. = FALSE)
   }
-
-  fixed_effect_variance_partition(data, metadata, form)
+  var_part <- variancePartition::fitExtractVarPartModel(na.omit(data), form, metadata)
+  model_terms <- setdiff(colnames(var_part), "Residuals")
+  table <- as.data.frame(var_part[, model_terms, drop = FALSE], check.names = FALSE)
+  table$feature <- rownames(table)
+  tidyr::pivot_longer(
+    table,
+    cols = dplyr::all_of(model_terms),
+    names_to = "variable",
+    values_to = "value"
+  )
 }
 
 

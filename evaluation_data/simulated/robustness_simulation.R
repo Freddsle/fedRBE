@@ -2,7 +2,6 @@
 # Model, parameters and usage: README.md, "Robustness simulations".
 
 suppressPackageStartupMessages(library(limma))
-suppressPackageStartupMessages(library(variancePartition))
 
 script <- if (sys.nframe() == 0L) {
   sub("^--file=", "", grep("^--file=", commandArgs(), value = TRUE))
@@ -10,9 +9,14 @@ script <- if (sys.nframe() == 0L) {
 script <- normalizePath(script)
 repo <- normalizePath(file.path(dirname(script), "..", ".."))
 for (helper in c("simulation_func.R", "filtering.R", "evaluation_funcs.R")) {
-  suppressPackageStartupMessages(source(file.path(repo, "evaluation_utils", helper)))
+  suppressPackageStartupMessages(source(file.path(repo, "evaluation_utils", helper), local = TRUE))
 }
 fedrbe_script <- file.path(repo, "evaluation_utils", "fedRBE_simulation_scrip_simdata.py")
+
+# sessionInfo() with the BLAS/LAPACK file names instead of their absolute paths.
+session_lines <- function() {
+  sub("^((BLAS|LAPACK|BLAS/LAPACK): +).*/", "\\1", capture.output(sessionInfo()))
+}
 
 params <- list(
   seed = 20261016L,
@@ -22,19 +26,21 @@ params <- list(
   offset_quantiles = c(batch2 = 0.10, batch3 = 0.25),
   missing_alpha = c(batch1 = 0.1, batch2 = 0.2, batch3 = 0.3), missing_beta = 0.8,
   panel_fraction = c(0.1, 0.2, 0.7), # features observed in one, two, three labs
-  verify_runs = c(1L, 5L, 10L),
   q_value = 0.05,
   tolerance = 1e-8
 )
-# Scenario order determines seed offsets; graded-confounding compositions come last.
+# Scenario order fixes the seed index of each generated composition; derived scenarios
+# reuse the balanced run and are scored against its correction.
 scenarios <- c("balanced", "mild_imbalanced", "strong_imbalanced",
-               "intensity_dependent", "missingness", names(confounded_b_fraction))
-# Scenarios generated from each base composition; derived ones reuse the balanced run.
-derived <- c(list(balanced = c("balanced", "intensity_dependent", "missingness"),
+               "intensity_dependent", "missingness", names(confounded_b_fraction),
+               "intensity_lower")
+derived <- c(list(balanced = c("balanced", "intensity_lower", "intensity_dependent", "missingness"),
                   mild_imbalanced = "mild_imbalanced", strong_imbalanced = "strong_imbalanced"),
              setNames(as.list(names(confounded_b_fraction)), names(confounded_b_fraction)))
-# Run the variancePartition diagnostic for the first five scenarios.
-variance_scenarios <- scenarios[1:5]
+paired_scenarios <- c("intensity_lower", "intensity_dependent", "missingness")
+# Complete-data variance diagnostics, including both intensity-offset severities.
+variance_scenarios <- c("balanced", "mild_imbalanced", "strong_imbalanced",
+                        "intensity_dependent", "intensity_lower")
 arms <- c("with_condition", "without_condition")
 
 parse_options <- function(args) {
@@ -89,11 +95,12 @@ simulate_base <- function(mode, run) {
   list(meta = meta, truth = truth, observed = add_batch_effect(truth, meta), role = role)
 }
 
-# Batch-specific additive offset on the raw scale (calibration model of Huber et al. 2002).
-add_intensity_offset <- function(d) {
+# Batch-specific additive offset on the raw scale (calibration model of Huber et al. 2002),
+# scaled by the severity multiplier.
+add_intensity_offset <- function(d, multiplier = 1) {
   raw_truth <- 2^d$truth
   for (lab in names(params$offset_quantiles)) {
-    offset <- quantile(raw_truth, params$offset_quantiles[[lab]], names = FALSE)
+    offset <- multiplier * quantile(raw_truth, params$offset_quantiles[[lab]], names = FALSE)
     cols <- d$meta$lab == lab
     d$observed[, cols] <- log2(2^d$observed[, cols] + offset)
   }
@@ -126,7 +133,8 @@ add_missingness <- function(d, run) {
 
 correct_central <- function(x, meta, arm) {
   covariates <- if (arm == "with_condition") "condition" else character()
-  input <- suppressMessages(filter_fedrbe_client(x, meta, "file", "lab", num_batches = 3,
+  input <- suppressMessages(filter_fedrbe_client(x, meta, "file", "lab",
+                                                 num_batches = length(unique(meta$lab)),
                                                  covariates = covariates))
   corrected <- if (arm == "with_condition") {
     limma::removeBatchEffect(input, batch = meta$lab, design = model.matrix(~condition, meta))
@@ -164,6 +172,20 @@ correct_fedrbe <- function(x, meta, arm) {
     stop("Local fedRBE failed:\n", paste(tail(log, 20), collapse = "\n"))
   }
   as.matrix(read.delim(out, row.names = 1, check.names = FALSE))
+}
+
+# Compare both methods on every dataset; score the aligned federated correction.
+correct_both <- function(x, meta, arm) {
+  central <- correct_central(x, meta, arm)
+  federated <- correct_fedrbe(x, meta, arm)
+  stopifnot(setequal(rownames(federated), rownames(central$corrected)),
+            setequal(colnames(federated), colnames(central$corrected)))
+  federated <- federated[rownames(central$corrected), colnames(central$corrected), drop = FALSE]
+  stopifnot(identical(is.na(federated), is.na(central$corrected)))
+  differences <- calculated_differences(central$corrected, federated)
+  stopifnot(differences[["max_diff"]] <= params$tolerance)
+  list(input = central$input, corrected = federated, central = central$corrected,
+       differences = differences)
 }
 
 # The two matrices may have different NA masks when measuring selection effects.
@@ -236,20 +258,55 @@ eta_squared <- function(indicator, lab) {
   sum((ave(x, lab) - mean(x))^2) / sum((x - mean(x))^2)
 }
 
-evaluate_stage <- function(x, truth, meta, role, partition) {
+# Fixed within-role abundance tertiles of the batch-free truth: the median truth over each
+# role's unshifted samples (B for A features, A for B features, nonlatent B for latent
+# features, all samples for null features), ranked within the role.
+abundance_tertiles <- function(truth, meta, role) {
+  in_b <- meta$condition == "B"
+  cells <- list(A_DE = in_b, B_DE = !in_b, latent = in_b & !meta$latent,
+                null = rep(TRUE, ncol(truth)))
+  tertile <- setNames(integer(nrow(truth)), rownames(truth))
+  for (r in names(cells)) {
+    rows <- which(role == r)
+    abundance <- apply(truth[rows, cells[[r]], drop = FALSE], 1, median)
+    ordered <- rows[order(abundance, rownames(truth)[rows])]
+    tertile[ordered] <- rep(1:3, each = length(rows) / 3L)
+  }
+  tertile
+}
+
+# Contrast recovery within each abundance tertile; complete data only.
+tertile_recovery <- function(x, truth, meta, role, tertiles) {
+  metrics <- numeric()
+  for (b in 1:3) {
+    rows <- tertiles[rownames(x)] == b
+    values <- contrast_recovery(x[rows, , drop = FALSE], truth[rows, , drop = FALSE], meta,
+                                role[rows])
+    metrics <- c(metrics, setNames(values, paste0(names(values), "_bin", b)))
+  }
+  metrics
+}
+
+evaluate_stage <- function(x, truth, meta, role, partition, tertiles = NULL) {
   # Sequential sums of squares would depend on term order under confounding.
-  variance <- if (partition && !anyNA(x)) variance_partition_long(x, meta, ~condition + lab) else NULL
+  variance <- if (partition && !anyNA(x)) {
+    variance_partition_long(x, meta, ~condition + lab)
+  } else NULL
   medians <- numeric()
   if (!is.null(variance)) {
     medians <- tapply(variance$value, variance$variable, median, na.rm = TRUE)
     medians <- setNames(as.vector(medians), paste0("median_variance_", names(medians)))
   }
   list(metrics = c(recovery_metrics(x, truth, meta, role),
-                   de_condition(x, meta, role, model.matrix(~condition, meta)), medians),
+                   de_condition(x, meta, role, model.matrix(~condition, meta)),
+                   if (!is.null(tertiles) && !anyNA(x)) {
+                     tertile_recovery(x, truth, meta, role, tertiles)
+                   },
+                   medians),
        variance = variance)
 }
 
-evaluate_dataset <- function(scenario, run, d, baseline = NULL) {
+evaluate_dataset <- function(scenario, run, d, baseline = NULL, tertiles = NULL) {
   tidy <- function(arm, stage, metric, value, feature = NA_character_) {
     data.frame(scenario, run, arm, stage, metric, feature, value)
   }
@@ -274,36 +331,37 @@ evaluate_dataset <- function(scenario, run, d, baseline = NULL) {
   partition <- scenario %in% variance_scenarios
   shared <- NULL
   for (arm in arms) {
-    central <- if (scenario == "balanced" && !is.null(baseline)) baseline[[arm]] else {
-      correct_central(d$observed, d$meta, arm)
+    correction <- if (scenario == "balanced" && !is.null(baseline)) baseline[[arm]] else {
+      correct_both(d$observed, d$meta, arm)
     }
-    kept <- match(rownames(central$input), rownames(d$observed))
+    kept <- match(rownames(correction$input), rownames(d$observed))
     stopifnot(is.null(d$n_labs) || all(d$n_labs[kept] == 3L))
     truth <- d$truth[kept, , drop = FALSE]
     role <- d$role[kept]
     # Before, truth and joint stages are shared when both arms retain the same cells.
-    if (is.null(shared) || !identical(is.na(shared$input), is.na(central$input))) {
+    if (is.null(shared) || !identical(is.na(shared$input), is.na(correction$input))) {
       masked_truth <- truth
-      masked_truth[is.na(central$input)] <- NA
-      before <- evaluate_stage(central$input, truth, d$meta, role, partition)
+      masked_truth[is.na(correction$input)] <- NA
+      before <- evaluate_stage(correction$input, truth, d$meta, role, partition, tertiles)
       # Per-lab gains: lab-specific signal distortion that no location correction changes.
       before$metrics <- c(before$metrics, unlist(lapply(labs, function(lab) {
         cols <- d$meta$lab == lab
-        gain <- contrast_recovery(central$input[, cols, drop = FALSE],
+        gain <- contrast_recovery(correction$input[, cols, drop = FALSE],
                                   masked_truth[, cols, drop = FALSE], d$meta[cols, ], role)
         setNames(gain[c("attenuation_condition", "attenuation_latent")],
                  paste0(c("gain_condition_", "gain_latent_"), lab))
       })))
-      shared <- list(input = central$input, stages = list(
+      shared <- list(input = correction$input, stages = list(
         before = before,
         truth = evaluate_stage(masked_truth, truth, d$meta, role, partition),
-        joint = list(metrics = de_condition(central$input, d$meta, role,
+        joint = list(metrics = de_condition(correction$input, d$meta, role,
                                             model.matrix(~condition + lab, d$meta)),
                      variance = NULL)),
         observed_truth = contrast_recovery(masked_truth, truth, d$meta, role))
     }
     stages <- c(shared$stages,
-                list(after = evaluate_stage(central$corrected, truth, d$meta, role, partition)))
+                list(after = evaluate_stage(correction$corrected, truth, d$meta, role, partition,
+                                             tertiles)))
     for (stage in names(stages)) {
       m <- stages[[stage]]$metrics
       v <- stages[[stage]]$variance
@@ -316,15 +374,15 @@ evaluate_dataset <- function(scenario, run, d, baseline = NULL) {
     metrics[[length(metrics) + 1L]] <- tidy(arm, "observed_truth", names(shared$observed_truth),
                                             shared$observed_truth)
     # Total recovery against the complete truth, including the observation selection.
-    complete <- contrast_recovery(central$corrected, truth, d$meta, role)
+    complete <- contrast_recovery(correction$corrected, truth, d$meta, role)
     metrics[[length(metrics) + 1L]] <- tidy(arm, "after_vs_complete", names(complete), complete)
-    if (scenario %in% c("intensity_dependent", "missingness")) {
+    if (scenario %in% paired_scenarios) {
       stopifnot(!is.null(baseline))
       # Fit the complete baseline first; apply the scenario's mask only for scoring.
-      matched <- baseline[[arm]]$corrected[rownames(central$input), colnames(central$input),
+      matched <- baseline[[arm]]$corrected[rownames(correction$input), colnames(correction$input),
                                           drop = FALSE]
-      matched[is.na(central$input)] <- NA
-      stopifnot(identical(is.na(matched), is.na(central$input)))
+      matched[is.na(correction$input)] <- NA
+      stopifnot(identical(is.na(matched), is.na(correction$input)))
       baseline_metrics <- recovery_metrics(matched, truth, d$meta, role)
       delta <- stages$after$metrics[names(baseline_metrics)] - baseline_metrics
       metrics[[length(metrics) + 1L]] <- tidy(arm, "baseline_after", names(baseline_metrics),
@@ -337,16 +395,8 @@ evaluate_dataset <- function(scenario, run, d, baseline = NULL) {
       c("retained_features", "excluded_features", "panel_excluded_features",
         "eligibility_excluded_features"),
       c(length(kept), excluded, panel_excluded, excluded - panel_excluded))
-    if (run %in% params$verify_runs) {
-      federated <- correct_fedrbe(d$observed, d$meta, arm)
-      stopifnot(setequal(rownames(federated), rownames(central$corrected)))
-      federated <- federated[rownames(central$corrected), colnames(central$corrected)]
-      stopifnot(all(is.na(federated) == is.na(central$corrected)))
-      differences <- calculated_differences(central$corrected, federated)
-      stopifnot(differences[["max_diff"]] <= params$tolerance)
-      metrics[[length(metrics) + 1]] <- tidy(arm, "fedrbe_vs_central", names(differences),
-                                             differences)
-    }
+    metrics[[length(metrics) + 1]] <- tidy(arm, "fedrbe_vs_central", names(correction$differences),
+                                           correction$differences)
   }
   list(metrics = do.call(rbind, metrics), variance = do.call(rbind, variance))
 }
@@ -411,53 +461,6 @@ summarise <- function(out) {
   write.table(summary, file.path(out, "summary.tsv"), sep = "\t", row.names = FALSE, quote = FALSE)
   write.table(equivalence, file.path(out, "equivalence.tsv"), sep = "\t", row.names = FALSE,
               quote = FALSE)
-  grDevices::pdf(file.path(out, "summary.pdf"), width = 12, height = 8)
-  on.exit(grDevices::dev.off())
-  dodge <- ggplot2::position_dodge(width = 0.6)
-  pages <- list(recovery = c("before", "after", "truth", "joint"),
-                paired_change = "paired_after",
-                observed_truth = c("observed_truth", "after_vs_complete"))
-  for (page in names(pages)) {
-    shown <- summary[summary$stage %in% pages[[page]] & summary$n_runs > 0, ]
-    if (!nrow(shown)) next
-    plot <- ggplot2::ggplot(shown, ggplot2::aes(scenario, mean, colour = stage, shape = arm)) +
-      ggplot2::geom_point(data = results[results$stage %in% pages[[page]], ],
-                          ggplot2::aes(y = value), position = dodge, alpha = 0.3, size = 0.6) +
-      ggplot2::geom_point(position = dodge) +
-      ggplot2::geom_errorbar(ggplot2::aes(ymin = ci_low, ymax = ci_high), position = dodge,
-                            width = 0.2, na.rm = TRUE) +
-      ggplot2::facet_wrap(~metric, scales = "free_y") +
-      ggplot2::labs(title = page) + ggplot2::theme_bw(base_size = 8) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
-    if (page != "recovery") {
-      reference <- unique(shown["metric"])
-      reference$value <- if (page == "paired_change") 0 else {
-        as.integer(startsWith(reference$metric, "attenuation_"))
-      }
-      plot <- plot + ggplot2::geom_hline(data = reference, ggplot2::aes(yintercept = value),
-                                        linetype = "dashed", colour = "grey50")
-    }
-    print(plot)
-  }
-  # Recovery against the confounding index, with the expectation 1 - eta2 for an omitted
-  # covariate under a per-lab offset.
-  eta <- summary[summary$metric == "eta2_condition", c("scenario", "mean")]
-  names(eta)[2] <- "eta2"
-  shown <- merge(summary[summary$stage %in% c("before", "after", "joint") &
-                           summary$metric %in% c("attenuation_condition", "shift_condition",
-                                                 "de_condition_fp"), ], eta)
-  expected <- data.frame(eta2 = seq(0, 1, 0.01), metric = "attenuation_condition")
-  expected$mean <- 1 - expected$eta2
-  plot <- ggplot2::ggplot(shown, ggplot2::aes(eta2, mean, colour = stage, shape = arm)) +
-    ggplot2::geom_point() +
-    ggplot2::geom_errorbar(ggplot2::aes(ymin = ci_low, ymax = ci_high), width = 0.02,
-                          na.rm = TRUE) +
-    ggplot2::geom_line(data = expected, ggplot2::aes(eta2, mean), inherit.aes = FALSE,
-                       linetype = "dashed", colour = "grey50") +
-    ggplot2::facet_wrap(~metric, scales = "free_y") +
-    ggplot2::labs(title = "confounding", x = "lab-explained condition variance") +
-    ggplot2::theme_bw(base_size = 8)
-  print(plot)
   cat("Completed runs per scenario:\n")
   print(table(unique(results[c("scenario", "run")])$scenario))
   cat("Passed equivalence checks:", nrow(unique(equivalence[c("scenario", "run", "arm")])), "\n")
@@ -465,6 +468,7 @@ summarise <- function(out) {
 
 main <- function(args = commandArgs(trailingOnly = TRUE)) {
   opts <- parse_options(args)
+  suppressPackageStartupMessages(library(variancePartition))
   dir.create(file.path(opts$out, "runs"), recursive = TRUE, showWarnings = FALSE)
   provenance <- file.path(opts$out, "provenance.txt")
   current <- fingerprint()
@@ -474,7 +478,7 @@ main <- function(args = commandArgs(trailingOnly = TRUE)) {
            " was created; use a new --out directory.")
     }
   } else {
-    writeLines(c(current, "", capture.output(sessionInfo())), provenance)
+    writeLines(c(current, "", session_lines()), provenance)
   }
 
   for (mode in names(derived)) {
@@ -483,19 +487,21 @@ main <- function(args = commandArgs(trailingOnly = TRUE)) {
       todo <- todo[!file.exists(file.path(opts$out, "runs", sprintf("%s_run%03d.tsv", todo, run)))]
       if (!length(todo)) next
       base <- simulate_base(mode, run)
-      baseline <- if (any(todo %in% c("intensity_dependent", "missingness"))) {
-        setNames(lapply(arms, function(arm) correct_central(base$observed, base$meta, arm)), arms)
+      tertiles <- if (mode == "balanced") abundance_tertiles(base$truth, base$meta, base$role)
+      baseline <- if (any(todo %in% paired_scenarios)) {
+        setNames(lapply(arms, function(arm) correct_both(base$observed, base$meta, arm)), arms)
       } else NULL
       for (scenario in todo) {
         started <- Sys.time()
-        d <- switch(scenario, intensity_dependent = add_intensity_offset(base),
+        d <- switch(scenario, intensity_lower = add_intensity_offset(base, 0.5),
+                    intensity_dependent = add_intensity_offset(base),
                     missingness = add_missingness(base, run), base)
         lab1 <- d$meta$lab == "batch1"
-        stopifnot(scenario != "intensity_dependent" ||
+        stopifnot(!startsWith(scenario, "intensity_") ||
                     identical(d$observed[, lab1], base$observed[, lab1]))
         stopifnot(scenario != "missingness" ||
                     identical(d$observed[!is.na(d$observed)], base$observed[!is.na(d$observed)]))
-        write_run(evaluate_dataset(scenario, run, d, baseline), opts$out, scenario, run)
+        write_run(evaluate_dataset(scenario, run, d, baseline, tertiles), opts$out, scenario, run)
         cat(sprintf("%s run %d: %.1f s\n", scenario, run,
                     as.numeric(difftime(Sys.time(), started, units = "secs"))))
       }
