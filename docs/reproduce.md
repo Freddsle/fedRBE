@@ -603,8 +603,8 @@ pixi run Rscript evaluation/aggregate_performance.R
 
 The script reads every `*_performance_clients.csv` that
 `generate_fedrbe_corrected_datasets.py` writes next to the corrected data in Step 2
-(one row per client and run, from the Docker runs over the `internet` channel with
-the default query interval of 5 s).
+(one row per client and run, from the Docker runs over the `internet` channel with a
+0.5 s query interval).
 
 Outputs: `figures/suppl/performance_runtime.png` (per dataset: total runtime, client
 computation and waiting time of all participants, with and without SMPC, and the
