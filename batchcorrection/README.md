@@ -281,9 +281,9 @@ The figure shows the phases of that protocol.
 With `feature_block_size`, clients send XtX/XtY in feature blocks and wait for the
 coordinator's acknowledgement before sending the next block. Only transport
 payloads are split; full local cross-product arrays remain allocated. Featurewise
-fits retain the same model and missingness masks. The ovarian configuration uses
-10,000 features per block; this is not a measured peak-memory guarantee, and
-deployed memory use still needs validation.
+fits retain the same model and missingness masks. Blocking is off by default, and
+the evaluation runs in this repository do not use it. Its effect on peak memory
+has not been measured.
 Privacy thresholds and SMPC settings are unchanged. Batch coefficients and outputs
 are released after all blocks succeed. Rebuild the same app image for every client.
 
