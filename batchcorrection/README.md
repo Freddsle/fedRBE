@@ -124,7 +124,7 @@ After completion, each client receives:
 - **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
 - **`report.txt`**: The client name, the batch coefficients used for the correction and the
-  design matrix. Features masked for privacy are listed in the app log.
+  design matrix.
 
 The coordinator additionally receives the files needed to correct new batches later on,
 without another run (see [Correcting new batches](#correcting-new-batches-after-a-fedrbe-run)):
@@ -137,6 +137,7 @@ without another run (see [Correcting new batches](#correcting-new-batches-after-
 features (rows) x samples (columns) whatever the input orientation; `full_corrected_data.csv`
 appends the covariates as rows. Values masked for privacy (fewer finite values than the
 effective `min_samples` in a batch or on the client) are exported as empty cells.
+Features masked for privacy are listed in the app log.
 Features available in fewer than `min_clients` (default: three) clients are omitted.
 Each client also writes `performance_report.json` with protocol timings, payload sizes
 and process memory.
