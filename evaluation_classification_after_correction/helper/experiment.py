@@ -95,12 +95,14 @@ class FedrbeClassificationExperiment:
             for learning_type, scores in scores_by_type.items():
                 for client, metrics in scores.items():
                     print(f"{self.spec.data_name} seed {seed} {preprocessing} {learning_type} "
-                          f"{client}: MCC {metrics['MCC']:.4f}, F1 {metrics['F1_score']:.4f}")
+                          f"{client}: MCC {metrics['MCC']:.4f}, "
+                          f"weighted F1 {metrics['weighted_F1_score']:.4f}, "
+                          f"macro F1 {metrics['macro_F1_score']:.4f}")
                     rows.extend(
-                        dict(metric_value=metrics[metric],
+                        dict(metric_value=value,
                              **self._result_key(seed, preprocessing, learning_type, client,
                                                 metric))
-                        for metric in METRICS)
+                        for metric, value in metrics.items())
         self.resultfile.upsert_experiments(rows)
 
     @staticmethod
@@ -139,7 +141,8 @@ class FedrbeClassificationExperiment:
                 cohort: evaluate.predict(model, model_info, table, target)
                 for cohort, table in tables[learning_type]["test"].items()
             }
-            scores[learning_type] = evaluate.score_predictions(predictions, self.pooled_scores)
+            scores[learning_type] = evaluate.score_predictions(predictions, model.classes_,
+                                                                 self.pooled_scores)
         return scores
 
 

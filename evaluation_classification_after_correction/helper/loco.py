@@ -22,7 +22,8 @@ For every dataset and held-out cohort H:
    batchcorrection/align_new_batch.py). H's labels are not used in either arm:
    if H's label mix differs from the training data's, part of that difference is
    removed as batch effect.
-4. The forests predict H. MCC and F1 are reported for H, for both learning types.
+4. The forests predict H. MCC, weighted and macro F1 and per-class confusion
+   counts are reported for H, for both learning types.
 
 The correction is deterministic, so it runs once per held-out cohort; only the
 forests run once per seed. The uncorrected arm uses the same cohorts without

@@ -1,6 +1,7 @@
 """
-Evaluating a trained forest on the test data: predictions, MCC and F1 scores,
-and the CSV result file the scores are recorded in.
+Evaluating a trained forest on the test data: predictions, MCC, weighted and
+macro F1 scores and per-class confusion counts, and the CSV result file they
+are recorded in.
 """
 
 from __future__ import annotations
@@ -19,7 +20,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
 from ..common import ALL_COHORTS, RESULTS_FOLDER
-from evaluation_utils.metrics import classification_scores
+from evaluation_utils.metrics import classification_scores, confusion_counts
 
 
 # ---------------------------------------------------------------------------
@@ -59,16 +60,24 @@ def predict(model: RandomForestClassifier,
     return true_labels, predictions
 
 
+def _scores_and_counts(truth, predicted, classes) -> Dict[str, float]:
+    return {**classification_scores(truth, predicted),
+            **confusion_counts(truth, predicted, classes)}
+
+
 def score_predictions(predictions: Dict[str, Tuple[np.ndarray, np.ndarray]],
-                      pooled: bool = True) -> Dict[str, Dict[str, float]]:
-    """Scores per test cohort and, with pooled, over all test cohorts ("All")."""
+                      classes, pooled: bool = True) -> Dict[str, Dict[str, float]]:
+    """
+    Scores and one-vs-rest confusion counts of every class in *classes* (the
+    model's classes) per test cohort and, with pooled, over all test cohorts ("All").
+    """
     scores = {}
     if pooled:
         truth = np.concatenate([true for true, _ in predictions.values()])
         predicted = np.concatenate([pred for _, pred in predictions.values()])
-        scores[ALL_COHORTS] = classification_scores(truth, predicted)
+        scores[ALL_COHORTS] = _scores_and_counts(truth, predicted, classes)
     for cohort, (true, pred) in predictions.items():
-        scores[cohort] = classification_scores(true, pred)
+        scores[cohort] = _scores_and_counts(true, pred, classes)
     return scores
 
 

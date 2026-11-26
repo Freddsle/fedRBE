@@ -998,6 +998,8 @@ export_classification_plots <- function(results_file, plots_dir) {
     "learning_type"
   )
   assert_columns(report, required_columns, "RF metric report")
+  # Confusion count rows (TP|<class>, ...) are recorded, not plotted
+  report <- report[!grepl("^(TP|TN|FP|FN)\\|", report$metric_name), , drop = FALSE]
   report <- report[report$data_name %in% sub("\\|.*$", "", names(task_labels)), , drop = FALSE]
   if (!nrow(report)) stop("No canonical real-data RF tasks in the report", call. = FALSE)
   task_labels <- task_labels[sub("\\|.*$", "", names(task_labels)) %in% report$data_name]
@@ -1008,7 +1010,9 @@ export_classification_plots <- function(results_file, plots_dir) {
     "Leave-One-Cohort-Out" = "RF leave-one-cohort-out",
     "Train-Test-Split" = "RF 70:30 train/test split"
   )
-  metric_labels <- c(MCC = "MCC", F1_score = "Weighted F1 score")
+  metric_labels <- c(
+    MCC = "MCC", weighted_F1_score = "Weighted F1 score", macro_F1_score = "Macro F1 score"
+  )
   if (anyNA(report[required_columns]) ||
       any(!report$data_preprocessing_name %in% c("uncorrected", unname(arms))) ||
       any(!report$learning_type %in% c("centralized", "federated")) ||

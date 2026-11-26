@@ -29,7 +29,8 @@ ARM_LABEL_FREE = "label_free"
 ARMS = (ARM_LABEL_FREE, ARM_LABEL_AWARE)
 # predicted_client_name of the scores pooled over all test cohorts
 ALL_COHORTS = "All"
-METRICS = ("MCC", "F1_score")
+# The score rows of every scored client; its confusion count rows are written with them
+METRICS = ("MCC", "weighted_F1_score", "macro_F1_score")
 DEFAULT_SEEDS = list(range(42, 52))  # ten repetitions
 
 

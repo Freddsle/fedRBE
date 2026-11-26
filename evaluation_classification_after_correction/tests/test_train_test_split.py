@@ -264,8 +264,9 @@ class ExperimentTests(unittest.TestCase):
     def test_rows_splits_and_caching(self):
         self.experiment().run_experiment(5)
         rows = pd.read_csv(self.results.path)
-        # 3 preprocessings x 2 learning types x (All + 4 cohorts) x 2 metrics
-        self.assertEqual(len(rows), 60)
+        # 3 preprocessings x 2 learning types x (All + 4 cohorts) x
+        # (3 scores + 2 classes x 4 confusion counts)
+        self.assertEqual(len(rows), 330)
         self.assertEqual(set(rows.data_preprocessing_name),
                          {"uncorrected", "label_free", "label_aware"})
         self.assertEqual(set(rows.cross_validation_method), {"Train-Test-Split"})
@@ -299,7 +300,7 @@ class ExperimentTests(unittest.TestCase):
                 "metric_name"]
         sequential_rows = pd.read_csv(self.results.path).sort_values(keys, ignore_index=True)
         parallel_rows = pd.read_csv(parallel_results.path).sort_values(keys, ignore_index=True)
-        self.assertEqual(len(parallel_rows), 120)
+        self.assertEqual(len(parallel_rows), 660)
         pd.testing.assert_frame_equal(parallel_rows, sequential_rows)
         for path in sorted(self.splits.rglob("*.*")):
             other = self.root / "parallel_splits" / path.relative_to(self.splits)

@@ -21,9 +21,9 @@ For every dataset and repetition (seed):
 4. The test samples are corrected with the batch coefficients of the learner's
    correction (batchcorrection.classes.client.subtract_batch_effect, no labels
    needed) and predicted. Values a correction did not correct in a batch's
-   training samples stay uncorrected in training and test samples. MCC and F1
-   are reported pooled over all cohorts ("All") and per test cohort, for both
-   learning types.
+   training samples stay uncorrected in training and test samples. MCC,
+   weighted and macro F1 and per-class confusion counts are reported pooled
+   over all cohorts ("All") and per test cohort, for both learning types.
 
 The uncorrected arm uses the same splits without steps 2 and 4's correction.
 """
