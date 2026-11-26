@@ -611,9 +611,10 @@ computation and waiting time of all participants, with and without SMPC, and the
 coordinator's runtime split into client computation, aggregation and waiting) and
 `figures/suppl/performance_memory.png` (container and app process peak memory against the
 participant's data size). `PERFORMANCE_DATA_DIR` overrides the searched folder
-(default `evaluation_data`), and `PERFORMANCE_RUNTIME_OUTPUT` and
-`PERFORMANCE_MEMORY_OUTPUT` override the output paths; a path ending in `.svg`
-writes an SVG.
+(default `evaluation_data`). `PERFORMANCE_RUNTIME_OUTPUT` and
+`PERFORMANCE_MEMORY_OUTPUT` override the default PNG paths. Use a `.png` or
+`.svg` extension to select the format. The script appends `.png` to paths
+without an extension.
 
 #### Feature overlap across clients (Figure S11)
 
