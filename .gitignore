@@ -213,6 +213,9 @@ evaluation_data/quartet_multiomics/before/preparation_summary.tsv
 /evaluation_data/simulated/sample_size_scaling_work/
 /evaluation_data/simulated/sample_size_scaling/n*_run001/.before-*/
 /evaluation_data/simulated/sample_size_scaling/n*_run001/after/**
+!/evaluation_data/simulated/sample_size_scaling/n*_run001/after/label_aware/
+!/evaluation_data/simulated/sample_size_scaling/n*_run001/after/no_label/
+!/evaluation_data/simulated/sample_size_scaling/n*_run001/after/*/intensities_R_corrected.tsv.gz
 # Extracted from evaluation_data/simulated/results/*/predictions.zip
 /evaluation_data/simulated/results/*/predictions/
 

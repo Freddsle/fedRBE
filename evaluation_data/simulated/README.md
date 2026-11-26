@@ -59,6 +59,10 @@ SMPC and writes outputs to `sample_size_scaling/n<SIZE>_run001/after/`.
 To regenerate a missing input bundle, pass its size to
 [`prepare_sample_size_inputs.R`](prepare_sample_size_inputs.R).
 
+The run-1 central limma matrices are stored as `intensities_R_corrected.tsv.gz`
+under `after/label_aware/` and `after/no_label/` for each size. Both corrections
+use the saved client inputs.
+
 ## Five-client missingness and feature overlap
 
 Ten roots cross full and partial panels with 0%, 10%, 30%, and 50% nominal
