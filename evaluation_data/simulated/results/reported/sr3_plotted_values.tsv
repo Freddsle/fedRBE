@@ -1,0 +1,61 @@
+figure	panel	scenario	state	metric	statistic	center
+SR3	a	overlap_0	Keep	feature_count	mean	4200
+SR3	a	overlap_10	Keep	feature_count	mean	4084.7
+SR3	a	overlap_30	Keep	feature_count	mean	3606.7
+SR3	a	overlap_50	Keep	feature_count	mean	2840.8
+SR3	a	overlap_0	Drop	feature_count	mean	1800
+SR3	a	overlap_10	Drop	feature_count	mean	793.6
+SR3	a	overlap_30	Drop	feature_count	mean	284.5
+SR3	a	overlap_50	Drop	feature_count	mean	80.1
+SR3	a	overlap_0	Impute	feature_count	mean	1800
+SR3	a	overlap_10	Impute	feature_count	mean	1730
+SR3	a	overlap_30	Impute	feature_count	mean	1438.8
+SR3	a	overlap_50	Impute	feature_count	mean	940.2
+SR3	b	overlap_0	Keep	feature_count	mean	70.5
+SR3	b	overlap_10	Keep	feature_count	mean	67.8
+SR3	b	overlap_30	Keep	feature_count	mean	59.4
+SR3	b	overlap_50	Keep	feature_count	mean	44.4
+SR3	b	overlap_0	Drop	feature_count	mean	30
+SR3	b	overlap_10	Drop	feature_count	mean	11.2
+SR3	b	overlap_30	Drop	feature_count	mean	3.6
+SR3	b	overlap_50	Drop	feature_count	mean	1.4
+SR3	b	overlap_0	Impute	feature_count	mean	30
+SR3	b	overlap_10	Impute	feature_count	mean	28.5
+SR3	b	overlap_30	Impute	feature_count	mean	23.6
+SR3	b	overlap_50	Impute	feature_count	mean	14.5
+SR3	a	full_0	Keep	feature_count	mean	6000
+SR3	a	full_10	Keep	feature_count	mean	5865.7
+SR3	a	full_30	Keep	feature_count	mean	5304.2
+SR3	a	full_50	Keep	feature_count	mean	4412.2
+SR3	a	full_0	Drop	feature_count	mean	6000
+SR3	a	full_10	Drop	feature_count	mean	2651.4
+SR3	a	full_30	Drop	feature_count	mean	956
+SR3	a	full_50	Drop	feature_count	mean	270.7
+SR3	a	full_0	Impute	feature_count	mean	6000
+SR3	a	full_10	Impute	feature_count	mean	5764.5
+SR3	a	full_30	Impute	feature_count	mean	4790.1
+SR3	a	full_50	Impute	feature_count	mean	3139.8
+SR3	b	full_0	Keep	feature_count	mean	100
+SR3	b	full_10	Keep	feature_count	mean	97.2
+SR3	b	full_30	Keep	feature_count	mean	89.1
+SR3	b	full_50	Keep	feature_count	mean	72
+SR3	b	full_0	Drop	feature_count	mean	100
+SR3	b	full_10	Drop	feature_count	mean	41.8
+SR3	b	full_30	Drop	feature_count	mean	14
+SR3	b	full_50	Drop	feature_count	mean	4.2
+SR3	b	full_0	Impute	feature_count	mean	100
+SR3	b	full_10	Impute	feature_count	mean	95.3
+SR3	b	full_30	Impute	feature_count	mean	79.7
+SR3	b	full_50	Impute	feature_count	mean	50.4
+SR3	c	overlap_0	3 labs	retained_percent	mean	100.0
+SR3	c	overlap_10	3 labs	retained_percent	mean	96.56666666666666
+SR3	c	overlap_30	3 labs	retained_percent	mean	81.91666666666666
+SR3	c	overlap_50	3 labs	retained_percent	mean	58.06666666666666
+SR3	c	overlap_0	4 labs	retained_percent	mean	100.0
+SR3	c	overlap_10	4 labs	retained_percent	mean	97.19166666666668
+SR3	c	overlap_30	4 labs	retained_percent	mean	86.05833333333334
+SR3	c	overlap_50	4 labs	retained_percent	mean	68.53333333333333
+SR3	c	overlap_0	5 labs	retained_percent	mean	100.0
+SR3	c	overlap_10	5 labs	retained_percent	mean	97.75555555555556
+SR3	c	overlap_30	5 labs	retained_percent	mean	88.38888888888889
+SR3	c	overlap_50	5 labs	retained_percent	mean	73.42222222222222
