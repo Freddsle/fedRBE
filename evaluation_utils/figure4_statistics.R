@@ -1,6 +1,7 @@
 # Exact rank comparisons for Figure 4a (ARI per dataset), Figure S7
-# (leave-one-cohort-out MCC per held-out cohort) and Figure S8 (70:30 MCC per test
-# cohort). Figures 4b and 4c are overviews of the S7 and S8 scores.
+# (leave-one-cohort-out MCC per held-out cohort), Figure S8 (70:30 MCC per test
+# cohort) and Figure S12 (AMI per dataset). Figures 4b and 4c are overviews of
+# the S7 and S8 scores.
 # C1/C2 pair correction states by run seed; their Pratt signed-rank null assumes
 # symmetric paired differences. C3/C4 use unpaired Mann-Whitney tests, assuming
 # independent run groups and exchangeable scores under their null.
@@ -158,6 +159,18 @@ panel_statistics <- function(data, units, unit_rows, value_col, seed_col, figure
 one_line <- function(label) gsub("\n", " ", label, fixed = TRUE)
 
 
+clustering_statistics <- function(data, metric, figure, panel) {
+  datasets <- levels(droplevels(data$DatasetLabel))
+  panel_statistics(
+    data,
+    data.frame(x_level = datasets, dataset = one_line(datasets), cohort = NA_character_,
+               stringsAsFactors = FALSE),
+    function(data, unit) as.character(data$DatasetLabel) == unit$x_level,
+    metric, "Seed", figure, panel, "k-means run (seed)"
+  )
+}
+
+
 # Per-cohort statistics of classification scores (Figures S7 and S8): one unit per
 # task and test cohort, in task order.
 cohort_statistics <- function(data, figure, panel, unit) {
@@ -180,20 +193,16 @@ cohort_statistics <- function(data, figure, panel, unit) {
 # One row per unit and contrast. `x_level` is the plot's x label used for brackets;
 # write_figure4_statistics() drops it from the saved table.
 compute_figure4_statistics <- function(figure4_data, arm) {
-  ari <- figure4_data$ari
-  ari_levels <- levels(droplevels(ari$DatasetLabel))
+  clustering <- figure4_data$ari
   stats <- rbind(
-    panel_statistics(
-      ari,
-      data.frame(x_level = ari_levels, dataset = one_line(ari_levels), cohort = NA_character_,
-                 stringsAsFactors = FALSE),
-      function(data, unit) as.character(data$DatasetLabel) == unit$x_level,
-      "ARI", "Seed", "figure4", "4a ARI", "k-means run (seed)"
-    ),
+    clustering_statistics(clustering, "ARI", "figure4", "4a ARI"),
     cohort_statistics(figure4_data$leave_one_cohort_out, "figureS7", "S7 LOCO",
                       "RF run (seed), held-out cohort"),
     cohort_statistics(figure4_data$train_test_split, "figureS8", "S8 train/test",
-                      "RF run (seed), 70:30 test cohort")
+                      "RF run (seed), 70:30 test cohort"),
+    if ("AMI" %in% names(clustering)) {
+      clustering_statistics(clustering, "AMI", "figureS12", "S12 AMI")
+    }
   )
   rownames(stats) <- NULL
   data.frame(arm = arm, stats, stringsAsFactors = FALSE)

@@ -128,8 +128,8 @@ for (arm in c("label_aware", "no_label")) {
   Sys.unsetenv(c("CORRECTION_ARM", "FIGURE4_OUTPUT"))
   statistics_file <- sub("\\.png$", "_statistics.tsv", output)
   annotated_file <- sub("\\.png$", "_statistics.png", output)
-  cohort_files <- file.path(tempdir(), paste0(c("figureS7_", "figureS8_"), arm, ".png"))
-  current_outputs <- c(output, annotated_file, statistics_file, cohort_files)
+  supplementary_files <- file.path(tempdir(), paste0(c("figureS7_", "figureS8_", "figureS12_"), arm, ".png"))
+  current_outputs <- c(output, annotated_file, statistics_file, supplementary_files)
   stopifnot(all(file.exists(current_outputs)),
             !any(current_outputs %in% verified_outputs),
             identical(tools::md5sum(verified_outputs), previous_hashes))
@@ -148,25 +148,30 @@ for (arm in c("label_aware", "no_label")) {
   families <- split(seq_len(nrow(summary)), family)
   stopifnot(nrow(cohort_seeds) == 17L, all(cohort_seeds == 10L),
             nrow(split_seeds) == 17L, all(split_seeds == 10L),
-            identical(as.vector(table(summary$panel)[c("4a ARI", "S7 LOCO", "S8 train/test")]),
-                      c(16L, 68L, 68L)),
-            all(summary$n_a == 10L), all(summary$n_b == 10L), nrow(saved) == 152L,
+            identical(as.vector(table(summary$panel)[c("4a ARI", "S7 LOCO", "S8 train/test", "S12 AMI")]),
+                      c(16L, 68L, 68L, 16L)),
+            all(summary$n_a == 10L), all(summary$n_b == 10L), nrow(saved) == 168L,
             identical(summary$paired, summary$contrast %in% c("C1", "C2")),
             !anyNA(summary[inference_columns]),
             identical(summary$marker, figure4_marker(summary$p_holm)),
             same(saved$p_raw, summary$p_raw), same(saved$p_holm, summary$p_holm),
             same(saved$ci95_low, summary$ci95_low), same(saved$ci95_high, summary$ci95_high),
-            length(families) == 38L, all(lengths(families) == 4L),
+            length(families) == 42L, all(lengths(families) == 4L),
             identical(saved$relevant, summary$relevant),
             identical(summary$relevant,
                       abs(summary$diff) >= figure4_min_difference - figure4_statistics_tolerance),
             nrow(figure4_annotation_data(summary, "4a ARI")) == 16L,
             nrow(figure4_annotation_data(summary, "S7 LOCO")) == 68L,
-            nrow(figure4_annotation_data(summary, "S8 train/test")) == 68L)
+            nrow(figure4_annotation_data(summary, "S8 train/test")) == 68L,
+            nrow(figure4_annotation_data(summary, "S12 AMI")) == 16L)
   stopifnot(
     identical(names(script$figure4_annotations), "ari"),
     identical(script$figure4_annotations$ari$label,
               summary$marker[summary$panel == "4a ARI"]),
+    identical(script$figureS12_annotations$label,
+              summary$marker[summary$panel == "S12 AMI"]),
+    identical(script$ami_panel$labels$y, "AMI"),
+    identical(rlang::eval_tidy(script$ami_panel$mapping$y, script$ami_panel$data), data$ari$AMI),
     length(script$figureS7_annotations) == 4L,
     length(script$figureS8_annotations) == 4L
   )
@@ -187,7 +192,8 @@ for (arm in c("label_aware", "no_label")) {
     "S7 LOCO" = list(data = loo, label = "predicted_client_name",
                       value = "metric_value", seed = "seed"),
     "S8 train/test" = list(data = split, label = "predicted_client_name",
-                           value = "metric_value", seed = "seed")
+                           value = "metric_value", seed = "seed"),
+    "S12 AMI" = list(data = data$ari, label = "DatasetLabel", value = "AMI", seed = "Seed")
   )
   for (i in seq_len(nrow(summary))) {
     row <- summary[i, ]
@@ -217,6 +223,6 @@ for (arm in c("label_aware", "no_label")) {
     stopifnot(same(row$p_raw, p), row$ci95_low >= bounds[[1]] - 1e-12,
               row$ci95_high <= bounds[[2]] + 1e-12, row$ci95_low <= row$ci95_high)
   }
-  cat(arm, ": 152 rank-test contrasts in 38 Holm families and all figures verified\n")
+  cat(arm, ": 168 rank-test contrasts in 42 Holm families and all figures verified\n")
 }
-stopifnot(length(verified_outputs) == 10L, !anyDuplicated(verified_outputs))
+stopifnot(length(verified_outputs) == 12L, !anyDuplicated(verified_outputs))

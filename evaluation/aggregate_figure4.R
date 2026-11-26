@@ -14,10 +14,11 @@
 # the output belong to one arm, so overriding them requires CORRECTION_ARM.
 # The script also writes the test table (<output>_statistics.tsv) next to the
 # Figure 4 output, Figure S7 (leave-one-cohort-out per held-out cohort with
-# brackets, figureS7_<arm>) and Figure S8 (70:30 per test cohort with brackets,
-# figureS8_<arm>). For no_label, which the paper reports, Figure 4 and the test
-# table go to figures/main/, the supplements to figures/suppl/ and the annotated
-# Figure 4 to figures/candidate/.
+# brackets, figureS7_<arm>), Figure S8 (70:30 per test cohort with brackets,
+# figureS8_<arm>) and Figure S12 (k-means AMI per dataset with brackets,
+# figureS12_<arm>) when the clustering table contains AMI. For no_label, which
+# the paper reports, Figure 4 and the test table go to figures/main/, the
+# supplements to figures/suppl/ and the annotated Figure 4 to figures/candidate/.
 # The label_aware arm writes all figures to figures/candidate/.
 # With FIGURE4_OUTPUT, every output goes next to that path.
 #
@@ -167,8 +168,8 @@ figure4_data <- prepare_figure4_plot_data(
   seeds_per_group = ari_seeds_per_group
 )
 
-# Exact rank tests over seeds: per dataset (panel a), per held-out cohort
-# (Figure S7) and per 70:30 test cohort (Figure S8). Panels b and c are overviews.
+# Exact rank tests over seeds: per dataset (panel a and Figure S12), per held-out
+# cohort (Figure S7) and per 70:30 test cohort (Figure S8). Panels b and c are overviews.
 
 # Incomplete leave-one-cohort-out results skip panel b and Figure S7; errors of
 # panel a or Figure S8 recur in the second attempt and stop the script.
@@ -288,3 +289,31 @@ figureS8_annotations <- save_per_cohort_figure(
   figure4_data$train_test_split, "figureS8", "S8 train/test",
   "RF 70:30 train-test split per test cohort"
 )
+
+# Figure S12 uses the same clustering runs as Figure 4a, scored with AMI.
+if ("AMI" %in% names(figure4_data$ari)) {
+  figureS12_annotations <- figure4_annotation_data(figure4_stats, "S12 AMI")
+  ami_panel <- plot_figure4_clustering_panel(
+    data = figure4_data$ari,
+    metric = "AMI",
+    dataset_levels = unname(ari_dataset_labels[ari_dataset_order]),
+    title = paste(correction_arm_titles[[CORRECTION_ARM]], "k-means clustering", sep = " · "),
+    scenario_order = scenario_order,
+    scenario_colors = scenario_colors,
+    point_size = point_size,
+    annotations = figureS12_annotations
+  ) + ggplot2::labs(subtitle = clustering_feature_label, caption = statistics_caption)
+  ami_figure <- list(
+    panels = list(ami_panel),
+    panel_heights = c(2.7, 0.55),
+    legend_gap = grid::unit(0.08, "cm")
+  )
+  saved_path <- save_grid_png(
+    function() draw_figure4(ami_figure),
+    output_path = supplementary_figure_path("figureS12"),
+    width = figure_width,
+    height = 3.5,
+    dpi = figure_dpi
+  )
+  cat("Saved Figure S12 to", saved_path, "\n")
+}

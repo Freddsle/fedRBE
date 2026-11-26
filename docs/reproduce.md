@@ -551,6 +551,7 @@ the test caption.
 Figures 3 and S5 also write matching `_variance.tsv` files with median variance
 fractions and feature counts. Figure 4 writes a matching `_statistics.tsv`
 covering Figures 4, S7 and S8.
+An `AMI` column in the clustering table adds Figure S12 and its rank tests.
 
 #### Scenario comparisons in Figures 4, S7 and S8
 

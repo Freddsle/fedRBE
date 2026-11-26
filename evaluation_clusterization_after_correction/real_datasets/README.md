@@ -121,6 +121,7 @@ reads the aggregate clustering tables and RF reports and writes
 `figure4_<arm>.png` without statistics, `figure4_<arm>_statistics.png` with
 significance brackets, a matching `_statistics.tsv` and per-cohort LOCO comparisons
 in `figureS7_<arm>.png` under `figures/main/`, `figures/suppl/` or `figures/candidate/`.
+Figure S12 shows k-means AMI.
 `CORRECTION_ARM` chooses the arm; without it, the script draws both arms. `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and
 `FIGURE4_OUTPUT` override paths relative to the repository root or absolutely.
 See the [figure-rendering commands](../../docs/reproduce.md#7-generate-figures-3-4-s5-s7-and-s8-for-each-correction-arm).
