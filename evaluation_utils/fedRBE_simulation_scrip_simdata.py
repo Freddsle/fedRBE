@@ -176,7 +176,9 @@ def run_experiments(only: str, verbose: bool) -> None:
     # result paths are given relative to evaluation_data, as in the generate script
     selected = [(exp, os.path.join(generate.data_dir, result_filename))
                 for exp, result_filename in generate.experiments
-                if only is None or only in exp.name or only in result_filename]
+                # Sample-size scenarios use sample_size_scaling.R for local comparison.
+                if not Path(result_filename).is_relative_to(generate.SAMPLE_SIZE_SCALING_DIR)
+                and (only is None or only in exp.name or only in result_filename)]
     if not selected:
         raise SystemExit(f"No experiment matches {only!r}")
 

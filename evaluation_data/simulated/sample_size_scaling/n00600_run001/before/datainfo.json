@@ -1,0 +1,51 @@
+{
+  "data_name": "Simulated Balanced (n=600)",
+  "covariates": [
+    "A"
+  ],
+  "prediction_targets": [
+    "condition"
+  ],
+  "datafile": {
+    "filename": "intensities.tsv.gz",
+    "separator": "\t",
+    "rotation": "features x samples",
+    "samplename_column": null,
+    "featurename_column": "rowname"
+  },
+  "cohorts": [
+    {
+      "name": "batch1",
+      "folder": "batch1",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
+    },
+    {
+      "name": "batch2",
+      "folder": "batch2",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
+    },
+    {
+      "name": "batch3",
+      "folder": "batch3",
+      "designfile": {
+        "filename": "design.tsv",
+        "separator": "\t",
+        "rotation": "samples x features",
+        "samplename_column": "file",
+        "featurename_column": null
+      }
+    }
+  ]
+}

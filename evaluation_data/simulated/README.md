@@ -44,6 +44,21 @@ pixi run --frozen Rscript evaluation_data/simulated/sample_size_scaling.R \
 
 Use `--samples 600 --runs 1` for a quick check.
 
+For FeatureCloud, the runner uses prebuilt run-1 client inputs in
+`sample_size_scaling/n<SIZE>_run001/before/`. The expression matrices are
+gzip-compressed TSV files tracked with Git LFS. Select sizes in the
+`experiments` list in `generate_fedrbe_corrected_datasets.py`, then run the
+script.
+
+```bash
+pixi run --frozen python generate_fedrbe_corrected_datasets.py
+```
+
+The runner uses the prepared clients for both correction arms with and without
+SMPC and writes outputs to `sample_size_scaling/n<SIZE>_run001/after/`.
+To regenerate a missing input bundle, pass its size to
+[`prepare_sample_size_inputs.R`](prepare_sample_size_inputs.R).
+
 ## Five-client missingness and feature overlap
 
 Ten roots cross full and partial panels with 0%, 10%, 30%, and 50% nominal
