@@ -44,29 +44,6 @@ pixi run --frozen Rscript evaluation_data/simulated/sample_size_scaling.R \
 
 Use `--samples 600 --runs 1` for a quick check.
 
-For FeatureCloud, the runner uses run-1 client inputs in
-`sample_size_scaling/n<SIZE>_run001/before/`. The repository includes the
-600-sample client matrices and both central limma references in Git LFS.
-Run `git lfs pull` to retrieve the matrices before running the experiment.
-
-```bash
-pixi run --frozen python generate_fedrbe_corrected_datasets.py
-```
-
-To run a larger sample size, prepare the seeded client bundle locally and
-uncomment the matching entry in the `experiments` list in
-`generate_fedrbe_corrected_datasets.py`. For example, prepare the 3,000-sample
-bundle with this command.
-
-```bash
-pixi run --frozen Rscript evaluation_data/simulated/prepare_sample_size_inputs.R 3000
-```
-
-The runner uses the prepared clients for both correction arms with and without
-SMPC and writes outputs to `sample_size_scaling/n<SIZE>_run001/after/`.
-The saved 600-sample central limma matrices are named
-`intensities_R_corrected.tsv.gz` under `after/label_aware/` and `after/no_label/`.
-
 ## Five-client missingness and feature overlap
 
 Ten roots cross full and partial panels with 0%, 10%, 30%, and 50% nominal

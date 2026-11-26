@@ -471,7 +471,7 @@ experiments = [
     # *sample_size_experiments(600),
     # *sample_size_experiments(3000),
     # *sample_size_experiments(12000),
-    *sample_size_experiments(50004),
+    #*sample_size_experiments(50004),
 
     # E. coli
     (ecoli_experiment, "ecoli/after/label_aware/FedApp_corrected_data.tsv"),
