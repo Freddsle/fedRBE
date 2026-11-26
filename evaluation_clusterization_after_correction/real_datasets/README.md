@@ -74,7 +74,7 @@ Keep generated `inputs/`, `fc_kmeans_res/`, per-seed `kmeans_res/` exports and
 bulk analysis tables local. These can be regenerated or retained in ignored
 `real_pipeline_runs/<run>/` records.
 Selected summaries remain under `analysis/`.
-The two canonical Figure 4 PNGs remain under the repository's `figures/`.
+The Figure 4 PNGs are under the repository's `figures/` (see [Figures](#figures)).
 
 ## Robustness analyses and descriptive tables
 
@@ -118,9 +118,9 @@ scikit-learn and does not recover actual FeatureCloud message arrival order.
 
 [`evaluation/aggregate_figure4.R`](../../evaluation/aggregate_figure4.R)
 reads the aggregate clustering tables and RF reports and writes
-`figures/figure4_<arm>.png` without statistics, `figures/figure4_<arm>_statistics.png`
-with significance brackets, a matching `_statistics.tsv` and per-cohort LOCO
-comparisons in `figures/figureS7_<arm>.png`.
+`figure4_<arm>.png` without statistics, `figure4_<arm>_statistics.png` with
+significance brackets, a matching `_statistics.tsv` and per-cohort LOCO comparisons
+in `figureS7_<arm>.png` under `figures/main/`, `figures/suppl/` or `figures/candidate/`.
 `CORRECTION_ARM` chooses the arm; without it, the script draws both arms. `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and
 `FIGURE4_OUTPUT` override paths relative to the repository root or absolutely.
 See the [figure-rendering commands](../../docs/reproduce.md#7-generate-figures-3-4-s5-s7-and-s8-for-each-correction-arm).

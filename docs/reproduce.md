@@ -541,11 +541,13 @@ done
 Without `CORRECTION_ARM`, each script draws both arms; `CORRECTION_ARM=<arm>`
 draws only that arm.
 
-Outputs under `figures/`: `figure3_<arm>.png`, `figure4_<arm>.png`,
-`figure4_<arm>_statistics.png`, `figureS5_<arm>.png`, `figureS7_<arm>.png` and
-`figureS8_<arm>.png`.
-Figure 4 is drawn twice: `figure4_<arm>.png` without statistics and
-`figure4_<arm>_statistics.png` with significance brackets and the test caption.
+The scripts write `figure3_<arm>.png` and `figure4_<arm>.png` in `figures/main/`, and
+`figureS5_<arm>.png`, `figureS7_<arm>.png` and `figureS8_<arm>.png` in
+`figures/suppl/` for the arm the paper reports (`label_aware` for Figures 3 and S5,
+`no_label` for Figures 4, S7 and S8). The other arm goes to `figures/candidate/`.
+Figure 4 is drawn twice: `figure4_<arm>.png` without statistics and, in
+`figures/candidate/`, `figure4_<arm>_statistics.png` with significance brackets and
+the test caption.
 Figures 3 and S5 also write matching `_variance.tsv` files with median variance
 fractions and feature counts. Figure 4 writes a matching `_statistics.tsv`
 covering Figures 4, S7 and S8.
@@ -585,10 +587,11 @@ Override paths with `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT
 
 Set `FIGURE4_OUTPUT` to a path ending in `.svg` to export Figure 4 as SVG.
 PNG is the default; a path without an extension gets `.png`. The annotated
-variant uses the same path with a `_statistics` suffix. For example:
+variant, the test table and Figures S7 and S8 are then written next to that path.
+For example:
 
 ```bash
-CORRECTION_ARM=label_aware FIGURE4_OUTPUT=figures/figure4_label_aware.svg \
+CORRECTION_ARM=label_aware FIGURE4_OUTPUT=figures/candidate/figure4_label_aware.svg \
   pixi run Rscript evaluation/aggregate_figure4.R
 ```
 
@@ -603,10 +606,10 @@ The script reads every `*_performance_clients.csv` that
 (one row per client and run, from the Docker runs over the `internet` channel with
 the default query interval of 5 s).
 
-Outputs: `figures/performance_runtime.png` (per dataset: total runtime, client
+Outputs: `figures/suppl/performance_runtime.png` (per dataset: total runtime, client
 computation and waiting time of all participants, with and without SMPC, and the
 coordinator's runtime split into client computation, aggregation and waiting) and
-`figures/performance_memory.png` (container and app process peak memory against the
+`figures/suppl/performance_memory.png` (container and app process peak memory against the
 participant's data size). `PERFORMANCE_DATA_DIR` overrides the searched folder
 (default `evaluation_data`), and `PERFORMANCE_RUNTIME_OUTPUT` and
 `PERFORMANCE_MEMORY_OUTPUT` override the output paths; a path ending in `.svg`

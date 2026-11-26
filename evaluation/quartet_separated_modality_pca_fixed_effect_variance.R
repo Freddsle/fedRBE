@@ -12,8 +12,9 @@
 # before/<Modality>/metadata.tsv and after/<arm>/<Modality>/FedApp_corrected_data.tsv.
 #
 # The sequential model ~ condition + batch assigns variance to donor first, then
-# batch. PCA batch codes are modality-specific. Outputs are
-# figures/figureS5_<arm>.png and a matching _variance.tsv summary.
+# batch. PCA batch codes are modality-specific. Outputs are figureS5_<arm>.png and a
+# matching _variance.tsv summary: label_aware, which the paper reports, under
+# figures/suppl/ and no_label under figures/candidate/.
 
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 require_figure_packages()
@@ -21,7 +22,7 @@ source_plotting_utils()
 run_each_correction_arm("Figure S5")
 
 CORRECTION_ARM <- correction_arm()
-output_dir <- "figures"
+output_dir <- paper_figure_dir("suppl", "label_aware")
 output_path <- file.path(output_dir, paste0("figureS5_", CORRECTION_ARM, ".png"))
 summary_path <- file.path(output_dir, paste0("figureS5_", CORRECTION_ARM, "_variance.tsv"))
 

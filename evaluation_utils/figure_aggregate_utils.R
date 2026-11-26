@@ -29,6 +29,13 @@ correction_arm <- function() {
 }
 
 
+# Folder of a paper figure: figures/main or figures/suppl for the arm the paper
+# reports, figures/candidate for the other arm.
+paper_figure_dir <- function(section, reported_arm) {
+  file.path("figures", if (correction_arm() == reported_arm) section else "candidate")
+}
+
+
 # Run by Rscript without CORRECTION_ARM, a figure script draws both arms: this
 # runs the calling script once per arm, each in its own environment, and then
 # exits. An error in an arm stops the run. A sourced script, or one with
