@@ -104,7 +104,8 @@ python generate_fedrbe_corrected_datasets.py
 - `after/label_aware/FedApp_corrected_data.tsv`
 - `after/label_aware/FedApp_corrected_data_smpc.tsv`
 - `after/no_label/FedApp_corrected_data.tsv` and `after/no_label/FedApp_corrected_data_smpc.tsv` for the no-covariate variants
-- `after/label_aware/individual_results/PDC000127/`, `.../PXD030344/`, `.../PXD042844/`
+- `after/label_aware/individual_results/` and `after/no_label/individual_results/`:
+  `PDC000127/`, `PXD030344/`, `PXD042844/`
 - `after/label_aware/datainfo.json` and `after/no_label/datainfo.json`:
   classification descriptions of each arm's per-client results
 
