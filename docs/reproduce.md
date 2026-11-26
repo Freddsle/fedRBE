@@ -195,9 +195,11 @@ prepared study inputs. Source acquisition and QC provenance are documented in th
 
 For simulated data, committed run-1 inputs support single-run correction. For all
 30 runs, first run `evaluation_data/simulated/00_data_simulation.ipynb` (1–2 hours)
-to generate `before/intermediate/` and `after/runs/`, then rerun
-`01_data_prep_and_central_RBE.ipynb`. For the separate 90-dataset robustness campaign,
-see the [simulation README](../evaluation_data/simulated/README.md#robustness-simulations).
+to generate `before/intermediate/` and `all_metadata.tsv`, then rerun
+`01_data_prep_and_central_RBE.ipynb`, which writes `after/runs/`. The
+[controlled simulation study](../evaluation_data/simulated/README.md) provides
+scripted biological-recovery, missingness/overlap and downstream-utility blocks
+with their own inputs and saved results.
 
 Output:
 
@@ -342,6 +344,12 @@ and `all_metadata.tsv`. Building the cache then requires both before- and
 after-correction per-run LMPV tables under
 `evaluation/eval_simulation/<mode>/lmvp/` for all 30 runs of all three scenarios;
 the script does not generate the after-correction LMPV tables.
+
+#### Controlled simulation study
+
+The [controlled simulation study](../evaluation_data/simulated/README.md) and its
+[result index](../evaluation_data/simulated/results/README.md) give the design, commands
+and saved results; they run natively in the pixi environment without Docker.
 
 ### 5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data
 

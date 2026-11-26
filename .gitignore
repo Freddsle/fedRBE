@@ -215,6 +215,8 @@ evaluation_data/quartet_multiomics/before/preparation_summary.tsv
 /evaluation_data/simulated/**/*_provenance.txt
 # Sample-size scaling campaign: local reproductions use a separate output directory.
 /evaluation_data/simulated/sample_size_scaling_work/
+# Extracted from evaluation_data/simulated/results/*/predictions.zip
+/evaluation_data/simulated/results/*/predictions/
 
 # Local experiment logs, prepared inputs, backups and temporary execution copies.
 /real_pipeline_runs/
