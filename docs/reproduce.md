@@ -190,8 +190,7 @@ For ccRCC, the starting inputs are the tracked `report_filtered.tsv` and
 `design.tsv` files under `evaluation_data/ccRCC_studies/before/<study>/` for
 PDC000127, PXD030344, and PXD042844. `prepare_ccRCC_data.py` aligns their sample
 order, encodes `Condition`, and builds the union matrix. This route starts from
-prepared study inputs. Source acquisition and QC provenance are documented in the
-[ccRCC preparation archive](../evaluation_data/ccRCC_studies/archive/README.md).
+prepared study inputs.
 
 For simulated data, committed run-1 inputs support single-run correction. For all
 30 runs, first run `evaluation_data/simulated/00_data_simulation.ipynb` (1–2 hours)

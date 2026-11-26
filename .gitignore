@@ -187,12 +187,8 @@ evaluation_data/**/config_forest.yaml
 # ccRCC raw acquisition files and intermediate reports remain local.
 evaluation_data/ccRCC_studies/data/
 
-# Archived and unused data
-evaluation_data/ccRCC_studies/before/*/report_filtered.zip
+# ccRCC per-client correction reports are not tracked.
 evaluation_data/ccRCC_studies/after/*/individual_results/*/report.txt
-
-# Local archive contents
-/evaluation_data/ovarian_cancer/archive/prepare_data.py
 
 evaluation_data/quartet_multiomics/plots/*
 evaluation_data/quartet_multiomics/filtered_data/*
