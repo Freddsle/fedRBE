@@ -195,7 +195,7 @@ class ExperimentTests(unittest.TestCase):
                 "metric_name"]
         sequential_rows = pd.read_csv(self.results.path).sort_values(keys, ignore_index=True)
         parallel_rows = pd.read_csv(parallel_results.path).sort_values(keys, ignore_index=True)
-        self.assertEqual(len(parallel_rows), 36)
+        self.assertEqual(len(parallel_rows), 198)
         pd.testing.assert_frame_equal(parallel_rows, sequential_rows)
         for path in sorted(self.corrections.rglob("*.*")):
             other = self.root / "parallel_corrections" / path.relative_to(self.corrections)
@@ -208,8 +208,12 @@ class ExperimentTests(unittest.TestCase):
         # once per fold and arm, not per seed
         self.assertEqual(correction.call_count, 3 * 2)
         rows = pd.read_csv(self.results.path)
-        # 3 folds x 2 seeds x 3 preprocessings x 2 learning types x 2 metrics
-        self.assertEqual(len(rows), 72)
+        # 3 folds x 2 seeds x 3 preprocessings x 2 learning types x
+        # (3 scores + 2 classes x 4 confusion counts)
+        self.assertEqual(len(rows), 396)
+        self.assertEqual(set(rows.metric_name), {
+            "MCC", "weighted_F1_score", "macro_F1_score",
+            *(f"{count}|{cls}" for count in ("TP", "TN", "FP", "FN") for cls in (0, 1))})
         self.assertEqual(set(rows.cross_validation_method), {"Leave-One-Cohort-Out"})
         self.assertEqual(set(rows.predicted_client_name), set(self.spec.cohorts))
         self.assertEqual(set(rows.data_preprocessing_name),

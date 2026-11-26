@@ -298,7 +298,11 @@ protocol implemented in `fedrbe.py`. The local simulator uses the same protocol.
 The figure shows the phases of that protocol.
 
 With `feature_block_size`, clients send XtX/XtY in feature blocks and wait for the
-coordinator's acknowledgement before the next block. Privacy thresholds and SMPC apply
+coordinator's acknowledgement before sending the next block. Clients split the
+transport payloads and still allocate the full local cross-product arrays.
+Featurewise fits retain the same model and missingness masks. Blocking is off by
+default and the repository's evaluation runs leave it disabled. Peak-memory
+measurements for feature blocking are pending. Privacy thresholds and SMPC apply
 to every block. Batch coefficients and outputs are released after all blocks
 succeed. All clients must run the same app image.
 

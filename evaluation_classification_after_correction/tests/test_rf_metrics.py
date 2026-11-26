@@ -17,13 +17,16 @@ from sklearn.tree import DecisionTreeClassifier
 from unittest.mock import patch
 
 from evaluation_classification_after_correction.fc_fed_forest_simple_app.fedForestSimple import main
-from evaluation_utils.metrics import classification_scores, classification_scores_from_confusion
+from evaluation_utils.metrics import (
+    classification_scores, classification_scores_from_confusion, confusion_counts,
+)
 from evaluation_classification_after_correction.fc_fed_forest_simple_app.fc_fedlearnsim_helper.run_app_simulation import (
     run_simulation_native,
 )
 
 COMPONENT = Path(__file__).resolve().parents[1]
 with patch.object(sys, "path", [str(COMPONENT), *sys.path]):
+    from helper.common import METRICS
     from helper.steps import evaluate
 
 
@@ -33,7 +36,8 @@ class RandomForestMetricTests(unittest.TestCase):
             confusion_matrix(true, predicted, labels=labels))
         expected = {
             'MCC': matthews_corrcoef(true, predicted),
-            'F1_score': f1_score(true, predicted, average='weighted', zero_division=0),
+            'weighted_F1_score': f1_score(true, predicted, average='weighted', zero_division=0),
+            'macro_F1_score': f1_score(true, predicted, average='macro', zero_division=0),
         }
         self.assertEqual(actual.keys(), expected.keys())
         np.testing.assert_allclose(list(actual.values()), list(expected.values()),
@@ -44,9 +48,11 @@ class RandomForestMetricTests(unittest.TestCase):
         true = [0] * 90 + [1] * 10
         scores = self.assert_scores_match(true, [0] * 100, [0, 1])
         self.assertEqual(scores['MCC'], 0)
-        self.assertAlmostEqual(scores['F1_score'], 0.9 * (180 / 190))
+        self.assertAlmostEqual(scores['weighted_F1_score'], 0.9 * (180 / 190))
+        # the missed minority class pulls macro F1 down to half the majority's F1
+        self.assertAlmostEqual(scores['macro_F1_score'], (180 / 190) / 2)
         self.assertNotAlmostEqual(scores['MCC'], 0.8)
-        self.assertNotAlmostEqual(scores['F1_score'], 0.9)
+        self.assertNotAlmostEqual(scores['weighted_F1_score'], 0.9)
 
     def test_binary_perfect_constant_and_wrong_predictions(self):
         examples = [
@@ -82,16 +88,23 @@ class RandomForestMetricTests(unittest.TestCase):
         }
         true = np.concatenate([y for y, _ in cohorts.values()])
         predicted = np.concatenate([p for _, p in cohorts.values()])
-        pooled = evaluate.score_predictions(cohorts)
-        per_cohort = evaluate.score_predictions(cohorts, pooled=False)
+        classes = ['D5', 'D6', 'F7', 'M8']
+        pooled = evaluate.score_predictions(cohorts, classes)
+        per_cohort = evaluate.score_predictions(cohorts, classes, pooled=False)
         self.assertEqual(list(pooled), ["All", "A", "B", "C"])
         self.assertEqual(list(per_cohort), ["A", "B", "C"])
-        self.assertEqual(pooled["All"], classification_scores(true, predicted))
+
+        def expected(y, p):
+            return {**classification_scores(y, p), **confusion_counts(y, p, classes)}
+
+        self.assertEqual(pooled["All"], expected(true, predicted))
         for cohort, (y, p) in cohorts.items():
-            self.assertEqual(pooled[cohort], classification_scores(y, p))
-            self.assertEqual(per_cohort[cohort], classification_scores(y, p))
-        local_average = np.mean([list(pooled[c].values()) for c in cohorts], axis=0)
-        self.assertFalse(np.allclose(list(pooled["All"].values()), local_average))
+            self.assertEqual(pooled[cohort], expected(y, p))
+            self.assertEqual(per_cohort[cohort], expected(y, p))
+        # every cohort gets counts for every class, also for classes it lacks
+        self.assertEqual(pooled["C"]["TP|D6"] + pooled["C"]["FN|D6"], 0)
+        local_average = np.mean([[pooled[c][m] for m in METRICS] for c in cohorts], axis=0)
+        self.assertFalse(np.allclose([pooled["All"][m] for m in METRICS], local_average))
 
 
 class RandomForestSeedTests(unittest.TestCase):

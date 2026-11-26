@@ -377,9 +377,9 @@ The test samples are corrected with the batch coefficients of their learner's
 correction, which needs no labels, and predicted. Values a correction did not
 correct (with fedRBE, a feature too sparse in a batch or present in fewer than
 three clients) stay uncorrected in both training and test samples, so every arm
-uses the same features. The uncorrected baseline uses the same splits. Each repetition reports MCC and
-support-weighted F1 pooled over all test samples (`All`) and per test cohort,
-for both learning types.
+uses the same features. The uncorrected baseline uses the same splits. Each repetition reports MCC,
+support-weighted and macro F1, and one-vs-rest TP/TN/FP/FN per class, pooled over
+all test samples (`All`) and per test cohort, for both learning types.
 
 ```bash
 pixi run python evaluation_classification_after_correction/run_classification_train_test_split.py
@@ -421,7 +421,8 @@ feature so that its mean equals the level of the learner's correction, with
 `batchcorrection.classes.client.align_to_training_level`, the function behind
 `batchcorrection/align_new_batch.py`. Features with fewer than `min_samples` values
 in a held-out batch stay uncorrected. The forests then predict the held-out cohort;
-MCC and support-weighted F1 are reported for that cohort and both learning types.
+MCC, support-weighted and macro F1, and one-vs-rest TP/TN/FP/FN per class are
+reported for that cohort and both learning types.
 
 The held-out cohort's labels are not used in either arm, so its alignment is
 label-free: if its label mix differs from the training data's, part of that
@@ -453,8 +454,8 @@ Plot the saved metrics from the repository root:
 python3 evaluation_classification_after_correction/analyse_classification_metric_report.py
 ```
 Plots go to `evaluation_classification_after_correction/plots/{label_aware,label_free}/`:
-MCC and support-weighted F1 boxplots with dots for each validation method in the
-results. Train/test and LOCO plots show each test cohort's score per seed.
+MCC, support-weighted F1 and macro F1 boxplots with dots for each validation method
+in the results. The confusion count rows are not plotted. Train/test and LOCO plots show each test cohort's score per seed.
 Use `--results-file` and `--plots-dir` to override paths. Plotting requires R.
 
 To rerun everything on a server, `run_rf_evaluations_screen.sh` starts a
@@ -516,8 +517,12 @@ these results for each correction arm.
 #### Shared evaluation metrics
 
 [`evaluation_utils/metrics.py`](../evaluation_utils/metrics.py) provides
-`classification_scores(truth, labels)` for MCC and support-weighted F1, and
-`clustering_scores(truth, labels)` for ARI and arithmetic AMI/NMI. Inputs must share
+one function per classification metric: `mcc`, `weighted_f1` (support-weighted F1)
+and `macro_f1`. `classification_scores(truth, labels)` returns all three under their
+result-file names (`MCC`, `weighted_F1_score`, `macro_F1_score`), and
+`confusion_counts(truth, labels, classes)` returns one-vs-rest `TP|<class>`,
+`TN|<class>`, `FP|<class>` and `FN|<class>` for every class, failing on labels outside
+`classes`. `clustering_scores(truth, labels)` gives ARI and arithmetic AMI/NMI. Inputs must share
 sample order. F1/MCC require matching class meanings; partition scores allow
 arbitrary cluster names. `classification_scores_from_confusion(matrix)` scores
 counts whose true rows and predicted columns share class order.
