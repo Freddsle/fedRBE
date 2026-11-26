@@ -71,11 +71,12 @@ The app is available on [FeatureCloud](https://featurecloud.ai/app/fedrbe). For 
 
 Install:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
-2. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
+2. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.11+ and R 4.0+ installations.
 
 Additional requirements depend on the use case:
 - **Running fedRBE in a federated manner via the FeatureCloud platform**: FeatureCloud account
-- **Reproducing the paper**: Git LFS and R dependencies from `requirements_r.txt`
+- **Running the sample experiment or reproducing the paper**: [Git LFS](https://git-lfs.com/)
+- **Reproducing the paper**: R dependencies from `requirements_r.txt`
 
 For Windows users, we recommend using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
@@ -86,6 +87,7 @@ For local simulations or reproduction:
 ```bash
 git clone https://github.com/Freddsle/fedRBE.git
 cd fedRBE
+git lfs pull
 ```
 
 Recommended: pixi installs one locked Python and R environment (`pixi.toml`,

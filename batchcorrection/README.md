@@ -75,6 +75,9 @@ Install:
      cd batchcorrection
      docker build . -t featurecloud.ai/bcorrect:latest
      ```
+     `run_sample_experiment.py` pulls the registry image first; with a locally built
+     image, use the commands in the
+     [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html).
 
 ---
 
@@ -85,6 +88,7 @@ Install:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
+   git lfs pull
    ```
 
 2. **Run a Sample Experiment**:

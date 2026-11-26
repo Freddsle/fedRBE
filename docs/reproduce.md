@@ -39,7 +39,7 @@ or regenerate the analysis stages you need.
 
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
 1. **Git LFS** (required for large files used in this workflow)
-1. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
+1. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.11+ and R 4.0+ installations.
 1. **System resources**:
    - ≥ 16 GB RAM; the correction script can use nearly all of it, so leave capacity for other processes
    - ≥ 20 GB free disk space
