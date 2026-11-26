@@ -44,24 +44,28 @@ pixi run --frozen Rscript evaluation_data/simulated/sample_size_scaling.R \
 
 Use `--samples 600 --runs 1` for a quick check.
 
-For FeatureCloud, the runner uses prebuilt run-1 client inputs in
-`sample_size_scaling/n<SIZE>_run001/before/`. The expression matrices are
-gzip-compressed TSV files tracked with Git LFS. Select sizes in the
-`experiments` list in `generate_fedrbe_corrected_datasets.py`, then run the
-script.
+For FeatureCloud, the runner uses run-1 client inputs in
+`sample_size_scaling/n<SIZE>_run001/before/`. The repository includes the
+600-sample client matrices and both central limma references in Git LFS.
+Run `git lfs pull` to retrieve the matrices before running the experiment.
 
 ```bash
 pixi run --frozen python generate_fedrbe_corrected_datasets.py
 ```
 
+To run a larger sample size, prepare the seeded client bundle locally and
+uncomment the matching entry in the `experiments` list in
+`generate_fedrbe_corrected_datasets.py`. For example, prepare the 3,000-sample
+bundle with this command.
+
+```bash
+pixi run --frozen Rscript evaluation_data/simulated/prepare_sample_size_inputs.R 3000
+```
+
 The runner uses the prepared clients for both correction arms with and without
 SMPC and writes outputs to `sample_size_scaling/n<SIZE>_run001/after/`.
-To regenerate a missing input bundle, pass its size to
-[`prepare_sample_size_inputs.R`](prepare_sample_size_inputs.R).
-
-The run-1 central limma matrices are stored as `intensities_R_corrected.tsv.gz`
-under `after/label_aware/` and `after/no_label/` for each size. Both corrections
-use the saved client inputs.
+The saved 600-sample central limma matrices are named
+`intensities_R_corrected.tsv.gz` under `after/label_aware/` and `after/no_label/`.
 
 ## Five-client missingness and feature overlap
 
