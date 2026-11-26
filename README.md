@@ -44,9 +44,9 @@ The **Federated Limma Remove Batch Effect (fedRBE)** app runs limma's `removeBat
 
 fedRBE allows multiple participants to collaboratively remove batch effects from their data without sharing raw data, ensuring privacy. It effectively eliminates non-biological variations arising from different sources such as labs, time points, or technologies, using limma’s `removeBatchEffect`. The tool supports various data formats and seamlessly integrates with the FeatureCloud platform for streamlined workflow management.
 <p align="center">
-   <img src="./figures/readme1.png" alt="fedRBE app states" width="80%">
+   <img src="./figures/readme1.png" alt="Federated aggregation with additive secret sharing" width="80%">
    <br>
-   <em>fedRBE app states. <a href="https://arxiv.org/abs/2412.05894" target="_blank">Source: ArXiv 2412.05894</a></em>
+   <em>Federated aggregation with additive secret sharing (SMPC). <a href="https://arxiv.org/abs/2412.05894" target="_blank">Source: ArXiv 2412.05894</a></em>
 </p>
 
 
@@ -60,6 +60,9 @@ The repository has two main parts:
    <br>
    <em>fedRBE architecture. <a href="https://arxiv.org/abs/2412.05894" target="_blank">Source: ArXiv 2412.05894</a></em>
 </p>
+
+In step 4, the coordinator sends only the batch coefficients β; each client subtracts its
+batch effect from its own data.
 
 
 The app is available on [FeatureCloud](https://featurecloud.ai/app/fedrbe). For setup, workflow, and implementation details, see the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) and the [app README](https://freddsle.github.io/fedRBE/batchcorrection/).
@@ -173,7 +176,7 @@ see [file preparation](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#
 Output files include:
 - **Corrected Data**: Batch-corrected features (rows) x samples (columns), whatever the input orientation.
 - **Corrected Data with covariates**: The same, with the covariates appended unchanged as rows.
-- **Report**: A summary of the correction process and results.
+- **Report**: The client name, the batch coefficients used for the correction and the design matrix.
 
 ---
 
