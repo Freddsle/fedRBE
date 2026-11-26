@@ -25,7 +25,6 @@ evaluation_data/ccRCC_studies/
 │   │   ├── FedApp_corrected_data.tsv             # created by Step 3
 │   │   └── FedApp_corrected_data_smpc.tsv        # created by Step 3
 │   └── no_label/          # same filenames without biological correction covariates
-├── archive/                # source-input provenance
 ├── data/                   # local raw inputs and intermediate reports; ignored
 ├── plots/                  # before- and after-correction diagnostic plots
 ├── prepare_ccRCC_data.py   # Step 1 script
@@ -35,11 +34,8 @@ evaluation_data/ccRCC_studies/
 ## Prepared inputs
 
 The workflow starts from tracked `before/<site>/report_filtered.tsv`
-and `design.tsv` files for the three studies above. The
-[preparation archive](archive/README.md) documents source-input provenance. Its
-notebooks require unavailable helper APIs and a source workbook, and do not
-specify every export step, so they are not a runnable preparation pipeline in this
-checkout. Raw inputs and intermediate reports are local under `data/`.
+and `design.tsv` files for the three studies above. Raw inputs and intermediate
+reports are local under `data/`.
 
 To reproduce correction from the prepared inputs, start at Step 1. To inspect
 existing correction results, start at Step 4 or 5 after checking that the files
@@ -108,7 +104,8 @@ python generate_fedrbe_corrected_datasets.py
 - `after/label_aware/FedApp_corrected_data.tsv`
 - `after/label_aware/FedApp_corrected_data_smpc.tsv`
 - `after/no_label/FedApp_corrected_data.tsv` and `after/no_label/FedApp_corrected_data_smpc.tsv` for the no-covariate variants
-- `after/label_aware/individual_results/PDC000127/`, `.../PXD030344/`, `.../PXD042844/`
+- `after/label_aware/individual_results/` and `after/no_label/individual_results/`:
+  `PDC000127/`, `PXD030344/`, `PXD042844/`
 - `after/label_aware/datainfo.json` and `after/no_label/datainfo.json`:
   classification descriptions of each arm's per-client results
 

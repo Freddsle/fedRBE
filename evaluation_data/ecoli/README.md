@@ -18,8 +18,8 @@ downloading or processing raw DIA-NN files.
 - `after/label_aware/` and `after/no_label/` — central and federated correction outputs.
 - `plots/` — preparation and after-correction diagnostic plots.
 
-The app inputs are already log2-transformed. Disable log transformation during
-batch effect correction to avoid transforming them twice.
+The app inputs are already log2-transformed. Keep `normalizationMethod: null`; the app
+accepts only `null` or `"log2(x+1)"`.
 
 ## Preparation
 

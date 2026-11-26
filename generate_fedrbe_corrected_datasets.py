@@ -92,6 +92,8 @@ def set_smpc_true(exp: util.Experiment):
 
 
 SIMULATED_SINGLE_RUN = 1
+SAMPLE_SIZE_SCALING_DIR = os.path.join("simulated", "sample_size_scaling")
+SAMPLE_SIZE_MATRIX = "intensities.tsv.gz"
 
 
 def _path_is_under(path: str, parent: str) -> bool:
@@ -103,15 +105,16 @@ def _path_is_under(path: str, parent: str) -> bool:
 def ensure_simulated_before_inputs_are_single_run(run_number: int = SIMULATED_SINGLE_RUN):
     """Abort if simulated single-run fedRBE inputs no longer point to run 1."""
     simulated_dir = os.path.join(data_dir, "simulated")
-    checked_modes = set()
+    checked_dirs = set()
     for exp, _ in experiments:
-        if not _path_is_under(exp.fc_data_dir, simulated_dir):
+        if exp.fc_data_dir in checked_dirs or not _path_is_under(exp.fc_data_dir, simulated_dir):
             continue
+        checked_dirs.add(exp.fc_data_dir)
 
         mode = os.path.basename(exp.fc_data_dir)
-        if mode in checked_modes:
+        if _path_is_under(exp.fc_data_dir, os.path.join(data_dir, SAMPLE_SIZE_SCALING_DIR)):
+            validate_sample_size_inputs(exp, int(mode.split("_", 1)[0][1:]))
             continue
-        checked_modes.add(mode)
 
         mode_dir = exp.fc_data_dir
         metadata_path = os.path.join(mode_dir, "all_metadata.tsv")
@@ -211,6 +214,59 @@ simulated_strongly_imbalanced_experiment_smpc = deepcopy(simulated_strongly_imba
 set_smpc_true(simulated_strongly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_strongly_imbalanced_experiment_smpc)
 add_position_to_config(simulated_strongly_imbalanced_experiment)
+
+
+def sample_size_experiments(samples: int):
+    """Balanced run 1 from the sample-size study, with both correction arms."""
+    if samples <= 0 or samples % 6:
+        raise ValueError("A balanced three-client scenario requires a multiple of six samples")
+    scenario = Path(SAMPLE_SIZE_SCALING_DIR) / f"n{samples:05d}_run{SIMULATED_SINGLE_RUN:03d}"
+    baseline = deepcopy(simulated_balanced_experiment)
+    baseline.name = f"Simulated Balanced (n={samples})"
+    baseline.fc_data_dir = str(Path(data_dir) / scenario)
+    baseline.clients = [str(Path(baseline.fc_data_dir) / "before" / f"batch{i}")
+                        for i in range(1, 4)]
+    for changes in baseline.config_file_changes:
+        changes["flimmaBatchCorrection"]["data_filename"] = SAMPLE_SIZE_MATRIX
+    for arm in ("label_aware", "no_label"):
+        for smpc in (False, True):
+            exp = deepcopy(baseline)
+            if arm == "no_label":
+                exp.name += " (no covariates)"
+                # The study uses min_samples=0 in both correction arms.
+                for changes in exp.config_file_changes:
+                    changes["flimmaBatchCorrection"]["covariates"] = []
+            if smpc:
+                set_smpc_true(exp)
+                exp.name += " (SMPC)"
+            mode = "smpc" if smpc else "plain"
+            filename = "FedApp_corrected_data_smpc.tsv" if smpc else "FedApp_corrected_data.tsv"
+            yield exp, str(scenario / "after" / arm / mode / filename)
+
+
+def validate_sample_size_inputs(exp: util.Experiment, samples: int):
+    """Check the prepared client files before starting the controller."""
+    before = Path(exp.fc_data_dir) / "before"
+    prepare = f"Rscript evaluation_data/simulated/prepare_sample_size_inputs.R {samples}"
+    if not (before / "datainfo.json").is_file():
+        raise RuntimeError(f"Missing inputs in {before}. Prepare them with {prepare}.")
+    seen = set()
+    for client in map(Path, exp.clients):
+        matrix_path = client / SAMPLE_SIZE_MATRIX
+        with matrix_path.open("rb") as matrix_file:
+            if matrix_file.read(2) != b"\x1f\x8b":
+                raise RuntimeError(f"Expected gzip data in {matrix_path}. Run git lfs pull.")
+        matrix = pd.read_csv(matrix_path, sep="\t", index_col="rowname", nrows=0)
+        design = pd.read_csv(client / "design.tsv", sep="\t", index_col="file")
+        if (len(design) != samples // 3 or not design.index.is_unique
+                or not matrix.columns.equals(design.index) or seen.intersection(design.index)):
+            raise ValueError(f"Unexpected sample count or identifiers in {client}")
+        half = samples // 6
+        if (design["condition"].value_counts().to_dict() != {"A": half, "B": half}
+                or not design["lab"].eq(client.name).all()
+                or not design["A"].eq(design["condition"].eq("B").astype(int)).all()):
+            raise ValueError(f"Unexpected batch or condition design in {client}")
+        seen.update(design.index)
 
 ## PROTEOMICS
 ecoli_config_file_changes_base = {
@@ -410,6 +466,12 @@ experiments = [
     (simulated_mildly_imbalanced_experiment_smpc, "simulated/mild_imbalanced/after/FedApp_corrected_data_smpc.tsv"),
     (simulated_strongly_imbalanced_experiment, "simulated/strong_imbalanced/after/FedApp_corrected_data.tsv"),
     (simulated_strongly_imbalanced_experiment_smpc, "simulated/strong_imbalanced/after/FedApp_corrected_data_smpc.tsv"),
+
+    # Balanced sample-size scaling. Prepare the larger inputs before enabling their runs.
+    *sample_size_experiments(600),
+    # *sample_size_experiments(3000),
+    # *sample_size_experiments(12000),
+    # *sample_size_experiments(50004),
 
     # E. coli
     (ecoli_experiment, "ecoli/after/label_aware/FedApp_corrected_data.tsv"),

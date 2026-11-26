@@ -1,0 +1,265 @@
+panel	target	route	method	stage	metric	datasets	value
+full	0	keep	uncorrected	masked_truth	residual_lab_rms	10	1.2911989481715778
+full	0	keep	fedrbe	masked_truth	residual_lab_rms	10	0.1429107410393084
+full	0	keep	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1429107410393084
+full	0	keep	dcombat	masked_truth	residual_lab_rms		
+full	0	keep	dcombat_label_aware	masked_truth	residual_lab_rms		
+full	0.1	keep	uncorrected	masked_truth	residual_lab_rms	10	1.3070703266746804
+full	0.1	keep	fedrbe	masked_truth	residual_lab_rms	10	0.1592565714400786
+full	0.1	keep	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.15913008909230011
+full	0.1	keep	dcombat	masked_truth	residual_lab_rms		
+full	0.1	keep	dcombat_label_aware	masked_truth	residual_lab_rms		
+full	0.3	keep	uncorrected	masked_truth	residual_lab_rms	10	1.3170268229557005
+full	0.3	keep	fedrbe	masked_truth	residual_lab_rms	10	0.2060847403103277
+full	0.3	keep	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.2055222251255664
+full	0.3	keep	dcombat	masked_truth	residual_lab_rms		
+full	0.3	keep	dcombat_label_aware	masked_truth	residual_lab_rms		
+full	0.5	keep	uncorrected	masked_truth	residual_lab_rms	10	1.296239978338141
+full	0.5	keep	fedrbe	masked_truth	residual_lab_rms	10	0.2681006984945062
+full	0.5	keep	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.2672300166736128
+full	0.5	keep	dcombat	masked_truth	residual_lab_rms		
+full	0.5	keep	dcombat_label_aware	masked_truth	residual_lab_rms		
+full	0	drop	uncorrected	masked_truth	residual_lab_rms	10	1.2911989481715778
+full	0	drop	fedrbe	masked_truth	residual_lab_rms	10	0.1429107410393084
+full	0	drop	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1429107410393084
+full	0	drop	dcombat	masked_truth	residual_lab_rms	10	0.1345018053304211
+full	0	drop	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.1345864701003645
+full	0.1	drop	uncorrected	masked_truth	residual_lab_rms	10	1.291643270158668
+full	0.1	drop	fedrbe	masked_truth	residual_lab_rms	10	0.1344856477639157
+full	0.1	drop	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1344856477639158
+full	0.1	drop	dcombat	masked_truth	residual_lab_rms	10	0.12262714478368619
+full	0.1	drop	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.1226825456319387
+full	0.3	drop	uncorrected	masked_truth	residual_lab_rms	10	1.2916253487645315
+full	0.3	drop	fedrbe	masked_truth	residual_lab_rms	10	0.1327765038927139
+full	0.3	drop	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1327765038927139
+full	0.3	drop	dcombat	masked_truth	residual_lab_rms	10	0.1216276183206064
+full	0.3	drop	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.1216796459061152
+full	0.5	drop	uncorrected	masked_truth	residual_lab_rms	10	1.2895812135244598
+full	0.5	drop	fedrbe	masked_truth	residual_lab_rms	10	0.13138260597839108
+full	0.5	drop	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.13138260597839108
+full	0.5	drop	dcombat	masked_truth	residual_lab_rms	10	0.120408931277004
+full	0.5	drop	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.120538894864422
+full	0	impute	uncorrected	masked_truth	residual_lab_rms	10	1.2911989481715778
+full	0	impute	fedrbe	masked_truth	residual_lab_rms	10	0.1429107410393084
+full	0	impute	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1429107410393084
+full	0	impute	dcombat	masked_truth	residual_lab_rms	10	0.1345018053304211
+full	0	impute	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.1345864701003644
+full	0.1	impute	uncorrected	masked_truth	residual_lab_rms	10	1.305940695910027
+full	0.1	impute	fedrbe	masked_truth	residual_lab_rms	10	0.5382040284009565
+full	0.1	impute	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.5382040284009565
+full	0.1	impute	dcombat	masked_truth	residual_lab_rms	10	0.4309294760317667
+full	0.1	impute	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.43102506595905654
+full	0.3	impute	uncorrected	masked_truth	residual_lab_rms	10	1.3126015635062687
+full	0.3	impute	fedrbe	masked_truth	residual_lab_rms	10	1.292360273598799
+full	0.3	impute	fedrbe_label_aware	masked_truth	residual_lab_rms	10	1.292360273598799
+full	0.3	impute	dcombat	masked_truth	residual_lab_rms	10	1.115892097888306
+full	0.3	impute	dcombat_label_aware	masked_truth	residual_lab_rms	10	1.115814439788892
+full	0.5	impute	uncorrected	masked_truth	residual_lab_rms	10	1.2906886703553044
+full	0.5	impute	fedrbe	masked_truth	residual_lab_rms	10	2.0546121543179647
+full	0.5	impute	fedrbe_label_aware	masked_truth	residual_lab_rms	10	2.0546121543179647
+full	0.5	impute	dcombat	masked_truth	residual_lab_rms	10	1.7085726584694547
+full	0.5	impute	dcombat_label_aware	masked_truth	residual_lab_rms	10	1.708126117432247
+overlap	0	keep	uncorrected	masked_truth	residual_lab_rms	10	1.2568393980189474
+overlap	0	keep	fedrbe	masked_truth	residual_lab_rms	10	0.1385494142003272
+overlap	0	keep	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1385494142003271
+overlap	0	keep	dcombat	masked_truth	residual_lab_rms		
+overlap	0	keep	dcombat_label_aware	masked_truth	residual_lab_rms		
+overlap	0.1	keep	uncorrected	masked_truth	residual_lab_rms	10	1.272128798238032
+overlap	0.1	keep	fedrbe	masked_truth	residual_lab_rms	10	0.1544076895944813
+overlap	0.1	keep	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.15430291610748761
+overlap	0.1	keep	dcombat	masked_truth	residual_lab_rms		
+overlap	0.1	keep	dcombat_label_aware	masked_truth	residual_lab_rms		
+overlap	0.3	keep	uncorrected	masked_truth	residual_lab_rms	10	1.2820115821593423
+overlap	0.3	keep	fedrbe	masked_truth	residual_lab_rms	10	0.1990709255433748
+overlap	0.3	keep	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1985196319407188
+overlap	0.3	keep	dcombat	masked_truth	residual_lab_rms		
+overlap	0.3	keep	dcombat_label_aware	masked_truth	residual_lab_rms		
+overlap	0.5	keep	uncorrected	masked_truth	residual_lab_rms	10	1.2639611346542812
+overlap	0.5	keep	fedrbe	masked_truth	residual_lab_rms	10	0.2580399290545452
+overlap	0.5	keep	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.2572190781828799
+overlap	0.5	keep	dcombat	masked_truth	residual_lab_rms		
+overlap	0.5	keep	dcombat_label_aware	masked_truth	residual_lab_rms		
+overlap	0	drop	uncorrected	masked_truth	residual_lab_rms	10	1.291448330265248
+overlap	0	drop	fedrbe	masked_truth	residual_lab_rms	10	0.1416354090190784
+overlap	0	drop	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1416354090190784
+overlap	0	drop	dcombat	masked_truth	residual_lab_rms	10	0.1329029917330689
+overlap	0	drop	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.13296485528191498
+overlap	0.1	drop	uncorrected	masked_truth	residual_lab_rms	10	1.2923058952302195
+overlap	0.1	drop	fedrbe	masked_truth	residual_lab_rms	10	0.1354273087799108
+overlap	0.1	drop	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.13542730877991072
+overlap	0.1	drop	dcombat	masked_truth	residual_lab_rms	10	0.1231822669413128
+overlap	0.1	drop	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.1232149164620375
+overlap	0.3	drop	uncorrected	masked_truth	residual_lab_rms	10	1.292297782618871
+overlap	0.3	drop	fedrbe	masked_truth	residual_lab_rms	10	0.13460866337383998
+overlap	0.3	drop	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1346086633738401
+overlap	0.3	drop	dcombat	masked_truth	residual_lab_rms	10	0.1247973148335642
+overlap	0.3	drop	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.1248187229527544
+overlap	0.5	drop	uncorrected	masked_truth	residual_lab_rms	10	1.2898477202759022
+overlap	0.5	drop	fedrbe	masked_truth	residual_lab_rms	10	0.1317574439955659
+overlap	0.5	drop	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.131757443995566
+overlap	0.5	drop	dcombat	masked_truth	residual_lab_rms	10	0.1238601963386536
+overlap	0.5	drop	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.12386389289007571
+overlap	0	impute	uncorrected	masked_truth	residual_lab_rms	10	1.291448330265248
+overlap	0	impute	fedrbe	masked_truth	residual_lab_rms	10	0.1416354090190784
+overlap	0	impute	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.1416354090190784
+overlap	0	impute	dcombat	masked_truth	residual_lab_rms	10	0.1329029917330689
+overlap	0	impute	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.13296485528191498
+overlap	0.1	impute	uncorrected	masked_truth	residual_lab_rms	10	1.306386473401803
+overlap	0.1	impute	fedrbe	masked_truth	residual_lab_rms	10	0.5085193036063407
+overlap	0.1	impute	fedrbe_label_aware	masked_truth	residual_lab_rms	10	0.5085193036063405
+overlap	0.1	impute	dcombat	masked_truth	residual_lab_rms	10	0.4038404321061305
+overlap	0.1	impute	dcombat_label_aware	masked_truth	residual_lab_rms	10	0.4038520150454762
+overlap	0.3	impute	uncorrected	masked_truth	residual_lab_rms	10	1.3139417533462858
+overlap	0.3	impute	fedrbe	masked_truth	residual_lab_rms	10	1.2222105572455022
+overlap	0.3	impute	fedrbe_label_aware	masked_truth	residual_lab_rms	10	1.2222105572455022
+overlap	0.3	impute	dcombat	masked_truth	residual_lab_rms	10	1.0502015308151311
+overlap	0.3	impute	dcombat_label_aware	masked_truth	residual_lab_rms	10	1.0500332552731941
+overlap	0.5	impute	uncorrected	masked_truth	residual_lab_rms	10	1.2909935540338489
+overlap	0.5	impute	fedrbe	masked_truth	residual_lab_rms	10	1.940765514848561
+overlap	0.5	impute	fedrbe_label_aware	masked_truth	residual_lab_rms	10	1.940765514848561
+overlap	0.5	impute	dcombat	masked_truth	residual_lab_rms	10	1.60714693860633
+overlap	0.5	impute	dcombat_label_aware	masked_truth	residual_lab_rms	10	1.606632853659132
+full	0	keep	masked_truth	complete_truth	attenuation_condition	10	1.0
+full	0	keep	uncorrected	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	keep	fedrbe	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	keep	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	keep	dcombat	complete_truth	attenuation_condition		
+full	0	keep	dcombat_label_aware	complete_truth	attenuation_condition		
+full	0.1	keep	masked_truth	complete_truth	attenuation_condition	10	0.992354091639949
+full	0.1	keep	uncorrected	complete_truth	attenuation_condition	10	0.982634671845062
+full	0.1	keep	fedrbe	complete_truth	attenuation_condition	10	0.9834726920223646
+full	0.1	keep	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.985640968528146
+full	0.1	keep	dcombat	complete_truth	attenuation_condition		
+full	0.1	keep	dcombat_label_aware	complete_truth	attenuation_condition		
+full	0.3	keep	masked_truth	complete_truth	attenuation_condition	10	0.982319536846856
+full	0.3	keep	uncorrected	complete_truth	attenuation_condition	10	0.9589344038261729
+full	0.3	keep	fedrbe	complete_truth	attenuation_condition	10	0.9556357726881626
+full	0.3	keep	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9623171199711067
+full	0.3	keep	dcombat	complete_truth	attenuation_condition		
+full	0.3	keep	dcombat_label_aware	complete_truth	attenuation_condition		
+full	0.5	keep	masked_truth	complete_truth	attenuation_condition	10	0.9844376821280256
+full	0.5	keep	uncorrected	complete_truth	attenuation_condition	10	0.9649543818800908
+full	0.5	keep	fedrbe	complete_truth	attenuation_condition	10	0.9487355073184753
+full	0.5	keep	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9587403394808878
+full	0.5	keep	dcombat	complete_truth	attenuation_condition		
+full	0.5	keep	dcombat_label_aware	complete_truth	attenuation_condition		
+full	0	drop	masked_truth	complete_truth	attenuation_condition	10	1.0
+full	0	drop	uncorrected	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	drop	fedrbe	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	drop	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	drop	dcombat	complete_truth	attenuation_condition	10	1.1097387385367532
+full	0	drop	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9997552886355112
+full	0.1	drop	masked_truth	complete_truth	attenuation_condition	10	1.0
+full	0.1	drop	uncorrected	complete_truth	attenuation_condition	10	1.001773641388986
+full	0.1	drop	fedrbe	complete_truth	attenuation_condition	10	1.001773641388986
+full	0.1	drop	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.001773641388986
+full	0.1	drop	dcombat	complete_truth	attenuation_condition	10	1.1108768841335297
+full	0.1	drop	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9987132334632681
+full	0.3	drop	masked_truth	complete_truth	attenuation_condition	10	1.0
+full	0.3	drop	uncorrected	complete_truth	attenuation_condition	10	0.9926624537273094
+full	0.3	drop	fedrbe	complete_truth	attenuation_condition	10	0.9926624537273094
+full	0.3	drop	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9926624537273092
+full	0.3	drop	dcombat	complete_truth	attenuation_condition	10	1.1022099070496718
+full	0.3	drop	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9958909230820376
+full	0.5	drop	masked_truth	complete_truth	attenuation_condition	10	1.0
+full	0.5	drop	uncorrected	complete_truth	attenuation_condition	10	0.9981823661691832
+full	0.5	drop	fedrbe	complete_truth	attenuation_condition	10	0.9981823661691831
+full	0.5	drop	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9981823661691831
+full	0.5	drop	dcombat	complete_truth	attenuation_condition	10	1.098053613982462
+full	0.5	drop	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9945302913178546
+full	0	impute	masked_truth	complete_truth	attenuation_condition	10	1.0
+full	0	impute	uncorrected	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	impute	fedrbe	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	impute	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.0002016347364222
+full	0	impute	dcombat	complete_truth	attenuation_condition	10	1.1097387385367532
+full	0	impute	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9997552886355112
+full	0.1	impute	masked_truth	complete_truth	attenuation_condition	10	0.991913472266518
+full	0.1	impute	uncorrected	complete_truth	attenuation_condition	10	0.9842475459146781
+full	0.1	impute	fedrbe	complete_truth	attenuation_condition	10	0.9955360740095436
+full	0.1	impute	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9955360740095436
+full	0.1	impute	dcombat	complete_truth	attenuation_condition	10	1.1090535767027352
+full	0.1	impute	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9837481648619152
+full	0.3	impute	masked_truth	complete_truth	attenuation_condition	10	0.9837494933350003
+full	0.3	impute	uncorrected	complete_truth	attenuation_condition	10	0.965957518095232
+full	0.3	impute	fedrbe	complete_truth	attenuation_condition	10	1.028941692159922
+full	0.3	impute	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.028941692159922
+full	0.3	impute	dcombat	complete_truth	attenuation_condition	10	1.184291388957387
+full	0.3	impute	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9882462286181359
+full	0.5	impute	masked_truth	complete_truth	attenuation_condition	10	0.9887959227203723
+full	0.5	impute	uncorrected	complete_truth	attenuation_condition	10	0.9752885586913738
+full	0.5	impute	fedrbe	complete_truth	attenuation_condition	10	1.0932620538215079
+full	0.5	impute	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.093262053821509
+full	0.5	impute	dcombat	complete_truth	attenuation_condition	10	1.383741490363898
+full	0.5	impute	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9613581074946842
+overlap	0	keep	masked_truth	complete_truth	attenuation_condition	10	1.000390189598084
+overlap	0	keep	uncorrected	complete_truth	attenuation_condition	10	0.99953758900369
+overlap	0	keep	fedrbe	complete_truth	attenuation_condition	10	0.9995375890036902
+overlap	0	keep	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.99953758900369
+overlap	0	keep	dcombat	complete_truth	attenuation_condition		
+overlap	0	keep	dcombat_label_aware	complete_truth	attenuation_condition		
+overlap	0.1	keep	masked_truth	complete_truth	attenuation_condition	10	0.9930125147271319
+overlap	0.1	keep	uncorrected	complete_truth	attenuation_condition	10	0.9830401207668913
+overlap	0.1	keep	fedrbe	complete_truth	attenuation_condition	10	0.983700602787455
+overlap	0.1	keep	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9856357316479032
+overlap	0.1	keep	dcombat	complete_truth	attenuation_condition		
+overlap	0.1	keep	dcombat_label_aware	complete_truth	attenuation_condition		
+overlap	0.3	keep	masked_truth	complete_truth	attenuation_condition	10	0.9813765353173801
+overlap	0.3	keep	uncorrected	complete_truth	attenuation_condition	10	0.9604255687739318
+overlap	0.3	keep	fedrbe	complete_truth	attenuation_condition	10	0.9555887377422149
+overlap	0.3	keep	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9613894352925278
+overlap	0.3	keep	dcombat	complete_truth	attenuation_condition		
+overlap	0.3	keep	dcombat_label_aware	complete_truth	attenuation_condition		
+overlap	0.5	keep	masked_truth	complete_truth	attenuation_condition	10	0.9842894428605506
+overlap	0.5	keep	uncorrected	complete_truth	attenuation_condition	10	0.965422382228982
+overlap	0.5	keep	fedrbe	complete_truth	attenuation_condition	10	0.9519923643165378
+overlap	0.5	keep	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9616814559825617
+overlap	0.5	keep	dcombat	complete_truth	attenuation_condition		
+overlap	0.5	keep	dcombat_label_aware	complete_truth	attenuation_condition		
+overlap	0	drop	masked_truth	complete_truth	attenuation_condition	10	1.0
+overlap	0	drop	uncorrected	complete_truth	attenuation_condition	10	1.0006327762722824
+overlap	0	drop	fedrbe	complete_truth	attenuation_condition	10	1.0006327762722822
+overlap	0	drop	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.0006327762722822
+overlap	0	drop	dcombat	complete_truth	attenuation_condition	10	1.107911201134553
+overlap	0	drop	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9988255715868458
+overlap	0.1	drop	masked_truth	complete_truth	attenuation_condition	10	1.0
+overlap	0.1	drop	uncorrected	complete_truth	attenuation_condition	10	0.9953938381375563
+overlap	0.1	drop	fedrbe	complete_truth	attenuation_condition	10	0.9953938381375563
+overlap	0.1	drop	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9953938381375564
+overlap	0.1	drop	dcombat	complete_truth	attenuation_condition	10	1.1011568971252719
+overlap	0.1	drop	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9962210976714676
+overlap	0.3	drop	masked_truth	complete_truth	attenuation_condition	9	1.0
+overlap	0.3	drop	uncorrected	complete_truth	attenuation_condition	9	0.9850581866299536
+overlap	0.3	drop	fedrbe	complete_truth	attenuation_condition	9	0.9850581866299548
+overlap	0.3	drop	fedrbe_label_aware	complete_truth	attenuation_condition	9	0.9850581866299536
+overlap	0.3	drop	dcombat	complete_truth	attenuation_condition	9	1.1024627099932274
+overlap	0.3	drop	dcombat_label_aware	complete_truth	attenuation_condition	9	0.9919095731704124
+overlap	0.5	drop	masked_truth	complete_truth	attenuation_condition	7	1.0
+overlap	0.5	drop	uncorrected	complete_truth	attenuation_condition	7	0.9817743278029896
+overlap	0.5	drop	fedrbe	complete_truth	attenuation_condition	7	0.9817743278029897
+overlap	0.5	drop	fedrbe_label_aware	complete_truth	attenuation_condition	7	0.9817743278029897
+overlap	0.5	drop	dcombat	complete_truth	attenuation_condition	7	1.1248441405441771
+overlap	0.5	drop	dcombat_label_aware	complete_truth	attenuation_condition	7	0.9954405858131015
+overlap	0	impute	masked_truth	complete_truth	attenuation_condition	10	1.0
+overlap	0	impute	uncorrected	complete_truth	attenuation_condition	10	1.0006327762722824
+overlap	0	impute	fedrbe	complete_truth	attenuation_condition	10	1.0006327762722822
+overlap	0	impute	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.0006327762722822
+overlap	0	impute	dcombat	complete_truth	attenuation_condition	10	1.1079112011345533
+overlap	0	impute	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9988255715868458
+overlap	0.1	impute	masked_truth	complete_truth	attenuation_condition	10	0.9910991049759031
+overlap	0.1	impute	uncorrected	complete_truth	attenuation_condition	10	0.9797645903293235
+overlap	0.1	impute	fedrbe	complete_truth	attenuation_condition	10	0.990546788218739
+overlap	0.1	impute	fedrbe_label_aware	complete_truth	attenuation_condition	10	0.9905467882187388
+overlap	0.1	impute	dcombat	complete_truth	attenuation_condition	10	1.10097999138957
+overlap	0.1	impute	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9818964160737382
+overlap	0.3	impute	masked_truth	complete_truth	attenuation_condition	10	0.9798622364486326
+overlap	0.3	impute	uncorrected	complete_truth	attenuation_condition	10	0.9610179824669892
+overlap	0.3	impute	fedrbe	complete_truth	attenuation_condition	10	1.0227117545024476
+overlap	0.3	impute	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.0227117545024476
+overlap	0.3	impute	dcombat	complete_truth	attenuation_condition	10	1.1807691851268711
+overlap	0.3	impute	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9816114977333493
+overlap	0.5	impute	masked_truth	complete_truth	attenuation_condition	10	0.9920041332453986
+overlap	0.5	impute	uncorrected	complete_truth	attenuation_condition	10	0.9720741110990676
+overlap	0.5	impute	fedrbe	complete_truth	attenuation_condition	10	1.1003621710063691
+overlap	0.5	impute	fedrbe_label_aware	complete_truth	attenuation_condition	10	1.1003621710063691
+overlap	0.5	impute	dcombat	complete_truth	attenuation_condition	10	1.3641822038152949
+overlap	0.5	impute	dcombat_label_aware	complete_truth	attenuation_condition	10	0.9917073109126362

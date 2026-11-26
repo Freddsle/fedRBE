@@ -29,6 +29,8 @@ Supports log scaling, multiple batches per client, and SMPC.
 - [Input requirements](#input-requirements)
 - [Outputs](#outputs)
 - [Configuration (config.yml)](#configuration-configyml)
+- [Input validation](#input-validation)
+- [Correcting new batches after a fedRBE run](#correcting-new-batches-after-a-fedrbe-run)
 - [Protocol phases](#protocol-phases)
 - [Additional resources](#additional-resources)
 - [License](#license)
@@ -75,6 +77,9 @@ Install:
      cd batchcorrection
      docker build . -t featurecloud.ai/bcorrect:latest
      ```
+     `run_sample_experiment.py` pulls the registry image first; with a locally built
+     image, use the commands in the
+     [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html).
 
 ---
 
@@ -85,6 +90,7 @@ Install:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
+   git lfs pull
    ```
 
 2. **Run a Sample Experiment**:
@@ -118,7 +124,7 @@ After completion, each client receives:
 - **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
 - **`report.txt`**: The client name, the batch coefficients used for the correction and the
-  design matrix. Features masked for privacy are listed in the app log.
+  design matrix.
 
 The coordinator additionally receives the files needed to correct new batches later on,
 without another run (see [Correcting new batches](#correcting-new-batches-after-a-fedrbe-run)):
@@ -131,7 +137,10 @@ without another run (see [Correcting new batches](#correcting-new-batches-after-
 features (rows) x samples (columns) whatever the input orientation; `full_corrected_data.csv`
 appends the covariates as rows. Values masked for privacy (fewer finite values than the
 effective `min_samples` in a batch or on the client) are exported as empty cells.
+Features masked for privacy are listed in the app log.
 Features available in fewer than `min_clients` (default: three) clients are omitted.
+Each client also writes `performance_report.json` with protocol timings, payload sizes
+and process memory.
 
 ---
 
@@ -147,7 +156,7 @@ flimmaBatchCorrection:
     # Optional design matrix: samples x covariates.
     # Must have first column as sample indices.
     # it is read in the following way:
-    # pd.read_csv(design_file_path, sep=seperator, index_col=0)
+    # pd.read_csv(design_file_path, sep=design_separator, index_col=0)
     # should therefore be in the format samples x covariates
     # with the first column being the sample indices
 
@@ -217,24 +226,34 @@ flimmaBatchCorrection:
     # Without an explicit reference, the last client's alphabetically last batch is used.
 
   reference_batch: ""
-    # Explicitly set a reference batch (string) or leave empty.
+    # A batch label (string) selects one of this client's batch_col batches;
+    # true makes this single-batch client the reference. Leave empty for the default.
     # Conflicts in ordering/reference will halt execution.
 ```
 
 ---
 
-## Input requirements
+## Input validation
 
+- `covariates` is required; use `[]` for none.
 - Covariates must be numeric and finite; encode categories as numeric indicators.
 - Batch labels must be complete and contain no `|`; spaces are allowed.
 - Feature identifiers must be unique, and every measurement cell must be numeric
-  (`NA` or empty for missing values).
+  (`NA` or empty for missing values). In samples × features files, non-numeric columns
+  are left out of the correction and duplicate column names are renamed (for example
+  `f2.1`); check headers and values first.
 - All clients must use the same boolean `smpc` setting (default: `true`), the same
   `normalizationMethod`, `min_clients` and `feature_block_size`.
 - Only finite measurements count for privacy thresholds, batch presence and regression.
+- Each batch needs at least one feature with max(`min_samples`, batches + covariates + 1)
+  finite values, or the run stops.
 - For each feature, a covariate that is constant (all 0 or all 1) among the samples
   with observed measurements is omitted from that feature's fit, as in limma. Other
-  collinear or numerically unreliable fits stop the run. Rescale very small covariates.
+  collinear or numerically unreliable fits stop the run.
+- With SMPC, very large XtX/XtY values stop the run; use log-scale data, rescale large
+  covariates or set `smpc: false`.
+- With SMPC, covariate variation below the fixed-point precision stops the run; rescale
+  covariates or set `smpc: false`.
 
 ## Correcting new batches after a fedRBE run
 
@@ -279,13 +298,13 @@ protocol implemented in `fedrbe.py`. The local simulator uses the same protocol.
 The figure shows the phases of that protocol.
 
 With `feature_block_size`, clients send XtX/XtY in feature blocks and wait for the
-coordinator's acknowledgement before sending the next block. Only transport
-payloads are split; full local cross-product arrays remain allocated. Featurewise
-fits retain the same model and missingness masks. Blocking is off by default, and
-the evaluation runs in this repository do not use it. Its effect on peak memory
-has not been measured.
-Privacy thresholds and SMPC settings are unchanged. Batch coefficients and outputs
-are released after all blocks succeed. Rebuild the same app image for every client.
+coordinator's acknowledgement before sending the next block. Clients split the
+transport payloads and still allocate the full local cross-product arrays.
+Featurewise fits retain the same model and missingness masks. Blocking is off by
+default and the repository's evaluation runs leave it disabled. Peak-memory
+measurements for feature blocking are pending. Privacy thresholds and SMPC apply
+to every block. Batch coefficients and outputs are released after all blocks
+succeed. All clients must run the same app image.
 
 <p align="center">
    <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE protocol phases" width="60%">

@@ -17,6 +17,52 @@ from .fc_fedlearnsim_helper.protocolfedlearning import ProtocolFedLearning
 CLASS_WEIGHT = "balanced"
 
 
+def train_local_trees(X_train, y_train, trees_per_client, max_depth,
+                      min_samples_split, min_samples_leaf, max_features, random_state):
+    """Fit local non-bootstrap trees with one input conversion and run RNG stream."""
+    # Apply the estimator's dtype and feature-name validation once. This also
+    # preserves its conversion rules for mixed numeric and boolean columns.
+    input_validator = DecisionTreeClassifier()
+    train_values = validate_data(
+        input_validator, X_train, dtype=np.float32,
+        accept_sparse="csc", ensure_all_finite=False)
+    feature_names = getattr(input_validator, "feature_names_in_", None)
+
+    local_trees = []
+    # A run owns its tree RNG stream; adjacent run seeds must not reuse seed blocks.
+    tree_seeds = np.random.RandomState(random_state).randint(
+        np.iinfo(np.int32).max, size=trees_per_client)
+    for tree_seed in tree_seeds:
+        tree = DecisionTreeClassifier(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            max_features=max_features,
+            class_weight=CLASS_WEIGHT,
+            random_state=int(tree_seed)
+        )
+
+        tree.fit(train_values, y_train)
+        if feature_names is not None:
+            tree.feature_names_in_ = feature_names
+        local_trees.append(tree)
+    del train_values
+
+    return local_trees
+
+
+def assemble_forest(all_trees, X_train, y_train):
+    """Assemble client trees with the native app's ensemble attributes."""
+    global_forest = RandomForestClassifier(n_estimators=len(all_trees))
+    global_forest.estimators_ = all_trees
+    global_forest.n_classes_ = len(np.unique(y_train))
+    global_forest.classes_ = np.unique(y_train)
+    global_forest.n_features_in_ = X_train.shape[1]
+    global_forest.n_outputs_ = 1
+    global_forest.feature_names_in_ = X_train.columns.to_numpy()
+    return global_forest
+
+
 def main(protocol_fed_learning: ProtocolFedLearning,
          inputfolder: Optional[str] = None,
          outputfolder: Optional[str] = None) -> None:
@@ -147,34 +193,10 @@ def main(protocol_fed_learning: ProtocolFedLearning,
     num_clients = len(protocol_fed_learning.clients)
     trees_per_client = ceil(num_estimators_total / num_clients)
 
-    # Apply the estimator's dtype and feature-name validation once. This also
-    # preserves its conversion rules for mixed numeric and boolean columns.
-    input_validator = DecisionTreeClassifier()
-    train_values = validate_data(
-        input_validator, X_train, dtype=np.float32,
-        accept_sparse="csc", ensure_all_finite=False)
-    feature_names = getattr(input_validator, "feature_names_in_", None)
-
     # Phase 1: Train local decision trees
-    local_trees = []
-    # A run owns its tree RNG stream; adjacent run seeds must not reuse seed blocks.
-    tree_seeds = np.random.RandomState(random_state).randint(
-        np.iinfo(np.int32).max, size=trees_per_client)
-    for tree_seed in tree_seeds:
-        tree = DecisionTreeClassifier(
-            max_depth=max_depth,
-            min_samples_split=min_samples_split,
-            min_samples_leaf=min_samples_leaf,
-            max_features=max_features,
-            class_weight=CLASS_WEIGHT,
-            random_state=int(tree_seed)
-        )
-
-        tree.fit(train_values, y_train)
-        if feature_names is not None:
-            tree.feature_names_in_ = feature_names
-        local_trees.append(tree)
-    del train_values
+    local_trees = train_local_trees(
+        X_train, y_train, trees_per_client, max_depth, min_samples_split,
+        min_samples_leaf, max_features, random_state)
 
     # Phase 2: Send local trees to coordinator
     protocol_fed_learning.send_data_to_coordinator(local_trees, send_to_self=True)
@@ -190,13 +212,7 @@ def main(protocol_fed_learning: ProtocolFedLearning,
 
 
         # Create global random forest with proper attributes
-        global_forest = RandomForestClassifier(n_estimators=len(all_trees))
-        global_forest.estimators_ = all_trees
-        global_forest.n_classes_ = len(np.unique(y_train))
-        global_forest.classes_ = np.unique(y_train)
-        global_forest.n_features_in_ = X_train.shape[1]
-        global_forest.n_outputs_ = 1
-        global_forest.feature_names_in_ = X_train.columns.to_numpy()
+        global_forest = assemble_forest(all_trees, X_train, y_train)
 
         # Broadcast global forest
         protocol_fed_learning.broadcast_data(pickle.dumps(global_forest), send_to_self=True)

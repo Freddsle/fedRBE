@@ -85,7 +85,7 @@ flimmaBatchCorrection:
   smpc: True  # Recommended to set to True
   min_samples: 5  # Minimum number of samples per batch to include a feature
   position: 1   # position of the client (first, second, third, etc.)
-  reference_batch: ""  # Leave empty to use the last client in positional order as the reference
+  reference_batch: ""  # Leave empty to use the last client in positional order as the reference (its alphabetically last batch)
 ```
 
 See the [full configuration reference](https://freddsle.github.io/fedRBE/batchcorrection/#configuration-configyml).
@@ -159,7 +159,7 @@ Set `expression_file_flag` and `index_col` in `config.yml` to match the data:
 
 Values must be numeric, complete and finite; encode categorical variables as
 numeric indicator columns. See the app's
-[input requirements](../batchcorrection/README.md#input-requirements) for design
+[input validation](../batchcorrection/README.md#input-validation) for design
 rank, batch-label, finite-observation and SMPC configuration checks.
 
 List model covariates (e.g., age or treatment) under `covariates`. Supply their

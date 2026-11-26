@@ -143,12 +143,25 @@ select_proportions <- function(mode_version){
 }
 
 
-generate_metadata <- function(batch_info, mode){
+generate_metadata <- function(batch_info, mode, num_batches = 3L){
+
+    if (length(num_batches) != 1L || !is.finite(num_batches) ||
+        num_batches < 1L || num_batches != as.integer(num_batches)) {
+        stop("num_batches must be a positive integer.", call. = FALSE)
+    }
+    if (mode != "balanced" && num_batches != 3L) {
+        stop("Only balanced metadata supports a configurable batch count.", call. = FALSE)
+    }
 
     if (mode == "balanced"){
-        batches <- rep(c("batch1", "batch2", "batch3"), each = 100)
-        batch_info$condition <- as.factor(c(rep("A", 300), rep("B", 300)))
-        batch_info$batch <- as.factor(c(batches[sample(1:300)], batches[sample(1:300)]))
+        half <- nrow(batch_info) / 2L
+        if (!half || half %% num_batches != 0) {
+            stop("Balanced samples must be divisible by twice num_batches.", call. = FALSE)
+        }
+        batches <- rep(paste0("batch", seq_len(num_batches)), each = half / num_batches)
+        batch_info$condition <- as.factor(c(rep("A", half), rep("B", half)))
+        batch_info$batch <- as.factor(c(batches[sample(seq_len(half))],
+                                       batches[sample(seq_len(half))]))
 
     } else if (mode == "strong_imbalanced") {
         batches_A <- c(rep("batch1", 32), rep("batch2", 28), rep("batch3", 288))
@@ -202,28 +215,31 @@ generate_data <- function(
     data_mu2 <- sim.dat.fn(row.frac=frac_1, col.frac=col_frac_B, mu.up=0, mu.down=mu_1, n=2500, m=m)
 
     # % of confounder in batches
-    b_proportions <- select_proportions(mode_version)
+    batch_levels <- sort(unique(as.character(batch_info$batch)))
+    b_proportions <- if (mode_version == "balanced") {
+        rep(0.6, length(batch_levels))
+    } else {
+        unlist(select_proportions(mode_version))
+    }
+    if (length(b_proportions) != length(batch_levels) || anyNA(b_proportions) ||
+        any(!is.finite(b_proportions) | b_proportions < 0 | b_proportions > 1)) {
+        stop("Selected mode must define one valid latent proportion per batch.", call. = FALSE)
+    }
     get_condition_files <- function(batch_name, condition_name) {
         batch_info$file[batch_info$batch == batch_name & batch_info$condition == condition_name]
     }
 
     # rearrange the data7
-    batch1_files <- get_condition_files("batch1", "B")
-    batch2_files <- get_condition_files("batch2", "B")
-    batch3_files <- get_condition_files("batch3", "B")
-    batch1_size <- normalize_count(b_proportions[[1]] * length(batch1_files), length(batch1_files))
-    batch2_size <- normalize_count(b_proportions[[2]] * length(batch2_files), length(batch2_files))
-    batch3_size <- normalize_count(b_proportions[[3]] * length(batch3_files), length(batch3_files))
-    need_to_generate <- (batch1_size + batch2_size + batch3_size) / m
+    batch_files <- lapply(batch_levels, get_condition_files, condition_name = "B")
+    batch_sizes <- mapply(function(files, proportion) {
+        normalize_count(proportion * length(files), length(files))
+    }, batch_files, b_proportions)
+    need_to_generate <- sum(batch_sizes) / m
     # add confounder
     data_mu7 <- sim.dat.fn(row.frac=frac_7, col.frac=need_to_generate, mu.up=0, mu.down=-1*mu_4, n=1000, m=m)
     cat(ncol(data_mu7$dat) * need_to_generate, "\n")
 
-    new_names <- c(
-        take_first_values(batch1_files, batch1_size),
-        take_first_values(batch2_files, batch2_size),
-        take_first_values(batch3_files, batch3_size)
-    )
+    new_names <- unlist(Map(take_first_values, batch_files, batch_sizes), use.names = FALSE)
 
     a_condition_files <- batch_info$file[batch_info$condition == "A"]
     b_condition_files <- batch_info$file[batch_info$condition == "B"]
@@ -287,7 +303,9 @@ add_batch_effect <- function(
     sd_additive = sample(c(0.5, 1, 1.5)),
     shape_multiplicative = sample(c(3, 1, 5)),
     min_pc1_var = 0.2,
-    pc1_iters = 15L
+    pc1_iters = 15L,
+    mult_scale = NULL,
+    noise_sd = 0.5
     ){
 
     # Assuming 'result_two' is your data matrix and 'batch_info' is a vector indicating the batch for each column
@@ -295,18 +313,28 @@ add_batch_effect <- function(
     n_batches <- length(batch_levels)
     n_cols <- ncol(result_two)
     n_proteins <- nrow(result_two)
+    by_batch <- function(values) {
+        if (is.null(names(values))) return(rep(values, length.out = n_batches))
+        if (anyDuplicated(names(values)) || !setequal(names(values), batch_levels)) {
+            stop("Named batch parameters must name each batch exactly once.", call. = FALSE)
+        }
+        unname(values[batch_levels])
+    }
+    if (length(noise_sd) != 1L || !is.finite(noise_sd) || noise_sd < 0) {
+        stop("noise_sd must be one finite nonnegative value.", call. = FALSE)
+    }
 
     # For Additive Effects
     additive_params <- data.frame(
-        mean = rep(mean_additive, length.out = n_batches),
-        sd = rep(sd_additive, length.out = n_batches),
+        mean = by_batch(mean_additive),
+        sd = by_batch(sd_additive),
         row.names = batch_levels
     ) 
     # For Multiplicative Effects
-    mult_scale <- sample(c(2, 1, 0.5), 1)
+    if (is.null(mult_scale)) mult_scale <- sample(c(2, 1, 0.5), 1)
     multiplicative_params <- data.frame(
-        shape = rep(shape_multiplicative, length.out = n_batches),
-        scale = rep(mult_scale, length.out = n_batches),
+        shape = by_batch(shape_multiplicative),
+        scale = by_batch(mult_scale),
         row.names = batch_levels
     ) 
 
@@ -342,7 +370,8 @@ add_batch_effect <- function(
         )
 
         # Noise
-        noise_effect <- matrix(rnorm(n_cols * n_proteins, mean = 0, sd = 0.5), nrow = n_proteins, ncol = n_cols)
+        noise_effect <- matrix(rnorm(n_cols * n_proteins, mean = 0, sd = noise_sd),
+                               nrow = n_proteins, ncol = n_cols)
 
         # Apply batch effects
         batch_effect_component <- additive_effects_matrix + multiplicative_effects_matrix * noise_effect
@@ -356,10 +385,10 @@ add_batch_effect <- function(
         }
     }
 
-    # Realized lab parameters for provenance; the added noise is N(0, 0.5) scaled per lab.
+    # Realized lab parameters for provenance; Gaussian noise is scaled per lab.
     attr(data_with_batch_effects, "batch_params") <- list(
         additive = add_batch_effects, multiplicative = mult_batch_effects,
-        noise_sd = 0.5 * mult_batch_effects)
+        noise_sd = noise_sd * mult_batch_effects)
     return(data_with_batch_effects)
 }
 

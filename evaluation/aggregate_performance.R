@@ -21,10 +21,10 @@ env_or_default <- function(variable, default) {
 }
 data_dir <- env_or_default("PERFORMANCE_DATA_DIR", "evaluation_data")
 runtime_output_path <- env_or_default(
-  "PERFORMANCE_RUNTIME_OUTPUT", file.path("figures", "performance_runtime.png")
+  "PERFORMANCE_RUNTIME_OUTPUT", file.path("figures", "suppl", "performance_runtime.png")
 )
 memory_output_path <- env_or_default(
-  "PERFORMANCE_MEMORY_OUTPUT", file.path("figures", "performance_memory.png")
+  "PERFORMANCE_MEMORY_OUTPUT", file.path("figures", "suppl", "performance_memory.png")
 )
 
 # Figure parameters: PNG sizes in inches.

@@ -27,10 +27,10 @@ preprocessing:
   `FedApp_corrected_data.tsv` and `FedApp_corrected_data_smpc.tsv`, and per-study
   outputs under `individual_results/`.
 
-**Disable log2 transformation in the app:** inputs are already RMA-normalized
-and log-transformed. The classification loaders read `before/datainfo.json`
-and `after/<arm>/datainfo.json`; k-means discovers `before/GSE*` folders containing
-`design.tsv`.
+**Keep `normalizationMethod: null`:** inputs are already RMA-normalized and
+log-transformed; the app accepts only `null` or `"log2(x+1)"`. The classification
+loaders read `before/datainfo.json` and `after/<arm>/datainfo.json`; k-means discovers
+`before/GSE*` folders containing `design.tsv`.
 
 ## Preparation
 

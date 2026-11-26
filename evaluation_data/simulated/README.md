@@ -1,166 +1,146 @@
-# Simulated datasets
+# Controlled simulation study
 
-Three-lab E. coli simulations based on FedProt [1].
+Synthetic log2-scale data test biological recovery, feature retention, and
+downstream learning. The main designs use 600 samples and 6,000 features. Label-aware
+correction includes condition as a covariate. [FedProt design](https://doi.org/10.1038/s43588-025-00832-7)
 
-## Notebook datasets
+Run from the repository root with the locked [pixi environment](../../README.md#installation)
+and use fresh output directories. [Saved results](results/README.md)
 
-The notebooks use `balanced`, `mild_imbalanced` and `strong_imbalanced` inputs
-without missing values.
+<a id="robustness-simulations"></a>
 
-- `00_data_simulation.ipynb`: simulation setup.
-- `01_data_prep_and_central_RBE.ipynb`: preprocessing and central correction.
-- Each scenario's `before/datainfo.json` and `after/datainfo.json`: classification
-  input definitions for the uncorrected and corrected data.
-- `pixi run Rscript evaluation/dataset_diagnostics.R simulated`, run from the
-  repository root: PCA plots of each scenario before and after fedRBE in
-  `evaluation/eval_simulation/pca_plots/` and federated-versus-R differences.
-- `pixi run Rscript evaluation/evaluation_simulated_30runs.R`: 30-run
-  differences and variance-partitioning plots in `evaluation/eval_simulation/`.
+## Biological recovery under confounding and nonlinear effects
 
-Each `before/` contains metadata, raw, log2 and filtered-log2 TSVs, plus per-lab
-FeatureCloud folders with data and covariate designs. Central limma RBE uses lab
-as batch and condition as a covariate.
-
-The RF launchers read the scenario descriptors, align per-lab matrices and design
-labels by sample ID, and create sample-by-feature `tmp_data.csv` inputs
-automatically. The prediction target is `condition`; corrected descriptors read
-`after/individual_results/<lab>/full_corrected_data.csv` and reuse the matching
-`before/<lab>/design.tsv` labels.
-
-## Robustness simulations
-
-`robustness_simulation.R` tests batch removal and signal recovery with **10 runs per
-scenario**: 90 datasets and 180 central corrections in two arms. Prevalences below
-are for the latent subgroup within condition B, by lab.
-
-| Scenario | Design |
-| --- | --- |
-| `balanced` | 100 samples per lab and condition; prevalence 0.6/0.6/0.6 |
-| `mild_imbalanced` | Mild lab/condition imbalance; prevalence 0.4/0.5/0.66 |
-| `strong_imbalanced` | Strong lab/condition imbalance; prevalence 0.2/0.5/0.7 |
-| `intensity_dependent` | Balanced run with raw-scale offsets in labs 2 and 3 |
-| `missingness` | Balanced run with lab-specific missingness and feature overlap |
-| `confounded_p50`, `confounded_p30`, `confounded_p15`, `confounded_p05` | 150/300/150 samples per lab; condition-B fractions p, 1 - p and p for p = 0.5, 0.3, 0.15 and 0.05; prevalence 0.6/0.6/0.6 |
-
-`eta2_condition`, the between-lab fraction of condition-indicator variance, is about
-0, 0.025 and 0.044 for the first three compositions and 0, 0.16, 0.495 and 0.804 for
-the confounded family. Condition counts are rounded to whole samples.
-
-### Run
-
-From the repository root in the [pixi environment](../../README.md#installation):
+Nine three-client scenarios × ten runs cover class imbalance, lab–condition
+confounding, and intensity-dependent batch effects. [Simulation driver](robustness_simulation.R)
 
 ```bash
-# Focused numerical checks
-pixi run Rscript evaluation_utils/tests/test_robustness_simulation.R
-# One run per scenario (nine datasets)
-pixi run Rscript evaluation_data/simulated/robustness_simulation.R \
-  --runs 1 --out /tmp/robustness_check
-# Full campaign
-pixi run Rscript evaluation_data/simulated/robustness_simulation.R
+pixi run --frozen Rscript evaluation_data/simulated/robustness_simulation.R \
+  --out /tmp/fedrbe_robustness
 ```
 
-Options: `--runs 1,5`, `--scenarios balanced,missingness`, `--out DIR`.
-Default output: `evaluation_data/simulated/robustness/`; `summary.tsv`,
-`equivalence.tsv` and `provenance.txt` are tracked, while the per-run files,
-`summary.pdf` and the log are regenerable and ignored.
-Completed runs are skipped; code or parameter changes require a new output directory.
-
-The full campaign took 65 minutes and 2.4 GB RAM on an idle 14-core machine; expect
-up to about 3.5 hours under load. Use one process per output directory.
-
-### Model
-
-The RobNorm-based generator [2] produces 600 samples and 6,000 features: 1,125 A
-and 1,125 B condition features (shift 1.45 in 80% of signal cells), 150 latent
-features (shift -1.25 within a subgroup of B) and 3,600 null features.
-
-The simplified ComBat-inspired model [3] adds a lab-wide offset and lab-scaled
-Gaussian noise. Noise SDs are 0.5 times inverse-gamma proposals with permuted shapes
-3/1/5 and a shared scale drawn from 0.5/1/2. Lab parameters must differ by at least
-20%; offsets and noise are redrawn until technical PC1 explains ≥20% of variance.
-
-- Intensity: `log2(2^y + o)` on batch-affected `y`, where `o` is zero for lab 1 and the
-  10th/25th percentiles of batch-free raw intensities for labs 2/3 [4].
-- Missingness: `simulateMissingValues` per lab, with alpha 0.1/0.2/0.3 and beta 0.8,
-  combines an abundance-dependent (MNAR) threshold and random removal (MCAR within
-  lab) [5]. Alpha does not fix the realized missing fraction. Then 10%/20%/70% of
-  features, stratified by truth role, are kept in one/two/three labs [6].
-- Graded confounding: with a homogeneous condition effect and per-lab offsets,
-  the omitted-covariate retention benchmark is `1 - eta2_condition`.
-- Seeds: `20261016 + 1000 * scenario index + run`, using the table order. Derived
-  scenarios reuse the balanced run; missingness draws use its seed + 500.
+Use `--runs 1` for one dataset per scenario. [Recovery summary](robustness/summary.tsv) ·
+[fedRBE–limma comparisons](robustness/equivalence.tsv)
 
 ### Correction and metrics
 
-Both arms use `limma::removeBatchEffect` with lab as batch. `with_condition` supplies
-`~condition`; `without_condition` omits it. Features need at least
-`labs + covariates + 1` observations per lab and presence in three labs
-(`filter_fedrbe_client`). Missingness excludes 1,800 one-/two-lab features.
-Limma fits observed samples and preserves NA cells.
+Compare fedRBE with limma using matched features and observed cells at a tolerance
+of `1e-8`. Score recovery against batch-free truth using feature-centred RMSE, contrast
+slopes, and differential-expression precision and recall. Contrast slopes regress the
+estimated contrasts on their true values through the origin.
 
-Metrics:
+<a id="sample-size-scaling"></a>
 
-- `rmse_to_truth`: feature-centred RMSE to batch-free truth. Its components are
-  `residual_lab_rms` (feature-by-lab residual means) and `within_lab_rmse` (remaining
-  error); their squares sum to `rmse_to_truth^2`.
-- `attenuation_condition`, `attenuation_condition_a_de`, `attenuation_condition_b_de` and
-  `attenuation_latent`: retention of the condition and latent-within-B contrasts on signal
-  features, `sum(estimate * truth) / sum(truth^2)`, where both terms are contrasts.
-  A value of 1 means unit gain, 0 no aligned signal, and negative values reversal.
-- `shift_condition`, `shift_latent`: mean estimated minus truth contrast over null features.
-- `gain_condition_<lab>` and `gain_latent_<lab>` (before stage): the same slopes within
-  each lab.
-- `de_condition_precision`, `de_condition_recall`, `de_condition_fp`, `de_condition_fn`:
-  condition-feature DE recovery against null features (limma, BH q < 0.05).
-  Before/after/truth use `~condition`; `joint` uses `~condition + lab` on uncorrected input.
-  Latent features are excluded; precision is unavailable when no features are called.
-- Retained/excluded feature counts and per-lab missingness:
-  `panel_excluded_features` counts features in fewer than three labs;
-  `eligibility_excluded_features` counts additional observation-threshold losses.
-  `missing_fraction_<lab>` is the NA fraction over all features after panel absence;
-  `missing_fraction_present_<lab>` is the fraction among features present in the lab.
-- `input` rows record drawn `offset_<lab>` and `noise_sd_<lab>` before intensity or
-  missingness perturbations, plus `eta2_condition` and `eta2_latent_in_b`
-  (lab-explained variance of the latent indicator within B).
+## Sample-size scaling of the fedRBE–limma agreement
 
-`before`, `after` and `truth` share retained features and observed cells.
+Compare both correction arms at 600, 3,000, 12,000, and 50,004 samples, with ten
+runs per size. Allow about 60 GB RAM and 25 GB temporary space per concurrent
+50,004-sample run. [Summary](sample_size_scaling/summary.tsv) · [Run-level differences](sample_size_scaling/differences.tsv)
 
-| Additional stage | Scoring |
-| --- | --- |
-| `baseline_after` | For intensity and missingness: balanced-run correction fitted on full eligible data, scored on the scenario's retained rows and observed cells |
-| `paired_after` | `after` minus `baseline_after` |
-| `observed_truth` | Masked vs complete truth contrasts; unit slopes and zero shifts without missingness |
-| `after_vs_complete` | Corrected vs complete truth contrasts |
+```bash
+pixi run --frozen Rscript evaluation_data/simulated/sample_size_scaling.R \
+  --out /tmp/fedrbe_scaling
+```
 
-`variancePartition` fits `~condition + lab` on complete-data stages of `balanced`,
-`mild_imbalanced`, `strong_imbalanced` and `intensity_dependent`.
+Use `--samples 600 --runs 1` for a quick check.
 
-Local verification calls client/coordinator functions without SMPC or hashing on
-runs 1, 5 and 10 of each scenario in both arms (54 full-campaign checks). Retained
-features and missing-value positions must match central correction, with maximum
-absolute difference ≤1e-8.
+For FeatureCloud, the runner uses run-1 client inputs in
+`sample_size_scaling/n<SIZE>_run001/before/`. The repository includes the
+600-sample client matrices and both central limma references in Git LFS.
+Run `git lfs pull` to retrieve the matrices before running the experiment.
 
-### Outputs
+```bash
+pixi run --frozen python generate_fedrbe_corrected_datasets.py
+```
 
-- `runs/<scenario>_runNNN.tsv`: scalar metrics.
-- `runs/<scenario>_runNNN_variance.tsv.gz`: per-feature variance fractions, complete data
-  only, for the four scenarios listed above.
-- `summary.tsv`: mean, median, finite/non-finite counts (`n_runs`, `n_missing`),
-  Monte Carlo standard error (`mcse` = sample SD / sqrt(n)) and approximate 95%
-  Student-t mean intervals (`ci_low`, `ci_high`). MCSE and intervals require at least two
-  finite runs; paired intervals summarize run-level differences.
-  `mean_abs_dev_1` is mean absolute deviation from unit gain for contrast slopes
-  and per-lab gains, excluding paired differences.
-- `equivalence.tsv`: local fedRBE versus central checks.
-- `summary.pdf`: run-level recovery, paired changes, observed-truth and confounding plots.
-- `provenance.txt`: parameters, seeds, code/lock checksums and `sessionInfo()`.
+To run a larger sample size, prepare the seeded client bundle locally and
+uncomment the matching entry in the `experiments` list in
+`generate_fedrbe_corrected_datasets.py`. For example, prepare the 3,000-sample
+bundle with this command.
 
-### References
+```bash
+pixi run --frozen Rscript evaluation_data/simulated/prepare_sample_size_inputs.R 3000
+```
 
-1. Burankova et al. (2025). [FedProt](https://doi.org/10.1038/s43588-025-00832-7).
-2. Wang et al. (2021). [RobNorm](https://doi.org/10.1093/bioinformatics/btaa904).
-3. Johnson et al. (2007). [ComBat](https://doi.org/10.1093/biostatistics/kxj037).
-4. Huber et al. (2002). [Variance stabilization and calibration](https://doi.org/10.1093/bioinformatics/18.suppl_1.S96).
-5. Jin et al. (2021). [Missing-value imputation in label-free proteomics](https://doi.org/10.1038/s41598-021-81279-4).
-6. Schumann et al. (2025). [BERT](https://doi.org/10.1038/s41467-025-62237-4).
+The runner uses the prepared clients for both correction arms with and without
+SMPC and writes outputs to `sample_size_scaling/n<SIZE>_run001/after/`.
+The saved 600-sample central limma matrices are named
+`intensities_R_corrected.tsv.gz` under `after/label_aware/` and `after/no_label/`.
+
+## Five-client missingness and feature overlap
+
+Ten roots cross full and partial panels with 0%, 10%, 30%, and 50% nominal
+abundance-dependent missingness. Each client has balanced classes, and panels and
+missingness levels share draws within each root.
+[Results and simulation command](results/missingness_overlap/README.md)
+
+## Contrast slopes by missing fraction
+
+Compare masked and corrected contrasts with complete truth by missing fraction,
+pooling the 10%, 30%, and 50% levels within each root and panel.
+[Saved slopes](results/missing_fraction_slopes.tsv)
+
+```bash
+pixi run --frozen Rscript evaluation_data/simulated/missing_fraction_slopes.R \
+  /tmp/fedrbe_missing_fraction_slopes.tsv
+```
+
+<a id="confounding-downstream-evaluation"></a>
+
+## Downstream utility under confounding
+
+Random forests score MCC on leave-one-lab-out and stratified within-lab 70:30
+splits. The driver fits fedRBE for federated learners and limma for central learners
+on training samples. Held-out labs align to the corrected
+training mean, while test samples from training labs use their fitted batch
+coefficients. Label-aware fits use training labels as a covariate.
+
+K-means uses joint correction on all samples and scores adjusted Rand index.
+Joint label-aware correction uses all condition labels.
+[Results and rerun commands](results/confounding_downstream/README.md)
+
+### Downstream utility with missingness and partial overlap
+
+Random forests use label-free correction on the same two split types. Keep
+requires six observations in each of at least three training labs. Drop uses the
+keep features that are complete in training. Impute requires six observations in
+every training lab and fills missing cells with the sample's lowest observed value.
+[Saved learner results](results/missingness_overlap/README.md#files)
+
+First generate the root inputs with the [simulation command](results/missingness_overlap/README.md#reproduce).
+For d-ComBat on drop and impute, supply `distributedCombat.R`, `neuroCombat.R`,
+and `neuroCombat_helpers.R` from commit `45b5a25`. [Distributed-ComBat source](https://github.com/andy1764/Distributed-ComBat)
+
+```bash
+pixi run --frozen python evaluation_data/simulated/downstream_simulation.py \
+  --analysis missingness_overlap --rf-protocols loco within_lab_70_30 \
+  --saved-inputs /tmp/fedrbe_missingness/runs --dcombat /path/to/Distributed-ComBat \
+  --runs 1,2,3,4,5,6,7,8,9,10 --learner-seeds 101,211,321,431,541 \
+  --reference evaluation_data/simulated/results/missingness_overlap/informative_missingness.tsv \
+  --out /tmp/fedrbe_missingness_rf
+```
+
+For joint correction, add `--correction joint` and use a separate output directory.
+
+<a id="variance-partitioning"></a>
+
+## Variance partitioning
+
+On shared features and cells, the interaction model separates lab, condition,
+lab × condition, and residual variance. [Implementation](variance_partition.R)
+
+<a id="notebook-datasets"></a>
+
+## Notebook and application examples
+
+The notebooks generate and prepare complete-data examples for the balanced,
+mildly imbalanced, and strongly imbalanced scenarios.
+[Simulation](00_data_simulation.ipynb) · [Preparation and central correction](01_data_prep_and_central_RBE.ipynb)
+
+The diagnostic scripts write single-run PCA plots and 30-run comparisons under
+`evaluation/eval_simulation/`.
+
+```bash
+pixi run --frozen Rscript evaluation/dataset_diagnostics.R simulated
+pixi run --frozen Rscript evaluation/evaluation_simulated_30runs.R
+```

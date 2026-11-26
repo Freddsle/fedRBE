@@ -187,12 +187,8 @@ evaluation_data/**/config_forest.yaml
 # ccRCC raw acquisition files and intermediate reports remain local.
 evaluation_data/ccRCC_studies/data/
 
-# Archived and unused data
-evaluation_data/ccRCC_studies/before/*/report_filtered.zip
+# ccRCC per-client correction reports are not tracked.
 evaluation_data/ccRCC_studies/after/*/individual_results/*/report.txt
-
-# Local archive contents
-/evaluation_data/ovarian_cancer/archive/prepare_data.py
 
 evaluation_data/quartet_multiomics/plots/*
 evaluation_data/quartet_multiomics/filtered_data/*
@@ -207,11 +203,23 @@ evaluation_data/quartet_multiomics/figshare_data/Metabolomics_fullset_expr_r984c
 evaluation_data/quartet_multiomics/before/preparation_summary.tsv
 
 
-# Robustness simulation campaign: per-run files, plot and log are regenerable in about
-# an hour; only summary.tsv, equivalence.tsv and provenance.txt are tracked.
+# Local robustness simulation checkpoints and logs
 /evaluation_data/simulated/robustness/runs/
-/evaluation_data/simulated/robustness/summary.pdf
 /evaluation_data/simulated/robustness/campaign.log
+# Generated simulation provenance stays local.
+/evaluation_data/simulated/**/provenance.txt
+/evaluation_data/simulated/**/*_provenance.txt
+# Sample-size scaling: keep the 600-sample fixture and generate larger bundles locally.
+/evaluation_data/simulated/sample_size_scaling_work/
+/evaluation_data/simulated/sample_size_scaling/n*_run001/
+!/evaluation_data/simulated/sample_size_scaling/n00600_run001/
+/evaluation_data/simulated/sample_size_scaling/n*_run001/.before-*/
+/evaluation_data/simulated/sample_size_scaling/n00600_run001/after/**
+!/evaluation_data/simulated/sample_size_scaling/n00600_run001/after/label_aware/
+!/evaluation_data/simulated/sample_size_scaling/n00600_run001/after/no_label/
+!/evaluation_data/simulated/sample_size_scaling/n00600_run001/after/*/intensities_R_corrected.tsv.gz
+# Extracted from evaluation_data/simulated/results/*/predictions.zip
+/evaluation_data/simulated/results/*/predictions/
 
 # Local experiment logs, prepared inputs, backups and temporary execution copies.
 /real_pipeline_runs/

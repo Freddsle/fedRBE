@@ -1,0 +1,881 @@
+panel	arm	scenario	task	learner	lab	state	metric	statistic	value
+a	label_aware	confounded_p05	kmeans	central	pooled	label_aware	ARI	median	0.9000022296790128884
+a	label_aware	confounded_p05	kmeans	central	pooled	label_aware	ARI	q1	0.7999955702722600925
+a	label_aware	confounded_p05	kmeans	central	pooled	label_aware	ARI	q3	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	central	pooled	label_aware	ARI	whisker_high	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	central	pooled	label_aware	ARI	whisker_low	0.5999867475495562763
+a	label_aware	confounded_p05	kmeans	central	pooled	truth	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	central	pooled	uncorrected	ARI	median	0.7427631329343353794
+a	label_aware	confounded_p05	kmeans	central	pooled	uncorrected	ARI	q1	0.2665780033474210442
+a	label_aware	confounded_p05	kmeans	central	pooled	uncorrected	ARI	q3	0.8036833741418918375
+a	label_aware	confounded_p05	kmeans	central	pooled	uncorrected	ARI	whisker_high	0.8036833741418918375
+a	label_aware	confounded_p05	kmeans	central	pooled	uncorrected	ARI	whisker_low	0.1877095810558971067
+a	label_aware	confounded_p05	kmeans	federated	pooled	label_aware	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	federated	pooled	label_aware	ARI	q1	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	federated	pooled	label_aware	ARI	q3	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	federated	pooled	label_aware	ARI	whisker_high	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	federated	pooled	label_aware	ARI	whisker_low	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	federated	pooled	truth	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	median	0.3927840930811641318
+a	label_aware	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	q1	0.2124681115897835149
+a	label_aware	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	q3	0.8151157965168310815
+a	label_aware	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	whisker_high	0.8193339494635388798
+a	label_aware	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	whisker_low	0.2033069911242374739
+a	label_aware	confounded_p15	kmeans	central	pooled	label_aware	ARI	median	0.9000022296790128884
+a	label_aware	confounded_p15	kmeans	central	pooled	label_aware	ARI	q1	0.8000044593580257768
+a	label_aware	confounded_p15	kmeans	central	pooled	label_aware	ARI	q3	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	central	pooled	label_aware	ARI	whisker_high	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	central	pooled	label_aware	ARI	whisker_low	0.6000712782070702911
+a	label_aware	confounded_p15	kmeans	central	pooled	truth	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	central	pooled	uncorrected	ARI	median	0.1213974850392398330
+a	label_aware	confounded_p15	kmeans	central	pooled	uncorrected	ARI	q1	0.1213974850392398330
+a	label_aware	confounded_p15	kmeans	central	pooled	uncorrected	ARI	q3	0.1213974850392398330
+a	label_aware	confounded_p15	kmeans	central	pooled	uncorrected	ARI	whisker_high	0.1213974850392398330
+a	label_aware	confounded_p15	kmeans	central	pooled	uncorrected	ARI	whisker_low	0.1213974850392398330
+a	label_aware	confounded_p15	kmeans	federated	pooled	label_aware	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	federated	pooled	label_aware	ARI	q1	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	federated	pooled	label_aware	ARI	q3	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	federated	pooled	label_aware	ARI	whisker_high	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	federated	pooled	label_aware	ARI	whisker_low	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	federated	pooled	truth	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	median	0.1200108969493141192
+a	label_aware	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	q1	0.1193011134777412913
+a	label_aware	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	q3	0.1247012529307421069
+a	label_aware	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	whisker_high	0.1256446641907636719
+a	label_aware	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	whisker_low	0.1163173528652674121
+a	label_aware	confounded_p30	kmeans	central	pooled	label_aware	ARI	median	0.9000000000000000222
+a	label_aware	confounded_p30	kmeans	central	pooled	label_aware	ARI	q1	0.8000000000000000444
+a	label_aware	confounded_p30	kmeans	central	pooled	label_aware	ARI	q3	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	central	pooled	label_aware	ARI	whisker_high	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	central	pooled	label_aware	ARI	whisker_low	0.5999999999999999778
+a	label_aware	confounded_p30	kmeans	central	pooled	truth	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	central	pooled	uncorrected	ARI	median	0.0747361381509894368
+a	label_aware	confounded_p30	kmeans	central	pooled	uncorrected	ARI	q1	0.0387964897618052681
+a	label_aware	confounded_p30	kmeans	central	pooled	uncorrected	ARI	q3	0.1549019516251871620
+a	label_aware	confounded_p30	kmeans	central	pooled	uncorrected	ARI	whisker_high	0.2310371918094442090
+a	label_aware	confounded_p30	kmeans	central	pooled	uncorrected	ARI	whisker_low	0.0387964897618052681
+a	label_aware	confounded_p30	kmeans	federated	pooled	label_aware	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	federated	pooled	label_aware	ARI	q1	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	federated	pooled	label_aware	ARI	q3	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	federated	pooled	label_aware	ARI	whisker_high	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	federated	pooled	label_aware	ARI	whisker_low	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	federated	pooled	truth	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	median	0.0388022770465865571
+a	label_aware	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	q1	0.0369510600058864588
+a	label_aware	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	q3	0.0738131438821613417
+a	label_aware	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	whisker_high	0.0848544937045509901
+a	label_aware	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	whisker_low	0.0348862409989517328
+a	label_aware	confounded_p50	kmeans	central	pooled	label_aware	ARI	median	0.9000000000000000222
+a	label_aware	confounded_p50	kmeans	central	pooled	label_aware	ARI	q1	0.6500500867837004648
+a	label_aware	confounded_p50	kmeans	central	pooled	label_aware	ARI	q3	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	central	pooled	label_aware	ARI	whisker_high	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	central	pooled	label_aware	ARI	whisker_low	0.4000000000000000222
+a	label_aware	confounded_p50	kmeans	central	pooled	truth	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	central	pooled	uncorrected	ARI	median	-0.0010029251984956121
+a	label_aware	confounded_p50	kmeans	central	pooled	uncorrected	ARI	q1	-0.0012536564981195152
+a	label_aware	confounded_p50	kmeans	central	pooled	uncorrected	ARI	q3	0.1989133579405931440
+a	label_aware	confounded_p50	kmeans	central	pooled	uncorrected	ARI	whisker_high	0.3992478061011283108
+a	label_aware	confounded_p50	kmeans	central	pooled	uncorrected	ARI	whisker_low	-0.0016722408026755853
+a	label_aware	confounded_p50	kmeans	federated	pooled	label_aware	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	federated	pooled	label_aware	ARI	q1	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	federated	pooled	label_aware	ARI	q3	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	federated	pooled	label_aware	ARI	whisker_high	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	federated	pooled	label_aware	ARI	whisker_low	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	federated	pooled	truth	ARI	median	1.0000000000000000000
+a	label_aware	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	median	-0.0012480916224060009
+a	label_aware	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	q1	-0.0012480916224060009
+a	label_aware	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	q3	-0.0012347414995163366
+a	label_aware	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	whisker_high	-0.0012302914585531153
+a	label_aware	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	whisker_low	-0.0012480916224060009
+a	no_label	confounded_p05	kmeans	central	pooled	no_label	ARI	median	0.0066395829696090387
+a	no_label	confounded_p05	kmeans	central	pooled	no_label	ARI	q1	0.0053701261928856461
+a	no_label	confounded_p05	kmeans	central	pooled	no_label	ARI	q3	0.0101406058585809394
+a	no_label	confounded_p05	kmeans	central	pooled	no_label	ARI	whisker_high	0.0142147352937235742
+a	no_label	confounded_p05	kmeans	central	pooled	no_label	ARI	whisker_low	0.0030686525052346413
+a	no_label	confounded_p05	kmeans	central	pooled	truth	ARI	median	1.0000000000000000000
+a	no_label	confounded_p05	kmeans	central	pooled	uncorrected	ARI	median	0.7427631329343353794
+a	no_label	confounded_p05	kmeans	central	pooled	uncorrected	ARI	q1	0.2665780033474210442
+a	no_label	confounded_p05	kmeans	central	pooled	uncorrected	ARI	q3	0.8036833741418918375
+a	no_label	confounded_p05	kmeans	central	pooled	uncorrected	ARI	whisker_high	0.8036833741418918375
+a	no_label	confounded_p05	kmeans	central	pooled	uncorrected	ARI	whisker_low	0.1877095810558971067
+a	no_label	confounded_p05	kmeans	federated	pooled	no_label	ARI	median	0.0100702359704209939
+a	no_label	confounded_p05	kmeans	federated	pooled	no_label	ARI	q1	0.0019844332889830895
+a	no_label	confounded_p05	kmeans	federated	pooled	no_label	ARI	q3	0.0181331878785315655
+a	no_label	confounded_p05	kmeans	federated	pooled	no_label	ARI	whisker_high	0.0278523702178033010
+a	no_label	confounded_p05	kmeans	federated	pooled	no_label	ARI	whisker_low	0.0014303211443092414
+a	no_label	confounded_p05	kmeans	federated	pooled	truth	ARI	median	1.0000000000000000000
+a	no_label	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	median	0.3927840930811641318
+a	no_label	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	q1	0.2124681115897835149
+a	no_label	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	q3	0.8151157965168310815
+a	no_label	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	whisker_high	0.8193339494635388798
+a	no_label	confounded_p05	kmeans	federated	pooled	uncorrected	ARI	whisker_low	0.2033069911242374739
+a	no_label	confounded_p15	kmeans	central	pooled	no_label	ARI	median	0.6105084707489507601
+a	no_label	confounded_p15	kmeans	central	pooled	no_label	ARI	q1	0.4188055882696353205
+a	no_label	confounded_p15	kmeans	central	pooled	no_label	ARI	q3	0.8031585753881780310
+a	no_label	confounded_p15	kmeans	central	pooled	no_label	ARI	whisker_high	1.0000000000000000000
+a	no_label	confounded_p15	kmeans	central	pooled	no_label	ARI	whisker_low	0.0501536869445054628
+a	no_label	confounded_p15	kmeans	central	pooled	truth	ARI	median	1.0000000000000000000
+a	no_label	confounded_p15	kmeans	central	pooled	uncorrected	ARI	median	0.1213974850392398330
+a	no_label	confounded_p15	kmeans	central	pooled	uncorrected	ARI	q1	0.1213974850392398330
+a	no_label	confounded_p15	kmeans	central	pooled	uncorrected	ARI	q3	0.1213974850392398330
+a	no_label	confounded_p15	kmeans	central	pooled	uncorrected	ARI	whisker_high	0.1213974850392398330
+a	no_label	confounded_p15	kmeans	central	pooled	uncorrected	ARI	whisker_low	0.1213974850392398330
+a	no_label	confounded_p15	kmeans	federated	pooled	no_label	ARI	median	0.0206636602813491700
+a	no_label	confounded_p15	kmeans	federated	pooled	no_label	ARI	q1	0.0206636602813491700
+a	no_label	confounded_p15	kmeans	federated	pooled	no_label	ARI	q3	0.2103107250896755209
+a	no_label	confounded_p15	kmeans	federated	pooled	no_label	ARI	whisker_high	0.2164537128831202639
+a	no_label	confounded_p15	kmeans	federated	pooled	no_label	ARI	whisker_low	0.0206636602813491700
+a	no_label	confounded_p15	kmeans	federated	pooled	truth	ARI	median	1.0000000000000000000
+a	no_label	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	median	0.1200108969493141192
+a	no_label	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	q1	0.1193011134777412913
+a	no_label	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	q3	0.1247012529307421069
+a	no_label	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	whisker_high	0.1256446641907636719
+a	no_label	confounded_p15	kmeans	federated	pooled	uncorrected	ARI	whisker_low	0.1163173528652674121
+a	no_label	confounded_p30	kmeans	central	pooled	no_label	ARI	median	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	central	pooled	no_label	ARI	q1	0.8000000000000000444
+a	no_label	confounded_p30	kmeans	central	pooled	no_label	ARI	q3	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	central	pooled	no_label	ARI	whisker_high	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	central	pooled	no_label	ARI	whisker_low	0.6000667823782673826
+a	no_label	confounded_p30	kmeans	central	pooled	truth	ARI	median	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	central	pooled	uncorrected	ARI	median	0.0747361381509894368
+a	no_label	confounded_p30	kmeans	central	pooled	uncorrected	ARI	q1	0.0387964897618052681
+a	no_label	confounded_p30	kmeans	central	pooled	uncorrected	ARI	q3	0.1549019516251871620
+a	no_label	confounded_p30	kmeans	central	pooled	uncorrected	ARI	whisker_high	0.2310371918094442090
+a	no_label	confounded_p30	kmeans	central	pooled	uncorrected	ARI	whisker_low	0.0387964897618052681
+a	no_label	confounded_p30	kmeans	federated	pooled	no_label	ARI	median	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	federated	pooled	no_label	ARI	q1	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	federated	pooled	no_label	ARI	q3	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	federated	pooled	no_label	ARI	whisker_high	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	federated	pooled	no_label	ARI	whisker_low	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	federated	pooled	truth	ARI	median	1.0000000000000000000
+a	no_label	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	median	0.0388022770465865571
+a	no_label	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	q1	0.0369510600058864588
+a	no_label	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	q3	0.0738131438821613417
+a	no_label	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	whisker_high	0.0848544937045509901
+a	no_label	confounded_p30	kmeans	federated	pooled	uncorrected	ARI	whisker_low	0.0348862409989517328
+a	no_label	confounded_p50	kmeans	central	pooled	no_label	ARI	median	0.9000000000000000222
+a	no_label	confounded_p50	kmeans	central	pooled	no_label	ARI	q1	0.6500500867837004648
+a	no_label	confounded_p50	kmeans	central	pooled	no_label	ARI	q3	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	central	pooled	no_label	ARI	whisker_high	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	central	pooled	no_label	ARI	whisker_low	0.4000000000000000222
+a	no_label	confounded_p50	kmeans	central	pooled	truth	ARI	median	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	central	pooled	uncorrected	ARI	median	-0.0010029251984956121
+a	no_label	confounded_p50	kmeans	central	pooled	uncorrected	ARI	q1	-0.0012536564981195152
+a	no_label	confounded_p50	kmeans	central	pooled	uncorrected	ARI	q3	0.1989133579405931440
+a	no_label	confounded_p50	kmeans	central	pooled	uncorrected	ARI	whisker_high	0.3992478061011283108
+a	no_label	confounded_p50	kmeans	central	pooled	uncorrected	ARI	whisker_low	-0.0016722408026755853
+a	no_label	confounded_p50	kmeans	federated	pooled	no_label	ARI	median	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	federated	pooled	no_label	ARI	q1	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	federated	pooled	no_label	ARI	q3	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	federated	pooled	no_label	ARI	whisker_high	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	federated	pooled	no_label	ARI	whisker_low	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	federated	pooled	truth	ARI	median	1.0000000000000000000
+a	no_label	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	median	-0.0012480916224060009
+a	no_label	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	q1	-0.0012480916224060009
+a	no_label	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	q3	-0.0012347414995163366
+a	no_label	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	whisker_high	-0.0012302914585531153
+a	no_label	confounded_p50	kmeans	federated	pooled	uncorrected	ARI	whisker_low	-0.0012480916224060009
+b	label_aware	confounded_p05	rf	central	batch1	label_aware	MCC	median	0.0385156874655076115
+b	label_aware	confounded_p05	rf	central	batch1	label_aware	MCC	q1	0.0290890172248842241
+b	label_aware	confounded_p05	rf	central	batch1	label_aware	MCC	q3	0.0717390148191460741
+b	label_aware	confounded_p05	rf	central	batch1	label_aware	MCC	whisker_high	0.1255174097647635545
+b	label_aware	confounded_p05	rf	central	batch1	label_aware	MCC	whisker_low	0.0094074202870960827
+b	label_aware	confounded_p05	rf	central	batch1	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch1	uncorrected	MCC	median	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch1	uncorrected	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch1	uncorrected	MCC	q3	0.0878127034759913494
+b	label_aware	confounded_p05	rf	central	batch1	uncorrected	MCC	whisker_high	0.1170836046346551418
+b	label_aware	confounded_p05	rf	central	batch1	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch2	label_aware	MCC	median	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch2	label_aware	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch2	label_aware	MCC	q3	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch2	label_aware	MCC	whisker_high	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch2	label_aware	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch2	truth	MCC	median	0.1288572094108176302
+b	label_aware	confounded_p05	rf	central	batch2	uncorrected	MCC	median	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch2	uncorrected	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch2	uncorrected	MCC	q3	0.0365367347316553279
+b	label_aware	confounded_p05	rf	central	batch2	uncorrected	MCC	whisker_high	0.0487156463088737682
+b	label_aware	confounded_p05	rf	central	batch2	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch3	label_aware	MCC	median	0.0281186463881831702
+b	label_aware	confounded_p05	rf	central	batch3	label_aware	MCC	q1	0.0211678802293052450
+b	label_aware	confounded_p05	rf	central	batch3	label_aware	MCC	q3	0.0365546942530551242
+b	label_aware	confounded_p05	rf	central	batch3	label_aware	MCC	whisker_high	0.0476384399888486604
+b	label_aware	confounded_p05	rf	central	batch3	label_aware	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch3	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch3	uncorrected	MCC	median	0.0378259386203809028
+b	label_aware	confounded_p05	rf	central	batch3	uncorrected	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch3	uncorrected	MCC	q3	0.6180711658114107498
+b	label_aware	confounded_p05	rf	central	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p05	rf	central	batch3	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch1	label_aware	MCC	median	0.1535767560915462515
+b	label_aware	confounded_p05	rf	federated	batch1	label_aware	MCC	q1	0.1357718058955597329
+b	label_aware	confounded_p05	rf	federated	batch1	label_aware	MCC	q3	0.1846519093114269428
+b	label_aware	confounded_p05	rf	federated	batch1	label_aware	MCC	whisker_high	0.2276934064430765348
+b	label_aware	confounded_p05	rf	federated	batch1	label_aware	MCC	whisker_low	0.1079505020009257910
+b	label_aware	confounded_p05	rf	federated	batch1	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch1	uncorrected	MCC	median	0.7441686289461527659
+b	label_aware	confounded_p05	rf	federated	batch1	uncorrected	MCC	q1	0.3399586133862163573
+b	label_aware	confounded_p05	rf	federated	batch1	uncorrected	MCC	q3	0.8767174772198575994
+b	label_aware	confounded_p05	rf	federated	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch1	uncorrected	MCC	whisker_low	0.1664604440746474678
+b	label_aware	confounded_p05	rf	federated	batch2	label_aware	MCC	median	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	label_aware	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	label_aware	MCC	q3	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	label_aware	MCC	whisker_high	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	label_aware	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	truth	MCC	median	0.0322021844960882347
+b	label_aware	confounded_p05	rf	federated	batch2	uncorrected	MCC	median	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	uncorrected	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	uncorrected	MCC	q3	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	uncorrected	MCC	whisker_high	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch2	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch3	label_aware	MCC	median	0.1348776733590485999
+b	label_aware	confounded_p05	rf	federated	batch3	label_aware	MCC	q1	0.1260593942261121481
+b	label_aware	confounded_p05	rf	federated	batch3	label_aware	MCC	q3	0.1379217965269277368
+b	label_aware	confounded_p05	rf	federated	batch3	label_aware	MCC	whisker_high	0.1426724717796435671
+b	label_aware	confounded_p05	rf	federated	batch3	label_aware	MCC	whisker_low	0.1100676179550677813
+b	label_aware	confounded_p05	rf	federated	batch3	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch3	uncorrected	MCC	median	0.7291333861390600912
+b	label_aware	confounded_p05	rf	federated	batch3	uncorrected	MCC	q1	0.3673733862815836693
+b	label_aware	confounded_p05	rf	federated	batch3	uncorrected	MCC	q3	0.8955384534544590380
+b	label_aware	confounded_p05	rf	federated	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p05	rf	federated	batch3	uncorrected	MCC	whisker_low	0.1840421934737176968
+b	label_aware	confounded_p15	rf	central	batch1	label_aware	MCC	median	0.3329404666909941413
+b	label_aware	confounded_p15	rf	central	batch1	label_aware	MCC	q1	0.2715280130046439089
+b	label_aware	confounded_p15	rf	central	batch1	label_aware	MCC	q3	0.3980009757617554156
+b	label_aware	confounded_p15	rf	central	batch1	label_aware	MCC	whisker_high	0.5126387002518054681
+b	label_aware	confounded_p15	rf	central	batch1	label_aware	MCC	whisker_low	0.1576533437073407984
+b	label_aware	confounded_p15	rf	central	batch1	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch1	uncorrected	MCC	median	0.0831467144460686647
+b	label_aware	confounded_p15	rf	central	batch1	uncorrected	MCC	q1	0.0016981780604024463
+b	label_aware	confounded_p15	rf	central	batch1	uncorrected	MCC	q3	0.7735921210561568229
+b	label_aware	confounded_p15	rf	central	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch1	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch2	label_aware	MCC	median	0.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch2	label_aware	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch2	label_aware	MCC	q3	0.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch2	label_aware	MCC	whisker_high	0.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch2	label_aware	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch2	truth	MCC	median	0.9848231978541044374
+b	label_aware	confounded_p15	rf	central	batch2	uncorrected	MCC	median	0.3808713009093801505
+b	label_aware	confounded_p15	rf	central	batch2	uncorrected	MCC	q1	0.0377329352964181491
+b	label_aware	confounded_p15	rf	central	batch2	uncorrected	MCC	q3	0.8537870551814428222
+b	label_aware	confounded_p15	rf	central	batch2	uncorrected	MCC	whisker_high	0.9948517802780516561
+b	label_aware	confounded_p15	rf	central	batch2	uncorrected	MCC	whisker_low	0.0166005594333570525
+b	label_aware	confounded_p15	rf	central	batch3	label_aware	MCC	median	0.4170553737426281882
+b	label_aware	confounded_p15	rf	central	batch3	label_aware	MCC	q1	0.3414122679881390066
+b	label_aware	confounded_p15	rf	central	batch3	label_aware	MCC	q3	0.4273082225841075554
+b	label_aware	confounded_p15	rf	central	batch3	label_aware	MCC	whisker_high	0.5363539875304063065
+b	label_aware	confounded_p15	rf	central	batch3	label_aware	MCC	whisker_low	0.2962602653723839241
+b	label_aware	confounded_p15	rf	central	batch3	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch3	uncorrected	MCC	median	0.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch3	uncorrected	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p15	rf	central	batch3	uncorrected	MCC	q3	0.1718454065569511025
+b	label_aware	confounded_p15	rf	central	batch3	uncorrected	MCC	whisker_high	0.2025104018889508362
+b	label_aware	confounded_p15	rf	central	batch3	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch1	label_aware	MCC	median	0.5381597825764475873
+b	label_aware	confounded_p15	rf	federated	batch1	label_aware	MCC	q1	0.4908615026530975256
+b	label_aware	confounded_p15	rf	federated	batch1	label_aware	MCC	q3	0.6055581895097704725
+b	label_aware	confounded_p15	rf	federated	batch1	label_aware	MCC	whisker_high	0.6553312996555379355
+b	label_aware	confounded_p15	rf	federated	batch1	label_aware	MCC	whisker_low	0.3418887241833876156
+b	label_aware	confounded_p15	rf	federated	batch1	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch1	uncorrected	MCC	median	0.8961150622653633047
+b	label_aware	confounded_p15	rf	federated	batch1	uncorrected	MCC	q1	0.4750400544805226666
+b	label_aware	confounded_p15	rf	federated	batch1	uncorrected	MCC	q3	0.9762610103194360178
+b	label_aware	confounded_p15	rf	federated	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch1	uncorrected	MCC	whisker_low	0.0261159283850819421
+b	label_aware	confounded_p15	rf	federated	batch2	label_aware	MCC	median	0.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch2	label_aware	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch2	label_aware	MCC	q3	0.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch2	label_aware	MCC	whisker_high	0.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch2	label_aware	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch2	truth	MCC	median	0.8752092737987595683
+b	label_aware	confounded_p15	rf	federated	batch2	uncorrected	MCC	median	0.0421261105029358124
+b	label_aware	confounded_p15	rf	federated	batch2	uncorrected	MCC	q1	0.0186263960906424240
+b	label_aware	confounded_p15	rf	federated	batch2	uncorrected	MCC	q3	0.0904352173297790496
+b	label_aware	confounded_p15	rf	federated	batch2	uncorrected	MCC	whisker_high	0.1582470032123587111
+b	label_aware	confounded_p15	rf	federated	batch2	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch3	label_aware	MCC	median	0.6113321899102641677
+b	label_aware	confounded_p15	rf	federated	batch3	label_aware	MCC	q1	0.5753072832551547888
+b	label_aware	confounded_p15	rf	federated	batch3	label_aware	MCC	q3	0.6430882287673179709
+b	label_aware	confounded_p15	rf	federated	batch3	label_aware	MCC	whisker_high	0.6885579524054022960
+b	label_aware	confounded_p15	rf	federated	batch3	label_aware	MCC	whisker_low	0.4941450937030003598
+b	label_aware	confounded_p15	rf	federated	batch3	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch3	uncorrected	MCC	median	0.9837931707066466247
+b	label_aware	confounded_p15	rf	federated	batch3	uncorrected	MCC	q1	0.8993609752344993158
+b	label_aware	confounded_p15	rf	federated	batch3	uncorrected	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p15	rf	federated	batch3	uncorrected	MCC	whisker_low	0.8820446748843029372
+b	label_aware	confounded_p30	rf	central	batch1	label_aware	MCC	median	0.9968699163792053008
+b	label_aware	confounded_p30	rf	central	batch1	label_aware	MCC	q1	0.9945223536636093042
+b	label_aware	confounded_p30	rf	central	batch1	label_aware	MCC	q3	0.9968699163792053008
+b	label_aware	confounded_p30	rf	central	batch1	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch1	label_aware	MCC	whisker_low	0.9937398327584106017
+b	label_aware	confounded_p30	rf	central	batch1	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch1	uncorrected	MCC	median	0.6726662383085810770
+b	label_aware	confounded_p30	rf	central	batch1	uncorrected	MCC	q1	0.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch1	uncorrected	MCC	q3	0.9913756533227413570
+b	label_aware	confounded_p30	rf	central	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch1	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch2	label_aware	MCC	median	0.5455159135041893759
+b	label_aware	confounded_p30	rf	central	batch2	label_aware	MCC	q1	0.5121736649666386310
+b	label_aware	confounded_p30	rf	central	batch2	label_aware	MCC	q3	0.5557202365328839377
+b	label_aware	confounded_p30	rf	central	batch2	label_aware	MCC	whisker_high	0.5753636588639922111
+b	label_aware	confounded_p30	rf	central	batch2	label_aware	MCC	whisker_low	0.4721060388436946198
+b	label_aware	confounded_p30	rf	central	batch2	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch2	uncorrected	MCC	median	0.9594591473084579381
+b	label_aware	confounded_p30	rf	central	batch2	uncorrected	MCC	q1	0.7994029262105558642
+b	label_aware	confounded_p30	rf	central	batch2	uncorrected	MCC	q3	0.9996059828264908242
+b	label_aware	confounded_p30	rf	central	batch2	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch2	uncorrected	MCC	whisker_low	0.7688676832393699367
+b	label_aware	confounded_p30	rf	central	batch3	label_aware	MCC	median	0.9984349581896025949
+b	label_aware	confounded_p30	rf	central	batch3	label_aware	MCC	q1	0.9968699163792053008
+b	label_aware	confounded_p30	rf	central	batch3	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch3	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch3	label_aware	MCC	whisker_low	0.9968699163792053008
+b	label_aware	confounded_p30	rf	central	batch3	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch3	uncorrected	MCC	median	0.3974763194884513573
+b	label_aware	confounded_p30	rf	central	batch3	uncorrected	MCC	q1	0.0639848161176293784
+b	label_aware	confounded_p30	rf	central	batch3	uncorrected	MCC	q3	0.9888110530101865692
+b	label_aware	confounded_p30	rf	central	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	central	batch3	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch1	label_aware	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch1	label_aware	MCC	q1	0.9968699163792053008
+b	label_aware	confounded_p30	rf	federated	batch1	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch1	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch1	label_aware	MCC	whisker_low	0.9938256666640172821
+b	label_aware	confounded_p30	rf	federated	batch1	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch1	uncorrected	MCC	median	0.9984349581896025949
+b	label_aware	confounded_p30	rf	federated	batch1	uncorrected	MCC	q1	0.9139167946029161937
+b	label_aware	confounded_p30	rf	federated	batch1	uncorrected	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch1	uncorrected	MCC	whisker_low	0.8998773474044566845
+b	label_aware	confounded_p30	rf	federated	batch2	label_aware	MCC	median	0.4271350588229350098
+b	label_aware	confounded_p30	rf	federated	batch2	label_aware	MCC	q1	0.3819993645643096070
+b	label_aware	confounded_p30	rf	federated	batch2	label_aware	MCC	q3	0.4408064297938820708
+b	label_aware	confounded_p30	rf	federated	batch2	label_aware	MCC	whisker_high	0.4519388747237405579
+b	label_aware	confounded_p30	rf	federated	batch2	label_aware	MCC	whisker_low	0.3455576774328594780
+b	label_aware	confounded_p30	rf	federated	batch2	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch2	uncorrected	MCC	median	0.7639458593783297058
+b	label_aware	confounded_p30	rf	federated	batch2	uncorrected	MCC	q1	0.3771463835343042970
+b	label_aware	confounded_p30	rf	federated	batch2	uncorrected	MCC	q3	0.8885812266814445692
+b	label_aware	confounded_p30	rf	federated	batch2	uncorrected	MCC	whisker_high	0.9704843745074362982
+b	label_aware	confounded_p30	rf	federated	batch2	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch3	label_aware	MCC	median	0.9984349581896025949
+b	label_aware	confounded_p30	rf	federated	batch3	label_aware	MCC	q1	0.9968699163792053008
+b	label_aware	confounded_p30	rf	federated	batch3	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch3	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch3	label_aware	MCC	whisker_low	0.9968699163792053008
+b	label_aware	confounded_p30	rf	federated	batch3	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch3	uncorrected	MCC	median	0.8949892035021501657
+b	label_aware	confounded_p30	rf	federated	batch3	uncorrected	MCC	q1	0.6471873538593366781
+b	label_aware	confounded_p30	rf	federated	batch3	uncorrected	MCC	q3	0.9992075568159886068
+b	label_aware	confounded_p30	rf	federated	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p30	rf	federated	batch3	uncorrected	MCC	whisker_low	0.2247005146482757287
+b	label_aware	confounded_p50	rf	central	batch1	label_aware	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	label_aware	MCC	q1	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	label_aware	MCC	whisker_low	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	uncorrected	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	uncorrected	MCC	q1	0.8679667835209827764
+b	label_aware	confounded_p50	rf	central	batch1	uncorrected	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch1	uncorrected	MCC	whisker_low	0.7042382237906635867
+b	label_aware	confounded_p50	rf	central	batch2	label_aware	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	label_aware	MCC	q1	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	label_aware	MCC	whisker_low	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	uncorrected	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	uncorrected	MCC	q1	0.9990033112214855571
+b	label_aware	confounded_p50	rf	central	batch2	uncorrected	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch2	uncorrected	MCC	whisker_low	0.9986710816286473724
+b	label_aware	confounded_p50	rf	central	batch3	label_aware	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch3	label_aware	MCC	q1	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch3	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch3	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch3	label_aware	MCC	whisker_low	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch3	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch3	uncorrected	MCC	median	0.9960433974155622483
+b	label_aware	confounded_p50	rf	central	batch3	uncorrected	MCC	q1	0.9526924870948693114
+b	label_aware	confounded_p50	rf	central	batch3	uncorrected	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	central	batch3	uncorrected	MCC	whisker_low	0.9395610511827842126
+b	label_aware	confounded_p50	rf	federated	batch1	label_aware	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch1	label_aware	MCC	q1	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch1	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch1	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch1	label_aware	MCC	whisker_low	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch1	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch1	uncorrected	MCC	median	0.9947188356221552397
+b	label_aware	confounded_p50	rf	federated	batch1	uncorrected	MCC	q1	0.7278910828626958818
+b	label_aware	confounded_p50	rf	federated	batch1	uncorrected	MCC	q3	0.9973508764131860937
+b	label_aware	confounded_p50	rf	federated	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch1	uncorrected	MCC	whisker_low	0.5295360104442103921
+b	label_aware	confounded_p50	rf	federated	batch2	label_aware	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch2	label_aware	MCC	q1	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch2	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch2	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch2	label_aware	MCC	whisker_low	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch2	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch2	uncorrected	MCC	median	0.9960305849028774361
+b	label_aware	confounded_p50	rf	federated	batch2	uncorrected	MCC	q1	0.9901658995661557494
+b	label_aware	confounded_p50	rf	federated	batch2	uncorrected	MCC	q3	0.9983388520358092988
+b	label_aware	confounded_p50	rf	federated	batch2	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch2	uncorrected	MCC	whisker_low	0.9882167844595601824
+b	label_aware	confounded_p50	rf	federated	batch3	label_aware	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch3	label_aware	MCC	q1	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch3	label_aware	MCC	q3	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch3	label_aware	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch3	label_aware	MCC	whisker_low	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch3	truth	MCC	median	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch3	uncorrected	MCC	median	0.8684758790603234191
+b	label_aware	confounded_p50	rf	federated	batch3	uncorrected	MCC	q1	0.7421214507490980772
+b	label_aware	confounded_p50	rf	federated	batch3	uncorrected	MCC	q3	0.9743489764319054336
+b	label_aware	confounded_p50	rf	federated	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	label_aware	confounded_p50	rf	federated	batch3	uncorrected	MCC	whisker_low	0.7210636301698765127
+b	no_label	confounded_p05	rf	central	batch1	no_label	MCC	median	0.0678795993543190451
+b	no_label	confounded_p05	rf	central	batch1	no_label	MCC	q1	0.0328875825464934463
+b	no_label	confounded_p05	rf	central	batch1	no_label	MCC	q3	0.1035599790336713955
+b	no_label	confounded_p05	rf	central	batch1	no_label	MCC	whisker_high	0.1076476001507990221
+b	no_label	confounded_p05	rf	central	batch1	no_label	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch1	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch1	uncorrected	MCC	median	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch1	uncorrected	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch1	uncorrected	MCC	q3	0.0878127034759913494
+b	no_label	confounded_p05	rf	central	batch1	uncorrected	MCC	whisker_high	0.1170836046346551418
+b	no_label	confounded_p05	rf	central	batch1	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch2	no_label	MCC	median	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch2	no_label	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch2	no_label	MCC	q3	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch2	no_label	MCC	whisker_high	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch2	no_label	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch2	truth	MCC	median	0.1288572094108176302
+b	no_label	confounded_p05	rf	central	batch2	uncorrected	MCC	median	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch2	uncorrected	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch2	uncorrected	MCC	q3	0.0365367347316553279
+b	no_label	confounded_p05	rf	central	batch2	uncorrected	MCC	whisker_high	0.0487156463088737682
+b	no_label	confounded_p05	rf	central	batch2	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch3	no_label	MCC	median	0.0897069623820313522
+b	no_label	confounded_p05	rf	central	batch3	no_label	MCC	q1	0.0566929218203625560
+b	no_label	confounded_p05	rf	central	batch3	no_label	MCC	q3	0.1242948046768737463
+b	no_label	confounded_p05	rf	central	batch3	no_label	MCC	whisker_high	0.1283413982224437810
+b	no_label	confounded_p05	rf	central	batch3	no_label	MCC	whisker_low	0.0123000320941738430
+b	no_label	confounded_p05	rf	central	batch3	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch3	uncorrected	MCC	median	0.0378259386203809028
+b	no_label	confounded_p05	rf	central	batch3	uncorrected	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch3	uncorrected	MCC	q3	0.6180711658114107498
+b	no_label	confounded_p05	rf	central	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p05	rf	central	batch3	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch1	no_label	MCC	median	0.3078874300507745687
+b	no_label	confounded_p05	rf	federated	batch1	no_label	MCC	q1	0.2732255258863347525
+b	no_label	confounded_p05	rf	federated	batch1	no_label	MCC	q3	0.3451294126539207197
+b	no_label	confounded_p05	rf	federated	batch1	no_label	MCC	whisker_high	0.3857545468432440061
+b	no_label	confounded_p05	rf	federated	batch1	no_label	MCC	whisker_low	0.2456860800739905371
+b	no_label	confounded_p05	rf	federated	batch1	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch1	uncorrected	MCC	median	0.7441686289461527659
+b	no_label	confounded_p05	rf	federated	batch1	uncorrected	MCC	q1	0.3399586133862163573
+b	no_label	confounded_p05	rf	federated	batch1	uncorrected	MCC	q3	0.8767174772198575994
+b	no_label	confounded_p05	rf	federated	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch1	uncorrected	MCC	whisker_low	0.1664604440746474678
+b	no_label	confounded_p05	rf	federated	batch2	no_label	MCC	median	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	no_label	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	no_label	MCC	q3	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	no_label	MCC	whisker_high	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	no_label	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	truth	MCC	median	0.0322021844960882347
+b	no_label	confounded_p05	rf	federated	batch2	uncorrected	MCC	median	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	uncorrected	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	uncorrected	MCC	q3	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	uncorrected	MCC	whisker_high	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch2	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch3	no_label	MCC	median	0.2772804339646018912
+b	no_label	confounded_p05	rf	federated	batch3	no_label	MCC	q1	0.2676518289410795282
+b	no_label	confounded_p05	rf	federated	batch3	no_label	MCC	q3	0.2881675539186239199
+b	no_label	confounded_p05	rf	federated	batch3	no_label	MCC	whisker_high	0.3086005735144868312
+b	no_label	confounded_p05	rf	federated	batch3	no_label	MCC	whisker_low	0.2661356460736294394
+b	no_label	confounded_p05	rf	federated	batch3	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch3	uncorrected	MCC	median	0.7291333861390600912
+b	no_label	confounded_p05	rf	federated	batch3	uncorrected	MCC	q1	0.3673733862815836693
+b	no_label	confounded_p05	rf	federated	batch3	uncorrected	MCC	q3	0.8955384534544590380
+b	no_label	confounded_p05	rf	federated	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p05	rf	federated	batch3	uncorrected	MCC	whisker_low	0.1840421934737176968
+b	no_label	confounded_p15	rf	central	batch1	no_label	MCC	median	0.4365502669541324599
+b	no_label	confounded_p15	rf	central	batch1	no_label	MCC	q1	0.4181665816968626603
+b	no_label	confounded_p15	rf	central	batch1	no_label	MCC	q3	0.5290206373820006691
+b	no_label	confounded_p15	rf	central	batch1	no_label	MCC	whisker_high	0.5533547469973549848
+b	no_label	confounded_p15	rf	central	batch1	no_label	MCC	whisker_low	0.3757609789989943549
+b	no_label	confounded_p15	rf	central	batch1	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch1	uncorrected	MCC	median	0.0831467144460686647
+b	no_label	confounded_p15	rf	central	batch1	uncorrected	MCC	q1	0.0016981780604024463
+b	no_label	confounded_p15	rf	central	batch1	uncorrected	MCC	q3	0.7735921210561568229
+b	no_label	confounded_p15	rf	central	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch1	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch2	no_label	MCC	median	0.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch2	no_label	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch2	no_label	MCC	q3	0.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch2	no_label	MCC	whisker_high	0.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch2	no_label	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch2	truth	MCC	median	0.9848231978541044374
+b	no_label	confounded_p15	rf	central	batch2	uncorrected	MCC	median	0.3808713009093801505
+b	no_label	confounded_p15	rf	central	batch2	uncorrected	MCC	q1	0.0377329352964181491
+b	no_label	confounded_p15	rf	central	batch2	uncorrected	MCC	q3	0.8537870551814428222
+b	no_label	confounded_p15	rf	central	batch2	uncorrected	MCC	whisker_high	0.9948517802780516561
+b	no_label	confounded_p15	rf	central	batch2	uncorrected	MCC	whisker_low	0.0166005594333570525
+b	no_label	confounded_p15	rf	central	batch3	no_label	MCC	median	0.5229810523973424941
+b	no_label	confounded_p15	rf	central	batch3	no_label	MCC	q1	0.4569220480643054749
+b	no_label	confounded_p15	rf	central	batch3	no_label	MCC	q3	0.5556838131095146460
+b	no_label	confounded_p15	rf	central	batch3	no_label	MCC	whisker_high	0.5821831760079517748
+b	no_label	confounded_p15	rf	central	batch3	no_label	MCC	whisker_low	0.3731134229225631094
+b	no_label	confounded_p15	rf	central	batch3	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch3	uncorrected	MCC	median	0.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch3	uncorrected	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p15	rf	central	batch3	uncorrected	MCC	q3	0.1718454065569511025
+b	no_label	confounded_p15	rf	central	batch3	uncorrected	MCC	whisker_high	0.2025104018889508362
+b	no_label	confounded_p15	rf	central	batch3	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch1	no_label	MCC	median	0.7955178394646094109
+b	no_label	confounded_p15	rf	federated	batch1	no_label	MCC	q1	0.7687645334307814382
+b	no_label	confounded_p15	rf	federated	batch1	no_label	MCC	q3	0.8473580949164617460
+b	no_label	confounded_p15	rf	federated	batch1	no_label	MCC	whisker_high	0.8662317519625905016
+b	no_label	confounded_p15	rf	federated	batch1	no_label	MCC	whisker_low	0.7386691397407634252
+b	no_label	confounded_p15	rf	federated	batch1	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch1	uncorrected	MCC	median	0.8961150622653633047
+b	no_label	confounded_p15	rf	federated	batch1	uncorrected	MCC	q1	0.4750400544805226666
+b	no_label	confounded_p15	rf	federated	batch1	uncorrected	MCC	q3	0.9762610103194360178
+b	no_label	confounded_p15	rf	federated	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch1	uncorrected	MCC	whisker_low	0.0261159283850819421
+b	no_label	confounded_p15	rf	federated	batch2	no_label	MCC	median	0.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch2	no_label	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch2	no_label	MCC	q3	0.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch2	no_label	MCC	whisker_high	0.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch2	no_label	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch2	truth	MCC	median	0.8752092737987595683
+b	no_label	confounded_p15	rf	federated	batch2	uncorrected	MCC	median	0.0421261105029358124
+b	no_label	confounded_p15	rf	federated	batch2	uncorrected	MCC	q1	0.0186263960906424240
+b	no_label	confounded_p15	rf	federated	batch2	uncorrected	MCC	q3	0.0904352173297790496
+b	no_label	confounded_p15	rf	federated	batch2	uncorrected	MCC	whisker_high	0.1582470032123587111
+b	no_label	confounded_p15	rf	federated	batch2	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch3	no_label	MCC	median	0.8483964488016308980
+b	no_label	confounded_p15	rf	federated	batch3	no_label	MCC	q1	0.8363005081989078882
+b	no_label	confounded_p15	rf	federated	batch3	no_label	MCC	q3	0.8668188596298532778
+b	no_label	confounded_p15	rf	federated	batch3	no_label	MCC	whisker_high	0.9028048482206190162
+b	no_label	confounded_p15	rf	federated	batch3	no_label	MCC	whisker_low	0.8345720038786131889
+b	no_label	confounded_p15	rf	federated	batch3	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch3	uncorrected	MCC	median	0.9837931707066466247
+b	no_label	confounded_p15	rf	federated	batch3	uncorrected	MCC	q1	0.8993609752344993158
+b	no_label	confounded_p15	rf	federated	batch3	uncorrected	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p15	rf	federated	batch3	uncorrected	MCC	whisker_low	0.8820446748843029372
+b	no_label	confounded_p30	rf	central	batch1	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch1	no_label	MCC	q1	0.9976524372844040034
+b	no_label	confounded_p30	rf	central	batch1	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch1	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch1	no_label	MCC	whisker_low	0.9968699163792053008
+b	no_label	confounded_p30	rf	central	batch1	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch1	uncorrected	MCC	median	0.6726662383085810770
+b	no_label	confounded_p30	rf	central	batch1	uncorrected	MCC	q1	0.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch1	uncorrected	MCC	q3	0.9913756533227413570
+b	no_label	confounded_p30	rf	central	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch1	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch2	no_label	MCC	median	0.5455159135041893759
+b	no_label	confounded_p30	rf	central	batch2	no_label	MCC	q1	0.5121736649666386310
+b	no_label	confounded_p30	rf	central	batch2	no_label	MCC	q3	0.5557202365328839377
+b	no_label	confounded_p30	rf	central	batch2	no_label	MCC	whisker_high	0.5753636588639922111
+b	no_label	confounded_p30	rf	central	batch2	no_label	MCC	whisker_low	0.4721060388436946198
+b	no_label	confounded_p30	rf	central	batch2	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch2	uncorrected	MCC	median	0.9594591473084579381
+b	no_label	confounded_p30	rf	central	batch2	uncorrected	MCC	q1	0.7994029262105558642
+b	no_label	confounded_p30	rf	central	batch2	uncorrected	MCC	q3	0.9996059828264908242
+b	no_label	confounded_p30	rf	central	batch2	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch2	uncorrected	MCC	whisker_low	0.7688676832393699367
+b	no_label	confounded_p30	rf	central	batch3	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch3	no_label	MCC	q1	0.9976524372844040034
+b	no_label	confounded_p30	rf	central	batch3	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch3	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch3	no_label	MCC	whisker_low	0.9968699163792053008
+b	no_label	confounded_p30	rf	central	batch3	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch3	uncorrected	MCC	median	0.3974763194884513573
+b	no_label	confounded_p30	rf	central	batch3	uncorrected	MCC	q1	0.0639848161176293784
+b	no_label	confounded_p30	rf	central	batch3	uncorrected	MCC	q3	0.9888110530101865692
+b	no_label	confounded_p30	rf	central	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	central	batch3	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	no_label	MCC	q1	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	no_label	MCC	whisker_low	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	uncorrected	MCC	median	0.9984349581896025949
+b	no_label	confounded_p30	rf	federated	batch1	uncorrected	MCC	q1	0.9139167946029161937
+b	no_label	confounded_p30	rf	federated	batch1	uncorrected	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch1	uncorrected	MCC	whisker_low	0.8998773474044566845
+b	no_label	confounded_p30	rf	federated	batch2	no_label	MCC	median	0.4271350588229350098
+b	no_label	confounded_p30	rf	federated	batch2	no_label	MCC	q1	0.3819993645643096070
+b	no_label	confounded_p30	rf	federated	batch2	no_label	MCC	q3	0.4408064297938820708
+b	no_label	confounded_p30	rf	federated	batch2	no_label	MCC	whisker_high	0.4519388747237405579
+b	no_label	confounded_p30	rf	federated	batch2	no_label	MCC	whisker_low	0.3455576774328594780
+b	no_label	confounded_p30	rf	federated	batch2	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch2	uncorrected	MCC	median	0.7639458593783297058
+b	no_label	confounded_p30	rf	federated	batch2	uncorrected	MCC	q1	0.3771463835343042970
+b	no_label	confounded_p30	rf	federated	batch2	uncorrected	MCC	q3	0.8885812266814445692
+b	no_label	confounded_p30	rf	federated	batch2	uncorrected	MCC	whisker_high	0.9704843745074362982
+b	no_label	confounded_p30	rf	federated	batch2	uncorrected	MCC	whisker_low	0.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch3	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch3	no_label	MCC	q1	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch3	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch3	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch3	no_label	MCC	whisker_low	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch3	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch3	uncorrected	MCC	median	0.8949892035021501657
+b	no_label	confounded_p30	rf	federated	batch3	uncorrected	MCC	q1	0.6471873538593366781
+b	no_label	confounded_p30	rf	federated	batch3	uncorrected	MCC	q3	0.9992075568159886068
+b	no_label	confounded_p30	rf	federated	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p30	rf	federated	batch3	uncorrected	MCC	whisker_low	0.2247005146482757287
+b	no_label	confounded_p50	rf	central	batch1	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	no_label	MCC	q1	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	no_label	MCC	whisker_low	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	uncorrected	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	uncorrected	MCC	q1	0.8679667835209827764
+b	no_label	confounded_p50	rf	central	batch1	uncorrected	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch1	uncorrected	MCC	whisker_low	0.7042382237906635867
+b	no_label	confounded_p50	rf	central	batch2	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	no_label	MCC	q1	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	no_label	MCC	whisker_low	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	uncorrected	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	uncorrected	MCC	q1	0.9990033112214855571
+b	no_label	confounded_p50	rf	central	batch2	uncorrected	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch2	uncorrected	MCC	whisker_low	0.9986710816286473724
+b	no_label	confounded_p50	rf	central	batch3	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch3	no_label	MCC	q1	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch3	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch3	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch3	no_label	MCC	whisker_low	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch3	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch3	uncorrected	MCC	median	0.9960433974155622483
+b	no_label	confounded_p50	rf	central	batch3	uncorrected	MCC	q1	0.9526924870948693114
+b	no_label	confounded_p50	rf	central	batch3	uncorrected	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	central	batch3	uncorrected	MCC	whisker_low	0.9395610511827842126
+b	no_label	confounded_p50	rf	federated	batch1	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch1	no_label	MCC	q1	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch1	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch1	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch1	no_label	MCC	whisker_low	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch1	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch1	uncorrected	MCC	median	0.9947188356221552397
+b	no_label	confounded_p50	rf	federated	batch1	uncorrected	MCC	q1	0.7278910828626958818
+b	no_label	confounded_p50	rf	federated	batch1	uncorrected	MCC	q3	0.9973508764131860937
+b	no_label	confounded_p50	rf	federated	batch1	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch1	uncorrected	MCC	whisker_low	0.5295360104442103921
+b	no_label	confounded_p50	rf	federated	batch2	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch2	no_label	MCC	q1	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch2	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch2	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch2	no_label	MCC	whisker_low	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch2	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch2	uncorrected	MCC	median	0.9960305849028774361
+b	no_label	confounded_p50	rf	federated	batch2	uncorrected	MCC	q1	0.9901658995661557494
+b	no_label	confounded_p50	rf	federated	batch2	uncorrected	MCC	q3	0.9983388520358092988
+b	no_label	confounded_p50	rf	federated	batch2	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch2	uncorrected	MCC	whisker_low	0.9882167844595601824
+b	no_label	confounded_p50	rf	federated	batch3	no_label	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch3	no_label	MCC	q1	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch3	no_label	MCC	q3	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch3	no_label	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch3	no_label	MCC	whisker_low	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch3	truth	MCC	median	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch3	uncorrected	MCC	median	0.8684758790603234191
+b	no_label	confounded_p50	rf	federated	batch3	uncorrected	MCC	q1	0.7421214507490980772
+b	no_label	confounded_p50	rf	federated	batch3	uncorrected	MCC	q3	0.9743489764319054336
+b	no_label	confounded_p50	rf	federated	batch3	uncorrected	MCC	whisker_high	1.0000000000000000000
+b	no_label	confounded_p50	rf	federated	batch3	uncorrected	MCC	whisker_low	0.7210636301698765127
+c	label_aware	confounded_p05	rf	central	mean of labs	label_aware	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p05	rf	central	mean of labs	label_aware	MCC	q1	0.9498375492365885853
+c	label_aware	confounded_p05	rf	central	mean of labs	label_aware	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p05	rf	central	mean of labs	label_aware	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p05	rf	central	mean of labs	label_aware	MCC	whisker_low	0.9398050590839063245
+c	label_aware	confounded_p05	rf	central	mean of labs	truth	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p05	rf	central	mean of labs	uncorrected	MCC	median	0.4232605430935378887
+c	label_aware	confounded_p05	rf	central	mean of labs	uncorrected	MCC	q1	0.3604451317931969268
+c	label_aware	confounded_p05	rf	central	mean of labs	uncorrected	MCC	q3	0.5836007799345136471
+c	label_aware	confounded_p05	rf	central	mean of labs	uncorrected	MCC	whisker_high	0.6318299300469154556
+c	label_aware	confounded_p05	rf	central	mean of labs	uncorrected	MCC	whisker_low	0.0619032746320241634
+c	label_aware	confounded_p05	rf	federated	mean of labs	label_aware	MCC	median	0.7026053833236973745
+c	label_aware	confounded_p05	rf	federated	mean of labs	label_aware	MCC	q1	0.3554216554824691232
+c	label_aware	confounded_p05	rf	federated	mean of labs	label_aware	MCC	q3	0.8002178488750689711
+c	label_aware	confounded_p05	rf	federated	mean of labs	label_aware	MCC	whisker_high	0.9399205753857928780
+c	label_aware	confounded_p05	rf	federated	mean of labs	label_aware	MCC	whisker_low	0.2808112668609880069
+c	label_aware	confounded_p05	rf	federated	mean of labs	truth	MCC	median	0.8287664511227073039
+c	label_aware	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	median	0.4586452685357162440
+c	label_aware	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	q1	0.2866922555970340403
+c	label_aware	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	q3	0.5714568712950239826
+c	label_aware	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	whisker_high	0.6889623509032979376
+c	label_aware	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	whisker_low	0.1939334611912052753
+c	label_aware	confounded_p15	rf	central	mean of labs	label_aware	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p15	rf	central	mean of labs	label_aware	MCC	q1	1.0000000000000000000
+c	label_aware	confounded_p15	rf	central	mean of labs	label_aware	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p15	rf	central	mean of labs	label_aware	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p15	rf	central	mean of labs	label_aware	MCC	whisker_low	1.0000000000000000000
+c	label_aware	confounded_p15	rf	central	mean of labs	truth	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p15	rf	central	mean of labs	uncorrected	MCC	median	0.7061800268112403689
+c	label_aware	confounded_p15	rf	central	mean of labs	uncorrected	MCC	q1	0.6601372611633504750
+c	label_aware	confounded_p15	rf	central	mean of labs	uncorrected	MCC	q3	0.7545608174867109996
+c	label_aware	confounded_p15	rf	central	mean of labs	uncorrected	MCC	whisker_high	0.7570814079850858302
+c	label_aware	confounded_p15	rf	central	mean of labs	uncorrected	MCC	whisker_low	0.6154365166917100671
+c	label_aware	confounded_p15	rf	federated	mean of labs	label_aware	MCC	median	0.9986571623312464618
+c	label_aware	confounded_p15	rf	federated	mean of labs	label_aware	MCC	q1	0.9879376557342633980
+c	label_aware	confounded_p15	rf	federated	mean of labs	label_aware	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p15	rf	federated	mean of labs	label_aware	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p15	rf	federated	mean of labs	label_aware	MCC	whisker_low	0.9858307957909429042
+c	label_aware	confounded_p15	rf	federated	mean of labs	truth	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	median	0.8923874367214147396
+c	label_aware	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	q1	0.8274688337184464837
+c	label_aware	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	q3	0.9061742993061692175
+c	label_aware	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	whisker_high	0.9798228582965787803
+c	label_aware	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	whisker_low	0.7512291085844982064
+c	label_aware	confounded_p30	rf	central	mean of labs	label_aware	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	label_aware	MCC	q1	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	label_aware	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	label_aware	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	label_aware	MCC	whisker_low	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	truth	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	uncorrected	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	uncorrected	MCC	q1	0.9937116472512953491
+c	label_aware	confounded_p30	rf	central	mean of labs	uncorrected	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	uncorrected	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p30	rf	central	mean of labs	uncorrected	MCC	whisker_low	0.9859397085242376235
+c	label_aware	confounded_p30	rf	federated	mean of labs	label_aware	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p30	rf	federated	mean of labs	label_aware	MCC	q1	1.0000000000000000000
+c	label_aware	confounded_p30	rf	federated	mean of labs	label_aware	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p30	rf	federated	mean of labs	label_aware	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p30	rf	federated	mean of labs	label_aware	MCC	whisker_low	1.0000000000000000000
+c	label_aware	confounded_p30	rf	federated	mean of labs	truth	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	median	0.9897182971146243347
+c	label_aware	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	q1	0.9835186931644721575
+c	label_aware	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	q3	0.9943602876870298868
+c	label_aware	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	whisker_low	0.9825839420760655862
+c	label_aware	confounded_p50	rf	central	mean of labs	label_aware	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	label_aware	MCC	q1	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	label_aware	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	label_aware	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	label_aware	MCC	whisker_low	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	truth	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	uncorrected	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	uncorrected	MCC	q1	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	uncorrected	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	uncorrected	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p50	rf	central	mean of labs	uncorrected	MCC	whisker_low	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	label_aware	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	label_aware	MCC	q1	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	label_aware	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	label_aware	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	label_aware	MCC	whisker_low	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	truth	MCC	median	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	median	0.9957096932518140209
+c	label_aware	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	q1	0.9836578847445269780
+c	label_aware	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	q3	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	whisker_high	1.0000000000000000000
+c	label_aware	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	whisker_low	0.9801447517064698634
+c	no_label	confounded_p05	rf	central	mean of labs	no_label	MCC	median	0.5210593947248873814
+c	no_label	confounded_p05	rf	central	mean of labs	no_label	MCC	q1	0.4788721969576338333
+c	no_label	confounded_p05	rf	central	mean of labs	no_label	MCC	q3	0.6499548636570531279
+c	no_label	confounded_p05	rf	central	mean of labs	no_label	MCC	whisker_high	0.7776947556241083914
+c	no_label	confounded_p05	rf	central	mean of labs	no_label	MCC	whisker_low	0.4169935941145329061
+c	no_label	confounded_p05	rf	central	mean of labs	truth	MCC	median	1.0000000000000000000
+c	no_label	confounded_p05	rf	central	mean of labs	uncorrected	MCC	median	0.4232605430935378887
+c	no_label	confounded_p05	rf	central	mean of labs	uncorrected	MCC	q1	0.3604451317931969268
+c	no_label	confounded_p05	rf	central	mean of labs	uncorrected	MCC	q3	0.5836007799345136471
+c	no_label	confounded_p05	rf	central	mean of labs	uncorrected	MCC	whisker_high	0.6318299300469154556
+c	no_label	confounded_p05	rf	central	mean of labs	uncorrected	MCC	whisker_low	0.0619032746320241634
+c	no_label	confounded_p05	rf	federated	mean of labs	no_label	MCC	median	0.6064717257505729542
+c	no_label	confounded_p05	rf	federated	mean of labs	no_label	MCC	q1	0.3904520954377386777
+c	no_label	confounded_p05	rf	federated	mean of labs	no_label	MCC	q3	0.6566341765139843689
+c	no_label	confounded_p05	rf	federated	mean of labs	no_label	MCC	whisker_high	0.6666666666666666297
+c	no_label	confounded_p05	rf	federated	mean of labs	no_label	MCC	whisker_low	0.2265367060559375645
+c	no_label	confounded_p05	rf	federated	mean of labs	truth	MCC	median	0.8287664511227073039
+c	no_label	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	median	0.4586452685357162440
+c	no_label	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	q1	0.2866922555970340403
+c	no_label	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	q3	0.5714568712950239826
+c	no_label	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	whisker_high	0.6889623509032979376
+c	no_label	confounded_p05	rf	federated	mean of labs	uncorrected	MCC	whisker_low	0.1939334611912052753
+c	no_label	confounded_p15	rf	central	mean of labs	no_label	MCC	median	0.9769785625779352500
+c	no_label	confounded_p15	rf	central	mean of labs	no_label	MCC	q1	0.9581855892171268207
+c	no_label	confounded_p15	rf	central	mean of labs	no_label	MCC	q3	0.9857697018344252493
+c	no_label	confounded_p15	rf	central	mean of labs	no_label	MCC	whisker_high	0.9921826050389686014
+c	no_label	confounded_p15	rf	central	mean of labs	no_label	MCC	whisker_low	0.9221547490362830279
+c	no_label	confounded_p15	rf	central	mean of labs	truth	MCC	median	1.0000000000000000000
+c	no_label	confounded_p15	rf	central	mean of labs	uncorrected	MCC	median	0.7061800268112403689
+c	no_label	confounded_p15	rf	central	mean of labs	uncorrected	MCC	q1	0.6601372611633504750
+c	no_label	confounded_p15	rf	central	mean of labs	uncorrected	MCC	q3	0.7545608174867109996
+c	no_label	confounded_p15	rf	central	mean of labs	uncorrected	MCC	whisker_high	0.7570814079850858302
+c	no_label	confounded_p15	rf	central	mean of labs	uncorrected	MCC	whisker_low	0.6154365166917100671
+c	no_label	confounded_p15	rf	federated	mean of labs	no_label	MCC	median	0.6942519196737559906
+c	no_label	confounded_p15	rf	federated	mean of labs	no_label	MCC	q1	0.6836252182782256437
+c	no_label	confounded_p15	rf	federated	mean of labs	no_label	MCC	q3	0.7010389800669190041
+c	no_label	confounded_p15	rf	federated	mean of labs	no_label	MCC	whisker_high	0.7172584385411659991
+c	no_label	confounded_p15	rf	federated	mean of labs	no_label	MCC	whisker_low	0.6600509519831027072
+c	no_label	confounded_p15	rf	federated	mean of labs	truth	MCC	median	1.0000000000000000000
+c	no_label	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	median	0.8923874367214147396
+c	no_label	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	q1	0.8274688337184464837
+c	no_label	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	q3	0.9061742993061692175
+c	no_label	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	whisker_high	0.9798228582965787803
+c	no_label	confounded_p15	rf	federated	mean of labs	uncorrected	MCC	whisker_low	0.7512291085844982064
+c	no_label	confounded_p30	rf	central	mean of labs	no_label	MCC	median	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	no_label	MCC	q1	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	no_label	MCC	q3	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	no_label	MCC	whisker_high	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	no_label	MCC	whisker_low	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	truth	MCC	median	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	uncorrected	MCC	median	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	uncorrected	MCC	q1	0.9937116472512953491
+c	no_label	confounded_p30	rf	central	mean of labs	uncorrected	MCC	q3	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	uncorrected	MCC	whisker_high	1.0000000000000000000
+c	no_label	confounded_p30	rf	central	mean of labs	uncorrected	MCC	whisker_low	0.9859397085242376235
+c	no_label	confounded_p30	rf	federated	mean of labs	no_label	MCC	median	0.9907122390386945421
+c	no_label	confounded_p30	rf	federated	mean of labs	no_label	MCC	q1	0.9886092830428365730
+c	no_label	confounded_p30	rf	federated	mean of labs	no_label	MCC	q3	0.9944771106046599307
+c	no_label	confounded_p30	rf	federated	mean of labs	no_label	MCC	whisker_high	0.9965541113998652722
+c	no_label	confounded_p30	rf	federated	mean of labs	no_label	MCC	whisker_low	0.9819169686626892934
+c	no_label	confounded_p30	rf	federated	mean of labs	truth	MCC	median	1.0000000000000000000
+c	no_label	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	median	0.9897182971146243347
+c	no_label	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	q1	0.9835186931644721575
+c	no_label	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	q3	0.9943602876870298868
+c	no_label	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	whisker_high	1.0000000000000000000
+c	no_label	confounded_p30	rf	federated	mean of labs	uncorrected	MCC	whisker_low	0.9825839420760655862
+c	no_label	confounded_p50	rf	central	mean of labs	no_label	MCC	median	1.0000000000000000000
+c	no_label	confounded_p50	rf	central	mean of labs	no_label	MCC	q1	0.9978260869565216407
+c	no_label	confounded_p50	rf	central	mean of labs	no_label	MCC	q3	1.0000000000000000000
+c	no_label	confounded_p50	rf	central	mean of labs	no_label	MCC	whisker_high	1.0000000000000000000
+c	no_label	confounded_p50	rf	central	mean of labs	no_label	MCC	whisker_low	0.9971014492753622616
+c	no_label	confounded_p50	rf	central	mean of labs	truth	MCC	median	1.0000000000000000000
+c	no_label	confounded_p50	rf	central	mean of labs	uncorrected	MCC	median	1.0000000000000000000
+c	no_label	confounded_p50	rf	central	mean of labs	uncorrected	MCC	q1	1.0000000000000000000
+c	no_label	confounded_p50	rf	central	mean of labs	uncorrected	MCC	q3	1.0000000000000000000
+c	no_label	confounded_p50	rf	central	mean of labs	uncorrected	MCC	whisker_high	1.0000000000000000000
+c	no_label	confounded_p50	rf	central	mean of labs	uncorrected	MCC	whisker_low	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	no_label	MCC	median	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	no_label	MCC	q1	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	no_label	MCC	q3	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	no_label	MCC	whisker_high	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	no_label	MCC	whisker_low	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	truth	MCC	median	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	median	0.9957096932518140209
+c	no_label	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	q1	0.9836578847445269780
+c	no_label	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	q3	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	whisker_high	1.0000000000000000000
+c	no_label	confounded_p50	rf	federated	mean of labs	uncorrected	MCC	whisker_low	0.9801447517064698634

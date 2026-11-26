@@ -29,6 +29,13 @@ correction_arm <- function() {
 }
 
 
+# Folder of a paper figure: figures/main or figures/suppl for the arm the paper
+# reports, figures/candidate for the other arm.
+paper_figure_dir <- function(section, reported_arm) {
+  file.path("figures", if (correction_arm() == reported_arm) section else "candidate")
+}
+
+
 # Run by Rscript without CORRECTION_ARM, a figure script draws both arms: this
 # runs the calling script once per arm, each in its own environment, and then
 # exits. An error in an arm stops the run. A sourced script, or one with
@@ -559,9 +566,12 @@ prepare_figure4a_plot_data <- function(
   if (anyDuplicated(plot_data[identity_columns])) {
     stop("Duplicate ARI experiment keys", call. = FALSE)
   }
-  plot_data$ARI <- suppressWarnings(as.numeric(plot_data$ARI))
-  if (any(!is.finite(plot_data$ARI) | plot_data$ARI < -1 | plot_data$ARI > 1)) {
-    stop("ARI scores must be finite and between -1 and 1", call. = FALSE)
+  for (metric in intersect(c("ARI", "AMI"), names(plot_data))) {
+    scores <- suppressWarnings(as.numeric(plot_data[[metric]]))
+    if (any(!is.finite(scores) | scores < -1 | scores > 1)) {
+      stop(metric, " scores must be finite and between -1 and 1", call. = FALSE)
+    }
+    plot_data[[metric]] <- scores
   }
 
   missing_datasets <- setdiff(dataset_order, unique(plot_data$Dataset))
@@ -1094,6 +1104,27 @@ export_classification_plots <- function(results_file, plots_dir) {
 }
 
 
+plot_figure4_clustering_panel <- function(
+  data, metric, dataset_levels, title, scenario_order, scenario_colors, point_size,
+  annotations = NULL
+) {
+  plot_figure4_box_panel(
+    data = data,
+    x_col = "DatasetLabel",
+    y_col = metric,
+    x_levels = observed_levels(data$DatasetLabel, dataset_levels),
+    y_label = metric,
+    panel_tag = title,
+    y_limits = c(min(-0.25, floor(min(data[[metric]]) * 4) / 4), 1.05),
+    y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
+    scenario_order = scenario_order,
+    scenario_colors = scenario_colors,
+    point_size = point_size,
+    annotations = annotations
+  )
+}
+
+
 make_figure4_plot <- function(
   figure4_data,
   dataset_labels,
@@ -1112,22 +1143,14 @@ make_figure4_plot <- function(
 ) {
   # `annotations` optionally holds bracket tables per panel (ari, loo, split); the
   # caption goes below the last panel.
-  ari_levels <- observed_levels(
-    figure4_data$ari$DatasetLabel,
-    unname(dataset_labels[dataset_order])
-  )
   loo_levels <- observed_levels(figure4_data$leave_one_cohort_out$Task, task_order)
   split_levels <- observed_levels(figure4_data$train_test_split$Task, task_order)
 
-  panel_a <- plot_figure4_box_panel(
+  panel_a <- plot_figure4_clustering_panel(
     data = figure4_data$ari,
-    x_col = "DatasetLabel",
-    y_col = "ARI",
-    x_levels = ari_levels,
-    y_label = "ARI",
-    panel_tag = "a) k-means clustering",
-    y_limits = c(min(-0.25, floor(min(figure4_data$ari$ARI) * 4) / 4), 1.05),
-    y_breaks = c(-0.2, 0, 0.25, 0.5, 0.75, 1),
+    metric = "ARI",
+    dataset_levels = unname(dataset_labels[dataset_order]),
+    title = "a) k-means clustering",
     scenario_order = scenario_order,
     scenario_colors = scenario_colors,
     point_size = point_size,

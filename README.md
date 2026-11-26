@@ -44,9 +44,9 @@ The **Federated Limma Remove Batch Effect (fedRBE)** app runs limma's `removeBat
 
 fedRBE allows multiple participants to collaboratively remove batch effects from their data without sharing raw data, ensuring privacy. It effectively eliminates non-biological variations arising from different sources such as labs, time points, or technologies, using limma’s `removeBatchEffect`. The tool supports various data formats and seamlessly integrates with the FeatureCloud platform for streamlined workflow management.
 <p align="center">
-   <img src="./figures/readme1.png" alt="fedRBE app states" width="80%">
+   <img src="./figures/readme1.png" alt="Federated aggregation with additive secret sharing" width="80%">
    <br>
-   <em>fedRBE app states. <a href="https://arxiv.org/abs/2412.05894" target="_blank">Source: ArXiv 2412.05894</a></em>
+   <em>Federated aggregation with additive secret sharing (SMPC). <a href="https://arxiv.org/abs/2412.05894" target="_blank">Source: ArXiv 2412.05894</a></em>
 </p>
 
 
@@ -61,6 +61,9 @@ The repository has two main parts:
    <em>fedRBE architecture. <a href="https://arxiv.org/abs/2412.05894" target="_blank">Source: ArXiv 2412.05894</a></em>
 </p>
 
+In step 4, the coordinator sends only the batch coefficients β; each client subtracts its
+batch effect from its own data.
+
 
 The app is available on [FeatureCloud](https://featurecloud.ai/app/fedrbe). For setup, workflow, and implementation details, see the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) and the [app README](https://freddsle.github.io/fedRBE/batchcorrection/).
 
@@ -71,11 +74,12 @@ The app is available on [FeatureCloud](https://featurecloud.ai/app/fedrbe). For 
 
 Install:
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
-2. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
+2. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.11+ and R 4.0+ installations.
 
 Additional requirements depend on the use case:
 - **Running fedRBE in a federated manner via the FeatureCloud platform**: FeatureCloud account
-- **Reproducing the paper**: Git LFS and R dependencies from `requirements_r.txt`
+- **Running the sample experiment or reproducing the paper**: [Git LFS](https://git-lfs.com/)
+- **Reproducing the paper**: R dependencies from `requirements_r.txt`
 
 For Windows users, we recommend using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
@@ -86,6 +90,7 @@ For local simulations or reproduction:
 ```bash
 git clone https://github.com/Freddsle/fedRBE.git
 cd fedRBE
+git lfs pull
 ```
 
 Recommended: pixi installs one locked Python and R environment (`pixi.toml`,
@@ -171,7 +176,7 @@ see [file preparation](https://freddsle.github.io/fedRBE/docs/how_to_guide.html#
 Output files include:
 - **Corrected Data**: Batch-corrected features (rows) x samples (columns), whatever the input orientation.
 - **Corrected Data with covariates**: The same, with the covariates appended unchanged as rows.
-- **Report**: A summary of the correction process and results.
+- **Report**: The client name, the batch coefficients used for the correction and the design matrix.
 
 ---
 

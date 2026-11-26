@@ -7,15 +7,20 @@
 # Without CORRECTION_ARM, the script runs once per arm (label_aware, then
 # no_label). CORRECTION_ARM=label_aware or CORRECTION_ARM=no_label runs only that
 # arm, as does sourcing the script (default label_aware).
-# Each arm writes figures/figure4_<arm>.png without statistics and
-# figures/figure4_<arm>_statistics.png with significance brackets in panel a.
+# Each arm writes figure4_<arm>.png without statistics and
+# figure4_<arm>_statistics.png with significance brackets in panel a.
 # FIGURE4_ARI_TABLE, FIGURE4_RF_REPORT and FIGURE4_OUTPUT override the source and
 # output paths; an output path ending in .svg writes an SVG. The ARI table and
 # the output belong to one arm, so overriding them requires CORRECTION_ARM.
-# The script also writes the test table (<output>_statistics.tsv), Figure S7
-# (leave-one-cohort-out per held-out cohort with brackets, figureS7_<arm>) and
-# Figure S8 (70:30 per test cohort with brackets, figureS8_<arm>) next to the
-# Figure 4 output.
+# The script also writes the test table (<output>_statistics.tsv) next to the
+# Figure 4 output, Figure S7 (leave-one-cohort-out per held-out cohort with
+# brackets, figureS7_<arm>), Figure S8 (70:30 per test cohort with brackets,
+# figureS8_<arm>) and Figure S12 (k-means AMI per dataset with brackets,
+# figureS12_<arm>) when the clustering table contains AMI. For no_label, which
+# the paper reports, Figure 4 and the test table go to figures/main/, the
+# supplements to figures/suppl/ and the annotated Figure 4 to figures/candidate/.
+# The label_aware arm writes all figures to figures/candidate/.
+# With FIGURE4_OUTPUT, every output goes next to that path.
 #
 # What the panels show. Every panel has four scenarios per dataset: central or
 # federated learning, each on uncorrected data ("before BEC") and on data
@@ -62,9 +67,9 @@ classification_path <- file.path(
   "results",
   "classification_metric_report.csv"
 )
-output_dir <- "figures"
 output_prefix <- "figure4_"
-output_path <- file.path(output_dir, paste0(output_prefix, CORRECTION_ARM, ".png"))
+output_path <- file.path(paper_figure_dir("main", "no_label"),
+                         paste0(output_prefix, CORRECTION_ARM, ".png"))
 
 # Path overrides are absolute or relative to the repository root.
 resolve_figure4_path <- function(variable, default) {
@@ -75,6 +80,9 @@ resolve_figure4_path <- function(variable, default) {
 ari_path <- resolve_figure4_path("FIGURE4_ARI_TABLE", ari_path)
 classification_path <- resolve_figure4_path("FIGURE4_RF_REPORT", classification_path)
 output_path <- resolve_figure4_path("FIGURE4_OUTPUT", output_path)
+exported <- nzchar(Sys.getenv("FIGURE4_OUTPUT"))
+supplementary_dir <- if (exported) dirname(output_path) else paper_figure_dir("suppl", "no_label")
+annotated_dir <- if (exported) dirname(output_path) else file.path("figures", "candidate")
 
 # Figure parameters: task ordering, scenario names, colors, seed counts and PNG size.
 
@@ -160,8 +168,8 @@ figure4_data <- prepare_figure4_plot_data(
   seeds_per_group = ari_seeds_per_group
 )
 
-# Exact rank tests over seeds: per dataset (panel a), per held-out cohort
-# (Figure S7) and per 70:30 test cohort (Figure S8). Panels b and c are overviews.
+# Exact rank tests over seeds: per dataset (panel a and Figure S12), per held-out
+# cohort (Figure S7) and per 70:30 test cohort (Figure S8). Panels b and c are overviews.
 
 # Incomplete leave-one-cohort-out results skip panel b and Figure S7; errors of
 # panel a or Figure S8 recur in the second attempt and stop the script.
@@ -180,14 +188,14 @@ has_loo <- nrow(figure4_data$leave_one_cohort_out) > 0
 statistics_path <- write_figure4_statistics(
   figure4_stats, paste0(tools::file_path_sans_ext(output_path), "_statistics.tsv")
 )
-cat("Saved Figure 4, S7 and S8 statistics to", statistics_path, "\n")
+cat("Saved Figure 4 and supplementary statistics to", statistics_path, "\n")
 cat("Significant contrasts with |mean difference| <", figure4_min_difference, ":\n")
 print(figure4_negligible_effects(figure4_stats), row.names = FALSE, digits = 3)
 figure4_annotations <- list(ari = figure4_annotation_data(figure4_stats, "4a ARI"))
 statistics_caption <- figure4_statistics_caption()
 
 # Build and save Figure 4 twice: plain at the output path, and with significance
-# brackets and the test caption at the same path with a `_statistics` suffix.
+# brackets and the test caption under the same name with a `_statistics` suffix.
 
 build_figure4 <- function(annotations, caption) {
   plot <- make_figure4_plot(
@@ -210,10 +218,10 @@ build_figure4 <- function(annotations, caption) {
 }
 
 figure4_extension <- tools::file_ext(output_path)
-statistics_output_path <- paste0(
-  tools::file_path_sans_ext(output_path), "_statistics.",
-  if (nzchar(figure4_extension)) figure4_extension else "png"
-)
+if (!nzchar(figure4_extension)) figure4_extension <- "png"
+statistics_output_path <- file.path(annotated_dir, paste0(
+  basename(tools::file_path_sans_ext(output_path)), "_statistics.", figure4_extension
+))
 figure4_variants <- list(
   list(path = output_path, plot = build_figure4(NULL, NULL)),
   list(path = statistics_output_path,
@@ -231,9 +239,12 @@ for (variant in figure4_variants) {
   cat("Saved Figure 4 to", saved_path, "\n")
 }
 
+supplementary_figure_path <- function(figure) {
+  file.path(supplementary_dir, paste0(figure, "_", CORRECTION_ARM, ".", figure4_extension))
+}
+
 # Figures S7 and S8: the panel b and c scores per test cohort, with the per-cohort
-# tests. They use the Figure 4 output's directory and format. Returns the brackets
-# per task.
+# tests, in the Figure 4 output's format. Returns the brackets per task.
 
 save_per_cohort_figure <- function(data, figure, panel, description) {
   tasks <- observed_levels(data$Task, classification_task_order)
@@ -257,15 +268,9 @@ save_per_cohort_figure <- function(data, figure, panel, description) {
       sep = "\n"
     )
   )
-  extension <- tools::file_ext(output_path)
-  path <- file.path(
-    dirname(output_path),
-    paste0(sub("^figure4", figure, output_prefix), CORRECTION_ARM, ".",
-           if (nzchar(extension)) extension else "png")
-  )
   saved_path <- save_grid_png(
     function() draw_figure4(plot),
-    output_path = path,
+    output_path = supplementary_figure_path(figure),
     width = figure_width,
     height = per_cohort_figure_height,
     dpi = figure_dpi
@@ -284,3 +289,31 @@ figureS8_annotations <- save_per_cohort_figure(
   figure4_data$train_test_split, "figureS8", "S8 train/test",
   "RF 70:30 train-test split per test cohort"
 )
+
+# Figure S12 uses the same clustering runs as Figure 4a, scored with AMI.
+if ("AMI" %in% names(figure4_data$ari)) {
+  figureS12_annotations <- figure4_annotation_data(figure4_stats, "S12 AMI")
+  ami_panel <- plot_figure4_clustering_panel(
+    data = figure4_data$ari,
+    metric = "AMI",
+    dataset_levels = unname(ari_dataset_labels[ari_dataset_order]),
+    title = paste(correction_arm_titles[[CORRECTION_ARM]], "k-means clustering", sep = " · "),
+    scenario_order = scenario_order,
+    scenario_colors = scenario_colors,
+    point_size = point_size,
+    annotations = figureS12_annotations
+  ) + ggplot2::labs(subtitle = clustering_feature_label, caption = statistics_caption)
+  ami_figure <- list(
+    panels = list(ami_panel),
+    panel_heights = c(2.7, 0.55),
+    legend_gap = grid::unit(0.08, "cm")
+  )
+  saved_path <- save_grid_png(
+    function() draw_figure4(ami_figure),
+    output_path = supplementary_figure_path("figureS12"),
+    width = figure_width,
+    height = 3.5,
+    dpi = figure_dpi
+  )
+  cat("Saved Figure S12 to", saved_path, "\n")
+}

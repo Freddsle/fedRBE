@@ -39,7 +39,7 @@ or regenerate the analysis stages you need.
 
 1. **Docker**: [Installation Instructions](https://www.docker.com/get-started)
 1. **Git LFS** (required for large files used in this workflow)
-1. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.8+ and R 4.0+ installations.
+1. **Either** [pixi](https://pixi.sh) (recommended, Linux x86-64), Conda or Mamba for `environment.yml`, **or** separate Python 3.11+ and R 4.0+ installations.
 1. **System resources**:
    - ≥ 16 GB RAM; the correction script can use nearly all of it, so leave capacity for other processes
    - ≥ 20 GB free disk space
@@ -190,14 +190,15 @@ For ccRCC, the starting inputs are the tracked `report_filtered.tsv` and
 `design.tsv` files under `evaluation_data/ccRCC_studies/before/<study>/` for
 PDC000127, PXD030344, and PXD042844. `prepare_ccRCC_data.py` aligns their sample
 order, encodes `Condition`, and builds the union matrix. This route starts from
-prepared study inputs. Source acquisition and QC provenance are documented in the
-[ccRCC preparation archive](../evaluation_data/ccRCC_studies/archive/README.md).
+prepared study inputs.
 
 For simulated data, committed run-1 inputs support single-run correction. For all
 30 runs, first run `evaluation_data/simulated/00_data_simulation.ipynb` (1–2 hours)
-to generate `before/intermediate/` and `after/runs/`, then rerun
-`01_data_prep_and_central_RBE.ipynb`. For the separate 90-dataset robustness campaign,
-see the [simulation README](../evaluation_data/simulated/README.md#robustness-simulations).
+to generate `before/intermediate/` and `all_metadata.tsv`, then rerun
+`01_data_prep_and_central_RBE.ipynb`, which writes `after/runs/`. The
+[controlled simulation study](../evaluation_data/simulated/README.md) provides
+scripted biological-recovery, missingness/overlap and downstream-utility blocks
+with their own inputs and saved results.
 
 Output:
 
@@ -342,6 +343,12 @@ and `all_metadata.tsv`. Building the cache then requires both before- and
 after-correction per-run LMPV tables under
 `evaluation/eval_simulation/<mode>/lmvp/` for all 30 runs of all three scenarios;
 the script does not generate the after-correction LMPV tables.
+
+#### Controlled simulation study
+
+The [controlled simulation study](../evaluation_data/simulated/README.md) and its
+[result index](../evaluation_data/simulated/results/README.md) give the design, commands
+and saved results; they run natively in the pixi environment without Docker.
 
 ### 5. Reproduce the classification analysis comparing fedRBE-corrected to uncorrected data
 
@@ -538,14 +545,17 @@ done
 Without `CORRECTION_ARM`, each script draws both arms; `CORRECTION_ARM=<arm>`
 draws only that arm.
 
-Outputs under `figures/`: `figure3_<arm>.png`, `figure4_<arm>.png`,
-`figure4_<arm>_statistics.png`, `figureS5_<arm>.png`, `figureS7_<arm>.png` and
-`figureS8_<arm>.png`.
-Figure 4 is drawn twice: `figure4_<arm>.png` without statistics and
-`figure4_<arm>_statistics.png` with significance brackets and the test caption.
+The scripts write `figure3_<arm>.png` and `figure4_<arm>.png` in `figures/main/`, and
+`figureS5_<arm>.png`, `figureS7_<arm>.png` and `figureS8_<arm>.png` in
+`figures/suppl/` for the arm the paper reports (`label_aware` for Figures 3 and S5,
+`no_label` for Figures 4, S7 and S8). The other arm goes to `figures/candidate/`.
+Figure 4 is drawn twice: `figure4_<arm>.png` without statistics and, in
+`figures/candidate/`, `figure4_<arm>_statistics.png` with significance brackets and
+the test caption.
 Figures 3 and S5 also write matching `_variance.tsv` files with median variance
 fractions and feature counts. Figure 4 writes a matching `_statistics.tsv`
 covering Figures 4, S7 and S8.
+An `AMI` column in the clustering table adds Figure S12 and its rank tests.
 
 #### Scenario comparisons in Figures 4, S7 and S8
 
@@ -582,10 +592,11 @@ Override paths with `FIGURE4_ARI_TABLE`, `FIGURE4_RF_REPORT` and `FIGURE4_OUTPUT
 
 Set `FIGURE4_OUTPUT` to a path ending in `.svg` to export Figure 4 as SVG.
 PNG is the default; a path without an extension gets `.png`. The annotated
-variant uses the same path with a `_statistics` suffix. For example:
+variant, the test table and Figures S7 and S8 are then written next to that path.
+For example:
 
 ```bash
-CORRECTION_ARM=label_aware FIGURE4_OUTPUT=figures/figure4_label_aware.svg \
+CORRECTION_ARM=label_aware FIGURE4_OUTPUT=figures/candidate/figure4_label_aware.svg \
   pixi run Rscript evaluation/aggregate_figure4.R
 ```
 
@@ -597,17 +608,28 @@ pixi run Rscript evaluation/aggregate_performance.R
 
 The script reads every `*_performance_clients.csv` that
 `generate_fedrbe_corrected_datasets.py` writes next to the corrected data in Step 2
-(one row per client and run, from the Docker runs over the `internet` channel with
-the default query interval of 5 s).
+(one row per client and run, from the Docker runs over the `internet` channel with a
+0.5 s query interval).
 
-Outputs: `figures/performance_runtime.png` (per dataset: total runtime, client
+Outputs: `figures/suppl/performance_runtime.png` (per dataset: total runtime, client
 computation and waiting time of all participants, with and without SMPC, and the
 coordinator's runtime split into client computation, aggregation and waiting) and
-`figures/performance_memory.png` (container and app process peak memory against the
+`figures/suppl/performance_memory.png` (container and app process peak memory against the
 participant's data size). `PERFORMANCE_DATA_DIR` overrides the searched folder
-(default `evaluation_data`), and `PERFORMANCE_RUNTIME_OUTPUT` and
-`PERFORMANCE_MEMORY_OUTPUT` override the output paths; a path ending in `.svg`
-writes an SVG.
+(default `evaluation_data`). `PERFORMANCE_RUNTIME_OUTPUT` and
+`PERFORMANCE_MEMORY_OUTPUT` override the default PNG paths. Use a `.png` or
+`.svg` extension to select the format. The script appends `.png` to paths
+without an extension.
+
+#### Feature overlap across clients (Figure S11)
+
+```bash
+pixi run python evaluation/plot_feature_overlap.py
+```
+
+Requires the Step 1 inputs, Step 2 label-free outputs, and Liberation Sans.
+Writes `figures/suppl/Figure_S11.png`, `figures/feature_overlap_summary.tsv`,
+and `figures/feature_overlap_intersections.tsv`.
 
 ---
 
@@ -648,6 +670,7 @@ fedRBE/
 │   ├── dataset_diagnostics.R                   # Central-correction panels and simulated PCA
 │   ├── evaluation_simulated_30runs.R           # Simulated 30-run differences and variance partitioning
 │   ├── quartet_separated_modality_pca_fixed_effect_variance.R  # Figure S5
+│   ├── plot_feature_overlap.py                 # Figure S11
 ├── evaluation_classification_after_correction/ # Classification comparison scripts and outputs
 ├── evaluation_clusterization_after_correction/ # K-means comparison scripts and FeatureCloud app
 └── [other directories/files]

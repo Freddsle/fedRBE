@@ -6,7 +6,8 @@
 # Without CORRECTION_ARM, the script runs once per arm (label_aware, then
 # no_label). CORRECTION_ARM=label_aware or CORRECTION_ARM=no_label runs only that
 # arm, as does sourcing the script (default label_aware). Each arm writes its own
-# PNG and median variance summary under figures/.
+# PNG and median variance summary: label_aware, which the paper reports, under
+# figures/main/ and no_label under figures/candidate/.
 
 source(file.path("evaluation_utils", "figure_aggregate_utils.R"))
 require_figure_packages()
@@ -16,7 +17,7 @@ run_each_correction_arm("Figure 3")
 # Paths
 
 CORRECTION_ARM <- correction_arm()
-output_dir <- "figures"
+output_dir <- paper_figure_dir("main", "label_aware")
 output_path <- file.path(output_dir, paste0("figure3_", CORRECTION_ARM, ".png"))
 
 # Labels and style: panel titles, palettes, model-term labels and output size.

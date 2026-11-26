@@ -22,7 +22,7 @@ Install:
    ```bash
    pip install featurecloud
    ```
-1. **App Image** (either pull or build locally — see [Installation](https://freddsle.github.io/fedRBE/#installation)).
+1. **App Image** (either pull or build locally — see [Prerequisites and setup](https://freddsle.github.io/fedRBE/batchcorrection/#prerequisites-and-setup)).
 
 For Windows users, git must also be installed and added to PATH. We recommend using [WSL](https://docs.docker.com/desktop/features/wsl/).
 
@@ -34,8 +34,8 @@ For Windows users, git must also be installed and added to PATH. We recommend us
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
    ```
-   Some sample data uses [Git LFS](https://git-lfs.com/); install it and run
-   `git lfs pull` after cloning to fetch the full evaluation datasets.
+   The sample client files are stored with [Git LFS](https://git-lfs.com/); install it
+   and run `git lfs pull` after cloning.
 
 2. **Start the FeatureCloud Controller with the correct input folder**:
    ```bash

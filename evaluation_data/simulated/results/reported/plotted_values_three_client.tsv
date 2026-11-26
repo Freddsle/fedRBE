@@ -1,0 +1,41 @@
+figure	panel	scenario	task	learner	lab	state	metric	statistic	center
+SR1	a	confounded_p50				Uncorrected	de_condition_fp	mean	17.4
+SR1	a	confounded_p50				No-label	de_condition_fp	mean	70.7
+SR1	a	confounded_p50				Label-aware	de_condition_fp	mean	70.7
+SR1	a	confounded_p50				Joint model, uncorrected data	de_condition_fp	mean	69.7
+SR1	a	confounded_p30				Uncorrected	de_condition_fp	mean	2614.7
+SR1	a	confounded_p30				No-label	de_condition_fp	mean	35.9
+SR1	a	confounded_p30				Label-aware	de_condition_fp	mean	118.9
+SR1	a	confounded_p30				Joint model, uncorrected data	de_condition_fp	mean	66.4
+SR1	a	confounded_p15				Uncorrected	de_condition_fp	mean	2517.5
+SR1	a	confounded_p15				No-label	de_condition_fp	mean	2.4
+SR1	a	confounded_p15				Label-aware	de_condition_fp	mean	372.8
+SR1	a	confounded_p15				Joint model, uncorrected data	de_condition_fp	mean	69.0
+SR1	a	confounded_p05				Uncorrected	de_condition_fp	mean	2834.6
+SR1	a	confounded_p05				No-label	de_condition_fp	mean	0.0
+SR1	a	confounded_p05				Label-aware	de_condition_fp	mean	1199.6
+SR1	a	confounded_p05				Joint model, uncorrected data	de_condition_fp	mean	60.5
+SR1	a	confounded_p50				Batch-free truth	de_condition_fp	mean	72.6
+SR1	a	confounded_p30				Batch-free truth	de_condition_fp	mean	68.3
+SR1	a	confounded_p15				Batch-free truth	de_condition_fp	mean	70.3
+SR1	a	confounded_p05				Batch-free truth	de_condition_fp	mean	70.9
+SR1	b	confounded_p50				Uncorrected	de_condition_recall	mean	0.988977777777778
+SR1	b	confounded_p50				No-label	de_condition_recall	mean	0.991955555555555
+SR1	b	confounded_p50				Label-aware	de_condition_recall	mean	0.991955555555555
+SR1	b	confounded_p50				Joint model, uncorrected data	de_condition_recall	mean	0.991911111111111
+SR1	b	confounded_p30				Uncorrected	de_condition_recall	mean	0.861955555555555
+SR1	b	confounded_p30				No-label	de_condition_recall	mean	0.988
+SR1	b	confounded_p30				Label-aware	de_condition_recall	mean	0.992311111111111
+SR1	b	confounded_p30				Joint model, uncorrected data	de_condition_recall	mean	0.990044444444444
+SR1	b	confounded_p15				Uncorrected	de_condition_recall	mean	0.830044444444444
+SR1	b	confounded_p15				No-label	de_condition_recall	mean	0.928311111111111
+SR1	b	confounded_p15				Label-aware	de_condition_recall	mean	0.990088888888889
+SR1	b	confounded_p15				Joint model, uncorrected data	de_condition_recall	mean	0.9748
+SR1	b	confounded_p05				Uncorrected	de_condition_recall	mean	0.830088888888889
+SR1	b	confounded_p05				No-label	de_condition_recall	mean	0.00137777777777778
+SR1	b	confounded_p05				Label-aware	de_condition_recall	mean	0.976088888888889
+SR1	b	confounded_p05				Joint model, uncorrected data	de_condition_recall	mean	0.849066666666667
+SR1	b	confounded_p50				Batch-free truth	de_condition_recall	mean	0.994088888888889
+SR1	b	confounded_p30				Batch-free truth	de_condition_recall	mean	0.992977777777778
+SR1	b	confounded_p15				Batch-free truth	de_condition_recall	mean	0.993422222222222
+SR1	b	confounded_p05				Batch-free truth	de_condition_recall	mean	0.9936
