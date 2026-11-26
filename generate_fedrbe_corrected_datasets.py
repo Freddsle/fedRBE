@@ -468,10 +468,10 @@ experiments = [
     (simulated_strongly_imbalanced_experiment_smpc, "simulated/strong_imbalanced/after/FedApp_corrected_data_smpc.tsv"),
 
     # Balanced sample-size scaling. Prepare the larger inputs before enabling their runs.
-    *sample_size_experiments(600),
+    # *sample_size_experiments(600),
     # *sample_size_experiments(3000),
     # *sample_size_experiments(12000),
-    # *sample_size_experiments(50004),
+    *sample_size_experiments(50004),
 
     # E. coli
     (ecoli_experiment, "ecoli/after/label_aware/FedApp_corrected_data.tsv"),

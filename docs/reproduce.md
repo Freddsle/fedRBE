@@ -20,6 +20,8 @@ or regenerate the analysis stages you need.
 - [Prerequisites and setup](#prerequisites-and-setup)
   - [Setup steps](#setup-steps)
 - [Running the analysis](#running-the-analysis)
+  - [One-command reproduction](#one-command-reproduction)
+  - [Running the stages by hand](#running-the-stages-by-hand)
   - [1. Preparing inputs and obtaining centrally corrected data](#1-preparing-inputs-and-obtaining-centrally-corrected-data)
   - [2. Obtaining federated corrected data](#2-obtaining-federated-corrected-data)
   - [3. Comparing federated and central corrections](#3-comparing-federated-and-central-corrections)
@@ -145,6 +147,55 @@ Recommended order:
    and [clustering](#6-reproduce-the-clustering-analysis-comparing-fedrbe-corrected-to-uncorrected-data)
    analyses, or inspect their available saved results.
 6. [Generate Figures 3, 4, S5, S7 and S8](#7-generate-figures-3-4-s5-s7-and-s8-for-each-correction-arm).
+
+### One-command reproduction
+
+`reproduce.sh` runs the stages below in order and stops at the first failing
+step:
+
+```bash
+bash reproduce.sh
+```
+
+It starts with a short questionnaire. You answer y/n for each expensive stage
+(raw ovarian preprocessing, the 30 simulated runs, Docker correction,
+classification, k-means rerun and the controlled simulation study) and set
+the number of parallel classification jobs. The run then continues in a
+detached `screen` session; the script prints the session name, the log
+(`reproduce_runs/<run>/reproduce.log`) and the status file
+(`reproduce_runs/<run>/STATUS`: `RUNNING`, `FAILED`, `INTERRUPTED` or
+`SUCCEEDED`, with the step).
+
+A failure prints the step, the command, its exit code and the log. Each step
+also checks that it wrote its expected outputs. Step 3 additionally fails when a
+federated result differs from its central result by more than
+`FAILURE_THRESHOLD`. Notebooks run through `jupyter nbconvert --execute`; the
+executed copies go to `reproduce_runs/<run>/notebooks/`, so the tracked
+notebooks stay unchanged.
+
+Every successful step is recorded in `reproduce_runs/progress.tsv`. If progress
+exists, a later start asks how to continue:
+
+- **continue** (`--resume`): start at the first step that is not done, then run
+  every later step again.
+- **rerun from** (`--rerun-from 5a`): run that step and every later step.
+- **rerun selected** (`--rerun 3,7a`): run only these steps.
+- **fresh** (`--fresh`): set the progress aside and run everything.
+
+A step counts as not done when the answers that change its result have changed
+(for example `--force-run` for classification). Done steps recorded at a
+different commit are listed, and you are offered a rerun from the earliest one.
+`bash reproduce.sh --list-steps` lists the steps with their recorded status;
+`bash reproduce.sh --explain` explains every question and step.
+
+Other options:
+
+- `--answers reproduce_runs/<run>/answers.env` reuses an earlier run's answers.
+- `--yes-defaults` takes the previous (or default) answers without asking.
+- `--no-screen` runs the script in the current terminal.
+- `DRY_RUN=1 bash reproduce.sh` prints the commands without running them.
+
+### Running the stages by hand
 
 Paths below are relative to the repository root. Run shell commands there unless
 another working directory is specified. Run notebook kernels from the directory
