@@ -44,7 +44,7 @@ stopifnot(identical(named_batch, ordered_batch),
 
 stopifnot(all(simulation$params$runs == 10L),
           identical(simulation$parse_options(character())$runs, 1:10),
-          identical(simulation$parse_options(c("--scenarios", "missingness"))$runs, 1:10),
+          identical(simulation$parse_options(c("--scenarios", "intensity_lower"))$runs, 1:10),
           identical(simulation$parse_options(c("--scenarios", "confounded_p05"))$scenarios,
                     "confounded_p05"))
 valid <- simulation$parse_options(c("--runs", "1,5,10", "--out", "/tmp/data,cohort"))
@@ -130,7 +130,7 @@ attr(observed, "batch_params") <- list(additive = c(lab1 = 0, lab2 = 1, lab3 = -
                                        multiplicative = c(lab1 = 2, lab2 = 1, lab3 = 4),
                                        noise_sd = c(lab1 = 1, lab2 = 0.5, lab3 = 2))
 data <- list(truth = truth, observed = observed, meta = meta, role = role)
-output <- simulation$evaluate_dataset("missingness", 2L, data, baseline = baseline)$metrics
+output <- simulation$evaluate_dataset("intensity_lower", 2L, data, baseline = baseline)$metrics
 metric <- function(stage, name) {
   values <- output$value[output$stage == stage & output$metric == name]
   stopifnot(length(values) == 2L)
@@ -156,7 +156,7 @@ stopifnot(same(metric("baseline_after", "rmse_to_truth"), c(0, 0)),
 identity_baseline <- lapply(baseline, function(arm) {
   simulation$correct_both(data$observed, meta, "with_condition")
 })
-control <- simulation$evaluate_dataset("missingness", 2L, data, identity_baseline)$metrics
+control <- simulation$evaluate_dataset("intensity_lower", 2L, data, identity_baseline)$metrics
 stopifnot(any(control$stage == "paired_after"),
           all(abs(control$value[control$stage == "paired_after"]) < 1e-12))
 
@@ -171,7 +171,7 @@ federated_baseline <- setNames(lapply(simulation$arms, function(arm) {
   simulation$correct_both(data$observed, meta, arm)
 }), simulation$arms)
 calls <- character()
-fed <- simulation$evaluate_dataset("missingness", 2L, data, federated_baseline)$metrics
+fed <- simulation$evaluate_dataset("intensity_lower", 2L, data, federated_baseline)$metrics
 stopifnot(identical(calls, simulation$arms),
           sum(fed$stage == "fedrbe_vs_central" & fed$metric == "max_diff") == 2L,
           all(fed$value[fed$stage == "fedrbe_vs_central" & fed$metric == "max_diff"] > 0),
@@ -219,6 +219,9 @@ for (run in 1:2) {
                         value = c(0, c(0.5, 1.5)[run], c(0.75, 1.25)[run], 0, 0, 5e-9))
   simulation$write_run(list(metrics = metrics), summary_dir, "confounded_p50", run)
 }
+# Files outside the supported scenarios must not enter a resumed summary.
+file.copy(file.path(summary_dir, "runs", "confounded_p50_run001.tsv"),
+          file.path(summary_dir, "runs", "other_run001.tsv"))
 simulation$summarise(summary_dir)
 summary <- read.delim(file.path(summary_dir, "summary.tsv"))
 equivalence <- read.delim(file.path(summary_dir, "equivalence.tsv"))
@@ -238,15 +241,15 @@ close_numeric <- function(actual, expected, tolerance = 1e-8) {
     max(abs(actual - expected)) <= tolerance
 }
 generated <- c("balanced", "mild_imbalanced", "strong_imbalanced", "intensity_dependent",
-               "missingness", "confounded_p50", "confounded_p30", "confounded_p15", "confounded_p05")
+               "confounded_p50", "confounded_p30", "confounded_p15", "confounded_p05")
 stopifnot(identical(pipeline$scenarios, c(generated, "intensity_lower")),
           identical(pipeline$parse_options(character())$scenarios, pipeline$scenarios),
           identical(pipeline$parse_options(c("--scenarios", "intensity_lower"))$scenarios,
                     "intensity_lower"),
           identical(pipeline$derived$balanced,
-                    c("balanced", "intensity_lower", "intensity_dependent", "missingness")),
+                    c("balanced", "intensity_lower", "intensity_dependent")),
           identical(vapply(generated, pipeline$run_seed, integer(1), run = 1L),
-                    setNames(20261017L + 1000L * 1:9, generated)),
+                    setNames(20261017L + 1000L * c(1:4, 6:9), generated)),
           pipeline$run_seed("balanced", 10L) == 20262026L)
 
 # A tiny complete input pins the pooled-quantile and direct-log arithmetic at both severities.

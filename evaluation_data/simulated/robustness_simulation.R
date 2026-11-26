@@ -24,20 +24,18 @@ params <- list(
   samples = 600L, mu_1 = 1.45, mu_4 = 1.25, frac_1 = 0.45, frac_7 = 0.15,
   # Raw-scale offsets per lab, as quantiles of the run's batch-free raw intensities.
   offset_quantiles = c(batch2 = 0.10, batch3 = 0.25),
-  missing_alpha = c(batch1 = 0.1, batch2 = 0.2, batch3 = 0.3), missing_beta = 0.8,
-  panel_fraction = c(0.1, 0.2, 0.7), # features observed in one, two, three labs
   q_value = 0.05,
   tolerance = 1e-8
 )
-# Scenario order fixes the seed index of each generated composition; derived scenarios
-# reuse the balanced run and are scored against its correction.
-scenarios <- c("balanced", "mild_imbalanced", "strong_imbalanced",
-               "intensity_dependent", "missingness", names(confounded_b_fraction),
-               "intensity_lower")
-derived <- c(list(balanced = c("balanced", "intensity_lower", "intensity_dependent", "missingness"),
+# Fixed indices preserve the datasets independently of scenario selection or order.
+seed_index <- c(balanced = 1L, mild_imbalanced = 2L, strong_imbalanced = 3L,
+                intensity_dependent = 4L, confounded_p50 = 6L, confounded_p30 = 7L,
+                confounded_p15 = 8L, confounded_p05 = 9L, intensity_lower = 10L)
+scenarios <- names(seed_index)
+derived <- c(list(balanced = c("balanced", "intensity_lower", "intensity_dependent"),
                   mild_imbalanced = "mild_imbalanced", strong_imbalanced = "strong_imbalanced"),
              setNames(as.list(names(confounded_b_fraction)), names(confounded_b_fraction)))
-paired_scenarios <- c("intensity_lower", "intensity_dependent", "missingness")
+paired_scenarios <- c("intensity_lower", "intensity_dependent")
 # Complete-data variance diagnostics, including both intensity-offset severities.
 variance_scenarios <- c("balanced", "mild_imbalanced", "strong_imbalanced",
                         "intensity_dependent", "intensity_lower")
@@ -74,7 +72,7 @@ parse_options <- function(args) {
   opts
 }
 
-run_seed <- function(mode, run) params$seed + 1000L * match(mode, scenarios) + run
+run_seed <- function(mode, run) params$seed + 1000L * seed_index[[mode]] + run
 
 simulate_base <- function(mode, run) {
   set.seed(run_seed(mode, run))
@@ -104,30 +102,6 @@ add_intensity_offset <- function(d, multiplier = 1) {
     cols <- d$meta$lab == lab
     d$observed[, cols] <- log2(2^d$observed[, cols] + offset)
   }
-  d
-}
-
-# Abundance-dependent and random missingness, then lab-specific feature absence.
-add_missingness <- function(d, run) {
-  set.seed(run_seed("balanced", run) + 500L)
-  labs <- names(params$missing_alpha)
-  for (lab in labs) {
-    cols <- d$meta$lab == lab
-    d$observed[, cols] <- simulateMissingValues(d$observed[, cols], params$missing_alpha[[lab]],
-                                                params$missing_beta)
-  }
-  # Repeating 1,2,2,3,...,3 over role-sorted, randomly ordered features gives the panel
-  # fractions overall and within each truth role.
-  n <- nrow(d$observed)
-  d$n_labs <- integer(n)
-  d$n_labs[order(d$role, runif(n))] <- rep_len(rep(1:3, round(10 * params$panel_fraction)), n)
-  present <- t(apply(matrix(runif(3 * n), n), 1, rank)) <= d$n_labs
-  for (i in seq_along(labs)) d$observed[!present[, i], d$meta$lab == labs[i]] <- NA
-  d$missing_fraction <- sapply(labs, function(lab) mean(is.na(d$observed[, d$meta$lab == lab])))
-  # Among features present in the lab, as missingness is reported for the real data.
-  d$missing_fraction_present <- setNames(sapply(seq_along(labs), function(i) {
-    mean(is.na(d$observed[present[, i], d$meta$lab == labs[i]]))
-  }), labs)
   d
 }
 
@@ -320,14 +294,6 @@ evaluate_dataset <- function(scenario, run, d, baseline = NULL, tertiles = NULL)
                          eta_squared(in_b, d$meta$lab),
                          eta_squared(d$meta$latent[in_b], d$meta$lab[in_b]))))
   variance <- list()
-  if (!is.null(d$n_labs)) {
-    metrics[[2]] <- tidy("none", "input",
-                         c(paste0("missing_fraction_", labs),
-                           paste0("missing_fraction_present_", labs),
-                           paste0("features_in_", 1:3, "_labs")),
-                         c(d$missing_fraction[labs], d$missing_fraction_present[labs],
-                           tabulate(d$n_labs, 3)))
-  }
   partition <- scenario %in% variance_scenarios
   shared <- NULL
   for (arm in arms) {
@@ -335,7 +301,6 @@ evaluate_dataset <- function(scenario, run, d, baseline = NULL, tertiles = NULL)
       correct_both(d$observed, d$meta, arm)
     }
     kept <- match(rownames(correction$input), rownames(d$observed))
-    stopifnot(is.null(d$n_labs) || all(d$n_labs[kept] == 3L))
     truth <- d$truth[kept, , drop = FALSE]
     role <- d$role[kept]
     # Before, truth and joint stages are shared when both arms retain the same cells.
@@ -390,11 +355,10 @@ evaluate_dataset <- function(scenario, run, d, baseline = NULL, tertiles = NULL)
       metrics[[length(metrics) + 1L]] <- tidy(arm, "paired_after", names(delta), delta)
     }
     excluded <- nrow(d$observed) - length(kept)
-    panel_excluded <- if (is.null(d$n_labs)) 0L else sum(d$n_labs < 3L)
     metrics[[length(metrics) + 1]] <- tidy(arm, "input",
       c("retained_features", "excluded_features", "panel_excluded_features",
         "eligibility_excluded_features"),
-      c(length(kept), excluded, panel_excluded, excluded - panel_excluded))
+      c(length(kept), excluded, 0L, excluded))
     metrics[[length(metrics) + 1]] <- tidy(arm, "fedrbe_vs_central", names(correction$differences),
                                            correction$differences)
   }
@@ -414,7 +378,7 @@ fingerprint <- function() {
              "pixi.lock")
   files <- files[file.exists(file.path(repo, files))]
   c(paste("params:", paste(deparse(params), collapse = "")),
-    "seeds: seed + 1000 * scenario index + run; missingness draws: balanced seed + 500",
+    paste("seed indices:", paste(names(seed_index), seed_index, sep = "=", collapse = ", ")),
     paste("md5", files, unname(tools::md5sum(file.path(repo, files)))))
 }
 
@@ -447,8 +411,8 @@ summarise_values <- function(v, deviation = FALSE) {
 }
 
 summarise <- function(out) {
-  files <- list.files(file.path(out, "runs"), pattern = "_run[0-9]{3}\\.tsv$",
-                      full.names = TRUE)
+  pattern <- paste0("^(", paste(scenarios, collapse = "|"), ")_run[0-9]{3}\\.tsv$")
+  files <- list.files(file.path(out, "runs"), pattern = pattern, full.names = TRUE)
   if (!length(files)) stop("No completed runs in ", out)
   results <- do.call(rbind, lapply(files, read.delim))
   equivalence <- results[results$stage == "fedrbe_vs_central", ]
@@ -494,13 +458,10 @@ main <- function(args = commandArgs(trailingOnly = TRUE)) {
       for (scenario in todo) {
         started <- Sys.time()
         d <- switch(scenario, intensity_lower = add_intensity_offset(base, 0.5),
-                    intensity_dependent = add_intensity_offset(base),
-                    missingness = add_missingness(base, run), base)
+                    intensity_dependent = add_intensity_offset(base), base)
         lab1 <- d$meta$lab == "batch1"
         stopifnot(!startsWith(scenario, "intensity_") ||
                     identical(d$observed[, lab1], base$observed[, lab1]))
-        stopifnot(scenario != "missingness" ||
-                    identical(d$observed[!is.na(d$observed)], base$observed[!is.na(d$observed)]))
         write_run(evaluate_dataset(scenario, run, d, baseline, tertiles), opts$out, scenario, run)
         cat(sprintf("%s run %d: %.1f s\n", scenario, run,
                     as.numeric(difftime(Sys.time(), started, units = "secs"))))

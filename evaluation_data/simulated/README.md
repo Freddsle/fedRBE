@@ -1,6 +1,8 @@
-# Simulated datasets
+# Controlled simulation study
 
-Three-lab E. coli simulations based on FedProt [1].
+The study uses synthetic log2-scale data based on FedProt [1] to measure batch
+removal and biological signal recovery. Run the commands from the repository root
+in the [pixi environment](../../README.md#installation).
 
 ## Notebook datasets
 
@@ -31,12 +33,11 @@ automatically. The prediction target is `condition`; corrected descriptors read
 
 ## Biological recovery under confounding and nonlinear effects
 
-[robustness_simulation.R](robustness_simulation.R) evaluates batch removal and signal recovery across ten
-three-client scenarios, with **ten runs per scenario**: 100 scenario datasets and
-200 paired fedRBE–limma comparisons across both correction arms. Seven cohort
-compositions supply 70 generated base cohorts; the intensity and missingness
-variants share the balanced roots. Prevalences below are for the latent subgroup
-within condition B, by lab.
+The nine scenarios yield 90 datasets and 180 fedRBE–limma comparisons across both
+correction arms. The two intensity-offset variants reuse the balanced roots.
+[Simulation driver](robustness_simulation.R)
+
+Prevalences in the table refer to the latent subgroup within condition B in each lab.
 
 | Scenario | Design |
 | --- | --- |
@@ -44,22 +45,18 @@ within condition B, by lab.
 | `mild_imbalanced` | Mild lab/condition imbalance; prevalence 0.4/0.5/0.66 |
 | `strong_imbalanced` | Strong lab/condition imbalance; prevalence 0.2/0.5/0.7 |
 | `intensity_dependent` | Balanced run with raw-scale offsets in labs 2 and 3 |
-| `missingness` | Balanced run with lab-specific missingness and feature overlap |
 | `confounded_p50`, `confounded_p30`, `confounded_p15`, `confounded_p05` | 150/300/150 samples per lab; condition-B fractions p, 1 - p and p for p = 0.5, 0.3, 0.15 and 0.05; prevalence 0.6/0.6/0.6 |
 | `intensity_lower` | Balanced run with the same raw-scale offsets at half strength |
 
-`eta2_condition`, the between-lab fraction of condition-indicator variance, is about
-0, 0.025 and 0.044 for the first three compositions and 0, 0.16, 0.495 and 0.804 for
-the confounded family. Condition counts are rounded to whole samples.
+`eta2_condition` measures the between-lab fraction of condition-indicator variance.
+Condition counts are rounded to whole samples.
 
 ### Run
-
-From the repository root in the [pixi environment](../../README.md#installation):
 
 ```bash
 # Focused numerical checks
 pixi run Rscript evaluation_utils/tests/test_robustness_simulation.R
-# One run per scenario (ten datasets)
+# One run per scenario (nine datasets)
 pixi run Rscript evaluation_data/simulated/robustness_simulation.R \
   --runs 1 --out /tmp/robustness_check
 # Full recovery block in a fresh output directory
@@ -67,49 +64,38 @@ pixi run Rscript evaluation_data/simulated/robustness_simulation.R \
   --out /tmp/robustness_full
 ```
 
-Options: `--runs 1,5`, `--scenarios balanced,missingness`, `--out DIR`.
-Default output: `evaluation_data/simulated/robustness/`; `summary.tsv`,
-`equivalence.tsv` and `provenance.txt` are tracked, while the per-run files
-and the log are regenerable and ignored.
-Completed runs are skipped. The run stops when parameters or code differ from the
-`provenance.txt` in the output directory, including the tracked default; rerun after
-code changes with a fresh `--out` directory.
-
-Use one process per output directory.
+Use `--runs 1,5` or `--scenarios balanced,intensity_dependent` to select a subset. The default
+output directory is `evaluation_data/simulated/robustness/`. Use one process per
+directory. Completed runs are skipped. Code or parameter changes require a fresh `--out`.
 
 ### Model
 
-The RobNorm-based generator [2] produces 600 samples and 6,000 features: 1,125 A
-and 1,125 B condition features (shift 1.45 in 80% of signal cells), 150 latent
-features (shift -1.25 within a subgroup of B) and 3,600 null features.
+The RobNorm-based generator [2] creates 1,125 A and 1,125 B condition features
+(shift 1.45 in 80% of signal cells), 150 latent features (shift −1.25 within a
+subgroup of B) and 3,600 null features.
 
 The simplified ComBat-inspired model [3] adds a lab-wide offset and lab-scaled
 Gaussian noise. Noise SDs are 0.5 times inverse-gamma proposals with permuted shapes
 3/1/5 and a shared scale drawn from 0.5/1/2. Lab parameters must differ by at least
-20%; offsets and noise are redrawn until technical PC1 explains ≥20% of variance.
+20%. Offsets and noise are redrawn until technical PC1 explains ≥20% of variance.
 
-- Intensity: `log2(2^y + s * o)` on batch-affected `y`, where `o` is zero for lab 1 and the
-  10th/25th percentiles of batch-free raw intensities for labs 2/3 [4]; the multiplier `s`
-  is 0.5 for `intensity_lower` and 1 for `intensity_dependent`.
-- Missingness: `simulateMissingValues` per lab, with alpha 0.1/0.2/0.3 and beta 0.8,
-  combines an abundance-dependent (MNAR) threshold and random removal (MCAR within
-  lab) [5]. Alpha does not fix the realized missing fraction. Then 10%/20%/70% of
-  features, stratified by truth role, are kept in one/two/three labs [6].
-- Graded confounding: with a homogeneous condition effect and per-lab offsets,
-  the omitted-covariate retention benchmark is `1 - eta2_condition`.
-- Seeds: `20261016 + 1000 * scenario index + run`, using the table order. Derived
-  scenarios reuse the balanced run; missingness draws use its seed + 500.
+- **Intensity.** Apply `log2(2^y + s * o)` to batch-affected `y`. Offset `o` is
+  zero for lab 1 and the 10th and 25th percentiles of batch-free raw intensities
+  for labs 2 and 3 [4]. Use `s = 0.5` for `intensity_lower` and `s = 1` for
+  `intensity_dependent`.
+- **Confounding.** With a homogeneous condition effect and per-lab offsets, the
+  no-label retention benchmark is `1 - eta2_condition`.
+- **Seeds.** Base cohorts use `20261016 + 1000 * scenario index + run`. The three
+  sample-imbalance designs use indices 1–3 and the four confounding designs use 6–9
+  in table order. Both offset scenarios reuse the balanced run.
 
 ### Correction and metrics
 
-Every run uses both central `limma::removeBatchEffect` and fedRBE with lab as batch.
-`with_condition` supplies `~condition`; `without_condition` omits it. Features need at least
-`labs + covariates + 1` observations per lab and presence in three labs
-(`filter_fedrbe_client`). Missingness excludes 1,800 one-/two-lab features.
-Both methods fit observed samples and preserve NA cells. All corrected-data metrics
-use the aligned fedRBE output, including the balanced baseline for paired comparisons.
-
-Metrics:
+fedRBE and `limma::removeBatchEffect` use lab as batch and preserve NAs. A feature
+needs at least `labs + covariates + 1` observations in each lab. The methods must retain
+the same features and NA mask and agree within `1e-8`. Recovery metrics use fedRBE
+output. In the tables, `with_condition` is label-aware and `without_condition` is
+no-label.
 
 - `rmse_to_truth`: feature-centred RMSE to batch-free truth. Its components are
   `residual_lab_rms` (feature-by-lab residual means) and `within_lab_rmse` (remaining
@@ -130,37 +116,24 @@ Metrics:
   condition-feature DE recovery against null features (limma, BH q < 0.05).
   Before/after/truth use `~condition`; `joint` uses `~condition + lab` on uncorrected input.
   Latent features are excluded; precision is unavailable when no features are called.
-- Retained/excluded feature counts and per-lab missingness:
-  `panel_excluded_features` counts features in fewer than three labs;
-  `eligibility_excluded_features` counts additional observation-threshold losses.
-  `missing_fraction_<lab>` is the NA fraction over all features after panel absence;
-  `missing_fraction_present_<lab>` is the fraction among features present in the lab.
-- `input` rows record drawn `offset_<lab>` and `noise_sd_<lab>` before intensity or
-  missingness perturbations, plus `eta2_condition` and `eta2_latent_in_b`
+- All 6,000 features are present in every lab in these scenarios.
+- `input` rows record drawn `offset_<lab>` and `noise_sd_<lab>` before intensity
+  perturbations, plus `eta2_condition` and `eta2_latent_in_b`
   (lab-explained variance of the latent indicator within B).
 
 `before`, `after` and `truth` share retained features and observed cells.
 
 | Additional stage | Scoring |
 | --- | --- |
-| `baseline_after` | For the intensity and missingness scenarios: balanced-run correction fitted on full eligible data, scored on the scenario's retained rows and observed cells |
+| `baseline_after` | For the two intensity-offset scenarios: balanced-run correction fitted on full eligible data, scored on the scenario's retained rows and observed cells |
 | `paired_after` | `after` minus `baseline_after` |
 | `observed_truth` | Masked vs complete truth contrasts; unit slopes and zero shifts without missingness |
 | `after_vs_complete` | Corrected vs complete truth contrasts |
 
-`variancePartition::fitExtractVarPartModel` fits `~condition + lab` on the
-`before`, `after` and batch-free `truth` stages of `balanced`, `mild_imbalanced`,
-`strong_imbalanced`, `intensity_dependent` and `intensity_lower`, in both arms.
-The stages use the correction arm's retained features. The actual `variancePartition`
-package is required; there is no substitute variance decomposition. Condition and
-lab fractions are saved per feature; `median_variance_condition` and
-`median_variance_lab` summarize them across features within each run/stage/arm.
-
-Local verification runs the app protocol (`batchcorrection/fedrbe.py`) through
-`evaluation_utils/fedRBE_simulation_scrip_simdata.py` with the SMPC checks but plaintext
-aggregation and hashed feature names, on every run of every scenario in both arms
-(200 recovery-block checks). Retained features and missing-value positions must match
-central correction, with maximum absolute difference ≤1e-8.
+`variancePartition::fitExtractVarPartModel` fits `~condition + lab` to the retained
+features at `before`, `after` and `truth` in both arms for `balanced`, `mild_imbalanced`,
+`strong_imbalanced`, `intensity_dependent` and `intensity_lower`. The output includes
+per-feature fractions and median condition and lab fractions for each run, stage and arm.
 
 ### Outputs
 
@@ -175,7 +148,6 @@ central correction, with maximum absolute difference ≤1e-8.
   `mean_abs_dev_1` is mean absolute deviation from unit gain for contrast slopes
   and per-lab gains, excluding paired differences.
 - `equivalence.tsv`: local fedRBE versus central checks.
-- `provenance.txt`: parameters, seeds, code/lock checksums and `sessionInfo()`.
 
 <a id="sample-size-scaling"></a>
 
@@ -192,16 +164,10 @@ inputs serialized to 15 significant digits. The comparison includes this input r
 
 Saved results from the full campaign are available as the
 [summary by sample count and arm](sample_size_scaling/summary.tsv) and
-[per-dataset differences](sample_size_scaling/differences.tsv). The 600-sample mean
-differences vary by at most 4.2% (7.9 × 10⁻¹⁷ in absolute terms) from the
-[saved recovery comparison](robustness/equivalence.tsv). OpenBLAS kernels can change
-rounding at this scale. The current driver uses the same generator and comparison.
+[per-dataset differences](sample_size_scaling/differences.tsv).
 
-> **Warning: heavy and long.** This script is not part of the routine reproduction. A
-> 600-sample dataset takes roughly one to two minutes and about 1 GB of memory.
-> A 50,004-sample dataset needs an estimated 60 GB of memory and 25 GB of temporary
-> files. With 32 CPUs and five such datasets side by side, each took about three
-> hours, and the full campaign about six and a half hours.
+Allow about 1 GB of memory for a 600-sample dataset. A concurrent 50,004-sample
+dataset needs an estimated 60 GB of memory and 25 GB of temporary space.
 
 From the repository root in the [pixi environment](../../README.md#installation):
 
@@ -235,6 +201,63 @@ Outputs:
 
 The `runs/` directory holds the per-dataset checkpoints.
 
+## Five-client missingness and feature overlap
+
+Each client has 60 A and 60 B samples, including 36 latent-B samples. Fifty on/off
+features per class have a +1.45 shift in about 80% of own-class cells and a downward
+shift of one median background within-feature SD in the other class. The 150 latent
+features retain a −1.25 subgroup effect. The other 2,150 original A/B features have no
+class effect. The study chose the feature count using roots 1 and 2 and the shift using
+three separate roots.
+
+Each root combines full and partial panels with 0%, 10%, 30% and 50% nominal
+missingness. In the partial panel, 10/20/20/20/30% of features appear in 1–5 clients,
+respectively, at every level [5]. Abundance offsets target a feature-mean SD ten times
+the median background within-feature SD. Detection is logit-linear in abundance [6],
+with a slope of 0.5 per median within-feature SD. The five lab targets are
+0.6/0.8/1.0/1.2/1.4 times the nominal level. Masks share draws across panels and are
+nested across levels. Intercepts are fitted before the on/off changes.
+[Simulation driver](missingness_overlap.R)
+
+The 80 datasets yield 160 fedRBE–limma comparisons across both correction arms.
+The ten roots are the independent replicates. [Results and eligibility records](results/missingness_overlap/README.md)
+
+```bash
+pixi run Rscript evaluation_utils/tests/test_missingness_overlap.R
+pixi run Rscript evaluation_data/simulated/missingness_overlap.R \
+  --roots 1 \
+  --out /tmp/missingness_root1_check
+```
+
+For all 80 datasets, use `--roots 1,2,3,4,5,6,7,8,9,10` and a fresh `--out`.
+Use one process per directory. Completed roots are skipped. Use a fresh directory
+after code or parameter changes.
+
+`summary.tsv` reports retention, recovery slopes, RMSE and lab residual RMS overall
+and by presence in three, four or five clients. `status.tsv` records comparison
+outcomes. `learner_eligibility.tsv` counts features by role and missing-value route.
+
+`eligibility.tsv.gz` records each fitted feature's `eta2_obs`, the share of condition
+variance between labs among its fitted cells. For features fitted on the same cells
+in both arms, no-label correction retains `1 - eta2_obs` of the label-aware condition
+contrast. `eta2_identity` reports the maximum deviation from that relationship.
+
+## Contrast slopes by missing fraction
+
+This descriptive analysis compares masked truth and fedRBE-corrected contrasts with
+complete truth in both correction arms. It pools the 10%, 30% and 50% levels within
+each of the ten five-client roots, separately for full and partially overlapping panels.
+
+Missing fractions use cells in labs assigned the feature. Slopes are reported for
+right-closed groups of 0–5%, 5–10%, 10–20%, 20–30%, 30–50% and 50–100%, plus an
+`all` group. [Scoring](#correction-and-metrics)
+
+```bash
+pixi run Rscript evaluation_data/simulated/missing_fraction_slopes.R
+```
+
+An optional argument sets the output path. The default is [results/missing_fraction_slopes.tsv](results/missing_fraction_slopes.tsv).
+
 <a id="variance-partitioning"></a>
 
 ## Variance partitioning
@@ -262,6 +285,6 @@ early.
 2. Wang et al. (2021). [RobNorm](https://doi.org/10.1093/bioinformatics/btaa904).
 3. Johnson et al. (2007). [ComBat](https://doi.org/10.1093/biostatistics/kxj037).
 4. Huber et al. (2002). [Variance stabilization and calibration](https://doi.org/10.1093/bioinformatics/18.suppl_1.S96).
-5. Jin et al. (2021). [Missing-value imputation in label-free proteomics](https://doi.org/10.1038/s41598-021-81279-4).
-6. Schumann et al. (2025). [BERT](https://doi.org/10.1038/s41467-025-62237-4).
+5. Schumann et al. (2025). [BERT](https://doi.org/10.1038/s41467-025-62237-4).
+6. Li and Smyth (2023). [Detection probability curves](https://doi.org/10.1093/bioinformatics/btad200).
 7. Hoffman and Schadt (2016). [variancePartition](https://doi.org/10.1186/s12859-016-1323-z); [vignette](https://bioconductor.org/packages/3.23/bioc/vignettes/variancePartition/inst/doc/variancePartition.html), "Including interaction terms".
