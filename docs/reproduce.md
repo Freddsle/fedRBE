@@ -604,6 +604,16 @@ participant's data size). `PERFORMANCE_DATA_DIR` overrides the searched folder
 `PERFORMANCE_MEMORY_OUTPUT` override the output paths; a path ending in `.svg`
 writes an SVG.
 
+#### Feature overlap across clients (Figure S11)
+
+```bash
+pixi run python evaluation/plot_feature_overlap.py
+```
+
+Requires the Step 1 inputs, Step 2 label-free outputs, and Liberation Sans.
+Writes `figures/suppl/Figure_S11.png`, `figures/feature_overlap_summary.tsv`,
+and `figures/feature_overlap_intersections.tsv`.
+
 ---
 
 ## Repository structure
@@ -643,6 +653,7 @@ fedRBE/
 │   ├── dataset_diagnostics.R                   # Central-correction panels and simulated PCA
 │   ├── evaluation_simulated_30runs.R           # Simulated 30-run differences and variance partitioning
 │   ├── quartet_separated_modality_pca_fixed_effect_variance.R  # Figure S5
+│   ├── plot_feature_overlap.py                 # Figure S11
 ├── evaluation_classification_after_correction/ # Classification comparison scripts and outputs
 ├── evaluation_clusterization_after_correction/ # K-means comparison scripts and FeatureCloud app
 └── [other directories/files]

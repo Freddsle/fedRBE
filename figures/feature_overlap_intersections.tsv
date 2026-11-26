@@ -1,0 +1,41 @@
+layer	clients	n_clients	features
+E. coli	lab_A+lab_B+lab_C+lab_D+lab_E	5	2273
+E. coli	lab_A+lab_B+lab_C+lab_D	4	164
+E. coli	lab_B+lab_C+lab_D	3	136
+E. coli	lab_B	1	69
+E. coli	lab_B+lab_C	2	61
+E. coli	lab_B+lab_C+lab_D+lab_E	4	61
+E. coli	lab_D	1	50
+E. coli	lab_C	1	40
+E. coli	lab_B+lab_D	2	33
+E. coli	lab_C+lab_D	2	26
+E. coli	lab_A	1	22
+E. coli	lab_A+lab_C+lab_D	3	15
+E. coli	lab_A+lab_D	2	13
+E. coli	lab_A+lab_C+lab_D+lab_E	4	12
+E. coli	lab_E	1	11
+E. coli	lab_A+lab_B+lab_C	3	9
+E. coli	lab_A+lab_B+lab_D	3	7
+E. coli	lab_A+lab_B+lab_D+lab_E	4	7
+E. coli	lab_A+lab_C	2	7
+E. coli	lab_B+lab_E	2	7
+E. coli	lab_A+lab_B	2	6
+E. coli	lab_A+lab_D+lab_E	3	6
+E. coli	lab_C+lab_D+lab_E	3	5
+E. coli	lab_A+lab_B+lab_C+lab_E	4	4
+E. coli	lab_B+lab_C+lab_E	3	4
+E. coli	lab_B+lab_D+lab_E	3	4
+E. coli	lab_A+lab_E	2	2
+E. coli	lab_C+lab_E	2	2
+E. coli	lab_A+lab_B+lab_E	3	1
+E. coli	lab_A+lab_C+lab_E	3	1
+E. coli	lab_D+lab_E	2	1
+ccRCC	PDC000127+PXD030344+PXD042844	3	6305
+ccRCC	PXD030344	1	2570
+ccRCC	PDC000127+PXD030344	2	2496
+ccRCC	PXD030344+PXD042844	2	1177
+ccRCC	PDC000127	1	1105
+ccRCC	PXD042844	1	115
+ccRCC	PDC000127+PXD042844	2	58
+Ovarian cancer	GSE10971+GSE38666+GSE40595+GSE69428	4	30148
+Ovarian cancer	GSE10971+GSE26712+GSE38666+GSE40595+GSE6008+GSE69428	6	21128

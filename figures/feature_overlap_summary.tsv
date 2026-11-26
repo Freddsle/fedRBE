@@ -1,0 +1,7 @@
+layer	clients	union	presence_excluded	retained	final_excluded	in_1_clients	in_2_clients	in_3_clients	in_4_clients	in_5_clients	in_6_clients
+E. coli	5	3059	350	2702	357	192	158	188	248	2273	0
+ccRCC	3	13826	7521	6282	7544	3790	3731	6305	0	0	0
+Ovarian cancer	6	51276	0	51276	0	0	0	0	30148	0	21128
+Quartet transcriptomics	3	26907	0	26907	0	0	0	26907	0	0	0
+Quartet proteomics	3	2539	0	2539	0	0	0	2539	0	0	0
+Quartet metabolomics	3	71	0	71	0	0	0	71	0	0	0
