@@ -1520,7 +1520,9 @@ plot_performance_memory <- function(clients) {
   ) +
     ggplot2::geom_point(size = 1.8, alpha = 0.8, stroke = 0.2, color = "white") +
     ggplot2::scale_x_log10(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
-    ggplot2::scale_y_log10(labels = scales::label_number(big.mark = ",")) +
+    ggplot2::scale_y_continuous(limits = c(0, NA), breaks = scales::breaks_width(100),
+                                labels = scales::label_number(big.mark = ","),
+                                expand = ggplot2::expansion(mult = c(0, 0.05))) +
     ggplot2::scale_fill_manual(values = point_fills, limits = names(point_fills), name = NULL) +
     ggplot2::scale_shape_manual(values = point_shapes, limits = names(point_fills), name = NULL) +
     ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE,
