@@ -1,4 +1,4 @@
-Client 8ca0bde37fd3c342:
+Client 90af70b904852be6:
 The following batch coefficients were used for batch correction:
 [[ 1.23571114e+00 -3.76440172e-01  2.63457131e-01  3.68438887e-02
    9.35741060e-01]
@@ -102553,7 +102553,7 @@ The following batch coefficients were used for batch correction:
  [ 1.08097222e+00 -1.07211246e-01 -1.05081773e+00  6.36093517e-01
    1.51748596e+00]]
 The corresponding design matrix was:
-           intercept  HGSC  ...  8ca0bde37fd3c342  bf5f726f89c22dbe
+           intercept  HGSC  ...  90af70b904852be6  e0ef79606203b553
 file                        ...                                    
 GSM947277        1.0     0  ...                 1                 0
 GSM947278        1.0     0  ...                 1                 0
