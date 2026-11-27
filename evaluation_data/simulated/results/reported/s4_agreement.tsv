@@ -1,0 +1,69 @@
+scenario	panel	target	arm	statistic	datasets	value
+balanced			without_condition	mean	10	1.88441440509343e-15
+balanced			with_condition	mean	10	1.858952553855928e-15
+balanced			without_condition	maximum	10	4.68958205601666e-13
+balanced			with_condition	maximum	10	4.68958205601666e-13
+mild_imbalanced			without_condition	mean	10	2.071991392900128e-15
+mild_imbalanced			with_condition	mean	10	1.967749692621646e-15
+mild_imbalanced			without_condition	maximum	10	5.6843418860808e-14
+mild_imbalanced			with_condition	maximum	10	5.6843418860808e-14
+strong_imbalanced			without_condition	mean	10	2.159761121261065e-15
+strong_imbalanced			with_condition	mean	10	2.078045742227822e-15
+strong_imbalanced			without_condition	maximum	10	5.6843418860808e-14
+strong_imbalanced			with_condition	maximum	10	5.6843418860808e-14
+confounded_p50			without_condition	mean	10	1.955298971966942e-15
+confounded_p50			with_condition	mean	10	1.9288827936368738e-15
+confounded_p50			without_condition	maximum	10	5.6843418860808e-14
+confounded_p50			with_condition	maximum	10	5.6843418860808e-14
+confounded_p30			without_condition	mean	10	1.904224968232245e-15
+confounded_p30			with_condition	mean	10	1.877266263455908e-15
+confounded_p30			without_condition	maximum	10	5.6843418860808e-14
+confounded_p30			with_condition	maximum	10	5.6843418860808e-14
+confounded_p15			without_condition	mean	10	1.8985763272494282e-15
+confounded_p15			with_condition	mean	10	1.942571308178624e-15
+confounded_p15			without_condition	maximum	10	5.6843418860808e-14
+confounded_p15			with_condition	maximum	10	5.6843418860808e-14
+confounded_p05			without_condition	mean	10	1.934266491172395e-15
+confounded_p05			with_condition	mean	10	2.3464783070566067e-15
+confounded_p05			without_condition	maximum	10	5.86197757002083e-14
+confounded_p05			with_condition	maximum	10	6.3948846218409e-14
+intensity_lower			without_condition	mean	10	1.7369143999547609e-15
+intensity_lower			with_condition	mean	10	1.7170330039637358e-15
+intensity_lower			without_condition	maximum	10	4.68958205601666e-13
+intensity_lower			with_condition	maximum	10	4.68958205601666e-13
+intensity_dependent			without_condition	mean	10	1.5903665863076759e-15
+intensity_dependent			with_condition	mean	10	1.570538124967867e-15
+intensity_dependent			without_condition	maximum	10	4.54747350886464e-13
+intensity_dependent			with_condition	maximum	10	4.54747350886464e-13
+	full	0	without_condition	mean	10	1.2979876042830981e-14
+	full	0	with_condition	mean	10	1.3042115488790821e-14
+	full	0	without_condition	maximum	10	9.9475983006414e-14
+	full	0	with_condition	maximum	10	9.9475983006414e-14
+	full	0.1	without_condition	mean	10	1.1667044787626601e-14
+	full	0.1	with_condition	mean	10	1.171879742674973e-14
+	full	0.1	without_condition	maximum	10	1.4210854715202e-13
+	full	0.1	with_condition	maximum	10	1.35003119794419e-13
+	full	0.3	without_condition	mean	10	1.0838297497994928e-14
+	full	0.3	with_condition	mean	10	1.087110830730806e-14
+	full	0.3	without_condition	maximum	10	1.17239551400417e-13
+	full	0.3	with_condition	maximum	10	1.19015908239817e-13
+	full	0.5	without_condition	mean	10	1.3388845175399e-14
+	full	0.5	with_condition	mean	10	1.3474340467420549e-14
+	full	0.5	without_condition	maximum	10	9.2370555648813e-14
+	full	0.5	with_condition	maximum	10	9.2370555648813e-14
+	overlap	0	without_condition	mean	10	1.309818734771248e-14
+	overlap	0	with_condition	mean	10	1.3501383838372979e-14
+	overlap	0	without_condition	maximum	10	9.9475983006414e-14
+	overlap	0	with_condition	maximum	10	2.20268248085631e-13
+	overlap	0.1	without_condition	mean	10	1.179346868219e-14
+	overlap	0.1	with_condition	mean	10	1.2106660497645938e-14
+	overlap	0.1	without_condition	maximum	10	1.20792265079217e-13
+	overlap	0.1	with_condition	maximum	10	1.91846538655227e-13
+	overlap	0.3	without_condition	mean	10	1.0963189418341579e-14
+	overlap	0.3	with_condition	mean	10	1.1227324116196749e-14
+	overlap	0.3	without_condition	maximum	10	1.17239551400417e-13
+	overlap	0.3	with_condition	maximum	10	1.77635683940025e-13
+	overlap	0.5	without_condition	mean	10	1.372015740031878e-14
+	overlap	0.5	with_condition	mean	10	1.404890769247983e-14
+	overlap	0.5	without_condition	maximum	10	1.13686837721616e-13
+	overlap	0.5	with_condition	maximum	10	1.91846538655227e-13

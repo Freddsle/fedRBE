@@ -1,0 +1,6 @@
+client,dataset,arm,experiment,channel,query_interval,coordinator,smpc,run_duration,n_samples,n_features,n_features_used,app_pre_fedrbe_peak_rss_bytes,app_baseline_rss_bytes,app_peak_rss_bytes,container_mem_peak_bytes,container_max_anon_bytes,container_cpu_usec,client_compute,aggregation,waiting
+lab_A,E. coli,no_label,E. coli (no covariates),internet,0.5,True,False,5.806069612503052,24,2549,2702,68251648,68255744,93138944,122920960,104673280,8562525,1.0625584125518799,0.3209700584411621,4.42254114151001
+lab_B,E. coli,no_label,E. coli (no covariates),internet,0.5,False,False,6.5961754322052,23,2846,2702,68009984,68001792,89948160,119705600,103174144,8060581,1.1836576461791992,0.0,5.412517786026001
+lab_C,E. coli,no_label,E. coli (no covariates),internet,0.5,False,False,6.5671892166137695,23,2820,2702,67776512,67780608,89264128,119451648,103178240,8165428,1.1547725200653076,0.0,5.412416696548462
+lab_D,E. coli,no_label,E. coli (no covariates),internet,0.5,False,False,6.598419666290283,24,2813,2702,68018176,67948544,89911296,121085952,103890944,8267688,1.186394453048706,0.0,5.412025213241577
+lab_E,E. coli,no_label,E. coli (no covariates),internet,0.5,False,False,4.559414863586426,24,2401,2702,68161536,68165632,88080384,118386688,102539264,8421049,1.0507194995880127,0.0,3.508695363998413

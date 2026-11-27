@@ -1,0 +1,261 @@
+panel	scenario	task	learner	lab	state	metric	statistic	value
+a	informative_overlap_50_drop	rf	central	held-out labs	no_label	MCC, mean of five labs	median	0.5110112052925388504
+a	informative_overlap_50_drop	rf	central	held-out labs	no_label	MCC, mean of five labs	q1	0.3339269045154331095
+a	informative_overlap_50_drop	rf	central	held-out labs	no_label	MCC, mean of five labs	q3	0.6276731495045327902
+a	informative_overlap_50_drop	rf	central	held-out labs	no_label	MCC, mean of five labs	whisker_high	0.8259860714648336044
+a	informative_overlap_50_drop	rf	central	held-out labs	no_label	MCC, mean of five labs	whisker_low	-0.0256554887170514709
+a	informative_overlap_50_drop	rf	central	held-out labs	truth	MCC, mean of five labs	median	0.5888702963615490837
+a	informative_overlap_50_drop	rf	central	held-out labs	uncorrected	MCC, mean of five labs	median	0.3869190938854141226
+a	informative_overlap_50_drop	rf	central	held-out labs	uncorrected	MCC, mean of five labs	q1	0.2439338723349069316
+a	informative_overlap_50_drop	rf	central	held-out labs	uncorrected	MCC, mean of five labs	q3	0.5768502361744832774
+a	informative_overlap_50_drop	rf	central	held-out labs	uncorrected	MCC, mean of five labs	whisker_high	0.7503863899880167665
+a	informative_overlap_50_drop	rf	central	held-out labs	uncorrected	MCC, mean of five labs	whisker_low	0.0031780493081952012
+a	informative_overlap_50_drop	rf	federated	held-out labs	no_label	MCC, mean of five labs	median	0.4797653165913607354
+a	informative_overlap_50_drop	rf	federated	held-out labs	no_label	MCC, mean of five labs	q1	0.2948383451986374970
+a	informative_overlap_50_drop	rf	federated	held-out labs	no_label	MCC, mean of five labs	q3	0.6045993504919265904
+a	informative_overlap_50_drop	rf	federated	held-out labs	no_label	MCC, mean of five labs	whisker_high	0.8023484963769990097
+a	informative_overlap_50_drop	rf	federated	held-out labs	no_label	MCC, mean of five labs	whisker_low	0.0111021022695641514
+a	informative_overlap_50_drop	rf	federated	held-out labs	truth	MCC, mean of five labs	median	0.5623599968882679878
+a	informative_overlap_50_drop	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	median	0.3288894395729342612
+a	informative_overlap_50_drop	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	q1	0.2153877386407008210
+a	informative_overlap_50_drop	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	q3	0.5292036914937099379
+a	informative_overlap_50_drop	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	whisker_high	0.7359774152707818651
+a	informative_overlap_50_drop	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	whisker_low	0.0082532719664083574
+a	informative_overlap_50_impute	rf	central	held-out labs	no_label	MCC, mean of five labs	median	0.8075798939732337089
+a	informative_overlap_50_impute	rf	central	held-out labs	no_label	MCC, mean of five labs	q1	0.7778605761829238130
+a	informative_overlap_50_impute	rf	central	held-out labs	no_label	MCC, mean of five labs	q3	0.8705602203073228296
+a	informative_overlap_50_impute	rf	central	held-out labs	no_label	MCC, mean of five labs	whisker_high	0.9217429704245130306
+a	informative_overlap_50_impute	rf	central	held-out labs	no_label	MCC, mean of five labs	whisker_low	0.7688935924636204344
+a	informative_overlap_50_impute	rf	central	held-out labs	uncorrected	MCC, mean of five labs	median	0.8153298311424613809
+a	informative_overlap_50_impute	rf	central	held-out labs	uncorrected	MCC, mean of five labs	q1	0.7642235945846901357
+a	informative_overlap_50_impute	rf	central	held-out labs	uncorrected	MCC, mean of five labs	q3	0.8869442621688359285
+a	informative_overlap_50_impute	rf	central	held-out labs	uncorrected	MCC, mean of five labs	whisker_high	0.9819134546154417720
+a	informative_overlap_50_impute	rf	central	held-out labs	uncorrected	MCC, mean of five labs	whisker_low	0.6086700295384418480
+a	informative_overlap_50_impute	rf	federated	held-out labs	no_label	MCC, mean of five labs	median	0.7302825581400440580
+a	informative_overlap_50_impute	rf	federated	held-out labs	no_label	MCC, mean of five labs	q1	0.7027942594559484224
+a	informative_overlap_50_impute	rf	federated	held-out labs	no_label	MCC, mean of five labs	q3	0.8210602505830589815
+a	informative_overlap_50_impute	rf	federated	held-out labs	no_label	MCC, mean of five labs	whisker_high	0.8660835391027198460
+a	informative_overlap_50_impute	rf	federated	held-out labs	no_label	MCC, mean of five labs	whisker_low	0.5287869617001379474
+a	informative_overlap_50_impute	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	median	0.7203050813827993615
+a	informative_overlap_50_impute	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	q1	0.6428086040308123028
+a	informative_overlap_50_impute	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	q3	0.7795981898446773251
+a	informative_overlap_50_impute	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	whisker_high	0.9483766282113421653
+a	informative_overlap_50_impute	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	whisker_low	0.4730396408566099886
+a	informative_overlap_50_keep	rf	central	held-out labs	no_label	MCC, mean of five labs	median	0.9415016018033004475
+a	informative_overlap_50_keep	rf	central	held-out labs	no_label	MCC, mean of five labs	q1	0.8978248255131775490
+a	informative_overlap_50_keep	rf	central	held-out labs	no_label	MCC, mean of five labs	q3	0.9845502079929977501
+a	informative_overlap_50_keep	rf	central	held-out labs	no_label	MCC, mean of five labs	whisker_high	0.9980163923040312746
+a	informative_overlap_50_keep	rf	central	held-out labs	no_label	MCC, mean of five labs	whisker_low	0.8763372798139771325
+a	informative_overlap_50_keep	rf	central	held-out labs	truth	MCC, mean of five labs	median	0.9852463178188473059
+a	informative_overlap_50_keep	rf	central	held-out labs	uncorrected	MCC, mean of five labs	median	0.8125536842900351608
+a	informative_overlap_50_keep	rf	central	held-out labs	uncorrected	MCC, mean of five labs	q1	0.7740835062251653076
+a	informative_overlap_50_keep	rf	central	held-out labs	uncorrected	MCC, mean of five labs	q3	0.8794503508343085585
+a	informative_overlap_50_keep	rf	central	held-out labs	uncorrected	MCC, mean of five labs	whisker_high	0.9711707681627016475
+a	informative_overlap_50_keep	rf	central	held-out labs	uncorrected	MCC, mean of five labs	whisker_low	0.6510029184631830335
+a	informative_overlap_50_keep	rf	federated	held-out labs	no_label	MCC, mean of five labs	median	0.8966361536045228675
+a	informative_overlap_50_keep	rf	federated	held-out labs	no_label	MCC, mean of five labs	q1	0.8682188801924179966
+a	informative_overlap_50_keep	rf	federated	held-out labs	no_label	MCC, mean of five labs	q3	0.9514556376429539331
+a	informative_overlap_50_keep	rf	federated	held-out labs	no_label	MCC, mean of five labs	whisker_high	0.9811484529365613882
+a	informative_overlap_50_keep	rf	federated	held-out labs	no_label	MCC, mean of five labs	whisker_low	0.8040112587063916738
+a	informative_overlap_50_keep	rf	federated	held-out labs	truth	MCC, mean of five labs	median	0.9588434578128119945
+a	informative_overlap_50_keep	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	median	0.7493866899807930526
+a	informative_overlap_50_keep	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	q1	0.7110409774885791956
+a	informative_overlap_50_keep	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	q3	0.8270203441916703646
+a	informative_overlap_50_keep	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	whisker_high	0.9296231018016917202
+a	informative_overlap_50_keep	rf	federated	held-out labs	uncorrected	MCC, mean of five labs	whisker_low	0.5906281199726225450
+b	informative_overlap none	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	median	0.1703506924796270861
+b	informative_overlap none	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	q1	0.0398467517026635382
+b	informative_overlap none	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	q3	0.2813362039728258268
+b	informative_overlap none	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	whisker_high	0.2882831565412465324
+b	informative_overlap none	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	whisker_low	-0.0256554887170514709
+b	informative_overlap none	rf	central	held-out labs	drop_truth	MCC, mean of five labs	median	0.1780096472604567881
+b	informative_overlap none	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	median	0.1149604070103724396
+b	informative_overlap none	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	q1	0.0354107215488654037
+b	informative_overlap none	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	q3	0.1904659540832284170
+b	informative_overlap none	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.2105662111579455487
+b	informative_overlap none	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.0031780493081952012
+b	informative_overlap none	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	median	0.1433811969787825435
+b	informative_overlap none	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	q1	0.0378373645229924255
+b	informative_overlap none	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	q3	0.2415752645305121737
+b	informative_overlap none	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	whisker_high	0.2462612320717588732
+b	informative_overlap none	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	whisker_low	0.0111021022695641514
+b	informative_overlap none	rf	federated	held-out labs	drop_truth	MCC, mean of five labs	median	0.1560451006914433947
+b	informative_overlap none	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	median	0.0758581994052440617
+b	informative_overlap none	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	q1	0.0207783496182789330
+b	informative_overlap none	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	q3	0.1433200992437754784
+b	informative_overlap none	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.1929913270503448575
+b	informative_overlap none	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.0082532719664083574
+b	informative_overlap one	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	median	0.5070723088788021693
+b	informative_overlap one	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	q1	0.4784104432371082405
+b	informative_overlap one	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	q3	0.5351861911276594164
+b	informative_overlap one	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	whisker_high	0.5410945357482643825
+b	informative_overlap one	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	whisker_low	0.4708581484379927296
+b	informative_overlap one	rf	central	held-out labs	drop_truth	MCC, mean of five labs	median	0.5313220455207583459
+b	informative_overlap one	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	median	0.3921019840447367288
+b	informative_overlap one	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	q1	0.3593424078473776428
+b	informative_overlap one	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	q3	0.4246998512845939766
+b	informative_overlap one	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.4319890596510723713
+b	informative_overlap one	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.3515680726083936225
+b	informative_overlap one	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	median	0.4510899190299662020
+b	informative_overlap one	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	q1	0.4418771930949730864
+b	informative_overlap one	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	q3	0.4810454130252931337
+b	informative_overlap one	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	whisker_high	0.4810454130252931337
+b	informative_overlap one	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	whisker_low	0.4405696845792733130
+b	informative_overlap one	rf	federated	held-out labs	drop_truth	MCC, mean of five labs	median	0.4913786984866752583
+b	informative_overlap one	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	median	0.3288894395729342612
+b	informative_overlap one	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	q1	0.2810759002091176018
+b	informative_overlap one	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	q3	0.3796786531340996529
+b	informative_overlap one	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.4163988292415202741
+b	informative_overlap one	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.2532827466937432326
+b	informative_overlap two or more	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	median	0.8718950337592983324
+b	informative_overlap two or more	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	q1	0.8028568270247613547
+b	informative_overlap two or more	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	q3	0.9498848262609832505
+b	informative_overlap two or more	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	whisker_high	1.0000000000000000000
+b	informative_overlap two or more	rf	central	held-out labs	drop_no_label	MCC, mean of five labs	whisker_low	0.6534896613868607096
+b	informative_overlap two or more	rf	central	held-out labs	drop_truth	MCC, mean of five labs	median	0.9729838838781152965
+b	informative_overlap two or more	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	median	0.7750804933373700578
+b	informative_overlap two or more	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	q1	0.6503640821990375187
+b	informative_overlap two or more	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	q3	0.8753123038972528969
+b	informative_overlap two or more	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.9927983701010313355
+b	informative_overlap two or more	rf	central	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.3440368558657911913
+b	informative_overlap two or more	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	median	0.8365897767381885730
+b	informative_overlap two or more	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	q1	0.7564824076713952961
+b	informative_overlap two or more	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	q3	0.9223343517748280318
+b	informative_overlap two or more	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	whisker_high	0.9966939871733855316
+b	informative_overlap two or more	rf	federated	held-out labs	drop_no_label	MCC, mean of five labs	whisker_low	0.5172176039158484784
+b	informative_overlap two or more	rf	federated	held-out labs	drop_truth	MCC, mean of five labs	median	0.9482819992546176469
+b	informative_overlap two or more	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	median	0.6464827005764731682
+b	informative_overlap two or more	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	q1	0.5653710869388639537
+b	informative_overlap two or more	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	q3	0.8177658598179650129
+b	informative_overlap two or more	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.9802829951777317641
+b	informative_overlap two or more	rf	federated	held-out labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.2825769734117686283
+c	informative_overlap_50_drop	rf	central	test samples of five labs	no_label	MCC, mean of five labs	median	0.5249612649002928233
+c	informative_overlap_50_drop	rf	central	test samples of five labs	no_label	MCC, mean of five labs	q1	0.3321902537502678943
+c	informative_overlap_50_drop	rf	central	test samples of five labs	no_label	MCC, mean of five labs	q3	0.6419946821656933311
+c	informative_overlap_50_drop	rf	central	test samples of five labs	no_label	MCC, mean of five labs	whisker_high	0.8084288475420975395
+c	informative_overlap_50_drop	rf	central	test samples of five labs	no_label	MCC, mean of five labs	whisker_low	0.0177872588057267980
+c	informative_overlap_50_drop	rf	central	test samples of five labs	truth	MCC, mean of five labs	median	0.6163322541155908940
+c	informative_overlap_50_drop	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	median	0.4262977531832773392
+c	informative_overlap_50_drop	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	q1	0.2322420350497050867
+c	informative_overlap_50_drop	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	q3	0.6318122172266995573
+c	informative_overlap_50_drop	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_high	0.8131055262881492496
+c	informative_overlap_50_drop	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_low	0.0507864725210499801
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	median	0.4866598947538639530
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	q1	0.2451534554905674956
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	q3	0.6456032246975783595
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	whisker_high	0.7946471080812929078
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	whisker_low	-0.0141804861297309057
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	truth	MCC, mean of five labs	median	0.5587939729550641665
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	median	0.3521193547101379995
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	q1	0.1951646445695527365
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	q3	0.5634878300911526638
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_high	0.7271625366580682925
+c	informative_overlap_50_drop	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_low	0.0117676784528875523
+c	informative_overlap_50_impute	rf	central	test samples of five labs	no_label	MCC, mean of five labs	median	0.8603479131072779840
+c	informative_overlap_50_impute	rf	central	test samples of five labs	no_label	MCC, mean of five labs	q1	0.8116818873922225785
+c	informative_overlap_50_impute	rf	central	test samples of five labs	no_label	MCC, mean of five labs	q3	0.9251442276493276884
+c	informative_overlap_50_impute	rf	central	test samples of five labs	no_label	MCC, mean of five labs	whisker_high	0.9540340030600020782
+c	informative_overlap_50_impute	rf	central	test samples of five labs	no_label	MCC, mean of five labs	whisker_low	0.6886567250527575457
+c	informative_overlap_50_impute	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	median	0.8831675563348181379
+c	informative_overlap_50_impute	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	q1	0.8183492700345670334
+c	informative_overlap_50_impute	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	q3	0.9594259917338857635
+c	informative_overlap_50_impute	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_high	1.0000000000000000000
+c	informative_overlap_50_impute	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_low	0.7608563486708539436
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	median	0.7684798063114720579
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	q1	0.7099895800044702110
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	q3	0.8411186631234144340
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	whisker_high	0.9042346418458762081
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	whisker_low	0.5868386429289353945
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	median	0.7857459128658614844
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	q1	0.6565720896255551331
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	q3	0.8088432706883359469
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_high	0.9421631535819458003
+c	informative_overlap_50_impute	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_low	0.4734549997910908470
+c	informative_overlap_50_keep	rf	central	test samples of five labs	no_label	MCC, mean of five labs	median	0.9747033217511553715
+c	informative_overlap_50_keep	rf	central	test samples of five labs	no_label	MCC, mean of five labs	q1	0.9341696145666865680
+c	informative_overlap_50_keep	rf	central	test samples of five labs	no_label	MCC, mean of five labs	q3	0.9930461869348816695
+c	informative_overlap_50_keep	rf	central	test samples of five labs	no_label	MCC, mean of five labs	whisker_high	1.0000000000000000000
+c	informative_overlap_50_keep	rf	central	test samples of five labs	no_label	MCC, mean of five labs	whisker_low	0.8814536543614996944
+c	informative_overlap_50_keep	rf	central	test samples of five labs	truth	MCC, mean of five labs	median	0.9967543181756151061
+c	informative_overlap_50_keep	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	median	0.9480515441292556300
+c	informative_overlap_50_keep	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	q1	0.9206040153810168825
+c	informative_overlap_50_keep	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	q3	0.9794361938188130834
+c	informative_overlap_50_keep	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_high	0.9935086363512301011
+c	informative_overlap_50_keep	rf	central	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_low	0.9003391554188530099
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	median	0.9177459934503744421
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	q1	0.8654523274719837511
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	q3	0.9607425288015232212
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	whisker_high	0.9759645959306479934
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	no_label	MCC, mean of five labs	whisker_low	0.8420860440660778989
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	truth	MCC, mean of five labs	median	0.9686613732066853277
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	median	0.8106019581448062894
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	q1	0.8006019318345786173
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	q3	0.8664443922331709347
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_high	0.9451622807940736060
+c	informative_overlap_50_keep	rf	federated	test samples of five labs	uncorrected	MCC, mean of five labs	whisker_low	0.7570695390464464714
+d	informative_overlap none	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	median	0.1847524522716635920
+d	informative_overlap none	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	q1	0.0930866060420019736
+d	informative_overlap none	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	q3	0.2615146198797499988
+d	informative_overlap none	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_high	0.2921029312512994913
+d	informative_overlap none	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_low	0.0177872588057267980
+d	informative_overlap none	rf	central	test samples of five labs	drop_truth	MCC, mean of five labs	median	0.1811148338052260831
+d	informative_overlap none	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	median	0.1081987494590190002
+d	informative_overlap none	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q1	0.0511532665775734571
+d	informative_overlap none	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q3	0.1690433936405636439
+d	informative_overlap none	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.1808076715973843673
+d	informative_overlap none	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.0507864725210499801
+d	informative_overlap none	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	median	0.0952263194850676287
+d	informative_overlap none	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	q1	0.0286817309999666953
+d	informative_overlap none	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	q3	0.1604006490122853457
+d	informative_overlap none	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_high	0.1991520892683333599
+d	informative_overlap none	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_low	-0.0141804861297309057
+d	informative_overlap none	rf	federated	test samples of five labs	drop_truth	MCC, mean of five labs	median	0.1308650193601268996
+d	informative_overlap none	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	median	0.0474629247979089508
+d	informative_overlap none	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q1	0.0228999369944635732
+d	informative_overlap none	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q3	0.0922036952422610190
+d	informative_overlap none	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.1638693017065571134
+d	informative_overlap none	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.0117676784528875523
+d	informative_overlap one	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	median	0.5167856934817425252
+d	informative_overlap one	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	q1	0.4978344871586865561
+d	informative_overlap one	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	q3	0.5246972635435691590
+d	informative_overlap one	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_high	0.5369606206713946062
+d	informative_overlap one	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_low	0.4978344871586865561
+d	informative_overlap one	rf	central	test samples of five labs	drop_truth	MCC, mean of five labs	median	0.5644382877323795844
+d	informative_overlap one	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	median	0.4262977531832773392
+d	informative_overlap one	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q1	0.4102930494326825772
+d	informative_overlap one	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q3	0.4413694755565640837
+d	informative_overlap one	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.4623184554506552524
+d	informative_overlap one	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.3865451254066671338
+d	informative_overlap one	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	median	0.4799827110298232058
+d	informative_overlap one	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	q1	0.4336643096944992060
+d	informative_overlap one	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	q3	0.5128041190480910894
+d	informative_overlap one	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_high	0.5228198946341522380
+d	informative_overlap one	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_low	0.3831575541572698751
+d	informative_overlap one	rf	federated	test samples of five labs	drop_truth	MCC, mean of five labs	median	0.4968786060031402663
+d	informative_overlap one	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	median	0.3458713011783055569
+d	informative_overlap one	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q1	0.3209956864550804201
+d	informative_overlap one	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q3	0.3632226049019333103
+d	informative_overlap one	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.3725946851996819187
+d	informative_overlap one	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.2890506731585396616
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	median	0.8719875314818512635
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	q1	0.7713537945570064780
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	q3	0.9351737493164169468
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_high	1.0000000000000000000
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_low	0.6285684687340892252
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_truth	MCC, mean of five labs	median	0.9648043605813625412
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	median	0.8555522918048471537
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q1	0.7716677851029535296
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q3	0.9009976973761408825
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_high	1.0000000000000000000
+d	informative_overlap two or more	rf	central	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.5789382155347856385
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	median	0.8131495690350569738
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	q1	0.7442344346498648289
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	q3	0.8976604495920995630
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_high	0.9935086363512301011
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_no_label	MCC, mean of five labs	whisker_low	0.6069834386364295620
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_truth	MCC, mean of five labs	median	0.9286573256585215486
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	median	0.7244601644990946721
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q1	0.6574469050093657563
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	q3	0.8515881673472862623
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_high	0.9848534848195368285
+d	informative_overlap two or more	rf	federated	test samples of five labs	drop_uncorrected	MCC, mean of five labs	whisker_low	0.4111068714670338964

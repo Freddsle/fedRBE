@@ -3,14 +3,15 @@ flimmaBatchCorrection:
     # the file containing the expression data/data to be batch corrected.
   design_filename: lab_A_design.tsv  # the file containing covariates
                                      # it is read in the following way:
-                                     # pd.read_csv(design_file_path, sep=seperator, index_col=0)
+                                     # pd.read_csv(design_file_path, sep=design_separator, index_col=0)
+                                     # optional for single-batch clients
                                      # should therefore be in the format samples x covariates
                                      # with the first column being the sample indices
                                      # the order of the samples should be the same than in the data file
   batch_col: "" # the column name of the batch information in the design file
                 # if left empty, the client is assumed to contain only one batch
                 # Must contain the same unique values for the same batch
-                # For technical reasons, cannot contain the character "|" (hex: 0xA6)
+                # For technical reasons, cannot contain the character "|" (hex: 0x7C)
                 # format: str
   expression_file_flag: True # If true, the datafile is expected to have the samples as columns
                              # and the features as rows. If false, the datafile is expected to have
@@ -26,35 +27,32 @@ flimmaBatchCorrection:
                       # format: str or int, int is interpreted as the column index (starting from 0)
   covariates: ['Pyr'] # covariates in linear model. In case a design matrix is given
                       # they are expected in the design matrix, otherwise they are expected
-                      # to be features in the given data (in the data_filename file).
+                      # to be rows when expression_file_flag is True, columns otherwise.
                       # format: list of strings
   separator: "\t" # the separator used in the annotation or data file
   design_separator: "\t" # the separator used in the design file
   normalizationMethod: "log2(x+1)" # the method used for normalization, supported:
-                                   # "log2(x+1)"
-                                   # if None is given, doesn't the app doesn't normalize
-  # The following options are for privacy, we recommend one of these tiers:
-  # minimum privacy:
-  #   smpc = False, min_samples = 0
-  # medium privacy, medium slowdown
-  #   smpc = True, min_samples = 0
-  # maximum privacy, medium to high slowdown
-  #   smpc = True, min_samples = 5
-  # We recommend at least medium privacy when using covariates and maximum
-  # privacy if the data contains a lot of missing values
-  # With min samples > 0, the program might halt depending on the given data
+                                   # "log2(x+1)" for raw non-negative values (all > -1)
+                                   # null or omitted: no normalization; other values stop the run
+  # Privacy options: smpc and min_samples. min_samples: 0 does not disable the threshold;
+  # the app always requires max(min_samples, batches + covariates + 1) finite values
+  # per feature in each batch and stops if a batch keeps no feature.
+  # We recommend smpc: True when using covariates and min_samples: 5 if the data
+  # contains a lot of missing values.
   smpc: True     # whether to use secure multi party computation to securely
                  # aggregate information sent from clients to the coordinator
                  # for more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
+  # feature_block_size: 10000  # Positive integer; same on all clients.
+    # Omit or null: all features in one round.
   min_samples: 5 # The minimum number of samples per feature that are required
-                 # to be present and non-missing on the whole client.
-                 # if for a feature less than min_samples samples are present,
-                 # the client will not send any information about that feature
-                 # format: int
+                 # to be present and non-missing in each batch of the client.
+                 # if for a feature less than min_samples samples are present
+                 # in a batch, the client will not send any information about
+                 # that feature for that batch
+                 # format: int, default: 5
                  # Please note that the actual used min_samples might be different
                  # as for privacy reasons min_samples = max(min_samples, len(design.columns)+1)
-                 # This is to ensure that a sent Xty matrix always has more samples
-                 # than features so that neither X not y can be reconstructed from the Xty matrix
+                 # This keeps more samples than design columns in every sent Xty matrix
   position: 1    # if a number x is given, the order of the clients will be
                  # be determined by sorting after this number x.
                  # Example:
@@ -62,11 +60,14 @@ flimmaBatchCorrection:
                  # Order -> Client1, Client3, Client2
                  # The last client in that order is always used as the reference
                  # batch, so in this case Client2
-                 # if empty/None, the order is random, making the batch correction
-                 # run non deterministic
-  reference_batch: "" # if a string is given, the specified batch is used as
-                      # the reference batch for the batch correction
-                      # if True, this client is used as the reference batch
+                 # positions apply only when every client supplies an integer (duplicates stop the run)
+                 # otherwise the coordinator's client order is used and may vary
+                 # between runs; without an explicit reference, the last client's
+                 # alphabetically last batch is used
+  reference_batch: "" # a batch label (string) selects one of this client's batch_col
+                      # batches as the reference batch; a string on a single-batch
+                      # client halts the program
+                      # if True, this single-batch client is used as the reference batch
                       # if True and multiple batches exist for this client,
                       # the program will halt
                       # if False or an empty string, the last client in the order

@@ -29,7 +29,9 @@ Supports log scaling, multiple batches per client, and SMPC.
 - [Input requirements](#input-requirements)
 - [Outputs](#outputs)
 - [Configuration (config.yml)](#configuration-configyml)
-- [FeatureCloud App states](#featurecloud-app-states)
+- [Input validation](#input-validation)
+- [Correcting new batches after a fedRBE run](#correcting-new-batches-after-a-fedrbe-run)
+- [Protocol phases](#protocol-phases)
 - [Additional resources](#additional-resources)
 - [License](#license)
 - [How to cite](#how-to-cite)
@@ -37,13 +39,13 @@ Supports log scaling, multiple batches per client, and SMPC.
 ---
 
 ## Overview
-`fedRBE` removes batch effects from omics data distributed across research centers. It uses limma's `removeBatchEffect()` method with **federated learning (FL)** and **secure multi-party computation (SMPC)**. Sensitive data remains on each participant's site; only summary-level information is shared.
+fedRBE corrects distributed omics data using limma's `removeBatchEffect()` method.
+Raw data stays at each site; only summary statistics are shared, with optional
+secure multi-party computation (SMPC). Two modes are available:
 
-fedRBE supports two usage modes:
+* [Federated mode](#running-a-true-federated-workflow-login-required): Collaborate across sites; registration required.
 
-* [Federated mode](#running-a-true-federated-workflow-login-required): Removes batch effects from decentralized, sensitive data. Registration required.
-
-* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Runs fedRBE locally to simulate federated batch effect correction. No registration required.
+* [Simulation mode](#simulating-a-federated-workflow-locally-no-login-required): Simulate clients locally; no registration required.
 
 For advanced parameters, see [Configuration](#configuration-configyml).
 
@@ -51,7 +53,7 @@ For advanced parameters, see [Configuration](#configuration-configyml).
 
 ## Prerequisites and setup
 
-Before using `fedRBE`, ensure:
+Install:
 1. **Docker** is installed ([FeatureCloud prerequisites](https://featurecloud.ai/developers)).
 1. **Python3** is installed. [Installation Instructions](https://www.python.org/doc/).
 1. **FeatureCloud CLI**:
@@ -69,25 +71,26 @@ Before using `fedRBE`, ensure:
      ```bash
      docker pull featurecloud.ai/bcorrect:latest
      ```
-   - Alternatively, if you are using an ARM architecture (e.g., Mac M-series), build the image locally from the repository checkout:
+   - For ARM (e.g., Mac M-series) or other platforms incompatible with linux/amd64,
+     build locally from the checkout:
      ```bash
      cd batchcorrection
      docker build . -t featurecloud.ai/bcorrect:latest
      ```
-
-The app image provided in the FeatureCloud Docker registry is built for the linux/amd64 platform. If you use a Mac with an M-series chip or another device that is not compatible with linux/amd64, build the image locally.
+     `run_sample_experiment.py` pulls the registry image first; with a locally built
+     image, use the commands in the
+     [Local Test Guide](https://freddsle.github.io/fedRBE/docs/local_test.html).
 
 ---
 
 ## Usage
 
 ### Simulating a federated workflow locally (No login required)
-To test how `fedRBE` behaves with multiple datasets on one machine:
-
 1. **Clone the full repository and enter it**:
    ```bash
    git clone https://github.com/Freddsle/fedRBE.git
    cd fedRBE
+   git lfs pull
    ```
 
 2. **Run a Sample Experiment**:
@@ -96,24 +99,19 @@ To test how `fedRBE` behaves with multiple datasets on one machine:
    ```
   The script prints the browser link for the local run.
 
-This runs the bundled sample experiment.
-
 ### Running a true federated workflow (Login required)
-For an actual multi-party setting:
 1. **Create a Project** in [FeatureCloud](https://featurecloud.ai/projects) and invite at least 3 clients.
 2. **Clients Join with Tokens** provided by the coordinator.
 3. **Each Client** uploads their data and `config.yml` to their local FeatureCloud instance.
 4. **Start the Project**: `fedRBE` runs securely, never sharing raw data.
 
-See the [How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for project setup and client onboarding.
-A FeatureCloud account is required to restrict project access to invited participants.
+A FeatureCloud account restricts access to invited participants. See the
+[How To Guide](https://freddsle.github.io/fedRBE/docs/how_to_guide.html) for setup.
 
 ---
 
 ## Input requirements
-- **Data File**: CSV or TSV with either:
-  - Samples x Features, or
-  - Features x Samples
+- **Data File**: CSV/TSV, samples × features or features × samples.
 - **`config.yml`**: Configuration file controlling formats, normalization, and additional parameters.
 - **Optional Design Matrix**: CSV/TSV with covariates (samples x covariates).
 
@@ -125,12 +123,24 @@ For details, see the [Configuration](#configuration-configyml) section.
 After completion, each client receives:
 - **`full_corrected_data.csv`**: Batch corrected features with the design covariates merged in.
 - **`only_batch_corrected_data.csv`**: Batch-corrected features.
-- **`report.txt`**: Includes:
-  - Excluded features (and why)
-  - Calculated beta values
-  - Internally used design matrix
+- **`report.txt`**: The client name, the batch coefficients used for the correction and the
+  design matrix.
 
-**Note**: Output files use the same `separator` defined in `config.yml`.
+The coordinator additionally receives the files needed to correct new batches later on,
+without another run (see [Correcting new batches](#correcting-new-batches-after-a-fedrbe-run)):
+- **`batch_coefficients.csv`**: The batch coefficients per hashed feature name.
+- **`training_level.csv`**: Per hashed feature name, the level the corrected data sits at.
+- **`training_level_info.yml`**: The normalization of the run, whether covariates were used,
+  the number of batches and the file separator.
+
+**Note**: Output files use the same `separator` defined in `config.yml`. Both CSV files are
+features (rows) x samples (columns) whatever the input orientation; `full_corrected_data.csv`
+appends the covariates as rows. Values masked for privacy (fewer finite values than the
+effective `min_samples` in a batch or on the client) are exported as empty cells.
+Features masked for privacy are listed in the app log.
+Features available in fewer than `min_clients` (default: three) clients are omitted.
+Each client also writes `performance_report.json` with protocol timings, payload sizes
+and process memory.
 
 ---
 
@@ -146,7 +156,7 @@ flimmaBatchCorrection:
     # Optional design matrix: samples x covariates.
     # Must have first column as sample indices.
     # it is read in the following way:
-    # pd.read_csv(design_file_path, sep=seperator, index_col=0)
+    # pd.read_csv(design_file_path, sep=design_separator, index_col=0)
     # should therefore be in the format samples x covariates
     # with the first column being the sample indices
 
@@ -164,7 +174,10 @@ flimmaBatchCorrection:
 
   covariates: ["Pyr"]
     # Covariates included in the linear model.
-    # If no design file, covariates must be present as features in the data file.
+    # Use [] to correct batch effects without biological covariates.
+    # A design file is optional for single-batch clients.
+    # Without one, covariates are rows when expression_file_flag is True,
+    # or columns when False; their values are retained unchanged in the output.
 
   separator: "\t"
     # Separator for main data file.
@@ -179,41 +192,122 @@ flimmaBatchCorrection:
     # format: str
 
   normalizationMethod: "log2(x+1)"
-    # Normalization: "log2(x+1)" or None.
-    # If None, no normalization is applied.
+    # "log2(x+1)" for raw non-negative values (all values must be > -1), or
+    # null (or omit the key) for already log-transformed data; other values stop the run.
+    # All clients must use the same setting, so that the corrected data share one scale.
 
   smpc: True
     # Enable secure multiparty computation for privacy-preserving aggregation.
     # For more information see https://featurecloud.ai/assets/developer_documentation/privacy_preserving_techniques.html#smpc-secure-multiparty-computation
 
-  min_samples: 5      # format: int
-    # Minimum samples per feature required. Adjusted for privacy if needed.
-    # If for a feature less than min_samples samples are present,
-    # the client will not send any information about that feature
+  # feature_block_size: 10000  # Positive integer; same on all clients.
+    # Omit or null: all features in one round.
+
+  min_clients: 3      # format: int >= 2, default: 3; same on all clients.
+    # Features present in fewer clients are not corrected. With two clients, each
+    # client can derive the other client's mean of every feature from the shared
+    # batch coefficients, so keep the default of 3 in deployments; lower values
+    # are meant for evaluations.
+
+  min_samples: 5      # format: int, default: 5
+    # Minimum samples per feature required in each batch. Adjusted for privacy if needed.
+    # If for a feature less than min_samples samples are present in a batch,
+    # the client will not send any information about that feature for that batch
     # The app may raise min_samples for privacy:
     # min_samples = max(min_samples, len(design.columns)+1)
-    # This ensures a sent Xty matrix always has more samples than features,
-    # so neither X nor y can be reconstructed from the Xty matrix.
+    # This keeps more samples than design columns in every sent Xty matrix.
 
   position: 1      # format: int
     # Defines client order. The last client in order is the reference batch.
     # Example:
     #  C1(position=0), C2(position=2), C3(position=1) -> Order: C1, C3, C2 (C2 is reference).
-    # If empty/None, the order is random, making the batch correction run non deterministic
+    # Positions apply only when every client supplies an integer; duplicates stop the run.
+    # Otherwise the coordinator's client order is used and may vary between runs.
+    # Without an explicit reference, the last client's alphabetically last batch is used.
 
   reference_batch: ""
-    # Explicitly set a reference batch (string) or leave empty.
+    # A batch label (string) selects one of this client's batch_col batches;
+    # true makes this single-batch client the reference. Leave empty for the default.
     # Conflicts in ordering/reference will halt execution.
 ```
 
 ---
 
-## FeatureCloud App states
+## Input validation
 
-The app has the following states:
+- `covariates` is required; use `[]` for none.
+- Covariates must be numeric and finite; encode categories as numeric indicators.
+- Batch labels must be complete and contain no `|`; spaces are allowed.
+- Feature identifiers must be unique, and every measurement cell must be numeric
+  (`NA` or empty for missing values). In samples × features files, non-numeric columns
+  are left out of the correction and duplicate column names are renamed (for example
+  `f2.1`); check headers and values first.
+- All clients must use the same boolean `smpc` setting (default: `true`), the same
+  `normalizationMethod`, `min_clients` and `feature_block_size`.
+- Only finite measurements count for privacy thresholds, batch presence and regression.
+- Each batch needs at least one feature with max(`min_samples`, batches + covariates + 1)
+  finite values, or the run stops.
+- For each feature, a covariate that is constant (all 0 or all 1) among the samples
+  with observed measurements is omitted from that feature's fit, as in limma. Other
+  collinear or numerically unreliable fits stop the run.
+- With SMPC, very large XtX/XtY values stop the run; use log-scale data, rescale large
+  covariates or set `smpc: false`.
+- With SMPC, covariate variation below the fixed-point precision stops the run; rescale
+  covariates or set `smpc: false`.
+
+## Correcting new batches after a fedRBE run
+
+fedRBE moves every batch, the reference batch included, to a common level per feature:
+the intercept of the linear model, plus, with covariates, the covariate effects at the
+covariates' mean in the training data. This level is the mean of all corrected values.
+The coordinator saves it in `training_level.csv`; neither the intercept nor the
+covariate coefficients are shared, as they can reveal single samples.
+
+A new batch that was not part of the run, e.g. a validation cohort, can be aligned to
+this level without another federated run: each of its batches is shifted per feature so
+that its mean equals the training level. The aligned batch can then be used with models
+trained on the corrected data of the run.
+
+```bash
+python batchcorrection/align_new_batch.py \
+  --fedrbe-output <output folder of the coordinator> \
+  --input <folder of the new batch> \
+  --output <result folder>
+```
+
+- `--input` is laid out like a fedRBE client: `config.yml` with the keys above, the
+  data file and, for `batch_col`, a design file. Each batch of `batch_col` is aligned
+  on its own. `covariates` is ignored, so no labels are needed.
+- `normalizationMethod` is taken from `training_level_info.yml`; a different setting in
+  the new batch's config stops the script, as the level is only valid on that scale.
+- A feature is aligned in a batch if it has a training level and at least `min_samples`
+  (at least 1) finite values in that batch; other values are kept as loaded (normalized).
+- Writes `aligned_data.csv` (features x samples, separator of the config) and
+  `report.txt` (aligned features per batch).
+
+The alignment only shifts means; the spread within a batch is kept. Without labels, a
+new batch's mean mixes its classes: if the run used covariates (e.g. the label) and the
+new batch has a different class mix than the training data, part of that difference is
+removed as batch effect. This is the same assumption a correction without covariates
+makes for every batch.
+
+## Protocol phases
+
+The app registers a single FeatureCloud state (`states.py`) that runs the whole
+protocol implemented in `fedrbe.py`. The local simulator uses the same protocol.
+The figure shows the phases of that protocol.
+
+With `feature_block_size`, clients send XtX/XtY in feature blocks and wait for the
+coordinator's acknowledgement before sending the next block. Clients split the
+transport payloads and still allocate the full local cross-product arrays.
+Featurewise fits retain the same model and missingness masks. Blocking is off by
+default and the repository's evaluation runs leave it disabled. Peak-memory
+measurements for feature blocking are pending. Privacy thresholds and SMPC apply
+to every block. Batch coefficients and outputs are released after all blocks
+succeed. All clients must run the same app image.
 
 <p align="center">
-   <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE app states" width="60%">
+   <img src="https://github.com/Freddsle/fedRBE/blob/main/figures/states.png?raw=true" alt="fedRBE protocol phases" width="60%">
 </p>
 
 ---
@@ -224,24 +318,11 @@ The app has the following states:
 
 ## License
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+This project is licensed under the [Apache License 2.0](../LICENSE).
 
 
 
 ## How to cite
 
-If you use `fedRBE` in your research, please cite our [ArXiv preprint](https://arxiv.org/abs/2412.05894):
-
- > Burankova, Y., Klemm, J., Lohmann, J.J., Taheri, A., Probul, N., Baumbach, J. and Zolotareva, O., 2024. FedRBE--a decentralized privacy-preserving federated batch effect correction tool for omics data based on limma. arXiv preprint arXiv:2412.05894.
-
-   ```bibtex
-   @misc{burankova2024fedrbedecentralizedprivacypreserving,
-         title={FedRBE -- a decentralized privacy-preserving federated batch effect correction tool for omics data based on limma}, 
-         author={Yuliya Burankova and Julian Klemm and Jens J. G. Lohmann and Ahmad Taheri and Niklas Probul and Jan Baumbach and Olga Zolotareva},
-         year={2024},
-         eprint={2412.05894},
-         archivePrefix={arXiv},
-         primaryClass={q-bio.QM},
-         url={https://arxiv.org/abs/2412.05894}, 
-   }
-   ```
+Please cite the [ArXiv preprint](https://arxiv.org/abs/2412.05894);
+the [repository citation](../README.md#how-to-cite) includes BibTeX.

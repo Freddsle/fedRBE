@@ -1,0 +1,13 @@
+modality	state	term	features	median_fraction
+Transcriptomics	before	condition	26907	0.121851555136883
+Transcriptomics	before	batch	26907	0.36269193351777
+Transcriptomics	after	condition	26907	0.25827786381589
+Transcriptomics	after	batch	26907	7.57417708200828e-17
+Proteomics	before	condition	2539	0.0850778055500658
+Proteomics	before	batch	2539	0.356575854665892
+Proteomics	after	condition	2539	0.147973799967633
+Proteomics	after	batch	2539	1.54876508234013e-17
+Metabolomics	before	condition	71	0.000690092357944327
+Metabolomics	before	batch	71	0.997173822779442
+Metabolomics	after	condition	71	0.242315411461478
+Metabolomics	after	batch	71	9.17930126214799e-16

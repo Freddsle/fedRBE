@@ -5,6 +5,82 @@ import hashlib
 import os
 import bios
 
+
+def subtract_batch_effect(data: pd.DataFrame, betas: np.ndarray,
+                          batch_design: pd.DataFrame) -> pd.DataFrame:
+    """
+    The correction step of limma::removeBatchEffect(): subtracts the batch
+    effect predicted by the batch coefficients from the data, NaN values stay NaN.
+    Args:
+        data: features x samples
+        betas: (#features x #batch columns), the batch coefficients in the
+            feature order of data
+        batch_design: samples x batch columns, the batch columns of the design
+            matrix (1 for the sample's batch, -1 everywhere for the reference
+            batch, 0 otherwise) in the sample order of data
+    Returns:
+        The corrected data, features x samples
+    """
+    if betas.shape[1] != batch_design.shape[1]:
+        raise ValueError(f"Expected coefficients for {batch_design.shape[1]} batch columns, "
+                         f"got {betas.shape[1]}")
+    values = np.where(data == 'NA', np.nan, data)
+    batch_effect = betas @ batch_design.T
+    corrected = np.where(np.isnan(values), values, values - batch_effect)
+    return pd.DataFrame(corrected, index=data.index, columns=data.columns)
+
+
+def align_to_training_level(client: "Client",
+                            training_level: pd.Series) -> Tuple[pd.DataFrame, Dict[str, int]]:
+    """
+    Corrects a new batch, which was not part of a fedRBE run, with the training
+    level of that run (see coordinator_utils.training_level). The corrected
+    training data of the run sits at the training level, so each batch of the
+    client is shifted per feature such that its mean equals the training level:
+    value - (batch mean - training level).
+    No labels are needed, so differences in the label mix between the batch and
+    the training data are treated as batch effect.
+    A feature is only shifted in a batch if it has a training level and at
+    least client.min_samples finite values in that batch, otherwise the values
+    stay as loaded (normalized, not corrected).
+    Args:
+        client: The new batch, loaded with config_based_init (hashed feature
+            names, normalized like the fedRBE run)
+        training_level: The training level per hashed feature name
+    Returns:
+        The aligned data, features (real names) x samples, and per batch label
+        the number of aligned features
+    """
+    assert isinstance(client.data, pd.DataFrame)
+    assert isinstance(client.hash2feature, dict)
+    data = client.data.apply(pd.to_numeric, errors="coerce")
+    shared_features = data.index[data.index.isin(training_level.index)]
+    if shared_features.empty:
+        raise ValueError(f"Client {client.client_name}: none of its features has a training "
+                         "level; the feature names (or their hashes) do not match the fedRBE run")
+    aligned = data.copy()
+    aligned_per_batch = {}
+    min_values = max(client.min_samples, 1)
+    for batch_label in client.batch_labels:
+        if client.batch_col:
+            assert isinstance(client.design, pd.DataFrame)
+            batch_name = batch_label.split("|", 1)[1]
+            batch_samples = client.design.index[client.design[client.batch_col] == batch_name]
+        else:
+            batch_samples = data.columns
+        batch_values = data.loc[shared_features, batch_samples]
+        num_finite_values = np.isfinite(batch_values).sum(axis=1)
+        features = num_finite_values.index[num_finite_values >= min_values]
+        if features.empty:
+            raise ValueError(f"Batch {batch_label}: no feature with a training level has at "
+                             f"least {min_values} finite values")
+        batch_mean = batch_values.loc[features].mean(axis=1)
+        shift = batch_mean - training_level.loc[features]
+        aligned.loc[features, batch_samples] = batch_values.loc[features].sub(shift, axis=0)
+        aligned_per_batch[batch_label] = len(features)
+    return aligned.rename(index=client.hash2feature), aligned_per_batch
+
+
 class Client:
     def __init__(self):
         """
@@ -12,6 +88,9 @@ class Client:
         """
         self.client_name = ""
         self.smpc = False
+        self.feature_block_size = None
+        self.min_clients = 3
+        self.normalization_method = None
         self.covariates = None
         self.min_samples = 0
         self.XtX = None
@@ -43,7 +122,7 @@ class Client:
         hash2name = {}
         name2hash = {}
         for name in names:
-            name_hash = hashlib.sha3_256(name.encode()).hexdigest()
+            name_hash = hashlib.sha3_256(str(name).encode()).hexdigest()
             hash2name[name_hash] = name
             name2hash[name] = name_hash
         return name2hash, hash2name
@@ -91,8 +170,8 @@ class Client:
         config = config["flimmaBatchCorrection"]
         # read min_samples
         if "min_samples" not in config:
-            min_samples = 0
-            print("min_samples was not given so it was set to 0")
+            min_samples = 5
+            print("min_samples was not given so it was set to 5")
         else:
             min_samples = config["min_samples"]
             try:
@@ -100,14 +179,24 @@ class Client:
             except:
                 raise ValueError("min_samples must be an integer")
         # read covariates
-        if "covariates" not in config:
-            covariates = None
-        else:
-            covariates = config["covariates"]
+        covariates = config.get("covariates")
+        if not isinstance(covariates, list) or not all(isinstance(name, str) for name in covariates):
+            raise ValueError(f"Client {clientname}: covariates must be a list of covariate names, "
+                             "e.g. ['Pyr'], or [] for batch-only correction")
         # read smpc
-        smpc = True
-        if "smpc" in config:
-            smpc = config["smpc"]
+        smpc = config.get("smpc", True)
+        if not isinstance(smpc, bool):
+            raise ValueError("smpc must be a boolean (true or false)")
+
+        min_clients = config.get("min_clients", 3)
+        if isinstance(min_clients, bool) or not isinstance(min_clients, int) or min_clients < 2:
+            raise ValueError("min_clients must be an integer of at least 2 (default: 3)")
+
+        feature_block_size = config.get("feature_block_size")
+        if feature_block_size is not None and (
+                isinstance(feature_block_size, bool)
+                or not isinstance(feature_block_size, int) or feature_block_size <= 0):
+            raise ValueError("feature_block_size must be a positive integer or null")
 
         # read design file and design_seperator
         design_file_path = None
@@ -162,6 +251,10 @@ class Client:
         # set variables
         self.client_name = clientname
         self.smpc = smpc
+        self.feature_block_size = feature_block_size
+        self.min_clients = min_clients
+        # None if the data is used as given, see normalize
+        self.normalization_method = normalizationMethod or None
         self.variables = covariates
         self.min_samples = min_samples
         self.separator = separator
@@ -171,28 +264,24 @@ class Client:
         # load the data
         try:
             self.open_dataset(datafile_path, expr_file_flag, design_file_path, separator, design_separator, index_col)
-        except:
-            raise ValueError(f"Client {self.client_name}: Error loading dataset.")
+        except Exception as error:
+            raise ValueError(f"Client {self.client_name}: Error loading dataset: {error}") from error
         self.normalize(normalizationMethod)
         assert isinstance(self.data, pd.DataFrame)
         assert self.feature_names is not None
-        assert self.variables is not None
         # Hashing logic
         if use_hashing:
             # we hash the feature names and variables to hide covariates and features
             # that this client has but other clients do not have
             if not self.feature_names:
                 raise ValueError(f"Client {self.client_name}: Error loading feature names.")
-            if not self.variables:
-                raise ValueError(f"Client {self.client_name}: Error loading variables.")
 
             self.feature2hash, self.hash2feature = self.hash_names(self.feature_names)
             self.data.rename(index=self.feature2hash, inplace=True)
 
             self.feature_names = [self.feature2hash[feature] for feature in self.feature_names]
 
-            if covariates:
-                self.hash2variable = self.hash_covariates(covariates)
+            self.hash2variable = self.hash_covariates(covariates)
         else:
             self.hash2feature = {name: name for name in self.feature_names}
             self.feature2hash = {name: name for name in self.feature_names}
@@ -205,8 +294,8 @@ class Client:
         """
         Opens the dataset and loads the data and design matrix.
         The data is converted in the format features x samples.
-        Furthermore, we only consider numerical values.
-        All other data is removed from batch correction and added later.
+        Non-numeric columns of samples x features files are left out of the
+        correction; expression files must be numeric apart from covariate rows.
         Furthermore, variables are extracted and added to the design matrix.
         A report of which features were batch corrected is given in the end.
         Args:
@@ -233,8 +322,12 @@ class Client:
                 relevant_cols.extend(self.variables)
             self.design = pd.read_csv(design_file_path, sep=design_separator, index_col=0)[relevant_cols]
             if self.batch_col:
+                if self.design[self.batch_col].isna().any():
+                    raise ValueError(f"Batch column '{self.batch_col}' must not contain missing labels")
                 # ensure batch column is string so label reconstruction via split works
                 self.design[self.batch_col] = self.design[self.batch_col].astype(str)
+                if self.design[self.batch_col].str.contains("|", regex=False).any():
+                    raise ValueError(f"Batch column '{self.batch_col}' must not contain '|' in labels")
                 # extract which batches exist
                 self.batch_labels = [f"{self.client_name}|{batchname}" for batchname in self.design[self.batch_col].unique()]
 
@@ -278,16 +371,27 @@ class Client:
 
         # handling of expression files
         else:
-            # for expression files we just have to remove the rows that have non-numeric values
+            # for expression files every cell must be numeric: one text cell types its
+            # whole sample column, so single features cannot be separated by dtype
             # we also need to potentially extract covariates
             tmp = self.data.T
             if self.variables and not design_file_path:
                 self.variables_in_data = True
                 tmp = tmp.drop(columns=self.variables)
-            tmp = tmp.select_dtypes(include=np.number)
+            numeric = tmp.apply(pd.to_numeric, errors="coerce", axis=1)
+            non_numeric = numeric.isna() & tmp.notna()
+            if non_numeric.to_numpy().any():
+                raise ValueError(f"{int(non_numeric.to_numpy().sum())} non-numeric values in samples "
+                                 f"{list(non_numeric.index[non_numeric.any(axis=1)][:10])} and features "
+                                 f"{list(non_numeric.columns[non_numeric.any(axis=0)][:10])}; use NA for "
+                                 "missing values and remove annotation rows or columns")
+            tmp = numeric
             self.num_excluded_numeric = len(self.data.columns) - len(tmp.columns)
             self.data = tmp.T
 
+        invalid = self.data.index[self.data.index.isna() | self.data.index.duplicated()].unique().tolist()
+        if invalid:
+            raise ValueError(f"{len(invalid)} feature identifiers are missing or duplicated, e.g. {invalid[:10]}")
         self.feature_names = list(self.data.index.values)
         self.sample_names = list(self.data.columns.values)
         # we need to ensure that the sample_names are the same as the design matrix index
@@ -303,10 +407,15 @@ class Client:
             # do nothing
             return
         if normalizationMethod == "log2(x+1)":
+            invalid = int((self.data <= -1).sum().sum())
+            if invalid:
+                raise ValueError(f"Client {self.client_name}: normalizationMethod log2(x+1) needs values > -1, "
+                                 f"but {invalid} values are <= -1; use null for already log-transformed "
+                                 "data, or remove or recode these values")
             self.data = np.log2(self.data + 1)
         else:
-            print(f"Normalization method {normalizationMethod} not recognized, no normalization applied")
-            return
+            raise ValueError(f"Client {self.client_name}: unsupported normalizationMethod "
+                             f"{normalizationMethod!r}; use \"log2(x+1)\" or null (or omit the key)")
 
     def get_batch_feature_presence_info(self, min_samples: int) -> Dict[str, List[str]]:
         """
@@ -317,7 +426,7 @@ class Client:
 
         Args:
             min_samples: Minimum number of samples that a feature must
-                have per client to be considered for the batch effect correction
+                have per batch to be considered for the batch effect correction
 
         Returns:
             batch_feature_presence_info: Dict with the batch names as keys and
@@ -328,7 +437,7 @@ class Client:
         assert isinstance(self.data, pd.DataFrame)
         assert isinstance(self.feature_names, list)
         assert isinstance(self.hash2feature, dict)
-        assert isinstance(self.design, pd.DataFrame)
+        assert not self.batch_col or isinstance(self.design, pd.DataFrame)
 
         print(f"INFO: Each feature must at least have {min_samples} samples in a batch to be considered for batch effect correction. Otherwise, privacy cannot be guaranteed.")
 
@@ -337,20 +446,21 @@ class Client:
         for batch in self.batch_labels:
             batch_feature_presence_info[batch] = list()
 
-        # first we need to ensure for each batch that at least 2 samples
-        # are available, otherwise the specific entry of XtY from the
-        # combination of the batch column and y leaks the specific non nan value
-        # of the feature
+        # first we need to ensure for each batch that at least min_samples
+        # samples are available. The batch columns of the design matrix
+        # separate the batches in XtX and XtY, so each batch's entries are
+        # aggregates of only that batch's samples (e.g. a single sample would
+        # leak the specific non nan value of the feature).
         # we only need to do this if we have multiple batches, otherwise the
-        # next step does a more strict check anyways
+        # next step does the same check for the whole client
         if self.batch_col:
             for batch_label in self.batch_labels:
                 pure_batch_name = batch_label.split("|")[1]
                 batch_indices = self.design[self.design[self.batch_col] == pure_batch_name].index.tolist()
                 batch_data = self.data.loc[:, batch_indices]
-                non_nan_samples = batch_data.notnull().sum(axis=1)
-                # find all features that have less than 2 samples
-                ignore_index = non_nan_samples[non_nan_samples == 1].index
+                non_nan_samples = np.isfinite(batch_data).sum(axis=1)
+                # find all features that have less than min_samples samples
+                ignore_index = non_nan_samples[(non_nan_samples > 0) & (non_nan_samples < min_samples)].index
                 if len(ignore_index) > 0:
                     print(f"INFO: Ignoring the following {len(ignore_index)} features for batch {batch_label} due to privacy reasons: {[self.hash2feature.get(hashed, hashed) for hashed in ignore_index]}")
 
@@ -358,9 +468,8 @@ class Client:
                 self.data.loc[ignore_index, batch_indices] = np.nan
 
 
-        # Second we check how many samples (non nan!) are available for each feature
-        # for the whole client
-        non_nan_samples = self.data.notnull().sum(axis=1)
+        # Second we count finite observations for each feature on the whole client.
+        non_nan_samples = np.isfinite(self.data).sum(axis=1)
         ignore_index = non_nan_samples[non_nan_samples < min_samples].index
         if len(ignore_index) > 0:
             print(f"INFO: Ignoring the following {len(ignore_index)} features for client {self.client_name} due to privacy reasons: {[self.hash2feature.get(hashed, hashed) for hashed in ignore_index]}")
@@ -382,8 +491,8 @@ class Client:
                 batch_data = self.data
 
             for feature in self.feature_names:
-                if feature in batch_data.index and not batch_data.loc[feature, :].isnull().all():
-                    # feature is available in this batch and not all samples are NaN
+                if feature in batch_data.index and np.isfinite(batch_data.loc[feature, :]).any():
+                    # At least one observation can contribute to the regression.
                     batch_feature_presence_info[batch_label].append(feature)
         return batch_feature_presence_info
 
@@ -428,11 +537,6 @@ class Client:
             for var in self.variables:
                 if var not in self.design.columns:
                     raise Exception(f"Variable {var} was not found in the design matrix")
-        else:
-            for var in self.variables:
-                assert self.data is not None
-                if var not in self.data.index.tolist():
-                    raise Exception(f"Variable {var} was not found in the data")
 
 
     def set_data(self, global_hashed_features: List[str]):
@@ -566,10 +670,16 @@ class Client:
         if self.variables:
             # first we ensure that the variables are in the loaded design matrix
             if self.variables_in_data:
-                self.design = self.design.join(self.rawdata.T[self.variables])
+                self.design = self.design.join(self._data_covariates())
             else:
                 if not all(column_name in self.design.columns for column_name in self.variables):
                     return f"ERROR: the given variables {self.variables} were not found in the given design matrix file."
+            for variable in self.variables:
+                values = self.design[variable]
+                if not pd.api.types.is_numeric_dtype(values):
+                    return f"Covariate '{variable}' must be numeric; encode categories as indicator columns."
+                if not np.isfinite(values.to_numpy()).all():
+                    return f"Covariate '{variable}' must contain only finite values (no missing values or infinities)."
             self.design = self.design.loc[:, ['intercept'] + self.variables + design_cohorts]
                 # IMPORTANT: this order of intercept, variables, cohorts is
                 # relevant for the batch correction later as well as for the
@@ -589,9 +699,12 @@ class Client:
         return None
 
     ####### limma: linear regression #########
-    def compute_XtX_XtY(self) -> Tuple[np.ndarray, np.ndarray, str]:
+    def compute_XtX_XtY(self, xtx_error: float = 0.0) -> Tuple[np.ndarray, np.ndarray, str]:
         """
         Computes the XtX and XtY matrices for the linear regression.
+        Args:
+            xtx_error: SMPC encoding error bound per aggregated XtX entry, zero
+                without SMPC.
         Returns:
             Returns a tuple of (XtX, XtY, Error) where
             - XtX is the XtX matrix of shape k x k
@@ -627,53 +740,39 @@ class Client:
                 XtX[feature_idx, :, :] = x.T @ x
                 XtY[feature_idx, :] = x.T @ y
 
+        # Stop if SMPC rounding could turn a varying covariate into the constant
+        # 0 or 1 column compute_beta omits; sum((x-1)^2) spans 4 XtX entries.
+        covariates = X[:, 1:1 + len(self.variables or [])]
+        present = np.isfinite(Y).astype(float)
+        for distance in (present @ covariates ** 2, present @ (covariates - 1) ** 2):
+            if ((distance > 0) & (distance <= 4 * xtx_error)).any():
+                return XtX, XtY, ("Covariate variation is below the SMPC precision; "
+                                  "rescale covariates or set smpc: false.")
+
         return XtX, XtY, ""
 
     def remove_batch_effects(self, betas: np.ndarray) -> None:
         """
         The algorithm is from limma::removeBatchEffect()
-        Uses the linear model represented by the betas to predict the batch
-        effect on the features given the covariates/batch information of the
-        samples. That prediction is than substracted from the real data,
-        effectively removing the batch effect
+        Uses the batch coefficients of the linear models to predict the batch
+        effect on the features given the batch information of the samples.
+        That prediction is than substracted from the real data, effectively
+        removing the batch effect. The effects of the intercept and the
+        covariates are wanted and are therefore not removed, the coordinator
+        only shares the batch coefficients.
         Args:
-            betas: an np.array of shape (#features x (1+#covariates+#batches-1))
+            betas: an np.array of shape (#features x (#batches-1)), the
+                coefficients of the batch columns of the design matrix
         Returns:
             None, sets self.data_corrected and adds to self.report
         """
-        assert self.data is not None
+        assert isinstance(self.data, pd.DataFrame)
         assert self.design is not None
         print("INFO: Removing the batch effects with the trained betas")
-        self.data_corrected = np.where(self.data == 'NA', np.nan, self.data)
-        # Create a mask to only consider the betas concerning batches
-        mask = np.ones(betas.shape[1], dtype=bool)
-            # Used to reduce beta to just the beta coefficients representing batches
-            # mask is set to be true for betas concerning clients and
-            # false for betas concerning variables and intercept
-            # this is done so that we predict only the batch effect and then
-            # remove that batch effect, the covariates effect and the intercept
-            # is wanted and should therefore not be removed
-        if self.variables:
-            mask[[self.design.columns.get_loc(col) for col in ['intercept', *self.variables]]] = False
-        else:
-            mask[[self.design.columns.get_loc(col) for col in ['intercept']]] = False
-        betas_reduced = betas[:, mask]
-            # only keep the betas concerning the batches
-            # shape of betas is #features x [intercept + #variables + #cohorts-1]
-            # shape of betas_reduces is #features x #cohorts-1
-
-        # Calculate the prediction of the data only based on the betas concerning
-        # batches (calculate the batch effect)
-        if self.variables:
-            batch_effect = betas_reduced @ self.design.drop(columns=['intercept', *self.variables]).T
-        else:
-            batch_effect = betas_reduced @ self.design.drop(columns=['intercept']).T
-
-        # Substract the calculated batch effect (for NaN values we don't need to substract, we keep them as NaN)
-        assert isinstance(self.data, pd.DataFrame)
-        self.data_corrected = np.where(np.isnan(self.data_corrected), self.data_corrected, self.data_corrected - batch_effect)
-        # Add the column_names/index information from the original DataFrame
-        self.data_corrected = pd.DataFrame(self.data_corrected, index=self.data.index, columns=self.data.columns)
+        batch_design = self.design.drop(columns=['intercept', *(self.variables or [])])
+        # Subtract the batch effect predicted by the batch coefficients, the
+        # effects of the intercept and the covariates are kept
+        self.data_corrected = subtract_batch_effect(self.data, betas, batch_design)
         # now we drop the extra global features that were added and
         # that we don't actually have data for
         if self.extra_global_features is not None:
@@ -685,7 +784,7 @@ class Client:
             # so we just use the maximum int size which should hopefully be enough
         self.report = ""
         self.report += f"Client {self.client_name}:\n"
-        self.report += f"The following betas were used for batch correction:\n{betas}\n"
+        self.report += f"The following batch coefficients were used for batch correction:\n{betas}\n"
         self.report += f"The corresponding design matrix was:\n{self.design}\n"
         np.set_printoptions(threshold=1000)
         print(f"INFO: Shape of corrected data after correction: {self.data_corrected.shape}")
@@ -694,13 +793,7 @@ class Client:
         # so that downstream tasks (e.g. classification) retain covariate information.
         if self.variables:
             if self.variables_in_data:
-                # Covariates were embedded in the original data file (no separate design file).
-                if self.expr_file_flag:
-                    # rawdata is features × samples; covariate rows are still present.
-                    cov_data = self.rawdata.loc[self.variables]
-                else:
-                    # rawdata is samples × (features + covariates); covariates are columns.
-                    cov_data = self.rawdata[self.variables].T
+                cov_data = self._data_covariates().T
             else:
                 # Covariates were provided via a design file and are still in self.design.
                 cov_data = self.design[self.variables].T
@@ -713,6 +806,12 @@ class Client:
         print(f"INFO: Shape of full corrected data (features + covariates): {self.full_corrected_data.shape}")
 
     ### Helpers ###
+    def _data_covariates(self) -> pd.DataFrame:
+        """Return embedded covariates as samples x covariates in either layout."""
+        if self.expr_file_flag:
+            return self.rawdata.loc[self.variables].T
+        return self.rawdata[self.variables]
+
     def _check_consistency_designfile(self) -> None:
         """
         Used to checks whether the design files row names (samples) are consistent

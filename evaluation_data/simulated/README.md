@@ -1,23 +1,123 @@
-# Simulated datasets
+# Controlled simulation study
 
-Three E. coli simulation scenarios with three labs each, based on the FedProt project: <https://doi.org/10.48550/arXiv.2407.15220>.
+Synthetic log2-scale data test biological recovery, feature retention, and
+downstream learning. The main designs use 600 samples and 6,000 features. Label-aware
+correction includes condition as a covariate. [FedProt design](https://doi.org/10.1038/s43588-025-00832-7)
 
-Scenarios: `balanced`, `mild_imbalanced`, and `strong_imbalanced`.
+Run from the repository root with the locked [pixi environment](../../README.md#installation)
+and use fresh output directories. [Saved results](results/README.md)
 
-The generated matrices contain NA values. PCA plots replace NA with 0.
+<a id="robustness-simulations"></a>
 
-Central run:  
-- Runs limma RBE with condition as covariate and lab as batch.
-- Uses matrices without NA values.
+## Biological recovery under confounding and nonlinear effects
 
-# Structure
+Nine three-client scenarios × ten runs cover class imbalance, lab–condition
+confounding, and intensity-dependent batch effects. [Simulation driver](robustness_simulation.R)
 
-`before/` contains both combined and app-ready inputs:
-- Combined TSV files for all labs (`metadata`, raw, raw-log2, and filtered-log2).
-- One folder per lab for the FeatureCloud app. Each folder contains data and a design file with covariates.
+```bash
+pixi run --frozen Rscript evaluation_data/simulated/robustness_simulation.R \
+  --out /tmp/fedrbe_robustness
+```
 
-Main files:
-- `00_data_simulation.ipynb`: simulation setup.
-- `01_data_prep_and_central_RBE.ipynb`: preprocessing and central correction.
-- `{balanced,mild_imbalanced,strong_imbalanced}/prepare_data.py`: scenario-specific app folder preparation.
-- `../../evaluation/evaluation_simulated.ipynb` and `../../evaluation/evaluation_simulated_30runs.ipynb`: evaluation plots and metrics.
+Use `--runs 1` for one dataset per scenario. [Recovery summary](robustness/summary.tsv) ·
+[fedRBE–limma comparisons](robustness/equivalence.tsv)
+
+### Correction and metrics
+
+Compare fedRBE with limma using matched features and observed cells at a tolerance
+of `1e-8`. Score recovery against batch-free truth using feature-centred RMSE, contrast
+slopes, and differential-expression precision and recall. Contrast slopes regress the
+estimated contrasts on their true values through the origin.
+
+<a id="sample-size-scaling"></a>
+
+## Sample-size scaling of the fedRBE–limma agreement
+
+Compare both correction arms at 600, 3,000, 12,000, and 50,004 samples, with ten
+runs per size. Allow about 60 GB RAM and 25 GB temporary space per concurrent
+50,004-sample run. [Summary](sample_size_scaling/summary.tsv) · [Run-level differences](sample_size_scaling/differences.tsv)
+
+```bash
+pixi run --frozen Rscript evaluation_data/simulated/sample_size_scaling.R \
+  --out /tmp/fedrbe_scaling
+```
+
+Use `--samples 600 --runs 1` for a quick check.
+
+## Five-client missingness and feature overlap
+
+Ten roots cross full and partial panels with 0%, 10%, 30%, and 50% nominal
+abundance-dependent missingness. Each client has balanced classes, and panels and
+missingness levels share draws within each root.
+[Results and simulation command](results/missingness_overlap/README.md)
+
+## Contrast slopes by missing fraction
+
+Compare masked and corrected contrasts with complete truth by missing fraction,
+pooling the 10%, 30%, and 50% levels within each root and panel.
+[Saved slopes](results/missing_fraction_slopes.tsv)
+
+```bash
+pixi run --frozen Rscript evaluation_data/simulated/missing_fraction_slopes.R \
+  /tmp/fedrbe_missing_fraction_slopes.tsv
+```
+
+<a id="confounding-downstream-evaluation"></a>
+
+## Downstream utility under confounding
+
+Random forests score MCC on leave-one-lab-out and stratified within-lab 70:30
+splits. The driver fits fedRBE for federated learners and limma for central learners
+on training samples. Held-out labs align to the corrected
+training mean, while test samples from training labs use their fitted batch
+coefficients. Label-aware fits use training labels as a covariate.
+
+K-means uses joint correction on all samples and scores adjusted Rand index.
+Joint label-aware correction uses all condition labels.
+[Results and rerun commands](results/confounding_downstream/README.md)
+
+### Downstream utility with missingness and partial overlap
+
+Random forests use label-free correction on the same two split types. Keep
+requires six observations in each of at least three training labs. Drop uses the
+keep features that are complete in training. Impute requires six observations in
+every training lab and fills missing cells with the sample's lowest observed value.
+[Saved learner results](results/missingness_overlap/README.md#files)
+
+First generate the root inputs with the [simulation command](results/missingness_overlap/README.md#reproduce).
+For d-ComBat on drop and impute, supply `distributedCombat.R`, `neuroCombat.R`,
+and `neuroCombat_helpers.R` from commit `45b5a25`. [Distributed-ComBat source](https://github.com/andy1764/Distributed-ComBat)
+
+```bash
+pixi run --frozen python evaluation_data/simulated/downstream_simulation.py \
+  --analysis missingness_overlap --rf-protocols loco within_lab_70_30 \
+  --saved-inputs /tmp/fedrbe_missingness/runs --dcombat /path/to/Distributed-ComBat \
+  --runs 1,2,3,4,5,6,7,8,9,10 --learner-seeds 101,211,321,431,541 \
+  --reference evaluation_data/simulated/results/missingness_overlap/informative_missingness.tsv \
+  --out /tmp/fedrbe_missingness_rf
+```
+
+For joint correction, add `--correction joint` and use a separate output directory.
+
+<a id="variance-partitioning"></a>
+
+## Variance partitioning
+
+On shared features and cells, the interaction model separates lab, condition,
+lab × condition, and residual variance. [Implementation](variance_partition.R)
+
+<a id="notebook-datasets"></a>
+
+## Notebook and application examples
+
+The notebooks generate and prepare complete-data examples for the balanced,
+mildly imbalanced, and strongly imbalanced scenarios.
+[Simulation](00_data_simulation.ipynb) · [Preparation and central correction](01_data_prep_and_central_RBE.ipynb)
+
+The diagnostic scripts write single-run PCA plots and 30-run comparisons under
+`evaluation/eval_simulation/`.
+
+```bash
+pixi run --frozen Rscript evaluation/dataset_diagnostics.R simulated
+pixi run --frozen Rscript evaluation/evaluation_simulated_30runs.R
+```

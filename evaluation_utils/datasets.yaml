@@ -5,8 +5,8 @@
 ecoli:
   before_matrix: evaluation_data/ecoli/before/central_intensities_log_UNION.tsv
   before_site_matrix_file: intensities_log_UNION.tsv
-  corrected_central: evaluation_data/ecoli/after/intensities_log_Rcorrected_UNION.tsv
-  corrected_federated: evaluation_data/ecoli/after/FedApp_corrected_data_smpc.tsv
+  corrected_central: evaluation_data/ecoli/after/label_aware/intensities_log_Rcorrected_UNION.tsv
+  corrected_federated: evaluation_data/ecoli/after/label_aware/FedApp_corrected_data_smpc.tsv
   sites_root: evaluation_data/ecoli/before
   site_glob: "lab_*"
   design_file: design.tsv
@@ -14,10 +14,10 @@ ecoli:
   condition_col: Pyr
 
 ovarian_cancer:
-  before_matrix: evaluation_data/ovarian_cancer/before/all_expression_UNION.tsv
+  before_matrix: evaluation_data/ovarian_cancer/before/central_input.zip
   before_site_matrix_file: expr_for_correction_UNION.tsv
-  corrected_central: evaluation_data/ovarian_cancer/after/central_corrected_UNION.tsv
-  corrected_federated: evaluation_data/ovarian_cancer/after/FedApp_corrected_data.tsv
+  corrected_central: evaluation_data/ovarian_cancer/after/label_aware/central_corrected_UNION.tsv
+  corrected_federated: evaluation_data/ovarian_cancer/after/label_aware/FedApp_corrected_data_smpc.tsv
   sites_root: evaluation_data/ovarian_cancer/before
   site_glob: "GSE*"
   design_file: design.tsv
@@ -27,31 +27,24 @@ ovarian_cancer:
 ccRCC_proteomics:
   before_matrix: evaluation_data/ccRCC_studies/before/central_intensities_log_UNION.tsv
   before_site_matrix_file: report_filtered.tsv
-  corrected_central: evaluation_data/ccRCC_studies/after/intensities_log_Rcorrected_UNION.tsv
-  corrected_federated: evaluation_data/ccRCC_studies/after/FedApp_corrected_data_smpc.tsv
+  corrected_central: evaluation_data/ccRCC_studies/after/label_aware/intensities_log_Rcorrected_UNION.tsv
+  corrected_federated: evaluation_data/ccRCC_studies/after/label_aware/FedApp_corrected_data_smpc.tsv
   sites_root: evaluation_data/ccRCC_studies/before
   site_glob: "P*"
   design_file: design.tsv
   sample_col: rowname
   condition_col: Condition
 
-# Quartet multiomics: k-means runs on the joint matrix containing all three
-# modalities together (Transcriptomics + Proteomics + Metabolomics rows
-# stacked vertically; columns are pseudo-matched samples). The joint matrix
-# itself is built by
-#   evaluation_clusterization_after_correction/real_datasets/
-#       00_build_kmeans_matrices.ipynb
-# which writes the joint matrices into evaluation_data/quartet_multiomics/after/
-# (shared with evaluation/evaluation_quartet_multiomics.ipynb) and the k-means-only
-# per-client splits into
-#   evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before/<client>/.
-# The standard per-feature StandardScaler / fc_kmeans scaling and default
-# single-initialization k-means settings apply to all real datasets.
+# Quartet uses all three modalities stacked by pseudo-matched sample IDs.
+# Canonical evaluators build joint matrices automatically through
+# real_datasets_utils.build_quartet_matrices(); notebook 00 inspects that helper.
+# Custom registries use explicit matrix paths without regenerating inputs.
+# Per-feature scaling and k-means settings are shared with the other datasets.
 quartet_multiomics:
   before_matrix: evaluation_data/quartet_multiomics/before/all_modalities_before_kmeans_matrix.tsv
   before_site_matrix_file: intensities.tsv
-  corrected_central: evaluation_data/quartet_multiomics/after/all_modalities_corrected_kmeans_matrix.tsv
-  corrected_federated: evaluation_data/quartet_multiomics/after/all_modalities_fedapp_kmeans_matrix.tsv
+  corrected_central: evaluation_data/quartet_multiomics/after/label_aware/all_modalities_corrected_kmeans_matrix.tsv
+  corrected_federated: evaluation_data/quartet_multiomics/after/label_aware/all_modalities_fedapp_kmeans_matrix.tsv
   sites_root: evaluation_clusterization_after_correction/real_datasets/quartet_multiomics/before
   site_glob: "client_*"
   design_file: design.tsv

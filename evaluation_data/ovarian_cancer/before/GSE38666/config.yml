@@ -5,6 +5,7 @@ flimmaBatchCorrection:
   data_filename: expr_for_correction_UNION.tsv
   design_filename: design.tsv
   design_separator: "\t"
+  feature_block_size: 10000
   expression_file_flag: true
   index_col: Gene
   min_samples: 2
